@@ -1,33 +1,35 @@
-﻿
-using Boilerplate.Contracts.Services;
+﻿using Boilerplate.Contracts.Services;
 using Boilerplate.Service.Services;
+using Boilerplate.Service.ValidationHelpers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Boilerplate.Service
 {
-    public static class ServiceRegistration
+    public class BusinessLogicServiceConfigurator
     {
-        public static void AddBusinessLogicLayer(this IServiceCollection services)
+        private const string CorsPolicyName = "CorsPolicy";
+        private static readonly string[] AllowedMethods = ["GET", "POST", "UPDATE", "PUT", "DELETE"];
+
+        public void AddBusinessLogicLayer(IServiceCollection services)
         {
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IMasterEntryService, MasterEntryService>();
             services.AddTransient<IDoubleMasterEntryService, DoubleMasterEntryService>();
             services.AddScoped<IGetDataService, GetDataService>();
-            services.ConfigureCors();
+            services.AddSingleton<ValidationHelper>();
+            ConfigureCors(services);
         }
 
-        private static IServiceCollection ConfigureCors(this IServiceCollection services)
+        private void ConfigureCors(IServiceCollection services)
         {
             services.AddCors(options =>
             {
-                options.AddPolicy("CorsPolicy",
+                options.AddPolicy(CorsPolicyName,
                     builder => builder.AllowAnyOrigin()
-                    .WithMethods("GET", "POST", "UPDATE", "PUT", "DELETE")
+                    .WithMethods(AllowedMethods)
                     .AllowAnyHeader());
             });
-
-            return services;
         }
     }
 }

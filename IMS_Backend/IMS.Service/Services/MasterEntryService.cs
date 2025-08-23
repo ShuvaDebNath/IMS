@@ -15,13 +15,13 @@ namespace Boilerplate.Service.Services
     {
         private readonly IMasterEntryRepository _masterEntryRepository;
         private readonly ILogger<MasterEntryService> _logger;
-        private readonly IConfiguration _configuration;
+        private readonly ValidationHelper _validationHelper;
 
-        public MasterEntryService(IMasterEntryRepository masterEntryRepository, ILogger<MasterEntryService> logger, IConfiguration configuration)
+        public MasterEntryService(IMasterEntryRepository masterEntryRepository, ILogger<MasterEntryService> logger, ValidationHelper validationHelper)
         {
             _masterEntryRepository = masterEntryRepository;
             _logger = logger;
-            _configuration = configuration;
+            _validationHelper = validationHelper;
         }
 
         public Messages GetAll(MasterEntryModel item)
@@ -81,8 +81,7 @@ namespace Boilerplate.Service.Services
         {
             try
             {
-                var validationHelper = new ValidationHelper(_configuration);
-                validationHelper.ValidateModel(item, item.TableName);
+                _validationHelper.ValidateModel(item, item.TableName ?? string.Empty);
 
                 var sqlQuery = $"INSERT INTO [dbo].[{item.TableName}] ";
 
@@ -100,10 +99,15 @@ namespace Boilerplate.Service.Services
                 _logger.LogInformation($"Data Save Fail!");
                 return MessageType.SaveError(null);
             }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning($"Validation failed: {ex.Message}");
+                return MessageType.SaveError(ex.Message);
+            }
             catch (Exception ex)
             {
                 string innserMsg = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
-                _logger.LogInformation($"Sourc: {ex.Source};\t Stack Trace: {ex.StackTrace};\t Message: {ex.Message};\t Inner Exception: {innserMsg};\n", "");
+                _logger.LogError($"Source: {ex.Source}; Stack Trace: {ex.StackTrace}; Message: {ex.Message}; Inner Exception: {innserMsg};");
                 throw;
             }
         }
