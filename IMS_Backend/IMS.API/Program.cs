@@ -17,6 +17,16 @@ var transactionDbConnection = Environment.GetEnvironmentVariable("TRANSACTIONDBC
 var jwtKey = Environment.GetEnvironmentVariable("SECURITYJWT_KEY");
 var jwtIssuer = Environment.GetEnvironmentVariable("SECURITYJWT_ISSUER");
 
+// Inject connection strings and JWT into configuration
+if (!string.IsNullOrEmpty(userDbConnection))
+    configuration["ConnectionStrings:UserDBConnection"] = userDbConnection;
+if (!string.IsNullOrEmpty(transactionDbConnection))
+    configuration["ConnectionStrings:TransactionDBConnection"] = transactionDbConnection;
+if (!string.IsNullOrEmpty(jwtKey))
+    configuration["SecurityJwt:Key"] = jwtKey;
+if (!string.IsNullOrEmpty(jwtIssuer))
+    configuration["SecurityJwt:Issuer"] = jwtIssuer;
+
 // Bind JwtOptions from environment variables
 builder.Services.Configure<JwtOptions>(options => {
     options.Key = jwtKey ?? string.Empty;
