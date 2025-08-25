@@ -43,7 +43,7 @@ namespace Boilerplate.API.Controllers
                 //var (buttonPermissions, permittedButtons) = await _authService.GetButtonPermissins(menuPermissions.UserId);
 
                 return Ok(new { IsAuthorized = true, TOKEN = tokenString , //PermittedMenus = permittedMenu, PermittedButtons = permittedButtons,
-                    UserName = user.UserName, //FullName = menuPermissions.FullName, UserId = menuPermissions.UserId,
+                    UserName = user.UserName,  UserId = user.Id,
                     CompanyId = "bfd4ca78-3ec9-4798-8be9-5a9423917949",
                     user.PasswordPin });
             }

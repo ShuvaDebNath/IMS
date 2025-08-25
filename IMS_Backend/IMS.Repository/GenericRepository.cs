@@ -13,18 +13,18 @@ namespace Boilerplate.Repository
 
     public abstract class GenericRepository<TDto> : IGenericRepository<TDto> where TDto : class
     {
-        public readonly string _connectionStringTransactionDB;
+       // public readonly string _connectionStringTransactionDB;
         public readonly string _connectionStringUserDB;
 
         public GenericRepository(IConfiguration configuration)
         {
-            _connectionStringTransactionDB = configuration.GetConnectionString("TransactionDBConnection");
+            //_connectionStringTransactionDB = configuration.GetConnectionString("TransactionDBConnection");
             _connectionStringUserDB = configuration.GetConnectionString("UserDBConnection");
         }
 
         public async Task<IList<TDto>> GetAllAsync(string query, object? param = null)
         {
-            using var connection = new SqlConnection(_connectionStringTransactionDB);
+            using var connection = new SqlConnection(_connectionStringUserDB);
 
             var result = await connection.QueryAsync<TDto>(query, param);
 
@@ -33,7 +33,7 @@ namespace Boilerplate.Repository
 
         public async Task<TResult> GetAllSingleAsync<TResult>(string query, object? param = null)
         {
-            using var connection = new SqlConnection(_connectionStringTransactionDB);
+            using var connection = new SqlConnection(_connectionStringUserDB);
             var result = await connection.QueryAsync<TResult>(query, param);
 
             return result.FirstOrDefault();
@@ -41,7 +41,7 @@ namespace Boilerplate.Repository
 
         public async Task<int> GetCountAsync(string tableName, string columnName, dynamic columnData)
         {
-            using var connection = new SqlConnection(_connectionStringTransactionDB);
+            using var connection = new SqlConnection(_connectionStringUserDB);
             string query = "select Count(" + columnName + ") from " + tableName + " where " + columnName + " = @ColumnData ";
             var result = await connection.QueryAsync<int>(query, new { ColumnData = columnData });
 
@@ -50,7 +50,7 @@ namespace Boilerplate.Repository
 
         public async Task<DataTable> GetDataInDataTableAsync(string query, object? selector = null)
         {
-            using var connection = new SqlConnection(_connectionStringTransactionDB);
+            using var connection = new SqlConnection(_connectionStringUserDB);
 
             DataTable table = new DataTable();
             table.Load(await connection.ExecuteReaderAsync(query, selector));
@@ -62,7 +62,7 @@ namespace Boilerplate.Repository
         {
             DataSet dsList = new DataSet();
 
-            using (var connection = new SqlConnection(_connectionStringTransactionDB))
+            using (var connection = new SqlConnection(_connectionStringUserDB))
             {
                 IDataReader ds = await connection.ExecuteReaderAsync(query, selector);
                 dsList = ConvertDataReaderToDataSet(ds);
@@ -119,7 +119,7 @@ namespace Boilerplate.Repository
         {
             try
             {
-                using (var connection = new SqlConnection(_connectionStringTransactionDB))
+                using (var connection = new SqlConnection(_connectionStringUserDB))
                 {
                     var affectedRows = await connection.ExecuteAsync(query, selector);
 
@@ -189,7 +189,7 @@ namespace Boilerplate.Repository
                     PCName = pcName,
                 };
 
-                using (var connection = new SqlConnection(_connectionStringTransactionDB))
+                using (var connection = new SqlConnection(_connectionStringUserDB))
                 {
                     var affectedRows = await connection.ExecuteAsync(query, selector);
                     return affectedRows;
@@ -212,7 +212,7 @@ namespace Boilerplate.Repository
             {                
                 StringBuilder maxNumberQuery = new(@"(SELECT ISNULL(MAX(SerialNo),0) AS SerialNo FROM SerialNoGenerate WHERE SerialType = @SerialType)");
 
-                using (var connection = new SqlConnection(_connectionStringTransactionDB))
+                using (var connection = new SqlConnection(_connectionStringUserDB))
                 {
                     await connection.OpenAsync();
                     var data = await connection.QueryAsync<SerialNoGenerate>(maxNumberQuery.ToString(), new { SerialType = model.SerialType });
@@ -266,7 +266,7 @@ namespace Boilerplate.Repository
 
         public async Task<IList<TResult>> GetAllAsync<TResult>(string query, object? param = null) where TResult : class
         {
-            using var connection = new SqlConnection(_connectionStringTransactionDB);
+            using var connection = new SqlConnection(_connectionStringUserDB);
 
             return (await connection.QueryAsync<TResult>(query, param)).ToList();
         }

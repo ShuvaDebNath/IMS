@@ -98,7 +98,7 @@ namespace Boilerplate.Repository.Repositories
             values
             (@UserId,@Id,@FullName,@UserTypeId,@MenuId,@MakeBy,@MakeDate,@isActive,@DashboardPreview)";
 
-            using (SqlConnection con = new SqlConnection(_connectionStringTransactionDB))
+            using (SqlConnection con = new SqlConnection(_connectionStringUserDB))
             {
                 con.Open();
                 using (SqlTransaction trn = con.BeginTransaction())
@@ -136,7 +136,7 @@ namespace Boilerplate.Repository.Repositories
             string querytblPagewiseAction = @"delete from tblPagewiseAction
                 where UserId = @UserId";
 
-            using (SqlConnection con = new SqlConnection(_connectionStringTransactionDB))
+            using (SqlConnection con = new SqlConnection(_connectionStringUserDB))
             {
                 con.Open();
                 using (SqlTransaction trn = con.BeginTransaction())
@@ -184,7 +184,7 @@ namespace Boilerplate.Repository.Repositories
                 where Id = @Id";
 
 
-            using (SqlConnection con = new SqlConnection(_connectionStringTransactionDB))
+            using (SqlConnection con = new SqlConnection(_connectionStringUserDB))
             {
                 con.Open();
                 using (SqlTransaction trn = con.BeginTransaction())

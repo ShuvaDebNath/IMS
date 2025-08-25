@@ -2,6 +2,7 @@
 using Boilerplate.Service.Services;
 using Boilerplate.Service.ValidationHelpers;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.SqlServer.Management.Dmf;
 
 namespace Boilerplate.Service
 {
@@ -23,12 +24,17 @@ namespace Boilerplate.Service
 
         private void ConfigureCors(IServiceCollection services)
         {
+
             services.AddCors(options =>
             {
                 options.AddPolicy(CorsPolicyName,
-                    builder => builder.AllowAnyOrigin()
+                    builder => builder.WithOrigins(
+                        "http://localhost:4200",
+                        "https://localhost:4200"
+                    )
                     .WithMethods(AllowedMethods)
-                    .AllowAnyHeader());
+                    .AllowAnyHeader()
+                    .AllowCredentials());
             });
         }
     }

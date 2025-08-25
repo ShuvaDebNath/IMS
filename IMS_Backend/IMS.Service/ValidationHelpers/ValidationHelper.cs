@@ -25,9 +25,14 @@ public class ValidationHelper
         if (!_schemaCache.ValidationSchemas.TryGetValue(schemaKey, out var rules))
             throw new Exception($"No validation rules found for the entity: {schemaKey}");
         ValidateProperty(model.TableName, rules.TableName, "TableName");
-        ValidateProperty(model.ColumnNames, rules.ColumnNames, "ColumnNames");
+        ValidateParameters(model.ColumnNames, rules.ColumnNames, "ColumnNames");
         ValidateParameters(model.QueryParams, rules.QueryParams, "QueryParams");
         ValidateParameters(model.WhereParams, rules.WhereParams, "WhereParams");
+    }
+
+    private void ValidateProperty(object? columnNames1, Dictionary<string, PropertyRule>? columnNames2, string v)
+    {
+        throw new NotImplementedException();
     }
 
     private void ValidateProperty(string? propertyValue, PropertyRule? propertyRules, string propertyName)
@@ -66,7 +71,7 @@ public class ValidationHelper
     public class EntityRules
     {
         public PropertyRule? TableName { get; set; }
-        public PropertyRule? ColumnNames { get; set; }
+        public Dictionary<string, PropertyRule>? ColumnNames { get; set; }
         public Dictionary<string, PropertyRule>? QueryParams { get; set; }
         public Dictionary<string, PropertyRule>? WhereParams { get; set; }
     }

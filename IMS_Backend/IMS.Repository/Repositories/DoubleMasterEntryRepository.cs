@@ -42,7 +42,7 @@ namespace Boilerplate.Repository.Repositories
             deleteChildSQL.Append(strWhereClouse);
 
             int rowAffect = 0;
-            conn = new SqlConnection(_connectionStringTransactionDB);
+            conn = new SqlConnection(_connectionStringUserDB);
 
             if (conn.State != ConnectionState.Open)
                 conn.Open();
@@ -78,7 +78,7 @@ namespace Boilerplate.Repository.Repositories
         public async Task<int> SaveData(DoubleMasterEntryModel model, string authUserName)
         {
             int rowAffect = 0;
-            conn = new SqlConnection(_connectionStringTransactionDB);
+            conn = new SqlConnection(_connectionStringUserDB);
 
             if (conn.State != ConnectionState.Open)
                 conn.Open();
@@ -117,7 +117,7 @@ namespace Boilerplate.Repository.Repositories
         public async Task<int> SaveListData(DoubleMasterEntryModel model, string authUserName)
         {
             int rowAffect = 0;
-            conn = new SqlConnection(_connectionStringTransactionDB);
+            conn = new SqlConnection(_connectionStringUserDB);
 
             if (conn.State != ConnectionState.Open)
                 conn.Open();
@@ -148,7 +148,7 @@ namespace Boilerplate.Repository.Repositories
         public async Task<int> UpdateData(DoubleMasterEntryModel model, string authUserName)
         {
             int rowAffect = 0;
-            conn = new SqlConnection(_connectionStringTransactionDB);
+            conn = new SqlConnection(_connectionStringUserDB);
 
             if (conn.State != ConnectionState.Open)
                 conn.Open();

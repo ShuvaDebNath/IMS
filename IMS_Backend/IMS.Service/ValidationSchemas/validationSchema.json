@@ -10,6 +10,14 @@
           "MaxLength": 50
         }
       }
+    },
+    "tblRoles": {
+      "QueryParams": {
+        "[RoleName]": {
+          "Required": true,
+          "MaxLength": 50
+        }
+      }
     }
   }
 }

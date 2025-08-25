@@ -12,6 +12,7 @@ namespace Boilerplate.Repository.Repositories
         private List<SqlParameter> parameters = new List<SqlParameter>();
         private SqlConnection conn;
         private SqlCommand cmd;
+        private SqlDataAdapter adapter;
 
         public GetDataRepository(IConfiguration configuration) : base(configuration)
         {
@@ -39,7 +40,7 @@ namespace Boilerplate.Repository.Repositories
             {
                 StringBuilder executeQuery = new StringBuilder($"exec {model.ProcedureName} ");
                 executeQuery.Append(GenerateParamsQuery(model, ref parameters));
-                conn = new SqlConnection(_connectionStringTransactionDB);
+                conn = new SqlConnection(_connectionStringUserDB);
 
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
@@ -66,9 +67,27 @@ namespace Boilerplate.Repository.Repositories
         {
             try
             {
-                StringBuilder executeQuery = new StringBuilder($"exec {model.ProcedureName}");
-                executeQuery.Append(GenerateParamsQuery(model,ref parameters));
-                DataSet ds = await GetDataInDataSetAsync(query: executeQuery.ToString(), selector: model.Parameters);
+                DataSet ds = new DataSet();
+                StringBuilder executeQuery = new StringBuilder($"exec {model.ProcedureName} ");
+                executeQuery.Append(GenerateParamsQuery(model, ref parameters));
+                if (model.Parameters.ToString() == "{}")
+                {
+                    ds = await GetDataInDataSetAsync(query: executeQuery.ToString(), selector: model.Parameters);
+                }
+                else
+                {
+                    conn = new SqlConnection(_connectionStringUserDB);
+
+                    if (conn.State != ConnectionState.Open)
+                        conn.Open();
+                    cmd = new SqlCommand();
+                    cmd.Connection = conn;
+                    cmd.Parameters.Clear();
+                    cmd.CommandText = executeQuery.ToString();
+                    cmd.Parameters.AddRange(parameters.ToArray());
+                    adapter = new SqlDataAdapter(cmd);
+                    adapter.Fill(ds);
+                }
                 return ds;
             }
             catch (Exception ex)

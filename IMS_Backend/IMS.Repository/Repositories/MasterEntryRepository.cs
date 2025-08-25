@@ -15,7 +15,7 @@ namespace Boilerplate.Repository.Repositories
 
         public bool ExecuteWriteOperation(string sqlQuery)
         {
-            using var sqlConnection = new SqlConnection(_connectionStringTransactionDB);
+            using var sqlConnection = new SqlConnection(_connectionStringUserDB);
             var sqlCommand = new SqlCommand(sqlQuery, sqlConnection);
 
             sqlConnection.Open();
@@ -27,7 +27,7 @@ namespace Boilerplate.Repository.Repositories
 
         public DataTable ExecuteReadOperation(string sqlQuery)
         {
-            using var sqlConnection = new SqlConnection(_connectionStringTransactionDB);
+            using var sqlConnection = new SqlConnection(_connectionStringUserDB);
             var sqlCommand = new SqlCommand(sqlQuery, sqlConnection);
 
             if (sqlConnection.State!=ConnectionState.Open)
