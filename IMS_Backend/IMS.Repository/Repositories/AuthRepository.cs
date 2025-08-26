@@ -52,7 +52,7 @@ public class AuthRepository : GenericRepository<UserDto>, IAuthRepository
 
     public async Task<UserDto> GetAspNetUserAsync(UserDto userInfo)
     {
-        const string query = "SELECT Id,Email,EmailConfirmed,UserName,PasswordPin FROM AspNetUsers where UserName = @UserName and PasswordHash = @PasswordHash";
+        const string query = "SELECT Id,Email,EmailConfirmed,UserName FROM AspNetUsers where UserName = @UserName and PasswordHash = @PasswordHash";
 
         var result = await GetAllAsync(query, new { userInfo.UserName, PasswordHash = userInfo.Password, PasswordPin = userInfo.PasswordPin });
         return result.FirstOrDefault();
