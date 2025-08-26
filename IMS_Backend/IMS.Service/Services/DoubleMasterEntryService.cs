@@ -71,7 +71,8 @@ public class DoubleMasterEntryService : IDoubleMasterEntryService
 
     private async Task<Messages> SaveDataGateway(DoubleMasterEntryModel model, string authUserName)
     {
-        int rowAffect = await _doubleMasterEntryRepository.SaveData(model, authUserName);
+        //int rowAffect = await _doubleMasterEntryRepository.SaveData(model, authUserName);
+        int rowAffect = await _doubleMasterEntryRepository.sa(model, authUserName);
         if (rowAffect > 0)
         {
             _logger.LogInformation($"Data Save Success!");
