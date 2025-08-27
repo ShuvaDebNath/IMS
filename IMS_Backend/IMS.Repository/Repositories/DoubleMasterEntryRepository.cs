@@ -411,11 +411,13 @@ namespace Boilerplate.Repository.Repositories
             var data = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(strdata);
             int cnt = ((IEnumerable<dynamic>)data).Count();
             List<SqlParameter> param = new List<SqlParameter>();
+            int nonPkColumnCount = 0;
             foreach (var item in (IEnumerable<dynamic>)data)
             {
                 cnt--;
                 if (item.Name.ToLower() == model.ColumnNamePrimary?.ToLower())
                     continue; // skip PK column for identity
+                nonPkColumnCount++;
                 masterColumns.Append(item.Name + (cnt > 0 ? "," : ""));
                 masterValues.Append("@" + item.Name + (cnt > 0 ? "," : ""));
                 if (item.Name.ToLower() == model.ColumnNameSerialNo?.ToLower())
@@ -429,6 +431,10 @@ namespace Boilerplate.Repository.Repositories
                 {
                     param.Add(new SqlParameter("@" + item.Name, item.Value.ToString()));
                 }
+            }
+            if (nonPkColumnCount == 0)
+            {
+                throw new InvalidOperationException($"No columns to insert for table '{masterTablename}'. At least one non-primary-key column is required.");
             }
             masterColumns.Append(", MakeDate, MakeBy, InsertTime");
             masterValues.Append(", getdate(), @authUserName , getdate()");
@@ -486,8 +492,8 @@ namespace Boilerplate.Repository.Repositories
             cmd.Transaction = trn;
             try
             {
-                int serialNo = string.IsNullOrEmpty(model.ColumnNameSerialNo) ? 0 : await GenSerialNumberAsync(model.SerialType);
-                int newPrimaryKey = await MasterTableInsertWithIdentity(model, cmd, authUserName, serialNo);
+                //int serialNo = string.IsNullOrEmpty(model.ColumnNameSerialNo) ? 0 : await GenSerialNumberAsync(model.SerialType);
+                int newPrimaryKey = await MasterTableInsertWithIdentity(model, cmd, authUserName, 0);
                 if (newPrimaryKey > 0)
                 {
                     rowAffect = await DetailsTableInsertWithIdentity(model, newPrimaryKey, cmd);
