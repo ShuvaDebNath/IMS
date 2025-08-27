@@ -1,0 +1,56 @@
+<div class="card card-default">
+  <div class="content-heading" style="border-bottom: 1px solid rgba(0,0,0,.125) !important;">
+    <h2 class="p-2 font-weight-bold"><i class="fas fa-list-alt fa-1x"></i>&nbsp;Role List</h2>
+  </div>
+  <div class="card-body">
+
+    <!--Region Mat Datatable"-->
+    <div>
+      <!-- <div class="float-right">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label style="height: calc(1.8125rem + 2px);" class="input-group-text" for="txtSearch">Search</label>
+          </div>
+          <input id="txtSearch" class="form-control form-control-sm form-control-success" placeholder="Search" (keyup)="GetFilterData($event)">
+        </div>
+      </div> -->
+      <div class="datatable">
+        <table  class="table table-bordered table-striped" >
+          <thead>
+              <tr>
+                <th style="text-align: center !important;" class="bg-gradient-success">SL</th>
+                <th style="text-align: center !important;" class="bg-gradient-success">Role Name</th>
+                <th style="text-align: center !important;" class="bg-gradient-success" *ngIf="allPersmissions">Action</th>
+              </tr>
+          </thead>
+          <tbody class="text-dark">
+            <tr *ngFor="let item of rows; let i = index">
+              <td style="text-align: center !important;">{{(i+1)+((pageIndex-1)*pageSize)}}</td>
+              <td class="text-center align-middle">{{item.Role_Name}}</td>
+              <td class="text-center align-middle p-0 m-0">
+                <a *ngIf="updatePermissions" class="btn bg-gradient-cyan btn-xs mr-2" target="_blank" title="Edit" [routerLink]="['/create-role']"
+                  [queryParams]="{Role_Id:item.Role_Id}"><i class="fa fa-edit" ></i></a> 
+                <button *ngIf="deletePermissions" class="btn bg-gradient-danger btn-xs" title="Delete" (click)="DeleteRoles(item)"><i
+                    class="fas fa-trash"></i></button> 
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <mat-paginator showFirstLastButtons style="background-color: #1aa44b;"
+          style-paginator
+          (page)="paginatiorChange($event)"
+          [length]="length"
+          [pageSize]="pageSize"
+          [pageSizeOptions]="pageSizeOptions"
+          aria-label="Select page of periodic elements"></mat-paginator>
+        
+      </div>
+    </div>
+    <!--/Region Mat Datatable-->
+  </div>
+</div>
+
+<div class="position-fixed mr-5 mb-4" style="right: 0; bottom: 0;z-index: 100;" >
+  <a class="btn btn-float btn-lg rounded-circle bg-gradient-maroon" [routerLink]="['/create-role']" target="_blank" title="Create Unit" *ngIf="insertPermissions"><i
+      class="fa fa-plus"></i></a>
+</div>

@@ -1,0 +1,169 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": "9a394bf4-3a26-4ddf-a798-b04180dff0b9"
+  },
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "AccountingFrontEnd": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/AccountingFrontEnd",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
+            "styles": [
+              "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
+              "node_modules/primeng/resources/primeng.min.css",
+              "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/admin-lte/plugins/fontawesome-free/css/all.min.css",
+              "node_modules/ionicons/dist/collection/components/icon/icon.css",
+              "node_modules/admin-lte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css",
+              "node_modules/admin-lte/dist/css/adminlte.min.css",
+              "node_modules/sweetalert2/dist/sweetalert2.min.css",
+              "node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
+              "node_modules/admin-lte/plugins/select2/css/select2.css",
+              "src/styles.css",
+              "src/google-fonts.css",
+              "./node_modules/ngx-ui-switch/ui-switch.component.css"
+
+            ],
+            "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "node_modules/admin-lte/plugins/jquery/jquery.min.js",
+              "node_modules/admin-lte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.js",
+              "node_modules/admin-lte/dist/js/adminlte.js",
+              "node_modules/admin-lte/plugins/jquery-mousewheel/jquery.mousewheel.js",
+              "node_modules/admin-lte/plugins/raphael/raphael.js",
+              "node_modules/admin-lte/plugins/jquery-mapael/jquery.mapael.js",
+              "node_modules/admin-lte/plugins/chart.js/Chart.js",
+              "node_modules/sweetalert2/dist/sweetalert2.min.js",
+              "node_modules/admin-lte/plugins/select2/js/select2.js"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": false,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "4mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            },
+            "development":
+            {
+                        "buildOptimizer": false,
+                        "optimization": false,
+                        "vendorChunk": true,
+                        "extractLicenses": false,
+                        "sourceMap": true,
+                        "namedChunks": true
+                      }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "AccountingFrontEnd:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "AccountingFrontEnd:build:production"
+            },
+            "development": {
+              "browserTarget": "AccountingFrontEnd:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "AccountingFrontEnd:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "src/test.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "tsconfig.spec.json",
+            "karmaConfig": "karma.conf.js",
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
+            "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
+              "src/styles.css"
+            ],
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "tsconfig.app.json",
+              "tsconfig.spec.json",
+              "e2e/tsconfig.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "e2e/protractor.conf.js",
+            "devServerTarget": "AccountingFrontEnd:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "AccountingFrontEnd:serve:production"
+            }
+          }
+        }
+      }
+    }
+  }
+}

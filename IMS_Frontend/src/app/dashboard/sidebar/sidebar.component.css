@@ -1,0 +1,55 @@
+.logo{
+  /* background-color: #5885AF !important;
+  background-color: #8e0808 !important; */
+  background-color: #1fb75cbf !important;
+  color:#FCF6F5FF !important;
+  font-weight: bold;
+  font-style: italic;
+  font-size: 100px;
+}
+
+.menu-active{
+  background-color: #17c45e !important;
+  color: #dafff3;
+}
+
+.menu-hover:hover{
+  background-color: #059862 !important;
+  color: #000000;
+}
+
+.menu-focus:focus{
+  background-color: #059862 !important;
+  color: #000000;
+}
+
+.text-w{
+  color: #FCF6F5FF !important;
+}
+
+.blue-green-palet{
+  /* background-color: #0d1c6b !important; */
+  background-color: #0d6b19 !important;
+}
+
+.submenu-active{
+  background-color: #056b46 !important;
+  color: #fff !important;
+}
+
+.color-debit-voucher{
+  color: #f35b5b !important;
+}
+
+.color-credit-voucher{
+  color: #75E6DA !important;
+}
+
+.color-journal-voucher{
+  color: #18b47b !important;
+}
+
+.color-contra-voucher{
+  color: #3789e2 !important;
+}
+

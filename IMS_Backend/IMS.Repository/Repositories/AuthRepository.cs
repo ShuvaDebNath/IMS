@@ -52,15 +52,16 @@ public class AuthRepository : GenericRepository<UserDto>, IAuthRepository
 
     public async Task<UserDto> GetAspNetUserAsync(UserDto userInfo)
     {
-        const string query = "SELECT Id,Email,EmailConfirmed,UserName FROM AspNetUsers where UserName = @UserName and PasswordHash = @PasswordHash";
+        const string query = "SELECT User_ID, UserName, Password, Role_id, Superior_ID, IsAuthorized, IsSupplier, Supplier_ID FROM tbl_users where UserName = @UserName and Password = @PasswordHash";
 
-        var result = await GetAllAsync(query, new { userInfo.UserName, PasswordHash = userInfo.Password, PasswordPin = userInfo.PasswordPin });
+
+        var result = await GetAllAsync(query, new { userInfo.UserName, PasswordHash = userInfo.Password,RoleId = userInfo.Role_id,User_ID = userInfo.User_ID });
         return result.FirstOrDefault();
     }
 
     public async Task<UserDto> GetAspNetUserByPasswordAsync(UserDto userInfo)
     {
-        const string query = "SELECT Id,Email,EmailConfirmed,UserName FROM AspNetUsers where PasswordHash = @PasswordHash";
+        const string query = "SELECT User_ID, UserName, Password, Role_id, Superior_ID, IsAuthorized, IsSupplier, Supplier_ID FROM tbl_users where Password = @PasswordHash";
 
         var result = await GetAllAsync(query, new { userInfo.UserName, PasswordHash = userInfo.Password });
         return result.FirstOrDefault();
@@ -68,7 +69,7 @@ public class AuthRepository : GenericRepository<UserDto>, IAuthRepository
 
     public async Task<(UserControlDto menuPermissions, int[] menuPermitted)> GetUserControlsInfo(string id)
     {
-        const string query = "SELECT UserId, FullName, UserTypeId, MenuId, UserRoleID FROM tblUserControl WHERE Id = @UserId";
+        const string query = "SELECT User_ID, UserName, Password, Role_id, Superior_ID, IsAuthorized, IsSupplier, Supplier_ID FROM tbl_users WHERE Id = @UserId";
         DataTable dt = await GetDataInDataTableAsync(query, new { UserId = id });
         UserControlDto menuPermissions = new UserControlDto();
 

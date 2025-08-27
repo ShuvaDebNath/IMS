@@ -1,0 +1,23 @@
+.list-group-item {
+  border: none;
+  padding: 8px 12px;
+  background: #f9fafb;
+  border-radius: 6px;
+  margin-bottom: 4px;
+}
+
+.list-group-item:hover {
+  background: #eef2f7;
+}
+
+.permissions input {
+  transform: scale(1.1);
+}
+
+button.btn-link {
+  color: #333;
+}
+
+button.btn-link:hover {
+  text-decoration: none;
+}

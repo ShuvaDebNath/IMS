@@ -1,0 +1,15 @@
+.blue-green-palet{
+  background-color: #1fb75cbf !important;
+  /* background-color: #2BAE66FF !important; */
+}
+
+.white-palet{
+  color: #FCF6F5FF !important;
+}
+
+.company{
+  font-weight: bold;
+  font-style: italic;
+  font-size: 20px;
+  border-bottom: 0ch;
+}

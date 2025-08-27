@@ -33,19 +33,17 @@ namespace Boilerplate.API.Controllers
         {
             var user = await _authService.GetAspNetUserAsync(userInfo);
 
-            if (user != null && !string.IsNullOrEmpty(user.Email))
+            if (user != null )
             {
                 //var (menuPermissions, menuPermitted) = await _authService.GetUserControlsInfo(user.Id);
 
                 //user.UserTypeId = menuPermissions.UserTypeId;
                 var tokenString = GetToken(user);
-                //var permittedMenu = await _authService.GetAllPermittedMenu(user.Id);
+                //var permittedMenu = await _authService.GetAllPermittedMenu(user.Role_id);
                 //var (buttonPermissions, permittedButtons) = await _authService.GetButtonPermissins(menuPermissions.UserId);
 
                 return Ok(new { IsAuthorized = true, TOKEN = tokenString , //PermittedMenus = permittedMenu, PermittedButtons = permittedButtons,
-                    UserName = user.UserName,  UserId = user.Id,
-                    CompanyId = "bfd4ca78-3ec9-4798-8be9-5a9423917949",
-                    user.PasswordPin });
+                    UserName = user.UserName,  UserId = user.User_ID,Role_Id = user.Role_id });
             }
             else
             {
@@ -59,19 +57,19 @@ namespace Boilerplate.API.Controllers
         {
             var user = await _authService.GetAspNetUserByPasswordAsync(userInfo);
 
-            if (user != null && !string.IsNullOrEmpty(user.Email))
+            if (user != null )
             {
-                var (menuPermissions, menuPermitted) = await _authService.GetUserControlsInfo(user.Id);
+                var (menuPermissions, menuPermitted) = await _authService.GetUserControlsInfo(user.User_ID);
 
-                user.UserTypeId = menuPermissions.UserTypeId;
+                user.Role_id = menuPermissions.UserTypeId;
                 var tokenString = GetToken(user);
-                var permittedMenu = await _authService.GetAllPermittedMenu(user.Id);
+                var permittedMenu = await _authService.GetAllPermittedMenu(user.User_ID);
                 var (buttonPermissions, permittedButtons) = await _authService.GetButtonPermissins(menuPermissions.UserId);
 
                 return Ok(new { IsAuthorized = true, TOKEN = tokenString, PermittedMenus = permittedMenu, PermittedButtons = permittedButtons, 
                     UserName = user.UserName, FullName = menuPermissions.FullName, 
-                    UserId = menuPermissions.UserId, CompanyId = "bfd4ca78-3ec9-4798-8be9-5a9423917949",
-                    UserType = user.UserTypeId
+                    UserId = menuPermissions.UserId,
+                    UserType = user.Role_id
                 });
             }
             else
@@ -151,8 +149,7 @@ namespace Boilerplate.API.Controllers
             SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             List<Claim> claims = new List<Claim> {
-                new Claim(JwtRegisteredClaimNames.Email, userInfo.Email),
-                new Claim(TokenVariableParams.UserId, userInfo.Id),
+                new Claim(TokenVariableParams.UserId, userInfo.User_ID),
                 new Claim(TokenVariableParams.UserName, userInfo.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };

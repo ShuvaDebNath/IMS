@@ -1,0 +1,61 @@
+<style>
+  .ngx-select{
+  border: 5px solid red !important;
+}
+.dropdown{
+  border: 5px solid red !important;
+}
+</style>
+<div class="mt-5">
+  <main class="main-container ">
+      <div class="p-md-0 m-0 ">
+          <div class="row shadow p-5">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+              <div class="">
+                <form name="loginForm" [formGroup]="LoginForm" role="form" class="position-relative">
+                    <div class="card" style="height: 400px;">
+                        <div class="card-body">
+                            <div class="text-center">
+                                <h1>IMS</h1>
+                            </div>
+                            <h5 class="text-uppercase text-center">LOGIN</h5>
+                            <!-- <div [class]="{'p-0':true, 'mb-3':true, 'error':LoginForm.controls.fiscalYear.invalid && (LoginForm.controls.fiscalYear.touched||isSubmit),'success':LoginForm.controls.fiscalYear.valid && (LoginForm.controls.fiscalYear.touched||isSubmit)}" style="border-radius: 5px;">
+                              <ngx-select class="border-5"
+                              formControlName="fiscalYear"
+                              noResultsFound="Not found"
+                              [items]="fiscalYears"
+                              optionValueField="fiscal_Year_Id"
+                              optionTextField="startDate"
+                              [noAutoComplete]="true"
+                              placeholder="Select Fiscal Year">
+                              </ngx-select>
+                            </div> -->
+
+                            <div class="form-group do-float" >
+                                <input  formControlName="userName" autocomplete="off"
+                                [class]="{'form-control':true, 'rounded-pill':true,'error':LoginForm.controls.userName.invalid && (LoginForm.controls.userName.touched||isSubmit),'success':LoginForm.controls.userName.valid && (LoginForm.controls.userName.touched||isSubmit)}"
+                                type="text" id="username" name="username" placeholder="Username">
+
+                            </div>
+
+                            <div class="form-group do-float" >
+                                <input formControlName="password"  type="password"
+                                [class]="{'form-control':true, 'rounded-pill':true,'error':LoginForm.controls.password.invalid && (LoginForm.controls.password.touched||isSubmit),'success':LoginForm.controls.password.valid && (LoginForm.controls.password.touched||isSubmit)}"
+                                id="password" name="password" placeholder="Password">
+
+                            </div>
+                             <div class="form-group do-float">
+                                  <button [disabled]="LoginForm.invalid" class="btn btn-bold btn-block btn-primary position-absolute left-30 rounded-pill" style="z-index: 2;width: 280px;" type="submit" (click)="login()">Sign in</button>
+                              </div>
+                        </div>
+                    </div>
+                   
+                </form>
+            </div>
+            </div>            
+            <div class="col-md-4"></div>
+          </div>
+      </div>
+  </main>
+</div>
