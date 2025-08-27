@@ -11,9 +11,9 @@
         }
       }
     },
-    "tblRoles": {
+    "tbl_Roles": {
       "QueryParams": {
-        "[RoleName]": {
+        "[Role_Name]": {
           "Required": true,
           "MaxLength": 50
         }

@@ -22,11 +22,28 @@ namespace Boilerplate.Repository.Repositories
         {
             try
             {
-                StringBuilder executeQuery = new StringBuilder($"exec {model.ProcedureName}");
+                DataTable ds = new DataTable();
+                StringBuilder executeQuery = new StringBuilder($"exec {model.ProcedureName} ");
                 executeQuery.Append(GenerateParamsQuery(model, ref parameters));
+                if (model.Parameters.ToString() == "{}")
+                {
+                    ds = await GetDataInDataTableAsync(query: executeQuery.ToString(), selector: model.Parameters);
+                }
+                else
+                {
+                    conn = new SqlConnection(_connectionStringUserDB);
 
-                DataTable dt = await GetDataInDataTableAsync(query: executeQuery.ToString(), selector: model.Parameters);
-                return dt;
+                    if (conn.State != ConnectionState.Open)
+                        conn.Open();
+                    cmd = new SqlCommand();
+                    cmd.Connection = conn;
+                    cmd.Parameters.Clear();
+                    cmd.CommandText = executeQuery.ToString();
+                    cmd.Parameters.AddRange(parameters.ToArray());
+                    adapter = new SqlDataAdapter(cmd);
+                    adapter.Fill(ds);
+                }
+                return ds;
             }
             catch (Exception ex)
             {

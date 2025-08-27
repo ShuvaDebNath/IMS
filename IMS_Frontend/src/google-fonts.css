@@ -1,0 +1,8 @@
+@font-face {
+  font-family: 'Roboto Slab';
+  src: url('/assets/fonts/RobotoSlab-VariableFont_wght.eot'); /* IE9 Compat Modes */
+  src: url('/assets/fonts/RobotoSlab-VariableFont_wght.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  /* url('/assets/fonts/RobotoSlab-VariableFont_wght.woff') format('woff'), Modern Browsers */
+  url('/assets/fonts/RobotoSlab-VariableFont_wght.ttf')  format('truetype'), /* Safari, Android, iOS */
+  url('/assets/fonts/RobotoSlab-VariableFont_wght.svg#svgFontName') format('svg'); /* Legacy iOS */
+}

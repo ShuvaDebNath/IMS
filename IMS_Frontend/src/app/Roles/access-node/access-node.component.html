@@ -1,0 +1,92 @@
+<li class="list-group-item d-flex flex-column">
+
+  <!-- Row: Menu Title + Expand/Collapse -->
+  <div class="d-flex justify-content-between align-items-center">
+    <div>
+      <button *ngIf="menu.Children?.length > 0"
+              class="btn btn-sm btn-link p-0 mr-2"
+              (click)="toggleExpand()">
+        <i class="fa" [ngClass]="expanded ? 'fa-chevron-down' : 'fa-chevron-right'"></i>
+      </button>
+
+      <!-- Main Menu Checkbox -->
+      <input type="checkbox"
+             [(ngModel)]="menu.permissions.enabled"
+             (change)="toggleMenuEnabled(menu.permissions.enabled)" />
+      <i class="{{ menu.MenuLogo }} ml-1"></i> {{ menu.SubMenuName }}
+    </div>
+    <div class="permissions d-flex">
+      <ng-container  *ngFor="let butonPermission of menu.ButtonName">
+        <label class="mr-3 mb-0" *ngIf="butonPermission.ButtonName=='Insert'">
+          <input type="checkbox"
+                [(ngModel)]="menu.permissions.Insert"
+                (change)="toggleChildPermissions('Insert', menu.permissions.Insert)"
+                />
+          <span class="ml-1">{{butonPermission.ButtonName}}</span>
+        </label>
+        <label class="mr-3 mb-0" *ngIf="butonPermission.ButtonName=='View'">
+          <input type="checkbox"
+                [(ngModel)]="menu.permissions.View"
+                (change)="toggleChildPermissions('View', menu.permissions.View)"
+                />
+          <span class="ml-1">{{butonPermission.ButtonName}}</span>
+        </label>
+        <label class="mr-3 mb-0" *ngIf="butonPermission.ButtonName=='Update'">
+          <input type="checkbox"
+                [(ngModel)]="menu.permissions.Update"
+                (change)="toggleChildPermissions('Update', menu.permissions.Update)"
+                />
+          <span class="ml-1">{{butonPermission.ButtonName}}</span>
+        </label>
+        <label class="mr-3 mb-0" *ngIf="butonPermission.ButtonName=='Delete'">
+          <input type="checkbox"
+                [(ngModel)]="menu.permissions.Delete"
+                (change)="toggleChildPermissions('Delete', menu.permissions.Delete)"
+                />
+          <span class="ml-1">{{butonPermission.ButtonName}}</span>
+        </label>
+
+      </ng-container>
+    </div>
+</div>
+
+    <!-- Permission checkboxes -->
+    
+      <!-- <label class="mr-3 mb-0">
+        <input type="checkbox"
+               [(ngModel)]="menu.permissions.view"
+               [disabled]="!menu.permissions.enabled"
+               (change)="toggleChildPermissions('view', menu.permissions.view)" />
+        <span class="ml-1">View</span>
+      </label>
+      <label class="mr-3 mb-0">
+        <input type="checkbox"
+               [(ngModel)]="menu.permissions.create"
+               [disabled]="!menu.permissions.enabled"
+               (change)="toggleChildPermissions('create', menu.permissions.create)" />
+        <span class="ml-1">Create</span>
+      </label>
+      <label class="mr-3 mb-0">
+        <input type="checkbox"
+               [(ngModel)]="menu.permissions.edit"
+               [disabled]="!menu.permissions.enabled"
+               (change)="toggleChildPermissions('edit', menu.permissions.edit)" />
+        <span class="ml-1">Edit</span>
+      </label>
+      <label class="mb-0">
+        <input type="checkbox"
+               [(ngModel)]="menu.permissions.delete"
+               [disabled]="!menu.permissions.enabled"
+               (change)="toggleChildPermissions('delete', menu.permissions.delete)" />
+        <span class="ml-1">Delete</span>
+      </label>
+    </div>
+  </div> -->
+
+  <!-- Child Nodes -->
+  <ul *ngIf="menu.Children?.length > 0 && expanded" class="list-group mt-2 ml-4">
+    <ng-container *ngFor="let child of menu.Children">
+      <app-access-node [menu]="child" [parent]="menu"></app-access-node>
+    </ng-container>
+  </ul>
+</li>

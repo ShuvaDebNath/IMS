@@ -1,0 +1,33 @@
+.container-login {
+  height: 100vh;
+  position: relative;
+}
+
+.vertical-center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.bottom-20N{
+  bottom: -20px;
+}
+.left-30{
+  left: 30px;
+}
+.error{
+  border: 1px solid tomato;
+}
+.success{
+  border: 1px solid rgb(71, 199, 71);
+}
+
+.ngx-select__toggle{
+  height: 55px !important;
+}
+ngx-select>div>div>div>div{
+  height: 55px !important;
+
+}

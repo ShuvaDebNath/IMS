@@ -1,0 +1,16 @@
+/* Ensure nested dropdowns appear properly */
+.dropdown-submenu {
+  position: relative;
+}
+
+.dropdown-submenu > .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-left: 0.1rem;
+  margin-right: 0.1rem;
+  display: none; /* hide by default */
+}
+
+.dropdown-submenu.show > .dropdown-menu {
+  display: block; /* show when parent is open */
+}
