@@ -54,6 +54,7 @@ public class AuthRepository : GenericRepository<UserDto>, IAuthRepository
     {
         const string query = "SELECT User_ID, UserName, Password, Role_id, Superior_ID, IsAuthorized, IsSupplier, Supplier_ID FROM tbl_users where UserName = @UserName and Password = @PasswordHash";
 
+
         var result = await GetAllAsync(query, new { userInfo.UserName, PasswordHash = userInfo.Password,RoleId = userInfo.Role_id,User_ID = userInfo.User_ID });
         return result.FirstOrDefault();
     }

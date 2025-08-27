@@ -401,5 +401,115 @@ namespace Boilerplate.Repository.Repositories
             }
             return rowAffect > 0 ? 1 : 0;
         }
+
+        private async Task<int> MasterTableInsertWithIdentity(DoubleMasterEntryModel model, SqlCommand cmd, string authUserName, int serialNo)
+        {
+            string? masterTablename = model.TableNameMaster;
+            var masterColumns = new StringBuilder();
+            var masterValues = new StringBuilder();
+            string? strdata = Convert.ToString(model.Data);
+            var data = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(strdata);
+            int cnt = ((IEnumerable<dynamic>)data).Count();
+            List<SqlParameter> param = new List<SqlParameter>();
+            int nonPkColumnCount = 0;
+            foreach (var item in (IEnumerable<dynamic>)data)
+            {
+                cnt--;
+                if (item.Name.ToLower() == model.ColumnNamePrimary?.ToLower())
+                    continue; // skip PK column for identity
+                nonPkColumnCount++;
+                masterColumns.Append(item.Name + (cnt > 0 ? "," : ""));
+                masterValues.Append("@" + item.Name + (cnt > 0 ? "," : ""));
+                if (item.Name.ToLower() == model.ColumnNameSerialNo?.ToLower())
+                {
+                    if (serialNo > 0)
+                        param.Add(new SqlParameter("@" + item.Name, item.Value.ToString() + serialNo.ToString()));
+                    else
+                        param.Add(new SqlParameter("@" + item.Name, item.Value.ToString()));
+                }
+                else
+                {
+                    param.Add(new SqlParameter("@" + item.Name, item.Value.ToString()));
+                }
+            }
+            if (nonPkColumnCount == 0)
+            {
+                throw new InvalidOperationException($"No columns to insert for table '{masterTablename}'. At least one non-primary-key column is required.");
+            }
+            masterColumns.Append(", MakeDate, MakeBy, InsertTime");
+            masterValues.Append(", getdate(), @authUserName , getdate()");
+            param.Add(new SqlParameter("@authUserName", authUserName));
+            cmd.CommandText = $"INSERT INTO {masterTablename} ({masterColumns}) VALUES ({masterValues}); SELECT CAST(SCOPE_IDENTITY() AS int);";
+            cmd.Parameters.Clear();
+            cmd.Parameters.AddRange(param.ToArray());
+            var newPrimaryKey = (int)await cmd.ExecuteScalarAsync();
+            return newPrimaryKey;
+        }
+
+        private async Task<int> DetailsTableInsertWithIdentity(DoubleMasterEntryModel model, int primeryKey, SqlCommand cmd)
+        {
+            int rowAffect = 0;
+            string? childTablename = model.TableNameChild;
+            string? strdata = Convert.ToString(model.DetailsData);
+            var details = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(strdata);
+            foreach (var citem in (IEnumerable<dynamic>)details)
+            {
+                var cData = citem;
+                int cnt = ((IEnumerable<dynamic>)cData).Count();
+                var childColumns = new StringBuilder();
+                var childValues = new StringBuilder();
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                foreach (var j in (IEnumerable<dynamic>)cData)
+                {
+                    cnt--;
+                    childColumns.Append(j.Name + (cnt > 0 ? "," : ""));
+                    childValues.Append("@" + j.Name + (cnt > 0 ? "," : ""));
+                    if (j.Name.ToLower() == model.ColumnNameForign?.ToLower())
+                        parameters.Add(new SqlParameter("@" + j.Name, primeryKey));
+                    else
+                        parameters.Add(new SqlParameter("@" + j.Name, j.Value.ToString()));
+                }
+                childColumns.Append(", MakeDate, MakeBy, InsertTime");
+                childValues.Append(", getdate(), @authUserName , getdate()");
+                parameters.Add(new SqlParameter("@authUserName", cmd.Parameters["@authUserName"].Value));
+                cmd.CommandText = $"INSERT INTO {childTablename} ({childColumns}) VALUES ({childValues})";
+                cmd.Parameters.Clear();
+                cmd.Parameters.AddRange(parameters.ToArray());
+                rowAffect += await cmd.ExecuteNonQueryAsync();
+            }
+            return rowAffect > 0 ? 1 : 0;
+        }
+
+        public async Task<int> SaveDataWithIdentity(DoubleMasterEntryModel model, string authUserName)
+        {
+            int rowAffect = 0;
+            conn = new SqlConnection(_connectionStringUserDB);
+            if (conn.State != ConnectionState.Open)
+                await conn.OpenAsync();
+            var trn = conn.BeginTransaction();
+            cmd = new SqlCommand();
+            cmd.Connection = conn;
+            cmd.Transaction = trn;
+            try
+            {
+                //int serialNo = string.IsNullOrEmpty(model.ColumnNameSerialNo) ? 0 : await GenSerialNumberAsync(model.SerialType);
+                int newPrimaryKey = await MasterTableInsertWithIdentity(model, cmd, authUserName, 0);
+                if (newPrimaryKey > 0)
+                {
+                    rowAffect = await DetailsTableInsertWithIdentity(model, newPrimaryKey, cmd);
+                }
+                await cmd.Transaction.CommitAsync();
+            }
+            catch (Exception)
+            {
+                await cmd.Transaction.RollbackAsync();
+                throw;
+            }
+            finally
+            {
+                await conn.CloseAsync();
+            }
+            return rowAffect;
+        }
     }
 }
