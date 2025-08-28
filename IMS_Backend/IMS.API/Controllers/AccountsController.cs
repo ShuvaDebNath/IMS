@@ -35,15 +35,9 @@ namespace Boilerplate.API.Controllers
 
             if (user != null )
             {
-                //var (menuPermissions, menuPermitted) = await _authService.GetUserControlsInfo(user.Id);
-
-                //user.UserTypeId = menuPermissions.UserTypeId;
                 var tokenString = GetToken(user);
-                //var permittedMenu = await _authService.GetAllPermittedMenu(user.Role_id);
-                //var (buttonPermissions, permittedButtons) = await _authService.GetButtonPermissins(menuPermissions.UserId);
 
-                return Ok(new { IsAuthorized = true, TOKEN = tokenString , //PermittedMenus = permittedMenu, PermittedButtons = permittedButtons,
-                    UserName = user.UserName,  UserId = user.User_ID,Role_Id = user.Role_id });
+                return Ok(new { IsAuthorized = true, TOKEN = tokenString, UserName = user.UserName,  UserId = user.User_ID,Role_Id = user.Role_id });
             }
             else
             {
