@@ -207,11 +207,12 @@ public GetAllData(model: GetDataModel){
   }
 
   public GetInitialData(model: GetDataModel){
-    console.log(model);
+   
+    const token = localStorage.getItem('token');
     
     return this.http.post<any>(this.baseUrlApi+this.getapiController+'/GetInitialData',model,{
       headers: new HttpHeaders({
-        Authorization: 'Bearer ' + this.token,
+         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       }),
     })

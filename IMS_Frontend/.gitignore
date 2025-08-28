@@ -44,3 +44,28 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Angular cache
+.angular/
+
+# build outputs
+/dist
+/out-tsc
+
+# IDE/Editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# misc
+.DS_Store
+Thumbs.db

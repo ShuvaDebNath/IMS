@@ -34,6 +34,9 @@ import { RoleCreateComponent } from '../Roles/role-create/role-create.component'
 import { MenuComponent } from '../dashboard/menu/menu.component';
 import { AccessNodeComponent } from '../Roles/access-node/access-node.component';
 import { AccessPanelComponent } from '../Roles/access-panel/access-panel.component';
+import { CreatePageComponent } from '../production/requisition/raw-material-requisition/create/create-page.component';
+import { EditPageComponent } from '../production/requisition/raw-material-requisition/edit/edit-page.component';
+import { ListPageComponent } from '../production/requisition/raw-material-requisition/list/list-page.component';
 
 
 // import {MatSortModule} from '@angular/material/sort';
@@ -89,6 +92,9 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           {path: 'role-list', component: RoleListComponent},
           {path: 'create-role', component: RoleCreateComponent},
           {path: 'access-panel', component: AccessPanelComponent},
+          { path: 'create-raw-material', component: CreatePageComponent },
+          { path: 'edit-raw-material', component: EditPageComponent },
+          { path: 'list-raw-material', component: ListPageComponent },
         ]
       }
     ]),

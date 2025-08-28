@@ -1,0 +1,11 @@
+// List Page Component
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-list-page',
+  templateUrl: './list-page.component.html',
+  styleUrls: ['./list-page.component.css']
+})
+export class ListPageComponent {
+  // Component logic here
+}

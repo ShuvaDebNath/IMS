@@ -1,0 +1,78 @@
+<div class="container">
+  <h1>RM Requisition Form</h1>
+  <form>
+    <div class="form-group">
+      <label for="requisitionDate">Requisition Date</label>
+      <input type="text" id="requisitionDate" class="form-control" value="27/08/2025" readonly>
+    </div>
+    <div class="form-group">
+      <label for="requisitionNumber">Requisition Number</label>
+      <input type="text" id="requisitionNumber" class="form-control" value="20250827-VL101" readonly>
+    </div>
+    <div class="form-group">
+      <label for="remarks">Remarks</label>
+      <textarea id="remarks" class="form-control"></textarea>
+    </div>
+
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Article</th>
+          <th>Description</th>
+          <th>Color</th>
+          <th>Width</th>
+          <th>Weight(KG)</th>
+          <th>Unit</th>
+          <th>Qty</th>
+          <th>Roll/Bag</th>
+          <th>Roll/Bag Qty</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <select class="form-control">
+              <option>1020H-RAW</option>
+            </select>
+          </td>
+          <td><input type="text" class="form-control"></td>
+          <td>
+            <select class="form-control">
+              <option>Select</option>
+            </select>
+          </td>
+          <td>
+            <select class="form-control">
+              <option>Select</option>
+            </select>
+          </td>
+          <td><input type="text" class="form-control"></td>
+          <td>
+            <select class="form-control">
+              <option>Select</option>
+            </select>
+          </td>
+          <td><input type="text" class="form-control"></td>
+          <td>
+            <select class="form-control">
+              <option>Rolls</option>
+              <option>Bags</option>
+            </select>
+          </td>
+          <td><input type="text" class="form-control" value="0" readonly></td>
+          <td><button class="btn btn-success">Add</button></td>
+        </tr>
+        <tr>
+          <td colspan="8">Total</td>
+          <td colspan="2">
+            <div>Rolls</div>
+            <div>Bags</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <button class="btn btn-primary">Create</button>
+  </form>
+</div>
