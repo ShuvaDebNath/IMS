@@ -1,0 +1,16 @@
+<p-dropdown
+  [options]="items"
+  [(ngModel)]="selectedItem"
+  placeholder="Select City"
+  [virtualScroll]="true"
+  [virtualScrollItemSize]="38"
+  [lazy]="true"
+
+  [filter]="true"
+  [showClear]="true"
+  [style]="{width:'250px'}"
+  (onLazyLoad)="loadData($event)">
+</p-dropdown>
+
+  <!-- [loading]="loading" -->
+   dsfsdf

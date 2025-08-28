@@ -1,5 +1,6 @@
 ﻿using Boilerplate.Contracts;
 using Boilerplate.Contracts.Repositories;
+using IMS.Contracts.DTOs;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Data.SqlClient;
@@ -78,6 +79,11 @@ namespace Boilerplate.Repository.Repositories
             {
                 conn.Close();
             }
+        }
+
+        public Task<List<DDLSearchResultModel>> GetDataById(DDLSearchModel model)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<DataSet> GetInitialData(GetDataModel model)
