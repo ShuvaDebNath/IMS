@@ -15,6 +15,9 @@ Boilerplate.Service/obj/
 *.vscode
 *.vs
 
+# Environment variables
+.env
+
 # Ignore build artifacts and compiled files
 bin/
 obj/
