@@ -1,61 +1,172 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-  .ngx-select{
-  border: 5px solid red !important;
+
+.parent-component {
+  height: 100vh;
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #f5f7fa, #e4e8f0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.dropdown{
-  border: 5px solid red !important;
+
+/* Main container */
+.main-container {
+  width: 100%;
+  max-width: 800px;
+  background: #fff;
+  padding: 40px 20px;
+  
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+/* Heading */
+.card{
+  padding: 30px;
+}
+.card h1 {
+  font-size: 28px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: left;
+}
+/* Divider */
+.card hr {
+  margin: 15px 0;
+  border: 0;
+  border-top: 1px solid #e5e5e5;
+}
+/* Inner form alignment */
+.form-inner {
+  max-width: 450px;
+  margin: auto;
+  text-align: left;
+}
+/* Labels */
+.form-group label {
+  display: inline-block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #333;
+}
+/* Input wrapper */
+.input-wrapper {
+  position: relative;
+  width: 100%;
+}
+/* Input fields */
+.form-control {
+  width: 100%;
+  padding: 10px 15px 10px 40px; /* extra left padding for icon */
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  margin-bottom: 15px;
+  transition: 0.3s;
+}
+.form-control:focus {
+  border-color: #6d2240;
+  box-shadow: 0 0 5px rgba(109,34,64,0.3);
+}
+/* Icons inside input */
+.input-wrapper i {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: #b91c1c; /* red icon color like image */
+  font-size: 14px;
+}
+/* Error & success states */
+.error {
+  border: 2px solid #ef4444 !important;
+}
+.success {
+  border: 2px solid #10b981 !important;
+}
+/* Button */
+.btn-primary {
+  background-color: #6d2240;
+  border: none;
+  padding: 10px 30px;
+  font-size: 16px;
+  border-radius: 4px;
+  color: white;
+  transition: 0.3s;
+  display: inline-block;
+}
+.btn-primary:hover {
+  background-color: #5a1b34;
+}
+/* Disable button */
+.btn-primary:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
+/* Align button center */
+.form-group button {
+  display: block;
+  margin: 15px auto 0;
 }
 </style>
-<div class="mt-5">
-  <main class="main-container ">
-      <div class="p-md-0 m-0 ">
-          <div class="row shadow p-5">
-            <div class="col-md-4"></div>
-            <div class="col-md-4">
-              <div class="">
-                <form name="loginForm" [formGroup]="LoginForm" role="form" class="position-relative">
-                    <div class="card" style="height: 400px;">
-                        <div class="card-body">
-                            <div class="text-center">
-                                <h1>IMS</h1>
-                            </div>
-                            <h5 class="text-uppercase text-center">LOGIN</h5>
-                            <!-- <div [class]="{'p-0':true, 'mb-3':true, 'error':LoginForm.controls.fiscalYear.invalid && (LoginForm.controls.fiscalYear.touched||isSubmit),'success':LoginForm.controls.fiscalYear.valid && (LoginForm.controls.fiscalYear.touched||isSubmit)}" style="border-radius: 5px;">
-                              <ngx-select class="border-5"
-                              formControlName="fiscalYear"
-                              noResultsFound="Not found"
-                              [items]="fiscalYears"
-                              optionValueField="fiscal_Year_Id"
-                              optionTextField="startDate"
-                              [noAutoComplete]="true"
-                              placeholder="Select Fiscal Year">
-                              </ngx-select>
-                            </div> -->
-
-                            <div class="form-group do-float" >
-                                <input  formControlName="userName" autocomplete="off"
-                                [class]="{'form-control':true, 'rounded-pill':true,'error':LoginForm.controls.userName.invalid && (LoginForm.controls.userName.touched||isSubmit),'success':LoginForm.controls.userName.valid && (LoginForm.controls.userName.touched||isSubmit)}"
-                                type="text" id="username" name="username" placeholder="Username">
-
-                            </div>
-
-                            <div class="form-group do-float" >
-                                <input formControlName="password"  type="password"
-                                [class]="{'form-control':true, 'rounded-pill':true,'error':LoginForm.controls.password.invalid && (LoginForm.controls.password.touched||isSubmit),'success':LoginForm.controls.password.valid && (LoginForm.controls.password.touched||isSubmit)}"
-                                id="password" name="password" placeholder="Password">
-
-                            </div>
-                             <div class="form-group do-float">
-                                  <button [disabled]="LoginForm.invalid" class="btn btn-bold btn-block btn-primary position-absolute left-30 rounded-pill" style="z-index: 2;width: 280px;" type="submit" (click)="login()">Sign in</button>
-                              </div>
-                        </div>
-                    </div>
-                   
-                </form>
-            </div>
-            </div>            
-            <div class="col-md-4"></div>
+<div class="parent-component">
+  <div class="main-container">
+  <form name="loginForm" [formGroup]="LoginForm" role="form" class="position-relative">
+    <div class="card">
+      <h1>Login</h1>
+      <hr />
+      <div class="form-inner">
+        <div class="form-group">
+          <label for="username">User Name</label>
+          <div class="input-wrapper">
+            <i class="fa fa-user"></i>
+            <input
+              formControlName="userName"
+              autocomplete="off"
+              [class]="{
+                'form-control': true,
+                'error': LoginForm.controls.userName.invalid && (LoginForm.controls.userName.touched || isSubmit),
+                'success': LoginForm.controls.userName.valid && (LoginForm.controls.userName.touched || isSubmit)
+              }"
+              type="text"
+              id="username"
+              name="username"
+              placeholder="Enter your username"
+            />
           </div>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-wrapper">
+            <i class="fa fa-key"></i>
+            <input
+              formControlName="password"
+              type="password"
+              [class]="{
+                'form-control': true,
+                'error': LoginForm.controls.password.invalid && (LoginForm.controls.password.touched || isSubmit),
+                'success': LoginForm.controls.password.valid && (LoginForm.controls.password.touched || isSubmit)
+              }"
+              id="password"
+              name="password"
+              placeholder="Enter your password"
+            />
+          </div>
+        </div>
+        <div class="form-group">
+          <button
+            [disabled]="LoginForm.invalid"
+            class="btn btn-primary"
+            type="submit"
+            (click)="login()"
+          >
+            Login
+          </button>
+        </div>
       </div>
-  </main>
+    </div>
+  </form>
+</div>
 </div>
