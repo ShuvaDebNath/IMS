@@ -28,8 +28,6 @@ export class HeaderComponent implements OnInit {
         private masterEntryService: MasterEntryService,   ) {}
 
   ngOnInit() {
-    // this.companyName = window.localStorage.getItem('companyName');
-    // this.userName = window.localStorage.getItem('userName');
     this.GetDynamicMenu();
     this.title.setTitle('Dashboard');
     if(GlobalConfig.USER_NAME){
@@ -46,40 +44,9 @@ export class HeaderComponent implements OnInit {
   GetDynamicMenu(){
     this.menu = window.localStorage.getItem('UserMenu');
     this.menu = JSON.parse(this.menu)
-    console.log(this.menu);
           this.menu.forEach((e:any)=>{
-            console.log(JSON.parse(e.Children));
             e.Children = JSON.parse(e.Children);
           })
-    //   var ProcedureData={
-    //   procedureName:'[prc_GetMenuTree]',
-    //   parameters:{
-    //     UserId:''
-    //   }
-    // };
-    // this.masterEntryService.GetAllData(ProcedureData).subscribe(res=>{
-    //   console.log(res);
-    //   if (res.status) {
-        
-    //   this.menu = JSON.parse(res.data);
-		// 			console.log(this.menu);
-    //       this.menu.forEach((e:any)=>{
-    //         console.log(JSON.parse(e.Children));
-    //         e.Children = JSON.parse(e.Children);
-    //       })
-
-        
-    //   }else{
-
-    //     Swal.fire(
-    //       {
-    //         title: `Invalid token!`,
-    //         text: `Please Login!`,
-    //         icon: 'error',
-    //       }
-    //     );
-    //   }
-    // });
     }
  
   Logout() {

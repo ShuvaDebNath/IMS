@@ -53,17 +53,15 @@ export class LoginComponent implements OnInit {
       swal.fire('Invalid Input', '', 'error');
       return;
     }
-    console.log(this.LoginForm.value);
     this.service.UserLogin(this.LoginForm.value).subscribe((res) => {
-      console.log(res);
       if (res.isAuthorized) {
         // let company = this.companyList.filter((x: { ComId: any; })=> x.ComId == this.LoginForm.controls.comId.value);
          window.localStorage.setItem('token', res.token);
         // debugger;
         window.localStorage.setItem('userName', res.userName);
         window.localStorage.setItem('companyId', res.companyId);
-        window.localStorage.setItem('roleId', res.Role_Id);
-        window.localStorage.setItem('userId', res.UserId);
+        window.localStorage.setItem('roleId', res.role_Id);
+        window.localStorage.setItem('userId', res.userId);
 
         var menu = "";
         var ProcedureData = {
@@ -75,8 +73,6 @@ export class LoginComponent implements OnInit {
         
             this.ms.GetInitialData(ProcedureData).subscribe({
               next: (results) => {
-                console.log(JSON.parse(results.data).Tables1);
-        
                 if (results.status) {
                   menu = JSON.parse(results.data).Tables1;
                   window.localStorage.setItem('UserMenu', JSON.stringify(menu));  

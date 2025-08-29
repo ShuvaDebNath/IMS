@@ -468,9 +468,7 @@ namespace Boilerplate.Repository.Repositories
                         parameters.Add(new SqlParameter("@" + j.Name, primeryKey));
                     else
                         parameters.Add(new SqlParameter("@" + j.Name, j.Value.ToString()));
-                }
-                childColumns.Append(", MakeDate, MakeBy, InsertTime");
-                childValues.Append(", getdate(), @authUserName , getdate()");
+                }                   
                 parameters.Add(new SqlParameter("@authUserName", cmd.Parameters["@authUserName"].Value));
                 cmd.CommandText = $"INSERT INTO {childTablename} ({childColumns}) VALUES ({childValues})";
                 cmd.Parameters.Clear();
@@ -492,7 +490,14 @@ namespace Boilerplate.Repository.Repositories
             cmd.Transaction = trn;
             try
             {
-                //int serialNo = string.IsNullOrEmpty(model.ColumnNameSerialNo) ? 0 : await GenSerialNumberAsync(model.SerialType);
+                int serialNo = 0;
+
+                if (!string.IsNullOrWhiteSpace(model.SerialType) &&
+                    !string.IsNullOrWhiteSpace(model.ColumnNameSerialNo))
+                {
+                    serialNo = await GenSerialNumberAsync(model.SerialType);
+                }
+
                 int newPrimaryKey = await MasterTableInsertWithIdentity(model, cmd, authUserName, 0);
                 if (newPrimaryKey > 0)
                 {

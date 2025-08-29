@@ -1,78 +1,141 @@
 <div class="container">
-  <h1>RM Requisition Form</h1>
-  <form>
-    <div class="form-group">
-      <label for="requisitionDate">Requisition Date</label>
-      <input type="text" id="requisitionDate" class="form-control" value="27/08/2025" readonly>
-    </div>
-    <div class="form-group">
-      <label for="requisitionNumber">Requisition Number</label>
-      <input type="text" id="requisitionNumber" class="form-control" value="20250827-VL101" readonly>
-    </div>
-    <div class="form-group">
-      <label for="remarks">Remarks</label>
-      <textarea id="remarks" class="form-control"></textarea>
+  <h1>Raw Material Requisition Form</h1>
+
+  <br />
+  <form [formGroup]="requisitionForm">
+
+    <!-- Header fields -->
+    <div class="row mb-3">
+      <!-- Requisition Date -->
+      <div class="col-md-2">
+        <label class="form-label">Requisition Date</label>
+        <input type="date" class="form-control" formControlName="requisitionDate" />
+      </div>
+
+      <!-- Remarks -->
+      <div class="col-md-8">
+        <label class="form-label">Remarks</label>
+        <textarea class="form-control" formControlName="remarks" rows="1"></textarea>
+      </div>
     </div>
 
+
+
+    <h3><strong>Details </strong></h3>
+    <!-- Items table -->
     <table class="table table-bordered">
+
+      <colgroup>
+        <col style="width: 40%;">
+        <col style="width: 30%;">
+        <col style="width: 10%;">
+        <col style="width: 10%;">
+        <col style="width: 10%;">
+        <col style="width: 5%;">
+      </colgroup>
       <thead>
         <tr>
-          <th>Article</th>
-          <th>Description</th>
-          <th>Color</th>
-          <th>Width</th>
-          <th>Weight(KG)</th>
-          <th>Unit</th>
-          <th>Qty</th>
-          <th>Roll/Bag</th>
-          <th>Roll/Bag Qty</th>
-          <th></th>
+         
+          <th class="th-article" style="text-align: center;">
+      <span>Article</span>
+
+      <!-- PrimeIcons version (PrimeNG) -->
+      <button type="button"
+              class="icon-btn"
+              [disabled]="reloadingArticles"
+              (click)="refreshArticles()"
+              title="Refresh articles">
+        <i class="pi" [ngClass]="reloadingArticles ? 'pi-spinner pi-spin' : 'pi-refresh'"></i>
+      </button>
+    </th>
+          <th style="text-align: center;">Description</th>
+          <th style="text-align: center;">Qty</th>
+          <th style="text-align: center;">Roll/Bag</th>
+          <th style="text-align: center;">Roll/Bag Qty</th>
+          <th style="width: 60px;"></th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
+
+      <tbody formArrayName="items">
+        <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
           <td>
-            <select class="form-control">
-              <option>1020H-RAW</option>
-            </select>
+            <div class="form-group">
+
+              <p-dropdown class="p-0 rm-dd" [style]="{ width: '100%' }" [panelStyle]="{ width: '100%' }"
+                [options]="rawMaterialArticles" optionLabel="ConcatArticleNo" optionValue="RawMaterial_ID"
+                [filter]="true" filterBy="ConcatArticleNo" [showClear]="true" placeholder="Please Select"
+                (onChange)="onArticleChange(i, $event.value)"
+                formControlName="rawMaterialId">
+                <ng-template let-article pTemplate="item">
+                  <div class="flex align-items-center gap-2">
+                    <div>{{ article.ConcatArticleNo }}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+            </div>
           </td>
-          <td><input type="text" class="form-control"></td>
-          <td>
-            <select class="form-control">
-              <option>Select</option>
-            </select>
+
+          <td class="col-description">
+            <input class="form-control" formControlName="description" />
           </td>
+
           <td>
-            <select class="form-control">
-              <option>Select</option>
-            </select>
+            <input type="number" class="form-control" formControlName="qty" style="text-align: center;" />
           </td>
-          <td><input type="text" class="form-control"></td>
+
           <td>
-            <select class="form-control">
-              <option>Select</option>
-            </select>
-          </td>
-          <td><input type="text" class="form-control"></td>
-          <td>
-            <select class="form-control">
+            <select class="form-control" formControlName="rollOrBag">
               <option>Rolls</option>
               <option>Bags</option>
             </select>
           </td>
-          <td><input type="text" class="form-control" value="0" readonly></td>
-          <td><button class="btn btn-success">Add</button></td>
-        </tr>
-        <tr>
-          <td colspan="8">Total</td>
-          <td colspan="2">
-            <div>Rolls</div>
-            <div>Bags</div>
+
+          <td>
+            <input type="number" class="form-control" formControlName="rollBagQty" style="text-align: center;" />
+          </td>
+
+          <td>
+            <button type="button" class="btn btn-sm btn-danger" (click)="removeItem(i)">
+              ×
+            </button>
           </td>
         </tr>
       </tbody>
+
+
+      <tr class="totals-row">
+        <td></td> 
+        <td class="text-end fw-bold">Totals:</td>
+        <td>
+          <input class="form-control text-end" [value]="totalQty" disabled />
+        </td>
+        <td>
+          <div class="rbq-label">Rolls</div>
+          <div class="rbq-label">Bags</div>
+        </td> 
+        <td colspan="2" class="rbq-total-cell">
+          <div class="rbq-grid">
+            <input class="form-control text-end" [value]="totalRoll" disabled /><br />
+            <input class="form-control text-end" [value]="totalBag" disabled />
+          </div>
+        </td>
+      </tr>
+
     </table>
 
-    <button class="btn btn-primary">Create</button>
+
+
+    <div class="d-flex justify-content-end gap-2 mt-3">
+      <button type="button" class="btn btn-outline-success btn-rounded" (click)="addItem()">
+        <i class="bi bi-plus-circle me-1"></i> Add Row
+      </button>
+
+      <button type="submit" (click)="saveData()" class="btn btn-primary btn-rounded" [disabled]="requisitionForm.invalid">
+        <i class="bi bi-save me-1"></i> Save
+      </button>
+    </div>
+
+
   </form>
+
 </div>
