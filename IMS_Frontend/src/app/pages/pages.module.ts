@@ -10,7 +10,7 @@ import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { NgxBootstrapTreeviewModule } from 'ngx-bootstrap-treeview';
 import { HttpClientModule } from '@angular/common/http';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import { NgxSelectModule,INgxSelectOptions } from 'ngx-select-ex';
+import { NgxSelectModule, INgxSelectOptions } from 'ngx-select-ex';
 import { UiSwitchModule } from 'ngx-ui-switch';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PagesComponent } from './pages.component';
@@ -20,15 +20,15 @@ import { FooterComponent } from '../dashboard/footer/footer.component';
 import { SidebarComponent } from '../dashboard/sidebar/sidebar.component';
 
 //Material Data Table
-import {MatPaginatorModule} from '@angular/material/paginator';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { Select2Module } from 'ng-select2-component';
 import { TreeTableModule } from 'primeng/treetable';
 import { TreeModule } from 'primeng/tree';
 import { DropdownModule } from 'primeng/dropdown'
 import { SelectButtonModule } from 'primeng/selectbutton';
 // import { ProjectWiseExpenseComponent } from '../Project-Wise-Income-Expense/project-wise-expense/project-wise-expense.component';
-import {PopoverModule} from 'ngx-bootstrap/popover';
-import {DatePipe} from '@angular/common';
+import { PopoverModule } from 'ngx-bootstrap/popover';
+import { DatePipe } from '@angular/common';
 import { RoleListComponent } from '../Roles/role-list/role-list.component';
 import { RoleCreateComponent } from '../Roles/role-create/role-create.component';
 import { MenuComponent } from '../dashboard/menu/menu.component';
@@ -37,15 +37,18 @@ import { AccessPanelComponent } from '../Roles/access-panel/access-panel.compone
 import { CreatePageComponent } from '../production/requisition/raw-material-requisition/create/create-page.component';
 import { EditPageComponent } from '../production/requisition/raw-material-requisition/edit/edit-page.component';
 import { ListPageComponent } from '../production/requisition/raw-material-requisition/list/list-page.component';
-
+import { PendingRMRequisitionComponent } from '../production/requisition/raw-material-requisition/list/PendingRMRequisition/pending-rm-requisition.component';
+import { IssuedRMRequisitionComponent } from '../production/requisition/raw-material-requisition/list/IssuedRMRequisition/issued-rm-requisition.component';
+import { ReceivedRMListComponent } from '../production/requisition/raw-material-requisition/list/ReceivedRMList/received-rm-list.component';
+import { AllRMRequisitionListComponent } from '../production/requisition/raw-material-requisition/list/AllRMRequisitionList/all-rm-requisition-list.component';
 
 // import {MatSortModule} from '@angular/material/sort';
 // import {MatTableModule} from '@angular/material/table';
 //!--Material Data Table
 
 const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more options
-  keepSelectedItems:false,
-  allowClear:true
+  keepSelectedItems: false,
+  allowClear: true
 };
 
 @NgModule({
@@ -60,7 +63,7 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     MenuComponent,
     AccessNodeComponent,
     AccessPanelComponent
-    ],
+  ],
   imports: [
     CommonModule,
     Select2Module,
@@ -79,7 +82,7 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
       color: 'rgb(0, 189, 99)',
       switchColor: '#80FFA2',
       defaultBgColor: '#00ACFF',
-      defaultBoColor : '#476EFF',
+      defaultBoColor: '#476EFF',
       checkedLabel: 'on',
       uncheckedLabel: 'off'
     }),
@@ -88,13 +91,17 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
       {
         path: '', component: PagesComponent,
         children: [
-          {path: 'dashboard', component: BaseContentComponent},
-          {path: 'role-list', component: RoleListComponent},
-          {path: 'create-role', component: RoleCreateComponent},
-          {path: 'access-panel', component: AccessPanelComponent},
+          { path: 'dashboard', component: BaseContentComponent },
+          { path: 'role-list', component: RoleListComponent },
+          { path: 'create-role', component: RoleCreateComponent },
+          { path: 'access-panel', component: AccessPanelComponent },
           { path: 'create-raw-material', component: CreatePageComponent },
           { path: 'edit-raw-material', component: EditPageComponent },
           { path: 'list-raw-material', component: ListPageComponent },
+          { path: 'pending-rm-requisition', component: PendingRMRequisitionComponent },
+          { path: 'issued-rm-requisition', component: IssuedRMRequisitionComponent },
+          { path: 'received-rm-list', component: ReceivedRMListComponent },
+          { path: 'all-rm-requisition-list', component: AllRMRequisitionListComponent }
         ]
       }
     ]),
