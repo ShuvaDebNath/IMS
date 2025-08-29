@@ -23,6 +23,9 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 // import { ProjectWiseExpenseComponent } from '../Project-Wise-Income-Expense/project-wise-expense/project-wise-expense.component';
 import {PopoverModule} from 'ngx-bootstrap/popover';
 import {DatePipe} from '@angular/common';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputTextModule } from 'primeng/inputtext';
 
 
 import { PagesComponent } from './pages.component';
@@ -39,6 +42,7 @@ import { CreatePageComponent } from '../production/requisition/raw-material-requ
 import { EditPageComponent } from '../production/requisition/raw-material-requisition/edit/edit-page.component';
 import { ListPageComponent } from '../production/requisition/raw-material-requisition/list/list-page.component';
 import { GeneratePiComponent } from '../PI/generate-pi/generate-pi.component';
+import { TestPIComponent } from '../PI/TestPI/TestPI.component';
 
 
 
@@ -63,9 +67,12 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     MenuComponent,
     AccessNodeComponent,
     AccessPanelComponent,
-    GeneratePiComponent
+    GeneratePiComponent,
+    TestPIComponent
     ],
   imports: [
+
+    NgSelectModule,
     CommonModule,
     Select2Module,
     HttpClientModule,
@@ -77,7 +84,11 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     TreeModule,
     DropdownModule,
     SelectButtonModule,
+    CheckboxModule,
+    InputTextModule,
     PopoverModule,
+    
+    DatePipe,
     UiSwitchModule.forRoot({
       size: 'small',
       color: 'rgb(0, 189, 99)',
@@ -100,6 +111,7 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'edit-raw-material', component: EditPageComponent },
           { path: 'list-raw-material', component: ListPageComponent },
           { path: 'generate-pi', component: GeneratePiComponent },
+          { path: 'generate-pit', component: TestPIComponent },
         ]
       }
     ]),

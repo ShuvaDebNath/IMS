@@ -1,16 +1,402 @@
-<p-dropdown
-  [options]="items"
-  [(ngModel)]="selectedItem"
-  placeholder="Select City"
-  [virtualScroll]="true"
-  [virtualScrollItemSize]="38"
-  [lazy]="true"
+<div class="card">
+  <div class="card-header sticky-header">
+    <h3 class="card-title mb-0">Proforma Invoice</h3>
+    <div class="float-right">
+      <button class="btn btn-sm btn-success mr-2"><i class="fas fa-save"></i>&nbsp;Save</button>
+      <button class="btn btn-sm btn-primary"><i class="fas fa-sync"></i>&nbsp;Refresh</button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-4">
+        <label class="control-label">Consignee Initial</label>
+        <input type="text" class="form-control form-control-sm" placeholder="Consignee Initial" id="coninit" name="coninit"/>
+       
+      </div>
+      <div class="col-md-4">
+        <label class="control-label">PI No</label>
+        <input type="text" class="form-control form-control-sm" placeholder="PI No" readOnly id="pino" name="pino"/>
+      </div>
+      <div class="col-md-4">
+        <label class="control-label">Date</label>
+        <input type="text" class="form-control form-control-sm" placeholder="Date" readOnly id="Date" name="Date"/>
+      </div>
+    </div>
+    <hr/>
+    <div class="row">
+      <div class="col-md-4 mb-2">
+        <label class="control-label">Shippeer</label><br/>
+        <p-dropdown 
+        [options]="ShipperList" 
+        optionLabel="CompanyName"
+        optionValue="Beneficiary_Account_ID"
+        [filter]="true" 
+        filterBy="CompanyName" 
+        [showClear]="true" 
+        placeholder="Select a Country">
+        </p-dropdown>
+      </div>
+      <div class="col-md-4 mb-2">
+        <label class="control-label">Beneficiary's Bank</label><br/>
+        <p-dropdown 
+        [options]="ShipperList" 
+        optionLabel="CompanyName"
+        optionValue="Beneficiary_Account_ID"
+        [filter]="true" 
+        filterBy="CompanyName" 
+        [showClear]="true" 
+        placeholder="Select a Country">
+        </p-dropdown>
+      </div>
+      <div class="col-md-4 mb-2">
+        <label class="control-label">Country of Origin</label><br/>
+        <p-dropdown 
+        [options]="ShipperList" 
+        optionLabel="CompanyName"
+        optionValue="Beneficiary_Account_ID"
+        [filter]="true" 
+        filterBy="CompanyName" 
+        [showClear]="true" 
+        placeholder="Select a Country">
+        </p-dropdown>        
+      </div>
+      <div class="col-md-4 mb-2">
+        <label class="control-label">Packing</label><br/>
+        <p-dropdown 
+        [options]="ShipperList" 
+        optionLabel="CompanyName"
+        optionValue="Beneficiary_Account_ID"
+        [filter]="true" 
+        filterBy="CompanyName" 
+        [showClear]="true" 
+        placeholder="Select a Country">
+        </p-dropdown>         
+      </div>
+      <div class="col-md-4 mb-2">
+        <label class="control-label">Loading Mode</label><br/>
+        <p-dropdown 
+        [options]="ShipperList" 
+        optionLabel="CompanyName"
+        optionValue="Beneficiary_Account_ID"
+        [filter]="true" 
+        filterBy="CompanyName" 
+        [showClear]="true" 
+        placeholder="Select a Country">
+        </p-dropdown>           
+      </div>
+      <div class="col-md-4 mb-2">
+        <label class="control-label">Payment Mode</label><br/>
+        <p-dropdown 
+        [options]="ShipperList" 
+        optionLabel="CompanyName"
+        optionValue="Beneficiary_Account_ID"
+        [filter]="true" 
+        filterBy="CompanyName" 
+        [showClear]="true" 
+        placeholder="Select a Country">
+        </p-dropdown>           
+      </div>
+      <div class="col-md-4 mb-2">
+        <label class="control-label">Consignee</label><br/>
+        <p-dropdown 
+        [options]="ShipperList" 
+        optionLabel="CompanyName"
+        optionValue="Beneficiary_Account_ID"
+        [filter]="true" 
+        filterBy="CompanyName" 
+        [showClear]="true" 
+        placeholder="Select a Country">
+        </p-dropdown>          
+      </div>
+      <div class="col-md-4 mb-2">
+        <label class="control-label">Contact Person</label>
+        <input type="text" class="form-control form-control-sm" id="ContactPerson" placeholder="Contact Person"/>
+      </div>
+      <div class="col-md-4 mb-2">
+        <label class="control-label">Applicant Bank</label><br/>
+        <p-dropdown 
+        [options]="ShipperList" 
+        optionLabel="CompanyName"
+        optionValue="Beneficiary_Account_ID"
+        [filter]="true" 
+        filterBy="CompanyName" 
+        [showClear]="true" 
+        placeholder="Select a Country">
+        </p-dropdown>          
+      </div>
+      <div class="col-md-4 mb-2">
+        <label class="control-label">Buyer Name</label>
+        <input type="text" class="form-control form-control-sm" id="BuyerName" placeholder="Buyer Name"/>
+      </div>
+      <div class="col-md-4 mb-2">
+        <label for="ingredient1" class="mr-2"> Is This Buying House Order? </label>
+        <p-checkbox inputId="ingredient1" name="pizza"value="yes" />
+      </div>
+      <div class="col-md-4 mb-2">
+        <label class="control-label">Buying House</label><br/>
+        <p-dropdown 
+        [options]="ShipperList" 
+        optionLabel="CompanyName"
+        optionValue="Beneficiary_Account_ID"
+        [filter]="true" 
+        filterBy="CompanyName" 
+        [showClear]="true" 
+        placeholder="Select a Country">
+        </p-dropdown>          
+      </div>
+      <div class="col-md-4 mb-2">
+        <label class="control-label">Delivery Address</label>
+        <textarea id="DeliveryAddress" class="form-control form-control-sm" rows="3"></textarea>
+      </div>
+      <div class="col-md-4 mb-2">
+        <label class="control-label">Style</label>
+        <textarea id="Style" class="form-control form-control-sm" rows="3"></textarea>
+      </div>
+      <div class="col-md-4 mb-2">
+        <label class="control-label">Goods Description</label>
+        <textarea id="GoodsDescription" class="form-control form-control-sm" rows="3"></textarea>
+      </div>
 
-  [filter]="true"
-  [showClear]="true"
-  [style]="{width:'250px'}"
-  (onLazyLoad)="loadData($event)">
-</p-dropdown>
+      <div class="col-md-4 mb-2">
+        <label class="control-label">Expire Date</label>
+          <input type="text"
+           placeholder="DD/MM/YYYY"
+           class="form-control form-control-sm"
+           bsDatepicker
+           [bsConfig]="{ isAnimated: true,adaptivePosition: true }">
+      </div>
 
-  <!-- [loading]="loading" -->
-   dsfsdf
+      <div class="col-md-4 mb-2">
+        <label class="control-label">Terms of Delivery</label><br/>
+        <p-dropdown 
+        [options]="ShipperList" 
+        optionLabel="CompanyName"
+        optionValue="Beneficiary_Account_ID"
+        [filter]="true" 
+        filterBy="CompanyName" 
+        [showClear]="true" 
+        placeholder="Select a Country">
+        </p-dropdown>          
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-sm table-bordered table-striped">
+        <thead>
+          <tr>
+            <th class="text-center align-middle"></th>
+            <th class="text-center align-middle">Article No</th>
+            <th class="text-center align-middle">Description</th>
+            <th class="text-center align-middle">Width</th>
+            <th class="text-center align-middle">Color</th>
+            <th class="text-center align-middle">Packaging</th>
+            <th class="text-center align-middle">Qty</th>
+            <th class="text-center align-middle">Unit</th>
+            <th class="text-center align-middle">Unit Price</th>
+            <th class="text-center align-middle">Total Amount</th>
+            <th class="text-center align-middle">Prod. Cost Unit</th>
+            <th class="text-center align-middle">Total Prod. Cost</th>
+            <th class="text-center align-middle">A. A.</th>
+          </tr>
+        </thead>       
+        <tbody>
+          <tr>
+            <td>
+              <button class="btn btn-xs btn-primary"><i class="fas fa-plus"></i></button>
+              <button class="btn btn-xs btn-danger"><i class="fas fa-times"></i></button>
+            </td>
+            <td class="mt-auto">
+              <input style="width: 5rem;" type="text" class="form-control form-control-sm" placeholder="Article No" id="ArticleNo" name="ArticleNo"/>
+            </td>
+            <td>
+              <p-dropdown 
+              [options]="ShipperList" 
+              optionLabel="CompanyName"
+              optionValue="Beneficiary_Account_ID"
+              [filter]="true" 
+              filterBy="CompanyName" 
+              [showClear]="true" 
+              placeholder="Select a Country">
+              </p-dropdown>
+            </td>
+            <td>
+              <p-dropdown 
+              [options]="ShipperList" 
+              optionLabel="CompanyName"
+              optionValue="Beneficiary_Account_ID"
+              [filter]="true" 
+              filterBy="CompanyName" 
+              [showClear]="true" 
+              placeholder="Select a Country">
+              </p-dropdown>
+            </td>
+            <td>
+              <p-dropdown 
+              [options]="ShipperList" 
+              optionLabel="CompanyName"
+              optionValue="Beneficiary_Account_ID"
+              [filter]="true" 
+              filterBy="CompanyName" 
+              [showClear]="true" 
+              placeholder="Select a Country">
+              </p-dropdown>
+            </td>
+            <td>
+              <p-dropdown 
+              [options]="ShipperList" 
+              optionLabel="CompanyName"
+              optionValue="Beneficiary_Account_ID"
+              [filter]="true" 
+              filterBy="CompanyName" 
+              [showClear]="true" 
+              placeholder="Select a Country">
+              </p-dropdown>
+            </td>
+            <td>
+              <input style="width: 5rem;" type="text" class="form-control form-control-sm" placeholder="Qty" id="Qty" name="Qty"/>
+            </td>
+            <td>
+              <p-dropdown 
+              [options]="ShipperList" 
+              optionLabel="CompanyName"
+              optionValue="Beneficiary_Account_ID"
+              [filter]="true" 
+              filterBy="CompanyName" 
+              [showClear]="true" 
+              placeholder="Select a Country">
+              </p-dropdown>
+            </td>
+            <td>
+              <input style="width: 5rem;" type="text" class="form-control form-control-sm" placeholder="Unit Price" id="Rate" name="Rate"/>
+            </td>     
+            <td>
+              <input style="width: 5rem;" type="text" class="form-control form-control-sm" placeholder="Total Amount" id="Amount" name="Amount"/>
+            </td> 
+            <td>
+              <input style="width: 5rem;" type="text" class="form-control form-control-sm" placeholder="Prod. Cost Unit" id="ProdCost" name="ProdCost"/>
+            </td>   
+            <td>
+              <input style="width: 5rem;" type="text" class="form-control form-control-sm" placeholder="Total Prod. Cost" id="TProdCost" name="TProdCost"/>
+            </td> 
+            <td>
+              <p-dropdown 
+              [options]="ShipperList" 
+              optionLabel="CompanyName"
+              optionValue="Beneficiary_Account_ID"
+              [filter]="true" 
+              filterBy="CompanyName" 
+              [showClear]="true" 
+              placeholder="Select a Country">
+              </p-dropdown>
+            </td>             
+        </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th class="text-center align-middle"></th>
+            <th class="text-center align-middle">Total</th>
+            <th class="text-center align-middle"></th>
+            <th class="text-center align-middle"></th>
+            <th class="text-center align-middle"></th>
+            <th class="text-center align-middle"></th>
+            <th class="text-center align-middle">
+              <input type="text" class="form-control form-control-sm" placeholder="Total Qty" id="GTQty" name="GTQty"/>
+            </th>
+            <th class="text-center align-middle"></th>
+            <th class="text-center align-middle"> </th>
+            <th class="text-center align-middle">  
+              <input type="text" class="form-control form-control-sm" placeholder="Total Amout" id="GTAmout" name="GTAmout"/>
+            </th>
+            <th class="text-center align-middle"></th>
+            <th class="text-center align-middle"></th>
+            <th class="text-center align-middle"></th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 mb-2">
+        <label class="control-label">Delivery Condition</label><br/>
+        <p-dropdown 
+        [options]="ShipperList" 
+        optionLabel="CompanyName"
+        optionValue="Beneficiary_Account_ID"
+        [filter]="true" 
+        filterBy="CompanyName" 
+        [showClear]="true" 
+        placeholder="Select a Delivery Condition">
+        </p-dropdown>
+      </div>
+      <div class="col-md-4 mb-2">
+        <label class="control-label">Partial Shipment</label><br/>
+        <p-dropdown 
+        [options]="ShipperList" 
+        optionLabel="CompanyName"
+        optionValue="Beneficiary_Account_ID"
+        [filter]="true" 
+        filterBy="CompanyName" 
+        [showClear]="true" 
+        placeholder="Select a Shipment">
+        </p-dropdown>
+      </div>
+      <div class="col-md-4 mb-2">
+        <label class="control-label">Price Terms</label><br/>
+        <p-dropdown 
+        [options]="ShipperList" 
+        optionLabel="CompanyName"
+        optionValue="Beneficiary_Account_ID"
+        [filter]="true" 
+        filterBy="CompanyName" 
+        [showClear]="true" 
+        placeholder="Select a Price Terms">
+        </p-dropdown>
+      </div>
+
+      <div class="col-md-4 mb-2">
+        <label class="control-label">Documents</label>
+        <textarea id="Documents" class="form-control form-control-sm" rows="3"></textarea>
+      </div>
+      <div class="col-md-4 mb-2">
+        <label class="control-label">Port Of Loading</label>
+        <textarea id="PortOfLoading" class="form-control form-control-sm" rows="3"></textarea>
+      </div>
+      <div class="col-md-4 mb-2">
+        <label class="control-label">Port Of Destination</label>
+        <textarea id="PortOfDestination" class="form-control form-control-sm" rows="3"></textarea>
+      </div>
+
+      <div class="col-md-4 mb-2">
+        <label class="control-label">Remarks</label>
+        <input type="text" class="form-control form-control-sm" id="Remarks" placeholder="Remarks"/>
+      </div>
+
+      <div class="col-md-4 mb-2">
+        <label class="control-label">Force Majeure</label><br/>
+        <p-dropdown 
+        [options]="ShipperList" 
+        optionLabel="CompanyName"
+        optionValue="Beneficiary_Account_ID"
+        [filter]="true" 
+        filterBy="CompanyName" 
+        [showClear]="true" 
+        placeholder="Select a Force Majeure">
+        </p-dropdown>
+      </div>
+      <div class="col-md-4 mb-2">
+        <label class="control-label">Arbitration</label><br/>
+        <p-dropdown 
+        [options]="ShipperList" 
+        optionLabel="CompanyName"
+        optionValue="Beneficiary_Account_ID"
+        [filter]="true" 
+        filterBy="CompanyName" 
+        [showClear]="true" 
+        placeholder="Select a Arbitration">
+        </p-dropdown>
+      </div>      
+
+    </div>
+    
+
+  </div>
+</div>

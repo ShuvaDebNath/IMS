@@ -1,50 +1,43 @@
 import { Component, OnInit } from '@angular/core';
-import { ScrollerOptions, SelectItem } from 'primeng/api';
-import { DdlLazyloadingService } from 'src/app/services/lazyloading/ddlLazyloading.service';
+import { GetDataModel } from 'src/app/models/GetDataModel';
+import { GlobalServiceService } from 'src/app/services/Global-service.service';
+import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
+import swal from 'sweetalert2';
+
 
 
 @Component({
   selector: 'app-generate-pi',
   templateUrl: './generate-pi.component.html',
   styleUrls: ['./generate-pi.component.css'],
-
 })
 export class GeneratePiComponent implements OnInit {
+  ShipperList: any|[];
+  constructor( private service:MasterEntryService,
+    private gs: GlobalServiceService
+  ) {}
 
-  items: SelectItem[] = [];
-  selectedItem: any;
-  loading: boolean = false;
-
-    constructor(private dllService:DdlLazyloadingService) {
-       
-    }
-  ngOnInit(): void {
-    
+  ngOnInit(): void {    
+    this.GetInitialData()
   }
 
-  loadData(event: { first: number; last: number; filter?: string }) {
-    this.loading = true;
-
-    const rows = event.last - event.first;
-    const filter = event.filter || ''; 
-    console.clear();
-    console.log(filter);
-    console.log(rows);
-    console.log(event.first);
-
-    this.dllService.GetCountryDDLLazyLoad(event.first, rows, filter).subscribe({
-      next: (data: any) => {
-        console.log(data);
-        // this.items = data.map(data => ({
-        //   label: city.name,
-        //   value: city.id
-        // }));
-        this.loading = false;
-      },
-      error: () => {
-        this.loading = false;
+  GetInitialData():void{
+    this.ShipperList=[];
+    let model=new GetDataModel();
+    model.procedureName="usp_ProformaInvoice_GetInitialData";
+    model.parameters={};
+    this.service.GetInitialData(model).subscribe((res:any) => {
+      if (res.status) {
+        let DataSet = JSON.parse(res.data);
+        console.log(res);
+        console.log(DataSet);
+        this.ShipperList.push(DataSet.Tables1[0]);
+      } else {
+        if (res.msg == 'Invalid Token') {
+          this.gs.Logout();
+        } else {
+        }
       }
-    });
+    });    
   }
 }
-    

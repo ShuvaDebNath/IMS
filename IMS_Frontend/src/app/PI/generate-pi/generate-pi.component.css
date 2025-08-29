@@ -1,0 +1,20 @@
+.w-full{
+    width: 100% !important;
+}
+.p-placeholder{
+    margin: 0px;
+    padding: 5px;
+}
+.p-dropdown{
+    height: 40px;
+}
+
+
+.sticky-header {
+  position: sticky;
+  top: 4.5rem;
+  z-index: 100;
+  background-color: white; /* Ensure it's not transparent */
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}

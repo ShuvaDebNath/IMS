@@ -24,6 +24,7 @@ import { RoleListComponent } from './Roles/role-list/role-list.component';
 import { RoleCreateComponent } from './Roles/role-create/role-create.component';
 import { MatPaginatorModule } from "@angular/material/paginator";
 
+
 const CustomSelectOptions: INgxSelectOptions = {
   keepSelectedItems: false,
   allowClear: true,
