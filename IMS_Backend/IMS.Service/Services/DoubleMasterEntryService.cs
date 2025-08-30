@@ -48,16 +48,32 @@ public class DoubleMasterEntryService : IDoubleMasterEntryService
 
                 if (isMemberFind == false)
                 {
+
                     return MessageType.NotFound("Member Name Not Found!");
+                }
+                else
+                {
+
+                    if (model.GuidKey == true)
+                    {
+                        return await SaveDataGatewayWithGuid(model, authUserName);
+                    }
+                    else
+                    {
+                        return await SaveDataGateway(model, authUserName);
+                    }
+                }
+            }
+            else
+            {
+                if (model.GuidKey == true)
+                {
+                    return await SaveDataGatewayWithGuid(model, authUserName);
                 }
                 else
                 {
                     return await SaveDataGateway(model, authUserName);
                 }
-            }
-            else
-            {
-                return await SaveDataGateway(model, authUserName);
             }
            
         }
@@ -68,7 +84,18 @@ public class DoubleMasterEntryService : IDoubleMasterEntryService
             throw;
         }
     }
-
+    private async Task<Messages> SaveDataGatewayWithGuid(DoubleMasterEntryModel model, string authUserName)
+    {
+        int rowAffect = await _doubleMasterEntryRepository.SaveData(model, authUserName);
+        //int rowAffect = await _doubleMasterEntryRepository.SaveDataWithIdentity(model, authUserName);
+        if (rowAffect > 0)
+        {
+            _logger.LogInformation($"Data Save Success!");
+            return MessageType.SaveSuccess(model);
+        }
+        _logger.LogInformation($"Data Save Fail!");
+        return MessageType.SaveError(null);
+    }
     private async Task<Messages> SaveDataGateway(DoubleMasterEntryModel model, string authUserName)
     {
         //int rowAffect = await _doubleMasterEntryRepository.SaveData(model, authUserName);

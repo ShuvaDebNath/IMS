@@ -11,6 +11,10 @@ export class AccessNodeComponent implements OnInit {
   expanded: boolean = false; // expand/collapse state
 
   ngOnInit(): void {
+    console.log(this.menu.ButtonName);
+    if(typeof(this.menu.ButtonName)=="string" && this.menu.ButtonName!='' && this.menu.ButtonName!=undefined){
+      this.menu.ButtonName = JSON.parse(this.menu.ButtonName)
+    }
     if (!this.menu.permissions) {
       this.menu.permissions = {
         enabled: false,   // new main checkbox

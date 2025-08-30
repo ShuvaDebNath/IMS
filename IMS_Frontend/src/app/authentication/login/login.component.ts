@@ -66,8 +66,9 @@ export class LoginComponent implements OnInit {
         window.localStorage.setItem('userId', res.UserId);
 
         var menu = "";
+        var menuWithButtonPermission = "";
         var ProcedureData = {
-              procedureName: 'prc_GetMenuTree_By_Role',
+              procedureName: 'usp_GetMenuTree_By_Role',
               parameters: {
                 "Role_id":res.role_Id
               }
@@ -78,8 +79,10 @@ export class LoginComponent implements OnInit {
                 console.log(JSON.parse(results.data).Tables1);
         
                 if (results.status) {
-                  menu = JSON.parse(results.data).Tables1;
+                  menu = JSON.parse(results.data).Tables2;
+                  menuWithButtonPermission = JSON.parse(results.data).Tables1;
                   window.localStorage.setItem('UserMenu', JSON.stringify(menu));  
+                  window.localStorage.setItem('UserMenuWithPermission', JSON.stringify(menuWithButtonPermission)); 
                   this.router.navigate(['/dashboard']).then(() => {
                     window.location.reload();
                   });      

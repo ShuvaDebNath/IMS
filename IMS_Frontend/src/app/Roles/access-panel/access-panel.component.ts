@@ -43,7 +43,7 @@ export class AccessPanelComponent implements OnInit {
 
   getInitialData(){
     var ProcedureData = {
-			procedureName: '[prc_InitialData]',
+			procedureName: '[usp_InitialData]',
 			parameters: {
 			}
 		}; 
@@ -67,7 +67,7 @@ export class AccessPanelComponent implements OnInit {
 	// Example menu JSON
 	getMenuData() {
 		var ProcedureData = {
-			procedureName: '[prc_GetMenuTree]',
+			procedureName: '[usp_GetMenuTree]',
 			parameters: {
 				UserId: ''
 			}
@@ -81,9 +81,15 @@ export class AccessPanelComponent implements OnInit {
 					this.menus = JSON.parse(results.data);
 					console.log(this.menus);
           this.menus.forEach(e=>{
-            console.log(JSON.parse(e.ButtonName));
-            e.ButtonName = JSON.parse(e.ButtonName);
+            console.log(e.ButtonName,e);
+            if(e.ButtonName!='' && e.ButtonName!=null){
+              console.log(JSON.parse(e.ButtonName));
+              e.ButtonName = JSON.parse(e.ButtonName);
+            }
             e.Children = JSON.parse(e.Children);
+            console.log(e.Children);            
+            this.checkChildren(e.children)
+            
           })
 
 				} else if (results.msg == 'Invalid Token') {
@@ -96,6 +102,21 @@ export class AccessPanelComponent implements OnInit {
 
 		return this.menus;
 	}
+
+  checkChildren(child:any){
+    
+    console.log(child);
+    
+    if(child!=undefined)
+    child.forEach((e:any)=>{
+      console.log(e);
+      
+      if(e.ButtonName!='' && e.ButtonName!=null){
+        e.ButtonName = JSON.parse(e.ButtonName);
+      }
+      this.checkChildren(e.Children)
+    });
+  }
 
 	addPermissions(nodes: any[]) {
 		nodes.forEach(node => {
@@ -200,7 +221,7 @@ savePermissions() {
     
   });
 
-  this.masterEntyService.SaveDataMasterDetails(detailsData,TableNameChild,masterData,TableNameMaster,ColumnNamePrimary,ColumnNameForign,'','').subscribe((res:any) => {
+  this.masterEntyService.SaveDataMasterDetails(detailsData,TableNameChild,masterData,TableNameMaster,ColumnNamePrimary,ColumnNameForign,'','',true).subscribe((res:any) => {
         console.log(res);
         
         if (res.status) {
@@ -238,8 +259,7 @@ savePermissions() {
 }
 
 // recursive function to flatten the tree
-flattenTree(nodes: any[], parentId: number | null = null) {
-  
+flattenTree(nodes: any[], parentId: number | null = null) { 
   
   let result: any[] = [];
   nodes.forEach(node => {
