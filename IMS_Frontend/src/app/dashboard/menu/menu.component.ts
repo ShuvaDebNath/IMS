@@ -1,5 +1,6 @@
 import { Component, OnInit,Input } from '@angular/core';
 import { Menu } from 'src/app/models/menu.model';
+import { GlobalServiceService } from 'src/app/services/Global-service.service';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 import Swal from 'sweetalert2';
 
@@ -10,13 +11,12 @@ import Swal from 'sweetalert2';
 })
 export class MenuComponent implements OnInit {
 @Input() menu?: Menu[];
-
+userName:any;
    openDropdowns = new Set<number>(); // track which dropdowns are open
-  constructor(private masterEntryService: MasterEntryService) {}
+  constructor(private gs: GlobalServiceService,private masterEntryService: MasterEntryService) {}
 
   ngOnInit(): void {
-    //this.GetDynamicMenu();
-    //this.menu = this.parseChildren(this.menu==undefined?[]:this.menu);
+    this.userName = window.localStorage.getItem('userName');
   }
 
 
@@ -58,5 +58,12 @@ export class MenuComponent implements OnInit {
     };
   });
 }
+  Logout() {
+    //this.gs.Logout().subscribe();
+    this.gs.Logout();
+  }
 
+  ChangePassword(){
+    window.location.href='change-password';
+  }
 }

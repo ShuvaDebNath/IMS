@@ -62,8 +62,8 @@ export class LoginComponent implements OnInit {
         // debugger;
         window.localStorage.setItem('userName', res.userName);
         window.localStorage.setItem('companyId', res.companyId);
-        window.localStorage.setItem('roleId', res.Role_Id);
-        window.localStorage.setItem('userId', res.UserId);
+        window.localStorage.setItem('roleId', res.role_Id);
+        window.localStorage.setItem('userId', res.userId);
 
         var menu = "";
         var menuWithButtonPermission = "";
@@ -96,7 +96,7 @@ export class LoginComponent implements OnInit {
 
         
       } else {
-        swal.fire(res.msg, '', 'error');
+        swal.fire(res.msg, 'Wrong password', 'error');
 
       }
     });

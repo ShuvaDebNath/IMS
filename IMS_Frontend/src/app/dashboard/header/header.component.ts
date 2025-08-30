@@ -83,7 +83,8 @@ export class HeaderComponent implements OnInit {
     }
  
   Logout() {
-    this.gs.Logout().subscribe();
+    //this.gs.Logout().subscribe();
+    this.gs.Logout();
   }
 
   
