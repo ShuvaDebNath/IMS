@@ -6,7 +6,7 @@
   <div class="card-body">
     <div class="col-md-3">
       <label>Role Name</label>
-      <p-dropdown [style]="{'width':'100%'}"  class="p-0" [options]="Roles"  optionLabel="label" [filter]="true" filterBy="label" [showClear]="true" styleClass="listBottom" placeholder="Please Select" optionValue="value" formControlName="Role_Name">
+      <p-dropdown [style]="{'width':'100%'}"  class="p-0" [options]="Roles" (onChange)="getSelectedMenu()"  optionLabel="label" [filter]="true" filterBy="label" [showClear]="true" styleClass="listBottom" placeholder="Please Select" optionValue="value" formControlName="Role_Name">
   
                   <ng-template let-Roles pTemplate="item">
                       <div class="flex align-items-center gap-2">  

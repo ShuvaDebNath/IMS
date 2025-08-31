@@ -27,17 +27,17 @@ export class AccessNodeComponent implements OnInit {
   }
 
   toggleChildPermissions(type: string, value: boolean) {
-    if (this.menu.Children && this.menu.Children.length > 0) {
-      this.menu.Children.forEach((child: any) => {
-        if(child.permissions!=undefined){
-child.permissions[type] = value;
-        if (child.Children && child.Children.length > 0) {
-          this.applyToAll(child, type, value);
-        }
-        }
+//     if (this.menu.Children && this.menu.Children.length > 0) {
+//       this.menu.Children.forEach((child: any) => {
+//         if(child.permissions!=undefined){
+// child.permissions[type] = value;
+//         if (child.Children && child.Children.length > 0) {
+//           this.applyToAll(child, type, value);
+//         }
+//         }
         
-      });
-    }
+//       });
+//     }
     this.updateParentPermissions(type);
   }
 
@@ -66,6 +66,8 @@ child.permissions[type] = value;
   }
 
   private applyToAll(node: any, type: string, value: boolean) {
+    console.log(node);
+    
     if (type === 'enabled') {
       node.permissions.enabled = value;
       node.permissions.view = false;

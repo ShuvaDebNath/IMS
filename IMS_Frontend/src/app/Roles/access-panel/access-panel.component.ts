@@ -17,6 +17,7 @@ export class AccessPanelComponent implements OnInit {
   Roles:any[] = [];
   Formgroup!: FormGroup;
   countChange:any=0;
+  menuPermissionId:any = '';
 	constructor(
 		private fb: FormBuilder,
 		private masterEntyService: MasterEntryService,
@@ -118,6 +119,18 @@ export class AccessPanelComponent implements OnInit {
     });
   }
 
+  checkChildrenByRole(child:any){
+    
+    console.log(child);
+    
+    if(child!=undefined)
+    child.forEach((e:any)=>{
+      console.log(e);
+      
+      this.checkChildren(e.Children)
+    });
+  }
+
 	addPermissions(nodes: any[]) {
 		nodes.forEach(node => {
 			node.permissions = {
@@ -139,6 +152,10 @@ savePermissions() {
         return;
       }
   
+if(this.menuPermissionId!=""){
+  this.deleteMenuById();
+}
+
   console.log(this.Formgroup.value.Role_Name);
   this.countChange = 0;
   
@@ -208,7 +225,7 @@ savePermissions() {
       if(count==0 && e.Enabled){
         console.log(count,e)
         detailsDataSingle = {
-        'Menu_Button_Permission_Id':'newid()',
+            'Menu_Button_Permission_Id':'newid()',
             'ButtonPermissionId':'',
             'Menu_Permission_Id':'',
             'MenuId':e.MenuId,
@@ -294,5 +311,124 @@ result.push({
     }
   });
   return result;
+}
+
+getSelectedMenu(){
+  console.log(this.menus);
+  
+  var ProcedureData = {
+			procedureName: '[usp_GetMenuPermissionByRoles]',
+			parameters: {
+				Role_Id: this.Formgroup.value.Role_Name
+			}
+		};
+		console.log(ProcedureData);
+		this.masterEntyService.GetAllData(ProcedureData).subscribe({
+			next: (results) => {
+				console.log(results);
+
+				if (results.status) {
+					var selectedMenus = JSON.parse(results.data);
+          var updatedMenu = this.enablePermissions(this.menus, selectedMenus);
+          this.menuPermissionId = selectedMenus[0].Menu_Permission_Id;
+          console.log(this.menuPermissionId);
+          
+          // console.log(selectedMenus);
+          // selectedMenus.forEach((e:any)=>{
+          //   console.log(this.menus);
+          //   this.menus.forEach(e=>{
+          //     e.permissions.enabled = true;
+              
+          //     e.Children = JSON.parse(e.Children);
+          //     console.log(e.Children);            
+          //     this.checkChildrenByRole(e.children)
+              
+          //   })
+          // })
+					// console.log(this.menus);
+          
+				} else if (results.msg == 'Invalid Token') {
+					swal.fire('Session Expierd!', 'Please Login Again.', 'info');
+					this.gs.Logout();
+				} else {}
+			},
+			error: (err) => {},
+		});
+}
+
+deleteMenuById(){
+  console.log(this.menus);
+  
+  var ProcedureData = {
+			procedureName: '[usp_DeleteMenuPermission]',
+			parameters: {
+				MenuPermissionId: this.menuPermissionId
+			}
+		};
+		console.log(ProcedureData);
+		this.masterEntyService.GetAllData(ProcedureData).subscribe({
+			next: (results) => {
+				console.log(results);
+
+				if (results.status) {
+				} else if (results.msg == 'Invalid Token') {
+					swal.fire('Session Expierd!', 'Please Login Again.', 'info');
+					this.gs.Logout();
+				} else {}
+			},
+			error: (err) => {},
+		});
+}
+
+enablePermissions(menuTree: any, list: any): any {
+  function traverse(node: any): void {
+    // Check if any match for this node
+    // var found = list.filter(
+    //   (item:any) => item.MenuId == node.MenuId 
+    // );
+    var found = list.filter((e:any)=>e.MenuId == node.MenuId)
+
+    
+    console.log(node,found,list);
+    
+
+    if (found) {
+      found.forEach((item:any)=>{
+        console.log(node.permissions);
+        if(node.permissions==undefined){
+          node.permissions = {};
+        }
+          node.permissions.enabled = true;
+          node.permissions.MenuId = found.MenuId
+          
+        if(item.ButtonPermissionId=="1"){
+          node.permissions.Insert = true;
+        }
+        if(item.ButtonPermissionId=="2"){
+          node.permissions.Update = true;
+        }
+        if(item.ButtonPermissionId=="3"){
+          node.permissions.View = true;
+        }
+        if(item.ButtonPermissionId=="4"){
+          node.permissions.Delete = true;
+        }
+      
+      })
+      
+      //node.enabledPermissions.push(found.permissionId);
+    }
+    else{
+      node.permissions ={};
+    }
+
+    // Recurse into children if present
+    if (node.Children && node.Children.length > 0) {
+      node.Children.forEach(traverse);
+    }
+  }
+
+  menuTree.forEach(traverse);
+  return menuTree;
 }
 }
