@@ -11,7 +11,6 @@ import { PageNotFoundComponent } from './error/page-not-found/page-not-found.com
 import { InternalServerErrorComponent } from './error/internal-server-error/internal-server-error.component';
 import { ForbiddenErrorComponent } from './error/forbidden-error/forbidden-error.component';
 import { LogoutComponent } from './authentication/logout/logout.component';
-import { ChangePasswordComponent } from './authentication/change-password/change-password.component';
 import { ResetPasswordComponent } from './authentication/reset-password/reset-password.component';
 import { LoginComponent } from './authentication/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -39,7 +38,6 @@ const CustomSelectOptions: INgxSelectOptions = {
     ForbiddenErrorComponent,
     PageNotFoundComponent,
     LogoutComponent,
-    ChangePasswordComponent,
     ResetPasswordComponent,
   ],
   imports: [

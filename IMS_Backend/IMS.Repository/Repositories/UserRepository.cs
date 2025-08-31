@@ -50,9 +50,9 @@ namespace Boilerplate.Repository.Repositories
 
         public async Task<bool> ResetPassword(string passwordhash,string userId)
         {
-            string query = @"UPDATE [dbo].[AspNetUsers] 
-                            SET [PasswordHash] = @Passwordhash 
-                            WHERE Id = @UserId";
+            string query = @"UPDATE [dbo].[tbl_users] 
+                            SET [Password] = @Passwordhash 
+                            WHERE User_ID = @UserId";
 
             int rowAffect = await ExecuteAsync(query, new { Passwordhash = passwordhash, UserId = userId });
 

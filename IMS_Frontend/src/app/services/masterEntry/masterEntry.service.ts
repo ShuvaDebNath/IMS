@@ -238,7 +238,7 @@ public GetAllData(model: GetDataModel){
       );
   }
 
-  public SaveDataMasterDetails(fd: any, tableName: any,fdMaster:any,tableNameMaster: any,primaryColumnName: any,ColumnNameForign: any,serialType:any,ColumnNameSerialNo:any) {
+  public SaveDataMasterDetails(fd: any, tableName: any,fdMaster:any,tableNameMaster: any,primaryColumnName: any,ColumnNameForign: any,serialType:any,ColumnNameSerialNo:any,GuidKey:any = false) {
     let model: DoubleMasterEntryModel=new DoubleMasterEntryModel();
 
     model.tableNameMaster = tableNameMaster;
@@ -252,6 +252,7 @@ public GetAllData(model: GetDataModel){
     model.detailsData=fd;
     model.data  =fdMaster;
     model.whereParams = null;
+    model.GuidKey = GuidKey;
 
     return this.http
       .post<ResponseModel>(

@@ -41,6 +41,7 @@ import { AccessPanelComponent } from '../Roles/access-panel/access-panel.compone
 import { CreatePageComponent } from '../production/requisition/raw-material-requisition/create/create-page.component';
 import { EditPageComponent } from '../production/requisition/raw-material-requisition/edit/edit-page.component';
 import { ListPageComponent } from '../production/requisition/raw-material-requisition/list/list-page.component';
+import { ChangePasswordComponent } from '../authentication/change-password/change-password.component';
 import { GeneratePiComponent } from '../PI/generate-pi/generate-pi.component';
 import { TestPIComponent } from '../PI/TestPI/TestPI.component';
 
@@ -66,6 +67,8 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     RoleCreateComponent,
     MenuComponent,
     AccessNodeComponent,
+    AccessPanelComponent,
+    ChangePasswordComponent
     AccessPanelComponent,
     GeneratePiComponent,
     TestPIComponent
@@ -110,6 +113,7 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'create-raw-material', component: CreatePageComponent },
           { path: 'edit-raw-material', component: EditPageComponent },
           { path: 'list-raw-material', component: ListPageComponent },
+           {path: 'change-password', component: ChangePasswordComponent},
           { path: 'generate-pi', component: GeneratePiComponent },
           { path: 'generate-pit', component: TestPIComponent },
         ]
