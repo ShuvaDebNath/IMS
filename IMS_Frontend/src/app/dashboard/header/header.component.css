@@ -10,6 +10,12 @@
             z-index: 1000;
             position: relative;
         }
+
+        .top-bar .company-name {
+            font-size: 20px;
+            color: #6a1a3f!important;
+            text-decoration: none;
+        }
         
         .top-bar .right-section {
             display: flex;

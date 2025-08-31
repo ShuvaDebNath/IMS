@@ -1,56 +1,78 @@
 <div class="card card-default">
   <div class="content-heading" style="border-bottom: 1px solid rgba(0,0,0,.125) !important;">
-    <h2 class="p-2 font-weight-bold"><i class="fas fa-list-alt fa-1x"></i>&nbsp;Role List</h2>
+    <h2 class="p-2 font-weight-bold theme-color"><i class="fas fa-list-alt fa-1x"></i>&nbsp;Role List</h2>
   </div>
   <div class="card-body">
 
-    <!--Region Mat Datatable"-->
-    <div>
-      <!-- <div class="float-right">
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <label style="height: calc(1.8125rem + 2px);" class="input-group-text" for="txtSearch">Search</label>
-          </div>
-          <input id="txtSearch" class="form-control form-control-sm form-control-success" placeholder="Search" (keyup)="GetFilterData($event)">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div class="d-flex align-items-center">
+        <button class="btn theme-btn" style=" color: white;" routerLink="/create-role">
+          <i class="fas fa-plus"></i>&nbsp;Create New
+        </button>
+        <div class="d-flex align-items-center ml-3">
+          <label class="mb-0 mr-2 theme-text">Show</label>
+          <select class="form-control form-control-sm" style="width: auto;">
+            <option>10</option>
+            <option>25</option>
+            <option>50</option>
+            <option>100</option>
+          </select>
+          <label class="mb-0 ml-2 theme-text">entries</label>
         </div>
-      </div> -->
-      <div class="datatable">
-        <table  class="table table-bordered table-striped" >
-          <thead>
-              <tr>
-                <th style="text-align: center !important;" class="bg-gradient-success">SL</th>
-                <th style="text-align: center !important;" class="bg-gradient-success">Role Name</th>
-                <th style="text-align: center !important;" class="bg-gradient-success" *ngIf="allPersmissions">Action</th>
-              </tr>
-          </thead>
-          <tbody class="text-dark">
-            <tr *ngFor="let item of rows; let i = index">
-              <td style="text-align: center !important;">{{(i+1)+((pageIndex-1)*pageSize)}}</td>
-              <td class="text-center align-middle">{{item.Role_Name}}</td>
-              <td class="text-center align-middle p-0 m-0">
-                <a *ngIf="updatePermissions" class="btn bg-gradient-cyan btn-xs mr-2" target="_blank" title="Edit" [routerLink]="['/create-role']"
-                  [queryParams]="{Role_Id:item.Role_Id}"><i class="fa fa-edit" ></i></a> 
-                <button *ngIf="deletePermissions" class="btn bg-gradient-danger btn-xs" title="Delete" (click)="DeleteRoles(item)"><i
-                    class="fas fa-trash"></i></button> 
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <mat-paginator showFirstLastButtons style="background-color: #1aa44b;"
-          style-paginator
-          (page)="paginatiorChange($event)"
-          [length]="length"
-          [pageSize]="pageSize"
-          [pageSizeOptions]="pageSizeOptions"
-          aria-label="Select page of periodic elements"></mat-paginator>
-        
+      </div>
+      <div class="d-flex align-items-center">
+        <label class="mb-0 mr-2">Search:</label>
+        <input type="text" class="form-control form-control-sm" placeholder="">
       </div>
     </div>
-    <!--/Region Mat Datatable-->
-  </div>
-</div>
 
-<div class="position-fixed mr-5 mb-4" style="right: 0; bottom: 0;z-index: 100;" >
-  <a class="btn btn-float btn-lg rounded-circle bg-gradient-maroon" [routerLink]="['/create-role']" target="_blank" title="Create Unit" *ngIf="insertPermissions"><i
-      class="fa fa-plus"></i></a>
+    <div class="datatable">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr style="background-color: #f5f5f5;">
+            <th class="p-2">
+              <div class="d-flex justify-content-between align-items-center">
+                Role Name
+                <div class="d-flex flex-column align-items-center ml-auto">
+                  <i class="fas fa-sort-up" style="line-height: 0.5;"></i>
+                  <i class="fas fa-sort-down" style="line-height: 0.5;"></i>
+                </div>
+              </div>
+            </th>
+            <th class="p-2">
+              <div class="d-flex justify-content-between align-items-center">
+                Action
+                <div class="d-flex flex-column align-items-center ml-auto">
+                  <i class="fas fa-sort-up" style="line-height: 0.5;"></i>
+                  <i class="fas fa-sort-down" style="line-height: 0.5;"></i>
+                </div>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody class="text-dark">
+          <tr *ngFor="let item of rows; let i = index">
+            <td class="align-middle">{{item.Role_Name}}</td>
+            <td class="text-center align-middle p-0 m-0">
+              <a *ngIf="updatePermissions" class="btn theme-btn btn-sm text-white m-1" target="_blank" title="Edit"
+                [routerLink]="['/create-role']" [queryParams]="{Role_Id:item.Role_Id}"
+                >
+                <i class="fa fa-edit"></i>&nbsp;Edit
+              </a>
+              <a *ngIf="allPersmissions" class="btn btn-sm text-white m-1 theme-btn" title="Details" >
+                <i class="fa fa-info-circle"></i>&nbsp;Details
+              </a>
+              <button *ngIf="deletePermissions" class="btn btn-sm text-white m-1" title="Delete"
+                (click)="DeleteRoles(item)" style="background-color: #dc3545;">
+                <i class="fas fa-trash"></i>&nbsp;Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <mat-paginator class="theme-btn" showFirstLastButtons style-paginator
+        (page)="paginatiorChange($event)" [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+        aria-label="Select page of periodic elements"></mat-paginator>
+    </div>
+  </div>
 </div>

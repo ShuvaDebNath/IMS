@@ -1,0 +1,18 @@
+
+.theme-btn{
+    background-color: #6a1a3f;
+}
+.theme-btn:hover{
+    background-color: #800080;
+    color: white;
+}
+
+.theme-text{
+    color: #6a1a3f;
+}
+.theme-color{
+    color: #6a1a3f;
+}
+table-bordered td, .table-bordered th {
+    border: 1px solid #6a1a3f !important;
+}
