@@ -19,6 +19,12 @@ export class RoleCreateComponent {
   isEdit = false;
   RoleId!: string;
   companyId!:string;
+  menu: any;
+
+  insertPermissions: boolean = false;
+  updatePermissions: boolean = false;
+  deletePermissions: boolean = false;
+  printPermissions: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -38,14 +44,36 @@ export class RoleCreateComponent {
   }
 
   ngOnInit() {
-    // let menus =  JSON.parse(window.localStorage.getItem('submenues')!);
-    // let thismenu = menus.filter((o: any) => o.SubMenuName == 'Voucher Date Validation');
-    // let buttonPermissions = JSON.parse(window.localStorage.getItem('buttons')!);
-    // this.companyId = window.localStorage.getItem('companyId')!;
-    // if(thismenu.length==0){
-    //   window.location.href='dashboard';
-    // }
-    //let thismenupermission = buttonPermissions.filter((o: any) => o.MenuId == thismenu[0].SubMenuId);
+    this.menu = window.localStorage.getItem('UserMenuWithPermission');
+    this.menu = JSON.parse(this.menu);
+    var buttonPermissions:any = [];
+    var countFound = 0;
+    console.log(this.menu);
+          this.menu.forEach((e:any)=>{
+            console.log(JSON.parse(e.Children));
+            e.Children = JSON.parse(e.Children);
+            e.Children.forEach((childMenu:any)=>{
+              if(childMenu.SubMenuName=="Roles"){
+                countFound++;
+                buttonPermissions = childMenu.ButtonName;
+              }
+            });
+          })
+    console.log(buttonPermissions);
+    if(countFound==0){
+      window.location.href='dashboard';
+    }
+    else{
+      buttonPermissions.forEach((buttonCheck:any)=>{
+        if(buttonCheck.ButtonName=="Insert"){
+          this.insertPermissions = true;
+        }
+      });
+    }
+
+    if(!this.insertPermissions){
+      window.location.href='role-list';
+    }
 
     this.title.setTitle('Role');
     this.GenerateFrom();

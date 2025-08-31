@@ -13,4 +13,5 @@ public class DoubleMasterEntryModel
     public object? Data { get; set; }
     public object? DetailsData { get; set; }
     public object? WhereParams { get; set; }
+    public bool? GuidKey { get; set; } = false;
 }

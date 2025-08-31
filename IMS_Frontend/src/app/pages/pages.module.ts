@@ -37,6 +37,7 @@ import { AccessPanelComponent } from '../Roles/access-panel/access-panel.compone
 import { CreatePageComponent } from '../production/requisition/raw-material-requisition/create/create-page.component';
 import { EditPageComponent } from '../production/requisition/raw-material-requisition/edit/edit-page.component';
 import { ListPageComponent } from '../production/requisition/raw-material-requisition/list/list-page.component';
+import { ChangePasswordComponent } from '../authentication/change-password/change-password.component';
 
 
 // import {MatSortModule} from '@angular/material/sort';
@@ -59,7 +60,8 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     RoleCreateComponent,
     MenuComponent,
     AccessNodeComponent,
-    AccessPanelComponent
+    AccessPanelComponent,
+    ChangePasswordComponent
     ],
   imports: [
     CommonModule,
@@ -95,6 +97,7 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'create-raw-material', component: CreatePageComponent },
           { path: 'edit-raw-material', component: EditPageComponent },
           { path: 'list-raw-material', component: ListPageComponent },
+           {path: 'change-password', component: ChangePasswordComponent},
         ]
       }
     ]),
