@@ -46,9 +46,7 @@ export class HeaderComponent implements OnInit {
   GetDynamicMenu(){
     this.menu = window.localStorage.getItem('UserMenu');
     this.menu = JSON.parse(this.menu)
-    console.log(this.menu);
           this.menu.forEach((e:any)=>{
-            console.log(JSON.parse(e.Children));
             e.Children = JSON.parse(e.Children);
           })
     //   var ProcedureData={

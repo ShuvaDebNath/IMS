@@ -10,5 +10,6 @@ namespace Boilerplate.Contracts.Repositories;
 public interface IMasterEntryRepository
 {
     bool ExecuteWriteOperation(string sqlQuery);
+    Task<int> ExecuteWriteOperationWithReturnKeyAsync(string sqlQuery);
     DataTable ExecuteReadOperation(string sqlQuery);
 }

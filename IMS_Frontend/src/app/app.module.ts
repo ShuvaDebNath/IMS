@@ -22,6 +22,8 @@ import { DatePipe } from '@angular/common';
 import { RoleListComponent } from './Roles/role-list/role-list.component';
 import { RoleCreateComponent } from './Roles/role-create/role-create.component';
 import { MatPaginatorModule } from "@angular/material/paginator";
+import { GenerateLcComponent } from './lc/generate-lc/generate-lc.component';
+import { AllLcComponent } from './lc/all-lc/all-lc.component';
 
 const CustomSelectOptions: INgxSelectOptions = {
   keepSelectedItems: false,

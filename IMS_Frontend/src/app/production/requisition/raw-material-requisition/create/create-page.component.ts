@@ -38,6 +38,5 @@ export class CreatePageComponent implements OnInit {
 
   saveData(): void {
     // Logic to save the requisition data
-    console.log('Data saved', this.requisitionData);
   }
 }

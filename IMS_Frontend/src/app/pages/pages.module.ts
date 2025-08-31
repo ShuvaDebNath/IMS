@@ -38,6 +38,10 @@ import { CreatePageComponent } from '../production/requisition/raw-material-requ
 import { EditPageComponent } from '../production/requisition/raw-material-requisition/edit/edit-page.component';
 import { ListPageComponent } from '../production/requisition/raw-material-requisition/list/list-page.component';
 import { ChangePasswordComponent } from '../authentication/change-password/change-password.component';
+import { GenerateCommercialInvoiceComponent } from '../commercial-invoice/generate-commercial-invoice.component';
+import { GenerateLcComponent } from '../lc/generate-lc/generate-lc.component';
+import { AllLcComponent } from '../lc/all-lc/all-lc.component';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 
 // import {MatSortModule} from '@angular/material/sort';
@@ -61,7 +65,10 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     MenuComponent,
     AccessNodeComponent,
     AccessPanelComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    GenerateCommercialInvoiceComponent,
+    GenerateLcComponent,
+    AllLcComponent,
     ],
   imports: [
     CommonModule,
@@ -75,7 +82,7 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     TreeModule,
     DropdownModule,
     SelectButtonModule,
-    PopoverModule,
+    PopoverModule,MultiSelectModule,
     UiSwitchModule.forRoot({
       size: 'small',
       color: 'rgb(0, 189, 99)',
@@ -98,6 +105,8 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'edit-raw-material', component: EditPageComponent },
           { path: 'list-raw-material', component: ListPageComponent },
            {path: 'change-password', component: ChangePasswordComponent},
+           {path: 'all-lc', component: AllLcComponent},
+           {path: 'generate-lc', component: GenerateLcComponent},
         ]
       }
     ]),

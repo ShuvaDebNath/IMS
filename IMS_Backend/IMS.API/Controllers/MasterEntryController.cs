@@ -54,6 +54,19 @@ namespace Boilerplate.API.Controllers
             }
         }
 
+        [HttpPost(nameof(InsertThenUpdateSl))]
+        public async Task<IActionResult> InsertThenUpdateSl([FromBody] MasterEntryWithSlUpdateModel item)
+        {
+            try
+            {
+                return Ok(await _masterEntryService.InsertThenUpdateSl(item, AuthUserName));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+        }
+
         [HttpPut(nameof(Update))]
         public IActionResult Update([FromBody]MasterEntryModel item)
         {

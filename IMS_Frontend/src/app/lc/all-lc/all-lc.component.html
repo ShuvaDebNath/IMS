@@ -1,0 +1,104 @@
+<div class="card card-default">
+  <div class="content-heading" style="border-bottom: 1px solid rgba(0,0,0,.125) !important;">
+    <div class="row">
+      <div class="col-6">
+        <h2 class="p-2">All LC</h2>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="SearchForm">
+      <div class="form-row align-items-center">
+        <div class="col-auto">
+          <label class="control-label" for="inlineFormInputGroup">From Date</label>
+          <div class="input-group mb-2">
+            <div class="input-group-sm input-group-prepend">
+              <div class="input-group-text" (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
+            </div>
+            <input type="text" autocomplete="off" formControlName="fromDate" [bsConfig]="{
+              dateInputFormat: 'DD/MM/YYYY',
+              containerClass: 'theme-green'
+            }" class="form-control-sm form-control bg-white" id="fromdate" name="fromdate" placeholder="From Date"
+              #dpfrom="bsDatepicker" bsDatepicker readonly />
+          </div>
+
+        </div>
+        <div class="col-auto">
+          <label class="control-label" for="inlineFormInputGroup">To Date</label>
+          <div class="input-group mb-2">
+            <div class="input-group-sm input-group-prepend">
+              <div class="input-group-text" (click)="dpto.toggle()"><i class="fas fa-calendar"></i></div>
+            </div>
+            <input type="text" autocomplete="off" formControlName="toDate" [bsConfig]="{
+              dateInputFormat: 'DD/MM/YYYY',
+              containerClass: 'theme-green'
+            }" class="form-control-sm form-control bg-white" id="todate" name="todate" placeholder="To Date"
+              #dpto="bsDatepicker" bsDatepicker readonly />
+          </div>
+        </div>
+        <div class="col-auto">
+            <label for="LCNo" class="">LC No </label>
+              <div class="">
+                <div class="form-group d-inline">
+                  <input autocomplete="off" type="text"                  
+                  formControlName="lcNo"
+                  class="form-control"
+                  placeholder="Role Name" id="LCNo" name="LCNo" value="">
+                </div>
+              </div>
+        </div>
+        <div class="col-auto">
+          <button title="Search" type="button" (click)="Search()"
+            class="btn btn-sm btn-outline-primary bg-gradient-primary mb-2 mr-2" style="margin-top: 2.3em !important;">
+            <i class="fas fa-search"></i>&nbsp;Search</button>
+        </div>
+      </div>
+    </form>
+    <hr>
+
+    <!--Region Mat Datatable"-->
+      <div class="datatable">
+        <table  class="table table-bordered table-striped" >
+          <thead>
+              <tr>
+                <th style="text-align: center !important;" class="bg-gradient-success">SL</th>
+                <th style="text-align: center !important;" class="bg-gradient-success">Consignee Name</th>
+                <th style="text-align: center !important;" class="bg-gradient-success">PI(s)</th>
+                <th style="text-align: center !important;" class="bg-gradient-success">LC No</th>
+                <th style="text-align: center !important;" class="bg-gradient-success">LC Value</th>
+                <th style="text-align: center !important;" class="bg-gradient-success">Issue Date</th>
+                <th style="text-align: center !important;" class="bg-gradient-success">Expiry Date</th>
+                <th style="text-align: center !important;" class="bg-gradient-success">Mode</th>
+                <th style="text-align: center !important;" class="bg-gradient-success">IP Documents Sending Date</th>
+                <th style="text-align: center !important;" class="bg-gradient-success">Group Head</th>
+                <th style="text-align: center !important;" class="bg-gradient-success" *ngIf="allPersmissions">Action</th>
+              </tr>
+          </thead>
+          <tbody class="text-dark">
+            <tr *ngFor="let item of tableData; let i = index">
+              <td style="text-align: center !important;">{{i}}</td>
+              <td class="text-center align-middle">{{item.Consignee_Name}}</td>
+              <td class="text-center align-middle">{{item.PI_No}}</td>
+              <td class="text-center align-middle">{{item.LC_No}}</td>
+              <td class="text-center align-middle p-0 m-0">
+                <a *ngIf="updatePermissions" class="btn bg-gradient-cyan btn-xs mr-2" target="_blank" title="Edit" [routerLink]="['/create-role']"
+                  [queryParams]="{LC_No:item['LC_No']}"><i class="fa fa-edit" ></i></a> 
+                <button *ngIf="deletePermissions" class="btn bg-gradient-danger btn-xs" title="Delete" (click)="DeleteData(item)"><i
+                    class="fas fa-trash"></i></button> 
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <mat-paginator showFirstLastButtons style="background-color: #1aa44b;"
+          style-paginator
+          (page)="paginatiorChange($event)"
+          [length]="length"
+          [pageSize]="pageSize"
+          [pageSizeOptions]="pageSizeOptions"
+          aria-label="Select page of periodic elements"></mat-paginator>
+        
+      </div>
+    </div>
+    <!--/Region Mat Datatable"-->
+
+  </div>
