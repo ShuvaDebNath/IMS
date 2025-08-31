@@ -125,7 +125,7 @@ namespace Boilerplate.Repository
 
                     try
                     {
-                        await TransactionHistory(query, JsonConvert.SerializeObject(selector), "", "", "", "");
+                        //await TransactionHistory(query, JsonConvert.SerializeObject(selector), "", "", "", "");
                     }
                     catch (Exception ex)
                     {

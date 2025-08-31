@@ -9,4 +9,5 @@ export class DoubleMasterEntryModel {
   data: any;
   detailsData: any;
   whereParams: any;
+  GuidKey:any;
 }

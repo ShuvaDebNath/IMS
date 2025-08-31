@@ -60,5 +60,24 @@
 
       </ng-container>
     </ul>
+     <ul class="navbar-nav ml-auto">
+    <li>
+      <div class="btn-group" dropdown>
+        <a id="button-animated" dropdownToggle type="button" class="btn btn-success dropdown-toggle"
+                aria-controls="dropdown-animated">
+          <i class="fas fa-user-circle"></i>  &nbsp; Hello &nbsp; <span>{{userName}}</span> <span class="caret"></span>
+        </a>
+        <ul id="dropdown-animated" *dropdownMenu class="dropdown-menu mt-2 dropdown-menu-right"
+            role="menu" aria-labelledby="button-animated">
+          <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);" (click)="ChangePassword()"><i class="fas fa-cog"></i> Change Password</a></li>
+          <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);" (click)="Logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+
+          <!-- <li role="menuitem"><a class="dropdown-item" [routerLink]="['/login']"><i class="fas fa-sign-out-alt"></i> Logout</a> -->
+          </li>
+        </ul>
+      </div>
+    </li>
+    <!-- Notifications Dropdown Menu -->
+  </ul>
   </div>
 </nav>

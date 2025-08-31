@@ -55,7 +55,9 @@ pageIndex: number = 1;
   }
 
   ngOnInit() {
-    this.menu = window.localStorage.getItem('UserMenu');
+    this.menu = window.localStorage.getItem('UserMenuWithPermission');
+    console.log(this.menu);
+    
     this.menu = JSON.parse(this.menu);
     var buttonPermissions:any = [];
     var countFound = 0;
@@ -67,31 +69,26 @@ pageIndex: number = 1;
               if(childMenu.SubMenuName=="Roles"){
                 countFound++;
                 buttonPermissions = childMenu.ButtonName;
+                console.log(buttonPermissions);
+                
+                if(buttonPermissions[0].ButtonName=="Insert"){
+                  this.insertPermissions = true;
+                }
+                else if(buttonPermissions[0].ButtonName=="Update"){
+                  this.updatePermissions = true;
+                }
+                else if(buttonPermissions[0].ButtonName=="View"){
+                  this.printPermissions = true;          
+                }
+                else if(buttonPermissions[0].ButtonName=="Delete"){
+                  this.deletePermissions = true;          
+                }
               }
             });
           })
-    console.log(buttonPermissions);
     if(countFound==0){
       window.location.href='dashboard';
     }
-    else{
-      buttonPermissions.forEach((buttonCheck:any)=>{
-        if(buttonCheck.ButtonName=="Insert"){
-          this.insertPermissions = true;
-        }
-        else if(buttonCheck.ButtonName=="Update"){
-          this.updatePermissions = true;
-        }
-        else if(buttonCheck.ButtonName=="View"){
-          this.printPermissions = true;          
-        }
-        else if(buttonCheck.ButtonName=="Delete"){
-          this.deletePermissions = true;          
-        }
-      });
-    }
-    console.log(this.insertPermissions,this.updatePermissions,this.printPermissions,this.deletePermissions);
-    
     this.title.setTitle('Role List');
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
     this.GetAllNullTrackIdProject(
@@ -109,7 +106,7 @@ pageIndex: number = 1;
       searchText: string
     ) {
       let param = new GetDataModel();
-      param.procedureName = '[prcGetRoles]';
+      param.procedureName = '[usp_GetRoles]';
       param.parameters = {
         PageIndex: pageIndex,
         PageSize:pageSize,
