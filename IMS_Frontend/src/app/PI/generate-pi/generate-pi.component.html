@@ -3,7 +3,7 @@
     <h3 class="card-title mb-0">Proforma Invoice</h3>
     <div class="float-right">
       <button class="btn btn-sm btn-success mr-2"><i class="fas fa-save"></i>&nbsp;Save</button>
-      <button class="btn btn-sm btn-primary"><i class="fas fa-sync"></i>&nbsp;Refresh</button>
+      <button class="btn btn-sm btn-primary" (click)="GetInitialData()"><i class="fas fa-sync"></i>&nbsp;Refresh</button>
     </div>
   </div>
   <div class="card-body">
@@ -33,79 +33,94 @@
         [filter]="true" 
         filterBy="CompanyName" 
         [showClear]="true" 
-        placeholder="Select a Country">
+        styleClass="my-dropdown"
+        panelStyleClass="my-dropdown-panel"
+        [style]="{width: '100%'}"
+        placeholder="Select a Shippeer">
         </p-dropdown>
       </div>
       <div class="col-md-4 mb-2">
         <label class="control-label">Beneficiary's Bank</label><br/>
         <p-dropdown 
-        [options]="ShipperList" 
-        optionLabel="CompanyName"
-        optionValue="Beneficiary_Account_ID"
+        [options]="BenificaryBankList" 
+        optionLabel="BankInfo"
+        optionValue="Beneficiary_Bank_ID"
         [filter]="true" 
-        filterBy="CompanyName" 
+        filterBy="BankInfo" 
+        styleClass="my-dropdown"
+        panelStyleClass="my-dropdown-panel"
         [showClear]="true" 
-        placeholder="Select a Country">
+        [style]="{width: '100%'}"
+        placeholder="Select a Beneficiary's Bank">
         </p-dropdown>
       </div>
       <div class="col-md-4 mb-2">
         <label class="control-label">Country of Origin</label><br/>
         <p-dropdown 
-        [options]="ShipperList" 
-        optionLabel="CompanyName"
-        optionValue="Beneficiary_Account_ID"
+        [options]="CountryList" 
+        optionLabel="Country"
+        optionValue="Country_ID"
         [filter]="true" 
-        filterBy="CompanyName" 
+        filterBy="Country" 
         [showClear]="true" 
+        [style]="{width: '100%'}"
         placeholder="Select a Country">
         </p-dropdown>        
       </div>
       <div class="col-md-4 mb-2">
         <label class="control-label">Packing</label><br/>
         <p-dropdown 
-        [options]="ShipperList" 
-        optionLabel="CompanyName"
-        optionValue="Beneficiary_Account_ID"
+        [options]="PackingList" 
+        optionLabel="Mode"
+        optionValue="Packing_ID"
         [filter]="true" 
-        filterBy="CompanyName" 
+        filterBy="Mode" 
         [showClear]="true" 
-        placeholder="Select a Country">
+        [style]="{width: '100%'}"
+        placeholder="Select a Packing">
         </p-dropdown>         
       </div>
       <div class="col-md-4 mb-2">
         <label class="control-label">Loading Mode</label><br/>
         <p-dropdown 
-        [options]="ShipperList" 
-        optionLabel="CompanyName"
-        optionValue="Beneficiary_Account_ID"
+        [options]="LoadingModeList" 
+        optionLabel="Details"
+        optionValue="Loading_Mode_ID"
         [filter]="true" 
-        filterBy="CompanyName" 
+        filterBy="Details" 
         [showClear]="true" 
-        placeholder="Select a Country">
+        [style]="{width: '100%'}"
+        placeholder="Select a Loading Mode">
         </p-dropdown>           
       </div>
       <div class="col-md-4 mb-2">
         <label class="control-label">Payment Mode</label><br/>
         <p-dropdown 
-        [options]="ShipperList" 
-        optionLabel="CompanyName"
-        optionValue="Beneficiary_Account_ID"
+        [options]="PaymentModeList" 
+        optionLabel="Mode"
+        optionValue="Payment_Term_ID"
         [filter]="true" 
-        filterBy="CompanyName" 
+        filterBy="Mode" 
         [showClear]="true" 
-        placeholder="Select a Country">
+        styleClass="my-dropdown"
+        panelStyleClass="my-dropdown-panel"
+        [style]="{width: '100%'}"
+        placeholder="Select a Payment Mode">
         </p-dropdown>           
       </div>
       <div class="col-md-4 mb-2">
         <label class="control-label">Consignee</label><br/>
         <p-dropdown 
-        [options]="ShipperList" 
-        optionLabel="CompanyName"
-        optionValue="Beneficiary_Account_ID"
+        [options]="ConsigneeList" 
+        optionLabel="CustomerName"
+        optionValue="Customer_ID"
         [filter]="true" 
-        filterBy="CompanyName" 
+        filterBy="CustomerName" 
         [showClear]="true" 
-        placeholder="Select a Country">
+        styleClass="my-dropdown"
+        panelStyleClass="my-dropdown-panel"
+        [style]="{width: '100%'}"
+        placeholder="Select a Consignee">
         </p-dropdown>          
       </div>
       <div class="col-md-4 mb-2">
@@ -115,13 +130,16 @@
       <div class="col-md-4 mb-2">
         <label class="control-label">Applicant Bank</label><br/>
         <p-dropdown 
-        [options]="ShipperList" 
-        optionLabel="CompanyName"
-        optionValue="Beneficiary_Account_ID"
+        [options]="ApplicantBankList" 
+        optionLabel="CustomerBankDetails"
+        optionValue="Applicant_Bank_ID"
         [filter]="true" 
-        filterBy="CompanyName" 
+        filterBy="CustomerBankDetails" 
         [showClear]="true" 
-        placeholder="Select a Country">
+        styleClass="my-dropdown"
+        panelStyleClass="my-dropdown-panel"
+        [style]="{width: '100%'}"
+        placeholder="Select a Bank">
         </p-dropdown>          
       </div>
       <div class="col-md-4 mb-2">
@@ -135,13 +153,14 @@
       <div class="col-md-4 mb-2">
         <label class="control-label">Buying House</label><br/>
         <p-dropdown 
-        [options]="ShipperList" 
-        optionLabel="CompanyName"
-        optionValue="Beneficiary_Account_ID"
+        [options]="BuyingHouseList" 
+        optionLabel="Buyer_Name"
+        optionValue="Id"
         [filter]="true" 
-        filterBy="CompanyName" 
+        filterBy="Buyer_Name" 
         [showClear]="true" 
-        placeholder="Select a Country">
+        [style]="{width: '100%'}"
+        placeholder="Select a Buying House">
         </p-dropdown>          
       </div>
       <div class="col-md-4 mb-2">
@@ -159,23 +178,33 @@
 
       <div class="col-md-4 mb-2">
         <label class="control-label">Expire Date</label>
+
+           <div class="input-group mb-3">
           <input type="text"
            placeholder="DD/MM/YYYY"
            class="form-control form-control-sm"
+           #dp="bsDatepicker"
            bsDatepicker
-           [bsConfig]="{ isAnimated: true,adaptivePosition: true }">
+           placement="bottom"
+           [bsConfig]="{ isAnimated: true }">
+            <div class="input-group-append">
+              <button class="btn btn-sm btn-outline-success" type="button" (click)="dp.toggle()" [attr.aria-expanded]="dp.isOpen">Button</button>
+            </div>
+          </div>
+
       </div>
 
       <div class="col-md-4 mb-2">
         <label class="control-label">Terms of Delivery</label><br/>
         <p-dropdown 
-        [options]="ShipperList" 
-        optionLabel="CompanyName"
-        optionValue="Beneficiary_Account_ID"
+        [options]="TermsofDeliveryList" 
+        optionLabel="Details"
+        optionValue="Id"
         [filter]="true" 
-        filterBy="CompanyName" 
+        filterBy="Details" 
         [showClear]="true" 
-        placeholder="Select a Country">
+        [style]="{width: '100%'}"
+        placeholder="Select a Terms of Delivery">
         </p-dropdown>          
       </div>
     </div>
@@ -209,46 +238,54 @@
             </td>
             <td>
               <p-dropdown 
-              [options]="ShipperList" 
-              optionLabel="CompanyName"
-              optionValue="Beneficiary_Account_ID"
+              [options]="DescriptionList" 
+              optionLabel="Details"
+              optionValue="GoodsDescriptionId"
               [filter]="true" 
-              filterBy="CompanyName" 
+              filterBy="Details" 
               [showClear]="true" 
-              placeholder="Select a Country">
+              appendTo="body"
+              [style]="{width: '100%'}"
+              placeholder="Select a Description">
               </p-dropdown>
             </td>
             <td>
               <p-dropdown 
-              [options]="ShipperList" 
-              optionLabel="CompanyName"
-              optionValue="Beneficiary_Account_ID"
+              [options]="WidthList" 
+              optionLabel="Measurement"
+              optionValue="Width_ID"
               [filter]="true" 
-              filterBy="CompanyName" 
+              filterBy="Measurement" 
               [showClear]="true" 
-              placeholder="Select a Country">
+              appendTo="body"
+              [style]="{width: '100%'}"
+              placeholder="Select a Width">
               </p-dropdown>
             </td>
             <td>
               <p-dropdown 
-              [options]="ShipperList" 
-              optionLabel="CompanyName"
-              optionValue="Beneficiary_Account_ID"
+              [options]="ColorList" 
+              optionLabel="Color"
+              optionValue="Color_ID"
               [filter]="true" 
-              filterBy="CompanyName" 
+              filterBy="Color" 
               [showClear]="true" 
-              placeholder="Select a Country">
+              appendTo="body"
+              [style]="{width: '100%'}"
+              placeholder="Select a Color">
               </p-dropdown>
             </td>
             <td>
               <p-dropdown 
-              [options]="ShipperList" 
-              optionLabel="CompanyName"
-              optionValue="Beneficiary_Account_ID"
+              [options]="PackagingList" 
+              optionLabel="Packaging"
+              optionValue="Packaging_ID"
               [filter]="true" 
-              filterBy="CompanyName" 
+              filterBy="Packaging" 
               [showClear]="true" 
-              placeholder="Select a Country">
+              appendTo="body"
+              [style]="{width: '100%'}"
+              placeholder="Select a Packaging">
               </p-dropdown>
             </td>
             <td>
@@ -256,13 +293,15 @@
             </td>
             <td>
               <p-dropdown 
-              [options]="ShipperList" 
-              optionLabel="CompanyName"
-              optionValue="Beneficiary_Account_ID"
+              [options]="UnitList" 
+              optionLabel="Unit"
+              optionValue="Unit_ID"
               [filter]="true" 
-              filterBy="CompanyName" 
+              filterBy="Unit" 
               [showClear]="true" 
-              placeholder="Select a Country">
+              appendTo="body"
+              [style]="{width: '100%'}"
+              placeholder="Select a Unit">
               </p-dropdown>
             </td>
             <td>
@@ -279,13 +318,15 @@
             </td> 
             <td>
               <p-dropdown 
-              [options]="ShipperList" 
-              optionLabel="CompanyName"
-              optionValue="Beneficiary_Account_ID"
+              [options]="AAList" 
+              optionLabel="Article_No"
+              optionValue="Item_ID"
               [filter]="true" 
-              filterBy="CompanyName" 
+              filterBy="Article_No" 
               [showClear]="true" 
-              placeholder="Select a Country">
+              appendTo="body"
+              [style]="{width: '100%'}"
+              placeholder="Select a Article">
               </p-dropdown>
             </td>             
         </tr>
@@ -318,36 +359,45 @@
       <div class="col-md-4 mb-2">
         <label class="control-label">Delivery Condition</label><br/>
         <p-dropdown 
-        [options]="ShipperList" 
-        optionLabel="CompanyName"
-        optionValue="Beneficiary_Account_ID"
+        [options]="DeliveryConditionList" 
+        optionLabel="Details"
+        optionValue="Delivery_Condition_ID"
         [filter]="true" 
-        filterBy="CompanyName" 
+        filterBy="Details" 
         [showClear]="true" 
+        [style]="{width: '100%'}"
+        styleClass="my-dropdown"
+        panelStyleClass="my-dropdown-panel"
         placeholder="Select a Delivery Condition">
         </p-dropdown>
       </div>
       <div class="col-md-4 mb-2">
         <label class="control-label">Partial Shipment</label><br/>
         <p-dropdown 
-        [options]="ShipperList" 
-        optionLabel="CompanyName"
-        optionValue="Beneficiary_Account_ID"
+        [options]="PartialShipmentList" 
+        optionLabel="ShipmentConditions"
+        optionValue="Shipment_Condition_ID"
         [filter]="true" 
-        filterBy="CompanyName" 
+        filterBy="ShipmentConditions" 
         [showClear]="true" 
+        [style]="{width: '100%'}"
+        styleClass="my-dropdown"
+        panelStyleClass="my-dropdown-panel"
         placeholder="Select a Shipment">
         </p-dropdown>
       </div>
       <div class="col-md-4 mb-2">
         <label class="control-label">Price Terms</label><br/>
         <p-dropdown 
-        [options]="ShipperList" 
-        optionLabel="CompanyName"
-        optionValue="Beneficiary_Account_ID"
+        [options]="PriceTermsList" 
+        optionLabel="PriceTerm"
+        optionValue="Price_Term_ID"
         [filter]="true" 
-        filterBy="CompanyName" 
+        filterBy="PriceTerm" 
         [showClear]="true" 
+        [style]="{width: '100%'}"
+        styleClass="my-dropdown"
+        panelStyleClass="my-dropdown-panel"
         placeholder="Select a Price Terms">
         </p-dropdown>
       </div>
@@ -373,24 +423,30 @@
       <div class="col-md-4 mb-2">
         <label class="control-label">Force Majeure</label><br/>
         <p-dropdown 
-        [options]="ShipperList" 
-        optionLabel="CompanyName"
-        optionValue="Beneficiary_Account_ID"
+        [options]="ForceMajeureList" 
+        optionLabel="Force"
+        optionValue="Force_Majeure_ID"
         [filter]="true" 
-        filterBy="CompanyName" 
+        filterBy="Force" 
         [showClear]="true" 
+        [style]="{width: '100%'}"
+        styleClass="my-dropdown"
+        panelStyleClass="my-dropdown-panel"
         placeholder="Select a Force Majeure">
         </p-dropdown>
       </div>
       <div class="col-md-4 mb-2">
         <label class="control-label">Arbitration</label><br/>
         <p-dropdown 
-        [options]="ShipperList" 
-        optionLabel="CompanyName"
-        optionValue="Beneficiary_Account_ID"
+        [options]="ArbitrationList" 
+        optionLabel="Detail"
+        optionValue="Arbitration_ID"
         [filter]="true" 
-        filterBy="CompanyName" 
+        filterBy="Detail" 
         [showClear]="true" 
+        styleClass="my-dropdown"
+        panelStyleClass="my-dropdown-panel"
+        [style]="{width: '100%'}"
         placeholder="Select a Arbitration">
         </p-dropdown>
       </div>      

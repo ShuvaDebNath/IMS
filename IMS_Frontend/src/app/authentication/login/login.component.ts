@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
 
         var menu = "";
         var ProcedureData = {
-              procedureName: 'prc_GetMenuTree_By_Role',
+              procedureName: 'usp_GetMenuTree_By_Role',
               parameters: {
                 "Role_id":res.role_Id
               }

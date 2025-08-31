@@ -261,3 +261,29 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
+
+
+/* .p-dropdown {
+  height: 38px;          /* আপনার পছন্দমতো fix height দিন 
+  line-height: 38px;
+  font-size: 14px;
+  padding: 6px 10px;
+  box-sizing: border-box;
+} */
+
+.my-dropdown-panel .p-dropdown-items .p-dropdown-item {
+  white-space: normal !important;
+  word-break: break-word;
+  line-height: 1.4;
+  padding: 6px 10px;
+}
+
+/* নির্বাচিত ভ্যালু (ড্রপডাউন বন্ধ অবস্থায় দেখানো টেক্সট) wrap হবে */
+.my-dropdown .p-dropdown-label.p-inputtext {
+  white-space: normal !important;
+  word-break: break-word;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  height: auto !important;
+  line-height: 1.4;
+}
