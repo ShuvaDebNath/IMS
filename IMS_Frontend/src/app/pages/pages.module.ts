@@ -42,7 +42,8 @@ import { GenerateCommercialInvoiceComponent } from '../commercial-invoice/genera
 import { GenerateLcComponent } from '../lc/generate-lc/generate-lc.component';
 import { AllLcComponent } from '../lc/all-lc/all-lc.component';
 import { MultiSelectModule } from 'primeng/multiselect';
-
+import { TableModule } from 'primeng/table';
+import {DialogModule} from 'primeng/dialog'
 
 // import {MatSortModule} from '@angular/material/sort';
 // import {MatTableModule} from '@angular/material/table';
@@ -83,6 +84,8 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     DropdownModule,
     SelectButtonModule,
     PopoverModule,MultiSelectModule,
+    TableModule,
+    DialogModule,
     UiSwitchModule.forRoot({
       size: 'small',
       color: 'rgb(0, 189, 99)',

@@ -7,7 +7,8 @@ public interface IMasterEntryService
     Messages GetAll(MasterEntryModel item);
     Messages GetByColumns(MasterEntryModel item);
     Messages Insert(MasterEntryModel item, string userName);
-    Task<Messages> InsertThenUpdateSl(MasterEntryWithSlUpdateModel item, string userName);
+    Task<Messages> InsertThenUpdateRefTable(MasterEntryWithSlUpdateModel item, string userName);
+    Task<Messages> DeleteThenUpdateSl(MasterEntryWithSlUpdateModel item, string userName);
     Messages Update(MasterEntryModel item, string userName);
     Messages Delete(MasterEntryModel item);
 }
