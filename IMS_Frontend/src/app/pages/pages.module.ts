@@ -43,7 +43,6 @@ import { EditPageComponent } from '../production/requisition/raw-material-requis
 import { ListPageComponent } from '../production/requisition/raw-material-requisition/list/list-page.component';
 import { ChangePasswordComponent } from '../authentication/change-password/change-password.component';
 import { GeneratePiComponent } from '../PI/generate-pi/generate-pi.component';
-import { TestPIComponent } from '../PI/TestPI/TestPI.component';
 
 
 
@@ -68,10 +67,8 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     MenuComponent,
     AccessNodeComponent,
     AccessPanelComponent,
-    ChangePasswordComponent
-    AccessPanelComponent,
-    GeneratePiComponent,
-    TestPIComponent
+    ChangePasswordComponent,
+    GeneratePiComponent
     ],
   imports: [
 
@@ -115,7 +112,6 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'list-raw-material', component: ListPageComponent },
            {path: 'change-password', component: ChangePasswordComponent},
           { path: 'generate-pi', component: GeneratePiComponent },
-          { path: 'generate-pit', component: TestPIComponent },
         ]
       }
     ]),
