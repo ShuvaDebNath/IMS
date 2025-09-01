@@ -38,12 +38,13 @@ import { CreatePageComponent } from '../production/requisition/raw-material-requ
 import { EditPageComponent } from '../production/requisition/raw-material-requisition/edit/edit-page.component';
 import { ListPageComponent } from '../production/requisition/raw-material-requisition/list/list-page.component';
 import { ChangePasswordComponent } from '../authentication/change-password/change-password.component';
-import { GenerateCommercialInvoiceComponent } from '../commercial-invoice/generate-commercial-invoice.component';
 import { GenerateLcComponent } from '../lc/generate-lc/generate-lc.component';
 import { AllLcComponent } from '../lc/all-lc/all-lc.component';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TableModule } from 'primeng/table';
 import {DialogModule} from 'primeng/dialog'
+import { GenerateCommercialInvoiceComponent } from '../commercial-document/generate-commercial-invoice/generate-commercial-invoice.component';
+import { AllCommercialInvoiceComponent } from '../commercial-document/all-commercial-invoice/all-commercial-invoice.component';
 
 // import {MatSortModule} from '@angular/material/sort';
 // import {MatTableModule} from '@angular/material/table';
@@ -67,9 +68,9 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     AccessNodeComponent,
     AccessPanelComponent,
     ChangePasswordComponent,
-    GenerateCommercialInvoiceComponent,
     GenerateLcComponent,
     AllLcComponent,
+    GenerateCommercialInvoiceComponent,
     ],
   imports: [
     CommonModule,
@@ -110,6 +111,8 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
            {path: 'change-password', component: ChangePasswordComponent},
            {path: 'all-lc', component: AllLcComponent},
            {path: 'generate-lc', component: GenerateLcComponent},
+           {path: 'generate-commercial-invoice', component: GenerateCommercialInvoiceComponent},
+           {path: 'all-commercial-invoice', component: AllCommercialInvoiceComponent},
         ]
       }
     ]),

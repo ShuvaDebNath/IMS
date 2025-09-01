@@ -1,0 +1,201 @@
+<div class="row d-flex justify-content-center">
+  <div class="col-md-6">
+    <div class="card card-default">
+      <div class="content-heading" style="border-bottom: 1px solid rgba(0,0,0,.125) !important;">
+          <div class="row">
+            <div class="col-6">
+              <h2 class="p-2"></h2>
+            </div>
+          </div>
+          <h2 class="p-2 font-weight-bold">{{!isEdit?'Add':'Edit'}}&nbsp;Commercial Invoice</h2>
+      </div>
+      <div class="card-body">
+        <form name="newForm" [formGroup]="Formgroup" role="form">
+          <div class="row">
+            <!-- <div class="col-md-6">
+                <label for="Commercial_Invoice_No" class="">Commercial Invoice No</label>
+                <div class="">
+                    <div class="form-group d-inline">
+                    <input autocomplete="off" type="text"                  
+                    formControlName="Commercial_Invoice_No"
+                    class="form-control"
+                    placeholder="Commercial Invoice No" id="Commercial_Invoice_No" name="Commercial_Invoice_No" value="">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+
+            </div> -->
+           <div class="col-md-6">
+            <label>LC <span>*</span></label>
+            <p-dropdown [style]="{'width':'100%'}"  class="p-0" [options]="LCList"   optionLabel="LC_No" [filter]="true" filterBy="UserName" [showClear]="true" styleClass="listBottom" placeholder="Please Select" optionValue="lc_id" formControlName="LC_No">
+              <ng-template let-LCList pTemplate="item">
+                      <div class="flex align-items-center gap-2">  
+                          <div>{{ LCList.LC_No }}</div>
+                      </div>
+                  </ng-template>
+              </p-dropdown>              
+            </div>
+            <div class="col-md-6">
+                <label>Applicant Bank <span>*</span></label>
+                <p-dropdown [style]="{'width':'100%'}"  class="p-0" [options]="BenificiaryAccounts"  optionLabel="CompanyName" [filter]="true" filterBy="CompanyName" [showClear]="true" styleClass="listBottom" placeholder="Please Select" optionValue="Beneficiary_Account_ID" formControlName="ApplicantBank">
+                <ng-template let-PINo pTemplate="item">
+                        <div class="flex align-items-center gap-2">  
+                            <div>{{ PINo.CompanyName }}</div>
+                        </div>
+                    </ng-template>
+                </p-dropdown> 
+            </div>
+            <div class="col-md-6">
+                <label class="control-label" for="inlineFormInputGroup">Exp No.<span>*</span></label>
+                <div class="form-group d-inline">
+                    <input autocomplete="off" type="text"                  
+                    formControlName="ExpNo"
+                    class="form-control"
+                    placeholder="Exp No" id="ExpNo" name="ExpNo" value="">
+                    </div>
+            </div>
+            
+            <div class="col-md-6">
+                <label class="control-label" for="inlineFormInputGroup">Exp Date</label>
+                <div class="input-group mb-2">
+                    <div class="input-group-sm input-group-prepend">
+                    <div class="input-group-text" (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
+                    </div>
+                    <input type="text" autocomplete="off" formControlName="ExpDate" [bsConfig]="{
+                    dateInputFormat: 'DD/MM/YYYY',
+                    containerClass: 'theme-green'
+                    }" class="form-control-sm form-control bg-white" id="ExpDate" name="ExpDate" placeholder="From Date"
+                    #dpfrom="bsDatepicker" bsDatepicker readonly />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label class="control-label" for="inlineFormInputGroup">Be No.</label>
+                <div class="form-group d-inline">
+                    <input autocomplete="off" type="text"                  
+                    formControlName="BeNo"
+                    class="form-control"
+                    placeholder="Be No" id="BeNo" name="BeNo" value="">
+                    </div>
+            </div>
+            
+            <div class="col-md-6">
+                <label class="control-label" for="inlineFormInputGroup">Be No. Date</label>
+                <div class="input-group mb-2">
+                    <div class="input-group-sm input-group-prepend">
+                    <div class="input-group-text" (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
+                    </div>
+                    <input type="text" autocomplete="off" formControlName="BeDate" [bsConfig]="{
+                    dateInputFormat: 'DD/MM/YYYY',
+                    containerClass: 'theme-green'
+                    }" class="form-control-sm form-control bg-white" id="BeDate" name="BeDate" placeholder="From Date"
+                    #dpfrom="bsDatepicker" bsDatepicker readonly />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label class="control-label" for="inlineFormInputGroup">Ep No.</label>
+                <div class="form-group d-inline">
+                    <input autocomplete="off" type="text"                  
+                    formControlName="EpNo"
+                    class="form-control"
+                    placeholder="Ep No" id="EpNo" name="EpNo" value="">
+                    </div>
+            </div>
+            
+            <div class="col-md-6">
+                <label class="control-label" for="inlineFormInputGroup">Ep No. Date</label>
+                <div class="input-group mb-2">
+                    <div class="input-group-sm input-group-prepend">
+                    <div class="input-group-text" (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
+                    </div>
+                    <input type="text" autocomplete="off" formControlName="EpDate" [bsConfig]="{
+                    dateInputFormat: 'DD/MM/YYYY',
+                    containerClass: 'theme-green'
+                    }" class="form-control-sm form-control bg-white" id="EpDate" name="EpDate" placeholder="From Date"
+                    #dpfrom="bsDatepicker" bsDatepicker readonly />
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <label class="control-label" for="inlineFormInputGroup">Freight Charge <span>*</span></label>
+                <div class="form-group d-inline">
+                    <input autocomplete="off" type="Number"                  
+                    formControlName="FreightCharge"
+                    class="form-control"
+                    placeholder="Freight Charge" id="FreightCharge" name="FreightCharge" value="">
+                    </div>
+            </div>
+            <div class="col-md-6">
+                <label class="control-label" for="inlineFormInputGroup">Qty (Rolls) <span>*</span></label>
+                <div class="form-group d-inline">
+                    <input autocomplete="off" type="Number"                  
+                    formControlName="QtyRolls"
+                    class="form-control"
+                    placeholder="Qty (Rolls)" id="QtyRolls" name="QtyRolls" value="">
+                    </div>
+            </div>
+            <div class="col-md-6">
+                <label class="control-label" for="inlineFormInputGroup">Total Gross Weight <span>*</span></label>
+                <div class="form-group d-inline">
+                    <input autocomplete="off" type="Number"                  
+                    formControlName="TotalGrossWeight"
+                    class="form-control"
+                    placeholder="Total Gross Weight" id="TotalGrossWeight" name="TotalGrossWeight" value="">
+                    </div>
+            </div>
+            <div class="col-md-6">
+                <label class="control-label" for="inlineFormInputGroup">Total Net Weight <span>*</span></label>
+                <div class="form-group d-inline">
+                    <input autocomplete="off" type="Number"                  
+                    formControlName="TotalNetWeight"
+                    class="form-control"
+                    placeholder="Total Net Weight" id="TotalNetWeight" name="TotalNetWeight" value="">
+                    </div>
+            </div>
+            <div class="col-md-6">
+                <label class="control-label" for="inlineFormInputGroup">Sailing on or about</label>
+                <div class="input-group mb-2">
+                    <div class="input-group-sm input-group-prepend">
+                    <div class="input-group-text" (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
+                    </div>
+                    <input type="text" autocomplete="off" formControlName="SailiongOnOrAbout" [bsConfig]="{
+                    dateInputFormat: 'DD/MM/YYYY',
+                    containerClass: 'theme-green'
+                    }" class="form-control-sm form-control bg-white" id="SailiongOnOrAbout" name="SailiongOnOrAbout" placeholder="From Date"
+                    #dpfrom="bsDatepicker" bsDatepicker readonly />
+                </div>
+            </div>
+            <div class="col-md-6"></div>
+            <div class="col-md-6">
+                <label for="Remarks" class="">Remarks</label>
+                <div class="">
+                    <div class="form-group d-inline">
+                    <input autocomplete="off" type="text"                  
+                    formControlName="Remarks"
+                    aria-multiline="true"
+                    class="form-control"
+                    placeholder="Remarks" id="Remarks" name="Remarks" value="">
+                    </div>
+                </div>
+            </div>
+          </div>
+        </form>
+        <div class="flexbox mt-5">
+          <!-- <button [routerLink]="['/all-']" class="btn btn-w-xl text-white btn-outline-danger bg-gradient-danger" type="button"
+            >
+            Cancel
+          </button> -->
+          <button  class="btn btn-w-xl text-white btn-outline-success bg-gradient-success px-5 float-right" type="button" (click)="saveData()"
+            [disabled]="Formgroup.invalid" [hidden]="isEdit">
+            Save
+          </button>
+          <button [hidden]="!isEdit" class="btn btn-w-xl text-white btn-outline-success bg-gradient-success px-5 float-right" type="button" (click)="updateData()"
+            [disabled]="Formgroup.invalid">
+            Update
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
