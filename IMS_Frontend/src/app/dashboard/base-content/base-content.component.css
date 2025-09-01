@@ -1,6 +1,6 @@
  .card {
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px  #6a1a3f;
             border: none;
             overflow: hidden;
             transition: transform 0.3s ease;
@@ -11,7 +11,7 @@
         }
         
         .header-bg {
-            background: linear-gradient(120deg, var(--primary) 0%, var(--secondary) 100%);
+            background:  #6a1a3f;
             color: white;
             padding: 2rem 0;
             border-radius: 0 0 30px 30px;
@@ -34,19 +34,19 @@
         }
         
         .btn-download {
-            background: linear-gradient(to right, var(--secondary), var(--primary));
+            background: #6a1a3f;
             color: white;
             border: none;
             padding: 12px 30px;
             border-radius: 50px;
             font-weight: 600;
             transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            box-shadow: 0 4px 15px  #6a1a3f;
         }
         
         .btn-download:hover {
             transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+            box-shadow: 0 6px 20px #6a1a3f;
             color: white;
         }
         
@@ -63,7 +63,7 @@
         
         .fa-database {
             font-size: 2.5rem;
-            color: var(--secondary);
+            color:  #6a1a3f;
         }
         
         .backup-info {

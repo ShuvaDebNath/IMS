@@ -38,6 +38,7 @@ import { CreatePageComponent } from '../production/requisition/raw-material-requ
 import { EditPageComponent } from '../production/requisition/raw-material-requisition/edit/edit-page.component';
 import { ListPageComponent } from '../production/requisition/raw-material-requisition/list/list-page.component';
 import { ChangePasswordComponent } from '../authentication/change-password/change-password.component';
+import { ArbitrationComponent } from '../arbitration/arbitration.component';
 
 
 // import {MatSortModule} from '@angular/material/sort';
@@ -98,6 +99,7 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'edit-raw-material', component: EditPageComponent },
           { path: 'list-raw-material', component: ListPageComponent },
            {path: 'change-password', component: ChangePasswordComponent},
+           {path:'ab',component:ArbitrationComponent}
         ]
       }
     ]),

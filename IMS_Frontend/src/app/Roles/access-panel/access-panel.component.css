@@ -13,7 +13,10 @@
     background-color: #800080;
     color: white;
 }
-
+.theme-btn{
+    background-color: #6a1a3f;
+    color: white;
+}
 .theme-text{
     color: #6a1a3f;
 }
