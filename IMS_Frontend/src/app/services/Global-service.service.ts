@@ -67,39 +67,41 @@ export class GlobalServiceService {
   }
 
   public Logout() {
-    let user = this.GetSessionUser();
-    let model = {
-      comId: '',
-      concernId: user.concernId,
-      deleteBy : '',
-      deleteDate: '',
-      email: user.email,
-      emailConfirmed: true,
-      fullName: '',
-      id: user.id,
-      isActive: true,
-      makeBy: '',
-      menuId: '',
-      password: '',
-      projectId: user.projectId,
-      updateBy: '',
-      userName: user.userName,
-      userTypeId: user.userTypeId,
-      UserId: '',
-      UserTypeName:''
-    };
-    return this.http
-      .post<any>(`${GlobalConfig.BASE_URL_USERMANAGE}LogIn/Logout`, model, {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-        }),
-      })
-      .pipe(
-        map((Response) => {
-          this.ClearSession();
+    this.ClearSession();
           window.open(`${GlobalConfig.LOGIN_URL_USERMANAGE}`, '_self');
-        })
-      );
+    // let user = this.GetSessionUser();
+    // let model = {
+    //   comId: '',
+    //   concernId: user.concernId,
+    //   deleteBy : '',
+    //   deleteDate: '',
+    //   email: user.email,
+    //   emailConfirmed: true,
+    //   fullName: '',
+    //   id: user.id,
+    //   isActive: true,
+    //   makeBy: '',
+    //   menuId: '',
+    //   password: '',
+    //   projectId: user.projectId,
+    //   updateBy: '',
+    //   userName: user.userName,
+    //   userTypeId: user.userTypeId,
+    //   UserId: '',
+    //   UserTypeName:''
+    // };
+    // return this.http
+    //   .post<any>(`${GlobalConfig.BASE_URL_USERMANAGE}LogIn/Logout`, model, {
+    //     headers: new HttpHeaders({
+    //       'Content-Type': 'application/json',
+    //     }),
+    //   })
+    //   .pipe(
+    //     map((Response) => {
+    //       this.ClearSession();
+    //       window.open(`${GlobalConfig.LOGIN_URL_USERMANAGE}`, '_self');
+    //     })
+    //   );
   }
   public GetSessionUser() {
     let user = JSON.parse(this.getSessionData('user'));

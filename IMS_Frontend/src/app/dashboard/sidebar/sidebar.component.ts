@@ -95,30 +95,5 @@ export class SidebarComponent implements OnInit {
     });
   }
 
-  GetUserWiseledger() {
-    let userJson = JSON.parse(window.localStorage.getItem('user')!);
-    console.log(userJson);
-    
-    let param = new GetDataModel();
-    param.procedureName = '[prcUserAccessWiseLedgerList]';
-    param.parameters = {
-      UserId:userJson.id
-    };
-
-    this.masterEntryService.GetInitialData(param).subscribe({
-      next: (results) => {
-
-        if (results.status) {
-          let tables = JSON.parse(results.data);
-          this.pagesComponent.userWiseLedger = tables.Table;
-        } else if (results.msg == 'Invalid Token') {          
-          this.gs.Logout();
-        } else {
-        }
-      },
-      error: (err) => {
-        console.log(err)
-      },
-    });
-  }
+  
 }
