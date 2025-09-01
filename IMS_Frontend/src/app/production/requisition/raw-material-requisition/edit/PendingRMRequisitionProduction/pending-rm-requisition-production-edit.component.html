@@ -1,0 +1,57 @@
+<!-- pending-rm-requisition-production-edit.component.html -->
+<div class="container">
+  <h1>Edit Pending RM Requisition</h1>
+
+  <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+    <div class="row g-3 mb-3">
+      <div class="col-md-4">
+        <label class="form-label" for="RequisitionNumber">Requisition Number</label>
+        <input id="RequisitionNumber" class="form-control" type="text" formControlName="RequisitionNumber" readonly />
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label" for="RequisitionDate">Requisition Date</label>
+        <input id="RequisitionDate" class="form-control" type="date" formControlName="RequisitionDate" />
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label" for="Remarks">Remarks</label>
+        <textarea id="Remarks" class="form-control" formControlName="Remarks"></textarea>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-sm table-bordered align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Article</th>
+            <th>Description</th>
+            <th>Color</th>
+            <th>Width</th>
+            <th>Weight (KG)</th>
+            <th>Unit</th>
+            <th>Quantity</th>
+            <th>Roll/Bag</th>
+            <th>R/B Qty</th>
+          </tr>
+        </thead>
+
+        <tbody formArrayName="Items">
+          <tr *ngFor="let fg of items.controls; let i = index" [formGroupName]="i">
+            <td><input class="form-control" formControlName="Article" readonly></td>
+            <td><input class="form-control" formControlName="Description" readonly></td>
+            <td><input class="form-control" formControlName="Color" readonly></td>
+            <td><input class="form-control" formControlName="Width" readonly></td>
+            <td><input class="form-control" formControlName="Weight" readonly></td>
+            <td><input class="form-control" formControlName="Unit" readonly></td>
+            <td><input class="form-control" type="number" min="0" formControlName="Quantity"></td>
+            <td><input class="form-control" formControlName="RollBag"></td>
+            <td><input class="form-control" type="number" min="0" formControlName="RBQty"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+  </form>
+</div>

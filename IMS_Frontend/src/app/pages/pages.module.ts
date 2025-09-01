@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule,ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -37,10 +37,11 @@ import { AccessPanelComponent } from '../Roles/access-panel/access-panel.compone
 import { CreatePageComponent } from '../production/requisition/raw-material-requisition/create/create-page.component';
 import { EditPageComponent } from '../production/requisition/raw-material-requisition/edit/edit-page.component';
 import { ListPageComponent } from '../production/requisition/raw-material-requisition/list/list-page.component';
-import { PendingRMRequisitionComponent } from '../production/requisition/raw-material-requisition/list/PendingRMRequisition/pending-rm-requisition.component';
+import { PendingRMRequisitionProductionComponent } from '../production/requisition/raw-material-requisition/list/PendingRMRequisition_Production/pending-rm-requisition-production.component';
 import { IssuedRMRequisitionComponent } from '../production/requisition/raw-material-requisition/list/IssuedRMRequisition/issued-rm-requisition.component';
 import { ReceivedRMListComponent } from '../production/requisition/raw-material-requisition/list/ReceivedRMList/received-rm-list.component';
 import { AllRMRequisitionListComponent } from '../production/requisition/raw-material-requisition/list/AllRMRequisitionList/all-rm-requisition-list.component';
+import { PendingRMRequisitionWareHouseComponent } from '../production/requisition/raw-material-requisition/list/PendingRMRequisition_Warehouse/pending-rm-requisition-warehouse.component';
 
 // import {MatSortModule} from '@angular/material/sort';
 // import {MatTableModule} from '@angular/material/table';
@@ -98,10 +99,19 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'create-raw-material', component: CreatePageComponent },
           { path: 'edit-raw-material', component: EditPageComponent },
           { path: 'list-raw-material', component: ListPageComponent },
-          { path: 'pending-rm-requisition', component: PendingRMRequisitionComponent },
+          { path: 'pending-rm-requisition', component: PendingRMRequisitionProductionComponent },
+          { path: 'pending-rm-requisition-warehouse', component: PendingRMRequisitionWareHouseComponent },
           { path: 'issued-rm-requisition', component: IssuedRMRequisitionComponent },
           { path: 'received-rm-list', component: ReceivedRMListComponent },
-          { path: 'all-rm-requisition-list', component: AllRMRequisitionListComponent }
+          { path: 'all-rm-requisition-list', component: AllRMRequisitionListComponent },
+
+          {
+            path: 'pending-rm-requisition/edit/:reqNo',
+            loadComponent: () =>
+              import('../production/requisition/raw-material-requisition/edit/PendingRMRequisitionProduction/pending-rm-requisition-production-edit.component')
+                .then(m => m.PendingRMRequisitionProductionEditComponent)
+          }
+
         ]
       }
     ]),
