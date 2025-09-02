@@ -6,7 +6,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DialogModule } from 'primeng/dialog';
 import swal from 'sweetalert2';
 import { GlobalServiceService } from 'src/app/services/Global-service.service';
-import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 import { Router } from '@angular/router';
 import { GetDataService } from 'src/app/services/getData/getDataService.service';
 import { DoubleMasterEntryService } from 'src/app/services/doubleEntry/doubleEntryService.service';

@@ -8,18 +8,21 @@ import { GetDataService } from 'src/app/services/getData/getDataService.service'
 import { DialogModule } from 'primeng/dialog';
 import { CommonModule } from '@angular/common';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     standalone: true,
-    selector: 'app-pending-rm-requisition',
-    templateUrl: './pending-rm-requisition-warehouse.component.html',
-    styleUrls: ['./pending-rm-requisition-warehouse.component.css'],
-    imports: [CommonModule, TableModule, InputTextModule, DialogModule],
+    selector: 'app-accepted-rm-requisition',
+    templateUrl: './accepted-rm-requisition-warehouse.component.html',
+    styleUrls: ['./accepted-rm-requisition-warehouse.component.css'],
+    imports: [FormsModule, CommonModule, TableModule, InputTextModule, DialogModule],
 })
-export class PendingRMRequisitionWareHouseComponent implements OnInit {
+export class AcceptedRMRequisitionWareHouseComponent implements OnInit {
     pendingRequisitions: any[] = [];
     detailsData: any = null;
+    detailsData_for_Issue: any = null;
     isDetailsVisible = false;
+    isDetailsVisible_for_Issue = false;
 
     constructor(
         private getDataService: GetDataService,
@@ -45,7 +48,7 @@ export class PendingRMRequisitionWareHouseComponent implements OnInit {
             parameters: {
                 FromDate: '',
                 ToDate: '',
-                Status: 'Pending',
+                Status: 'Accepted',
                 User: sentBy
             }
         };
@@ -97,60 +100,71 @@ export class PendingRMRequisitionWareHouseComponent implements OnInit {
         });
     }
 
-    onAccept(data: any): void {
-        let queryParams = {
-            Status: 'Accepted'
+    showDataBeforeSend(row: any): void {
+        // swal.fire('Sent!', 'Requisition has been sent.', 'success');
+        const procedureData = {
+            procedureName: 'usp_Rawmaterial_GetDataById_With_Stock',
+            parameters: { RM_Requisition_MasterID: row.RM_Requisition_MasterID }
         };
-        let condition = {
-            RM_Requisition_MasterID: data.RM_Requisition_MasterID
-        };
-        let tableName = 'tbl_rm_requisition_master';
 
-        this.masterEntryService.UpdateData(queryParams, condition, tableName).subscribe((res: any) => {
-            if (res.status) {
-                swal.fire('Accepted!', 'Requisition has been accepted.', 'success');
-                this.isDetailsVisible = false;
-                this.loadPendingRequisitions(); 
-            } else {
-                if (res.message == 'Invalid Token') {
+        this.getDataService.GetInitialData(procedureData).subscribe({
+            next: (results) => {
+                if (results.status) {
+                    const items = JSON.parse(results.data).Tables1;
+                    this.detailsData_for_Issue = {
+                        RM_Requisition_MasterID: row.RM_Requisition_MasterID,
+                        RequisitionNumber: row.RequisitionNumber,
+                        RequisitionDate: row.RequisitionDate,
+                        Remarks: row.Remarks,
+                        TotalQty: row.Total_Qty,
+                        TotalBag: row.Total_bag,
+                        TotalRoll: row.Total_Roll,
+                        Items: items
+                    };
+                    this.isDetailsVisible_for_Issue = true;
+                } else if (results.msg === 'Invalid Token') {
                     swal.fire('Session Expired!', 'Please Login Again.', 'info');
                     this.gs.Logout();
                 } else {
-                    swal.fire('Rejected!', 'Requisition has been rejected.', 'error');
-                    this.isDetailsVisible = false;
-                    this.loadPendingRequisitions();
+                    swal.fire('Error!', 'Failed to load details.', 'error');
                 }
-            }
+            },
+            error: () => swal.fire('Error!', 'An error occurred while fetching details.', 'error')
         });
 
     }
 
-    onReject(data: any): void {
+    onAcceptedChange(): void {
+        // e.g., recompute accepted totals or enable/disable "Send" button
+    }
 
-        let queryParams = {
-            Status: 'Rejected'
-        };
-        let condition = {
-            RM_Requisition_MasterID: data.RM_Requisition_MasterID
-        };
-        let tableName = 'tbl_rm_requisition_master';
-
-        this.masterEntryService.UpdateData(queryParams, condition, tableName).subscribe((res: any) => {
-            if (res.status) {
-                swal.fire('Rejected!', 'Requisition has been rejected.', 'error');
-                this.isDetailsVisible = false;
-                this.loadPendingRequisitions(); 
-            } else {
-                if (res.message == 'Invalid Token') {
-                    swal.fire('Session Expired!', 'Please Login Again.', 'info');
-                    this.gs.Logout();
-                } else {
-                    swal.fire('Rejected!', 'Requisition has been rejected.', 'error');
-                    this.isDetailsVisible = false;
-                    this.loadPendingRequisitions();
-                }
-            }
+    // In the component TS
+    get canSend(): boolean {
+        const items = this.detailsData_for_Issue?.Items ?? [];
+        return items.every((it: any) => {
+            const qty = Number(it?.IssuedQuantity);
+            const max = Number(it?.Quantity);
+            // valid only if IssuedQuantity is a number, >= 0, and <= Quantity
+            return !Number.isNaN(qty) && qty >= 0 && qty <= max;
         });
     }
+
+    isFull(it: any): boolean {
+        const q = Number(it?.Quantity);
+        const rq = Number(it?.RollBag_Quantity);
+        const iq = Number(it?.IssuedQuantity);
+        const irq = Number(it?.IssuedRoll_Bag);
+
+        return Number.isFinite(q) && Number.isFinite(rq) &&
+            Number.isFinite(iq) && Number.isFinite(irq) &&
+            iq === q && irq === rq;        // Full only if both match exactly
+    }
+
+
+
+    onSendFromWarehouse(data: any): void {
+        swal.fire('Sent!', 'Requisition has been sent from warehouse.', 'success');
+    }
+
 }
 

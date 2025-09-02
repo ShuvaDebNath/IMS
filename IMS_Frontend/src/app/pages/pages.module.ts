@@ -42,6 +42,7 @@ import { IssuedRMRequisitionComponent } from '../production/requisition/raw-mate
 import { ReceivedRMListComponent } from '../production/requisition/raw-material-requisition/list/ReceivedRMList/received-rm-list.component';
 import { AllRMRequisitionListComponent } from '../production/requisition/raw-material-requisition/list/AllRMRequisitionList/all-rm-requisition-list.component';
 import { PendingRMRequisitionWareHouseComponent } from '../production/requisition/raw-material-requisition/list/PendingRMRequisition_Warehouse/pending-rm-requisition-warehouse.component';
+import { AcceptedRMRequisitionWareHouseComponent } from '../production/requisition/raw-material-requisition/list/AcceptedRMRequisition_Warehouse/accepted-rm-requisition-warehouse.component';
 
 // import {MatSortModule} from '@angular/material/sort';
 // import {MatTableModule} from '@angular/material/table';
@@ -99,8 +100,9 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'create-raw-material', component: CreatePageComponent },
           { path: 'edit-raw-material', component: EditPageComponent },
           { path: 'list-raw-material', component: ListPageComponent },
-          { path: 'pending-rm-requisition', component: PendingRMRequisitionProductionComponent },
+          { path: 'pending-rm-requisition-production', component: PendingRMRequisitionProductionComponent },
           { path: 'pending-rm-requisition-warehouse', component: PendingRMRequisitionWareHouseComponent },
+          { path: 'accepted-rm-requisition-warehouse', component: AcceptedRMRequisitionWareHouseComponent },
           { path: 'issued-rm-requisition', component: IssuedRMRequisitionComponent },
           { path: 'received-rm-list', component: ReceivedRMListComponent },
           { path: 'all-rm-requisition-list', component: AllRMRequisitionListComponent },
