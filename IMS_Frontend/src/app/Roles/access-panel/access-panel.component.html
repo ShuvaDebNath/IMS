@@ -2,11 +2,11 @@
 <form name="newForm" [formGroup]="Formgroup" role="form">
   <div class="card shadow-sm">
     <div class="card-header theme-bg ">
-      <h3 class="card-title theme-text mb-0 theme-text"  >Access Control Panel</h3>
+      <h3 class="card-title  mb-0 "  >Access Control Panel</h3>
     </div>
     <div class="card-body">
       <div class="col-md-3">
-        <label>Role Name</label>
+        <label class="theme-text">Role Name</label>
         <p-dropdown [style]="{'width':'100%'}" class="p-0" [options]="Roles" (onChange)="getSelectedMenu()"
           optionLabel="label" [filter]="true" filterBy="label" [showClear]="true" styleClass="listBottom"
           placeholder="Please Select" optionValue="value" formControlName="Role_Name">
