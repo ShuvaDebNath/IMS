@@ -10,7 +10,8 @@ import { INgxSelectOption } from 'ngx-select-ex';
 
 @Component({
 	selector: 'app-access-panel',
-	templateUrl: './access-panel.component.html'
+	templateUrl: './access-panel.component.html',
+   styleUrls: ['./access-panel.component.css']
 })
 export class AccessPanelComponent implements OnInit {
 	menus: any[] = [];

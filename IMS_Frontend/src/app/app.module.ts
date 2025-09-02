@@ -24,6 +24,7 @@ import { RoleCreateComponent } from './Roles/role-create/role-create.component';
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { ArbitrationComponent } from './arbitration/arbitration.component';
 import { TableComponent } from './common/table/table.component';
+import { LandingPageComponent } from './landing-page/landing-page.component';
 
 const CustomSelectOptions: INgxSelectOptions = {
   keepSelectedItems: false,
@@ -41,7 +42,8 @@ const CustomSelectOptions: INgxSelectOptions = {
     LogoutComponent,
     ResetPasswordComponent,
     ArbitrationComponent,
-    TableComponent
+    TableComponent,
+    LandingPageComponent
 
   ],
   imports: [

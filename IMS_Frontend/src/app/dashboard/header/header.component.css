@@ -31,25 +31,26 @@
         }
         
        
-        .main-header {
+        .custom-header {
             position: sticky!important;
             top: 0;
             background: #6a1a3f;
             padding: 0;
             z-index: 999; 
+            margin-left:0px!important;
         }
         
-        .main-header .navbar-nav .nav-link {
+        .custom-header .navbar-nav .nav-link {
             color: #fff !important;
             font-size: 14px;
             padding: 8px 12px;
         }
         
-        .main-header .navbar-nav .dropdown-menu {
+        .custom-header .navbar-nav .dropdown-menu {
             font-size: 14px;
         }
         
-        .main-header .navbar-nav .nav-link i {
+        .custom-header .navbar-nav .nav-link i {
             margin-right: 5px;
         }
         
