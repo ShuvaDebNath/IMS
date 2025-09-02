@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DoubleMasterEntryModel } from 'src/app/models/DoubleMasterEntryModel';
 import { GetDataModel } from 'src/app/models/GetDataModel';
+import { PIDetails } from 'src/app/models/PIDetails';
+import { PIMaster } from 'src/app/models/PIMaster';
 import { GlobalServiceService } from 'src/app/services/Global-service.service';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 import swal from 'sweetalert2';
@@ -38,7 +41,6 @@ export class GeneratePiComponent implements OnInit {
   Formgroup!: FormGroup;
   isSubmit!: boolean;
   SetDDL:boolean=true;
-  IsBuyerMandatory:boolean=true;
   GTQTY: any=0;
   GTAMNT: any=0;
 
@@ -49,23 +51,21 @@ export class GeneratePiComponent implements OnInit {
 
   ngOnInit(): void {
     this.SetDDL=true;
-    this.IsBuyerMandatory=true;
     this.GenerateFrom(); 
     this.GetInitialData();
+    this.BuyerToggle(false);
 
     this.Formgroup.get('IsBuyerMandatory')?.valueChanges.subscribe(value => {
-      console.log('IsBuyerMandatory:', value);
-
+      this.BuyerToggle(value);
+    });
+    
+  }
+  BuyerToggle(value:boolean){
       if(value){
         this.Formgroup.get('Buyer_ID')?.enable();
       }else{
         this.Formgroup.get('Buyer_ID')?.disable();
       }
-      
-      this.IsBuyerMandatory=value;
-
-    });
-    
   }
 
   GenerateFrom() {
@@ -161,22 +161,16 @@ export class GeneratePiComponent implements OnInit {
   DeleteRow(index: any) {
     const con = <FormArray>this.Formgroup.controls['ItemArray'];
     if (con != null && con.length>1) {
-      // this.Totalrow = con.length;
-      // if (this.Totalrow > 1) {
         con.removeAt(index);
         this.calculatetotalGrandTotal();
-      // }
     }
   }
 
   RemoveLast() {
     const con = <FormArray>this.Formgroup.controls['ItemArray'];
     if (con != null && con.length>1) {
-      // this.Totalrow = con.length;
-      // if (this.Totalrow > 1) {
         con.removeAt(con.length-1);
         this.calculatetotalGrandTotal();
-      // }
     }
   }
   calculateAmount(itemrow:any){
@@ -195,10 +189,6 @@ export class GeneratePiComponent implements OnInit {
       this.GTQTY+=control.value.Quantity;
       this.GTAMNT+=control.value.Total_Amount;
     });
-     
-
-    // this.Formgroup.controls.TotalCrAmount.setValue(res.CR);
-    // this.Formgroup.controls.TotalDrAmount.setValue(res.DR);
   }
 
   isInvalid(itemrow:any,controlName:any){
@@ -278,6 +268,20 @@ export class GeneratePiComponent implements OnInit {
     let model= this.Formgroup.value;
     console.clear();
     console.log(model);
+    console.log(model.itemArray.value);
+
+    this.service.SaveDataMasterDetails(model.itemArray.value,
+      "tbl_pi_detail",
+      model,
+      "tbl_pi_master",
+      "PI_Master_ID",
+      "PI_Master_ID",
+      "tbl_pi_master",
+      "PINo"
+    ).subscribe(res=>{
+      console.log(res);
+    });
+
   }
 
 
