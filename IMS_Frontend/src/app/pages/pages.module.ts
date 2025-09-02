@@ -71,6 +71,7 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     GenerateLcComponent,
     AllLcComponent,
     GenerateCommercialInvoiceComponent,
+    AllCommercialInvoiceComponent
     ],
   imports: [
     CommonModule,

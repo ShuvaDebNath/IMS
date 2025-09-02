@@ -16,4 +16,8 @@ export class CD {
   EP_No!:string;
   EP_No_Date!:string;
   Commercial_Invoice_No!:string;
+  totallen!:string;
+  Commercial_Invoice_ID!:string;
+  PI_No!:string;
+  UserName!:string;
 }

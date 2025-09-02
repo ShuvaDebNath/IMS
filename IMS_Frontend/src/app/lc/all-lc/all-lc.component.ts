@@ -21,7 +21,7 @@ import { DoubleMasterEntryModel } from 'src/app/models/DoubleMasterEntryModel';
   styleUrls: ['./all-lc.component.css']
 })
 export class AllLcComponent {
-pageIndex = 1;
+  pageIndex = 1;
   searchText = '';
   length = 100;
   pageSize = 10;
