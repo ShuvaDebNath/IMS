@@ -60,10 +60,10 @@
             </div>
             <div class="col-md-6">
                 <label>Beneficiary Bank <span>*</span></label>
-                <p-dropdown [style]="{'width':'100%'}"  class="p-0" [options]="BenificiaryAccounts"  optionLabel="CompanyName" [filter]="true" filterBy="CompanyName" [showClear]="true" styleClass="listBottom" placeholder="Please Select" optionValue="Beneficiary_Account_ID" formControlName="BenificiaryAccounts">
+                <p-dropdown [style]="{'width':'100%'}"  class="p-0" [options]="BenificiaryAccounts"  optionLabel="BankName" [filter]="true" filterBy="BankName" [showClear]="true" styleClass="listBottom" placeholder="Please Select" optionValue="Beneficiary_Bank_ID" formControlName="BenificiaryAccounts">
                 <ng-template let-PINo pTemplate="item">
                         <div class="flex align-items-center gap-2">  
-                            <div>{{ PINo.CompanyName }}</div>
+                            <div>{{ PINo.BankName }}</div>
                         </div>
                     </ng-template>
                 </p-dropdown> 

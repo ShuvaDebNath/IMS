@@ -79,13 +79,13 @@ export class GenerateCommercialInvoiceComponent {
       //window.location.href='all-lc';
     }
 
-    this.title.setTitle('Generate LC');
+    this.title.setTitle('Generate Commercial Invoice');
     this.GenerateFrom();
     this.getInitialData();
 
-    // if (this.isEdit) {
-    //    this.GetLCById(this.LCId);
-    // }
+    if (this.isEdit) {
+       this.GetCDById(this.CIId);
+    }
 
   }
 
@@ -110,7 +110,7 @@ export class GenerateCommercialInvoiceComponent {
 
       getInitialData(){
         var ProcedureData = {
-          procedureName: '[usp_CommDoc_GetInitialData]',
+          procedureName: '[usp_CD_GetInitialData]',
           parameters: {
           }
         }; 
@@ -147,20 +147,18 @@ export class GenerateCommercialInvoiceComponent {
                 var cd = new CD();
                 cd.LC_ID = this.Formgroup.value.LC_No;
                 cd.ExpNo = this.Formgroup.value.ExpNo;
-                cd.Export_Date = this.Formgroup.value.ExpDate;
+                cd.Export_Date = this.Formgroup.value.ExpDate==undefined?null:this.Formgroup.value.ExpDate;
                 cd.Sailing_On_Or_About = this.Formgroup.value.SailiongOnOrAbout;
                 cd.FreightCharge = this.Formgroup.value.FreightCharge;
                 cd.Remarks = this.Formgroup.value.Remarks;
-                cd.Date = this.Formgroup.value.IssueDate;
-                cd.User_ID = this.Formgroup.value.ExpiryDate;
                 cd.Applicant_Bank_ID = this.Formgroup.value.ApplicantBank;
                 cd.Qty_Rolls = this.Formgroup.value.QtyRolls;
                 cd.Total_Gross_Weight = this.Formgroup.value.TotalGrossWeight;
                 cd.Total_Net_Weight = this.Formgroup.value.TotalNetWeight;
                 cd.Be_No = this.Formgroup.value.BeNo;
-                cd.Be_No_Date = this.Formgroup.value.BeDate;
+                cd.Be_No_Date = this.Formgroup.value.BeDate==undefined?null:this.Formgroup.value.BeDate;
                 cd.EP_No = this.Formgroup.value.EpNo;
-                cd.EP_No_Date = this.Formgroup.value.EpDate;
+                cd.EP_No_Date = this.Formgroup.value.EpDate==undefined?null:this.Formgroup.value.EpDate;
                 cd.Commercial_Invoice_No = 'temp';
                 cd.Date = formatted;
                 cd.User_ID = userId==undefined?'':userId;
@@ -210,43 +208,26 @@ export class GenerateCommercialInvoiceComponent {
             }; 
             this.masterEntyService.GetInitialData(ProcedureData).subscribe({
               next: (results) => {
-        
+                console.log(results);
+                
                 if (results.status) {
                   var tableData = JSON.parse(results.data).Tables1;
-                  console.log(tableData);
                   
                   tableData.forEach((e:any)=>{   
-                    var piArr = e.PI_No.split(','); 
-                    const piArrInt = piArr.map(Number);
-                    console.log(piArr);
-                    this.Formgroup.controls.Marketing_Concern.setValue(e.User_ID);   
-                    this.Formgroup.controls.BenificiaryAccounts.setValue(e.Beneficiary_Bank_ID);
-                    this.Formgroup.controls.Consignee_Name.setValue(e.Consignee_Name);
-                    this.Formgroup.controls.LCReceivingDateByDraft.setValue(new Date(e.LC_Receiving_Date_By_Mail));
-                    this.Formgroup.controls.LCReceivingDateOrgBank.setValue(new Date(e.LC_Receiving_Date_By_Bank));
-                    this.Formgroup.controls.LCNo.setValue(e.LC_No);
-                    this.Formgroup.controls.LCValue.setValue(e.LC_Value);
-                    this.Formgroup.controls.IssueDate.setValue(new Date(e.Issue_Date));
-                    this.Formgroup.controls.ExpiryDate.setValue(new Date(e.Expiry_Date));
-                    this.Formgroup.controls.CustomerBankName.setValue(e.Customer_Bank);
-                    this.Formgroup.controls.InvoiceNoWitDate.setValue(e.Invoice_No);
-                    this.Formgroup.controls.IPDocSendingDate.setValue(new Date(e.IP_Document_Sending_Date));
-                    this.Formgroup.controls.IPDocReceivingDate.setValue(new Date(e.IP_Document_Receiving_Date));
-                    this.Formgroup.controls.PaymentTermsLC.setValue(e.Mode);
-                    this.Formgroup.controls.MaturityDate.setValue(new Date(e.Maturity_Date));
-                    this.Formgroup.controls.DocPresBankDate.setValue(new Date(e.IP_Document_Sending_Date));
-                    this.Formgroup.controls.FDDRecDate.setValue(new Date(e.FddTtReceiveDate));
-                    this.Formgroup.controls.ExportLCSC.setValue(e.Export_LC_SC);
-                    this.Formgroup.controls.ActualPaymentRecDate.setValue(new Date(e.Actual_Payment_Receiving_Date));
-                    this.Formgroup.controls.ExportLCSCDate.setValue(new Date(e.Export_LC_SC_Date));
-                    this.Formgroup.controls.LCAFormNo.setValue(e.LCA_Form_No);
-                    this.Formgroup.controls.ApplicantTIN.setValue(e.Applicant_TIN);
-                    this.Formgroup.controls.ApplicantBINVAT.setValue(e.Applicant_BIN_VAT);
-                    this.Formgroup.controls.HSCode.setValue(e.HS_Code);
-                    this.Formgroup.controls.BankBINNo.setValue(e.Bank_BIN_No);
+                    this.Formgroup.controls.LC_No.setValue(e.LC_ID);   
+                    this.Formgroup.controls.ExpNo.setValue(e.ExpNo);
+                    this.Formgroup.controls.ExpDate.setValue(e.Export_Date==undefined?null:e.Export_Date);
+                    this.Formgroup.controls.SailiongOnOrAbout.setValue(e.Sailing_On_Or_About);
+                    this.Formgroup.controls.FreightCharge.setValue(e.FreightCharge);
                     this.Formgroup.controls.Remarks.setValue(e.Remarks);
-                    this.Formgroup.controls.IRCNo.setValue(e.IRC_No);
-                    this.Formgroup.controls.PINo.setValue(piArrInt);
+                    this.Formgroup.controls.ApplicantBank.setValue(e.Applicant_Bank_ID);
+                    this.Formgroup.controls.QtyRolls.setValue(e.Qty_Rolls);
+                    this.Formgroup.controls.TotalGrossWeight.setValue(e.Total_Gross_Weight);
+                    this.Formgroup.controls.TotalNetWeight.setValue(e.Total_Net_Weight);
+                    this.Formgroup.controls.BeNo.setValue(e.Be_No);
+                    this.Formgroup.controls.BeDate.setValue(e.Be_No_Date==undefined?null:e.Be_No_Date);
+                    this.Formgroup.controls.EpNo.setValue(e.EP_No);
+                    this.Formgroup.controls.EpDate.setValue(e.EP_No_Date==undefined?null:e.EP_No_Date);
                   });
         
                 } else if (results.message == 'Invalid Token') {
@@ -260,6 +241,73 @@ export class GenerateCommercialInvoiceComponent {
       
 
       updateData(){
+if (this.Formgroup.invalid) {
+      swal.fire('Invaild Input', 'Please check inputs', 'error');
+      return;
+    }
+    
+              var fDate = new Date();
+              const mm = String(fDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+              const dd = String(fDate.getDate()).padStart(2, '0');
+              const yyyy = fDate.getFullYear();
 
+              const formatted = `${mm}/${dd}/${yyyy}`;  
+              
+              var userId = window.localStorage.getItem('userId');
+              console.log(this.Formgroup.value.EpDate);
+              
+   var cd = new CD();
+    cd.LC_ID = this.Formgroup.value.LC_No;
+                cd.ExpNo = this.Formgroup.value.ExpNo;
+                cd.Export_Date = this.Formgroup.value.ExpDate==undefined?null:this.Formgroup.value.ExpDate;
+                cd.Sailing_On_Or_About = this.Formgroup.value.SailiongOnOrAbout;
+                cd.FreightCharge = this.Formgroup.value.FreightCharge;
+                cd.Remarks = this.Formgroup.value.Remarks;
+                cd.Applicant_Bank_ID = this.Formgroup.value.ApplicantBank;
+                cd.Qty_Rolls = this.Formgroup.value.QtyRolls;
+                cd.Total_Gross_Weight = this.Formgroup.value.TotalGrossWeight;
+                cd.Total_Net_Weight = this.Formgroup.value.TotalNetWeight;
+                cd.Be_No = this.Formgroup.value.BeNo;
+                cd.Be_No_Date = this.Formgroup.value.BeDate==undefined?null:this.Formgroup.value.BeDate;
+                cd.EP_No = this.Formgroup.value.EpNo;
+                cd.EP_No_Date = this.Formgroup.value.EpDate==undefined?null:this.Formgroup.value.EpDate;
+                cd.Commercial_Invoice_No = 'temp';
+                cd.Date = formatted;
+                cd.User_ID = userId==undefined?'':userId;
+
+
+    
+    let queryParams = cd
+    let condition = {
+      'Commercial_Invoice_ID':this.CIId
+    }
+    let tableName = 'tbl_commercial_invoice';
+
+    this.masterEntyService.UpdateData(queryParams,condition,tableName).subscribe((res:any) => {
+      if (res.status) {
+        swal
+          .fire({
+            title: `${res.message}!`,
+            text: `Update Successfully!`,
+            icon: 'success',
+            timer: 5000,
+          })
+          .then((result) => {
+            this.ngOnInit();
+          });
+      } else {
+        if (res.message == 'Invalid Token') {
+          swal.fire('Session Expierd!', 'Please Login Again.', 'info');
+          this.gs.Logout();
+        } else {
+          swal.fire({
+            title: `Faild!`,
+            text: `Save Faild!`,
+            icon: 'error',
+            timer: 5000,
+          });
+        }
+      }
+    });
       }
 }
