@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DoubleMasterEntryModel } from 'src/app/models/DoubleMasterEntryModel';
@@ -97,15 +98,15 @@ export class GeneratePiComponent implements OnInit {
       Remarks: [''],
       Force_Majeure_ID: [''],
       Arbitration_ID: [''],
-      Status: [''],
+      Status: ['Pending'],
       User_ID: [''],
       Superior_ID: [''],
       LC_ID: [''],
       Customer_ID: [''],
       Currency_ID: [''],
-      IsMPI: [''],
+      IsMPI: [0],
       CR_ID: [''],
-      LastUpdateDate: [''],
+      LastUpdateDate: [new Date()],
       ExpireDate: [''],
       Terms_of_Delivery_ID: [''],
       Buyer_ID: [''],
@@ -116,19 +117,12 @@ export class GeneratePiComponent implements OnInit {
       GrandTotalAmount_LC: [''],
       GrandTotalAmount_Cash: [''],
       GrandTotalAmount_Both: [''],
-      MakeBy: [''],
-      MakeDate: [''],
-      InsertTime: [''],
-      UpdateBy: [''],
-      UpdateDate: [''],
-      UpdateTime: [''],
 
       ItemArray: this.fb.array([this.InitRow()]),
     });
   }
   InitRow() {
     return this.fb.group({
-      PI_Detail_ID: [''],
       PI_Master_ID: [''],
       Article: [''],
       Description: [''],
@@ -136,14 +130,11 @@ export class GeneratePiComponent implements OnInit {
       Color_ID: [''],
       Packaging_ID: [''],
       Quantity: [''],
-      Unit: [''],
       Total_Amount: [''],
-      Delivered_Quantity: [''],
+      Delivered_Quantity: [0],
       Unit_Price: [''],
-      Item_ID: [''],
       CommissionUnit: [''],
       TotalCommission: [''],
-      Total_Amount_Tk: [''],
       ActualArticle: [''],
       Unit_ID: [''],
     });
@@ -265,12 +256,49 @@ export class GeneratePiComponent implements OnInit {
 
 
   Save():void{
-    let model= this.Formgroup.value;
-    console.clear();
-    console.log(model);
-    console.log(model.itemArray.value);
+    let model= {
+      PI_Master_ID: this.Formgroup.controls['PI_Master_ID'].value,
+      PINo: this.Formgroup.controls['PINo'].value,
+      Consignee_Initial: this.Formgroup.controls['Consignee_Initial'].value,
+      Date: this.Formgroup.controls['Date'].value,
+      Beneficiary_Account_ID: this.Formgroup.controls['Beneficiary_Account_ID'].value,
+      Beneficiary_Bank_ID: this.Formgroup.controls['Beneficiary_Bank_ID'].value,
+      Country_Of_Orgin_ID: this.Formgroup.controls['Country_Of_Orgin_ID'].value,
+      Packing_ID: this.Formgroup.controls['Packing_ID'].value,
+      Loading_Mode_ID: this.Formgroup.controls['Loading_Mode_ID'].value,
+      Payment_Term_ID: this.Formgroup.controls['Payment_Term_ID'].value,
+      Consignee: this.Formgroup.controls['Consignee'].value,
+      Contact_Person: this.Formgroup.controls['Contact_Person'].value,
+      Buyer_Name: this.Formgroup.controls['Buyer_Name'].value,
+      Delivery_Address: this.Formgroup.controls['Delivery_Address'].value,
+      Style: this.Formgroup.controls['Style'].value,
+      Delivery_Condition_ID: this.Formgroup.controls['Delivery_Condition_ID'].value,
+      Shipment_Condition_ID: this.Formgroup.controls['Shipment_Condition_ID'].value,
+      Price_Term_ID: this.Formgroup.controls['Price_Term_ID'].value,
+      Good_Description: this.Formgroup.controls['Good_Description'].value,
+      Documents: this.Formgroup.controls['Documents'].value,
+      Shipping_Marks: this.Formgroup.controls['Shipping_Marks'].value,
+      Loading_Port: this.Formgroup.controls['Loading_Port'].value,
+      Destination_Port: this.Formgroup.controls['Destination_Port'].value,
+      Remarks: this.Formgroup.controls['Remarks'].value,
+      Force_Majeure_ID: this.Formgroup.controls['Force_Majeure_ID'].value,
+      Arbitration_ID: this.Formgroup.controls['Arbitration_ID'].value,
+      Status: this.Formgroup.controls['Status'].value,
+      User_ID: this.gs.getSessionData('userId'),
+      Superior_ID: this.gs.getSessionData('userId'),
+      Customer_ID: this.Formgroup.controls['Customer_ID'].value,
+      IsMPI: this.Formgroup.controls['IsMPI'].value,      
+      LastUpdateDate: this.Formgroup.controls['LastUpdateDate'].value,
+      ExpireDate: this.Formgroup.controls['ExpireDate'].value,
+      Terms_of_Delivery_ID: this.Formgroup.controls['Terms_of_Delivery_ID'].value,  
+      IsBuyerMandatory: this.Formgroup.controls['IsBuyerMandatory'].value,    
+      Customer_Bank_ID: this.Formgroup.controls['Customer_Bank_ID'].value
+    };
 
-    this.service.SaveDataMasterDetails(model.itemArray.value,
+    const datePipe = new DatePipe('en-US');
+    model.PINo=`${model.Consignee_Initial}-${datePipe.transform(model.Date, 'yyyyMMdd')}`;
+
+    this.service.SaveDataMasterDetails(this.Formgroup.value.ItemArray,
       "tbl_pi_detail",
       model,
       "tbl_pi_master",

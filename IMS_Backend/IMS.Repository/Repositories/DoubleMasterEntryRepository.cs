@@ -415,17 +415,29 @@ namespace Boilerplate.Repository.Repositories
             foreach (var item in (IEnumerable<dynamic>)data)
             {
                 cnt--;
+
                 if (item.Name.ToLower() == model.ColumnNamePrimary?.ToLower())
-                    continue; // skip PK column for identity
+                {
+                    param.Add(new SqlParameter("@" + item.Name, item.Value.ToString() + serialNo.ToString()));
+                    masterColumns.Append(item.Name + (cnt > 0 ? "," : ""));
+                    masterValues.Append("@" + item.Name + (cnt > 0 ? "," : ""));
+                    continue;
+                }
                 nonPkColumnCount++;
                 masterColumns.Append(item.Name + (cnt > 0 ? "," : ""));
                 masterValues.Append("@" + item.Name + (cnt > 0 ? "," : ""));
                 if (item.Name.ToLower() == model.ColumnNameSerialNo?.ToLower())
                 {
                     if (serialNo > 0)
-                        param.Add(new SqlParameter("@" + item.Name, item.Value.ToString() + serialNo.ToString()));
+                    {
+                        var vcNo = $"{item.Value.ToString()}-{authUserName.Substring(0,3)}{serialNo.ToString("00")}";
+                        param.Add(new SqlParameter("@" + item.Name, vcNo));
+
+                    }
                     else
+                    {
                         param.Add(new SqlParameter("@" + item.Name, item.Value.ToString()));
+                    }
                 }
                 else
                 {
@@ -439,10 +451,11 @@ namespace Boilerplate.Repository.Repositories
             masterColumns.Append(", MakeDate, MakeBy, InsertTime");
             masterValues.Append(", getdate(), @authUserName , getdate()");
             param.Add(new SqlParameter("@authUserName", authUserName));
-            cmd.CommandText = $"INSERT INTO {masterTablename} ({masterColumns}) VALUES ({masterValues}); SELECT CAST(SCOPE_IDENTITY() AS int);";
+            cmd.CommandText = $"SET IDENTITY_INSERT {masterTablename} OFF; INSERT INTO {masterTablename} ({masterColumns}) VALUES ({masterValues}); SET IDENTITY_INSERT {masterTablename} ON;";
             cmd.Parameters.Clear();
             cmd.Parameters.AddRange(param.ToArray());
-            var newPrimaryKey = (int)await cmd.ExecuteScalarAsync();
+            var aff = await cmd.ExecuteNonQueryAsync();
+            var newPrimaryKey = (int)await cmd.ExecuteNonQueryAsync() > 0 ? serialNo : 0;
             return newPrimaryKey;
         }
 
@@ -469,9 +482,9 @@ namespace Boilerplate.Repository.Repositories
                     else
                         parameters.Add(new SqlParameter("@" + j.Name, j.Value.ToString()));
                 }
-                childColumns.Append(", MakeDate, MakeBy, InsertTime");
-                childValues.Append(", getdate(), @authUserName , getdate()");
-                parameters.Add(new SqlParameter("@authUserName", cmd.Parameters["@authUserName"].Value));
+                //childColumns.Append(", MakeDate, MakeBy, InsertTime");
+                //childValues.Append(", getdate(), @authUserName , getdate()");
+                //parameters.Add(new SqlParameter("@authUserName", cmd.Parameters["@authUserName"].Value));
                 cmd.CommandText = $"INSERT INTO {childTablename} ({childColumns}) VALUES ({childValues})";
                 cmd.Parameters.Clear();
                 cmd.Parameters.AddRange(parameters.ToArray());
@@ -492,16 +505,19 @@ namespace Boilerplate.Repository.Repositories
             cmd.Transaction = trn;
             try
             {
-                //int serialNo = string.IsNullOrEmpty(model.ColumnNameSerialNo) ? 0 : await GenSerialNumberAsync(model.SerialType);
-                int newPrimaryKey = await MasterTableInsertWithIdentity(model, cmd, authUserName, 0);
+                int serialNo = 0;
+                serialNo = string.IsNullOrEmpty(model.ColumnNameSerialNo) ? 0 : await GenSerialNumberAsync(model.SerialType);
+                int newPrimaryKey = await MasterTableInsertWithIdentity(model, cmd, authUserName, serialNo);
                 if (newPrimaryKey > 0)
                 {
-                    rowAffect = await DetailsTableInsertWithIdentity(model, newPrimaryKey, cmd);
+                    //rowAffect = await DetailsTableInsertWithIdentity(model, serialNo, cmd);
                 }
                 await cmd.Transaction.CommitAsync();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+
+                await GenSerialNumberModifyAsync(model.SerialType);
                 await cmd.Transaction.RollbackAsync();
                 throw;
             }

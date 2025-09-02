@@ -127,7 +127,7 @@
           <label class="control-label">Consignee</label><br/>
           <p-dropdown 
           [options]="ConsigneeList" 
-          formControlName="Consignee"
+          formControlName="Customer_ID"
           optionLabel="CustomerName"
           optionValue="Customer_ID"
           [filter]="true" 
@@ -147,7 +147,7 @@
           <label class="control-label">Applicant Bank</label><br/>
           <p-dropdown 
           [options]="ApplicantBankList" 
-          formControlName="Consignee"
+          formControlName="Customer_Bank_ID"
           optionLabel="CustomerBankDetails"
           optionValue="Applicant_Bank_ID"
           [filter]="true" 
@@ -266,7 +266,7 @@
                   formControlName="Description"
                   [options]="DescriptionList" 
                   optionLabel="Details"
-                  optionValue="GoodsDescriptionId"
+                  optionValue="Details"
                   [filter]="true" 
                   filterBy="Details" 
                   [showClear]="true" 
