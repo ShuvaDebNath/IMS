@@ -26,6 +26,7 @@ export interface CreateRmRequisitionItem {
 
 /** UPDATE (replace-all items, simplest & safest) */
 export interface UpdateRmRequisitionRequest {
+  status: string;
   id: number;                           // RM_Requisition_MasterID
   requisitionDate?: string;             // optional partial updates
   remarks?: string | null;

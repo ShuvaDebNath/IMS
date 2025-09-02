@@ -5,12 +5,13 @@ import { FormBuilder, Validators, FormArray, FormGroup, ReactiveFormsModule, Abs
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { GlobalServiceService } from 'src/app/services/Global-service.service';
-import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 import swal from 'sweetalert2';
 import { DropdownModule } from 'primeng/dropdown';
 import { CreateRmRequisitionItem, CreateRmRequisitionRequest } from 'src/app/models/requisition/rmRequisition';
 import { startWith, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { DoubleMasterEntryService } from 'src/app/services/doubleEntry/doubleEntryService.service';
+import { GetDataService } from 'src/app/services/getData/getDataService.service';
 
 @Component({
   standalone: true,
@@ -35,9 +36,9 @@ export class CreatePageComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private masterEntryService: MasterEntryService,
+    private doubleMasterEntryService: DoubleMasterEntryService,
+    private getDataService: GetDataService,
     private gs: GlobalServiceService,
-    private activeLink: ActivatedRoute,
     private title: Title,
   ) {
 
@@ -81,7 +82,7 @@ refreshArticles(): void {
       }
     };
 
-    this.masterEntryService.GetInitialData(ProcedureData).subscribe({
+    this.getDataService.GetInitialData(ProcedureData).subscribe({
       next: (results) => {
 
         if (results.status) {
@@ -233,7 +234,7 @@ private rowsCompleteValidator(): ValidatorFn {
       Unit_ID: i.unitId ?? null,
     }));
 
-    this.masterEntryService.SaveDataMasterDetails(
+    this.doubleMasterEntryService.SaveDataMasterDetails(
       detailRows,                          // fd (child rows)
       'tbl_rm_requisition_details',        // tableName (child)
       masterRow,                           // fdMaster (master row)

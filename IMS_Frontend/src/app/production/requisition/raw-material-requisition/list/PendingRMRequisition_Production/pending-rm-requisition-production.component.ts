@@ -8,6 +8,8 @@ import swal from 'sweetalert2';
 import { GlobalServiceService } from 'src/app/services/Global-service.service';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 import { Router } from '@angular/router';
+import { GetDataService } from 'src/app/services/getData/getDataService.service';
+import { DoubleMasterEntryService } from 'src/app/services/doubleEntry/doubleEntryService.service';
 
 @Component({
   standalone: true,
@@ -22,10 +24,11 @@ export class PendingRMRequisitionProductionComponent implements OnInit {
   isDetailsVisible = false;
 
   constructor(
-    private masterEntryService: MasterEntryService,
+    private getDataService: GetDataService,
     private gs: GlobalServiceService,
     private title: Title,
-    private router: Router
+    private router: Router,
+    private dme: DoubleMasterEntryService
   ) {}
 
   ngOnInit(): void {
@@ -42,7 +45,7 @@ export class PendingRMRequisitionProductionComponent implements OnInit {
       parameters: { FromDate: '', ToDate: '', Status: 'Pending', User: sentBy }
     };
 
-    this.masterEntryService.GetInitialData(procedureData).subscribe({
+    this.getDataService.GetInitialData(procedureData).subscribe({
       next: (results) => {
         if (results.status) {
           this.pendingRequisitions = JSON.parse(results.data).Tables1;
@@ -56,19 +59,71 @@ export class PendingRMRequisitionProductionComponent implements OnInit {
   }
 
   onEdit(row: any)   { 
-    window.open(this.router.serializeUrl(this.router.createUrlTree(['pending-rm-requisition','edit', row.RequisitionNumber])), '_blank');
+    window.open(this.router.serializeUrl(this.router.createUrlTree(['pending-rm-requisition','edit', row.RM_Requisition_MasterID])), '_blank');
   }
 
-  onDelete(row: any) { /* TODO: confirm & delete */ }
+  onDelete(row: any) { 
+
+     const id = String(row?.RM_Requisition_MasterID ?? '');
+
+    if (!id) {
+      swal.fire('Missing Id', 'RM_Requisition_MasterID not found.', 'error');
+      return;
+    }
+
+    swal.fire({
+      title: 'Are you sure?',
+      text: `Delete requisition ${row?.RequisitionNumber || ''}?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete',
+      cancelButtonText: 'Cancel',
+      reverseButtons: true
+    }).then(res => {
+      if (!res.isConfirmed) return;
+
+    const fd: any[] = [];                              // detailsData -> empty for delete
+    const tableName = 'tbl_rm_requisition_details';    // child table
+    const fdMaster: any = {};                          // data -> empty for delete
+    const tableNameMaster = 'tbl_rm_requisition_master';
+    const primaryColumnName = 'RM_Requisition_MasterID';
+    const columnNameForign  = 'RM_Requisition_MasterID';
+    const serialType = '';
+    const columnNameSerialNo = '';
+    const whereParams = { RM_Requisition_MasterID: id };
+
+    this.dme.DeleteDataMasterDetails(
+      fd,
+      tableName,
+      fdMaster,
+      tableNameMaster,
+      primaryColumnName,
+      columnNameForign,
+      serialType,
+      columnNameSerialNo,
+      whereParams
+    ).subscribe({
+        next: () => {
+          swal.fire('Deleted!', 'Requisition deleted successfully.', 'success');
+          this.loadPendingRequisitions(); // refresh the table
+        },
+        error: (err) => {
+          console.error(err);
+          swal.fire('Delete Failed', err?.error?.message || 'Something went wrong.', 'error');
+        }
+      });
+    });
+  
+   }
 
   // ✅ Opens the dialog and loads detail rows
   onDetails(row: any): void {
     const procedureData = {
-      procedureName: 'usp_Rawmaterial_GetDataByRequisitionNumber',
-      parameters: { RequisitionNumber: row.RequisitionNumber }
+      procedureName: 'usp_Rawmaterial_GetDataById',
+      parameters: { RM_Requisition_MasterID: row.RM_Requisition_MasterID }
     };
 
-    this.masterEntryService.GetInitialData(procedureData).subscribe({
+    this.getDataService.GetInitialData(procedureData).subscribe({
       next: (results) => {
         if (results.status) {
           const items = JSON.parse(results.data).Tables1;

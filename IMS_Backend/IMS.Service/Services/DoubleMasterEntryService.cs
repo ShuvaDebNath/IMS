@@ -142,7 +142,8 @@ public class DoubleMasterEntryService : IDoubleMasterEntryService
 
     private async Task<Messages> UpdateDataGateway(DoubleMasterEntryModel model, string authUserName)
     {
-        int rowAffect = await _doubleMasterEntryRepository.UpdateData(model, authUserName);
+        //int rowAffect = await _doubleMasterEntryRepository.UpdateData(model, authUserName);
+        int rowAffect = await _doubleMasterEntryRepository.UpdateDataWithIdentity(model, authUserName);
         if (rowAffect > 0)
         {
             _logger.LogInformation($"Data Update Success!");

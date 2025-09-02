@@ -106,7 +106,7 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'all-rm-requisition-list', component: AllRMRequisitionListComponent },
 
           {
-            path: 'pending-rm-requisition/edit/:reqNo',
+            path: 'pending-rm-requisition/edit/:reqId',
             loadComponent: () =>
               import('../production/requisition/raw-material-requisition/edit/PendingRMRequisitionProduction/pending-rm-requisition-production-edit.component')
                 .then(m => m.PendingRMRequisitionProductionEditComponent)
