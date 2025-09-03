@@ -430,7 +430,7 @@ namespace Boilerplate.Repository.Repositories
                 {
                     if (serialNo > 0)
                     {
-                        var vcNo = $"{item.Value.ToString()}-{authUserName.Substring(0,3)}{serialNo.ToString("00")}";
+                        var vcNo = $"{item.Value.ToString()}-{authUserName.Substring(0,3)}"; //{serialNo.ToString("00")}
                         param.Add(new SqlParameter("@" + item.Name, vcNo));
 
                     }
@@ -451,10 +451,10 @@ namespace Boilerplate.Repository.Repositories
             masterColumns.Append(", MakeDate, MakeBy, InsertTime");
             masterValues.Append(", getdate(), @authUserName , getdate()");
             param.Add(new SqlParameter("@authUserName", authUserName));
-            cmd.CommandText = $"SET IDENTITY_INSERT {masterTablename} OFF; INSERT INTO {masterTablename} ({masterColumns}) VALUES ({masterValues}); SET IDENTITY_INSERT {masterTablename} ON;";
+            cmd.CommandText = $"SET IDENTITY_INSERT {masterTablename} ON; INSERT INTO {masterTablename} ({masterColumns}) VALUES ({masterValues}); SET IDENTITY_INSERT {masterTablename} OFF;";
             cmd.Parameters.Clear();
             cmd.Parameters.AddRange(param.ToArray());
-            var aff = await cmd.ExecuteNonQueryAsync();
+            //var aff = await cmd.ExecuteNonQueryAsync();
             var newPrimaryKey = (int)await cmd.ExecuteNonQueryAsync() > 0 ? serialNo : 0;
             return newPrimaryKey;
         }
@@ -510,7 +510,7 @@ namespace Boilerplate.Repository.Repositories
                 int newPrimaryKey = await MasterTableInsertWithIdentity(model, cmd, authUserName, serialNo);
                 if (newPrimaryKey > 0)
                 {
-                    //rowAffect = await DetailsTableInsertWithIdentity(model, serialNo, cmd);
+                    rowAffect = await DetailsTableInsertWithIdentity(model, serialNo, cmd);
                 }
                 await cmd.Transaction.CommitAsync();
             }

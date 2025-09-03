@@ -1,13 +1,10 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { DoubleMasterEntryModel } from 'src/app/models/DoubleMasterEntryModel';
 import { GetDataModel } from 'src/app/models/GetDataModel';
-import { PIDetails } from 'src/app/models/PIDetails';
-import { PIMaster } from 'src/app/models/PIMaster';
 import { GlobalServiceService } from 'src/app/services/Global-service.service';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
-import swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 
 
 
@@ -17,6 +14,9 @@ import swal from 'sweetalert2';
   styleUrls: ['./generate-pi.component.css'],
 })
 export class GeneratePiComponent implements OnInit {
+  datePipe = new DatePipe('en-US');
+
+
   ShipperList: any|[];
   BenificaryBankList: any|[];
   CountryList: any|[];
@@ -38,6 +38,7 @@ export class GeneratePiComponent implements OnInit {
   PriceTermsList: any|[];
   ForceMajeureList: any|[];
   ArbitrationList: any|[];
+  PINo!:string;
 
   Formgroup!: FormGroup;
   isSubmit!: boolean;
@@ -55,12 +56,29 @@ export class GeneratePiComponent implements OnInit {
     this.GenerateFrom(); 
     this.GetInitialData();
     this.BuyerToggle(false);
+    this.RegisterFormControlsChangeEvent();    
+    this.GTQTY=0;
+    this.GTAMNT=0;
+  }
 
+  RegisterFormControlsChangeEvent(){
     this.Formgroup.get('IsBuyerMandatory')?.valueChanges.subscribe(value => {
       this.BuyerToggle(value);
     });
-    
+
+    this.Formgroup.get('Consignee_Initial')?.valueChanges.subscribe(value => {
+      let piNo= value? `${value}-${this.PINo}`: this.PINo;
+      this.Formgroup.controls["PINo"].setValue(piNo);
+    });
+
+    this.Formgroup.get('Customer_ID')?.valueChanges.subscribe(value => {
+      let contactPerson=this.ConsigneeList.filter((x:any)=>x.Customer_ID==value)[0];
+      this.Formgroup.controls["Contact_Person"].setValue(contactPerson.Contact_Name);
+    });
+
   }
+
+
   BuyerToggle(value:boolean){
       if(value){
         this.Formgroup.get('Buyer_ID')?.enable();
@@ -74,7 +92,7 @@ export class GeneratePiComponent implements OnInit {
       PI_Master_ID: [''],
       PINo: [''],
       Consignee_Initial: ['',[Validators.required,Validators.minLength(3),Validators.maxLength(3)]],
-      Date: [new Date()],
+      Date: [this.datePipe.transform(new Date, 'MM/dd/yyyy')],
       Beneficiary_Account_ID: [''],
       Beneficiary_Bank_ID: [''],
       Country_Of_Orgin_ID: [''],
@@ -201,6 +219,7 @@ export class GeneratePiComponent implements OnInit {
         this.Formgroup.controls["Delivery_Condition_ID"].setValue(3);
         this.Formgroup.controls["Shipment_Condition_ID"].setValue(1);
         this.Formgroup.controls["Price_Term_ID"].setValue(1);
+        this.Formgroup.controls["PINo"].setValue(this.PINo);
   }
   
 
@@ -213,7 +232,10 @@ export class GeneratePiComponent implements OnInit {
     this.ShipperList=[];
     let model=new GetDataModel();
     model.procedureName="usp_ProformaInvoice_GetInitialData";
-    model.parameters={};
+    model.parameters={
+      userID:this.gs.getSessionData('userId'),
+      roleID:this.gs.getSessionData('roleId')
+    };
     this.service.GetInitialData(model).subscribe((res:any) => {
       if (res.status) {
 
@@ -240,6 +262,8 @@ export class GeneratePiComponent implements OnInit {
         this.PriceTermsList=DataSet.Tables19;
         this.ForceMajeureList=DataSet.Tables20;
         this.ArbitrationList=DataSet.Tables21;
+
+        this.PINo=DataSet.Tables30[0].PINO;
 
         if (this.SetDDL){
           this.SetDDLDefaultValue();
@@ -295,8 +319,8 @@ export class GeneratePiComponent implements OnInit {
       Customer_Bank_ID: this.Formgroup.controls['Customer_Bank_ID'].value
     };
 
-    const datePipe = new DatePipe('en-US');
-    model.PINo=`${model.Consignee_Initial}-${datePipe.transform(model.Date, 'yyyyMMdd')}`;
+    
+    // model.PINo=`${model.Consignee_Initial}-${this.datePipe.transform(model.Date, 'yyyyMMdd')}`;
 
     this.service.SaveDataMasterDetails(this.Formgroup.value.ItemArray,
       "tbl_pi_detail",
@@ -305,12 +329,21 @@ export class GeneratePiComponent implements OnInit {
       "PI_Master_ID",
       "PI_Master_ID",
       "tbl_pi_master",
-      "PINo"
+      "PI_Master_ID"
     ).subscribe(res=>{
       console.log(res);
+      if(res.messageType=='Success' && res.status){
+        Swal.fire(res.messageType, res.message, 'success').then(()=>{
+              this.ngOnInit();
+        });
+        
+      }else{
+        if(!res.isAuthorized){
+          this.gs.Logout();
+        }
+        console.log(res);
+      }
     });
 
   }
-
-
 }
