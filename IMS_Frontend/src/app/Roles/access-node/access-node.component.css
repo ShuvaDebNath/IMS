@@ -18,3 +18,7 @@
 table-bordered td, .table-bordered th {
     border: 1px solid #6a1a3f !important;
 }
+.list-group-item i{
+    color: #6a1a3f;
+
+}

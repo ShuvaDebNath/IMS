@@ -1,3 +1,15 @@
+.wrapper {
+  height: 100vh; 
+  display: flex;
+  flex-direction: column; 
+  background: linear-gradient(135deg, #f5f7fa, #e4e8f0);
+  overflow: hidden;
+}
+.company-name{
+  font-size: 20px;
+  color:   #5a1b34!important;
+  font-family: "Ubuntu", Tahoma, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
 .top-bar {
   background: #e0e0e0;
   display: flex;
@@ -13,10 +25,12 @@
   width: 100%;
 }
 
-.top-bar .company-name {
-  font-size: 20px;
-  color: #6a1a3f !important;
-  text-decoration: none;
+.empty-bar {
+  height: 45px;
+  background-color: #5a1b34;
+  width: 100%;
+  flex-shrink: 0;
+  margin-top: 40px; 
 }
 
 .top-bar .right-section {
@@ -25,61 +39,34 @@
   font-size: 14px;
 }
 
-
 #time {
+      font-size: 25px;
+    font-family: digital-clock-font;
+    font-weight: 800;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
 }
 
-.ims-custom-footer {
-
-  background-color: #6a1a3f;
-  color: white;
-  position: fixed;
-  margin-left: 0px !important;
-  font-size: 10px !important;
-  bottom: 0;
-  width: 100%;
-  height: 40px;
-  padding: 5px !important;
-  text-align: center;
-
-}
-
-.ims-custom-footer a {
-  color: #ffffff;
-  text-decoration: none;
-}
-
-.wrapper {
-  height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa, #e4e8f0);
-
-}
-
 .parent-component {
-  height: 95vh;
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #f5f7fa, #e4e8f0);
+  flex: 1; 
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #f5f7fa, #e4e8f0);
+  overflow: auto; /* allow scrolling inside only if needed */
 }
 
-/* Main container */
 .main-container {
   width: 100%;
   max-width: 800px;
   background: #fff;
   padding: 40px 20px;
-
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Heading */
 .card {
   padding: 30px;
 }
@@ -92,21 +79,18 @@
   text-align: left;
 }
 
-/* Divider */
 .card hr {
   margin: 15px 0;
   border: 0;
   border-top: 1px solid #e5e5e5;
 }
 
-/* Inner form alignment */
 .form-inner {
   max-width: 450px;
   margin: auto;
   text-align: left;
 }
 
-/* Labels */
 .form-group label {
   display: inline-block;
   margin-bottom: 8px;
@@ -114,17 +98,14 @@
   color: #333;
 }
 
-/* Input wrapper */
 .input-wrapper {
   position: relative;
   width: 100%;
 }
 
-/* Input fields */
 .form-control {
   width: 100%;
-  padding: 10px 15px 10px 40px;
-  /* extra left padding for icon */
+  padding: 10px 15px 10px 40px; 
   font-size: 14px;
   border-radius: 4px;
   border: 1px solid #ccc;
@@ -137,18 +118,15 @@
   box-shadow: 0 0 5px rgba(109, 34, 64, 0.3);
 }
 
-/* Icons inside input */
 .input-wrapper i {
   position: absolute;
   top: 50%;
   left: 12px;
   transform: translateY(-50%);
   color: #b91c1c;
-  /* red icon color like image */
   font-size: 14px;
 }
 
-/* Error & success states */
 .error {
   border: 2px solid #ef4444 !important;
 }
@@ -157,7 +135,6 @@
   border: 2px solid #10b981 !important;
 }
 
-/* Button */
 .btn-primary {
   background-color: #6d2240;
   border: none;
@@ -173,14 +150,21 @@
   background-color: #5a1b34;
 }
 
-/* Disable button */
 .btn-primary:disabled {
   background-color: #9ca3af;
   cursor: not-allowed;
 }
 
-/* Align button center */
 .form-group button {
   display: block;
   margin: 15px auto 0;
+}
+
+.ims-custom-footer {
+  background-color: #6a1a3f;
+  color: white;
+  font-size: 10px !important;
+  padding: 5px !important;
+  text-align: center;
+  flex-shrink: 0;
 }

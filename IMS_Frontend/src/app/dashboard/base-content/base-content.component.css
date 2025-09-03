@@ -1,4 +1,7 @@
- .card {
+.parent-base{
+    height: 100vh;
+}
+.card {
             border-radius: 15px;
             box-shadow: 0 10px 30px  #6a1a3f;
             border: none;

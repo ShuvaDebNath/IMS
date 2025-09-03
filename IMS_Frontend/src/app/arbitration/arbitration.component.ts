@@ -47,7 +47,7 @@ export class ArbitrationComponent {
     const getApiUrl = 'http://localhost:5077/api/MasterEntry/GetAll';
     
     const headers = new HttpHeaders({
-      'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ2bGluayIsImp0aSI6ImM5MzNhY2Q2LTQyMDItNGJjYy1iMGVjLWNkNDZlNTA2NDMwZCIsIm5iZiI6MTc1Njc1MjMwMywiZXhwIjoxNzU2Nzk1NTAzLCJpc3MiOiJzaHV2YS5jb20iLCJhdWQiOiJzaHV2YS5jb20ifQ.qlicJLrOvTyPqQTHn3_LlDqXT0jsjT1Ccz_3XmIQaSE`,
+      'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ2bGluayIsImp0aSI6IjU5N2NmNTRhLTZiMmItNGNlZi05NmFlLWE0YzM5OTJlYzhmYyIsIm5iZiI6MTc1NjkxMTYwOSwiZXhwIjoxNzU2OTU0ODA5LCJpc3MiOiJzaHV2YS5jb20iLCJhdWQiOiJzaHV2YS5jb20ifQ.yvm00vA-SnfEbE11IAfpoz2ZnLyMFOAARQFKs5QKleQ`,
       'Content-Type': 'application/json'
     });
  const newGoods = {
@@ -84,7 +84,7 @@ export class ArbitrationComponent {
     };
 
     const headers = new HttpHeaders({ 
-      'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ2bGluayIsImp0aSI6IjhiMTAzZjA0LTYwNzMtNDFmNy05NjE4LTBkNjkwMTY0NGQ1OCIsIm5iZiI6MTc1NjM2NjU0MiwiZXhwIjoxNzU2NDA5NzQyLCJpc3MiOiJzaHV2YS5jb20iLCJhdWQiOiJzaHV2YS5jb20ifQ.3VzMQ2adAAC5sNsOyaqnBSVPG8K3accelgZzmbmFKMQ`,
+      'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ2bGluayIsImp0aSI6IjU5N2NmNTRhLTZiMmItNGNlZi05NmFlLWE0YzM5OTJlYzhmYyIsIm5iZiI6MTc1NjkxMTYwOSwiZXhwIjoxNzU2OTU0ODA5LCJpc3MiOiJzaHV2YS5jb20iLCJhdWQiOiJzaHV2YS5jb20ifQ.yvm00vA-SnfEbE11IAfpoz2ZnLyMFOAARQFKs5QKleQ`,
       'Content-Type': 'application/json'
     });
 

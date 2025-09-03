@@ -61,7 +61,6 @@ pageIndex: number = 1;
     this.menu = JSON.parse(this.menu);
     var buttonPermissions:any = [];
     var countFound = 0;
-    console.log(this.menu);
           this.menu.forEach((e:any)=>{
             console.log(JSON.parse(e.Children));
             e.Children = JSON.parse(e.Children);
@@ -69,7 +68,6 @@ pageIndex: number = 1;
               if(childMenu.SubMenuName=="Roles"){
                 countFound++;
                 buttonPermissions = childMenu.ButtonName;
-                console.log(buttonPermissions);
                 
                 if(buttonPermissions[0].ButtonName=="Insert"){
                   this.insertPermissions = true;

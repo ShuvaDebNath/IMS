@@ -1,4 +1,4 @@
-import { Component, OnInit,Input } from '@angular/core';
+import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { Menu } from 'src/app/models/menu.model';
 import { GlobalServiceService } from 'src/app/services/Global-service.service';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
@@ -10,60 +10,67 @@ import Swal from 'sweetalert2';
   styleUrls: ['./menu.component.css']
 })
 export class MenuComponent implements OnInit {
-@Input() menu?: Menu[];
-userName:any;
-   openDropdowns = new Set<number>(); // track which dropdowns are open
-  constructor(private gs: GlobalServiceService,private masterEntryService: MasterEntryService) {}
+  @Input() menu?: Menu[];
+  userName: any;
+
+  openDropdownId: number | null = null;
+
+  constructor(private gs: GlobalServiceService,
+              private masterEntryService: MasterEntryService) {}
 
   ngOnInit(): void {
     this.userName = window.localStorage.getItem('userName');
   }
 
-
   toggleDropdown(id: number, event: Event) {
     event.preventDefault();
-    if (this.openDropdowns.has(id)) {
-      this.openDropdowns.delete(id);
+    event.stopPropagation();
+
+    if (this.openDropdownId === id) {
+      this.openDropdownId = null; 
     } else {
-      this.openDropdowns.add(id);
+      this.openDropdownId = id;   
     }
   }
 
   isOpen(id: number): boolean {
-    return this.openDropdowns.has(id);
+    return this.openDropdownId === id;
   }
-   
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    this.openDropdownId = null;
+  }
+
   parseChildren(menu: Menu[]): Menu[] {
-  return menu.map(item => {
-    let children: Menu[] = [];
+    return menu.map(item => {
+      let children: Menu[] = [];
 
-    // If Children exists
-    if (item.Children) {
-      if (typeof item.Children === 'string') {
-        // Parse string into array
-        try {
-          children = JSON.parse(item.Children);
-        } catch (err) {
-          console.error(`Invalid JSON in menu item ${item.MenuId}`, err);
-          children = [];
+      if (item.Children) {
+        if (typeof item.Children === 'string') {
+          try {
+            children = JSON.parse(item.Children);
+          } catch (err) {
+            console.error(`Invalid JSON in menu item ${item.MenuId}`, err);
+            children = [];
+          }
+        } else if (Array.isArray(item.Children)) {
+          children = item.Children;
         }
-      } else if (Array.isArray(item.Children)) {
-        children = item.Children;
       }
-    }
 
-    return {
-      ...item,
-      Children: this.parseChildren(children) // recursively parse grandchildren
-    };
-  });
-}
+      return {
+        ...item,
+        Children: this.parseChildren(children)
+      };
+    });
+  }
+
   Logout() {
-    //this.gs.Logout().subscribe();
     this.gs.Logout();
   }
 
-  ChangePassword(){
-    window.location.href='change-password';
+  ChangePassword() {
+    window.location.href = 'change-password';
   }
 }

@@ -57,14 +57,17 @@
               <a *ngIf="updatePermissions" class="btn theme-btn btn-sm text-white m-1" target="_blank" title="Edit"
                 [routerLink]="['/create-role']" [queryParams]="{Role_Id:item.Role_Id}"
                 >
-                <i class="fa fa-edit"></i>&nbsp;Edit
+                <i class="fa fa-edit"></i>
+                <!-- &nbsp;Edit -->
               </a>
               <a *ngIf="allPersmissions" class="btn btn-sm text-white m-1 theme-btn" title="Details" >
-                <i class="fa fa-info-circle"></i>&nbsp;Details
+                <i class="fa fa-info-circle"></i>
+                <!-- &nbsp;Details -->
               </a>
               <button *ngIf="deletePermissions" class="btn btn-sm text-white m-1" title="Delete"
                 (click)="DeleteRoles(item)" style="background-color: #dc3545;">
-                <i class="fas fa-trash"></i>&nbsp;Delete
+                <i class="fas fa-trash"></i>
+                <!-- &nbsp;Delete -->
               </button>
             </td>
           </tr>
