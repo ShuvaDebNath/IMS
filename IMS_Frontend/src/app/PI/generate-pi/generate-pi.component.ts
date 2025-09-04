@@ -240,9 +240,7 @@ export class GeneratePiComponent implements OnInit {
       if (res.status) {
 
         let DataSet = JSON.parse(res.data);
-        console.clear();
-        console.log(DataSet);
-
+        
         this.ShipperList.push(DataSet.Tables1[0]);
         this.BenificaryBankList=DataSet.Tables2;
         this.CountryList=DataSet.Tables3;
