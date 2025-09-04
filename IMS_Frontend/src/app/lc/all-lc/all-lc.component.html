@@ -172,7 +172,8 @@
             [closable]="true"
             [style]="{ width: '70vw' }"
             (onHide)="detailsData = null">
-            <div *ngIf="detailsData">
+            <div *ngIf="detailsData" style="display: flex;">
+            <div class="col-md-6">
               <p>User Name: {{ detailsData.UserName }}</p>
               <p>Mode: {{ detailsData.Mode }}</p>
               <p>Consignee Name: {{ detailsData.Consignee_Name }}</p>
@@ -187,6 +188,8 @@
               <p>IP Documents Sending Date: {{ detailsData.IP_Document_Sending_Date }}</p>
               <p>Export LC/SC: {{ detailsData.Export_LC_SC }}</p>
               <p>LCA Form No: {{ detailsData.LCA_Form_No }}</p>
+            </div>
+            <div class="col-md-6">              
               <p>IRC No: {{ detailsData.IRC_No }}</p>
               <p>HS Code: {{ detailsData.HS_Code }}</p>
               <p>Beneficiary Bank: {{ detailsData.BankName }}</p>
@@ -201,6 +204,7 @@
               <p>Remarks.: {{ detailsData.Remarks }}</p>
               <p>User Name: {{ detailsData.UserName }}</p>
               <p>System_Created_Date: {{ detailsData.System_Created_Date }}</p>
+            </div>
             </div>
   </p-dialog>
 
