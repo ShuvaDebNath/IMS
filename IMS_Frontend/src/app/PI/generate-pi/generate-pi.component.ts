@@ -240,6 +240,8 @@ export class GeneratePiComponent implements OnInit {
       if (res.status) {
 
         let DataSet = JSON.parse(res.data);
+        console.clear();
+        console.log(DataSet);
 
         this.ShipperList.push(DataSet.Tables1[0]);
         this.BenificaryBankList=DataSet.Tables2;
@@ -340,6 +342,8 @@ export class GeneratePiComponent implements OnInit {
       }else{
         if(!res.isAuthorized){
           this.gs.Logout();
+        }else{
+          Swal.fire(res.messageType, res.message, 'error');
         }
         console.log(res);
       }
