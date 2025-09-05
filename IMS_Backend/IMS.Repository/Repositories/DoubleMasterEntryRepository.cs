@@ -227,7 +227,7 @@ namespace Boilerplate.Repository.Repositories
             return await cmd.ExecuteNonQueryAsync();
         }
         private async Task<int> MasterTabelUpdate(DoubleMasterEntryModel model, SqlCommand cmd, string authUserName)
-          {
+        {
             string? masterTablename = model.TableNameMaster;
             string primeryKey = "";
             cmd.Parameters.Clear();

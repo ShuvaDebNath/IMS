@@ -22,6 +22,8 @@ import { DatePipe } from '@angular/common';
 import { RoleListComponent } from './Roles/role-list/role-list.component';
 import { RoleCreateComponent } from './Roles/role-create/role-create.component';
 import { MatPaginatorModule } from "@angular/material/paginator";
+import { GenerateCashReceiveComponent } from './lc/generate-cash-receive/generate-cash-receive.component';
+import { AllCashReceiveComponent } from './lc/all-cash-receive/all-cash-receive.component';
 
 const CustomSelectOptions: INgxSelectOptions = {
   keepSelectedItems: false,
@@ -38,6 +40,7 @@ const CustomSelectOptions: INgxSelectOptions = {
     PageNotFoundComponent,
     LogoutComponent,
     ResetPasswordComponent,
+    AllCashReceiveComponent,
   ],
   imports: [
     FormsModule,

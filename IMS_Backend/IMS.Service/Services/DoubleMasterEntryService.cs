@@ -11,7 +11,7 @@ public class DoubleMasterEntryService : IDoubleMasterEntryService
 {
     readonly IDoubleMasterEntryRepository _doubleMasterEntryRepository;
     private readonly ILogger<DoubleMasterEntryService> _logger;
-    public DoubleMasterEntryService(IDoubleMasterEntryRepository doubleMasterEntryRepository, 
+    public DoubleMasterEntryService(IDoubleMasterEntryRepository doubleMasterEntryRepository,
         ILogger<DoubleMasterEntryService> logger)
     {
         _doubleMasterEntryRepository = doubleMasterEntryRepository;
@@ -75,7 +75,7 @@ public class DoubleMasterEntryService : IDoubleMasterEntryService
                     return await SaveDataGateway(model, authUserName);
                 }
             }
-           
+
         }
         catch (Exception ex)
         {
@@ -179,22 +179,22 @@ public class DoubleMasterEntryService : IDoubleMasterEntryService
         {
             string memberId = "";
             if (IsKeyExist(model.Data, "MemberId", out memberId))
-            {   
+            {
                 return false;
                 //if (!(await _isDataCheck.IsMemberExist(memberId)))
                 //{
-                    
+
                 //}
             }
         }
         return true;
     }
-    private bool IsKeyExist(object data,string keyName,out string memberId)
+    private bool IsKeyExist(object data, string keyName, out string memberId)
     {
         string lKeyName = keyName.ToLower();
         string? strdata = Convert.ToString(data);
         var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(strdata);
-        var tt=((IEnumerable<dynamic>)obj).Where(x => x.Name.ToString().ToLower() == lKeyName);
+        var tt = ((IEnumerable<dynamic>)obj).Where(x => x.Name.ToString().ToLower() == lKeyName);
         memberId = tt.Any() ? tt.FirstOrDefault().Value.ToString() : "";
         return tt.Any();
     }
