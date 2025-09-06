@@ -287,3 +287,34 @@ input[type=number] {
   height: auto !important;
   line-height: 1.4;
 }
+
+
+.w-full{
+    width: 100% !important;
+}
+
+
+
+.sticky-header {
+  position: sticky;
+  top: 4.5rem;
+  z-index: 100;
+  background-color: white; /* Ensure it's not transparent */
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+
+.table-border-colups {
+  border-collapse: separate !important; /* collapse এর বদলে separate */
+  border-spacing: 0; /* যাতে gap না থাকে */
+}
+
+.sticky-table-column {
+  position: sticky;
+  left: 0;
+  background: #fff !important; /* ব্যাকগ্রাউন্ড দিলে অন্য কলামের সাথে মিশবে না */
+  z-index: 2; /* কনটেন্ট overlap আটকাবে */
+  border-right: 1px solid green; /* ডান পাশে border */
+  border-left: 1px solid green;  /* চাইলে বাম পাশেও border দিতে পারেন */
+}
