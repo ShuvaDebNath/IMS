@@ -1,9 +1,20 @@
 ﻿using Boilerplate.Contracts;
 using Boilerplate.Contracts.Repositories;
+using Boilerplate.Contracts.Services;
+using IMS.Contracts.Repositories;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
+using System.Linq;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Threading.Tasks;
 
 namespace Boilerplate.Repository.Repositories
 {
@@ -11,8 +22,12 @@ namespace Boilerplate.Repository.Repositories
     {
         private SqlConnection conn;
         private SqlCommand cmd;
-        public DoubleMasterEntryRepository(IConfiguration configuration) : base(configuration)
+        private readonly IDoubleMasterEntryPostInsertActionFactory _postInsertActionFactory;
+        public DoubleMasterEntryRepository(
+            IConfiguration configuration,
+            IDoubleMasterEntryPostInsertActionFactory postInsertActionFactory) : base(configuration)
         {
+            _postInsertActionFactory = postInsertActionFactory;
         }
 
         public async Task<int> DeleteData(DoubleMasterEntryModel model)
@@ -402,6 +417,56 @@ namespace Boilerplate.Repository.Repositories
             return rowAffect > 0 ? 1 : 0;
         }
 
+        #region Save with Identity
+
+        public async Task<int> SaveDataWithIdentity(DoubleMasterEntryModel model, string authUserName)
+        {
+            int rowAffect = 0;
+            conn = new SqlConnection(_connectionStringUserDB);
+            if (conn.State != ConnectionState.Open)
+                await conn.OpenAsync();
+            var trn = conn.BeginTransaction();
+            cmd = new SqlCommand();
+            cmd.Connection = conn;
+            cmd.Transaction = trn;
+            try
+            {
+                int serialNo = 0;
+
+                if (!string.IsNullOrWhiteSpace(model.SerialType) &&
+                    !string.IsNullOrWhiteSpace(model.ColumnNameSerialNo))
+                {
+                    serialNo = await GenSerialNumberAsync(model.SerialType);
+                }
+
+                int newPrimaryKey = await MasterTableInsertWithIdentity(model, cmd, authUserName, 0);
+                if (newPrimaryKey > 0)
+                {
+                    rowAffect = await DetailsTableInsertWithIdentity(model, newPrimaryKey, cmd);
+
+                    if (rowAffect > 0)
+                    {
+                        var actions = _postInsertActionFactory.GetActions(model);
+                        foreach (var action in actions)
+                        {
+                            await action.ExecuteAsync(model, authUserName);
+                        }
+                    }
+                }
+                await cmd.Transaction.CommitAsync();
+            }
+            catch (Exception)
+            {
+                await cmd.Transaction.RollbackAsync();
+                throw;
+            }
+            finally
+            {
+                await conn.CloseAsync();
+            }
+            return rowAffect;
+        }
+
         private async Task<int> MasterTableInsertWithIdentity(DoubleMasterEntryModel model, SqlCommand cmd, string authUserName, int serialNo)
         {
 
@@ -470,9 +535,7 @@ namespace Boilerplate.Repository.Repositories
                     else
                         parameters.Add(new SqlParameter("@" + j.Name, j.Value.ToString()));
                 }
-                //childColumns.Append(", MakeDate, MakeBy, InsertTime");
-                //childValues.Append(", getdate(), @authUserName , getdate()");
-                //parameters.Add(new SqlParameter("@authUserName", cmd.Parameters["@authUserName"].Value));
+                parameters.Add(new SqlParameter("@authUserName", cmd.Parameters["@authUserName"].Value));
                 cmd.CommandText = $"INSERT INTO {childTablename} ({childColumns}) VALUES ({childValues})";
                 cmd.Parameters.Clear();
                 cmd.Parameters.AddRange(parameters.ToArray());
@@ -481,7 +544,11 @@ namespace Boilerplate.Repository.Repositories
             return rowAffect > 0 ? 1 : 0;
         }
 
-        public async Task<int> SaveDataWithIdentity(DoubleMasterEntryModel model, string authUserName)
+        #endregion
+
+        #region Update with Identity
+
+        public async Task<int> UpdateDataWithIdentity(DoubleMasterEntryModel model, string authUserName)
         {
             int rowAffect = 0;
             conn = new SqlConnection(_connectionStringUserDB);
@@ -493,19 +560,30 @@ namespace Boilerplate.Repository.Repositories
             cmd.Transaction = trn;
             try
             {
-                int serialNo = 0;
-                //serialNo = string.IsNullOrEmpty(model.ColumnNameSerialNo) ? 0 : await GenSerialNumberAsync(model.SerialType);
-                int newPrimaryKey = await MasterTableInsertWithIdentity(model, cmd, authUserName, serialNo);
-                if (newPrimaryKey > 0)
+                // Get PK value from WhereParams
+                string? strWhereParams = Convert.ToString(model.WhereParams);
+                var whereParams = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(strWhereParams);
+                object? pkValue = null;
+                foreach (var item in (IEnumerable<dynamic>)whereParams)
                 {
-                    rowAffect = await DetailsTableInsertWithIdentity(model, newPrimaryKey, cmd);
+                    if (item.Name.ToLower() == model.ColumnNamePrimary?.ToLower())
+                    {
+                        pkValue = item.Value;
+                        break;
+                    }
+                }
+                if (pkValue == null)
+                    throw new InvalidOperationException($"Primary key value not found in WhereParams for table '{model.TableNameMaster}'.");
+
+                rowAffect = await UpdateMasterWithIdentity(model, authUserName, pkValue, cmd);
+                if (rowAffect > 0)
+                {
+                    await UpdateDetailsWithIdentity(model, authUserName, pkValue, cmd);
                 }
                 await cmd.Transaction.CommitAsync();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                await GenSerialNumberModifyAsync(model.SerialType);
                 await cmd.Transaction.RollbackAsync();
                 throw;
             }
@@ -515,5 +593,352 @@ namespace Boilerplate.Repository.Repositories
             }
             return rowAffect;
         }
+        
+        #region Master Update Helpers
+
+
+        private async Task<int> UpdateMasterWithIdentity(
+            DoubleMasterEntryModel model,
+            string authUserName,
+            object pkValue,
+            SqlCommand cmd,
+            CancellationToken ct = default)
+        {
+            if (cmd == null) throw new ArgumentNullException(nameof(cmd));
+            if (model == null) throw new ArgumentNullException(nameof(model));
+            if (string.IsNullOrWhiteSpace(model.TableNameMaster)) throw new ArgumentException("TableNameMaster is required.", nameof(model));
+            if (string.IsNullOrWhiteSpace(model.ColumnNamePrimary)) throw new ArgumentException("ColumnNamePrimary is required.", nameof(model));
+
+            // Normalize incoming data (and drill into the 'data' object if present)
+            var root = AsJObject(model.Data);
+            var obj = root["data"] as JObject ?? root; // ensures we use the JSON you showed
+
+            // Columns you typically should NOT update
+            var skip = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+    {
+        model.ColumnNamePrimary, // PK
+        "InsertDate","InsertTime","MakeBy","MakeDate"
+    };
+
+            var sets = new List<string>();
+            var parameters = new List<SqlParameter>();
+
+            foreach (var prop in obj.Properties())
+            {
+                var col = prop.Name;
+                if (skip.Contains(col)) continue;
+
+                var paramName = "@p_" + col;
+                sets.Add($"[{col}] = {paramName}");
+                parameters.Add(new SqlParameter(paramName, ToDbValue(prop.Value)));
+            }
+
+            // Audit fields (match your schema)
+            sets.Add("[UpdateBy]   = @p_UpdateBy");
+            sets.Add("[UpdateDate] = CAST(getdate() AS date)");
+            sets.Add("[UpdateTime] = getdate()");
+            parameters.Add(new SqlParameter("@p_UpdateBy", (object?)authUserName ?? DBNull.Value));
+
+            // WHERE PK = @p_pk (guard against JsonElement/JValue)
+            parameters.Add(new SqlParameter("@p_pk", ToDbValue(pkValue)));
+
+            var sql = $"UPDATE [{model.TableNameMaster}] SET {string.Join(", ", sets)} WHERE [{model.ColumnNamePrimary}] = @p_pk;";
+
+            cmd.Parameters.Clear();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = sql;
+            cmd.Parameters.AddRange(parameters.ToArray());
+
+            return await cmd.ExecuteNonQueryAsync(ct);
+        }
+
+        #endregion
+
+        #region Helpers
+        private static JObject AsJObject(object data)
+        {
+            if (data is null) return new JObject();
+            if (data is JObject jo) return jo;
+            if (data is string s)
+            {
+                s = s.Trim();
+                return string.IsNullOrEmpty(s) ? new JObject() : JObject.Parse(s);
+            }
+            if (data is JToken jt) return jt as JObject ?? JObject.Parse(jt.ToString());
+            if (data is JsonElement je) return JObject.Parse(je.GetRawText());
+            if (data is JsonDocument jd) return JObject.Parse(jd.RootElement.GetRawText());
+            if (data is JsonObject no) return JObject.Parse(no.ToJsonString());
+            // fallback: serialize with Newtonsoft
+            return JObject.Parse(JsonConvert.SerializeObject(data));
+        }
+
+        private static JArray AsJArray(object data)
+        {
+            if (data == null) return new JArray();
+            if (data is JArray ja) return ja;
+            if (data is string s) return string.IsNullOrWhiteSpace(s) ? new JArray() : JArray.Parse(s);
+            if (data is JToken jt) return jt as JArray ?? new JArray(jt);
+            if (data is JsonElement je) return JArray.Parse(je.GetRawText());
+            if (data is JsonDocument jd) return JArray.Parse(jd.RootElement.GetRawText());
+            return JArray.Parse(Newtonsoft.Json.JsonConvert.SerializeObject(data));
+        }
+
+        private static object ToDbValue(JToken token)
+        {
+            if (token == null || token.Type == JTokenType.Null) return DBNull.Value;
+
+            switch (token.Type)
+            {
+                case JTokenType.Integer: return token.ToObject<long>();
+                case JTokenType.Float: return token.ToObject<decimal>();
+                case JTokenType.Boolean: return token.ToObject<bool>();
+                case JTokenType.Date: return token.ToObject<DateTime>();
+                case JTokenType.String:
+                    {
+                        var s = token.ToObject<string>()?.Trim();
+                        if (string.IsNullOrEmpty(s)) return DBNull.Value;
+
+                        if (bool.TryParse(s, out var b)) return b;
+                        if (DateTime.TryParse(s, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out var dt)) return dt;
+                        if (decimal.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture, out var dec)) return dec;
+                        if (long.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out var l)) return l;
+                        return s;
+                    }
+                default:
+                    return token.ToString(Newtonsoft.Json.Formatting.None);
+            }
+        }
+
+        private static object ToDbValue(object value)
+        {
+            if (value is null) return DBNull.Value;
+            if (value is JToken jt) return ToDbValue(jt);
+            if (value is JsonElement je)
+            {
+                switch (je.ValueKind)
+                {
+                    case JsonValueKind.Null: return DBNull.Value;
+                    case JsonValueKind.True: return true;
+                    case JsonValueKind.False: return false;
+                    case JsonValueKind.Number:
+                        if (je.TryGetInt64(out var l)) return l;
+                        if (je.TryGetDecimal(out var d)) return d;
+                        return Convert.ToDecimal(je.GetDouble(), CultureInfo.InvariantCulture);
+                    case JsonValueKind.String:
+                        var s = je.GetString();
+                        if (string.IsNullOrWhiteSpace(s)) return DBNull.Value;
+                        if (bool.TryParse(s, out var b)) return b;
+                        if (DateTime.TryParse(s, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out var dt)) return dt;
+                        if (decimal.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture, out var dec)) return dec;
+                        if (long.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out var li)) return li;
+                        return s;
+                    default:
+                        return je.GetRawText();
+                }
+            }
+            return value;
+        }
+
+        private static (string schema, string table) SplitSchema(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Table name required.");
+            var parts = name.Split('.', 2);
+            return parts.Length == 2 ? (parts[0], parts[1]) : ("dbo", parts[0]);
+        }
+
+        private static async Task<string?> GetChildPkNameAsync(
+            SqlConnection? conn, SqlTransaction? tx, string schema, string table, CancellationToken ct)
+        {
+            if (conn == null) return null;
+
+            // Prefer PRIMARY KEY
+            using (var cmd = new SqlCommand(@"
+        SELECT TOP(1) kcu.COLUMN_NAME
+        FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS tc
+        JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE kcu
+          ON kcu.CONSTRAINT_NAME = tc.CONSTRAINT_NAME
+         AND kcu.TABLE_SCHEMA = tc.TABLE_SCHEMA
+         AND kcu.TABLE_NAME  = tc.TABLE_NAME
+        WHERE tc.CONSTRAINT_TYPE = 'PRIMARY KEY'
+          AND tc.TABLE_SCHEMA = @schema AND tc.TABLE_NAME = @table
+        ORDER BY kcu.ORDINAL_POSITION;", conn, tx))
+            {
+                cmd.Parameters.AddWithValue("@schema", schema);
+                cmd.Parameters.AddWithValue("@table", table);
+                var o = await cmd.ExecuteScalarAsync(ct);
+                if (o != null && o != DBNull.Value) return Convert.ToString(o, CultureInfo.InvariantCulture);
+            }
+
+            // Fallback: identity column
+            using (var cmd = new SqlCommand(@"
+        SELECT TOP(1) c.[name]
+        FROM sys.identity_columns c
+        WHERE c.[object_id] = OBJECT_ID(QUOTENAME(@schema)+'.'+QUOTENAME(@table));", conn, tx))
+            {
+                cmd.Parameters.AddWithValue("@schema", schema);
+                cmd.Parameters.AddWithValue("@table", table);
+                var o = await cmd.ExecuteScalarAsync(ct);
+                return o == null || o == DBNull.Value ? null : Convert.ToString(o, CultureInfo.InvariantCulture);
+            }
+        }
+
+        private static object ToTypedId(string s)
+        {
+            if (long.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out var l)) return l;
+            if (Guid.TryParse(s, out var g)) return g;
+            return s;
+        }
+
+        #endregion
+
+        #region Details Update Helpers
+
+        private async Task UpdateDetailsWithIdentity(
+    DoubleMasterEntryModel model,
+    string authUserName,
+    object pkValue,
+    SqlCommand cmd,
+    CancellationToken ct = default)
+        {
+            if (cmd == null) throw new ArgumentNullException(nameof(cmd));
+            if (model == null) throw new ArgumentNullException(nameof(model));
+
+            var childFull = model.TableNameChild ?? throw new ArgumentException("TableNameChild is required.", nameof(model));
+            var fkCol = model.ColumnNameForign ?? throw new ArgumentException("ColumnNameForign is required.", nameof(model));
+            var (schema, table) = SplitSchema(childFull);
+
+            var rows = AsJArray(model.DetailsData);
+
+            // 1) Find child PK column name from DB (no heuristic)
+            var childPkName = await GetChildPkNameAsync(cmd.Connection, cmd.Transaction, schema, table, ct);
+            if (string.IsNullOrWhiteSpace(childPkName))
+                throw new InvalidOperationException($"Could not determine child PK column for [{schema}].[{table}].");
+
+            // 2) Load existing PKs for this master
+            var existing = new List<string>();
+            cmd.Parameters.Clear();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = $"SELECT [{childPkName}] FROM [{schema}].[{table}] WHERE [{fkCol}] = @p_fk;";
+            cmd.Parameters.Add(new SqlParameter("@p_fk", ToDbValue(pkValue)));
+
+            using (var rdr = await cmd.ExecuteReaderAsync(ct))
+            {
+                while (await rdr.ReadAsync(ct))
+                {
+                    var v = rdr.GetValue(0);
+                    if (v != DBNull.Value)
+                        existing.Add(Convert.ToString(v, CultureInfo.InvariantCulture) ?? "");
+                }
+            }
+
+            // 3) Upsert payload rows; record PKs we keep
+            var keep = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var token in rows)
+            {
+                if (token is not JObject row) continue;
+
+                // Extract child PK (if present in payload)
+                JToken? pkTok;
+                var hasPk = row.TryGetValue(childPkName, StringComparison.OrdinalIgnoreCase, out pkTok) &&
+                            pkTok != null && pkTok.Type != JTokenType.Null &&
+                            !string.IsNullOrWhiteSpace(pkTok.ToString());
+
+                if (hasPk) keep.Add(pkTok!.ToString());
+
+                // ---------- UPDATE path ----------
+                if (hasPk)
+                {
+                    var sets = new List<string>();
+                    var upParams = new List<SqlParameter>();
+
+                    foreach (var prop in row.Properties())
+                    {
+                        var col = prop.Name;
+
+                        // Never update PK or FK; skip insert-only audit columns
+                        if (col.Equals(childPkName, StringComparison.OrdinalIgnoreCase)) continue;
+                        if (col.Equals(fkCol, StringComparison.OrdinalIgnoreCase)) continue;                          
+
+                        var pName = "@p_" + col;
+                        sets.Add($"[{col}] = {pName}");
+                        upParams.Add(new SqlParameter(pName, ToDbValue(prop.Value)));
+                    }
+
+                    // Keys
+                    upParams.Add(new SqlParameter("@p_fk", ToDbValue(pkValue)));
+                    upParams.Add(new SqlParameter("@p_childPk", ToDbValue(pkTok!)));
+
+                    cmd.Parameters.Clear();
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText =
+                        $"UPDATE [{schema}].[{table}] SET {string.Join(", ", sets)} " +
+                        $"WHERE [{childPkName}] = @p_childPk AND [{fkCol}] = @p_fk;";
+
+                    var affected = await cmd.ExecuteNonQueryAsync(ct);
+                    if (affected > 0) continue; // updated; skip insert fallback
+                }
+
+                // ---------- INSERT path ----------
+                var cols = new List<string>();
+                var vals = new List<string>();
+                var insParams = new List<SqlParameter>();
+
+                // Always set FK from master, not from payload
+                cols.Add($"[{fkCol}]"); vals.Add("@p_fk");
+                insParams.Add(new SqlParameter("@p_fk", ToDbValue(pkValue)));
+
+                foreach (var prop in row.Properties())
+                {
+                    var col = prop.Name;
+
+                    // Skip PK on insert (assume identity or default)
+                    if (col.Equals(childPkName, StringComparison.OrdinalIgnoreCase)) continue;
+                    if (col.Equals(fkCol, StringComparison.OrdinalIgnoreCase)) continue;
+
+                    var pName = "@p_" + col;
+                    cols.Add($"[{col}]");
+                    vals.Add(pName);
+                    insParams.Add(new SqlParameter(pName, ToDbValue(prop.Value)));
+                }
+
+                // Audit on insert
+                insParams.Add(new SqlParameter("@p_MakeBy", (object?)authUserName ?? DBNull.Value));
+
+                cmd.Parameters.Clear();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = $"INSERT INTO [{schema}].[{table}] ({string.Join(", ", cols)}) VALUES ({string.Join(", ", vals)});";
+                cmd.Parameters.AddRange(insParams.ToArray());
+                await cmd.ExecuteNonQueryAsync(ct);
+            }
+
+            // 4) DELETE any DB rows not in payload
+            var toDelete = existing.Where(s => !keep.Contains(s)).ToList();
+            if (toDelete.Count > 0)
+            {
+                var names = new List<string>();
+                cmd.Parameters.Clear();
+                cmd.CommandType = CommandType.Text;
+                cmd.Parameters.Add(new SqlParameter("@p_fk", ToDbValue(pkValue)));
+
+                for (int i = 0; i < toDelete.Count; i++)
+                {
+                    var pName = "@d" + i;
+                    names.Add(pName);
+                    cmd.Parameters.Add(new SqlParameter(pName, ToTypedId(toDelete[i])));
+                }
+
+                cmd.CommandText =
+                    $"DELETE FROM [{schema}].[{table}] " +
+                    $"WHERE [{fkCol}] = @p_fk AND [{childPkName}] IN ({string.Join(", ", names)});";
+
+                await cmd.ExecuteNonQueryAsync(ct);
+            }
+        }
+
+        #endregion
+
+
+        #endregion
     }
 }

@@ -1,116 +1,118 @@
 <div class="top-bar">
-        <div>
-            <a class="text-white fw-bold company-name" href="#">Sunshine</a>
-        </div>
-        <span id="time">22:49:08</span>
-        <div class="right-section">
-          <div class="btn-group" dropdown>
-        <a *ngIf="userName" id="button-animated" dropdownToggle type="button" class="btn theme-btn dropdown-toggle"
-                aria-controls="dropdown-animated">
-          <i class="fas fa-user-circle"></i>  &nbsp; Hello &nbsp; <span>{{userName}}</span> <span class="caret"></span>
-        </a>
-        <a *ngIf="!userName" href="/login"  type="button" class="btn theme-btn "
-            >
-          <i class="fas fa-user-circle"></i>  login<span class="caret"></span>
-        </a>
-        <ul id="dropdown-animated" *dropdownMenu class="dropdown-menu mt-2 dropdown-menu-right"
-            role="menu" aria-labelledby="button-animated">
-          <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);" (click)="ChangePassword()"><i class="fas fa-cog"></i> Change Password</a></li>
-          <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);" (click)="Logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+  <div>
+    <a class="text-white fw-bold company-name" href="#">Sunshine</a>
+  </div>
+  <span id="time">22:49:08</span>
+  <div class="right-section">
+    <div class="btn-group" dropdown>
+      <a *ngIf="userName" id="button-animated" dropdownToggle type="button" class="btn theme-btn dropdown-toggle"
+        aria-controls="dropdown-animated">
+        <i class="fas fa-user-circle"></i> &nbsp; Hello &nbsp; <span>{{userName}}</span> <span class="caret"></span>
+      </a>
+      <a *ngIf="!userName" href="/login" type="button" class="btn theme-btn ">
+        <i class="fas fa-user-circle"></i> login<span class="caret"></span>
+      </a>
+      <ul id="dropdown-animated" *dropdownMenu class="dropdown-menu mt-2 dropdown-menu-right" role="menu"
+        aria-labelledby="button-animated">
+        <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);" (click)="ChangePassword()"><i
+              class="fas fa-cog"></i> Change Password</a></li>
+        <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);" (click)="Logout()"><i
+              class="fas fa-sign-out-alt"></i> Logout</a>
 
           <!-- <li role="menuitem"><a class="dropdown-item" [routerLink]="['/login']"><i class="fas fa-sign-out-alt"></i> Logout</a> -->
-          </li>
-        </ul>
-      </div>
-        </div>
+        </li>
+      </ul>
     </div>
+  </div>
+</div>
 <nav class="navbar navbar-expand-lg custom-header">
-   <div class="container-fluid">
+  <div class="container-fluid">
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-              <div class="collapse navbar-collapse" id="navbarTop">
-    <ul class="navbar-nav mr-auto">
-      <ng-container *ngFor="let item of menu">
-        
-        <!-- Top-level dropdown -->
-        <li class="nav-item dropdown" *ngIf="item.Children?.length; else singleLink">
-          <a class="nav-link dropdown-toggle" href="#" role="button"
-             (click)="toggleDropdown(item.MenuId, $event)">
-            {{ item.SubMenuName }}
-          </a>
+    <div class="collapse navbar-collapse" id="navbarTop">
+      <ul class="navbar-nav mr-auto">
+        <ng-container *ngFor="let item of menu">
 
-          <ul class="dropdown-menu" [class.show]="isOpen(item.MenuId)">
-            <ng-container *ngFor="let child of item.Children">
-                 
-              <ng-container *ngIf="child.Children?.length; else childLink">
-                <li class="dropdown-submenu" [class.show]="isOpen(child.MenuId)">
-                  <a class="dropdown-item dropdown-toggle" href="#"
-                  
-                     (click)="toggleDropdown(child.MenuId, $event)">
-                    {{ child.SubMenuName }}
-                  </a>
-                  <ul class="dropdown-menu " [class.show]="isOpen(child.MenuId)">
-                    <ng-container *ngFor="let grandchild of child.Children">
-                      <li >
-                        <a class="dropdown-item" [routerLink]="grandchild.UiLink">
-                          {{ grandchild.SubMenuName }}
-                        </a>
-                      </li>
-                    </ng-container>
-                  </ul>
-                </li>
+          <!-- Top-level dropdown -->
+          <li class="nav-item dropdown" *ngIf="item.Children?.length; else singleLink">
+            <a class="nav-link dropdown-toggle" href="#" role="button" (click)="toggleDropdown(item.MenuId, $event)">
+              {{ item.SubMenuName }}
+            </a>
+
+            <ul class="dropdown-menu" [class.show]="isOpen(item.MenuId)">
+              <ng-container *ngFor="let child of item.Children">
+
+                <ng-container *ngIf="child.Children?.length; else childLink">
+                  <li class="dropdown-submenu" [class.show]="isOpen(child.MenuId)">
+                    <a class="dropdown-item dropdown-toggle" href="#" (click)="toggleDropdown(child.MenuId, $event)">
+                      {{ child.SubMenuName }}
+                    </a>
+                    <ul class="dropdown-menu " [class.show]="isOpen(child.MenuId)">
+                      <ng-container *ngFor="let grandchild of child.Children">
+                        <li>
+                          <a class="dropdown-item" [routerLink]="grandchild.UiLink">
+                            {{ grandchild.SubMenuName }}
+                          </a>
+                        </li>
+                      </ng-container>
+                    </ul>
+                  </li>
+                </ng-container>
+
+                <!-- Child without children -->
+                <ng-template #childLink>
+                  <li>
+                    <a class="dropdown-item" [routerLink]="child.UiLink">
+                      {{ child.SubMenuName }}
+                    </a>
+                  </li>
+                </ng-template>
+
               </ng-container>
-
-              <!-- Child without children -->
-              <ng-template #childLink>
-                <li>
-                  <a class="dropdown-item" [routerLink]="child.UiLink">
-                    {{ child.SubMenuName }}
-                  </a>
-                </li>
-              </ng-template>
-
-            </ng-container>
-          </ul>
-        </li>
-
-        <!-- Top-level link without children -->
-        <ng-template #singleLink>
-          <li class="nav-item">
-            <a class="nav-link" [routerLink]="item.UiLink">{{ item.SubMenuName }}</a>
+            </ul>
           </li>
-        </ng-template>
 
-      </ng-container>
-    </ul>
-     <ul class="navbar-nav ml-auto">
-    <li>
-      <div class="btn-group" dropdown>
-        <!-- <a *ngIf="userName" id="button-animated" dropdownToggle type="button" class="btn theme-btn dropdown-toggle"
+          <!-- Top-level link without children -->
+          <ng-template #singleLink>
+            <li class="nav-item">
+              <a class="nav-link" [routerLink]="item.UiLink">{{ item.SubMenuName }}</a>
+            </li>
+          </ng-template>
+
+        </ng-container>
+      </ul>
+      <ul class="navbar-nav ml-auto">
+        <li>
+          <div class="btn-group" dropdown>
+            <!-- <a *ngIf="userName" id="button-animated" dropdownToggle type="button" class="btn theme-btn dropdown-toggle"
                 aria-controls="dropdown-animated">
           <i class="fas fa-user-circle"></i>  &nbsp; Hello &nbsp; <span>{{userName}}</span> <span class="caret"></span>
         </a> -->
-        <!-- <a *ngIf="!userName" href="" dropdownToggle type="button" class="btn theme-btn dropdown-toggle"
+            <!-- <a *ngIf="!userName" href="" dropdownToggle type="button" class="btn theme-btn dropdown-toggle"
                 aria-controls="dropdown-animated">
           <i class="fas fa-user-circle"></i>  login<span class="caret"></span>
         </a> -->
-        <!-- <ul id="dropdown-animated" *dropdownMenu class="dropdown-menu mt-2 dropdown-menu-right"
+            <!-- <ul id="dropdown-animated" *dropdownMenu class="dropdown-menu mt-2 dropdown-menu-right"
             role="menu" aria-labelledby="button-animated">
           <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);" (click)="ChangePassword()"><i class="fas fa-cog"></i> Change Password</a></li>
           <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);" (click)="Logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
 
           </li>
         </ul> -->
-      </div>
-    </li>
-    <!-- Notifications Dropdown Menu -->
-  </ul>
+          </div>
+        </li>
+        <!-- Notifications Dropdown Menu -->
+      </ul>
+    </div>
   </div>
-   </div>
 
 
 
 </nav>
+<div>
+
+<app-landing-page *ngIf="!isShowComInfo"></app-landing-page>
+</div>
