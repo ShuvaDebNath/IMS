@@ -313,19 +313,6 @@ getSelectedMenu(){
           var updatedMenu = this.enablePermissions(this.menus, selectedMenus);
           this.menuPermissionId = selectedMenus[0].Menu_Permission_Id;
           
-          // console.log(selectedMenus);
-          // selectedMenus.forEach((e:any)=>{
-          //   console.log(this.menus);
-          //   this.menus.forEach(e=>{
-          //     e.permissions.enabled = true;
-              
-          //     e.Children = JSON.parse(e.Children);
-          //     console.log(e.Children);            
-          //     this.checkChildrenByRole(e.children)
-              
-          //   })
-          // })
-					// console.log(this.menus);
           
 				} else if (results.msg == 'Invalid Token') {
 					swal.fire('Session Expierd!', 'Please Login Again.', 'info');

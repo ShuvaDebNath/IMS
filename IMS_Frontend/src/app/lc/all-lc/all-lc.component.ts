@@ -102,7 +102,7 @@ export class AllLcComponent {
   }
   Search(){
     let param = new GetDataModel();
-    param.procedureName = '[usp_LCList]';
+    param.procedureName = '[usp_LC_List]';
     param.parameters = {
       FromDate: this.SearchForm.value.fromDate,
       ToDate: this.SearchForm.value.toDate,
@@ -112,17 +112,19 @@ export class AllLcComponent {
     };
 
     this.masterEntryService.GetInitialData(param).subscribe({
-      next: (results) => {
-        console.log(results);
-        
+      next: (results) => {        
         if (results.status) {
           this.tableData = [];
           let tables = JSON.parse(results.data);
           this.tableData = tables.Tables1;
-          console.log(this.tableData);          
-          //  this.isPage=this.rows[0].totallen>10;
-            this.length = parseInt(this.tableData[0].totallen);
-          
+          if(this.tableData.length>0){
+            
+            this.length = parseInt(this.tableData[0].totallen);    
+          }
+          else{
+            swal.fire('error', 'No Data Found!!', 'error');
+          }         
+          //  this.isPage=this.rows[0].totallen>10;      
 
         }
 
@@ -132,32 +134,28 @@ export class AllLcComponent {
 
   }
 
-  DeleteData(item:any){
-    console.log(item);
-    
+  DeleteData(item:any){    
     swal
-                .fire({
-                  title: 'Wait!',
-                  html: `<span>Once you delete, you won't be able to revert this!<br> <b>[${item.LC_No}]</b></span>`,
-                  icon: 'warning',
-                  showCancelButton: true,
-                  confirmButtonColor: '#3085d6',
-                  cancelButtonColor: '#d33',
-                  confirmButtonText: 'Yes, delete it!',
-                })
-                .then((result) => {
-                  if (result.isConfirmed==true) {
-                    let param = new GetDataModel();
-                    param.procedureName = "usp_LC_Delete";
-                    param.parameters = 
-                    {
-                      'LC_ID':item.LC_ID
-                    };
-          
+     .fire({
+       title: 'Wait!',
+       html: `<span>Once you delete, you won't be able to revert this!<br> <b>[${item.LC_No}]</b></span>`,
+       icon: 'warning',
+       showCancelButton: true,
+       confirmButtonColor: '#3085d6',
+       cancelButtonColor: '#d33',
+       confirmButtonText: 'Yes, delete it!',
+     })
+     .then((result) => {
+       if (result.isConfirmed==true) {
+         let param = new GetDataModel();
+         param.procedureName = "usp_LC_Delete";
+         param.parameters = 
+         {
+           'LC_ID':item.LC_ID
+         };         
       
           this.masterEntryService.GetInitialData(param).subscribe({
             next: (results:any) => {
-              console.log(results);
               
               if (results.status) {
                 var effectedRows = JSON.parse(results.data).Tables1;
@@ -182,19 +180,18 @@ export class AllLcComponent {
             },
             error: (err) => {},
           });
-                  }
-                });
-    
+      }
+    });    
   }
 
   paginatiorChange(e: any) {
-      this.pageIndex = e.pageIndex+1;
-      this.pageSize = e.pageSize;
-      this.Search();
-    }
+    this.pageIndex = e.pageIndex+1;
+    this.pageSize = e.pageSize;
+    this.Search();
+  }
 
-    viewDetails(table:any){
-      this.isDetailsVisible = true;
-      this.detailsData = table;
-    }
+  viewDetails(table:any){
+    this.isDetailsVisible = true;
+    this.detailsData = table;
+  }
 }

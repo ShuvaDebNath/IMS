@@ -49,35 +49,6 @@ export class HeaderComponent implements OnInit {
           this.menu.forEach((e:any)=>{
             e.Children = JSON.parse(e.Children);
           })
-    //   var ProcedureData={
-    //   procedureName:'[prc_GetMenuTree]',
-    //   parameters:{
-    //     UserId:''
-    //   }
-    // };
-    // this.masterEntryService.GetAllData(ProcedureData).subscribe(res=>{
-    //   console.log(res);
-    //   if (res.status) {
-        
-    //   this.menu = JSON.parse(res.data);
-		// 			console.log(this.menu);
-    //       this.menu.forEach((e:any)=>{
-    //         console.log(JSON.parse(e.Children));
-    //         e.Children = JSON.parse(e.Children);
-    //       })
-
-        
-    //   }else{
-
-    //     Swal.fire(
-    //       {
-    //         title: `Invalid token!`,
-    //         text: `Please Login!`,
-    //         icon: 'error',
-    //       }
-    //     );
-    //   }
-    // });
     }
  
   Logout() {

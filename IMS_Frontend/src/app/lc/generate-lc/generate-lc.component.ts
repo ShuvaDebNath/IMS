@@ -129,7 +129,7 @@ export class GenerateLcComponent {
   
       this.masterEntyService.GetInitialData(ProcedureData).subscribe({
         next: (results) => {
-  
+          
           if (results.status) {
             this.BenificiaryAccounts = JSON.parse(results.data).Tables1;
             this.PaymentTerms = JSON.parse(results.data).Tables2;
@@ -146,7 +146,6 @@ export class GenerateLcComponent {
     }
 
     getPINoByMarketingConcern(){
-      console.log(this.Formgroup.value.Marketing_Concern);
       
       var ProcedureData = {
         procedureName: '[usp_LC_PINo_ByMarketingConcern]',
@@ -181,7 +180,6 @@ export class GenerateLcComponent {
   
       this.masterEntyService.GetInitialData(ProcedureData).subscribe({
         next: (results) => {
-          console.log(results);
           
           if (results.status) {
             this.PINo = JSON.parse(results.data).Tables1;
@@ -281,7 +279,7 @@ export class GenerateLcComponent {
 
     GetLCById(LCID:any){
       var ProcedureData = {
-        procedureName: '[usp_LCById]',
+        procedureName: '[usp_LC_ById]',
         parameters: {
           'LC_ID':this.LCId
         }
@@ -291,12 +289,10 @@ export class GenerateLcComponent {
   
           if (results.status) {
             var tableData = JSON.parse(results.data).Tables1;
-            console.log(tableData);
             
             tableData.forEach((e:any)=>{   
               var piArr = e.PI_No.split(','); 
               const piArrInt = piArr.map(Number);
-              console.log(piArr);
               this.Formgroup.controls.Marketing_Concern.setValue(e.User_ID);   
               this.Formgroup.controls.BenificiaryAccounts.setValue(e.Beneficiary_Bank_ID);
               this.Formgroup.controls.Consignee_Name.setValue(e.Consignee_Name);
@@ -387,7 +383,6 @@ export class GenerateLcComponent {
         lc.Remarks = this.Formgroup.value.Remarks;
         lc.IRC_No = this.Formgroup.value.IRCNo;
         lc.PI_No = piNoStringSep;
-        console.log(lc);
         var ProcedureData = {
           procedureName: '[usp_LC_Update]',
           parameters: lc
@@ -395,7 +390,6 @@ export class GenerateLcComponent {
 
         this.masterEntyService.GetAllData(ProcedureData).subscribe({
         next: (results) => {
-          console.log(results);
           
           if (results.status) {
             this.PINo = JSON.parse(results.data);
@@ -410,7 +404,6 @@ export class GenerateLcComponent {
     }
 
     convertDates(dateString: any) {
-      console.log(dateString);
       
       if(dateString=="" || dateString==undefined)
         return '';

@@ -115,13 +115,11 @@ pageIndex = 1;
 
     this.masterEntryService.GetInitialData(param).subscribe({
       next: (results) => {
-        console.log(results);
         
         if (results.status) {
           this.tableData = [];
           let tables = JSON.parse(results.data);
-          this.tableData = tables.Tables1;
-          console.log(this.tableData);          
+          this.tableData = tables.Tables1; 
           //  this.isPage=this.rows[0].totallen>10;
           this.length = parseInt(this.tableData[0].totallen);
         }
@@ -133,8 +131,6 @@ pageIndex = 1;
   }
 
   DeleteData(item:any){
-    console.log(item);
-    
     swal
                 .fire({
                   title: 'Wait!',
@@ -157,7 +153,6 @@ pageIndex = 1;
       
           this.masterEntryService.GetInitialData(param).subscribe({
             next: (results:any) => {
-              console.log(results);
               
               if (results.status) {
                 var effectedRows = JSON.parse(results.data).Tables1;
@@ -190,7 +185,6 @@ pageIndex = 1;
 
     viewDetails(table:any){
       this.isDetailsVisible = true;
-      console.log(table);
       
       let param = new GetDataModel();
       param.procedureName = '[usp_LC_Details]';
@@ -200,14 +194,12 @@ pageIndex = 1;
 
     this.masterEntryService.GetInitialData(param).subscribe({
       next: (results) => {
-        console.log(results);
         
         if (results.status) {
           let tables = JSON.parse(results.data);
           
           this.detailsData = tables.Tables1[0]; 
           this.detailsTableData = tables.Tables2;
-          console.log(this.detailsData);          
         }
       }
     });
