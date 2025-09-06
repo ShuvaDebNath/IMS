@@ -38,7 +38,6 @@ import { CreatePageComponent } from '../production/requisition/raw-material-requ
 import { EditPageComponent } from '../production/requisition/raw-material-requisition/edit/edit-page.component';
 import { ListPageComponent } from '../production/requisition/raw-material-requisition/list/list-page.component';
 import { ChangePasswordComponent } from '../authentication/change-password/change-password.component';
-import { ArbitrationComponent } from '../arbitration/arbitration.component';
 import { LandingPageComponent } from '../landing-page/landing-page.component';
 
 
