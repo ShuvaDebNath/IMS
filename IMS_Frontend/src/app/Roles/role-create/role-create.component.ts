@@ -48,9 +48,7 @@ export class RoleCreateComponent {
     this.menu = JSON.parse(this.menu);
     var buttonPermissions:any = [];
     var countFound = 0;
-    console.log(this.menu);
           this.menu.forEach((e:any)=>{
-            console.log(JSON.parse(e.Children));
             e.Children = JSON.parse(e.Children);
             e.Children.forEach((childMenu:any)=>{
               if(childMenu.SubMenuName=="Roles"){
@@ -59,7 +57,6 @@ export class RoleCreateComponent {
               }
             });
           })
-    console.log(buttonPermissions);
     if(countFound==0){
       window.location.href='dashboard';
     }
@@ -115,11 +112,9 @@ export class RoleCreateComponent {
     masterEntryModel.columnNames = 'Role_Id,Role_Name';
     masterEntryModel.whereParams = '{"Role_Id":'+this.RoleId+'}'
     this.masterEntyService.GetEditData(masterEntryModel).subscribe((res:any) => {
-      console.log(res);
       
       if (res.status) {
         let UserRole = JSON.parse(res.data)[0];
-        console.log(UserRole);
         
         this.Formgroup.controls.Role_Name.setValue(UserRole.Role_Name);
       } else {
@@ -132,12 +127,14 @@ export class RoleCreateComponent {
   }
 
   saveData(){
-    
+    if (this.Formgroup.invalid) {
+      swal.fire('Invlid Inputs!', 'Form is Invalid! Please select Role.', 'info');
+      return;
+    }
     var role = new Roles();
     role.Role_Name = this.Formgroup.value.Role_Name;
     role.IsBuiltIn =false;
     this.masterEntyService.SaveSingleData(role,'tbl_Roles').subscribe((res:any) => {
-      console.log(res);
       
       if (res.status) {
         swal
@@ -222,3 +219,5 @@ export class RoleCreateComponent {
     });
   }
 }
+
+

@@ -54,6 +54,32 @@ namespace Boilerplate.API.Controllers
             }
         }
 
+        [HttpPost(nameof(InsertThenUpdateRefTable))]
+        public async Task<IActionResult> InsertThenUpdateRefTable([FromBody] MasterEntryWithSlUpdateModel item)
+        {
+            try
+            {
+                return Ok(await _masterEntryService.InsertThenUpdateRefTable(item, AuthUserName));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+        }
+
+        [HttpDelete(nameof(DeleteThenUpdateSl))]
+        public async Task<IActionResult> DeleteThenUpdateSl([FromBody] MasterEntryWithSlUpdateModel item)
+        {
+            try
+            {
+                return Ok(await _masterEntryService.DeleteThenUpdateSl(item, AuthUserName));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+        }
+
         [HttpPut(nameof(Update))]
         public IActionResult Update([FromBody]MasterEntryModel item)
         {

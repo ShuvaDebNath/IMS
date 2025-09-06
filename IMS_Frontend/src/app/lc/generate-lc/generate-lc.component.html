@@ -1,0 +1,703 @@
+<div class="row d-flex justify-content-center">
+  <div class="col-md-6">
+    <div class="card card-default">
+      <div
+        class="content-heading"
+        style="border-bottom: 1px solid rgba(0,0,0,.125) !important;"
+      >
+        <div class="row">
+          <div class="col-6">
+            <h2 class="p-2"></h2>
+          </div>
+        </div>
+        <h2 class="p-2 font-weight-bold">
+          {{!isEdit?'Add':'Edit'}}&nbsp;Create LC
+        </h2>
+      </div>
+      <div class="card-body">
+        <form name="newForm" [formGroup]="Formgroup" role="form">
+          <label>LC</label>
+          <div class="row">
+            <div class="col-md-6">
+              <label>Marketing Concern <span>*</span></label>
+              <p-dropdown
+                [style]="{'width':'100%'}"
+                class="p-0"
+                [options]="MarketingConcern"
+                (onChange)="getPINoByMarketingConcern()"
+                optionLabel="UserName"
+                [filter]="true"
+                filterBy="UserName"
+                [showClear]="true"
+                styleClass="listBottom"
+                placeholder="Please Select"
+                optionValue="User_ID"
+                formControlName="Marketing_Concern"
+              >
+                <ng-template let-MarketingConcern pTemplate="item">
+                  <div class="flex align-items-center gap-2">
+                    <div>{{ MarketingConcern.UserName }}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+            </div>
+            <div class="col-md-6">
+              <label for="Consignee_Name" class="">Consignee Name</label>
+              <div class="">
+                <div class="form-group d-inline">
+                  <input
+                    autocomplete="off"
+                    type="text"
+                    formControlName="Consignee_Name"
+                    class="form-control"
+                    placeholder="Consignee Name"
+                    id="Consignee_Name"
+                    name="Consignee_Name"
+                    value=""
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label>PIs <span>*</span></label>
+              <p-multiSelect
+                [style]="{'width':'100%'}"
+                class="p-0"
+                [options]="PINo"
+                optionLabel="label"
+                optionValue="value"
+                [filter]="true"
+                filterBy="label"
+                [showClear]="true"
+                styleClass="listBottom"
+                placeholder="Please Select"
+                formControlName="PINo"
+              >
+                <ng-template let-option pTemplate="item">
+                  <div class="flex align-items-center gap-2">
+                    <div>{{ option.label }}</div>
+                  </div>
+                </ng-template>
+              </p-multiSelect>
+            </div>
+            <div class="col-md-6">
+              <label>Benificiary Bank <span>*</span></label>
+              <p-dropdown
+                [style]="{'width':'100%'}"
+                class="p-0"
+                [options]="BenificiaryAccounts"
+                optionLabel="BankName"
+                [filter]="true"
+                filterBy="BankName"
+                [showClear]="true"
+                styleClass="listBottom"
+                placeholder="Please Select"
+                optionValue="Beneficiary_Bank_ID"
+                formControlName="BenificiaryAccounts"
+              >
+                <ng-template let-BenificiaryAccounts pTemplate="item">
+                  <div class="flex align-items-center gap-2">
+                    <div>{{ BenificiaryAccounts.BankName }}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+            </div>
+          </div>
+          <label>LC Receiving Date : </label>
+          <div class="row">
+            <div class="col-md-6">
+              <label class="control-label" for="inlineFormInputGroup"
+                >LC Receiving Date By Mail/Draft</label
+              >
+              <div class="input-group mb-2">
+                <div class="input-group-sm input-group-prepend">
+                  <div class="input-group-text" (click)="dpfrom.toggle()">
+                    <i class="fas fa-calendar"></i>
+                  </div>
+                </div>
+                <input
+                  type="text"
+                  autocomplete="off"
+                  formControlName="LCReceivingDateByDraft"
+                  [bsConfig]="{
+                    dateInputFormat: 'DD/MM/YYYY',
+                    containerClass: 'theme-green'
+                    }"
+                  class="form-control-sm form-control bg-white"
+                  id="LCReceivingDateByDraft"
+                  name="LCReceivingDateByDraft"
+                  placeholder="From Date"
+                  #dpfrom="bsDatepicker"
+                  bsDatepicker
+                  readonly
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="control-label" for="inlineFormInputGroup"
+                >LC Receiving Date Original By Bank</label
+              >
+              <div class="input-group mb-2">
+                <div class="input-group-sm input-group-prepend">
+                  <div class="input-group-text" (click)="dpfrom.toggle()">
+                    <i class="fas fa-calendar"></i>
+                  </div>
+                </div>
+                <input
+                  type="text"
+                  autocomplete="off"
+                  formControlName="LCReceivingDateOrgBank"
+                  [bsConfig]="{
+                    dateInputFormat: 'DD/MM/YYYY',
+                    containerClass: 'theme-green'
+                    }"
+                  class="form-control-sm form-control bg-white"
+                  id="LCReceivingDateOrgBank"
+                  name="LCReceivingDateOrgBank"
+                  placeholder="From Date"
+                  #dpfrom="bsDatepicker"
+                  bsDatepicker
+                  readonly
+                />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <label for="LCNo" class="">LC No</label>
+              <div class="">
+                <div class="form-group d-inline">
+                  <input
+                    autocomplete="off"
+                    type="text"
+                    formControlName="LCNo"
+                    class="form-control"
+                    placeholder="LC No"
+                    id="LCNo"
+                    name="LCNo"
+                    value=""
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label for="LCValue" class="">LC Value <span>*</span></label>
+              <div class="">
+                <div class="form-group d-inline">
+                  <input
+                    autocomplete="off"
+                    type="number"
+                    formControlName="LCValue"
+                    class="form-control"
+                    placeholder="LC Value"
+                    id="LCValue"
+                    name="LCValue"
+                    value=""
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="control-label" for="inlineFormInputGroup"
+                >Issue Date</label
+              >
+              <div class="input-group mb-2">
+                <div class="input-group-sm input-group-prepend">
+                  <div class="input-group-text" (click)="dpfrom.toggle()">
+                    <i class="fas fa-calendar"></i>
+                  </div>
+                </div>
+                <input
+                  type="text"
+                  autocomplete="off"
+                  formControlName="IssueDate"
+                  [bsConfig]="{
+                    dateInputFormat: 'DD/MM/YYYY',
+                    containerClass: 'theme-green'
+                    }"
+                  class="form-control-sm form-control bg-white"
+                  id="IssueDate"
+                  name="IssueDate"
+                  placeholder="From Date"
+                  #dpfrom="bsDatepicker"
+                  bsDatepicker
+                  readonly
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="control-label" for="inlineFormInputGroup"
+                >Expiry Date</label
+              >
+              <div class="input-group mb-2">
+                <div class="input-group-sm input-group-prepend">
+                  <div class="input-group-text" (click)="dpfrom.toggle()">
+                    <i class="fas fa-calendar"></i>
+                  </div>
+                </div>
+                <input
+                  type="text"
+                  autocomplete="off"
+                  formControlName="ExpiryDate"
+                  [bsConfig]="{
+                    dateInputFormat: 'DD/MM/YYYY',
+                    containerClass: 'theme-green'
+                    }"
+                  class="form-control-sm form-control bg-white"
+                  id="ExpiryDate"
+                  name="ExpiryDate"
+                  placeholder="From Date"
+                  #dpfrom="bsDatepicker"
+                  bsDatepicker
+                  readonly
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label for="LCNo" class="">Customer Bank Name</label>
+              <div class="">
+                <div class="form-group d-inline">
+                  <input
+                    autocomplete="off"
+                    type="text"
+                    formControlName="CustomerBankName"
+                    class="form-control"
+                    placeholder="Customer Bank Name"
+                    id="CustomerBankName"
+                    name="CustomerBankName"
+                    value=""
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="control-label" for="inlineFormInputGroup"
+                >Invoice No With Date</label
+              >
+              <div class="input-group mb-2">
+                <div class="input-group-sm input-group-prepend">
+                  <div class="input-group-text" (click)="dpfrom.toggle()">
+                    <i class="fas fa-calendar"></i>
+                  </div>
+                </div>
+                <input
+                  type="text"
+                  autocomplete="off"
+                  formControlName="InvoiceNoWitDate"
+                  [bsConfig]="{
+                    dateInputFormat: 'DD/MM/YYYY',
+                    containerClass: 'theme-green'
+                    }"
+                  class="form-control-sm form-control bg-white"
+                  id="InvoiceNoWitDate"
+                  name="InvoiceNoWitDate"
+                  placeholder="From Date"
+                  #dpfrom="bsDatepicker"
+                  bsDatepicker
+                  readonly
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="control-label" for="inlineFormInputGroup"
+                >IP Documents Sending Date</label
+              >
+              <div class="input-group mb-2">
+                <div class="input-group-sm input-group-prepend">
+                  <div class="input-group-text" (click)="dpfrom.toggle()">
+                    <i class="fas fa-calendar"></i>
+                  </div>
+                </div>
+                <input
+                  type="text"
+                  autocomplete="off"
+                  formControlName="IPDocSendingDate"
+                  [bsConfig]="{
+                    dateInputFormat: 'DD/MM/YYYY',
+                    containerClass: 'theme-green'
+                    }"
+                  class="form-control-sm form-control bg-white"
+                  id="IPDocSendingDate"
+                  name="IPDocSendingDate"
+                  placeholder="From Date"
+                  #dpfrom="bsDatepicker"
+                  bsDatepicker
+                  readonly
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="control-label" for="inlineFormInputGroup"
+                >IP Documents Receiving Date</label
+              >
+              <div class="input-group mb-2">
+                <div class="input-group-sm input-group-prepend">
+                  <div class="input-group-text" (click)="dpfrom.toggle()">
+                    <i class="fas fa-calendar"></i>
+                  </div>
+                </div>
+                <input
+                  type="text"
+                  autocomplete="off"
+                  formControlName="IPDocReceivingDate"
+                  [bsConfig]="{
+                    dateInputFormat: 'DD/MM/YYYY',
+                    containerClass: 'theme-green'
+                    }"
+                  class="form-control-sm form-control bg-white"
+                  id="ExpiryDate"
+                  name="ExpiryDate"
+                  placeholder="From Date"
+                  #dpfrom="bsDatepicker"
+                  bsDatepicker
+                  readonly
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label>Payment Terms (LC) <span>*</span></label>
+              <p-dropdown
+                [style]="{'width':'100%'}"
+                class="p-0"
+                [options]="PaymentTerms"
+                optionLabel="Mode"
+                [filter]="true"
+                filterBy="Mode"
+                [showClear]="true"
+                styleClass="listBottom"
+                placeholder="Please Select"
+                optionValue="Payment_Term_ID"
+                formControlName="PaymentTermsLC"
+              >
+                <ng-template let-PaymentTerms pTemplate="item">
+                  <div class="flex align-items-center gap-2">
+                    <div>{{ PaymentTerms.Mode }}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+            </div>
+            <div class="col-md-6">
+              <label class="control-label" for="inlineFormInputGroup"
+                >Maturity Date</label
+              >
+              <div class="input-group mb-2">
+                <div class="input-group-sm input-group-prepend">
+                  <div class="input-group-text" (click)="dpfrom.toggle()">
+                    <i class="fas fa-calendar"></i>
+                  </div>
+                </div>
+                <input
+                  type="text"
+                  autocomplete="off"
+                  formControlName="MaturityDate"
+                  [bsConfig]="{
+                    dateInputFormat: 'DD/MM/YYYY',
+                    containerClass: 'theme-green'
+                    }"
+                  class="form-control-sm form-control bg-white"
+                  id="MaturityDate"
+                  name="MaturityDate"
+                  placeholder="From Date"
+                  #dpfrom="bsDatepicker"
+                  bsDatepicker
+                  readonly
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="control-label" for="inlineFormInputGroup"
+                >Documents Presentation To Bank Date</label
+              >
+              <div class="input-group mb-2">
+                <div class="input-group-sm input-group-prepend">
+                  <div class="input-group-text" (click)="dpfrom.toggle()">
+                    <i class="fas fa-calendar"></i>
+                  </div>
+                </div>
+                <input
+                  type="text"
+                  autocomplete="off"
+                  formControlName="DocPresBankDate"
+                  [bsConfig]="{
+                    dateInputFormat: 'DD/MM/YYYY',
+                    containerClass: 'theme-green'
+                    }"
+                  class="form-control-sm form-control bg-white"
+                  id="DocPresBankDate"
+                  name="DocPresBankDate"
+                  placeholder="From Date"
+                  #dpfrom="bsDatepicker"
+                  bsDatepicker
+                  readonly
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="control-label" for="inlineFormInputGroup"
+                >FDD/TT Receive Date</label
+              >
+              <div class="input-group mb-2">
+                <div class="input-group-sm input-group-prepend">
+                  <div class="input-group-text" (click)="dpfrom.toggle()">
+                    <i class="fas fa-calendar"></i>
+                  </div>
+                </div>
+                <input
+                  type="text"
+                  autocomplete="off"
+                  formControlName="FDDRecDate"
+                  [bsConfig]="{
+                    dateInputFormat: 'DD/MM/YYYY',
+                    containerClass: 'theme-green'
+                    }"
+                  class="form-control-sm form-control bg-white"
+                  id="FDDRecDate"
+                  name="FDDRecDate"
+                  placeholder="From Date"
+                  #dpfrom="bsDatepicker"
+                  bsDatepicker
+                  readonly
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="control-label" for="inlineFormInputGroup"
+                >Export LC/SC</label
+              >
+              <div class="">
+                <div class="form-group d-inline">
+                  <input
+                    autocomplete="off"
+                    type="text"
+                    formControlName="ExportLCSC"
+                    class="form-control"
+                    placeholder="Export LC/SC"
+                    id="ExportLCSC"
+                    name="ExportLCSC"
+                    value=""
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="control-label" for="inlineFormInputGroup"
+                >Actual Payment Receiving Date</label
+              >
+              <div class="input-group mb-2">
+                <div class="input-group-sm input-group-prepend">
+                  <div class="input-group-text" (click)="dpfrom.toggle()">
+                    <i class="fas fa-calendar"></i>
+                  </div>
+                </div>
+                <input
+                  type="text"
+                  autocomplete="off"
+                  formControlName="ActualPaymentRecDate"
+                  [bsConfig]="{
+                    dateInputFormat: 'DD/MM/YYYY',
+                    containerClass: 'theme-green'
+                    }"
+                  class="form-control-sm form-control bg-white"
+                  id="ActualPaymentRecDate"
+                  name="ActualPaymentRecDate"
+                  placeholder="From Date"
+                  #dpfrom="bsDatepicker"
+                  bsDatepicker
+                  readonly
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="control-label" for="inlineFormInputGroup"
+                >Export LC/SC Date</label
+              >
+              <div class="input-group mb-2">
+                <div class="input-group-sm input-group-prepend">
+                  <div class="input-group-text" (click)="dpfrom.toggle()">
+                    <i class="fas fa-calendar"></i>
+                  </div>
+                </div>
+                <input
+                  type="text"
+                  autocomplete="off"
+                  formControlName="ExportLCSCDate"
+                  [bsConfig]="{
+                    dateInputFormat: 'DD/MM/YYYY',
+                    containerClass: 'theme-green'
+                    }"
+                  class="form-control-sm form-control bg-white"
+                  id="ExportLCSCDate"
+                  name="ExportLCSCDate"
+                  placeholder="From Date"
+                  #dpfrom="bsDatepicker"
+                  bsDatepicker
+                  readonly
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="control-label" for="inlineFormInputGroup"
+                >LCA Form No</label
+              >
+              <div class="">
+                <div class="form-group d-inline">
+                  <input
+                    autocomplete="off"
+                    type="text"
+                    formControlName="LCAFormNo"
+                    class="form-control"
+                    placeholder="LCA Form No"
+                    id="LCAFormNo"
+                    name="LCAFormNo"
+                    value=""
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="control-label" for="inlineFormInputGroup"
+                >Applicant TIN</label
+              >
+              <div class="">
+                <div class="form-group d-inline">
+                  <input
+                    autocomplete="off"
+                    type="text"
+                    formControlName="ApplicantTIN"
+                    class="form-control"
+                    placeholder="Applicant TIN"
+                    id="ApplicantTIN"
+                    name="ApplicantTIN"
+                    value=""
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="control-label" for="inlineFormInputGroup"
+                >Applicant BIN/VAT</label
+              >
+              <div class="">
+                <div class="form-group d-inline">
+                  <input
+                    autocomplete="off"
+                    type="text"
+                    formControlName="ApplicantBINVAT"
+                    class="form-control"
+                    placeholder="Applicant BIN/VAT"
+                    id="ApplicantBINVAT"
+                    name="ApplicantBINVAT"
+                    value=""
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="control-label" for="inlineFormInputGroup"
+                >HS Code</label
+              >
+              <div class="">
+                <div class="form-group d-inline">
+                  <input
+                    autocomplete="off"
+                    type="text"
+                    formControlName="HSCode"
+                    class="form-control"
+                    placeholder="HS Code"
+                    id="HSCode"
+                    name="HSCode"
+                    value=""
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="control-label" for="inlineFormInputGroup"
+                >Bank BIN No.</label
+              >
+              <div class="">
+                <div class="form-group d-inline">
+                  <input
+                    autocomplete="off"
+                    type="text"
+                    formControlName="BankBINNo"
+                    class="form-control"
+                    placeholder="Bank BIN No."
+                    id="BankBINNo"
+                    name="BankBINNo"
+                    value=""
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="control-label" for="inlineFormInputGroup"
+                >Remarks</label
+              >
+              <div class="">
+                <div class="form-group d-inline">
+                  <input
+                    autocomplete="off"
+                    type="text"
+                    formControlName="Remarks"
+                    class="form-control"
+                    placeholder="Remarks"
+                    id="Remarks"
+                    name="Remarks"
+                    value=""
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="control-label" for="inlineFormInputGroup"
+                >IRC No.</label
+              >
+              <div class="">
+                <div class="form-group d-inline">
+                  <input
+                    autocomplete="off"
+                    type="text"
+                    formControlName="IRCNo"
+                    class="form-control"
+                    placeholder="IRC No.o"
+                    id="IRCNo"
+                    name="IRCNo"
+                    value=""
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="flexbox mt-5">
+          <button
+            [routerLink]="['/all-lc']"
+            class="btn btn-w-xl text-white btn-outline-danger bg-gradient-danger"
+            type="button"
+          >
+            Cancel
+          </button>
+          <button
+            class="btn btn-w-xl text-white btn-outline-success bg-gradient-success px-5 float-right"
+            type="button"
+            (click)="saveData()"
+            [disabled]="Formgroup.invalid"
+            [hidden]="isEdit"
+          >
+            Save
+          </button>
+          <button
+            [hidden]="!isEdit"
+            class="btn btn-w-xl text-white btn-outline-success bg-gradient-success px-5 float-right"
+            type="button"
+            (click)="updateData()"
+            [disabled]="Formgroup.invalid"
+          >
+            Update
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

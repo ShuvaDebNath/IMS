@@ -13,22 +13,24 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { NgxSelectModule,INgxSelectOptions } from 'ngx-select-ex';
 import { UiSwitchModule } from 'ngx-ui-switch';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { PagesComponent } from './pages.component';
-import { BaseContentComponent } from '../dashboard/base-content/base-content.component';
-import { HeaderComponent } from '../dashboard/header/header.component';
-import { FooterComponent } from '../dashboard/footer/footer.component';
-import { SidebarComponent } from '../dashboard/sidebar/sidebar.component';
-
-//Material Data Table
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { Select2Module } from 'ng-select2-component';
 import { TreeTableModule } from 'primeng/treetable';
 import { TreeModule } from 'primeng/tree';
 import { DropdownModule } from 'primeng/dropdown'
 import { SelectButtonModule } from 'primeng/selectbutton';
-// import { ProjectWiseExpenseComponent } from '../Project-Wise-Income-Expense/project-wise-expense/project-wise-expense.component';
 import {PopoverModule} from 'ngx-bootstrap/popover';
 import {DatePipe} from '@angular/common';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputTextModule } from 'primeng/inputtext';
+
+
+import { PagesComponent } from './pages.component';
+import { BaseContentComponent } from '../dashboard/base-content/base-content.component';
+import { HeaderComponent } from '../dashboard/header/header.component';
+import { FooterComponent } from '../dashboard/footer/footer.component';
+import { SidebarComponent } from '../dashboard/sidebar/sidebar.component';
 import { RoleListComponent } from '../Roles/role-list/role-list.component';
 import { RoleCreateComponent } from '../Roles/role-create/role-create.component';
 import { MenuComponent } from '../dashboard/menu/menu.component';
@@ -39,11 +41,14 @@ import { EditPageComponent } from '../production/requisition/raw-material-requis
 import { ListPageComponent } from '../production/requisition/raw-material-requisition/list/list-page.component';
 import { ChangePasswordComponent } from '../authentication/change-password/change-password.component';
 import { LandingPageComponent } from '../landing-page/landing-page.component';
-
-
-// import {MatSortModule} from '@angular/material/sort';
-// import {MatTableModule} from '@angular/material/table';
-//!--Material Data Table
+import { GenerateLcComponent } from '../lc/generate-lc/generate-lc.component';
+import { AllLcComponent } from '../lc/all-lc/all-lc.component';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { TableModule } from 'primeng/table';
+import {DialogModule} from 'primeng/dialog'
+import { GenerateCommercialInvoiceComponent } from '../commercial-document/generate-commercial-invoice/generate-commercial-invoice.component';
+import { AllCommercialInvoiceComponent } from '../commercial-document/all-commercial-invoice/all-commercial-invoice.component';
+import { GeneratePiComponent } from '../PI/generate-pi/generate-pi.component';
 
 const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more options
   keepSelectedItems:false,
@@ -62,9 +67,16 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     MenuComponent,
     AccessNodeComponent,
     AccessPanelComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    GenerateLcComponent,
+    AllLcComponent,
+    GenerateCommercialInvoiceComponent,
+    AllCommercialInvoiceComponent
+    GeneratePiComponent
     ],
   imports: [
+
+    NgSelectModule,
     CommonModule,
     Select2Module,
     HttpClientModule,
@@ -76,7 +88,13 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     TreeModule,
     DropdownModule,
     SelectButtonModule,
-    PopoverModule,
+    PopoverModule,MultiSelectModule,
+    TableModule,
+    DialogModule,
+    CheckboxModule,
+    InputTextModule,
+    PopoverModule,    
+    DatePipe,
     UiSwitchModule.forRoot({
       size: 'small',
       color: 'rgb(0, 189, 99)',
@@ -98,9 +116,13 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'create-raw-material', component: CreatePageComponent },
           { path: 'edit-raw-material', component: EditPageComponent },
           { path: 'list-raw-material', component: ListPageComponent },
-           {path: 'change-password', component: ChangePasswordComponent},
-       
+           {path: 'change-password', component: ChangePasswordComponent},       
            {path:"landing-page",component:LandingPageComponent}
+           {path: 'all-lc', component: AllLcComponent},
+           {path: 'generate-lc', component: GenerateLcComponent},
+           {path: 'generate-commercial-invoice', component: GenerateCommercialInvoiceComponent},
+           {path: 'all-commercial-invoice', component: AllCommercialInvoiceComponent},
+          { path: 'generate-pi', component: GeneratePiComponent },
         ]
       }
     ]),

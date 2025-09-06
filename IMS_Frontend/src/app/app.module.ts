@@ -26,6 +26,7 @@ import { ArbitrationComponent } from './arbitration/arbitration.component';
 import { TableComponent } from './common/table/table.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 
+
 const CustomSelectOptions: INgxSelectOptions = {
   keepSelectedItems: false,
   allowClear: true,

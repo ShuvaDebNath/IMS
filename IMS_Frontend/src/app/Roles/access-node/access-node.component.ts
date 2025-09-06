@@ -11,7 +11,6 @@ export class AccessNodeComponent implements OnInit {
   expanded: boolean = false; // expand/collapse state
 
   ngOnInit(): void {
-    console.log(this.menu.ButtonName);
     if(typeof(this.menu.ButtonName)=="string" && this.menu.ButtonName!='' && this.menu.ButtonName!=undefined){
       this.menu.ButtonName = JSON.parse(this.menu.ButtonName)
     }
@@ -66,7 +65,6 @@ export class AccessNodeComponent implements OnInit {
   }
 
   private applyToAll(node: any, type: string, value: boolean) {
-    console.log(node);
     
     if (type === 'enabled') {
       node.permissions.enabled = value;
