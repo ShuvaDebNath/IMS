@@ -18,6 +18,13 @@
           "MaxLength": 50
         }
       }
+    },
+    "tbl_commercial_invoice": {
+      "QueryParams": {
+        "[LC_ID]": {
+          "Required": true
+        }
+      }
     }
   }
 }

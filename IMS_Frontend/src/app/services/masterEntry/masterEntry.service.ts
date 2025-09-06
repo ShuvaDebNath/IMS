@@ -8,6 +8,7 @@ import { ResponseModel } from 'src/app/models/ResponseModel';
 import { DoubleMasterEntryModel } from 'src/app/models/DoubleMasterEntryModel';
 import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
 import { GetDataModel } from 'src/app/models/GetDataModel';
+import { MasterEntryWithSlUpdateModel } from 'src/app/models/MasterEntryWithSlUpdateModel ';
 
 @Injectable({
   providedIn: 'root'
@@ -94,7 +95,6 @@ export class MasterEntryService {
     let model: MasterEntryModel=new MasterEntryModel();
     model.tableName=tableName;
     model.queryParams=fd;
-    console.log(model);
     
     return this.http
       .post<ResponseModel>(
@@ -112,6 +112,60 @@ export class MasterEntryService {
           return Response;
         })
       );
+  }
+
+  public SaveSingleDataAndUpdateSerial(fd: any, tableName: any,updateTableName:any,updateSerialColumnName:any,whereParams:any) {
+    
+    let model: MasterEntryWithSlUpdateModel=new MasterEntryWithSlUpdateModel();
+    model.tableName=tableName;
+    model.queryParams=fd;
+    model.updateTableName = updateTableName;
+    model.updateColumnName = updateSerialColumnName;
+    model.whereParams = whereParams;
+    
+    return this.http
+      .post<ResponseModel>(
+        this.baseUrlApi + this.postApiMasterEntryController + '/InsertThenUpdateRefTable',
+        model,
+        {
+          headers: new HttpHeaders({
+            Authorization: 'Bearer ' + this.token,
+            'Content-Type': 'application/json',
+          }),
+        }
+      )
+      .pipe(
+        map((Response) => {
+          return Response;
+        })
+      );
+  }
+
+  public DeleteDataAndUpdateSerial(fd: any, tableName: any,updateTableName:any,updateSerialColumnName:any,whereParams:any) {
+    
+    let model: MasterEntryWithSlUpdateModel=new MasterEntryWithSlUpdateModel();
+    model.tableName=tableName;
+    model.queryParams=fd;
+    model.updateTableName = updateTableName;
+    model.updateColumnName = updateSerialColumnName;
+    model.whereParams = whereParams;
+    
+    return this.http
+  .delete<ResponseModel>(
+      this.baseUrlApi + 'MasterEntry/DeleteThenUpdateSl',
+      {
+        headers: new HttpHeaders({
+          Authorization: 'Bearer ' + this.token,
+          'Content-Type': 'application/json',
+        }),
+        body: model // 👈 if your API expects a request body
+      }
+    )
+    .pipe(
+      map((response) => {
+        return response;
+      })
+    );
   }
 
 
@@ -163,8 +217,6 @@ export class MasterEntryService {
   }
 
   public DeleteData(model:MasterEntryModel) {
-    console.log(model);
-    
 
     const options = {
     headers: new HttpHeaders({
@@ -194,9 +246,7 @@ export class MasterEntryService {
     );
   }
 
-public GetAllData(model: GetDataModel){
-   
-    
+public GetAllData(model: GetDataModel){    
     return this.http.post<any>(this.baseUrlApi+this.getapiController+'/GetAllData',model,{
       headers: new HttpHeaders({
         Authorization: 'Bearer ' + this.token,

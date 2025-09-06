@@ -56,20 +56,16 @@ pageIndex: number = 1;
 
   ngOnInit() {
     this.menu = window.localStorage.getItem('UserMenuWithPermission');
-    console.log(this.menu);
     
     this.menu = JSON.parse(this.menu);
     var buttonPermissions:any = [];
     var countFound = 0;
-    console.log(this.menu);
           this.menu.forEach((e:any)=>{
-            console.log(JSON.parse(e.Children));
             e.Children = JSON.parse(e.Children);
             e.Children.forEach((childMenu:any)=>{
               if(childMenu.SubMenuName=="Roles"){
                 countFound++;
                 buttonPermissions = childMenu.ButtonName;
-                console.log(buttonPermissions);
                 
                 if(buttonPermissions[0].ButtonName=="Insert"){
                   this.insertPermissions = true;
@@ -159,7 +155,6 @@ pageIndex: number = 1;
   
       this.service.DeleteData(param).subscribe({
         next: (results:any) => {
-          console.log(results)
           if (results.status) {
             swal.fire({
                         title: `${results.message}!`,

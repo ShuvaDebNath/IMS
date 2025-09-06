@@ -1,0 +1,23 @@
+export class CD {
+  LC_ID!:string;           
+  ExpNo!:string;      
+  Export_Date!:string;      
+  Sailing_On_Or_About!:string;   
+  FreightCharge!:number;  
+  Remarks!:string;    
+  Date!:string;
+  User_ID!:string;
+  Applicant_Bank_ID!:string;
+  Qty_Rolls!:number;
+  Total_Gross_Weight!:number;
+  Total_Net_Weight!:number;
+  Be_No!:string;
+  Be_No_Date!:string;
+  EP_No!:string;
+  EP_No_Date!:string;
+  Commercial_Invoice_No!:string;
+  totallen!:string;
+  Commercial_Invoice_ID!:string;
+  PI_No!:string;
+  UserName!:string;
+}

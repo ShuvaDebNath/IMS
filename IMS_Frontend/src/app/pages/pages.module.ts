@@ -13,14 +13,12 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { NgxSelectModule,INgxSelectOptions } from 'ngx-select-ex';
 import { UiSwitchModule } from 'ngx-ui-switch';
 import { ModalModule } from 'ngx-bootstrap/modal';
-//Material Data Table
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { Select2Module } from 'ng-select2-component';
 import { TreeTableModule } from 'primeng/treetable';
 import { TreeModule } from 'primeng/tree';
 import { DropdownModule } from 'primeng/dropdown'
 import { SelectButtonModule } from 'primeng/selectbutton';
-// import { ProjectWiseExpenseComponent } from '../Project-Wise-Income-Expense/project-wise-expense/project-wise-expense.component';
 import {PopoverModule} from 'ngx-bootstrap/popover';
 import {DatePipe} from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -42,10 +40,14 @@ import { CreatePageComponent } from '../production/requisition/raw-material-requ
 import { EditPageComponent } from '../production/requisition/raw-material-requisition/edit/edit-page.component';
 import { ListPageComponent } from '../production/requisition/raw-material-requisition/list/list-page.component';
 import { ChangePasswordComponent } from '../authentication/change-password/change-password.component';
+import { GenerateLcComponent } from '../lc/generate-lc/generate-lc.component';
+import { AllLcComponent } from '../lc/all-lc/all-lc.component';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { TableModule } from 'primeng/table';
+import {DialogModule} from 'primeng/dialog'
+import { GenerateCommercialInvoiceComponent } from '../commercial-document/generate-commercial-invoice/generate-commercial-invoice.component';
+import { AllCommercialInvoiceComponent } from '../commercial-document/all-commercial-invoice/all-commercial-invoice.component';
 import { GeneratePiComponent } from '../PI/generate-pi/generate-pi.component';
-
-
-
 // import {MatSortModule} from '@angular/material/sort';
 // import {MatTableModule} from '@angular/material/table';
 //!--Material Data Table
@@ -68,6 +70,10 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     AccessNodeComponent,
     AccessPanelComponent,
     ChangePasswordComponent,
+    GenerateLcComponent,
+    AllLcComponent,
+    GenerateCommercialInvoiceComponent,
+    AllCommercialInvoiceComponent
     GeneratePiComponent
     ],
   imports: [
@@ -84,10 +90,12 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     TreeModule,
     DropdownModule,
     SelectButtonModule,
+    PopoverModule,MultiSelectModule,
+    TableModule,
+    DialogModule,
     CheckboxModule,
     InputTextModule,
-    PopoverModule,
-    
+    PopoverModule,    
     DatePipe,
     UiSwitchModule.forRoot({
       size: 'small',
@@ -111,6 +119,10 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'edit-raw-material', component: EditPageComponent },
           { path: 'list-raw-material', component: ListPageComponent },
            {path: 'change-password', component: ChangePasswordComponent},
+           {path: 'all-lc', component: AllLcComponent},
+           {path: 'generate-lc', component: GenerateLcComponent},
+           {path: 'generate-commercial-invoice', component: GenerateCommercialInvoiceComponent},
+           {path: 'all-commercial-invoice', component: AllCommercialInvoiceComponent},
           { path: 'generate-pi', component: GeneratePiComponent },
         ]
       }

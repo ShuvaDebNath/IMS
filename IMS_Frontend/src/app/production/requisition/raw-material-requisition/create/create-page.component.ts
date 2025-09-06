@@ -15,7 +15,6 @@ export class CreatePageComponent implements OnInit {
 
   loadPageData(): void {
     // Logic to load initial data for the page
-    console.log('Page data loaded');
   }
 
   addRow(): void {
@@ -38,6 +37,5 @@ export class CreatePageComponent implements OnInit {
 
   saveData(): void {
     // Logic to save the requisition data
-    console.log('Data saved', this.requisitionData);
   }
 }

@@ -25,6 +25,19 @@ namespace Boilerplate.Repository.Repositories
             return isExecuted > 0;
         }
 
+
+        public async Task<int> ExecuteWriteOperationWithReturnKeyAsync(string sqlQuery)
+        {
+            using var sqlConnection = new SqlConnection(_connectionStringUserDB);
+            var sqlCommand = new SqlCommand(sqlQuery, sqlConnection);
+
+            sqlConnection.Open();
+            var newPrimaryKey = (int)await sqlCommand.ExecuteScalarAsync();
+            sqlConnection.Dispose();
+
+            return newPrimaryKey;
+        }
+
         public DataTable ExecuteReadOperation(string sqlQuery)
         {
             using var sqlConnection = new SqlConnection(_connectionStringUserDB);
@@ -43,5 +56,6 @@ namespace Boilerplate.Repository.Repositories
 
             return dataTable;
         }
+
     }
 }

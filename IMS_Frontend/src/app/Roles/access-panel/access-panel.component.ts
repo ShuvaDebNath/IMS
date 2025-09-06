@@ -51,7 +51,6 @@ export class AccessPanelComponent implements OnInit {
 
     this.masterEntyService.GetInitialData(ProcedureData).subscribe({
 			next: (results) => {
-				console.log(JSON.parse(results.data).Tables1);
 
 				if (results.status) {
 					this.Roles = JSON.parse(results.data).Tables1;
@@ -73,22 +72,16 @@ export class AccessPanelComponent implements OnInit {
 				UserId: ''
 			}
 		};
-		console.log(ProcedureData);
 		this.masterEntyService.GetAllData(ProcedureData).subscribe({
 			next: (results) => {
-				console.log(results);
 
 				if (results.status) {
 					this.menus = JSON.parse(results.data);
-					console.log(this.menus);
           this.menus.forEach(e=>{
-            console.log(e.ButtonName,e);
             if(e.ButtonName!='' && e.ButtonName!=null){
-              console.log(JSON.parse(e.ButtonName));
               e.ButtonName = JSON.parse(e.ButtonName);
             }
             e.Children = JSON.parse(e.Children);
-            console.log(e.Children);            
             this.checkChildren(e.children)
             
           })
@@ -106,11 +99,9 @@ export class AccessPanelComponent implements OnInit {
 
   checkChildren(child:any){
     
-    console.log(child);
     
     if(child!=undefined)
     child.forEach((e:any)=>{
-      console.log(e);
       
       if(e.ButtonName!='' && e.ButtonName!=null){
         e.ButtonName = JSON.parse(e.ButtonName);
@@ -121,11 +112,9 @@ export class AccessPanelComponent implements OnInit {
 
   checkChildrenByRole(child:any){
     
-    console.log(child);
     
     if(child!=undefined)
     child.forEach((e:any)=>{
-      console.log(e);
       
       this.checkChildren(e.Children)
     });
@@ -156,7 +145,6 @@ if(this.menuPermissionId!=""){
   this.deleteMenuById();
 }
 
-  console.log(this.Formgroup.value.Role_Name);
   this.countChange = 0;
   
   const flatPermissions = this.flattenTree(this.menus);
@@ -165,7 +153,6 @@ if(this.menuPermissionId!=""){
         return;
   }
   
-  console.log(flatPermissions);
   var TableNameChild = "tbl_MenuButtonPermissionByRole";
   var TableNameMaster = "tbl_MenuPermissionByRole";
   var ColumnNamePrimary = "Menu_Permission_Id";
@@ -177,7 +164,6 @@ if(this.menuPermissionId!=""){
       };
   //MenuId: 1, ParentMenuId: null, Enabled: true, CanView: false, CanInsert: false, CanUpdate: false, CanDelete: false
   flatPermissions.forEach(e=>{
-    console.log(e);
     if(e.Enabled){
       var count = 0;
       var detailsDataSingle  = {};
@@ -223,7 +209,6 @@ if(this.menuPermissionId!=""){
 
       }
       if(count==0 && e.Enabled){
-        console.log(count,e)
         detailsDataSingle = {
             'Menu_Button_Permission_Id':'newid()',
             'ButtonPermissionId':'',
@@ -239,7 +224,7 @@ if(this.menuPermissionId!=""){
   });
 
   this.masterEntyService.SaveDataMasterDetails(detailsData,TableNameChild,masterData,TableNameMaster,ColumnNamePrimary,ColumnNameForign,'','',true).subscribe((res:any) => {
-        console.log(res);
+        
         
         if (res.status) {
           swal
@@ -303,7 +288,6 @@ result.push({
             CanDelete: node.permissions.Delete
           });
     }
-    console.log(node);
     
 
     if (node.Children && node.Children.length > 0) {
@@ -314,7 +298,6 @@ result.push({
 }
 
 getSelectedMenu(){
-  console.log(this.menus);
   
   var ProcedureData = {
 			procedureName: '[usp_GetMenuPermissionByRoles]',
@@ -322,30 +305,14 @@ getSelectedMenu(){
 				Role_Id: this.Formgroup.value.Role_Name
 			}
 		};
-		console.log(ProcedureData);
 		this.masterEntyService.GetAllData(ProcedureData).subscribe({
 			next: (results) => {
-				console.log(results);
 
 				if (results.status) {
 					var selectedMenus = JSON.parse(results.data);
           var updatedMenu = this.enablePermissions(this.menus, selectedMenus);
           this.menuPermissionId = selectedMenus[0].Menu_Permission_Id;
-          console.log(this.menuPermissionId);
           
-          // console.log(selectedMenus);
-          // selectedMenus.forEach((e:any)=>{
-          //   console.log(this.menus);
-          //   this.menus.forEach(e=>{
-          //     e.permissions.enabled = true;
-              
-          //     e.Children = JSON.parse(e.Children);
-          //     console.log(e.Children);            
-          //     this.checkChildrenByRole(e.children)
-              
-          //   })
-          // })
-					// console.log(this.menus);
           
 				} else if (results.msg == 'Invalid Token') {
 					swal.fire('Session Expierd!', 'Please Login Again.', 'info');
@@ -357,18 +324,14 @@ getSelectedMenu(){
 }
 
 deleteMenuById(){
-  console.log(this.menus);
-  
   var ProcedureData = {
 			procedureName: '[usp_DeleteMenuPermission]',
 			parameters: {
 				MenuPermissionId: this.menuPermissionId
 			}
 		};
-		console.log(ProcedureData);
 		this.masterEntyService.GetAllData(ProcedureData).subscribe({
 			next: (results) => {
-				console.log(results);
 
 				if (results.status) {
 				} else if (results.msg == 'Invalid Token') {
@@ -389,12 +352,9 @@ enablePermissions(menuTree: any, list: any): any {
     var found = list.filter((e:any)=>e.MenuId == node.MenuId)
 
     
-    console.log(node,found,list);
-    
 
     if (found) {
       found.forEach((item:any)=>{
-        console.log(node.permissions);
         if(node.permissions==undefined){
           node.permissions = {};
         }
