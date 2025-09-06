@@ -18,7 +18,7 @@ import { CG } from 'src/app/models/cg';
 @Component({
   selector: 'app-all-cash-receive',
   templateUrl: './all-cash-receive.component.html',
-  styleUrls: ['./all-cash-receive.component.css']
+  styleUrls: ['./all-cash-receive.component.css'],
 })
 export class AllCashReceiveComponent {
   pageIndex = 1;
@@ -46,7 +46,7 @@ export class AllCashReceiveComponent {
   SearchForm!: FormGroup;
   fromDate: any;
   toDate: any;
-  LCNo:string='';
+  LCNo: string = '';
 
   showPaginator = false;
   insertPermissions: boolean = true;
@@ -55,8 +55,8 @@ export class AllCashReceiveComponent {
   printPermissions: boolean = true;
   allPersmissions: boolean = true;
   getDataModel: GetDataModel = new GetDataModel();
-  detailsData:any;
-  isDetailsVisible:boolean = false;
+  detailsData: any;
+  isDetailsVisible: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -64,30 +64,29 @@ export class AllCashReceiveComponent {
     private gs: GlobalServiceService,
     private pagesComponent: PagesComponent,
     private masterEntryService: MasterEntryService,
-    private title:Title
-  ) {
-  }
+    private title: Title
+  ) {}
   ngOnInit(): void {
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
     this.title.setTitle('All Cash Receive');
-    
+
     var fDate = new Date();
     const mm = String(fDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
     const dd = String(fDate.getDate()).padStart(2, '0');
     const yyyy = fDate.getFullYear();
 
-    const formatted = `${dd}/${mm}/${yyyy}`;    
-    
+    const formatted = `${dd}/${mm}/${yyyy}`;
+
     const threeMonthsAgo = new Date();
     threeMonthsAgo.setMonth(fDate.getMonth() - 3);
-    
+
     const mmT = String(threeMonthsAgo.getMonth() + 1).padStart(2, '0'); // Months are 0-based
     const ddT = String(threeMonthsAgo.getDate()).padStart(2, '0');
     const yyyyT = threeMonthsAgo.getFullYear();
 
     const formattedT = `${ddT}/${mmT}/${yyyyT}`;
-    
+
     this.SearchForm.get('fromDate')?.setValue(formattedT);
     this.SearchForm.get('toDate')?.setValue(formatted);
 
@@ -95,74 +94,98 @@ export class AllCashReceiveComponent {
   }
   initForm(): void {
     this.SearchForm = this.fb.group({
-      fromDate: ['',[Validators.required]],
-      toDate: ['',[Validators.required]],
+      fromDate: ['', [Validators.required]],
+      toDate: ['', [Validators.required]],
     });
   }
-  Search(){
+  Search() {
+    var finput = new Date();
+    if (!(this.SearchForm.value.fromDate instanceof Date)) {
+      finput = new Date(this.SearchForm.value.fromDate); // try converting if it's not already a Date
+    }
+
+
+    const fday = String(finput.getDate()).padStart(2, '0');
+    const fmonth = String(finput.getMonth() + 1).padStart(2, '0'); // months are 0-based
+    const fyear = finput.getFullYear();
+    var fromDate = this.SearchForm.value.fromDate;
+    fromDate = `${fday}/${fmonth}/${fyear}`;
+
+    var tinput = new Date();
+    if (!(this.SearchForm.value.fromDate instanceof Date)) {
+      tinput = new Date(this.SearchForm.value.toDate); // try converting if it's not already a Date
+    }
+
+    const tday = String(tinput.getDate()).padStart(2, '0');
+    const tmonth = String(tinput.getMonth() + 1).padStart(2, '0'); // months are 0-based
+    const tyear = tinput.getFullYear();
+    var toDate = this.SearchForm.value.toDate;
+    toDate = `${tday}/${tmonth}/${tyear}`;
+
     let param = new GetDataModel();
-    param.procedureName = '[usp_CashReceiveList]';
+    param.procedureName = '[usp_CashReceive_List]';
     param.parameters = {
-      FromDate: this.SearchForm.value.fromDate,
-      ToDate: this.SearchForm.value.toDate,
-      PageIndex:this.pageIndex,
-      PageSize:this.pageSize      
+      FromDate: fromDate,
+      ToDate: toDate,
+      PageIndex: this.pageIndex,
+      PageSize: this.pageSize,
     };
 
     this.masterEntryService.GetInitialData(param).subscribe({
-      next: (results) => {        
+      next: (results) => {
+        console.log(param.parameters);
+
         if (results.status) {
           this.tableData = [];
           let tables = JSON.parse(results.data);
           this.tableData = tables.Tables1;
-          console.log(this.tableData);          
+          console.log(this.tableData);
           //  this.isPage=this.rows[0].totallen>10;
         }
-      }
+      },
     });
   }
 
-  DeleteData(item:any){
+  DeleteData(item: any) {
     console.log(item);
-    
+
     swal
-                .fire({
-                  title: 'Wait!',
-                  html: `<span>Once you delete, you won't be able to revert this!</span>`,
-                  icon: 'warning',
-                  showCancelButton: true,
-                  confirmButtonColor: '#3085d6',
-                  cancelButtonColor: '#d33',
-                  confirmButtonText: 'Yes, delete it!',
-                })
-                .then((result) => {
-                  if (result.isConfirmed==true) {
-                    let param = new GetDataModel();
-                    param.procedureName = "usp_LC_Delete";
-                    param.parameters = 
-                    {
-                      'LC_ID':item.LC_ID
-                    };
-          
-      
+      .fire({
+        title: 'Wait!',
+        html: `<span>Once you delete, you won't be able to revert this!</span>`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+      })
+      .then((result) => {
+        if (result.isConfirmed == true) {
+          let param = new GetDataModel();
+          param.procedureName = 'usp_LC_Delete';
+          param.parameters = {
+            LC_ID: item.LC_ID,
+          };
+
           this.masterEntryService.GetInitialData(param).subscribe({
-            next: (results:any) => {
+            next: (results: any) => {
               console.log(results);
-              
+
               if (results.status) {
                 var effectedRows = JSON.parse(results.data).Tables1;
-                if(effectedRows[0].AffectedRows>0){
-                  swal.fire({
-                            text: `Data Deleted Successfully !`,
-                            title: `Delete Successfully!`,
-                            icon: 'success',
-                            timer: 5000,
-                          })
-                          .then((result) => {
-                            this.ngOnInit();
-                          });
+                if (effectedRows[0].AffectedRows > 0) {
+                  swal
+                    .fire({
+                      text: `Data Deleted Successfully !`,
+                      title: `Delete Successfully!`,
+                      icon: 'success',
+                      timer: 5000,
+                    })
+                    .then((result) => {
+                      this.ngOnInit();
+                    });
                 }
-                
+
                 this.Search();
               } else if (results.message == 'Invalid Token') {
                 swal.fire('Session Expierd!', 'Please Login Again.', 'info');
@@ -172,19 +195,18 @@ export class AllCashReceiveComponent {
             },
             error: (err) => {},
           });
-                  }
-                });
-    
+        }
+      });
   }
 
   paginatiorChange(e: any) {
-      this.pageIndex = e.pageIndex+1;
-      this.pageSize = e.pageSize;
-      this.Search();
-    }
+    this.pageIndex = e.pageIndex + 1;
+    this.pageSize = e.pageSize;
+    this.Search();
+  }
 
-    viewDetails(table:any){
-      this.isDetailsVisible = true;
-      this.detailsData = table;
-    }
+  viewDetails(table: any) {
+    this.isDetailsVisible = true;
+    this.detailsData = table;
+  }
 }

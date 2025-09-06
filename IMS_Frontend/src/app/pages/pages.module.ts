@@ -19,7 +19,6 @@ import { DropdownModule } from 'primeng/dropdown'
 import { SelectButtonModule } from 'primeng/selectbutton';
 import {PopoverModule} from 'ngx-bootstrap/popover';
 import {DatePipe} from '@angular/common';
-import { NgSelectModule } from '@ng-select/ng-select';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 
@@ -38,39 +37,21 @@ import { CreatePageComponent } from '../production/requisition/raw-material-requ
 import { EditPageComponent } from '../production/requisition/raw-material-requisition/edit/edit-page.component';
 import { ListPageComponent } from '../production/requisition/raw-material-requisition/list/list-page.component';
 import { ChangePasswordComponent } from '../authentication/change-password/change-password.component';
-<<<<<<< .mine
 import { GenerateCashReceiveComponent } from '../lc/generate-cash-receive/generate-cash-receive.component';
 import { AllCashReceiveComponent } from '../lc/all-cash-receive/all-cash-receive.component';
 import { TableModule } from 'primeng/table';
-
-
-
-
-
-
-=======
 import { LandingPageComponent } from '../landing-page/landing-page.component';
 import { GenerateLcComponent } from '../lc/generate-lc/generate-lc.component';
 import { AllLcComponent } from '../lc/all-lc/all-lc.component';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { TableModule } from 'primeng/table';
 import {DialogModule} from 'primeng/dialog'
 import { GenerateCommercialInvoiceComponent } from '../commercial-document/generate-commercial-invoice/generate-commercial-invoice.component';
 import { AllCommercialInvoiceComponent } from '../commercial-document/all-commercial-invoice/all-commercial-invoice.component';
 import { GeneratePiComponent } from '../PI/generate-pi/generate-pi.component';
->>>>>>> .theirs
-
-<<<<<<< .mine
-// import {MatSortModule} from '@angular/material/sort';
-// import {MatTableModule} from '@angular/material/table';
-//!--Material Data Table
-
-=======
+import { CashReceiveUpdateComponent } from '../lc/cash-receive-update/cash-receive-update.component';
+import { CashReceiveDetailsComponent } from '../lc/cash-receive-details/cash-receive-details.component';
 
 
-
-
->>>>>>> .theirs
 const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more options
   keepSelectedItems:false,
   allowClear:true
@@ -88,25 +69,19 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     MenuComponent,
     AccessNodeComponent,
     AccessPanelComponent,
-<<<<<<< .mine
     GenerateCashReceiveComponent,
     ChangePasswordComponent,
-    AllCashReceiveComponent
-
-
-
-=======
+    AllCashReceiveComponent,
     ChangePasswordComponent,
     GenerateLcComponent,
     AllLcComponent,
     GenerateCommercialInvoiceComponent,
-    AllCommercialInvoiceComponent
-    GeneratePiComponent
->>>>>>> .theirs
+    AllCommercialInvoiceComponent,
+    GeneratePiComponent,
+    CashReceiveUpdateComponent,
+    CashReceiveDetailsComponent
     ],
   imports: [
-
-    NgSelectModule,
     CommonModule,
     TableModule,
     HttpClientModule,
@@ -146,23 +121,17 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'create-raw-material', component: CreatePageComponent },
           { path: 'edit-raw-material', component: EditPageComponent },
           { path: 'list-raw-material', component: ListPageComponent },
-<<<<<<< .mine
-          {path: 'change-password', component: ChangePasswordComponent},
           {path: 'generate-cash-receive', component: GenerateCashReceiveComponent},
           {path: 'all-cash-receive', component: AllCashReceiveComponent},
-
-
-
-
-=======
            {path: 'change-password', component: ChangePasswordComponent},       
-           {path:"landing-page",component:LandingPageComponent}
+           {path:"landing-page",component:LandingPageComponent},
            {path: 'all-lc', component: AllLcComponent},
            {path: 'generate-lc', component: GenerateLcComponent},
            {path: 'generate-commercial-invoice', component: GenerateCommercialInvoiceComponent},
            {path: 'all-commercial-invoice', component: AllCommercialInvoiceComponent},
           { path: 'generate-pi', component: GeneratePiComponent },
->>>>>>> .theirs
+           {path: 'cash-receive-update', component: CashReceiveUpdateComponent},
+          { path: 'cash-receive-details', component: CashReceiveDetailsComponent },
         ]
       }
     ]),

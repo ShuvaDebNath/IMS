@@ -16,9 +16,9 @@ import { LoginComponent } from './authentication/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { MatPaginatorModule } from "@angular/material/paginator";
-import { ArbitrationComponent } from './arbitration/arbitration.component';
-import { TableComponent } from './common/table/table.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
+import { CashReceiveUpdateComponent } from './lc/cash-receive-update/cash-receive-update.component';
+import { CashReceiveDetailsComponent } from './lc/cash-receive-details/cash-receive-details.component';
 
 
 
@@ -32,10 +32,7 @@ import { LandingPageComponent } from './landing-page/landing-page.component';
     PageNotFoundComponent,
     LogoutComponent,
     ResetPasswordComponent,
-    ArbitrationComponent,
-    TableComponent,
-    LandingPageComponent
-
+    LandingPageComponent,
   ],
   imports: [
     FormsModule,

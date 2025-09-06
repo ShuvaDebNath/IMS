@@ -1,0 +1,58 @@
+<div class="row d-flex justify-content-center">
+  <div class="col-md-6">
+    <div class="card card-default">
+      <div class="content-heading" style="border-bottom: 1px solid rgba(0,0,0,.125) !important;">
+          <div class="row">
+            <div class="col-6">
+              <h2 class="p-2"></h2>
+            </div>
+          </div>
+          <h2 class="p-2 font-weight-bold">Edit</h2>
+          <h5 class="p-2 font-weight-bold">Pi No {{PINo}} (Balance:{{Balance}})</h5>
+      </div>
+      <div class="card-body">
+        <form name="newForm" [formGroup]="Formgroup" role="form">
+          <div class="row">
+           
+            <label>Generate Cash Receive <span>*</span></label>
+            
+            <div class="col-md-6">
+                <label class="control-label" for="inlineFormInputGroup">Receive Amount <span>*</span></label>
+                <div class="form-group d-inline">
+                    <input autocomplete="off" type="Number"                  
+                    formControlName="ReceiveAmount"
+                    (keyup)="checkReceiveAmount()"
+                    class="form-control"
+                    placeholder="Receive Amount" id="ReceiveAmount" name="ReceiveAmount" value="" ngModel="ReceiveAmount">
+                    </div>
+            </div>
+            <div class="col-md-6">
+                <label class="control-label" for="inlineFormInputGroup">Receive Date</label>
+                <div class="input-group mb-2">
+                    <div class="input-group-sm input-group-prepend">
+                    <div class="input-group-text" (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
+                    </div>
+                    <input type="text" autocomplete="off" formControlName="ReceiveDate" [bsConfig]="{
+                    dateInputFormat: 'DD/MM/YYYY',
+                    containerClass: 'theme-green'
+                    }" class="form-control-sm form-control bg-white" id="ReceiveDate" name="ReceiveDate" placeholder="DD/MM/YYYY"
+                    #dpfrom="bsDatepicker" bsDatepicker readonly />
+                </div>
+            </div>
+          </div>
+        </form>
+        <div class="flexbox mt-5">
+          <!-- <button [routerLink]="['/all-']" class="btn btn-w-xl text-white btn-outline-danger bg-gradient-danger" type="button"
+            >
+            Cancel
+          </button> -->
+          <button  class="btn btn-w-xl text-white btn-outline-success bg-gradient-success px-5 float-right" type="button" (click)="saveData()"
+            [disabled]="Formgroup.invalid" [hidden]="isEdit">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
