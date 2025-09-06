@@ -1,33 +1,37 @@
+<div class="container  rounded mt-4">
 <form name="newForm" [formGroup]="Formgroup" role="form">
-<div class="card shadow-sm">
-  <div class="card-header bg-primary text-white">
-    <h3 class="card-title mb-0">Access Control Panel</h3>
-  </div>
-  <div class="card-body">
-    <div class="col-md-3">
-      <label>Role Name</label>
-      <p-dropdown [style]="{'width':'100%'}"  class="p-0" [options]="Roles" (onChange)="getSelectedMenu()"  optionLabel="label" [filter]="true" filterBy="label" [showClear]="true" styleClass="listBottom" placeholder="Please Select" optionValue="value" formControlName="Role_Name">
-  
-                  <ng-template let-Roles pTemplate="item">
-                      <div class="flex align-items-center gap-2">  
-                          <div>{{ Roles.label }}</div>
-                      </div>
-                  </ng-template>
-              </p-dropdown>
+  <div class="card shadow-sm">
+    <div class="card-header theme-bg ">
+      <h3 class="card-title  mb-0 "  >Access Control Panel</h3>
+    </div>
+    <div class="card-body">
+      <div class="col-md-3">
+        <label class="theme-text">Role Name</label>
+        <p-dropdown [style]="{'width':'100%'}" class="p-0" [options]="Roles" (onChange)="getSelectedMenu()"
+          optionLabel="label" [filter]="true" filterBy="label" [showClear]="true" styleClass="listBottom"
+          placeholder="Please Select" optionValue="value" formControlName="Role_Name">
 
-              
-    </div>
-    <div class="col-md-12 mt-1">
-      <h5>Menu List</h5>
-      <ul class="list-group mt-1">
-      <ng-container *ngFor="let menu of menus">
-        <app-access-node [menu]="menu" [parent]="null"></app-access-node>
-      </ng-container>
-    </ul>
+          <ng-template let-Roles pTemplate="item">
+            <div class="flex align-items-center gap-2">
+              <div>{{ Roles.label }}</div>
+            </div>
+          </ng-template>
+        </p-dropdown>
+
+
+      </div>
+      <div class="col-md-12 mt-1">
+        <h5 class="theme-text">Menu List</h5>
+        <ul class="list-group mt-1">
+          <ng-container *ngFor="let menu of menus">
+            <app-access-node [menu]="menu" [parent]="null"></app-access-node>
+          </ng-container>
+        </ul>
+      </div>
     </div>
   </div>
-</div>
 </form>
 <div class="card-footer">
-  <button class="btn btn-primary" (click)="savePermissions()">Save</button>
+  <button class="btn theme-btn" (click)="savePermissions()">Save</button>
+</div>
 </div>

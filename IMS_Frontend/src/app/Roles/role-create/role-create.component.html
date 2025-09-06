@@ -1,47 +1,39 @@
-<div class="row d-flex justify-content-center">
-  <div class="col-md-6">
-    <div class="card card-default">
-      <div class="content-heading" style="border-bottom: 1px solid rgba(0,0,0,.125) !important;">
-          <div class="row">
-            <div class="col-6">
-              <h2 class="p-2"></h2>
-            </div>
-          </div>
-          <h2 class="p-2 font-weight-bold">{{!isEdit?'Add':'Edit'}}&nbsp;Create Role</h2>
-      </div>
-      <div class="card-body">
-        <form name="newForm" [formGroup]="Formgroup" role="form">
-          
-          <div class="row">
-            <div class="col-md-12">
-              <label for="RoleRole_NameName" class="">Role Name <span>* &nbsp;</span></label>
-              <div class="">
-                <div class="form-group d-inline">
-                  <input autocomplete="off" type="text"                  
-                  formControlName="Role_Name"
-                  class="form-control"
-                  placeholder="Role Name" id="Role_Name" name="Role_Name" value="">
+<div class="container form-container">
+        <div class="card">
+            <div class="card-header d-flex align-items-center">
+                <div class="icon-wrapper">
+                    <i class="fas fa-user-shield"></i>
                 </div>
-              </div>
+                <span>{{!isEdit?'Create New Role':'Edit Role'}}</span>
             </div>
-          </div>
-        </form>
-        <div class="flexbox mt-5">
-          <button [routerLink]="['/role-list']" class="btn btn-w-xl text-white btn-outline-danger bg-gradient-danger" type="button"
-            >
-            Cancel
-          </button>
-          <button  class="btn btn-w-xl text-white btn-outline-success bg-gradient-success px-5 float-right" type="button" (click)="saveData()"
-            [disabled]="Formgroup.invalid" [hidden]="isEdit">
-            Save
-          </button>
-          <button [hidden]="!isEdit" class="btn btn-w-xl text-white btn-outline-success bg-gradient-success px-5 float-right" type="button" (click)="updateData()"
-            [disabled]="Formgroup.invalid">
-            Update
-          </button>
+            <div class="card-body">
+                <form name="newForm" [formGroup]="Formgroup" role="form">
+                    <div class="mb-4">
+                        <label for="Role_Name" class="form-label required-field">Role Name</label>
+                        <input autocomplete="off" type="text" formControlName="Role_Name"
+                            class="form-control form-control-lg" placeholder="Enter role name" 
+                            id="Role_Name" name="Role_Name" value="">
+                        <div class="form-text">Enter a unique name for the role</div>
+                    </div>
+                    
+                    
+                </form>
+                
+                <div class="button-group">
+                    <button [routerLink]="['/role-list']" class="btn btn-danger" type="button">
+                        <i class="fas fa-times-circle me-2"></i>Cancel
+                    </button>
+                    
+                    <button *ngIf="!isEdit" class="btn btn-success" type="button" 
+                        (click)="saveData()" [disabled]="Formgroup.invalid">
+                        <i class="fas fa-save me-2"></i>Save Role
+                    </button>
+                    
+                    <button *ngIf="isEdit" class="btn btn-success" type="button" 
+                        (click)="updateData()" [disabled]="Formgroup.invalid">
+                        <i class="fas fa-sync-alt me-2"></i>Update Role
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-
-  </div>
-</div>

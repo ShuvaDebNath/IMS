@@ -3,7 +3,7 @@
   <!-- Row: Menu Title + Expand/Collapse -->
   <div class="d-flex justify-content-between align-items-center">
     <div>
-      <button *ngIf="menu.Children?.length > 0"
+      <button class="theme-btn" *ngIf="menu.Children?.length > 0"
               class="btn btn-sm btn-link p-0 mr-2"
               (click)="toggleExpand()">
         <i class="fa" [ngClass]="expanded ? 'fa-chevron-down' : 'fa-chevron-right'"></i>

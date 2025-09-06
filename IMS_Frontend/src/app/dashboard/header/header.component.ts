@@ -28,8 +28,7 @@ export class HeaderComponent implements OnInit {
         private masterEntryService: MasterEntryService,   ) {}
 
   ngOnInit() {
-    // this.companyName = window.localStorage.getItem('companyName');
-    // this.userName = window.localStorage.getItem('userName');
+
     this.GetDynamicMenu();
     this.title.setTitle('Dashboard');
     if(GlobalConfig.USER_NAME){
