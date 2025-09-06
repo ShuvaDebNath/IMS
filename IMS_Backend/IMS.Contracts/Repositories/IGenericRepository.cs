@@ -13,5 +13,6 @@ public interface IGenericRepository<TDto> where TDto : class
     Task<int> ExecuteAsync(string query, SqlConnection con, DbTransaction trn, object? selector = null);
     Task<int> ExecuteAsync(string query, object? selector = null);
     Task<int> GenSerialNumberAsync(string SerialType);
+    Task<int> GenSerialNumberModifyAsync(string SerialType);
     Task<IList<TResult>> GetAllAsync<TResult>(string query, object? param = null) where TResult : class;
 }

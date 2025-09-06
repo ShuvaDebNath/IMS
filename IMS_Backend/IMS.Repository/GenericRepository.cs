@@ -264,6 +264,48 @@ namespace Boilerplate.Repository
             return model.SerialNo;
         }
 
+        public async Task<int> GenSerialNumberModifyAsync(string? SerialType)
+        {
+            SerialNoGenerate model = new()
+            {
+                SerialType = SerialType,
+                SerialId = Guid.NewGuid().ToString()
+            };
+            try
+            {
+              
+                using (var connection = new SqlConnection(_connectionStringUserDB))
+                {
+                    await connection.OpenAsync();
+                    using (var trn = await connection.BeginTransactionAsync())
+                    {
+                        try
+                        {
+                            StringBuilder sql = new();
+                            sql.Append(@"UPDATE [dbo].[SerialNoGenerate]
+                                                set [SerialId]=@SerialId,
+                                                    [SerialNo]= SerialNo-1 WHERE [SerialType]=@SerialType and (SerialNo-1)>=0");
+                            await connection.ExecuteAsync(sql.ToString(), model, trn);
+                            await trn.CommitAsync();
+                        }
+                        catch (Exception)
+                        {
+                            await trn.RollbackAsync();
+                            throw;
+                        }
+                        finally
+                        {
+                            await connection.CloseAsync();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return model.SerialNo;
+        }
         public async Task<IList<TResult>> GetAllAsync<TResult>(string query, object? param = null) where TResult : class
         {
             using var connection = new SqlConnection(_connectionStringUserDB);

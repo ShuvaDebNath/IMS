@@ -246,8 +246,7 @@ export class MasterEntryService {
     );
   }
 
-public GetAllData(model: GetDataModel){
-    
+public GetAllData(model: GetDataModel){    
     return this.http.post<any>(this.baseUrlApi+this.getapiController+'/GetAllData',model,{
       headers: new HttpHeaders({
         Authorization: 'Bearer ' + this.token,
