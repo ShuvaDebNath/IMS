@@ -1,0 +1,207 @@
+<div class="card card-default">
+  <div class="content-heading" style="border-bottom: 1px solid rgba(0,0,0,.125) !important;">
+    <div class="row">
+      <div class="col-6">
+        <h2 class="p-2">All LC</h2>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="SearchForm">
+      <div class="form-row align-items-center">
+        <div class="col-auto">
+          <label class="control-label" for="inlineFormInputGroup">From Date</label>
+          <div class="input-group mb-2">
+            <div class="input-group-sm input-group-prepend">
+              <div class="input-group-text" (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
+            </div>
+            <input type="text" autocomplete="off" formControlName="fromDate" [bsConfig]="{
+              dateInputFormat: 'DD/MM/YYYY',
+              containerClass: 'theme-green'
+            }" class="form-control-sm form-control bg-white" id="fromdate" name="fromdate" placeholder="From Date" 
+              #dpfrom="bsDatepicker" bsDatepicker/>
+          </div>
+
+        </div>
+        <div class="col-auto">
+          <label class="control-label" for="inlineFormInputGroup">To Date</label>
+          <div class="input-group mb-2">
+            <div class="input-group-sm input-group-prepend">
+              <div class="input-group-text" (click)="dpto.toggle()"><i class="fas fa-calendar"></i></div>
+            </div>
+            <input type="text" autocomplete="off" formControlName="toDate" [bsConfig]="{
+              dateInputFormat: 'DD/MM/YYYY',
+              containerClass: 'theme-green'
+            }" class="form-control-sm form-control bg-white" id="todate" name="todate" placeholder="To Date"
+              #dpto="bsDatepicker" bsDatepicker />
+          </div>
+        </div>
+        <div class="col-auto">
+            <label for="LCNo" class="">LC No </label>
+              <div class="">
+                <div class="form-group d-inline">
+                  <input autocomplete="off" type="text"                  
+                  formControlName="lcNo"
+                  class="form-control"
+                  placeholder="LC No" id="LCNo" name="LCNo" value="">
+                </div>
+              </div>
+        </div>
+        <div class="col-auto">
+          <button title="Search" type="button" (click)="Search()"
+            class="btn btn-sm btn-outline-primary bg-gradient-primary mb-2 mr-2" style="margin-top: 2.3em !important;">
+            <i class="fas fa-search"></i>&nbsp;Search</button>
+        </div>
+      </div>
+    </form>
+    <hr>
+
+    <!--Region Mat Datatable"-->
+      <!-- <div class="datatable">
+        <table  class="table table-bordered table-striped" >
+          <thead>
+              <tr>
+                <th style="text-align: center !important;" class="bg-gradient-success">SL</th>
+                <th style="text-align: center !important;" class="bg-gradient-success">Consignee Name</th>
+                <th style="text-align: center !important;" class="bg-gradient-success">PI(s)</th>
+                <th style="text-align: center !important;" class="bg-gradient-success">LC No</th>
+                <th style="text-align: center !important;" class="bg-gradient-success">LC Value</th>
+                <th style="text-align: center !important;" class="bg-gradient-success">Issue Date</th>
+                <th style="text-align: center !important;" class="bg-gradient-success">Expiry Date</th>
+                <th style="text-align: center !important;" class="bg-gradient-success">Mode</th>
+                <th style="text-align: center !important;" class="bg-gradient-success">IP Documents Sending Date</th>
+                <th style="text-align: center !important;" class="bg-gradient-success">Group Head</th>
+                <th style="text-align: center !important;" class="bg-gradient-success" *ngIf="allPersmissions">Action</th>
+              </tr>
+          </thead>
+          <tbody class="text-dark">
+            <tr *ngFor="let item of tableData; let i = index">
+              <td style="text-align: center !important;">{{(i+1)+((pageIndex-1)*pageSize)}}</td>
+              <td class="text-center align-middle">{{item.Consignee_Name}}</td>
+              <td class="text-center align-middle">{{item.PI_No}}</td>
+              <td class="text-center align-middle">{{item.LC_No}}</td>
+              <td class="text-center align-middle">{{item.LC_Value}}</td>
+              <td class="text-center align-middle">{{item.Issue_Date}}</td>
+              <td class="text-center align-middle">{{item.Expiry_Date}}</td>
+              <td class="text-center align-middle">{{item.Mode}}</td>
+              <td class="text-center align-middle">{{item.IP_Document_Sending_Date}}</td>
+              <td class="text-center align-middle">{{item.Group_Head}}</td>
+              <td class="text-center align-middle p-0 m-0">
+                <a *ngIf="updatePermissions" class="btn bg-gradient-cyan btn-xs mr-2" target="_blank" title="Edit" [routerLink]="['/create-role']"
+                  [queryParams]="{LC_No:item['LC_No']}"><i class="fa fa-edit" ></i></a> 
+                <button *ngIf="deletePermissions" class="btn bg-gradient-danger btn-xs" title="Delete" (click)="DeleteData(item)"><i
+                    class="fas fa-trash"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <mat-paginator showFirstLastButtons style="background-color: #1aa44b;"
+          style-paginator
+          (page)="paginatiorChange($event)"
+          [length]="length"
+          [pageSize]="pageSize"
+          [pageSizeOptions]="pageSizeOptions"
+          aria-label="Select page of periodic elements"></mat-paginator>
+        
+      </div> -->
+      <p-table #dt
+           [value]="tableData"
+           [paginator]="true"
+           [rows]="10"
+           [responsive]="true"
+           [showCurrentPageReport]="true"
+           [globalFilterFields]="['Consignee_Name','PI_No','LC_No','LC_Value','Issue_Date','Expiry_Date','Mode','IP_Document_Sending_Date','Group_Head']"
+           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+
+    <ng-template pTemplate="caption">
+      <div class="table-toolbar">
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text"
+                 (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                 placeholder="Global Search" />
+        </span>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="bg-gradient-success">SL</th>
+        <th class="bg-gradient-success">Consignee Name</th>
+        <th class="bg-gradient-success">PI(s)</th>
+        <th class="bg-gradient-success">LC No</th>
+        <th class="bg-gradient-success">LC Value</th>
+        <th class="bg-gradient-success">Issue Date</th>
+        <th class="bg-gradient-success">Expiry Date</th>
+        <th class="bg-gradient-success">Mode</th>
+        <th class="bg-gradient-success">IP Documents Sending Date</th>
+        <th class="bg-gradient-success">Group Head</th>
+        <th class="bg-gradient-success" *ngIf="allPersmissions">Action</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-table let-i="rowIndex">
+      <tr>
+        <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
+        <td class="text-center align-middle">{{table.Consignee_Name}}</td>
+        <td class="text-center align-middle">{{table.PI_No}}</td>
+        <td class="text-center align-middle">{{table.LC_No}}</td>
+        <td class="text-center align-middle">{{table.LC_Value}}</td>
+        <td class="text-center align-middle">{{table.Issue_Date}}</td>
+        <td class="text-center align-middle">{{table.Expiry_Date}}</td>
+        <td class="text-center align-middle">{{table.Mode}}</td>
+        <td class="text-center align-middle">{{table.IP_Document_Sending_Date}}</td>
+        <td class="text-center align-middle">{{table.Group_Head}}</td>
+        <td class="text-center align-middle p-0 m-0">
+            <a  class="btn bg-gradient-cyan btn-xs mr-2" target="_blank" title="View" (click)="viewDetails(table)"><i class="fa fa-eye" ></i></a> 
+            <a *ngIf="updatePermissions" class="btn bg-gradient-cyan btn-xs mr-2" target="_blank" title="Edit" [routerLink]="['/generate-lc']"
+              [queryParams]="{LC_No:table.LC_ID}"><i class="fa fa-edit" ></i></a> 
+            <button *ngIf="deletePermissions" class="btn bg-gradient-danger btn-xs" title="Delete" (click)="DeleteData(table)"><i
+                class="fas fa-trash"></i></button>
+        </td>
+      </tr>
+    </ng-template>
+
+  </p-table>
+
+    </div>
+    <!--/Region Mat Datatable"-->
+    <p-dialog header="Detail"
+            [(visible)]="isDetailsVisible"
+            [modal]="true"
+            [closable]="true"
+            [style]="{ width: '70vw' }"
+            (onHide)="detailsData = null">
+            <div *ngIf="detailsData">
+              <p>User Name: {{ detailsData.UserName }}</p>
+              <p>Mode: {{ detailsData.Mode }}</p>
+              <p>Consignee Name: {{ detailsData.Consignee_Name }}</p>
+              <p>LC Receiving Date By Mail/Draft: {{ detailsData.TotalRoll }}</p>
+              <p>LC Receiving Date Original By Bank: {{ detailsData.Remarks }}</p>
+              <p>LC No: {{ detailsData.LC_No }}</p>
+              <p>LC Value: {{ detailsData.LC_Value }}</p>
+              <p>Issue Date: {{ detailsData.Issue_Date }}</p>
+              <p>Expiry Date: {{ detailsData.Expiry_Date }}</p>
+              <p>Customer Bank Name: {{ detailsData.Customer_Bank }}</p>
+              <p>Invoice No With Date: {{ detailsData.Invoice_No }}</p>
+              <p>IP Documents Sending Date: {{ detailsData.IP_Document_Sending_Date }}</p>
+              <p>Export LC/SC: {{ detailsData.Export_LC_SC }}</p>
+              <p>LCA Form No: {{ detailsData.LCA_Form_No }}</p>
+              <p>IRC No: {{ detailsData.IRC_No }}</p>
+              <p>HS Code: {{ detailsData.HS_Code }}</p>
+              <p>Beneficiary Bank: {{ detailsData.BankName }}</p>
+              <p>IP Documents Receiving Date: {{ detailsData.IP_Document_Receiving_Date }}</p>
+              <p>Documents Presentation To Bank Date: {{ detailsData.IP_Document_Sending_Date }}</p>
+              <p>Maturity Date: {{ detailsData.Maturity_Date }}</p>
+              <p>FDD/TT Receive Date: {{ detailsData.FddTtReceiveDate }}</p>
+              <p>Actual Payment Receiving Date: {{ detailsData.Actual_Payment_Receiving_Date }}</p>
+              <p>Applicant BIN/VAT: {{ detailsData.Applicant_BIN_VAT }}</p>
+              <p>Applicant TIN: {{ detailsData.Applicant_TIN }}</p>
+              <p>Bank BIN No.: {{ detailsData.Bank_BIN_No }}</p>
+              <p>Remarks.: {{ detailsData.Remarks }}</p>
+              <p>User Name: {{ detailsData.UserName }}</p>
+              <p>System_Created_Date: {{ detailsData.System_Created_Date }}</p>
+            </div>
+  </p-dialog>
+
+  </div>

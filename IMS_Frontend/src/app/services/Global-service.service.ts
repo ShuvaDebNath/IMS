@@ -52,7 +52,6 @@ export class GlobalServiceService {
         
         map((result: any) => {
           
-        console.log(result);
           if (!result) {
              this.ClearSession();
              this.router.navigate(['/login']);

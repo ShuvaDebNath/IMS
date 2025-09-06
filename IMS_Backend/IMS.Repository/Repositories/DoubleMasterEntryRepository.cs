@@ -404,6 +404,7 @@ namespace Boilerplate.Repository.Repositories
 
         private async Task<int> MasterTableInsertWithIdentity(DoubleMasterEntryModel model, SqlCommand cmd, string authUserName, int serialNo)
         {
+
             string? masterTablename = model.TableNameMaster;
             var masterColumns = new StringBuilder();
             var masterValues = new StringBuilder();
@@ -469,9 +470,9 @@ namespace Boilerplate.Repository.Repositories
                     else
                         parameters.Add(new SqlParameter("@" + j.Name, j.Value.ToString()));
                 }
-                childColumns.Append(", MakeDate, MakeBy, InsertTime");
-                childValues.Append(", getdate(), @authUserName , getdate()");
-                parameters.Add(new SqlParameter("@authUserName", cmd.Parameters["@authUserName"].Value));
+                //childColumns.Append(", MakeDate, MakeBy, InsertTime");
+                //childValues.Append(", getdate(), @authUserName , getdate()");
+                //parameters.Add(new SqlParameter("@authUserName", cmd.Parameters["@authUserName"].Value));
                 cmd.CommandText = $"INSERT INTO {childTablename} ({childColumns}) VALUES ({childValues})";
                 cmd.Parameters.Clear();
                 cmd.Parameters.AddRange(parameters.ToArray());
@@ -492,16 +493,19 @@ namespace Boilerplate.Repository.Repositories
             cmd.Transaction = trn;
             try
             {
-                //int serialNo = string.IsNullOrEmpty(model.ColumnNameSerialNo) ? 0 : await GenSerialNumberAsync(model.SerialType);
-                int newPrimaryKey = await MasterTableInsertWithIdentity(model, cmd, authUserName, 0);
+                int serialNo = 0;
+                //serialNo = string.IsNullOrEmpty(model.ColumnNameSerialNo) ? 0 : await GenSerialNumberAsync(model.SerialType);
+                int newPrimaryKey = await MasterTableInsertWithIdentity(model, cmd, authUserName, serialNo);
                 if (newPrimaryKey > 0)
                 {
                     rowAffect = await DetailsTableInsertWithIdentity(model, newPrimaryKey, cmd);
                 }
                 await cmd.Transaction.CommitAsync();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+
+                await GenSerialNumberModifyAsync(model.SerialType);
                 await cmd.Transaction.RollbackAsync();
                 throw;
             }

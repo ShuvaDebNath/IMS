@@ -16,6 +16,10 @@ import { LoginComponent } from './authentication/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { MatPaginatorModule } from "@angular/material/paginator";
+import { ArbitrationComponent } from './arbitration/arbitration.component';
+import { TableComponent } from './common/table/table.component';
+import { LandingPageComponent } from './landing-page/landing-page.component';
+
 
 
 @NgModule({
@@ -28,6 +32,10 @@ import { MatPaginatorModule } from "@angular/material/paginator";
     PageNotFoundComponent,
     LogoutComponent,
     ResetPasswordComponent,
+    ArbitrationComponent,
+    TableComponent,
+    LandingPageComponent
+
   ],
   imports: [
     FormsModule,
@@ -47,7 +55,10 @@ import { MatPaginatorModule } from "@angular/material/paginator";
     PagesModule,
     BrowserAnimationsModule,
     BsDropdownModule.forRoot(),
-    MatPaginatorModule
+    MatPaginatorModule,
+],
+exports:[
+
 ],
   providers: [DatePipe],
   bootstrap: [AppComponent],

@@ -1,0 +1,18 @@
+.table-toolbar{
+  display: flex;
+  justify-content: flex-end;   /* push to the right */
+  padding: .25rem .5rem;
+}
+
+.table-toolbar .p-inputtext{
+  width: 260px;                /* adjust as you like */
+}
+
+/* Optional: full width on small screens */
+@media (max-width: 576px){
+  .table-toolbar .p-inputtext{ width: 100%; }
+}
+/* Styles for Pending RM Requisition */
+.pi .pi-search{
+    left: 6.75em !important;
+}
