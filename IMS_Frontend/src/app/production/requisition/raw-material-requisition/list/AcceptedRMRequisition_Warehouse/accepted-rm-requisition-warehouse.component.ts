@@ -7,8 +7,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { GetDataService } from 'src/app/services/getData/getDataService.service';
 import { DialogModule } from 'primeng/dialog';
 import { CommonModule } from '@angular/common';
-import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 import { FormsModule } from '@angular/forms';
+import { DoubleMasterEntryService } from 'src/app/services/doubleEntry/doubleEntryService.service';
 
 @Component({
     standalone: true,
@@ -28,7 +28,7 @@ export class AcceptedRMRequisitionWareHouseComponent implements OnInit {
         private getDataService: GetDataService,
         private gs: GlobalServiceService,
         private title: Title,
-        private masterEntryService: MasterEntryService
+        private doubleMasterEntryService: DoubleMasterEntryService,
     ) {
 
     }
@@ -163,8 +163,96 @@ export class AcceptedRMRequisitionWareHouseComponent implements OnInit {
 
 
     onSendFromWarehouse(data: any): void {
-        swal.fire('Sent!', 'Requisition has been sent from warehouse.', 'success');
+        if (!data) { return; }
+
+        // safety: list of items
+        const items: any[] = Array.isArray(data.Items) ? data.Items : [];
+
+        // row is FULL only if both accepted values match requested ones
+        const isFullRow = (it: any) =>
+            Number(it?.IssuedQuantity) === Number(it?.Quantity) &&
+            Number(it?.IssuedRoll_Bag) === Number(it?.RollBag_Quantity);
+
+        // master status: Partially Sent if any row is partial, otherwise Sent
+        const masterStatus = items.every(isFullRow) ? 'Sent' : 'Partially Sent';
+
+        // normalize 'roll' | 'bag'
+        const norm = (v: any) => String(v ?? '').trim().toLowerCase();
+
+        // build detail rows
+        const detailsData = items.map((it: any) => {
+            const kind = norm(it?.Roll_Bag);
+            const acceptedQty = Number(it?.IssuedQuantity) || 0;
+            const acceptedRB = Number(it?.IssuedRoll_Bag) || 0;
+
+            return {
+                RM_Send_MasterID: '',
+                RawMaterial_ID: Number(it?.RawMaterial_ID) || 0,
+                Quantity: acceptedQty,
+                Note: it?.Note ?? '',
+                Roll: kind === 'roll' ? acceptedRB : 0,
+                Bag: kind === 'bag' ? acceptedRB : 0,
+                Roll_Bag: kind,
+                AcceptedQuantity: 0,
+                AcceptedRollBag_Qty: 0
+            };
+        });
+
+        // build master row
+        const masterData = {
+            RM_Send_MasterID: '',
+            Note: data?.HeaderNote ?? data?.Remarks ?? '',
+            Status: 'Accepted',
+            Sent_By: (localStorage.getItem('userId') ?? '').toString(),
+            Received_By: '58',  // hardcoded for now
+            Received_Date: this.nowSql(),
+            IssueNumber: data?.IssueNumber ?? '',
+            IssueDate: data?.IssueDate ?? '',
+            RM_Requisition_MasterID: data?.RM_Requisition_MasterID ?? '',
+            ActionApplied: null
+        };
+
+         const whereParams = { RM_Requisition_MasterID: data.RM_Requisition_MasterID };
+
+        // final payload (matches your requested shape)
+        const payload = {
+            tableNameMaster: 'tbl_rm_send_master',
+            tableNameChild: 'tbl_rm_send_details',
+            columnNamePrimary: 'RM_Send_MasterID',
+            columnNameForign: 'RM_Send_MasterID',
+            columnNameSerialNo: '',
+            serialType: '',
+            IsFlag: '',
+            Status: masterStatus,
+            data: masterData,
+            detailsData: detailsData,
+            whereParams: { RM_Requisition_MasterID: data?.RM_Requisition_MasterID ?? '' }
+        };
+
+        console.log('WAREHOUSE SEND PAYLOAD', payload);
+
+        this.doubleMasterEntryService.SaveDataMasterDetailsWithReferenceTableUpdate(detailsData,'tbl_rm_send_details',
+             masterData,'tbl_rm_send_master','RM_Send_MasterID','RM_Send_MasterID','','',whereParams,
+             masterStatus)            
+                        .subscribe({
+                next: (res: any) => {
+                    swal.fire('Success', 'Requisition saved successfully', 'success');
+                    this.isDetailsVisible_for_Issue = false;
+                    this.loadPendingRequisitions();
+                },
+                error: () => {
+                    swal.fire('Error', 'Could not save requisition', 'error');
+                }
+            });
     }
+
+    /** SQL-like datetime: YYYY-MM-DD HH:mm:ss */
+    private nowSql(d = new Date()): string {
+        const pad = (n: number) => String(n).padStart(2, '0');
+        return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} `
+            + `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    }
+
 
 }
 

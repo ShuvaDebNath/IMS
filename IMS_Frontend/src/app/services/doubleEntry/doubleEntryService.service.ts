@@ -64,7 +64,7 @@ export class DoubleMasterEntryService {
       );
   }
 
-// Insert Data
+
   public SaveDataMasterDetails
         (fd: any, tableName: any,fdMaster:any,tableNameMaster: any,primaryColumnName: any,ColumnNameForign: any,serialType:any,ColumnNameSerialNo:any) {
     let model: DoubleMasterEntryModel=new DoubleMasterEntryModel();
@@ -99,7 +99,7 @@ export class DoubleMasterEntryService {
       );
   }
 
-  // Insert List Data
+
   public SaveDataMasterDetailsList(fd: any, tableName: any,fdMaster:any,tableNameMaster: any,primaryColumnName: any,ColumnNameForign: any,serialType:any,ColumnNameSerialNo:any) {
    
     let model: DoubleMasterEntryModel=new DoubleMasterEntryModel();
@@ -134,7 +134,51 @@ export class DoubleMasterEntryService {
       );
   }
 
-  // Update Data
+  public SaveDataMasterDetailsWithReferenceTableUpdate
+        ( fd: any, 
+          tableName: any,
+          fdMaster:any,
+          tableNameMaster: any,
+          primaryColumnName: any,
+          ColumnNameForign: any,
+          serialType:any,
+          ColumnNameSerialNo:any,
+          Whereparam:any,
+          Status:any) {
+    let model: DoubleMasterEntryModel=new DoubleMasterEntryModel();
+
+    model.tableNameMaster = tableNameMaster;
+    model.tableNameChild=tableName;
+
+    model.columnNamePrimary = primaryColumnName;
+    model.columnNameForign = ColumnNameForign;
+    model.columnNameSerialNo = ColumnNameSerialNo;
+    model.serialType = serialType;
+    model.isFlag = null;
+    model.detailsData=fd;
+    model.data  =fdMaster;
+    model.whereParams = Whereparam;
+    model.Status=Status;
+
+    return this.http
+      .post<ResponseModel>(
+        this.baseUrlApi + this.postApiController + '/Insert',
+        model,
+        {
+          headers: new HttpHeaders({
+            Authorization: 'Bearer ' + this.token,
+            'Content-Type': 'application/json',
+          }),
+        }
+      )
+      .pipe(
+        map((Response) => {
+          return Response;
+        })
+      );
+  }
+
+
   public UpdateDataMasterDetails(fd: any, tableName: any,fdMaster:any,tableNameMaster: any,primaryColumnName: any,ColumnNameForign: any,serialType:any,ColumnNameSerialNo:any,Whereparam:any) {
     let model: DoubleMasterEntryModel=new DoubleMasterEntryModel();
 

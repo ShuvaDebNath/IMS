@@ -94,7 +94,7 @@
   <p-dialog header="Detail" [(visible)]="isDetailsVisible_for_Issue" [modal]="true" [closable]="true"
     [style]="{ width: '70vw' }" (onHide)="detailsData_for_Issue = null" styleClass="wide-dialog">
     <div *ngIf="detailsData_for_Issue">
-      <h2>RMRequisition - {{ detailsData_for_Issue.RequisitionNumber }}</h2>
+      <h2>{{ detailsData_for_Issue.RequisitionNumber }}</h2>
       <p>Date: {{ detailsData_for_Issue.RequisitionDate }}</p>
       <p>Total Qty: {{ detailsData_for_Issue.TotalQty }}</p>
       <p>Total Bag: {{ detailsData_for_Issue.TotalBag }}</p>

@@ -1,15 +1,20 @@
 ﻿using Boilerplate.Contracts;
 using Boilerplate.Contracts.Repositories;
+using Boilerplate.Contracts.Services;
+using IMS.Contracts.Repositories;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Threading.Tasks;
 
 namespace Boilerplate.Repository.Repositories
 {
@@ -17,8 +22,12 @@ namespace Boilerplate.Repository.Repositories
     {
         private SqlConnection conn;
         private SqlCommand cmd;
-        public DoubleMasterEntryRepository(IConfiguration configuration) : base(configuration)
+        private readonly IDoubleMasterEntryPostInsertActionFactory _postInsertActionFactory;
+        public DoubleMasterEntryRepository(
+            IConfiguration configuration,
+            IDoubleMasterEntryPostInsertActionFactory postInsertActionFactory) : base(configuration)
         {
+            _postInsertActionFactory = postInsertActionFactory;
         }
 
         public async Task<int> DeleteData(DoubleMasterEntryModel model)
@@ -434,6 +443,15 @@ namespace Boilerplate.Repository.Repositories
                 if (newPrimaryKey > 0)
                 {
                     rowAffect = await DetailsTableInsertWithIdentity(model, newPrimaryKey, cmd);
+
+                    if (rowAffect > 0)
+                    {
+                        var actions = _postInsertActionFactory.GetActions(model);
+                        foreach (var action in actions)
+                        {
+                            await action.ExecuteAsync(model, authUserName);
+                        }
+                    }
                 }
                 await cmd.Transaction.CommitAsync();
             }

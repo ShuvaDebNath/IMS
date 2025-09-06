@@ -6,13 +6,21 @@ import { ReceivedRMListComponent } from './ReceivedRMList/received-rm-list.compo
 import { AllRMRequisitionListComponent } from './AllRMRequisitionList/all-rm-requisition-list.component';
 import { PendingRMRequisitionProductionComponent } from './PendingRMRequisition_Production/pending-rm-requisition-production.component';
 import { PendingRMRequisitionWareHouseComponent } from './PendingRMRequisition_Warehouse/pending-rm-requisition-warehouse.component';
+import { IssuedRMRequisitionListWarehouseComponent } from './IssuedRMRequisitionList_Warehouse/issued-rm-requisition-list-warehouse.component';
 
 @Component({
   selector: 'app-list-page',
   templateUrl: './list-page.component.html',
   styleUrls: ['./list-page.component.css'],
   standalone: true,
-  imports: [PendingRMRequisitionProductionComponent, PendingRMRequisitionWareHouseComponent, IssuedRMRequisitionComponent, ReceivedRMListComponent, AllRMRequisitionListComponent]
+  imports: [
+    PendingRMRequisitionProductionComponent, 
+    PendingRMRequisitionWareHouseComponent, 
+    IssuedRMRequisitionComponent, 
+    ReceivedRMListComponent, 
+    AllRMRequisitionListComponent,
+    IssuedRMRequisitionListWarehouseComponent
+  ]
 })
 export class ListPageComponent {
   // Logic to manage the four requisition components
