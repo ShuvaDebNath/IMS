@@ -202,7 +202,7 @@ export class AcceptedRMRequisitionWareHouseComponent implements OnInit {
         const masterData = {
             RM_Send_MasterID: '',
             Note: data?.HeaderNote ?? data?.Remarks ?? '',
-            Status: 'Accepted',
+            Status: 'Sent',
             Sent_By: (localStorage.getItem('userId') ?? '').toString(),
             Received_By: '58',  // hardcoded for now
             Received_Date: this.nowSql(),

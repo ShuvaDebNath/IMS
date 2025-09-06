@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
 export class MenuComponent implements OnInit {
   @Input() menu?: Menu[];
   userName: any;
-
+  isShowComInfo = false;
   openDropdownId: number | null = null;
 
   constructor(private gs: GlobalServiceService,
@@ -20,6 +20,8 @@ export class MenuComponent implements OnInit {
 
   ngOnInit(): void {
     this.userName = window.localStorage.getItem('userName');
+    if(this.userName!=undefined && this.userName!=null)
+      this.isShowComInfo = true;
   }
 
   toggleDropdown(id: number, event: Event) {

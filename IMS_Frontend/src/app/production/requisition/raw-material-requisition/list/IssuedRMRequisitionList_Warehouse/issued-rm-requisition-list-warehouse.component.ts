@@ -31,7 +31,7 @@ export class IssuedRMRequisitionListWarehouseComponent {
     }
 
   ngOnInit(): void {
-        this.title.setTitle('Issued Requisition Form');
+        this.title.setTitle('Issued Raw Material Requisition List');
         this.loadIssuedRequisitions();
   }
 
@@ -45,7 +45,7 @@ export class IssuedRMRequisitionListWarehouseComponent {
               parameters: {
                   FromDate: '',
                   ToDate: '',
-                  Status: 'Accepted',
+                  Status: 'Sent',
                   User: sentBy
               }
           };
@@ -78,6 +78,8 @@ export class IssuedRMRequisitionListWarehouseComponent {
                           this.detailsData = {
                               RM_Send_MasterID: row.RM_Send_MasterID,
                               RM_Requisition_MasterID: row.RM_Requisition_MasterID,
+                              RequisitionNumber: row.RequisitionNumber,
+                              RequisitionDate: row.RequisitionDate,
                               IssueNumber: row.IssueNumber,
                               IssueDate: row.IssueDate,
                               Remarks: row.MasterNote,

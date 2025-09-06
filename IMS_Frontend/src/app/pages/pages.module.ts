@@ -7,26 +7,17 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
-import { NgxBootstrapTreeviewModule } from 'ngx-bootstrap-treeview';
 import { HttpClientModule } from '@angular/common/http';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { NgxSelectModule, INgxSelectOptions } from 'ngx-select-ex';
 import { UiSwitchModule } from 'ngx-ui-switch';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { PagesComponent } from './pages.component';
-import { BaseContentComponent } from '../dashboard/base-content/base-content.component';
-import { HeaderComponent } from '../dashboard/header/header.component';
-import { FooterComponent } from '../dashboard/footer/footer.component';
-import { SidebarComponent } from '../dashboard/sidebar/sidebar.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import {MatPaginatorModule} from '@angular/material/paginator';
 import { Select2Module } from 'ng-select2-component';
 import { TreeTableModule } from 'primeng/treetable';
 import { TreeModule } from 'primeng/tree';
 import { DropdownModule } from 'primeng/dropdown'
 import { SelectButtonModule } from 'primeng/selectbutton';
-import { PopoverModule } from 'ngx-bootstrap/popover';
-import { DatePipe } from '@angular/common';
 import {PopoverModule} from 'ngx-bootstrap/popover';
 import {DatePipe} from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -46,7 +37,7 @@ import { CreatePageComponent } from '../production/requisition/raw-material-requ
 import { EditPageComponent } from '../production/requisition/raw-material-requisition/edit/edit-page.component';
 import { ListPageComponent } from '../production/requisition/raw-material-requisition/list/list-page.component';
 import { PendingRMRequisitionProductionComponent } from '../production/requisition/raw-material-requisition/list/PendingRMRequisition_Production/pending-rm-requisition-production.component';
-import { IssuedRMRequisitionComponent } from '../production/requisition/raw-material-requisition/list/IssuedRMRequisition/issued-rm-requisition.component';
+import {  IssuedRMRequisitionProductionComponent } from '../production/requisition/raw-material-requisition/list/IssuedRMRequisition_Production/issued-rm-requisition-production.component';
 import { ReceivedRMListComponent } from '../production/requisition/raw-material-requisition/list/ReceivedRMList/received-rm-list.component';
 import { AllRMRequisitionListComponent } from '../production/requisition/raw-material-requisition/list/AllRMRequisitionList/all-rm-requisition-list.component';
 import { PendingRMRequisitionWareHouseComponent } from '../production/requisition/raw-material-requisition/list/PendingRMRequisition_Warehouse/pending-rm-requisition-warehouse.component';
@@ -84,8 +75,9 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     GenerateLcComponent,
     AllLcComponent,
     GenerateCommercialInvoiceComponent,
-    AllCommercialInvoiceComponent
-    GeneratePiComponent
+    AllCommercialInvoiceComponent,
+    GeneratePiComponent,
+    LandingPageComponent
     ],
   imports: [
 
@@ -132,7 +124,7 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'pending-rm-requisition-production', component: PendingRMRequisitionProductionComponent },
           { path: 'pending-rm-requisition-warehouse', component: PendingRMRequisitionWareHouseComponent },
           { path: 'accepted-rm-requisition-warehouse', component: AcceptedRMRequisitionWareHouseComponent },
-          { path: 'issued-rm-requisition', component: IssuedRMRequisitionComponent },
+          { path: 'issued-rm-requisition-production', component: IssuedRMRequisitionProductionComponent },
           { path: 'received-rm-list', component: ReceivedRMListComponent },
           { path: 'all-rm-requisition-list', component: AllRMRequisitionListComponent },
           { path: 'issued-rm-requisition-list-warehouse', component: IssuedRMRequisitionListWarehouseComponent },
@@ -142,9 +134,9 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
             loadComponent: () =>
               import('../production/requisition/raw-material-requisition/edit/PendingRMRequisitionProduction/pending-rm-requisition-production-edit.component')
                 .then(m => m.PendingRMRequisitionProductionEditComponent)
-          }
+          },
            {path: 'change-password', component: ChangePasswordComponent},       
-           {path:"landing-page",component:LandingPageComponent}
+           {path:"landing-page",component:LandingPageComponent},
            {path: 'all-lc', component: AllLcComponent},
            {path: 'generate-lc', component: GenerateLcComponent},
            {path: 'generate-commercial-invoice', component: GenerateCommercialInvoiceComponent},

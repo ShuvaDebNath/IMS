@@ -60,10 +60,6 @@ export class CreatePageComponent implements OnInit {
   this.destroy$.next();
   this.destroy$.complete();
 }
-  loadPageData(): void {
-    // Logic to load initial data for the page
-  }
-
   generateForm() {
     this.requisitionForm = this.fb.group({
       requisitionDate: [new Date(), Validators.required],

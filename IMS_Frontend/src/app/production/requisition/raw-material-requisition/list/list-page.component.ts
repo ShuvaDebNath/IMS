@@ -1,7 +1,7 @@
 // List Page Component
 import { Component } from '@angular/core';
 
-import { IssuedRMRequisitionComponent } from './IssuedRMRequisition/issued-rm-requisition.component';
+import { IssuedRMRequisitionProductionComponent } from './IssuedRMRequisition_Production/issued-rm-requisition-production.component';
 import { ReceivedRMListComponent } from './ReceivedRMList/received-rm-list.component';
 import { AllRMRequisitionListComponent } from './AllRMRequisitionList/all-rm-requisition-list.component';
 import { PendingRMRequisitionProductionComponent } from './PendingRMRequisition_Production/pending-rm-requisition-production.component';
@@ -16,7 +16,7 @@ import { IssuedRMRequisitionListWarehouseComponent } from './IssuedRMRequisition
   imports: [
     PendingRMRequisitionProductionComponent, 
     PendingRMRequisitionWareHouseComponent, 
-    IssuedRMRequisitionComponent, 
+    IssuedRMRequisitionProductionComponent, 
     ReceivedRMListComponent, 
     AllRMRequisitionListComponent,
     IssuedRMRequisitionListWarehouseComponent

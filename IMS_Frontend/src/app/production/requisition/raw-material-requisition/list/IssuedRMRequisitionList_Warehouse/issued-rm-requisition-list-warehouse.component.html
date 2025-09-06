@@ -58,10 +58,10 @@
   <p-dialog header="Detail" [(visible)]="isDetailsVisible" [modal]="true" [closable]="true" [style]="{ width: '70vw' }"
     (onHide)="detailsData = null">
     <div *ngIf="detailsData">
-      <h2>Req. No: {{ detailsData.RequisitionNumber }}</h2>
-      <p>Date: {{ detailsData.RequisitionDate }}</p>
-      <p>Issue No: {{ detailsData.IssueNumber }}</p>
+      <h2>Issue No: {{ detailsData.IssueNumber }}</h2>
       <p>Issue Date: {{ detailsData.IssueDate }}</p>
+      <p>Req. No: {{ detailsData.RequisitionNumber }}</p>
+      <p>Date: {{ detailsData.RequisitionDate }}</p>
       <p>Issue Note: {{ detailsData.MasterNote }}</p>
 
       <p-table [value]="detailsData.Items" [responsive]="true">
