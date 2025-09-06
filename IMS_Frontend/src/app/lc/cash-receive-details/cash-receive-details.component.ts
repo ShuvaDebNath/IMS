@@ -52,38 +52,16 @@ export class CashReceiveDetailsComponent {
   }
 
   ngOnInit(): void {
-    this.menu = window.localStorage.getItem('UserMenuWithPermission');
-    this.menu = JSON.parse(this.menu);
-    var buttonPermissions:any = [];
-    var countFound = 0;
-          this.menu.forEach((e:any)=>{
-            e.Children = JSON.parse(e.Children);
-            e.Children.forEach((childMenu:any)=>{
-              if(childMenu.SubMenuName=="All Cash Receive"){
-                countFound++;
-                buttonPermissions.push(childMenu.ButtonName);
-              }
-            });
-          })
-    if(countFound==0){
-      window.location.href='dashboard';
-    }
-    else{
-      buttonPermissions.forEach((buttonCheck:any)=>{
-        
-        if(buttonCheck[0].ButtonName=="Delete"){
-          this.deletePermissions = true;
-        }
-        else if(buttonCheck[0].ButtonName=="View"){
-          this.printPermissions = true;
-        }
-      });
-    }
+    var permissions = this.gs.CheckUserPermission("Cash Receive Details");
+    this.insertPermissions = permissions.insertPermissions;
+    this.updatePermissions = permissions.updatePermissions;
+    this.deletePermissions = permissions.deletePermissions;
+    this.printPermissions = permissions.printPermissions;
     
-
     if(!this.printPermissions){
-      //window.location.href='all-cash-receive';
-    }
+      window.location.href='all-cash-receive';
+    }   
+
     this.title.setTitle('Cash Receive Details');
     this.GetIdByCashReceiveDetails();
   }
