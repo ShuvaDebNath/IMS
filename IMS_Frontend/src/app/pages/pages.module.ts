@@ -13,12 +13,6 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { NgxSelectModule,INgxSelectOptions } from 'ngx-select-ex';
 import { UiSwitchModule } from 'ngx-ui-switch';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { PagesComponent } from './pages.component';
-import { BaseContentComponent } from '../dashboard/base-content/base-content.component';
-import { HeaderComponent } from '../dashboard/header/header.component';
-import { FooterComponent } from '../dashboard/footer/footer.component';
-import { SidebarComponent } from '../dashboard/sidebar/sidebar.component';
-
 //Material Data Table
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { Select2Module } from 'ng-select2-component';
@@ -29,6 +23,16 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 // import { ProjectWiseExpenseComponent } from '../Project-Wise-Income-Expense/project-wise-expense/project-wise-expense.component';
 import {PopoverModule} from 'ngx-bootstrap/popover';
 import {DatePipe} from '@angular/common';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputTextModule } from 'primeng/inputtext';
+
+
+import { PagesComponent } from './pages.component';
+import { BaseContentComponent } from '../dashboard/base-content/base-content.component';
+import { HeaderComponent } from '../dashboard/header/header.component';
+import { FooterComponent } from '../dashboard/footer/footer.component';
+import { SidebarComponent } from '../dashboard/sidebar/sidebar.component';
 import { RoleListComponent } from '../Roles/role-list/role-list.component';
 import { RoleCreateComponent } from '../Roles/role-create/role-create.component';
 import { MenuComponent } from '../dashboard/menu/menu.component';
@@ -38,6 +42,8 @@ import { CreatePageComponent } from '../production/requisition/raw-material-requ
 import { EditPageComponent } from '../production/requisition/raw-material-requisition/edit/edit-page.component';
 import { ListPageComponent } from '../production/requisition/raw-material-requisition/list/list-page.component';
 import { ChangePasswordComponent } from '../authentication/change-password/change-password.component';
+import { GeneratePiComponent } from '../PI/generate-pi/generate-pi.component';
+
 
 
 // import {MatSortModule} from '@angular/material/sort';
@@ -61,9 +67,12 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     MenuComponent,
     AccessNodeComponent,
     AccessPanelComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    GeneratePiComponent
     ],
   imports: [
+
+    NgSelectModule,
     CommonModule,
     Select2Module,
     HttpClientModule,
@@ -75,7 +84,11 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     TreeModule,
     DropdownModule,
     SelectButtonModule,
+    CheckboxModule,
+    InputTextModule,
     PopoverModule,
+    
+    DatePipe,
     UiSwitchModule.forRoot({
       size: 'small',
       color: 'rgb(0, 189, 99)',
@@ -98,6 +111,7 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'edit-raw-material', component: EditPageComponent },
           { path: 'list-raw-material', component: ListPageComponent },
            {path: 'change-password', component: ChangePasswordComponent},
+          { path: 'generate-pi', component: GeneratePiComponent },
         ]
       }
     ]),

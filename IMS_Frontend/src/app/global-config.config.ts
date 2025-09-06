@@ -3,8 +3,8 @@ import { throwError } from 'rxjs';
 
 export class GlobalConfig {
 
-    public static BASE_URL_USERMANAGE = 'https://localhost:44372/api/';
-  public static LOGIN_URL_USERMANAGE = 'http://localhost:4200/login';
+    public static BASE_URL_USERMANAGE = 'http://localhost:5077/api/';
+  public static LOGIN_URL_USERMANAGE = 'http://localhost:5077/login';
 
     public static BASE_URL = 'http://localhost:5077/api/';
  public static BASE_URL_REPORT = 'http://localhost:5077/';

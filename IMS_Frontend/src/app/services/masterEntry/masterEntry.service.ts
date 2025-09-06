@@ -195,7 +195,7 @@ export class MasterEntryService {
   }
 
 public GetAllData(model: GetDataModel){
-    console.log(model);
+   
     
     return this.http.post<any>(this.baseUrlApi+this.getapiController+'/GetAllData',model,{
       headers: new HttpHeaders({
