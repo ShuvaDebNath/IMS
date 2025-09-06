@@ -21,11 +21,11 @@ import { CG } from 'src/app/models/cg';
   styleUrls: ['./all-cash-receive.component.css']
 })
 export class AllCashReceiveComponent {
-pageIndex = 1;
+  pageIndex = 1;
   searchText = '';
   length = 100;
   pageSize = 10;
-    tableData!: CG[];
+  tableData!: CG[];
   pageSizeOptions: number[] = [];
   displayedColumns: string[] = [
     'Sl',
@@ -110,23 +110,16 @@ pageIndex = 1;
     };
 
     this.masterEntryService.GetInitialData(param).subscribe({
-      next: (results) => {
-        console.log(results);
-        
+      next: (results) => {        
         if (results.status) {
           this.tableData = [];
           let tables = JSON.parse(results.data);
           this.tableData = tables.Tables1;
           console.log(this.tableData);          
           //  this.isPage=this.rows[0].totallen>10;
-          
-
         }
-
       }
-
     });
-
   }
 
   DeleteData(item:any){

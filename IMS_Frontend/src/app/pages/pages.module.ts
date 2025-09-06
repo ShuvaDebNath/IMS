@@ -20,8 +20,6 @@ import { FooterComponent } from '../dashboard/footer/footer.component';
 import { SidebarComponent } from '../dashboard/sidebar/sidebar.component';
 
 //Material Data Table
-import {MatPaginatorModule} from '@angular/material/paginator';
-import { Select2Module } from 'ng-select2-component';
 import { TreeTableModule } from 'primeng/treetable';
 import { TreeModule } from 'primeng/tree';
 import { DropdownModule } from 'primeng/dropdown'
@@ -39,7 +37,8 @@ import { EditPageComponent } from '../production/requisition/raw-material-requis
 import { ListPageComponent } from '../production/requisition/raw-material-requisition/list/list-page.component';
 import { ChangePasswordComponent } from '../authentication/change-password/change-password.component';
 import { GenerateCashReceiveComponent } from '../lc/generate-cash-receive/generate-cash-receive.component';
-
+import { AllCashReceiveComponent } from '../lc/all-cash-receive/all-cash-receive.component';
+import { TableModule } from 'primeng/table';
 
 // import {MatSortModule} from '@angular/material/sort';
 // import {MatTableModule} from '@angular/material/table';
@@ -63,11 +62,12 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     AccessNodeComponent,
     AccessPanelComponent,
     GenerateCashReceiveComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    AllCashReceiveComponent
     ],
   imports: [
     CommonModule,
-    Select2Module,
+    TableModule,
     HttpClientModule,
     BrowserModule,
     FormsModule,
@@ -99,8 +99,9 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'create-raw-material', component: CreatePageComponent },
           { path: 'edit-raw-material', component: EditPageComponent },
           { path: 'list-raw-material', component: ListPageComponent },
-           {path: 'change-password', component: ChangePasswordComponent},
-           {path: 'generate-cash-receive', component: GenerateCashReceiveComponent},
+          {path: 'change-password', component: ChangePasswordComponent},
+          {path: 'generate-cash-receive', component: GenerateCashReceiveComponent},
+          {path: 'all-cash-receive', component: AllCashReceiveComponent},
         ]
       }
     ]),
@@ -108,10 +109,8 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     ModalModule.forRoot(),
     BsDropdownModule.forRoot(),
     BsDatepickerModule.forRoot(),
-    NgxSelectModule.forRoot(CustomSelectOptions),
     AccordionModule.forRoot(),
     UiSwitchModule,
-    MatPaginatorModule
   ]
 })
 export class PagesModule { }

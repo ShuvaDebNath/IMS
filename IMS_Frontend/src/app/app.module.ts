@@ -14,21 +14,9 @@ import { LogoutComponent } from './authentication/logout/logout.component';
 import { ResetPasswordComponent } from './authentication/reset-password/reset-password.component';
 import { LoginComponent } from './authentication/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
-import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { NgxSelectModule, INgxSelectOptions } from 'ngx-select-ex';
-import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import { Select2Module } from 'ng-select2-component';
 import { DatePipe } from '@angular/common';
-import { RoleListComponent } from './Roles/role-list/role-list.component';
-import { RoleCreateComponent } from './Roles/role-create/role-create.component';
 import { MatPaginatorModule } from "@angular/material/paginator";
-import { GenerateCashReceiveComponent } from './lc/generate-cash-receive/generate-cash-receive.component';
-import { AllCashReceiveComponent } from './lc/all-cash-receive/all-cash-receive.component';
 
-const CustomSelectOptions: INgxSelectOptions = {
-  keepSelectedItems: false,
-  allowClear: true,
-};
 
 @NgModule({
   declarations: [
@@ -40,7 +28,6 @@ const CustomSelectOptions: INgxSelectOptions = {
     PageNotFoundComponent,
     LogoutComponent,
     ResetPasswordComponent,
-    AllCashReceiveComponent,
   ],
   imports: [
     FormsModule,
@@ -48,8 +35,6 @@ const CustomSelectOptions: INgxSelectOptions = {
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    NgxDatatableModule,
-    NgMultiSelectDropDownModule.forRoot(),
     RouterModule.forRoot([
         { path: '', component: LoginComponent },
         {
@@ -61,7 +46,6 @@ const CustomSelectOptions: INgxSelectOptions = {
     ], { useHash: false, onSameUrlNavigation: 'reload' }),
     PagesModule,
     BrowserAnimationsModule,
-    NgxSelectModule.forRoot(CustomSelectOptions),
     BsDropdownModule.forRoot(),
     MatPaginatorModule
 ],

@@ -50,38 +50,6 @@
     </div>
 </div>
 
-    <!-- Permission checkboxes -->
-    
-      <!-- <label class="mr-3 mb-0">
-        <input type="checkbox"
-               [(ngModel)]="menu.permissions.view"
-               [disabled]="!menu.permissions.enabled"
-               (change)="toggleChildPermissions('view', menu.permissions.view)" />
-        <span class="ml-1">View</span>
-      </label>
-      <label class="mr-3 mb-0">
-        <input type="checkbox"
-               [(ngModel)]="menu.permissions.create"
-               [disabled]="!menu.permissions.enabled"
-               (change)="toggleChildPermissions('create', menu.permissions.create)" />
-        <span class="ml-1">Create</span>
-      </label>
-      <label class="mr-3 mb-0">
-        <input type="checkbox"
-               [(ngModel)]="menu.permissions.edit"
-               [disabled]="!menu.permissions.enabled"
-               (change)="toggleChildPermissions('edit', menu.permissions.edit)" />
-        <span class="ml-1">Edit</span>
-      </label>
-      <label class="mb-0">
-        <input type="checkbox"
-               [(ngModel)]="menu.permissions.delete"
-               [disabled]="!menu.permissions.enabled"
-               (change)="toggleChildPermissions('delete', menu.permissions.delete)" />
-        <span class="ml-1">Delete</span>
-      </label>
-    </div>
-  </div> -->
 
   <!-- Child Nodes -->
   <ul *ngIf="menu.Children?.length > 0 && expanded" class="list-group mt-2 ml-4">
