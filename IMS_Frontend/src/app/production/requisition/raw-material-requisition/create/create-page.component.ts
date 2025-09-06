@@ -55,10 +55,14 @@ export class CreatePageComponent implements OnInit {
     .subscribe(() => this.recalcTotals());
   }
 
+
   ngOnDestroy(): void {
   this.destroy$.next();
   this.destroy$.complete();
 }
+  loadPageData(): void {
+    // Logic to load initial data for the page
+  }
 
   generateForm() {
     this.requisitionForm = this.fb.group({
@@ -255,6 +259,5 @@ private rowsCompleteValidator(): ValidatorFn {
           swal.fire('Error', 'Could not save requisition', 'error');
         }
       });
-    
   }
 }

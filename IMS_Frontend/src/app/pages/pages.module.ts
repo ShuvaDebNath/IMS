@@ -18,17 +18,25 @@ import { BaseContentComponent } from '../dashboard/base-content/base-content.com
 import { HeaderComponent } from '../dashboard/header/header.component';
 import { FooterComponent } from '../dashboard/footer/footer.component';
 import { SidebarComponent } from '../dashboard/sidebar/sidebar.component';
-
-//Material Data Table
 import { MatPaginatorModule } from '@angular/material/paginator';
+import {MatPaginatorModule} from '@angular/material/paginator';
 import { Select2Module } from 'ng-select2-component';
 import { TreeTableModule } from 'primeng/treetable';
 import { TreeModule } from 'primeng/tree';
 import { DropdownModule } from 'primeng/dropdown'
 import { SelectButtonModule } from 'primeng/selectbutton';
-// import { ProjectWiseExpenseComponent } from '../Project-Wise-Income-Expense/project-wise-expense/project-wise-expense.component';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { DatePipe } from '@angular/common';
+import {PopoverModule} from 'ngx-bootstrap/popover';
+import {DatePipe} from '@angular/common';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputTextModule } from 'primeng/inputtext';
+import { PagesComponent } from './pages.component';
+import { BaseContentComponent } from '../dashboard/base-content/base-content.component';
+import { HeaderComponent } from '../dashboard/header/header.component';
+import { FooterComponent } from '../dashboard/footer/footer.component';
+import { SidebarComponent } from '../dashboard/sidebar/sidebar.component';
 import { RoleListComponent } from '../Roles/role-list/role-list.component';
 import { RoleCreateComponent } from '../Roles/role-create/role-create.component';
 import { MenuComponent } from '../dashboard/menu/menu.component';
@@ -44,10 +52,16 @@ import { AllRMRequisitionListComponent } from '../production/requisition/raw-mat
 import { PendingRMRequisitionWareHouseComponent } from '../production/requisition/raw-material-requisition/list/PendingRMRequisition_Warehouse/pending-rm-requisition-warehouse.component';
 import { AcceptedRMRequisitionWareHouseComponent } from '../production/requisition/raw-material-requisition/list/AcceptedRMRequisition_Warehouse/accepted-rm-requisition-warehouse.component';
 import { IssuedRMRequisitionListWarehouseComponent } from '../production/requisition/raw-material-requisition/list/IssuedRMRequisitionList_Warehouse/issued-rm-requisition-list-warehouse.component';
-
-// import {MatSortModule} from '@angular/material/sort';
-// import {MatTableModule} from '@angular/material/table';
-//!--Material Data Table
+import { ChangePasswordComponent } from '../authentication/change-password/change-password.component';
+import { LandingPageComponent } from '../landing-page/landing-page.component';
+import { GenerateLcComponent } from '../lc/generate-lc/generate-lc.component';
+import { AllLcComponent } from '../lc/all-lc/all-lc.component';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { TableModule } from 'primeng/table';
+import {DialogModule} from 'primeng/dialog'
+import { GenerateCommercialInvoiceComponent } from '../commercial-document/generate-commercial-invoice/generate-commercial-invoice.component';
+import { AllCommercialInvoiceComponent } from '../commercial-document/all-commercial-invoice/all-commercial-invoice.component';
+import { GeneratePiComponent } from '../PI/generate-pi/generate-pi.component';
 
 const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more options
   keepSelectedItems: false,
@@ -65,9 +79,17 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     RoleCreateComponent,
     MenuComponent,
     AccessNodeComponent,
-    AccessPanelComponent
-  ],
+    AccessPanelComponent,
+    ChangePasswordComponent,
+    GenerateLcComponent,
+    AllLcComponent,
+    GenerateCommercialInvoiceComponent,
+    AllCommercialInvoiceComponent
+    GeneratePiComponent
+    ],
   imports: [
+
+    NgSelectModule,
     CommonModule,
     Select2Module,
     HttpClientModule,
@@ -79,7 +101,13 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     TreeModule,
     DropdownModule,
     SelectButtonModule,
-    PopoverModule,
+    PopoverModule,MultiSelectModule,
+    TableModule,
+    DialogModule,
+    CheckboxModule,
+    InputTextModule,
+    PopoverModule,    
+    DatePipe,
     UiSwitchModule.forRoot({
       size: 'small',
       color: 'rgb(0, 189, 99)',
@@ -115,7 +143,13 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
               import('../production/requisition/raw-material-requisition/edit/PendingRMRequisitionProduction/pending-rm-requisition-production-edit.component')
                 .then(m => m.PendingRMRequisitionProductionEditComponent)
           }
-
+           {path: 'change-password', component: ChangePasswordComponent},       
+           {path:"landing-page",component:LandingPageComponent}
+           {path: 'all-lc', component: AllLcComponent},
+           {path: 'generate-lc', component: GenerateLcComponent},
+           {path: 'generate-commercial-invoice', component: GenerateCommercialInvoiceComponent},
+           {path: 'all-commercial-invoice', component: AllCommercialInvoiceComponent},
+          { path: 'generate-pi', component: GeneratePiComponent },
         ]
       }
     ]),

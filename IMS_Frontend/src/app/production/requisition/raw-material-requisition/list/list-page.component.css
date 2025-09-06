@@ -1,4 +1,4 @@
-/* Add your CSS styles here */
+
 
 /* Styles for List Page Component */
 .container {
@@ -26,4 +26,24 @@ h1 {
 .tab.active {
   background-color: #007bff;
   color: #fff;
+}
+.theme-bg{
+    background-color: #6a1a3f!important;
+}
+.theme-btn:hover{
+    background-color: #800080;
+    color: white;
+}
+.theme-btn{
+    background-color: #6a1a3f;
+    color: white;
+}
+.theme-text{
+    color: #6a1a3f;
+}
+.theme-color{
+    color: #6a1a3f;
+}
+table-bordered td, .table-bordered th {
+    border: 1px solid #6a1a3f !important;
 }

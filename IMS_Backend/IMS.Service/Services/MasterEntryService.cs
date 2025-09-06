@@ -8,6 +8,8 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Data;
+using System.Collections.Generic;
+using System.Text.Json.Nodes;
 
 namespace Boilerplate.Service.Services
 {
@@ -112,6 +114,73 @@ namespace Boilerplate.Service.Services
             }
         }
 
+        public async Task<Messages> InsertThenUpdateRefTable(MasterEntryWithSlUpdateModel item, string userName)
+        {
+            try
+            {
+                //_validationHelper.ValidateModel(item, item.TableName ?? string.Empty);
+
+                MasterEntryModel model = new MasterEntryModel();
+                model.TableName = item.TableName;
+                model.QueryParams = item.QueryParams;
+                //model.WhereParams = item.WhereParams;
+                model.ColumnNames = item.ColumnNames;
+
+                var sqlQuery = $"INSERT INTO [dbo].[{item.TableName}] ";
+
+                sqlQuery += InsertQueryGeneratorWithKeyParams(model);
+
+                sqlQuery += InsertQueryGeneratorWithValueParams(model, userName);
+
+                sqlQuery += " ; SELECT CAST(SCOPE_IDENTITY() AS int);";
+
+                var resultPrimaryKey =await _masterEntryRepository.ExecuteWriteOperationWithReturnKeyAsync(sqlQuery);
+
+                MasterEntryModel modelUpdate = new MasterEntryModel();
+                modelUpdate.TableName = (string?)item.UpdateTableName;
+                string columnName = (string)item.UpdateColumnName; // property name stored in a variable
+
+                var jsonObj = new JsonObject
+                {
+                    [columnName] = resultPrimaryKey
+                };
+
+                string json = jsonObj.ToJsonString();
+                modelUpdate.QueryParams = json;
+
+                var whereArr = item.WhereParams.ToString().Split('@');
+                foreach ( var whereItem in whereArr )
+                {
+
+                    modelUpdate.WhereParams = whereItem;
+
+
+                    var result = Update(modelUpdate, userName);
+                }
+
+
+                if (resultPrimaryKey > 0)
+                {
+                    _logger.LogInformation($"Data Save Success!");
+                    return MessageType.SaveSuccess(model);
+                }
+                _logger.LogInformation($"Data Save Fail!");
+                return MessageType.SaveError(null);
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning($"Validation failed: {ex.Message}");
+                return MessageType.SaveError(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                string innserMsg = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                _logger.LogError($"Source: {ex.Source}; Stack Trace: {ex.StackTrace}; Message: {ex.Message}; Inner Exception: {innserMsg};");
+                throw;
+            }
+        }
+
+
         public Messages Update(MasterEntryModel item,string userName)
         {
             try
@@ -162,6 +231,66 @@ namespace Boilerplate.Service.Services
             {
                 string innserMsg = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
                 _logger.LogInformation($"Sourc: {ex.Source};\t Stack Trace: {ex.StackTrace};\t Message: {ex.Message};\t Inner Exception: {innserMsg};\n", "");
+                throw;
+            }
+        }
+
+        public async Task<Messages> DeleteThenUpdateSl(MasterEntryWithSlUpdateModel item, string userName)
+        {
+            try
+            {
+                //_validationHelper.ValidateModel(item, item.TableName ?? string.Empty);
+
+                MasterEntryModel modelUpdate = new MasterEntryModel();
+                modelUpdate.TableName = (string?)item.UpdateTableName;
+                string columnName = (string)item.UpdateColumnName; // property name stored in a variable
+
+                var jsonObj = new JsonObject
+                {
+                    [columnName] = ""
+                };
+
+                string json = jsonObj.ToJsonString();
+                modelUpdate.QueryParams = json;
+
+
+                var whereArr = item.WhereParams.ToString().Split('@');
+                foreach (var whereItem in whereArr)
+                {
+                    modelUpdate.WhereParams = whereItem;
+                    var result = Update(modelUpdate, userName);
+                }
+
+                MasterEntryModel model = new MasterEntryModel();
+                model.TableName = item.TableName;
+                model.QueryParams = item.QueryParams;
+                model.WhereParams = item.WhereParams;
+                model.ColumnNames = item.ColumnNames;
+
+                var sqlQuery = $" DELETE FROM [dbo].[{item.TableName}] ";
+
+                sqlQuery += WhereParams(model);
+
+                var resultDelete = _masterEntryRepository.ExecuteWriteOperation(sqlQuery);
+
+                if (resultDelete)
+                {
+                    _logger.LogInformation($"Data Delete Success!");
+                    return MessageType.SaveSuccess(model);
+                }
+
+                _logger.LogInformation($"Data Delete Fail!");
+                return MessageType.DeleteError(null);
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning($"Validation failed: {ex.Message}");
+                return MessageType.SaveError(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                string innserMsg = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                _logger.LogError($"Source: {ex.Source}; Stack Trace: {ex.StackTrace}; Message: {ex.Message}; Inner Exception: {innserMsg};");
                 throw;
             }
         }

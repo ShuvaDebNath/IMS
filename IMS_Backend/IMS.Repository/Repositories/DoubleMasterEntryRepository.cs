@@ -469,6 +469,7 @@ namespace Boilerplate.Repository.Repositories
 
         private async Task<int> MasterTableInsertWithIdentity(DoubleMasterEntryModel model, SqlCommand cmd, string authUserName, int serialNo)
         {
+
             string? masterTablename = model.TableNameMaster;
             var masterColumns = new StringBuilder();
             var masterValues = new StringBuilder();

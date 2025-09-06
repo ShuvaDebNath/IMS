@@ -1,3 +1,4 @@
+
 <div class="container">
   <h1>Raw Material Requisition Form</h1>
 
@@ -17,6 +18,20 @@
         <label class="form-label">Remarks</label>
         <textarea class="form-control" formControlName="remarks" rows="1"></textarea>
       </div>
+<div class="container shadow-sm p-3 mb-5 bg-white rounded">
+  <h1 class="theme-text">RM Requisition Form</h1>
+  <form>
+    <div class="form-group">
+      <label for="requisitionDate theme-text">Requisition Date</label>
+      <input type="text" id="requisitionDate" class="form-control" value="27/08/2025" readonly>
+    </div>
+    <div class="form-group">
+      <label for="requisitionNumber">Requisition Number</label>
+      <input type="text" id="requisitionNumber" class="form-control" value="20250827-VL101" readonly>
+    </div>
+    <div class="form-group">
+      <label for="remarks">Remarks</label>
+      <textarea id="remarks" class="form-control"></textarea>
     </div>
 
 
@@ -98,6 +113,12 @@
             <button type="button" class="btn btn-sm btn-danger" (click)="removeItem(i)">
               ×
             </button>
+        </tr>
+        <tr>
+          <td colspan="8">Total</td>
+          <td colspan="2">
+            <div>Rolls</div>
+            <div>Bags</div>
           </td>
         </tr>
       </tbody>
@@ -124,7 +145,6 @@
     </table>
 
 
-
     <div class="d-flex justify-content-end gap-2 mt-3">
       <button type="button" class="btn btn-outline-success btn-rounded" (click)="addItem()">
         <i class="bi bi-plus-circle me-1"></i> Add Row
@@ -134,8 +154,6 @@
         <i class="bi bi-save me-1"></i> Save
       </button>
     </div>
-
-
   </form>
 
 </div>

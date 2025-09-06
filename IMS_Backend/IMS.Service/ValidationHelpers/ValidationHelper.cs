@@ -30,6 +30,16 @@ public class ValidationHelper
         ValidateParameters(model.WhereParams, rules.WhereParams, "WhereParams");
     }
 
+    public void ValidateModelWithUpdateSl(MasterEntryWithSlUpdateModel model, string schemaKey)
+    {
+        if (!_schemaCache.ValidationSchemas.TryGetValue(schemaKey, out var rules))
+            throw new Exception($"No validation rules found for the entity: {schemaKey}");
+        ValidateProperty(model.TableName, rules.TableName, "TableName");
+        ValidateParameters(model.ColumnNames, rules.ColumnNames, "ColumnNames");
+        ValidateParameters(model.QueryParams, rules.QueryParams, "QueryParams");
+        ValidateParameters(model.WhereParams, rules.WhereParams, "WhereParams");
+    }
+
     private void ValidateProperty(object? columnNames1, Dictionary<string, PropertyRule>? columnNames2, string v)
     {
         throw new NotImplementedException();
