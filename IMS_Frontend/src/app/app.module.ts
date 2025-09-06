@@ -22,6 +22,10 @@ import { DatePipe } from '@angular/common';
 import { RoleListComponent } from './Roles/role-list/role-list.component';
 import { RoleCreateComponent } from './Roles/role-create/role-create.component';
 import { MatPaginatorModule } from "@angular/material/paginator";
+import { ArbitrationComponent } from './arbitration/arbitration.component';
+import { TableComponent } from './common/table/table.component';
+import { LandingPageComponent } from './landing-page/landing-page.component';
+
 
 
 const CustomSelectOptions: INgxSelectOptions = {
@@ -39,6 +43,10 @@ const CustomSelectOptions: INgxSelectOptions = {
     PageNotFoundComponent,
     LogoutComponent,
     ResetPasswordComponent,
+    ArbitrationComponent,
+    TableComponent,
+    LandingPageComponent
+
   ],
   imports: [
     FormsModule,
@@ -61,7 +69,10 @@ const CustomSelectOptions: INgxSelectOptions = {
     BrowserAnimationsModule,
     NgxSelectModule.forRoot(CustomSelectOptions),
     BsDropdownModule.forRoot(),
-    MatPaginatorModule
+    MatPaginatorModule,
+],
+exports:[
+
 ],
   providers: [DatePipe],
   bootstrap: [AppComponent],

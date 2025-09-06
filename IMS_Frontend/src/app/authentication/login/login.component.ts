@@ -53,9 +53,7 @@ export class LoginComponent implements OnInit {
       swal.fire('Invalid Input', '', 'error');
       return;
     }
-    console.log(this.LoginForm.value);
     this.service.UserLogin(this.LoginForm.value).subscribe((res) => {
-      console.log(res);
       if (res.isAuthorized) {
         // let company = this.companyList.filter((x: { ComId: any; })=> x.ComId == this.LoginForm.controls.comId.value);
          window.localStorage.setItem('token', res.token);
@@ -76,7 +74,6 @@ export class LoginComponent implements OnInit {
         
             this.ms.GetInitialData(ProcedureData).subscribe({
               next: (results) => {
-                console.log(JSON.parse(results.data).Tables1);
         
                 if (results.status) {
                   menu = JSON.parse(results.data).Tables2;

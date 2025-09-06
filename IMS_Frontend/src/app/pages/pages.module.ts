@@ -20,7 +20,6 @@ import { TreeTableModule } from 'primeng/treetable';
 import { TreeModule } from 'primeng/tree';
 import { DropdownModule } from 'primeng/dropdown'
 import { SelectButtonModule } from 'primeng/selectbutton';
-// import { ProjectWiseExpenseComponent } from '../Project-Wise-Income-Expense/project-wise-expense/project-wise-expense.component';
 import {PopoverModule} from 'ngx-bootstrap/popover';
 import {DatePipe} from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -42,6 +41,15 @@ import { CreatePageComponent } from '../production/requisition/raw-material-requ
 import { EditPageComponent } from '../production/requisition/raw-material-requisition/edit/edit-page.component';
 import { ListPageComponent } from '../production/requisition/raw-material-requisition/list/list-page.component';
 import { ChangePasswordComponent } from '../authentication/change-password/change-password.component';
+import { LandingPageComponent } from '../landing-page/landing-page.component';
+import { GenerateLcComponent } from '../lc/generate-lc/generate-lc.component';
+import { AllLcComponent } from '../lc/all-lc/all-lc.component';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { TableModule } from 'primeng/table';
+import {DialogModule} from 'primeng/dialog'
+import { GenerateCommercialInvoiceComponent } from '../commercial-document/generate-commercial-invoice/generate-commercial-invoice.component';
+import { AllCommercialInvoiceComponent } from '../commercial-document/all-commercial-invoice/all-commercial-invoice.component';
+import { GeneratePiComponent } from '../PI/generate-pi/generate-pi.component';
 import { GeneratePiComponent } from '../PI/generate-pi/generate-pi.component';
 import { GenerateCpiComponent } from '../PI/generate-cpi/generate-cpi.component';
 
@@ -69,6 +77,12 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     AccessNodeComponent,
     AccessPanelComponent,
     ChangePasswordComponent,
+    GenerateLcComponent,
+    AllLcComponent,
+    GenerateCommercialInvoiceComponent,
+    AllCommercialInvoiceComponent
+    GeneratePiComponent
+    ChangePasswordComponent,
     GeneratePiComponent,
     GenerateCpiComponent
     ],
@@ -86,6 +100,13 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     TreeModule,
     DropdownModule,
     SelectButtonModule,
+    PopoverModule,MultiSelectModule,
+    TableModule,
+    DialogModule,
+    CheckboxModule,
+    InputTextModule,
+    PopoverModule,    
+    DatePipe,
     CheckboxModule,
     InputTextModule,
     PopoverModule,
@@ -112,7 +133,13 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'create-raw-material', component: CreatePageComponent },
           { path: 'edit-raw-material', component: EditPageComponent },
           { path: 'list-raw-material', component: ListPageComponent },
-           {path: 'change-password', component: ChangePasswordComponent},
+           {path: 'change-password', component: ChangePasswordComponent},       
+           {path:"landing-page",component:LandingPageComponent}
+           {path: 'all-lc', component: AllLcComponent},
+           {path: 'generate-lc', component: GenerateLcComponent},
+           {path: 'generate-commercial-invoice', component: GenerateCommercialInvoiceComponent},
+           {path: 'all-commercial-invoice', component: AllCommercialInvoiceComponent},
+          { path: 'generate-pi', component: GeneratePiComponent },
           { path: 'generate-pi', component: GeneratePiComponent },
           { path: 'generate-cpi', component: GenerateCpiComponent },
         ]
