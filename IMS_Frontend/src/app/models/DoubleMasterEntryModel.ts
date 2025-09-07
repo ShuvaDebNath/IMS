@@ -10,4 +10,5 @@ export class DoubleMasterEntryModel {
   detailsData: any;
   whereParams: any;
   GuidKey:any;
+  Status:string|any;
 }

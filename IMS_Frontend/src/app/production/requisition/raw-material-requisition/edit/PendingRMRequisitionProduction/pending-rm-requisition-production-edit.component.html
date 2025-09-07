@@ -1,0 +1,105 @@
+<!-- pending-rm-requisition-production-edit.component.html -->
+<div class="container">
+  <h1>Edit Pending RM Requisition</h1>
+
+  <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+    <div class="row g-3 mb-3">
+      <div class="col-md-4">
+        <label class="form-label" for="RequisitionNumber">Requisition Number</label>
+        <input id="RequisitionNumber" class="form-control" type="text" formControlName="RequisitionNumber" readonly />
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label" for="RequisitionDate">Requisition Date</label>
+        <input id="RequisitionDate" class="form-control" type="date" formControlName="RequisitionDate" />
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label" for="Remarks">Remarks</label>
+        <textarea id="Remarks" class="form-control" formControlName="Remarks"></textarea>
+      </div>
+    </div>
+
+
+
+    <table class="table table-sm table-bordered align-middle">
+      <thead class="table-light">
+        <tr>
+          <th style="width: 40%; text-align: center;">Article</th>
+          <th style="width: 30%; text-align: center;">Description</th>
+          <th style="width: 10%; text-align: center;">Quantity</th>
+          <th style="width: 10%; text-align: center;">Roll/Bag</th>
+          <th style="width: 10%; text-align: center;">R/B Qty</th>
+          <th style="width: 10%; text-align: center;">Action</th>
+        </tr>
+      </thead>
+
+      <tbody formArrayName="Items">
+        <tr *ngFor="let fg of items.controls; let i = index" [formGroupName]="i">
+          <td>
+            <p-dropdown class="p-0 rm-dd" [style]="{ width: '100%' }" [panelStyle]="{ width: '100%' }"
+              [options]="rawMaterialArticles" optionLabel="ConcatArticleNo" optionValue="RawMaterial_ID" [filter]="true"
+              filterBy="ConcatArticleNo" [showClear]="true" placeholder="Please Select"
+              (onChange)="onArticleChange(i, $event.value)" formControlName="RawMaterial_ID">
+              <ng-template let-article pTemplate="item">
+                <div class="flex align-items-center gap-2">
+                  <div>{{ article.ConcatArticleNo }}</div>
+                </div>
+              </ng-template>
+            </p-dropdown>
+          </td>
+          <td><input class="form-control" formControlName="Description"></td>
+          <td><input class="form-control" style="text-align: center;" type="number" min="0" formControlName="Quantity">
+          </td>
+          <td>
+            <select class="form-select text-center" formControlName="Roll_Bag">
+              <option *ngFor="let opt of rollOrBagOptions" [value]="opt.value">
+                {{ opt.label }}
+              </option>
+            </select>
+          </td>
+
+          <td><input class="form-control" style="text-align: center;" type="number" min="0"
+              formControlName="RollBag_Quantity">
+          </td>
+
+          <td>
+            <button type="button" class="btn btn-sm btn-danger" (click)="removeItem(i)">
+              ×
+            </button>
+          </td>
+        </tr>
+      </tbody>
+
+      <tr class="totals-row">
+        <td></td>
+        <td class="text-end fw-bold">Totals:</td>
+        <td>
+          <input class="form-control text-center" formControlName="Total_Qty" readonly />
+        </td>
+        <td>
+          <div class="rbq-label">Rolls</div>
+          <div class="rbq-label">Bags</div>
+        </td>
+        <td colspan="2" class="rbq-total-cell">
+          <div class="rbq-grid">
+            <input class="form-control text-end" formControlName="Total_Roll" readonly /><br />
+            <input class="form-control text-end" formControlName="Total_bag" readonly />
+          </div>
+        </td>
+      </tr>
+    </table>
+    <div class="d-flex justify-content-end gap-2 mt-3">
+      <button type="button" class="btn btn-outline-success btn-rounded" (click)="addItem()">
+        <i class="bi bi-plus-circle me-1"></i> Add Row
+      </button>
+
+      <button type="submit" class="btn btn-primary btn-rounded" [disabled]="editForm.invalid">
+        <i class="bi bi-save me-1"></i> Save
+      </button>
+    </div>
+
+
+    <!-- <button type="submit" class="btn btn-primary">Save</button> -->
+  </form>
+</div>

@@ -65,51 +65,51 @@ export class GlobalServiceService {
     return window.localStorage.getItem(key);
   }
 
-  public Logout() {
-    this.ClearSession();
-          window.open(`${GlobalConfig.LOGIN_URL_USERMANAGE}`, '_self');
-    // let user = this.GetSessionUser();
-    // let model = {
-    //   comId: '',
-    //   concernId: user.concernId,
-    //   deleteBy : '',
-    //   deleteDate: '',
-    //   email: user.email,
-    //   emailConfirmed: true,
-    //   fullName: '',
-    //   id: user.id,
-    //   isActive: true,
-    //   makeBy: '',
-    //   menuId: '',
-    //   password: '',
-    //   projectId: user.projectId,
-    //   updateBy: '',
-    //   userName: user.userName,
-    //   userTypeId: user.userTypeId,
-    //   UserId: '',
-    //   UserTypeName:''
-    // };
-    // return this.http
-    //   .post<any>(`${GlobalConfig.BASE_URL_USERMANAGE}LogIn/Logout`, model, {
-    //     headers: new HttpHeaders({
-    //       'Content-Type': 'application/json',
-    //     }),
-    //   })
-    //   .pipe(
-    //     map((Response) => {
-    //       this.ClearSession();
-    //       window.open(`${GlobalConfig.LOGIN_URL_USERMANAGE}`, '_self');
-    //     })
-    //   );
-  }
+  // public Logout() {
+  //   this.ClearSession();
+  //         window.open(`${GlobalConfig.LOGIN_URL_USERMANAGE}`, '_self');
+  //   // let user = this.GetSessionUser();
+  //   // let model = {
+  //   //   comId: '',
+  //   //   concernId: user.concernId,
+  //   //   deleteBy : '',
+  //   //   deleteDate: '',
+  //   //   email: user.email,
+  //   //   emailConfirmed: true,
+  //   //   fullName: '',
+  //   //   id: user.id,
+  //   //   isActive: true,
+  //   //   makeBy: '',
+  //   //   menuId: '',
+  //   //   password: '',
+  //   //   projectId: user.projectId,
+  //   //   updateBy: '',
+  //   //   userName: user.userName,
+  //   //   userTypeId: user.userTypeId,
+  //   //   UserId: '',
+  //   //   UserTypeName:''
+  //   // };
+  //   // return this.http
+  //   //   .post<any>(`${GlobalConfig.BASE_URL_USERMANAGE}LogIn/Logout`, model, {
+  //   //     headers: new HttpHeaders({
+  //   //       'Content-Type': 'application/json',
+  //   //     }),
+  //   //   })
+  //   //   .pipe(
+  //   //     map((Response) => {
+  //   //       this.ClearSession();
+  //   //       window.open(`${GlobalConfig.LOGIN_URL_USERMANAGE}`, '_self');
+  //   //     })
+  //   //   );
+  // }
   public GetSessionUser() {
     let user = JSON.parse(this.getSessionData('user'));
     return user;
   }
-  // public Logout() {
-  //   this.ClearSession();
-  //   this.router.navigate(['/login']);
-  // }
+  public Logout() {
+    this.ClearSession();
+    this.router.navigate(['/login']);
+  }
 
   public ClearSession() {
     window.localStorage.clear();
