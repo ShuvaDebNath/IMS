@@ -50,7 +50,6 @@ import {DialogModule} from 'primeng/dialog'
 import { GenerateCommercialInvoiceComponent } from '../commercial-document/generate-commercial-invoice/generate-commercial-invoice.component';
 import { AllCommercialInvoiceComponent } from '../commercial-document/all-commercial-invoice/all-commercial-invoice.component';
 import { GeneratePiComponent } from '../PI/generate-pi/generate-pi.component';
-import { GeneratePiComponent } from '../PI/generate-pi/generate-pi.component';
 import { GenerateCpiComponent } from '../PI/generate-cpi/generate-cpi.component';
 
 
@@ -80,8 +79,7 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     GenerateLcComponent,
     AllLcComponent,
     GenerateCommercialInvoiceComponent,
-    AllCommercialInvoiceComponent
-    GeneratePiComponent
+    AllCommercialInvoiceComponent,
     ChangePasswordComponent,
     GeneratePiComponent,
     GenerateCpiComponent
@@ -134,12 +132,11 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'edit-raw-material', component: EditPageComponent },
           { path: 'list-raw-material', component: ListPageComponent },
            {path: 'change-password', component: ChangePasswordComponent},       
-           {path:"landing-page",component:LandingPageComponent}
+           {path: 'landing-page',component:LandingPageComponent},
            {path: 'all-lc', component: AllLcComponent},
            {path: 'generate-lc', component: GenerateLcComponent},
-           {path: 'generate-commercial-invoice', component: GenerateCommercialInvoiceComponent},
            {path: 'all-commercial-invoice', component: AllCommercialInvoiceComponent},
-          { path: 'generate-pi', component: GeneratePiComponent },
+           {path: 'generate-commercial-invoice', component: GenerateCommercialInvoiceComponent},
           { path: 'generate-pi', component: GeneratePiComponent },
           { path: 'generate-cpi', component: GenerateCpiComponent },
         ]
