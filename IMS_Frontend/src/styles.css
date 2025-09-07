@@ -297,7 +297,7 @@ input[type=number] {
 
 .sticky-header {
   position: sticky;
-  top: 4.5rem;
+  top: 0;
   z-index: 100;
   background-color: white; /* Ensure it's not transparent */
   padding: 10px;

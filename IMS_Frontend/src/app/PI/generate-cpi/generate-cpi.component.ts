@@ -196,7 +196,7 @@ datePipe = new DatePipe('en-US');
     const itemArray = this.Formgroup.get('ItemArray') as FormArray;
     itemArray.controls.forEach(control => {
       this.GTQTY+=control.value.Quantity;
-      this.GTAMNT+=control.value.Total_Amount;
+      this.GTAMNT+=control.value.Total_Amount_Tk;
     });
   }
 

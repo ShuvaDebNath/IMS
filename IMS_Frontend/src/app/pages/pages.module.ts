@@ -13,8 +13,7 @@ import { NgxSelectModule, INgxSelectOptions } from 'ngx-select-ex';
 import { UiSwitchModule } from 'ngx-ui-switch';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { MatPaginatorModule } from '@angular/material/paginator';
-//Material Data Table
-import {MatPaginatorModule} from '@angular/material/paginator';
+//Material Data Table;
 import { Select2Module } from 'ng-select2-component';
 import { TreeTableModule } from 'primeng/treetable';
 import { TreeModule } from 'primeng/tree';
@@ -86,7 +85,7 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     GenerateCommercialInvoiceComponent,
     AllCommercialInvoiceComponent,
     GeneratePiComponent,
-    LandingPageComponent
+    LandingPageComponent,
     AllCommercialInvoiceComponent,
     ChangePasswordComponent,
     GeneratePiComponent,
