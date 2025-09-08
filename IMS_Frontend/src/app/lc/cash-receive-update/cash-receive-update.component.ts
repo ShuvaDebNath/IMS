@@ -38,9 +38,9 @@ export class CashReceiveUpdateComponent {
     private title: Title
   ) {
     // this.gs.CheckToken().subscribe();
-    let has = this.activeLink.snapshot.queryParamMap.has('CRId');
+    let has = this.activeLink.snapshot.queryParamMap.has('CR_Id');
     if (has) {
-      this.CRId = this.activeLink.snapshot.queryParams['CRId'];
+      this.CRId = this.activeLink.snapshot.queryParams['CR_Id'];
       this.isEdit = true;
     } else {
       this.isEdit = false;
@@ -48,32 +48,15 @@ export class CashReceiveUpdateComponent {
   }
 
   ngOnInit() {
-    this.menu = window.localStorage.getItem('UserMenuWithPermission');
-    this.menu = JSON.parse(this.menu);
-    var buttonPermissions: any = [];
-    var countFound = 0;
-    this.menu.forEach((e: any) => {
-      e.Children = JSON.parse(e.Children);
-      e.Children.forEach((childMenu: any) => {
-        if (childMenu.SubMenuName == 'Cash-Receive') {
-          countFound++;
-          buttonPermissions = childMenu.ButtonName;
-        }
-      });
-    });
-    if (countFound == 0) {
-      //window.location.href='dashboard';
-    } else {
-      buttonPermissions.forEach((buttonCheck: any) => {
-        if (buttonCheck.ButtonName == 'Insert') {
-          this.insertPermissions = true;
-        }
-      });
-    }
-
-    if (!this.insertPermissions) {
-      //window.location.href='all-lc';
-    }
+    var permissions = this.gs.CheckUserPermission("All Cash Receive");
+    this.insertPermissions = permissions.insertPermissions;
+    this.updatePermissions = permissions.updatePermissions;
+    this.deletePermissions = permissions.deletePermissions;
+    this.printPermissions = permissions.printPermissions;
+    
+    if(!this.updatePermissions){
+      window.location.href='all-cash-receive';
+    }   
 
     this.title.setTitle('Cash Receive Update');
     this.GenerateFrom();
@@ -111,9 +94,10 @@ export class CashReceiveUpdateComponent {
       next: (results) => {
         if (results.status) {
           this.PIData = JSON.parse(results.data).Tables1;
-
+          console.log(results);
+          
           this.ReceiveAmount = this.PIData[0].Total_Receive_Amount;
-          this.Balance = this.PIData[0].Balance;
+          this.Balance = this.PIData[0].balance;
           this.LC_Value = this.PIData[0].LC_Value;
           this.PINo = this.PIData[0].PINo;
 

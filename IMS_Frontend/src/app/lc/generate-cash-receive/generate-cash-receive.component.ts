@@ -106,7 +106,7 @@ export class GenerateCashReceiveComponent {
 
       getInitialData(){
         var ProcedureData = {
-          procedureName: '[usp_Cash_GetInitialData]',
+          procedureName: '[usp_CashReceive_GetInitialData]',
           parameters: {
           }
         }; 
@@ -134,7 +134,7 @@ export class GenerateCashReceiveComponent {
     getPINoByMarketingConcern(){
       
       var ProcedureData = {
-        procedureName: '[usp_Cash_PINo_ByMarketingConcern]',
+        procedureName: '[usp_CashReceive_PINo_ByMarketingConcern]',
         parameters: {
           'UserID':this.Formgroup.value.Marketing_Concern
         }
@@ -215,8 +215,9 @@ export class GenerateCashReceiveComponent {
                 cd.Last_Receive_Amount = this.Formgroup.value.ReceiveAmount;
                 cd.Total_Receive_Amount = this.Formgroup.value.ReceiveAmount;
                 cd.Last_Receive_Date = this.Formgroup.value.ReceiveDate==undefined?null:this.Formgroup.value.ReceiveDate;
-                cd.Balance = this.Formgroup.value.PIValue - this.Formgroup.value.ReceiveAmount;
-              
+                cd.Issue_Date = this.Formgroup.value.IssueDate==undefined?null:this.Formgroup.value.IssueDate;
+                cd.Balance = this.Formgroup.value.PIValue - this.Formgroup.value.ReceiveAmount;     
+                cd.PI_Master_ID = this.Formgroup.value.PI;         
               
                 var TableNameMaster = 'tbl_cash_receive_master';
                 var TableNameChild = 'tbl_cash_receive_detail';
@@ -234,8 +235,12 @@ export class GenerateCashReceiveComponent {
                 }
 
                 detailsData.push(details);
+
+                var whereParam = {
+                  'PI_Master_ID':this.Formgroup.value.PI
+                }
         
-                this.masterEntyService.SaveDataMasterDetails(detailsData,TableNameChild,cd,TableNameMaster,ColumnNamePrimary,ColumnNameForign,'','',false).subscribe((res:any) => {
+                this.masterEntyService.SaveDataMasterDetails(detailsData,TableNameChild,cd,TableNameMaster,ColumnNamePrimary,ColumnNameForign,'','',false,whereParam).subscribe((res:any) => {
                         console.log(res);
                         
                         if (res.status) {

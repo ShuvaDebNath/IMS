@@ -7,4 +7,5 @@ public interface IDoubleMasterEntryRepository
     public Task<int> DeleteData(DoubleMasterEntryModel model);
 
     public Task<int> SaveDataWithIdentity(DoubleMasterEntryModel model, string AuthUserName);
+    public Task<int> UpdateDataWithIdentity(DoubleMasterEntryModel model, string AuthUserName);
 }

@@ -14,13 +14,17 @@ import { LogoutComponent } from './authentication/logout/logout.component';
 import { ResetPasswordComponent } from './authentication/reset-password/reset-password.component';
 import { LoginComponent } from './authentication/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { NgxSelectModule, INgxSelectOptions } from 'ngx-select-ex';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { DatePipe } from '@angular/common';
 import { MatPaginatorModule } from "@angular/material/paginator";
-import { LandingPageComponent } from './landing-page/landing-page.component';
-import { CashReceiveUpdateComponent } from './lc/cash-receive-update/cash-receive-update.component';
-import { CashReceiveDetailsComponent } from './lc/cash-receive-details/cash-receive-details.component';
 
 
+const CustomSelectOptions: INgxSelectOptions = {
+  keepSelectedItems: false,
+  allowClear: true,
+};
 
 @NgModule({
   declarations: [
@@ -31,8 +35,7 @@ import { CashReceiveDetailsComponent } from './lc/cash-receive-details/cash-rece
     ForbiddenErrorComponent,
     PageNotFoundComponent,
     LogoutComponent,
-    ResetPasswordComponent,
-    LandingPageComponent,
+    ResetPasswordComponent
   ],
   imports: [
     FormsModule,
@@ -40,6 +43,8 @@ import { CashReceiveDetailsComponent } from './lc/cash-receive-details/cash-rece
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    NgxDatatableModule,
+    NgMultiSelectDropDownModule.forRoot(),
     RouterModule.forRoot([
         { path: '', component: LoginComponent },
         {
@@ -51,6 +56,7 @@ import { CashReceiveDetailsComponent } from './lc/cash-receive-details/cash-rece
     ], { useHash: false, onSameUrlNavigation: 'reload' }),
     PagesModule,
     BrowserAnimationsModule,
+    NgxSelectModule.forRoot(CustomSelectOptions),
     BsDropdownModule.forRoot(),
     MatPaginatorModule,
 ],

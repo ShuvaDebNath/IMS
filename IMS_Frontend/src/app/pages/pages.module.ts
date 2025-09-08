@@ -1,18 +1,19 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule,ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
-import { NgxBootstrapTreeviewModule } from 'ngx-bootstrap-treeview';
 import { HttpClientModule } from '@angular/common/http';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import { NgxSelectModule,INgxSelectOptions } from 'ngx-select-ex';
+import { NgxSelectModule, INgxSelectOptions } from 'ngx-select-ex';
 import { UiSwitchModule } from 'ngx-ui-switch';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { Select2Module } from 'ng-select2-component';
 import { TreeTableModule } from 'primeng/treetable';
 import { TreeModule } from 'primeng/tree';
 import { DropdownModule } from 'primeng/dropdown'
@@ -21,8 +22,6 @@ import {PopoverModule} from 'ngx-bootstrap/popover';
 import {DatePipe} from '@angular/common';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
-
-
 import { PagesComponent } from './pages.component';
 import { BaseContentComponent } from '../dashboard/base-content/base-content.component';
 import { HeaderComponent } from '../dashboard/header/header.component';
@@ -36,25 +35,33 @@ import { AccessPanelComponent } from '../Roles/access-panel/access-panel.compone
 import { CreatePageComponent } from '../production/requisition/raw-material-requisition/create/create-page.component';
 import { EditPageComponent } from '../production/requisition/raw-material-requisition/edit/edit-page.component';
 import { ListPageComponent } from '../production/requisition/raw-material-requisition/list/list-page.component';
+import { PendingRMRequisitionProductionComponent } from '../production/requisition/raw-material-requisition/list/PendingRMRequisition_Production/pending-rm-requisition-production.component';
+import {  IssuedRMRequisitionProductionComponent } from '../production/requisition/raw-material-requisition/list/IssuedRMRequisition_Production/issued-rm-requisition-production.component';
+import { ReceivedRMListComponent } from '../production/requisition/raw-material-requisition/list/ReceivedRMList/received-rm-list.component';
+import { AllRMRequisitionListComponent } from '../production/requisition/raw-material-requisition/list/AllRMRequisitionList/all-rm-requisition-list.component';
+import { PendingRMRequisitionWareHouseComponent } from '../production/requisition/raw-material-requisition/list/PendingRMRequisition_Warehouse/pending-rm-requisition-warehouse.component';
+import { AcceptedRMRequisitionWareHouseComponent } from '../production/requisition/raw-material-requisition/list/AcceptedRMRequisition_Warehouse/accepted-rm-requisition-warehouse.component';
+import { IssuedRMRequisitionListWarehouseComponent } from '../production/requisition/raw-material-requisition/list/IssuedRMRequisitionList_Warehouse/issued-rm-requisition-list-warehouse.component';
 import { ChangePasswordComponent } from '../authentication/change-password/change-password.component';
-import { GenerateCashReceiveComponent } from '../lc/generate-cash-receive/generate-cash-receive.component';
-import { AllCashReceiveComponent } from '../lc/all-cash-receive/all-cash-receive.component';
-import { TableModule } from 'primeng/table';
 import { LandingPageComponent } from '../landing-page/landing-page.component';
 import { GenerateLcComponent } from '../lc/generate-lc/generate-lc.component';
 import { AllLcComponent } from '../lc/all-lc/all-lc.component';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { TableModule } from 'primeng/table';
 import {DialogModule} from 'primeng/dialog'
 import { GenerateCommercialInvoiceComponent } from '../commercial-document/generate-commercial-invoice/generate-commercial-invoice.component';
 import { AllCommercialInvoiceComponent } from '../commercial-document/all-commercial-invoice/all-commercial-invoice.component';
 import { GeneratePiComponent } from '../PI/generate-pi/generate-pi.component';
-import { CashReceiveUpdateComponent } from '../lc/cash-receive-update/cash-receive-update.component';
+import { AllPiComponent } from '../PI/all-pi/all-pi.component';
+import { DeliveredPiComponent } from '../PI/delivered-pi/delivered-pi.component';
+import { AllCashReceiveComponent } from '../lc/all-cash-receive/all-cash-receive.component';
+import { GenerateCashReceiveComponent } from '../lc/generate-cash-receive/generate-cash-receive.component';
 import { CashReceiveDetailsComponent } from '../lc/cash-receive-details/cash-receive-details.component';
-
+import { CashReceiveUpdateComponent } from '../lc/cash-receive-update/cash-receive-update.component';
 
 const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more options
-  keepSelectedItems:false,
-  allowClear:true
+  keepSelectedItems: false,
+  allowClear: true
 };
 
 @NgModule({
@@ -69,21 +76,24 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     MenuComponent,
     AccessNodeComponent,
     AccessPanelComponent,
-    GenerateCashReceiveComponent,
-    ChangePasswordComponent,
-    AllCashReceiveComponent,
     ChangePasswordComponent,
     GenerateLcComponent,
     AllLcComponent,
     GenerateCommercialInvoiceComponent,
     AllCommercialInvoiceComponent,
     GeneratePiComponent,
-    CashReceiveUpdateComponent,
-    CashReceiveDetailsComponent
+    LandingPageComponent,
+    DeliveredPiComponent,
+    AllPiComponent,
+    AllCashReceiveComponent,
+    GenerateCashReceiveComponent,
+    CashReceiveDetailsComponent,
+    CashReceiveUpdateComponent
     ],
   imports: [
+
     CommonModule,
-    TableModule,
+    Select2Module,
     HttpClientModule,
     BrowserModule,
     FormsModule,
@@ -105,7 +115,7 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
       color: 'rgb(0, 189, 99)',
       switchColor: '#80FFA2',
       defaultBgColor: '#00ACFF',
-      defaultBoColor : '#476EFF',
+      defaultBoColor: '#476EFF',
       checkedLabel: 'on',
       uncheckedLabel: 'off'
     }),
@@ -114,15 +124,27 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
       {
         path: '', component: PagesComponent,
         children: [
-          {path: 'dashboard', component: BaseContentComponent},
-          {path: 'role-list', component: RoleListComponent},
-          {path: 'create-role', component: RoleCreateComponent},
-          {path: 'access-panel', component: AccessPanelComponent},
+          { path: 'dashboard', component: BaseContentComponent },
+          { path: 'role-list', component: RoleListComponent },
+          { path: 'create-role', component: RoleCreateComponent },
+          { path: 'access-panel', component: AccessPanelComponent },
           { path: 'create-raw-material', component: CreatePageComponent },
           { path: 'edit-raw-material', component: EditPageComponent },
           { path: 'list-raw-material', component: ListPageComponent },
-          {path: 'generate-cash-receive', component: GenerateCashReceiveComponent},
-          {path: 'all-cash-receive', component: AllCashReceiveComponent},
+          { path: 'pending-rm-requisition-production', component: PendingRMRequisitionProductionComponent },
+          { path: 'pending-rm-requisition-warehouse', component: PendingRMRequisitionWareHouseComponent },
+          { path: 'accepted-rm-requisition-warehouse', component: AcceptedRMRequisitionWareHouseComponent },
+          { path: 'issued-rm-requisition-production', component: IssuedRMRequisitionProductionComponent },
+          { path: 'received-rm-list', component: ReceivedRMListComponent },
+          { path: 'all-rm-requisition-list', component: AllRMRequisitionListComponent },
+          { path: 'issued-rm-requisition-list-warehouse', component: IssuedRMRequisitionListWarehouseComponent },
+
+          {
+            path: 'pending-rm-requisition/edit/:reqId',
+            loadComponent: () =>
+              import('../production/requisition/raw-material-requisition/edit/PendingRMRequisitionProduction/pending-rm-requisition-production-edit.component')
+                .then(m => m.PendingRMRequisitionProductionEditComponent)
+          },
            {path: 'change-password', component: ChangePasswordComponent},       
            {path:"landing-page",component:LandingPageComponent},
            {path: 'all-lc', component: AllLcComponent},
@@ -130,8 +152,12 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
            {path: 'generate-commercial-invoice', component: GenerateCommercialInvoiceComponent},
            {path: 'all-commercial-invoice', component: AllCommercialInvoiceComponent},
           { path: 'generate-pi', component: GeneratePiComponent },
-           {path: 'cash-receive-update', component: CashReceiveUpdateComponent},
+          { path: 'all-pi', component: AllPiComponent },
+          { path: 'delivered-pi', component: DeliveredPiComponent },
+          { path: 'all-cash-receive', component: AllCashReceiveComponent },
+          { path: 'generate-cash-receive', component: GenerateCashReceiveComponent },
           { path: 'cash-receive-details', component: CashReceiveDetailsComponent },
+          { path: 'cash-receive-update', component: CashReceiveUpdateComponent },
         ]
       }
     ]),
@@ -139,8 +165,10 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     ModalModule.forRoot(),
     BsDropdownModule.forRoot(),
     BsDatepickerModule.forRoot(),
+    NgxSelectModule.forRoot(CustomSelectOptions),
     AccordionModule.forRoot(),
     UiSwitchModule,
+    MatPaginatorModule
   ]
 })
 export class PagesModule { }

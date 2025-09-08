@@ -13,5 +13,6 @@ User_ID!: string;
 Last_Receive_Amount!: number;
 Total_Receive_Amount!: number;
 Last_Receive_Date!: string;
-  
+Issue_Date!:string;
+PI_Master_ID!:string;
 }

@@ -1,9 +1,10 @@
-﻿
-using Boilerplate.Contracts;
+﻿using Boilerplate.Contracts;
 using Boilerplate.Contracts.Repositories;
 using Boilerplate.Contracts.Responses;
 using Boilerplate.Contracts.Services;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Boilerplate.Service.Services;
 
@@ -87,7 +88,6 @@ public class DoubleMasterEntryService : IDoubleMasterEntryService
     private async Task<Messages> SaveDataGatewayWithGuid(DoubleMasterEntryModel model, string authUserName)
     {
         int rowAffect = await _doubleMasterEntryRepository.SaveData(model, authUserName);
-        //int rowAffect = await _doubleMasterEntryRepository.SaveDataWithIdentity(model, authUserName);
         if (rowAffect > 0)
         {
             _logger.LogInformation($"Data Save Success!");
@@ -98,10 +98,9 @@ public class DoubleMasterEntryService : IDoubleMasterEntryService
     }
     private async Task<Messages> SaveDataGateway(DoubleMasterEntryModel model, string authUserName)
     {
-        //int rowAffect = await _doubleMasterEntryRepository.SaveData(model, authUserName);
         int rowAffect = await _doubleMasterEntryRepository.SaveDataWithIdentity(model, authUserName);
         if (rowAffect > 0)
-        {
+        {  
             _logger.LogInformation($"Data Save Success!");
             return MessageType.SaveSuccess(model);
         }
@@ -142,7 +141,8 @@ public class DoubleMasterEntryService : IDoubleMasterEntryService
 
     private async Task<Messages> UpdateDataGateway(DoubleMasterEntryModel model, string authUserName)
     {
-        int rowAffect = await _doubleMasterEntryRepository.UpdateData(model, authUserName);
+        //int rowAffect = await _doubleMasterEntryRepository.UpdateData(model, authUserName);
+        int rowAffect = await _doubleMasterEntryRepository.UpdateDataWithIdentity(model, authUserName);
         if (rowAffect > 0)
         {
             _logger.LogInformation($"Data Update Success!");

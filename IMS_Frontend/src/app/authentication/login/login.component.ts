@@ -74,7 +74,6 @@ export class LoginComponent implements OnInit {
         
             this.ms.GetInitialData(ProcedureData).subscribe({
               next: (results) => {
-        
                 if (results.status) {
                   menu = JSON.parse(results.data).Tables2;
                   menuWithButtonPermission = JSON.parse(results.data).Tables1;

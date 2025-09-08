@@ -64,52 +64,14 @@ export class GlobalServiceService {
   public getSessionData(key: string): any {
     return window.localStorage.getItem(key);
   }
-
-  public Logout() {
-    this.ClearSession();
-    window.open(`${GlobalConfig.LOGIN_URL_USERMANAGE}`, '_self');
-    // let user = this.GetSessionUser();
-    // let model = {
-    //   comId: '',
-    //   concernId: user.concernId,
-    //   deleteBy : '',
-    //   deleteDate: '',
-    //   email: user.email,
-    //   emailConfirmed: true,
-    //   fullName: '',
-    //   id: user.id,
-    //   isActive: true,
-    //   makeBy: '',
-    //   menuId: '',
-    //   password: '',
-    //   projectId: user.projectId,
-    //   updateBy: '',
-    //   userName: user.userName,
-    //   userTypeId: user.userTypeId,
-    //   UserId: '',
-    //   UserTypeName:''
-    // };
-    // return this.http
-    //   .post<any>(`${GlobalConfig.BASE_URL_USERMANAGE}LogIn/Logout`, model, {
-    //     headers: new HttpHeaders({
-    //       'Content-Type': 'application/json',
-    //     }),
-    //   })
-    //   .pipe(
-    //     map((Response) => {
-    //       this.ClearSession();
-    //       window.open(`${GlobalConfig.LOGIN_URL_USERMANAGE}`, '_self');
-    //     })
-    //   );
-  }
-  public GetSessionUser() {
+public GetSessionUser() {
     let user = JSON.parse(this.getSessionData('user'));
     return user;
   }
-  // public Logout() {
-  //   this.ClearSession();
-  //   this.router.navigate(['/login']);
-  // }
+  public Logout() {
+    this.ClearSession();
+    this.router.navigate(['/login']);
+  }
 
   public ClearSession() {
     window.localStorage.clear();
@@ -144,10 +106,6 @@ export class GlobalServiceService {
         map((Response) => {
           if (Response.ok) {
             let tables = JSON.parse(Response.userpermission);
-            let companyName = tables.Table1[0].ComName;
-            let concernCompanyLogo = tables.Table1[0].ConcernCompanyLogo;
-            window.localStorage.setItem('companyName', companyName);
-            window.localStorage.setItem('concernCompanyLogo', concernCompanyLogo);
             window.localStorage.setItem(
               'modules',
               JSON.stringify(tables.Table2)

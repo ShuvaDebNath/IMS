@@ -52,7 +52,7 @@ export class CashReceiveDetailsComponent {
   }
 
   ngOnInit(): void {
-    var permissions = this.gs.CheckUserPermission("Cash Receive Details");
+    var permissions = this.gs.CheckUserPermission("All Cash Receive");
     this.insertPermissions = permissions.insertPermissions;
     this.updatePermissions = permissions.updatePermissions;
     this.deletePermissions = permissions.deletePermissions;

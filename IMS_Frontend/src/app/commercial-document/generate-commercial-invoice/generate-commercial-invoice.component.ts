@@ -203,7 +203,7 @@ export class GenerateCommercialInvoiceComponent {
 
       GetCDById(LCID:any){
             var ProcedureData = {
-              procedureName: '[usp_CDById]',
+              procedureName: '[usp_CD_ById]',
               parameters: {
                 'Commercial_Invoice_ID':this.CIId
               }

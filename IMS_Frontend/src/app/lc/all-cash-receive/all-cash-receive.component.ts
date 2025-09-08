@@ -112,7 +112,7 @@ export class AllCashReceiveComponent {
     fromDate = `${fday}/${fmonth}/${fyear}`;
 
     var tinput = new Date();
-    if (!(this.SearchForm.value.fromDate instanceof Date)) {
+    if (!(this.SearchForm.value.toDate instanceof Date)) {
       tinput = new Date(this.SearchForm.value.toDate); // try converting if it's not already a Date
     }
 
@@ -121,6 +121,8 @@ export class AllCashReceiveComponent {
     const tyear = tinput.getFullYear();
     var toDate = this.SearchForm.value.toDate;
     toDate = `${tday}/${tmonth}/${tyear}`;
+
+    
 
     let param = new GetDataModel();
     param.procedureName = '[usp_CashReceive_List]';
@@ -134,6 +136,7 @@ export class AllCashReceiveComponent {
     this.masterEntryService.GetInitialData(param).subscribe({
       next: (results) => {
         console.log(param.parameters);
+    console.log(results);
 
         if (results.status) {
           this.tableData = [];
