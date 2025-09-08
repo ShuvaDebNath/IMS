@@ -140,6 +140,32 @@ export class MasterEntryService {
         })
       );
   }
+  public SaveSingleDataAndUpdateAnotherTable(fd: any, tableName: any,updateTableName:any,updateSerialColumnName:any,whereParams:any) {
+    
+    let model: MasterEntryWithSlUpdateModel=new MasterEntryWithSlUpdateModel();
+    model.tableName=tableName;
+    model.queryParams=fd;
+    model.updateTableName = updateTableName;
+    model.updateColumnName = updateSerialColumnName;
+    model.whereParams = whereParams;
+    
+    return this.http
+      .post<ResponseModel>(
+        this.baseUrlApi + this.postApiMasterEntryController + '/InsertThenUpdateRefTable',
+        model,
+        {
+          headers: new HttpHeaders({
+            Authorization: 'Bearer ' + this.token,
+            'Content-Type': 'application/json',
+          }),
+        }
+      )
+      .pipe(
+        map((Response) => {
+          return Response;
+        })
+      );
+  }
 
   public DeleteDataAndUpdateSerial(fd: any, tableName: any,updateTableName:any,updateSerialColumnName:any,whereParams:any) {
     

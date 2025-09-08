@@ -180,6 +180,62 @@ namespace Boilerplate.Service.Services
             }
         }
 
+        public Messages InsertThenUpdateTable(MasterEntryWithUpdateModel item, string userName)
+        {
+            try
+            {
+                //_validationHelper.ValidateModel(item, item.TableName ?? string.Empty);
+
+                MasterEntryModel model = new MasterEntryModel();
+                model.TableName = item.TableName;
+                model.QueryParams = item.QueryParams;
+                //model.WhereParams = item.WhereParams;
+                model.ColumnNames = item.ColumnNames;
+
+                var sqlQuery = $"INSERT INTO [dbo].[{item.TableName}] ";
+
+                sqlQuery += InsertQueryGeneratorWithKeyParams(model);
+
+                sqlQuery += InsertQueryGeneratorWithValueParams(model, userName);
+
+                var result = _masterEntryRepository.ExecuteWriteOperation(sqlQuery);
+
+                MasterEntryModel modelUpdate = new MasterEntryModel();
+                modelUpdate.TableName = (string?)item.UpdateTableName;
+                string columnName = (string)item.UpdateColumnName; // property name stored in a variable
+
+                if (result)
+                {
+                    MasterEntryModel updateModel = new MasterEntryModel();
+                    updateModel.TableName = (string?)item.UpdateTableName;
+                    updateModel.QueryParams = item.QueryParams;
+                    updateModel.WhereParams = item.WhereParams;
+
+                    var updateResult = Update(updateModel, userName);
+
+                    if (updateResult!=null)
+                    {
+                        _logger.LogInformation($"Data Save Success!");
+                        return MessageType.SaveSuccess(item);
+                    }
+                }
+
+                _logger.LogInformation($"Data Save Fail!");
+                return MessageType.SaveError(null);
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning($"Validation failed: {ex.Message}");
+                return MessageType.SaveError(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                string innserMsg = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                _logger.LogError($"Source: {ex.Source}; Stack Trace: {ex.StackTrace}; Message: {ex.Message}; Inner Exception: {innserMsg};");
+                throw;
+            }
+        }
+
 
         public Messages Update(MasterEntryModel item,string userName)
         {

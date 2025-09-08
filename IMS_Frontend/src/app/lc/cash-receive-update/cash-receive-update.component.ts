@@ -23,7 +23,7 @@ export class CashReceiveUpdateComponent {
   LC_Value: any = 0;
   Balance: any = 0;
   PIData: any;
-  PINo:any;
+  PINo: any;
 
   insertPermissions: boolean = false;
   updatePermissions: boolean = false;
@@ -53,10 +53,10 @@ export class CashReceiveUpdateComponent {
     this.updatePermissions = permissions.updatePermissions;
     this.deletePermissions = permissions.deletePermissions;
     this.printPermissions = permissions.printPermissions;
-    
-    if(!this.updatePermissions){
-      window.location.href='all-cash-receive';
-    }   
+
+    if (!this.updatePermissions) {
+      window.location.href = 'all-cash-receive';
+    }
 
     this.title.setTitle('Cash Receive Update');
     this.GenerateFrom();
@@ -95,8 +95,8 @@ export class CashReceiveUpdateComponent {
         if (results.status) {
           this.PIData = JSON.parse(results.data).Tables1;
           console.log(results);
-          
-          this.ReceiveAmount = this.PIData[0].Total_Receive_Amount;
+
+          //this.ReceiveAmount = this.PIData[0].Total_Receive_Amount;
           this.Balance = this.PIData[0].balance;
           this.LC_Value = this.PIData[0].LC_Value;
           this.PINo = this.PIData[0].PINo;
@@ -108,11 +108,81 @@ export class CashReceiveUpdateComponent {
         } else {
         }
       },
-      error: (err) => {},
+      error: (err) => { },
     });
   }
 
   saveData() {
+    if (this.Formgroup.invalid) {
+      swal.fire('Invlid Inputs!', 'Form is Invalid! Please select Role.', 'info');
+      return;
+    }
+    var fDate = new Date();
+    const mm = String(fDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const dd = String(fDate.getDate()).padStart(2, '0');
+    const yyyy = fDate.getFullYear();
+
+    const formatted = `${mm}/${dd}/${yyyy}`;
+
+    var userId = window.localStorage.getItem('userId');
+
+    var model = {
+      'ReceiveAmount':this.Formgroup.value.ReceiveAmount,      
+      'ReceiveDate':this.Formgroup.value.ReceiveDate,
+      'UserId':userId,
+      'CreatedDate':formatted,
+      'CR_ID':this.CRId
+    }
+
     
+    var updateModel = {
+      'ReceiveAmount':this.Formgroup.value.ReceiveAmount,      
+      'ReceiveDate':this.Formgroup.value.ReceiveDate,
+      'UserId':userId,
+      'CreatedDate':formatted
+    }
+
+
+    
+
+    var TableNameChild = 'tbl_cash_receive_detail';
+    var updateTableName = 'tbl_PI_Master';
+    var whereParam = {
+      'PI_Master_ID': this.Formgroup.value.PI
+    }
+
+    this.masterEntyService.SaveSingleData(model, TableNameChild).subscribe((res: any) => {
+      console.log(res);
+
+      if (res.status) {
+        swal
+          .fire({
+            title: `${res.message}!`,
+            text: `Save Successfully!`,
+            icon: 'success',
+            timer: 5000,
+          })
+          .then((result) => {
+            this.ngOnInit();
+          });
+
+      } else {
+
+        if (res.message == 'Data already exist') {
+          swal.fire('Data already exist', '', 'warning');
+        }
+        else if (res.message == 'Invalid Token') {
+          swal.fire('Session Expierd!', 'Please Login Again.', 'info');
+          this.gs.Logout();
+        } else {
+          swal.fire({
+            title: `Faild!`,
+            text: `Save Faild!`,
+            icon: 'error',
+            timer: 5000,
+          });
+        }
+      }
+    });
   }
 }
