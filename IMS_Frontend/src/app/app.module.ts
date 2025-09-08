@@ -20,6 +20,8 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { DatePipe } from '@angular/common';
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { LandingPageComponent } from './landing-page/landing-page.component';
+import { ArbitrationComponent } from './arbitration-create/arbitration-create.component';
+import { BeneficiaryCreateComponent } from './Beneficiary/beneficiary-create/beneficiary-create.component';
 
 
 const CustomSelectOptions: INgxSelectOptions = {
@@ -36,7 +38,9 @@ const CustomSelectOptions: INgxSelectOptions = {
     ForbiddenErrorComponent,
     PageNotFoundComponent,
     LogoutComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    ArbitrationComponent,
+    BeneficiaryCreateComponent
 
   ],
   imports: [

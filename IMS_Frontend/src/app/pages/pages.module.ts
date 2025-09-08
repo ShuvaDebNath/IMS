@@ -53,6 +53,7 @@ import {DialogModule} from 'primeng/dialog'
 import { GenerateCommercialInvoiceComponent } from '../commercial-document/generate-commercial-invoice/generate-commercial-invoice.component';
 import { AllCommercialInvoiceComponent } from '../commercial-document/all-commercial-invoice/all-commercial-invoice.component';
 import { GeneratePiComponent } from '../PI/generate-pi/generate-pi.component';
+import { ArbitrationComponent } from '../arbitration-create/arbitration-create.component';
 
 const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more options
   keepSelectedItems: false,
@@ -142,6 +143,9 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
            {path: 'generate-commercial-invoice', component: GenerateCommercialInvoiceComponent},
            {path: 'all-commercial-invoice', component: AllCommercialInvoiceComponent},
           { path: 'generate-pi', component: GeneratePiComponent },
+          {
+            path:"arbitration-create",component:ArbitrationComponent
+          }
         ]
       }
     ]),
