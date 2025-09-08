@@ -1,1 +1,82 @@
-<p>beneficiary-create works!</p>
+<div class="container form-container">
+  <div class="card">
+    <div class="card-header d-flex align-items-center">
+      <div class="icon-wrapper">
+        <i class="fas fa-user-friends"></i>
+      </div>
+      <span>{{!isEdit ? 'Create New Beneficiary' : 'Edit Beneficiary'}}</span>
+    </div>
+
+    <div class="card-body">
+      <form [formGroup]="Formgroup" role="form">
+
+        <div class="mb-3">
+          <label class="form-label required-field">Company Name</label>
+          <input type="text" formControlName="CompanyName" class="form-control" placeholder="Enter company name">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">BIN No</label>
+          <input type="number" formControlName="BinNo" class="form-control">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Address</label>
+          <input type="text" formControlName="Address" class="form-control">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">City</label>
+          <input type="text" formControlName="City" class="form-control">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label required-field">Country</label>
+          <input type="number" formControlName="Country_ID" class="form-control">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">ETIN</label>
+          <input type="number" formControlName="ETIN" class="form-control">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">VAT Reg No</label>
+          <input type="text" formControlName="VATRegNo" class="form-control">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Available</label>
+          <input type="checkbox" formControlName="IsAvailable" class="form-check-input ms-2">
+        </div>
+
+      <div class="mb-3">
+  <label class="form-label required-field">Payment Type</label>
+  <select formControlName="PaymentTypeId" class="form-select">
+    <option value="">-- Select Payment Type --</option>
+    <option value="1">Cash</option>
+    <option value="2">LC</option>
+    <option value="3">Both</option>
+  </select>
+</div>
+
+      </form>
+
+      <div class="button-group">
+        <!-- <button [routerLink]="['/beneficiary-list']" class="btn btn-danger" type="button">
+          <i class="fas fa-times-circle me-2"></i>Cancel
+        </button> -->
+
+        <button *ngIf="!isEdit" class="btn btn-success" type="button"
+          (click)="saveData()" [disabled]="Formgroup.invalid">
+          <i class="fas fa-save me-2"></i>Save Beneficiary
+        </button>
+
+        <button *ngIf="isEdit" class="btn btn-success" type="button"
+          (click)="updateData()" [disabled]="Formgroup.invalid">
+          <i class="fas fa-sync-alt me-2"></i>Update Beneficiary
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

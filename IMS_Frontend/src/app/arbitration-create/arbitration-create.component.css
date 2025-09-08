@@ -1,0 +1,11 @@
+/* SELECT TOP (1000) [Beneficiary_Account_ID]
+      ,[CompanyName]
+      ,[BinNo]
+      ,[Address]
+      ,[City]
+      ,[Country_ID]
+      ,[ETIN]
+      ,[VATRegNo]
+      ,[IsAvailable]
+      ,[PaymentTypeId]
+  FROM [IMS].[dbo].[tbl_beneficiary_account] */

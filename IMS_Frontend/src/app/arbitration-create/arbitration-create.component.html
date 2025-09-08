@@ -11,14 +11,14 @@
       <form name="arbitrationForm" [formGroup]="Formgroup" role="form">
         <!-- Details field -->
         <div class="mb-4">
-          <label for="Details" class="form-label required-field">Details</label>
+          <label for="Detail" class="form-label required-field">Details</label>
           <textarea
             autocomplete="off"
-            formControlName="Details"
+            formControlName="Detail"
             class="form-control form-control-lg"
             placeholder="Enter arbitration details"
-            id="Details"
-            name="Details"
+            id="Detail"
+            name="Detail"
             rows="3"
           ></textarea>
           <div class="form-text">Provide arbitration details</div>
@@ -32,6 +32,7 @@
             class="form-check-input"
             id="IsAvailable"
           />
+          
           <label for="IsAvailable" class="form-check-label">Available</label>
         </div>
       </form>

@@ -46,7 +46,7 @@ export class ArbitrationComponent implements OnInit {
 
   GenerateForm() {
     this.Formgroup = this.fb.group({
-      Details: ['', [Validators.required]],
+      Detail: ['', [Validators.required]],
       IsAvailable: [false]
     });
   }
@@ -54,13 +54,13 @@ export class ArbitrationComponent implements OnInit {
   GetById(arbitrationId: any) {
     let masterEntryModel = new MasterEntryModel();
     masterEntryModel.tableName = 'tbl_arbitration';
-    masterEntryModel.columnNames = 'Arbitration_Id,Details,IsAvailable';
+    masterEntryModel.columnNames = 'Arbitration_Id,Detail,IsAvailable';
     masterEntryModel.whereParams = '{"Arbitration_Id":' + arbitrationId + '}';
 
     this.masterEntyService.GetEditData(masterEntryModel).subscribe((res: any) => {
       if (res.status) {
         let arbitration = JSON.parse(res.data)[0];
-        this.Formgroup.controls.Details.setValue(arbitration.Details);
+        this.Formgroup.controls.Detail.setValue(arbitration.Detail);
         this.Formgroup.controls.IsAvailable.setValue(arbitration.IsAvailable);
       } else {
         if (res.msg == 'Invalid Token') {
@@ -77,7 +77,7 @@ export class ArbitrationComponent implements OnInit {
     }
 
     let arbitration = {
-      Details: this.Formgroup.value.Details,
+      Detail: this.Formgroup.value.Detail,
       IsAvailable: this.Formgroup.value.IsAvailable
     };
 
@@ -113,7 +113,7 @@ export class ArbitrationComponent implements OnInit {
     }
 
     let arbitration = {
-      Details: this.Formgroup.value.Details,
+      Detail: this.Formgroup.value.Detail,
       IsAvailable: this.Formgroup.value.IsAvailable
     };
 

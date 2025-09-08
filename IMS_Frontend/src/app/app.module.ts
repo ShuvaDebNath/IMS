@@ -22,6 +22,7 @@ import { MatPaginatorModule } from "@angular/material/paginator";
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { ArbitrationComponent } from './arbitration-create/arbitration-create.component';
 import { BeneficiaryCreateComponent } from './Beneficiary/beneficiary-create/beneficiary-create.component';
+import { BeneficiaryListComponent } from './beneficiary/beneficiary-list/beneficiary-list.component';
 
 
 const CustomSelectOptions: INgxSelectOptions = {
@@ -40,7 +41,8 @@ const CustomSelectOptions: INgxSelectOptions = {
     LogoutComponent,
     ResetPasswordComponent,
     ArbitrationComponent,
-    BeneficiaryCreateComponent
+    BeneficiaryCreateComponent,
+    BeneficiaryListComponent
 
   ],
   imports: [
