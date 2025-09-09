@@ -114,6 +114,8 @@ pageIndex: number = 1;
           if (results.status) {
   
             let tables = JSON.parse(results.data);
+
+          
             this.rows = tables.Tables1
             this.isPage=this.rows[0].totallen>10;
             this.length = this.rows[0].totallen;
