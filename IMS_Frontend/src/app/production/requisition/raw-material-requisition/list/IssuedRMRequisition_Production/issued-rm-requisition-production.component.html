@@ -1,5 +1,5 @@
 <div class="container">
-  <h1>Issued RM List</h1>
+  <h1>Issued RM List from Warehouse</h1>
   <p-table #dt [value]="issuedRequisitions" [paginator]="true" [rows]="10" [responsive]="true"
     [showCurrentPageReport]="true"
     [globalFilterFields]="['RequisitionNumber','RequisitionDate','SentStatus_from_Warehouse','IssueNumber','IssueDate','ReceivedStatus_from_Production','SentBy']"
@@ -44,7 +44,7 @@
             <i class="pi pi-eye me-1"></i>
           </button>
 
-           <button class="btn btn-primary btn-xl text-white d-inline-flex align-items-center"
+          <button class="btn btn-primary btn-xl text-white d-inline-flex align-items-center"
             (click)="showDataBeforeAccept(requisition)">
             <i class="fa fa-paper-plane me-1"></i>
           </button>
@@ -108,44 +108,44 @@
           <tr>
             <th class="text-center">Article</th>
             <th class="text-center">Description</th>
-            <th class="text-center">Quantity from Warehouse</th>
+            <th class="text-center">Qty send from warehouse</th>
             <th class="text-center">Roll/Bag</th>
-            <th class="text-center">R/B Qty</th>
+            <th class="text-center">Roll Qty</th>
+            <th class="text-center">Bag Qty</th>
             <th class="text-center">Accepted Qty</th>
             <th class="text-center">Accepted Roll</th>
             <th class="text-center">Note</th>
-            <th class="text-center">Status</th>
+            <!-- <th class="text-center">Status</th> -->
           </tr>
         </ng-template>
 
         <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
           <tr>
-            <td>{{ item.ConcatArticleNo }}</td>
-            <td>{{ item.DetailsNote }}</td>
-            <td class="text-end">{{ item.Quantity }}</td>
-            <td class="text-capitalize">{{ item.Roll_Bag }}</td>
-            <td class="text-end">{{ item.RollBag_Quantity }}</td>
+            <td class="text-left">{{ item.ConcatArticleNo }}</td>
+            <td class="text-center">{{ item.DetailsNote }}</td>
+            <td class="text-center">{{ item.Quantity }}</td>
+            <td class="text-center">{{ item.Roll_Bag }}</td>
+            <td class="text-center">{{ item.Roll }}</td>
+            <td class="text-center">{{ item.Bag }}</td>
 
             <!-- Accepted Qty -->
             <td style="width:120px">
-              <input type="number" class="form-control form-control-sm text-end danger-input"
-                [(ngModel)]="item.AcceptedQuantity" name="accQty{{ rowIndex }}" min="0" [max]="item.Quantity"
-                [class.is-invalid]="item.AcceptedQuantity > item.Quantity || item.AcceptedQuantity < 0"
-                [class.is-valid]="item.AcceptedQuantity === item.Quantity && item.AcceptedQuantity >= 0" />
-              <div *ngIf="item.AcceptedQuantity > item.Quantity" class="invalid-feedback d-block">
-                Max {{ item.AcceptedQuantity }}
-              </div>
+              <input type="number" class="form-control form-control-sm text-end" [(ngModel)]="item.AcceptedQuantity"
+                name="accQty{{ rowIndex }}" min="0" [class.is-invalid]="item.AcceptedQuantity < 0"
+                [class.is-valid]="item.AcceptedQuantity >= 0" />
+
             </td>
 
             <!-- Accepted Roll -->
             <td style="width:120px">
-              <input type="number" class="form-control form-control-sm text-end danger-input"
-                [(ngModel)]="item.AcceptedRollBag_Qty" name="accRoll{{ rowIndex }}" min="0" [max]="item.RollBag_Quantity"
-                [class.is-invalid]="item.AcceptedRollBag_Qty > item.RollBag_Quantity || item.AcceptedRollBag_Qty < 0"
-                [class.is-valid]="item.AcceptedRollBag_Qty === item.RollBag_Quantity && item.AcceptedRollBag_Qty >= 0" />
-              <div *ngIf="item.AcceptedRollBag_Qty > item.RollBag_Quantity" class="invalid-feedback d-block">
-                Max {{ item.AcceptedRollBag_Qty }}
+              <input type="number" class="form-control form-control-sm text-end" [(ngModel)]="item.AcceptedRollBag_Qty"
+                name="accRoll{{ rowIndex }}" min="0" [class.is-invalid]="item.AcceptedRollBag_Qty < 0"
+                [class.is-valid]="item.AcceptedRollBag_Qty >= 0" />
+
+              <div *ngIf="item.AcceptedRollBag_Qty < 0" class="invalid-feedback d-block">
+                Value cannot be negative
               </div>
+
             </td>
 
             <!-- Note as textarea -->
@@ -155,11 +155,11 @@
         </textarea>
             </td>
 
-            <td class="text-center">
+            <!-- <td class="text-center">
               <span class="badge" [ngClass]="isFull(item) ? 'bg-success' : 'bg-warning text-dark'">
                 {{ isFull(item) ? 'Full' : 'Partial' }}
               </span>
-            </td>
+            </td> -->
 
           </tr>
         </ng-template>
