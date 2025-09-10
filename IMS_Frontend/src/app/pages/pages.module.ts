@@ -13,6 +13,7 @@ import { NgxSelectModule, INgxSelectOptions } from 'ngx-select-ex';
 import { UiSwitchModule } from 'ngx-ui-switch';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { MatPaginatorModule } from '@angular/material/paginator';
+//Material Data Table;
 import { Select2Module } from 'ng-select2-component';
 import { TreeTableModule } from 'primeng/treetable';
 import { TreeModule } from 'primeng/tree';
@@ -53,6 +54,13 @@ import {DialogModule} from 'primeng/dialog'
 import { GenerateCommercialInvoiceComponent } from '../commercial-document/generate-commercial-invoice/generate-commercial-invoice.component';
 import { AllCommercialInvoiceComponent } from '../commercial-document/all-commercial-invoice/all-commercial-invoice.component';
 import { GeneratePiComponent } from '../PI/generate-pi/generate-pi.component';
+import { GenerateCpiComponent } from '../PI/generate-cpi/generate-cpi.component';
+
+
+
+// import {MatSortModule} from '@angular/material/sort';
+// import {MatTableModule} from '@angular/material/table';
+//!--Material Data Table
 
 const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more options
   keepSelectedItems: false,
@@ -77,7 +85,11 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     GenerateCommercialInvoiceComponent,
     AllCommercialInvoiceComponent,
     GeneratePiComponent,
-    LandingPageComponent
+    LandingPageComponent,
+    AllCommercialInvoiceComponent,
+    ChangePasswordComponent,
+    GeneratePiComponent,
+    GenerateCpiComponent
     ],
   imports: [
 
@@ -99,6 +111,11 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     CheckboxModule,
     InputTextModule,
     PopoverModule,    
+    DatePipe,
+    CheckboxModule,
+    InputTextModule,
+    PopoverModule,
+    
     DatePipe,
     UiSwitchModule.forRoot({
       size: 'small',
@@ -136,12 +153,13 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
                 .then(m => m.PendingRMRequisitionProductionEditComponent)
           },
            {path: 'change-password', component: ChangePasswordComponent},       
-           {path:"landing-page",component:LandingPageComponent},
+           {path: 'landing-page',component:LandingPageComponent},
            {path: 'all-lc', component: AllLcComponent},
            {path: 'generate-lc', component: GenerateLcComponent},
-           {path: 'generate-commercial-invoice', component: GenerateCommercialInvoiceComponent},
            {path: 'all-commercial-invoice', component: AllCommercialInvoiceComponent},
+           {path: 'generate-commercial-invoice', component: GenerateCommercialInvoiceComponent},
           { path: 'generate-pi', component: GeneratePiComponent },
+          { path: 'generate-cpi', component: GenerateCpiComponent },
         ]
       }
     ]),

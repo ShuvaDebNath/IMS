@@ -22,6 +22,7 @@ import { MatPaginatorModule } from "@angular/material/paginator";
 import { LandingPageComponent } from './landing-page/landing-page.component';
 
 
+
 const CustomSelectOptions: INgxSelectOptions = {
   keepSelectedItems: false,
   allowClear: true,

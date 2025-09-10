@@ -153,11 +153,16 @@ export class GeneratePiComponent implements OnInit {
       Unit_Price: [''],
       CommissionUnit: [''],
       TotalCommission: [''],
+      Item_ID: [''],
       ActualArticle: [''],
       Unit_ID: [''],
     });
   }
-
+  SetActualArticle(itemrow:any){ 
+    let articleID=itemrow.controls["Item_ID"].value;
+    let articleNo=this.AAList.filter((x:any)=>x.Item_ID==articleID)[0].Article_No;
+    itemrow.controls["ActualArticle"].setValue(articleNo);
+  }
   getControls() {
     return (this.Formgroup.get('ItemArray') as FormArray).controls;
   }
@@ -234,14 +239,15 @@ export class GeneratePiComponent implements OnInit {
     model.procedureName="usp_ProformaInvoice_GetInitialData";
     model.parameters={
       userID:this.gs.getSessionData('userId'),
-      roleID:this.gs.getSessionData('roleId')
+      roleID:this.gs.getSessionData('roleId'),
+      PaymentType:2
     };
     this.service.GetInitialData(model).subscribe((res:any) => {
       if (res.status) {
 
         let DataSet = JSON.parse(res.data);
         
-        this.ShipperList.push(DataSet.Tables1[0]);
+        this.ShipperList=DataSet.Tables1;
         this.BenificaryBankList=DataSet.Tables2;
         this.CountryList=DataSet.Tables3;
         this.PackingList=DataSet.Tables4;
