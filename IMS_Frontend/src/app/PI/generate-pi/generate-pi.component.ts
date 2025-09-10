@@ -153,11 +153,16 @@ export class GeneratePiComponent implements OnInit {
       Unit_Price: [''],
       CommissionUnit: [''],
       TotalCommission: [''],
+      Item_ID: [''],
       ActualArticle: [''],
       Unit_ID: [''],
     });
   }
-
+  SetActualArticle(itemrow:any){ 
+    let articleID=itemrow.controls["Item_ID"].value;
+    let articleNo=this.AAList.filter((x:any)=>x.Item_ID==articleID)[0].Article_No;
+    itemrow.controls["ActualArticle"].setValue(articleNo);
+  }
   getControls() {
     return (this.Formgroup.get('ItemArray') as FormArray).controls;
   }
