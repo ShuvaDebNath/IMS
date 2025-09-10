@@ -44,8 +44,23 @@ export class BeneficiaryCreateComponent implements OnInit {
     if (this.isEdit) {
       this.GetBeneficiaryById(this.BeneficiaryId);
     }
+    this.GetPaymentType()
   }
+  GetPaymentType() {
+    this.masterEntyService.GetDataTable({
+      tableName: "tbl_payment_type",
+      columnNames: "Id,Name",
+      whereParams: "",
+      queryParams: ""
 
+    }).subscribe({
+      next: (results) => {
+
+        console.log("payment-type",results)
+        if (results.status) { }
+      }
+    })
+  }
   GenerateForm() {
     this.Formgroup = this.fb.group({
       CompanyName: ['', [Validators.required]],
@@ -59,10 +74,10 @@ export class BeneficiaryCreateComponent implements OnInit {
       PaymentTypeId: ['', [Validators.required]]
     });
   }
-nowSql(): string {
-  const date = new Date();
-  return date.toISOString().slice(0, 19).replace('T', ' ');
-}
+  nowSql(): string {
+    const date = new Date();
+    return date.toISOString().slice(0, 19).replace('T', ' ');
+  }
   GetBeneficiaryById(id: any) {
     var masterEntryModel = new MasterEntryModel();
     masterEntryModel.tableName = 'tbl_beneficiary_account';
@@ -88,12 +103,12 @@ nowSql(): string {
       return;
     }
 
-let payload = { 
-  ...this.Formgroup.value, 
-  Sent_By: (localStorage.getItem('userId') ?? '').toString(),
-  Received_By: '58',  //to do need to make dynamic
-  Received_Date: this.nowSql(), 
-};
+    let payload = {
+      ...this.Formgroup.value,
+      Sent_By: (localStorage.getItem('userId') ?? '').toString(),
+      Received_By: '58',  //to do need to make dynamic
+      Received_Date: this.nowSql(),
+    };
     payload.IsAvailable = payload.IsAvailable ? 1 : 0;
 
     this.masterEntyService.SaveSingleData(payload, 'tbl_beneficiary_account').subscribe((res: any) => {
@@ -119,7 +134,7 @@ let payload = {
     });
   }
 
-  
+
 
   updateData() {
     if (this.Formgroup.invalid) {
@@ -128,7 +143,6 @@ let payload = {
     }
 
     let payload = { ...this.Formgroup.value };
-    // convert boolean -> 0/1 for DB
     payload.IsAvailable = payload.IsAvailable ? 1 : 0;
 
     let condition = { Beneficiary_Account_ID: this.BeneficiaryId };
