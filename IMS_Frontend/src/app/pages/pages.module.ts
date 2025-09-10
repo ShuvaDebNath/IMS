@@ -128,7 +128,7 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'pending-rm-requisition-warehouse', component: PendingRMRequisitionWareHouseComponent },
           { path: 'accepted-rm-requisition-warehouse', component: AcceptedRMRequisitionWareHouseComponent },
           { path: 'issued-rm-requisition-production', component: IssuedRMRequisitionProductionComponent },
-          { path: 'received-rm-list', component: ReceivedRMListComponent },
+          { path: 'received-raw-material-production', component: ReceivedRMListComponent },
           { path: 'all-rm-requisition-list', component: AllRMRequisitionListComponent },
           { path: 'issued-rm-requisition-list-warehouse', component: IssuedRMRequisitionListWarehouseComponent },
 
