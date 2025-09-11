@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalServiceService } from '../../services/Global-service.service';
 import swal from 'sweetalert2';
 import { Page } from 'src/app/models/Page';
@@ -40,13 +40,14 @@ export class AllCashReceiveComponent {
     'Action',
   ];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-
+  isEdit:any;
   page = new Page();
   rows: any;
   SearchForm!: FormGroup;
   fromDate: any;
   toDate: any;
   LCNo: string = '';
+  CR_Id:any;
 
   showPaginator = false;
   insertPermissions: boolean = true;
@@ -64,9 +65,22 @@ export class AllCashReceiveComponent {
     private gs: GlobalServiceService,
     private pagesComponent: PagesComponent,
     private masterEntryService: MasterEntryService,
+    private activeLink: ActivatedRoute,
     private title: Title
   ) {}
   ngOnInit(): void {
+
+    var permissions = this.gs.CheckUserPermission("All Cash Receive");
+    this.insertPermissions = permissions.insertPermissions;
+    this.updatePermissions = permissions.updatePermissions;
+    this.deletePermissions = permissions.deletePermissions;
+    this.printPermissions = permissions.printPermissions;
+
+    if (!this.printPermissions) {
+      window.location.href = 'dashboard';
+    }
+    
+    
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
     this.title.setTitle('All Cash Receive');
@@ -99,31 +113,31 @@ export class AllCashReceiveComponent {
     });
   }
   Search() {
-    var finput = new Date();
-    if (!(this.SearchForm.value.fromDate instanceof Date)) {
-      finput = new Date(this.SearchForm.value.fromDate); // try converting if it's not already a Date
-    }
-
-
-    const fday = String(finput.getDate()).padStart(2, '0');
-    const fmonth = String(finput.getMonth() + 1).padStart(2, '0'); // months are 0-based
-    const fyear = finput.getFullYear();
+    var finput = new Date();    
     var fromDate = this.SearchForm.value.fromDate;
-    fromDate = `${fday}/${fmonth}/${fyear}`;
+    if (this.SearchForm.value.fromDate instanceof Date) {
+      finput = new Date(this.SearchForm.value.fromDate); // try converting if it's not already a Date
+      const fday = String(finput.getDate()).padStart(2, '0');
+      const fmonth = String(finput.getMonth() + 1).padStart(2, '0'); // months are 0-based
+      const fyear = finput.getFullYear();
+      
+      fromDate = `${fday}/${fmonth}/${fyear}`;
+    }    
 
     var tinput = new Date();
-    if (!(this.SearchForm.value.toDate instanceof Date)) {
+    var toDate = this.SearchForm.value.toDate;
+    if (this.SearchForm.value.toDate instanceof Date) {
       tinput = new Date(this.SearchForm.value.toDate); // try converting if it's not already a Date
+      
+      const tday = String(tinput.getDate()).padStart(2, '0');
+      const tmonth = String(tinput.getMonth() + 1).padStart(2, '0'); // months are 0-based
+      const tyear = tinput.getFullYear();
+
+      toDate = `${tday}/${tmonth}/${tyear}`;
     }
 
-    const tday = String(tinput.getDate()).padStart(2, '0');
-    const tmonth = String(tinput.getMonth() + 1).padStart(2, '0'); // months are 0-based
-    const tyear = tinput.getFullYear();
-    var toDate = this.SearchForm.value.toDate;
-    toDate = `${tday}/${tmonth}/${tyear}`;
-
     
-
+    
     let param = new GetDataModel();
     param.procedureName = '[usp_CashReceive_List]';
     param.parameters = {
@@ -135,14 +149,11 @@ export class AllCashReceiveComponent {
 
     this.masterEntryService.GetInitialData(param).subscribe({
       next: (results) => {
-        console.log(param.parameters);
-    console.log(results);
 
         if (results.status) {
           this.tableData = [];
           let tables = JSON.parse(results.data);
           this.tableData = tables.Tables1;
-          console.log(this.tableData);
           //  this.isPage=this.rows[0].totallen>10;
         }
       },
@@ -150,7 +161,6 @@ export class AllCashReceiveComponent {
   }
 
   DeleteData(item: any) {
-    console.log(item);
 
     swal
       .fire({
@@ -165,14 +175,13 @@ export class AllCashReceiveComponent {
       .then((result) => {
         if (result.isConfirmed == true) {
           let param = new GetDataModel();
-          param.procedureName = 'usp_LC_Delete';
+          param.procedureName = 'usp_CashReceiveDelete';
           param.parameters = {
-            LC_ID: item.LC_ID,
+            CR_ID: item.CR_ID,
           };
 
           this.masterEntryService.GetInitialData(param).subscribe({
             next: (results: any) => {
-              console.log(results);
 
               if (results.status) {
                 var effectedRows = JSON.parse(results.data).Tables1;

@@ -75,7 +75,6 @@ export class CashReceiveDetailsComponent {
 
     this.masterEntryService.GetInitialData(param).subscribe({
       next: (results) => {
-        console.log(results);
         
         if (results.status) {
           this.tableData = [];
@@ -100,8 +99,6 @@ export class CashReceiveDetailsComponent {
   }
 
   DeleteData(item: any) {
-    console.log(item);
-
     swal
       .fire({
         title: 'Wait!',
@@ -123,7 +120,6 @@ export class CashReceiveDetailsComponent {
 
           this.masterEntryService.GetInitialData(param).subscribe({
             next: (results: any) => {
-              console.log(results);
 
               if (results.status) {
                 var effectedRows = JSON.parse(results.data).Tables1;

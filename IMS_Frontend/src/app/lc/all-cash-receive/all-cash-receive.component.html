@@ -98,10 +98,10 @@
         <td class="text-center align-middle">{{table.Payment_Terms}}</td>
         <td class="text-center align-middle p-0 m-0">
             <a *ngIf="updatePermissions && table.Balance!=0" class="btn bg-gradient-cyan btn-xs mr-2" target="_blank" title="Add Receive Amount" [routerLink]="['/cash-receive-update']"
-              [queryParams]="{CR_Id:table.CR_ID}"><i class="fa fa-money" ></i></a> 
+              [queryParams]="{CR_Id:table.CR_ID}"><i class="fa fa-plus" ></i></a> 
             <a class="btn bg-gradient-cyan btn-xs mr-2" target="_blank" title="View Details" [routerLink]="['/cash-receive-details']"
               [queryParams]="{CR_Id:table.CR_ID}"><i class="fa fa-eye" ></i></a> 
-            <a *ngIf="updatePermissions" class="btn bg-gradient-cyan btn-xs mr-2" target="_blank" title="Edit" [routerLink]="['/generate-cash-rececive']"
+            <a *ngIf="updatePermissions" class="btn bg-gradient-cyan btn-xs mr-2" target="_blank" title="Edit" [routerLink]="['/generate-cash-receive']"
               [queryParams]="{CR_Id:table.CR_ID}"><i class="fa fa-edit" ></i></a> 
             <button *ngIf="deletePermissions" class="btn bg-gradient-danger btn-xs" title="Delete" (click)="DeleteData(table)"><i
                 class="fas fa-trash"></i></button>

@@ -64,6 +64,7 @@
                 [style]="{'width':'100%'}"
                 class="p-0"
                 [options]="PINo"
+                [virtualScroll]="true" [virtualScrollItemSize]="30"
                 optionLabel="label"
                 optionValue="value"
                 [filter]="true"
@@ -199,7 +200,7 @@
             </div>
             <div class="col-md-6">
               <label class="control-label" for="inlineFormInputGroup"
-                >Issue Date</label
+                >Issue Date <span>*</span></label
               >
               <div class="input-group mb-2">
                 <div class="input-group-sm input-group-prepend">

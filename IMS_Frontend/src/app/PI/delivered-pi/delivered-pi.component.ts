@@ -145,7 +145,6 @@ export class DeliveredPiComponent {
   }
 
   DeleteData(item: any) {
-    console.log(item);
     swal
       .fire({
         title: 'Wait!',

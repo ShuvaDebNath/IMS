@@ -13,10 +13,10 @@
         <form name="newForm" [formGroup]="Formgroup" role="form">
           <div class="row">
            
-            <label>Generate Cash Receive <span>*</span></label>
+            <label>Generate Cash Receive</label>
             <div class="col-md-6">
             <label>Marketing Concern <span>*</span></label>
-            <p-dropdown [style]="{'width':'100%'}"  class="p-0" [options]="MarketingConcern" (onChange)="getPINoByMarketingConcern()"  optionLabel="UserName" [filter]="true" filterBy="UserName" [showClear]="true" styleClass="listBottom" placeholder="Please Select" optionValue="User_ID" formControlName="Marketing_Concern">
+            <p-dropdown [style]="{'width':'100%'}"  class="p-0" [options]="MarketingConcern" (onChange)="getPINoByMarketingConcern()"  optionLabel="UserName" [filter]="true" filterBy="UserName" [showClear]="true" styleClass="listBottom" placeholder="Please Select" optionValue="User_ID" formControlName="Marketing_Concern" [readonly]="isEdit">
               <ng-template let-MarketingConcern pTemplate="item">
                       <div class="flex align-items-center gap-2">  
                           <div>{{ MarketingConcern.UserName }}</div>
@@ -35,7 +35,7 @@
                 </p-dropdown> 
             </div>
             <div class="col-md-6">
-                <label for="Consignee_Name" class="">Consignee Name</label>
+                <label for="Consignee_Name" class="">Consignee Name <span>*</span></label>
                 <div class="">
                     <div class="form-group d-inline">
                     <input autocomplete="off" type="text"                  
@@ -46,7 +46,7 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <label for="Customer_Bank" class="">Customer Bank Name</label>
+                <label for="Customer_Bank" class="">Customer Bank Name <span>*</span></label>
                 <div class="">
                     <div class="form-group d-inline">
                     <input autocomplete="off" type="text"                  
@@ -56,7 +56,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6" *ngIf="!isEdit">
                 <label>PIs <span>*</span></label>
                 <p-dropdown [style]="{'width':'100%'}" (onChange)="getCashReceiveInfoByPI()"  class="p-0" [options]="PIList"  optionLabel="label" [filter]="true" filterBy="label" [showClear]="true" styleClass="listBottom" placeholder="Please Select" optionValue="value" formControlName="PI">
                 <ng-template let-PI pTemplate="item">
@@ -66,16 +66,26 @@
                     </ng-template>
                 </p-dropdown> 
             </div>
-            <div class="col-md-6">
-                <label class="control-label" for="inlineFormInputGroup">PI Value <span>*</span></label>
+            <div class="col-md-6" *ngIf="!isEdit">
+                <label>PIs <span>*</span></label>
+                <p-dropdown [style]="{'width':'100%'}" (onChange)="getCashReceiveInfoByPI()"  class="p-0" [options]="PIList"  optionLabel="label" [filter]="true" filterBy="label" [showClear]="true" styleClass="listBottom" placeholder="Please Select" optionValue="value" formControlName="PI">
+                <ng-template let-PI pTemplate="item">
+                        <div class="flex align-items-center gap-2">  
+                            <div>{{ PI.label }}</div>
+                        </div>
+                    </ng-template>
+                </p-dropdown> 
+            </div>
+            <div class="col-md-6" *ngIf="isEdit">
+                <label class="control-label" for="inlineFormInputGroup">PI No <span>*</span></label>
                 <div class="form-group d-inline">
-                    <input autocomplete="off" type="Number"                  
-                    formControlName="PIValue"
+                    <input autocomplete="off" type="text"                  
+                    formControlName="PINo"
                     class="form-control"
-                    placeholder="PI Value" id="PIValue" name="PIValue" value="0" readonly>
+                    placeholder="PINo" id="PINo" name="PINo" value="0" readonly>
                     </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6" *ngIf="!isEdit">
                 <label class="control-label" for="inlineFormInputGroup">Receive Amount <span>*</span></label>
                 <div class="form-group d-inline">
                     <input autocomplete="off" type="Number"                  
@@ -85,8 +95,8 @@
                     placeholder="Receive Amount" id="ReceiveAmount" name="ReceiveAmount" value="" ngModel="ReceiveAmount">
                     </div>
             </div>
-            <div class="col-md-6">
-                <label class="control-label" for="inlineFormInputGroup">Receive Date</label>
+            <div class="col-md-6" *ngIf="!isEdit">
+                <label class="control-label" for="inlineFormInputGroup">Receive Date <span>*</span></label>
                 <div class="input-group mb-2">
                     <div class="input-group-sm input-group-prepend">
                     <div class="input-group-text" (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
@@ -99,7 +109,7 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <label class="control-label" for="inlineFormInputGroup">Issue Date</label>
+                <label class="control-label" for="inlineFormInputGroup">Issue Date <span>*</span></label>
                 <div class="input-group mb-2">
                     <div class="input-group-sm input-group-prepend">
                     <div class="input-group-text" (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>

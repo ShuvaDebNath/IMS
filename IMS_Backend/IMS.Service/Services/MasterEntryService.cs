@@ -387,7 +387,7 @@ namespace Boilerplate.Service.Services
 
             foreach (var itemQueryParams in dataQueryParams)
             {
-                if (itemQueryParams.Value.ToLower() == "newid()")
+                if ((itemQueryParams.Value == null ? "" : itemQueryParams.Value).ToLower() == "newid()")
                 {
                     sqlQuery += " " + itemQueryParams.Value + " ,";
                 }

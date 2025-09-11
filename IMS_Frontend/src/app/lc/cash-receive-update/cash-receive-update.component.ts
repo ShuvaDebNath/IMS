@@ -94,7 +94,6 @@ export class CashReceiveUpdateComponent {
       next: (results) => {
         if (results.status) {
           this.PIData = JSON.parse(results.data).Tables1;
-          console.log(results);
 
           //this.ReceiveAmount = this.PIData[0].Total_Receive_Amount;
           this.Balance = this.PIData[0].balance;
@@ -152,7 +151,6 @@ export class CashReceiveUpdateComponent {
     }
 
     this.masterEntyService.SaveSingleData(model, TableNameChild).subscribe((res: any) => {
-      console.log(res);
 
       if (res.status) {
         swal
