@@ -23,6 +23,8 @@ import { LandingPageComponent } from './landing-page/landing-page.component';
 import { ArbitrationComponent } from './arbitration-create/arbitration-create.component';
 import { BeneficiaryCreateComponent } from './Beneficiary/beneficiary-create/beneficiary-create.component';
 import { BeneficiaryListComponent } from './beneficiary/beneficiary-list/beneficiary-list.component';
+import { ArbitrationCreateComponent } from './arbitration/arbitration-create/arbitration-create.component';
+import { ArbitrationListComponent } from './arbitration/arbitration-list/arbitration-list.component';
 
 
 const CustomSelectOptions: INgxSelectOptions = {
@@ -42,7 +44,9 @@ const CustomSelectOptions: INgxSelectOptions = {
     ResetPasswordComponent,
     ArbitrationComponent,
     BeneficiaryCreateComponent,
-    BeneficiaryListComponent
+    BeneficiaryListComponent,
+    ArbitrationCreateComponent,
+    ArbitrationListComponent
 
   ],
   imports: [
