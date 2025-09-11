@@ -6,6 +6,91 @@
   font-size: medium;
 }
 
+/* default theme variable */
+.theme-bg{
+    background-color: #6a1a3f!important;
+    color: white;
+}
+.theme-btn:hover{
+    background-color: #800080;
+    color: white;
+}
+.theme-btn{
+    background-color: #6a1a3f;
+    color: white;
+}
+
+.theme-text{
+    color: #6a1a3f;
+}
+.theme-color{
+    color: #6a1a3f;
+}
+table-bordered td, .table-bordered th,tr,td {
+    border: 1px solid #6a1a3f !important;
+}
+.theme-btn {
+    border-radius: 5px;
+    background-color: #6a1a3f;
+    color: white;
+}
+
+.theme-bg {
+    background-color: #6a1a3f;
+    color: white;
+
+}
+.theme-btn-disable{
+    background-color: #6a1a3f45;
+}
+.theme-btn:hover {
+    background-color: #800080;
+    color: white;
+}
+
+.theme-text {
+    color: #6a1a3f;
+}
+
+.theme-color {
+    color: #6a1a3f;
+}
+
+ td,
+.table-bordered th,
+td,
+tr {
+    border: 1px solid #6a1a3f !important;
+}
+/* over-right */
+
+.p-paginator {
+  background-color: #6a1a3f!important;
+    color: white!important;
+}
+p-paginator .p-paginator-current {
+   color: white!important;
+}
+/* Add / Create */
+.theme-btn-add { background-color: #a12c64; color: #fff; }
+.theme-btn-add:hover { background-color: #b23b75; }
+
+/* Edit / Update */
+.theme-btn-edit { background-color: #b23b60; color: #fff; }
+.btn-edit:hover { background-color: #c94d77; }
+
+/* Delete */
+.theme-btn-delete { background-color: #d32f2f; color: #fff; }
+.theme-btn-delete:hover { background-color: #e53935; }
+
+/* View / Details */
+.theme-btn-view { background-color: #51223c; color: #fff; }
+.theme-btn-view:hover { background-color: #6a1a3f; }
+
+/* Cancel */
+.theme-btn-cancel { background-color: #aa607f; color: #fff; }
+.theme-btn-cancel:hover { background-color: #bb708f; }
+
 .ngx-datatable.bootstrap {
   background-color: transparent;
   box-shadow: 0 0 0 #000;

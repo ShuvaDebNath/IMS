@@ -20,7 +20,8 @@ export class BeneficiaryCreateComponent implements OnInit {
 
   insertPermissions: boolean = false;
   updatePermissions: boolean = false;
-
+  paymentTypes: any[] = [];
+  countryData: any[]=[]
   constructor(
     private fb: FormBuilder,
     private masterEntyService: MasterEntryService,
@@ -45,6 +46,7 @@ export class BeneficiaryCreateComponent implements OnInit {
       this.GetBeneficiaryById(this.BeneficiaryId);
     }
     this.GetPaymentType()
+    this.GetCountry()
   }
   GetPaymentType() {
     this.masterEntyService.GetDataTable({
@@ -56,8 +58,39 @@ export class BeneficiaryCreateComponent implements OnInit {
     }).subscribe({
       next: (results) => {
 
-        console.log("payment-type",results)
-        if (results.status) { }
+        if (results.status) {
+          const firstParse = JSON.parse(results.data)
+
+          const parsed = JSON.parse(firstParse);
+          this.paymentTypes = parsed.data.map((row: any) => ({
+            id: row[0],
+            name: row[1]
+          }));
+
+        }
+      }
+    })
+  }
+    GetCountry() {
+    this.masterEntyService.GetDataTable({
+      tableName: "tbl_country",
+      columnNames: "Country_ID,Country",
+      whereParams: "",
+      queryParams: ""
+
+    }).subscribe({
+      next: (results) => {
+
+        if (results.status) {
+          const firstParse = JSON.parse(results.data)
+
+          const parsed = JSON.parse(firstParse);
+          this.countryData = parsed.data.map((row: any) => ({
+            id: row[0],
+            name: row[1]
+          }));
+          console.log( this.countryData)
+        }
       }
     })
   }

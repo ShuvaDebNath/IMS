@@ -32,10 +32,17 @@
           <input type="text" formControlName="City" class="form-control" placeholder="Enter City">
         </div>
 
+
+
         <!-- Country -->
         <div class="col-md-6">
           <label class="form-label required-field">Country</label>
-          <input type="number" formControlName="Country_ID" class="form-control" placeholder="Enter Country ID">
+          <select formControlName="Country_ID" class="form-select">
+            <option value="">-- Select Country --</option>
+            <option *ngFor="let country of countryData" [value]="country.id">
+              {{country.name}}
+            </option>
+          </select>
         </div>
 
         <!-- ETIN -->
@@ -61,9 +68,9 @@
           <label class="form-label required-field">Payment Type</label>
           <select formControlName="PaymentTypeId" class="form-select">
             <option value="">-- Select Payment Type --</option>
-            <option value="1">Cash</option>
-            <option value="2">LC</option>
-            <option value="3">Both</option>
+            <option *ngFor="let pt of paymentTypes" [value]="pt.id">
+              {{ pt.name }}
+            </option>
           </select>
         </div>
 
