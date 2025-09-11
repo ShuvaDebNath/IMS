@@ -25,6 +25,13 @@
           "Required": true
         }
       }
+    },
+    "tbl_stock": {
+      "QueryParams": {
+        "[RawMaterial_ID]": {
+          "Required": true
+        }
+      }
     }
   }
 }
