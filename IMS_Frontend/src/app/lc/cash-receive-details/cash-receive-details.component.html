@@ -1,0 +1,99 @@
+<div class="card card-default">
+  <div class="content-heading" style="border-bottom: 1px solid rgba(0,0,0,.125) !important;">
+    <div class="row">
+      <div class="col-6">
+        <h2 class="p-2">All LC</h2>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+        <div class="col-md-6">
+            <b>Marketing Concern :</b> {{MarketingConcern}}
+        </div>
+        <div class="col-md-6">
+            <b>Consignee Name :</b> {{ConsigneeName}}
+        </div>
+        <div class="col-md-6">
+            <b>Benificiary Bank :</b> {{BenificiaryBank}}
+        </div>
+        <div class="col-md-6">
+            <b>PI Value :</b> {{PIValue}}
+        </div>
+        <div class="col-md-6">
+            <b>Issue Date :</b> {{IssueDate}}
+        </div>
+        <div class="col-md-6">
+            <b>Customer Bank Name :</b> {{CustomerBankName}}
+        </div>
+        <div class="col-md-6">
+            <b>Total Receive Amount :</b> {{TotalReceiveAmount}}
+        </div>
+        <div class="col-md-6">
+            <b>Last Receive Date :</b> {{LastReceiveDate}}
+        </div>
+        <div class="col-md-6">
+            <b>Balance :</b> {{Balance}}
+        </div>
+        <div class="col-md-6">
+            <b>Payment Terms :</b> {{PaymentTerms}}
+        </div>
+        <div class="col-md-6">
+            <b>Remarks :</b> {{Remarks}}
+        </div>
+        <div class="col-md-6">
+            <b>PIs :</b> {{PIs}}
+        </div>
+    </div>
+
+      <p-table #dt
+           [value]="tableData"
+           [paginator]="true"
+           [rows]="10"
+           [responsive]="true"
+           [showCurrentPageReport]="true"
+           [globalFilterFields]="['ReceiveAmount','ReceiveDate','UserName','CreatedDate']"           
+           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+
+    <ng-template pTemplate="caption">
+      <div class="table-toolbar">
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text"
+                 (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                 placeholder="Global Search" />
+        </span>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="bg-gradient-success">SL</th>
+        <th class="bg-gradient-success">Receive Amount</th>
+        <th class="bg-gradient-success">Receive Date</th>
+        <th class="bg-gradient-success">Received Date</th>
+        <th class="bg-gradient-success">Created Date</th>
+        <th class="bg-gradient-success">Action</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-table let-i="rowIndex">
+      <tr>
+        <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
+        <td class="text-center align-middle">{{table.ReceiveAmount}}</td>
+        <td class="text-center align-middle">{{table.ReceiveDate}}</td>
+        <td class="text-center align-middle">{{table.UserName}}</td>
+        <td class="text-center align-middle">{{table.CreatedDate}}</td>
+        <td class="text-center align-middle p-0 m-0">
+            <button *ngIf="deletePermissions" class="btn bg-gradient-danger btn-xs" title="Delete" (click)="DeleteData(table)"><i
+                class="fas fa-trash"></i></button>
+        </td>
+      </tr>
+    </ng-template>
+
+  </p-table>
+
+    </div>
+    
+
+  </div>

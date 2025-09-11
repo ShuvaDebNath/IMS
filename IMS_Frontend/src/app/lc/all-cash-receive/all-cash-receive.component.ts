@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalServiceService } from '../../services/Global-service.service';
 import swal from 'sweetalert2';
 import { Page } from 'src/app/models/Page';
@@ -11,23 +11,21 @@ import { PagesComponent } from 'src/app/pages/pages.component';
 import { Title } from '@angular/platform-browser';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 import { GetDataModel } from 'src/app/models/GetDataModel';
-import { LC } from 'src/app/models/LCModel';
 import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
 import { DoubleMasterEntryModel } from 'src/app/models/DoubleMasterEntryModel';
-import { CD } from 'src/app/models/CDModel';
+import { CG } from 'src/app/models/cg';
 
 @Component({
-  selector: 'app-all-commercial-invoice',
-  templateUrl: './all-commercial-invoice.component.html',
-  styleUrls: ['./all-commercial-invoice.component.css']
+  selector: 'app-all-cash-receive',
+  templateUrl: './all-cash-receive.component.html',
+  styleUrls: ['./all-cash-receive.component.css'],
 })
-export class AllCommercialInvoiceComponent {
-pageIndex = 1;
+export class AllCashReceiveComponent {
+  pageIndex = 1;
   searchText = '';
   length = 100;
   pageSize = 10;
-  detailsTableData:any;
-    tableData!: CD[];
+  tableData!: CG[];
   pageSizeOptions: number[] = [];
   displayedColumns: string[] = [
     'Sl',
@@ -42,13 +40,14 @@ pageIndex = 1;
     'Action',
   ];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-
+  isEdit:any;
   page = new Page();
   rows: any;
   SearchForm!: FormGroup;
   fromDate: any;
   toDate: any;
-  CDNo:string='';
+  LCNo: string = '';
+  CR_Id:any;
 
   showPaginator = false;
   insertPermissions: boolean = true;
@@ -57,8 +56,8 @@ pageIndex = 1;
   printPermissions: boolean = true;
   allPersmissions: boolean = true;
   getDataModel: GetDataModel = new GetDataModel();
-  detailsData:any;
-  isDetailsVisible:boolean = false;
+  detailsData: any;
+  isDetailsVisible: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -66,30 +65,42 @@ pageIndex = 1;
     private gs: GlobalServiceService,
     private pagesComponent: PagesComponent,
     private masterEntryService: MasterEntryService,
-    private title:Title
-  ) {
-  }
+    private activeLink: ActivatedRoute,
+    private title: Title
+  ) {}
   ngOnInit(): void {
+
+    var permissions = this.gs.CheckUserPermission("All Cash Receive");
+    this.insertPermissions = permissions.insertPermissions;
+    this.updatePermissions = permissions.updatePermissions;
+    this.deletePermissions = permissions.deletePermissions;
+    this.printPermissions = permissions.printPermissions;
+
+    if (!this.printPermissions) {
+      window.location.href = 'dashboard';
+    }
+    
+    
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
-    this.title.setTitle('All Commercial Documents');
-    
+    this.title.setTitle('All Cash Receive');
+
     var fDate = new Date();
     const mm = String(fDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
     const dd = String(fDate.getDate()).padStart(2, '0');
     const yyyy = fDate.getFullYear();
 
-    const formatted = `${dd}/${mm}/${yyyy}`;    
-    
+    const formatted = `${dd}/${mm}/${yyyy}`;
+
     const threeMonthsAgo = new Date();
     threeMonthsAgo.setMonth(fDate.getMonth() - 3);
-    
+
     const mmT = String(threeMonthsAgo.getMonth() + 1).padStart(2, '0'); // Months are 0-based
     const ddT = String(threeMonthsAgo.getDate()).padStart(2, '0');
     const yyyyT = threeMonthsAgo.getFullYear();
 
     const formattedT = `${ddT}/${mmT}/${yyyyT}`;
-    
+
     this.SearchForm.get('fromDate')?.setValue(formattedT);
     this.SearchForm.get('toDate')?.setValue(formatted);
 
@@ -97,12 +108,11 @@ pageIndex = 1;
   }
   initForm(): void {
     this.SearchForm = this.fb.group({
-      fromDate: ['',[Validators.required]],
-      toDate: ['',[Validators.required]],
-      cdNo: [''],
+      fromDate: ['', [Validators.required]],
+      toDate: ['', [Validators.required]],
     });
   }
-  Search(){
+  Search() {
     var finput = new Date();    
     var fromDate = this.SearchForm.value.fromDate;
     if (this.SearchForm.value.fromDate instanceof Date) {
@@ -125,73 +135,69 @@ pageIndex = 1;
 
       toDate = `${tday}/${tmonth}/${tyear}`;
     }
+
+    
     
     let param = new GetDataModel();
-    param.procedureName = '[usp_CD_List]';
+    param.procedureName = '[usp_CashReceive_List]';
     param.parameters = {
       FromDate: fromDate,
       ToDate: toDate,
-      CDNo: this.SearchForm.value.cdNo,
-      PageIndex:this.pageIndex,
-      PageSize:this.pageSize      
+      PageIndex: this.pageIndex,
+      PageSize: this.pageSize,
     };
-    
+
     this.masterEntryService.GetInitialData(param).subscribe({
       next: (results) => {
-        
+
         if (results.status) {
           this.tableData = [];
           let tables = JSON.parse(results.data);
-          this.tableData = tables.Tables1; 
+          this.tableData = tables.Tables1;
           //  this.isPage=this.rows[0].totallen>10;
-          this.length = parseInt(this.tableData[0].totallen);
         }
-
-      }
-
+      },
     });
-
   }
 
-  DeleteData(item:any){
+  DeleteData(item: any) {
+
     swal
-                .fire({
-                  title: 'Wait!',
-                  html: `<span>Once you delete, you won't be able to revert this!<br> <b>[${item.LC_No}]</b></span>`,
-                  icon: 'warning',
-                  showCancelButton: true,
-                  confirmButtonColor: '#3085d6',
-                  cancelButtonColor: '#d33',
-                  confirmButtonText: 'Yes, delete it!',
-                })
-                .then((result) => {
-                  if (result.isConfirmed==true) {
-                    let param = new GetDataModel();
-                    param.procedureName = "usp_CD_Delete";
-                    param.parameters = 
-                    {
-                      'Commercial_Invoice_ID':item.Commercial_Invoice_ID
-                    };
-          
-      
+      .fire({
+        title: 'Wait!',
+        html: `<span>Once you delete, you won't be able to revert this!</span>`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+      })
+      .then((result) => {
+        if (result.isConfirmed == true) {
+          let param = new GetDataModel();
+          param.procedureName = 'usp_CashReceiveDelete';
+          param.parameters = {
+            CR_ID: item.CR_ID,
+          };
+
           this.masterEntryService.GetInitialData(param).subscribe({
-            next: (results:any) => {
-              
+            next: (results: any) => {
+
               if (results.status) {
                 var effectedRows = JSON.parse(results.data).Tables1;
-                if(effectedRows[0].AffectedRows>0){
-                  swal.fire({
-                            text: `Data Deleted Successfully !`,
-                            title: `Delete Successfully!`,
-                            icon: 'success',
-                            timer: 5000,
-                          })
-                          .then((result) => {
-                            this.ngOnInit();
-                            this.Search();
-                          });
+                if (effectedRows[0].AffectedRows > 0) {
+                  swal
+                    .fire({
+                      text: `Data Deleted Successfully !`,
+                      title: `Delete Successfully!`,
+                      icon: 'success',
+                      timer: 5000,
+                    })
+                    .then((result) => {
+                      this.ngOnInit();
+                    });
                 }
-                
+
                 this.Search();
               } else if (results.message == 'Invalid Token') {
                 swal.fire('Session Expierd!', 'Please Login Again.', 'info');
@@ -201,30 +207,18 @@ pageIndex = 1;
             },
             error: (err) => {},
           });
-                  }
-                });
-    
+        }
+      });
   }
 
-    viewDetails(table:any){
-      this.isDetailsVisible = true;
-      
-      let param = new GetDataModel();
-      param.procedureName = '[usp_LC_Details]';
-      param.parameters = {
-        Commercial_Invoice_ID: table.Commercial_Invoice_ID,     
-      };
+  paginatiorChange(e: any) {
+    this.pageIndex = e.pageIndex + 1;
+    this.pageSize = e.pageSize;
+    this.Search();
+  }
 
-    this.masterEntryService.GetInitialData(param).subscribe({
-      next: (results) => {
-        
-        if (results.status) {
-          let tables = JSON.parse(results.data);
-          
-          this.detailsData = tables.Tables1[0]; 
-          this.detailsTableData = tables.Tables2;
-        }
-      }
-    });
-    }
+  viewDetails(table: any) {
+    this.isDetailsVisible = true;
+    this.detailsData = table;
+  }
 }

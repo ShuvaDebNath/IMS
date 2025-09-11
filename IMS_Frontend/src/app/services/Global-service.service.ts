@@ -8,7 +8,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class GlobalServiceService {
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(private router: Router, private http: HttpClient) { }
   readonly baseUrlApi = GlobalConfig.BASE_URL;
   readonly baseUrl = GlobalConfig.BASE_URL_REPORT;
   readonly apiController = 'UserAccount';
@@ -25,7 +25,7 @@ export class GlobalServiceService {
         map((result: any) => {
           if (result.ok) {
             window.localStorage.setItem('token', result.token);
-            window.localStorage.setItem('companyId',result.userinfo.concernId)
+            window.localStorage.setItem('companyId', result.userinfo.concernId)
             window.localStorage.setItem(
               'user',
               JSON.stringify(result.userinfo)
@@ -49,12 +49,12 @@ export class GlobalServiceService {
         }),
       })
       .pipe(
-        
+
         map((result: any) => {
-          
+
           if (!result) {
-             this.ClearSession();
-             this.router.navigate(['/login']);
+            this.ClearSession();
+            this.router.navigate(['/login']);
           }
           return true;
         })
@@ -64,45 +64,7 @@ export class GlobalServiceService {
   public getSessionData(key: string): any {
     return window.localStorage.getItem(key);
   }
-
-  // public Logout() {
-  //   this.ClearSession();
-  //         window.open(`${GlobalConfig.LOGIN_URL_USERMANAGE}`, '_self');
-  //   // let user = this.GetSessionUser();
-  //   // let model = {
-  //   //   comId: '',
-  //   //   concernId: user.concernId,
-  //   //   deleteBy : '',
-  //   //   deleteDate: '',
-  //   //   email: user.email,
-  //   //   emailConfirmed: true,
-  //   //   fullName: '',
-  //   //   id: user.id,
-  //   //   isActive: true,
-  //   //   makeBy: '',
-  //   //   menuId: '',
-  //   //   password: '',
-  //   //   projectId: user.projectId,
-  //   //   updateBy: '',
-  //   //   userName: user.userName,
-  //   //   userTypeId: user.userTypeId,
-  //   //   UserId: '',
-  //   //   UserTypeName:''
-  //   // };
-  //   // return this.http
-  //   //   .post<any>(`${GlobalConfig.BASE_URL_USERMANAGE}LogIn/Logout`, model, {
-  //   //     headers: new HttpHeaders({
-  //   //       'Content-Type': 'application/json',
-  //   //     }),
-  //   //   })
-  //   //   .pipe(
-  //   //     map((Response) => {
-  //   //       this.ClearSession();
-  //   //       window.open(`${GlobalConfig.LOGIN_URL_USERMANAGE}`, '_self');
-  //   //     })
-  //   //   );
-  // }
-  public GetSessionUser() {
+public GetSessionUser() {
     let user = JSON.parse(this.getSessionData('user'));
     return user;
   }
@@ -144,10 +106,6 @@ export class GlobalServiceService {
         map((Response) => {
           if (Response.ok) {
             let tables = JSON.parse(Response.userpermission);
-            let companyName=tables.Table1[0].ComName;
-            let concernCompanyLogo=tables.Table1[0].ConcernCompanyLogo;
-            window.localStorage.setItem('companyName',companyName);
-            window.localStorage.setItem('concernCompanyLogo',concernCompanyLogo);
             window.localStorage.setItem(
               'modules',
               JSON.stringify(tables.Table2)
@@ -173,5 +131,54 @@ export class GlobalServiceService {
 
   public GetPageSizeOptions() {
     return [5, 10, 25, 100];
+  }
+
+  public CheckUserPermission(menuName: string) {
+    var permissions = {
+      insertPermissions: false,
+      updatePermissions: false,
+      deletePermissions: false,
+      printPermissions: false,}
+    var menu = '';
+    menu = window.localStorage.getItem('UserMenuWithPermission')==null?'':window.localStorage.getItem('UserMenuWithPermission')!;
+    if (menu == '') {
+      this.Logout();
+    }
+    var menuJson = JSON.parse(menu);
+    var buttonPermissions: any = [];
+    var countFound = 0;
+    menuJson.forEach((e: any) => {
+      e.Children = JSON.parse(e.Children);
+      e.Children.forEach((childMenu: any) => {
+        if (childMenu.SubMenuName == menuName) {
+          countFound++;
+          buttonPermissions.push(childMenu.ButtonName);
+        }
+      });
+    })
+    if (countFound == 0) {
+      window.location.href = 'dashboard';
+    }
+    else {
+      buttonPermissions.forEach((buttonCheck: any) => {
+
+        if (buttonCheck[0].ButtonName == "Delete") {
+          permissions.deletePermissions = true;
+        }
+        else if (buttonCheck[0].ButtonName == "View") {
+          permissions.printPermissions = true;
+        }
+        else if (buttonCheck[0].ButtonName == "Insert") {
+          permissions.insertPermissions = true;
+        }
+        else if (buttonCheck[0].ButtonName == "Update") {
+          permissions.updatePermissions = true;
+        }
+      });
+    }
+
+    return permissions;
+
+    
   }
 }

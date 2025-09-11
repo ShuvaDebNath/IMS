@@ -17,6 +17,7 @@ public static class DataAccessRegistration
         service.AddScoped<IGetDataRepository, GetDataRepository>();
         // Register post-insert actions and factory from contracts
         service.AddTransient<IDoubleMasterEntryPostInsertAction, UpdateRequisitionMasterAction>();
+        service.AddTransient<IDoubleMasterEntryPostInsertAction, UpdateCashReceiveMasterAction>();
         service.AddSingleton<IDoubleMasterEntryPostInsertActionFactory, DoubleMasterEntryPostInsertActionFactory>();
     }
 }

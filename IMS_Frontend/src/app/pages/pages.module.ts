@@ -21,7 +21,6 @@ import { DropdownModule } from 'primeng/dropdown'
 import { SelectButtonModule } from 'primeng/selectbutton';
 import {PopoverModule} from 'ngx-bootstrap/popover';
 import {DatePipe} from '@angular/common';
-import { NgSelectModule } from '@ng-select/ng-select';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { PagesComponent } from './pages.component';
@@ -54,10 +53,15 @@ import {DialogModule} from 'primeng/dialog'
 import { GenerateCommercialInvoiceComponent } from '../commercial-document/generate-commercial-invoice/generate-commercial-invoice.component';
 import { AllCommercialInvoiceComponent } from '../commercial-document/all-commercial-invoice/all-commercial-invoice.component';
 import { GeneratePiComponent } from '../PI/generate-pi/generate-pi.component';
+import { AllPiComponent } from '../PI/all-pi/all-pi.component';
+import { DeliveredPiComponent } from '../PI/delivered-pi/delivered-pi.component';
+import { AllCashReceiveComponent } from '../lc/all-cash-receive/all-cash-receive.component';
+import { GenerateCashReceiveComponent } from '../lc/generate-cash-receive/generate-cash-receive.component';
+import { CashReceiveDetailsComponent } from '../lc/cash-receive-details/cash-receive-details.component';
+import { CashReceiveUpdateComponent } from '../lc/cash-receive-update/cash-receive-update.component';
 import { RawMaterialStockComponent } from '../rm-fg-material-infos-with-stock/raw-material-info-with-stock/raw-material-stock.component';
 
 import { GenerateCpiComponent } from '../PI/generate-cpi/generate-cpi.component';
-
 
 const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more options
   keepSelectedItems: false,
@@ -83,6 +87,12 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     AllCommercialInvoiceComponent,
     GeneratePiComponent,
     LandingPageComponent,
+    DeliveredPiComponent,
+    AllPiComponent,
+    AllCashReceiveComponent,
+    GenerateCashReceiveComponent,
+    CashReceiveDetailsComponent,
+    CashReceiveUpdateComponent
     AllCommercialInvoiceComponent,
     ChangePasswordComponent,
     GeneratePiComponent,
@@ -90,7 +100,6 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     ],
   imports: [
 
-    NgSelectModule,
     CommonModule,
     Select2Module,
     HttpClientModule,
@@ -157,6 +166,12 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
            {path: 'all-commercial-invoice', component: AllCommercialInvoiceComponent},
            {path: 'generate-commercial-invoice', component: GenerateCommercialInvoiceComponent},
           { path: 'generate-pi', component: GeneratePiComponent },
+          { path: 'all-pi', component: AllPiComponent },
+          { path: 'delivered-pi', component: DeliveredPiComponent },
+          { path: 'all-cash-receive', component: AllCashReceiveComponent },
+          { path: 'generate-cash-receive', component: GenerateCashReceiveComponent },
+          { path: 'cash-receive-details', component: CashReceiveDetailsComponent },
+          { path: 'cash-receive-update', component: CashReceiveUpdateComponent },
           { path: 'generate-cpi', component: GenerateCpiComponent },
         ]
       }

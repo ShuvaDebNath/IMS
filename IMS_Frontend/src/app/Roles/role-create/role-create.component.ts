@@ -67,7 +67,6 @@ export class RoleCreateComponent {
         }
       });
     }
-    console.log(buttonPermissions);
     
     if(!this.insertPermissions){
       //window.location.href='role-list';
