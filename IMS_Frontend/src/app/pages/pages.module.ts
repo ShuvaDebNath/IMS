@@ -13,6 +13,7 @@ import { NgxSelectModule, INgxSelectOptions } from 'ngx-select-ex';
 import { UiSwitchModule } from 'ngx-ui-switch';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { MatPaginatorModule } from '@angular/material/paginator';
+//Material Data Table;
 import { Select2Module } from 'ng-select2-component';
 import { TreeTableModule } from 'primeng/treetable';
 import { TreeModule } from 'primeng/tree';
@@ -58,6 +59,9 @@ import { AllCashReceiveComponent } from '../lc/all-cash-receive/all-cash-receive
 import { GenerateCashReceiveComponent } from '../lc/generate-cash-receive/generate-cash-receive.component';
 import { CashReceiveDetailsComponent } from '../lc/cash-receive-details/cash-receive-details.component';
 import { CashReceiveUpdateComponent } from '../lc/cash-receive-update/cash-receive-update.component';
+import { RawMaterialStockComponent } from '../rm-fg-material-infos-with-stock/raw-material-info-with-stock/raw-material-stock.component';
+
+import { GenerateCpiComponent } from '../PI/generate-cpi/generate-cpi.component';
 
 const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more options
   keepSelectedItems: false,
@@ -89,6 +93,10 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     GenerateCashReceiveComponent,
     CashReceiveDetailsComponent,
     CashReceiveUpdateComponent
+    AllCommercialInvoiceComponent,
+    ChangePasswordComponent,
+    GeneratePiComponent,
+    GenerateCpiComponent
     ],
   imports: [
 
@@ -109,6 +117,11 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     CheckboxModule,
     InputTextModule,
     PopoverModule,    
+    DatePipe,
+    CheckboxModule,
+    InputTextModule,
+    PopoverModule,
+    
     DatePipe,
     UiSwitchModule.forRoot({
       size: 'small',
@@ -135,9 +148,10 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'pending-rm-requisition-warehouse', component: PendingRMRequisitionWareHouseComponent },
           { path: 'accepted-rm-requisition-warehouse', component: AcceptedRMRequisitionWareHouseComponent },
           { path: 'issued-rm-requisition-production', component: IssuedRMRequisitionProductionComponent },
-          { path: 'received-rm-list', component: ReceivedRMListComponent },
+          { path: 'received-raw-material-production', component: ReceivedRMListComponent },
           { path: 'all-rm-requisition-list', component: AllRMRequisitionListComponent },
           { path: 'issued-rm-requisition-list-warehouse', component: IssuedRMRequisitionListWarehouseComponent },
+          { path: 'raw-material-stock', component: RawMaterialStockComponent },
 
           {
             path: 'pending-rm-requisition/edit/:reqId',
@@ -146,11 +160,11 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
                 .then(m => m.PendingRMRequisitionProductionEditComponent)
           },
            {path: 'change-password', component: ChangePasswordComponent},       
-           {path:"landing-page",component:LandingPageComponent},
+           {path: 'landing-page',component:LandingPageComponent},
            {path: 'all-lc', component: AllLcComponent},
            {path: 'generate-lc', component: GenerateLcComponent},
-           {path: 'generate-commercial-invoice', component: GenerateCommercialInvoiceComponent},
            {path: 'all-commercial-invoice', component: AllCommercialInvoiceComponent},
+           {path: 'generate-commercial-invoice', component: GenerateCommercialInvoiceComponent},
           { path: 'generate-pi', component: GeneratePiComponent },
           { path: 'all-pi', component: AllPiComponent },
           { path: 'delivered-pi', component: DeliveredPiComponent },
@@ -158,6 +172,7 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'generate-cash-receive', component: GenerateCashReceiveComponent },
           { path: 'cash-receive-details', component: CashReceiveDetailsComponent },
           { path: 'cash-receive-update', component: CashReceiveUpdateComponent },
+          { path: 'generate-cpi', component: GenerateCpiComponent },
         ]
       }
     ]),
