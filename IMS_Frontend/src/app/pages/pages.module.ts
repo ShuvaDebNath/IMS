@@ -55,8 +55,11 @@ import { GenerateCommercialInvoiceComponent } from '../commercial-document/gener
 import { AllCommercialInvoiceComponent } from '../commercial-document/all-commercial-invoice/all-commercial-invoice.component';
 import { GeneratePiComponent } from '../PI/generate-pi/generate-pi.component';
 import { RawMaterialStockComponent } from '../rm-fg-material-infos-with-stock/raw-material-info-with-stock/raw-material-stock.component';
-
 import { GenerateCpiComponent } from '../PI/generate-cpi/generate-cpi.component';
+import { UnApprovePiComponent } from '../PI/un-approve-pi/un-approve-pi.component';
+import { PartialApprovePiComponent } from '../PI/partial-approve-pi/partial-approve-pi.component';
+import { QuarterApprovePiComponent } from '../PI/quarter-approve-pi/quarter-approve-pi.component';
+import { FullApprovePiComponent } from '../PI/full-approve-pi/full-approve-pi.component';
 
 
 const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more options
@@ -157,7 +160,12 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
            {path: 'all-commercial-invoice', component: AllCommercialInvoiceComponent},
            {path: 'generate-commercial-invoice', component: GenerateCommercialInvoiceComponent},
           { path: 'generate-pi', component: GeneratePiComponent },
-          { path: 'generate-cpi', component: GenerateCpiComponent },
+          { path: 'generate-cpi', component: GenerateCpiComponent },          
+          { path: 'unapproved-pi', component: UnApprovePiComponent },
+          { path: 'partialapproved-pi', component: PartialApprovePiComponent },
+          { path: 'quarterapproved-pi', component: QuarterApprovePiComponent },
+          { path: 'fullapproved-pi', component: FullApprovePiComponent },
+
         ]
       }
     ]),
