@@ -21,10 +21,9 @@ export class IssuedRMRequisitionProductionComponent {
   issuedRequisitions: any[] = [];
   detailsData: any = null;
   isDetailsVisible = false;
-
   detailsData_for_Accept: any = null;
-
   isDetailsVisible_for_Issue = false;
+  tableName: any;
 
   constructor(
     private getDataService: GetDataService,
@@ -192,22 +191,46 @@ export class IssuedRMRequisitionProductionComponent {
       Roll_Bag: r?.Roll_Bag
     }));
 
+    const detailRowsForStockUpdate = (data.Items as any[]).map(r => ({
+      RawMaterial_ID: r?.RawMaterial_ID,
+      Stock_Out: Number(r?.AcceptedQuantity ?? 0),
+      RM_Requisition_MasterID: data.RM_Requisition_MasterID,
+      Roll_Out: r?.Roll_Bag === 'roll' ? Number(r?.AcceptedRollBag_Qty ?? 0) : 0,
+      Bag_Out: r?.Roll_Bag === 'bag' ? Number(r?.AcceptedRollBag_Qty ?? 0) : 0,
+      RM_Send_MasterID: data.RM_Send_MasterID,
+    }));
+
     const whereParams = { RM_Send_MasterID: data.RM_Send_MasterID };
+    // First update master/details, then update stock only if first succeeds
     this.dme.UpdateDataMasterDetails(
-      detailRows,                          // fd (details)
-      'tbl_rm_send_details',               // details table
-      masterRow,                           // fdMaster
-      'tbl_rm_send_master',                // master table
-      'RM_Send_MasterID',                  // primaryColumnName
-      'RM_Send_MasterID',                  // ColumnNameForign
-      '',                                  // serialType
-      '',                                  // ColumnNameSerialNo
-      whereParams                          // where clause
+      detailRows,
+      'tbl_rm_send_details',
+      masterRow,
+      'tbl_rm_send_master',
+      'RM_Send_MasterID',
+      'RM_Send_MasterID',
+      '',
+      '',
+      whereParams
     ).subscribe({
       next: () => {
-        swal.fire('Accepted!', 'Issued accepted successfully.', 'success');
-        this.isDetailsVisible_for_Issue = false;
-        this.loadIssuedRequisitions();
+        // Now call SaveData for stock update
+        this.dme.SaveData(detailRowsForStockUpdate, 'tbl_stock').subscribe({
+          next: (res) => {
+            if (res.messageType === 'Success' && res.status) {
+              this.isDetailsVisible_for_Issue = false;
+              swal.fire('Congratulation', 'Data saved successfully.', 'success').then(() => {
+                this.loadIssuedRequisitions();
+              });
+            } else {
+              swal.fire('Stock Update Failed', res?.message || 'Stock update failed.', 'error');
+            }
+          },
+          error: (err) => {
+            console.error(err);
+            swal.fire('Stock Update Failed', err?.error?.message || 'Stock update failed.', 'error');
+          }
+        });
       },
       error: (err) => {
         console.error(err);
