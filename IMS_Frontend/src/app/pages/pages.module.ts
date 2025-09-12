@@ -53,9 +53,12 @@ import {DialogModule} from 'primeng/dialog'
 import { GenerateCommercialInvoiceComponent } from '../commercial-document/generate-commercial-invoice/generate-commercial-invoice.component';
 import { AllCommercialInvoiceComponent } from '../commercial-document/all-commercial-invoice/all-commercial-invoice.component';
 import { GeneratePiComponent } from '../PI/generate-pi/generate-pi.component';
-import { ArbitrationComponent } from '../arbitration-create/arbitration-create.component';
 import { BeneficiaryCreateComponent } from '../Beneficiary/beneficiary-create/beneficiary-create.component';
 import { BeneficiaryListComponent } from '../beneficiary/beneficiary-list/beneficiary-list.component';
+import { ArbitrationCreateComponent } from '../arbitration/arbitration-create/arbitration-create.component';
+import { ArbitrationListComponent } from '../arbitration/arbitration-list/arbitration-list.component';
+import { BeneficiarybankCreateComponent } from '../BeneficiaryBank/beneficiarybank-create/beneficiarybank-create.component';
+import { BeneficiaryBankListComponent } from '../BeneficiaryBank/beneficiary-bank-list/beneficiary-bank-list.component';
 
 const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more options
   keepSelectedItems: false,
@@ -146,13 +149,22 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
            {path: 'all-commercial-invoice', component: AllCommercialInvoiceComponent},
           { path: 'generate-pi', component: GeneratePiComponent },
           {
-            path:"arbitration-create",component:ArbitrationComponent
+            path:"arbitration-create",component:ArbitrationCreateComponent
+          },
+          {
+            path:"arbitration-list",component:ArbitrationListComponent
           },
            {
             path:"beneficiary-create",component:BeneficiaryCreateComponent
           },
           {
             path:"beneficiary-list",component:BeneficiaryListComponent
+          },
+          {
+            path:"beneficiarybank-create",component:BeneficiarybankCreateComponent
+          },
+          {
+            path:"beneficiarybank-list",component:BeneficiaryBankListComponent
           }
         ]
       }

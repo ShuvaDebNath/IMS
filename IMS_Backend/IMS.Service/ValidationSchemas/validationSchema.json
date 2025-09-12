@@ -25,7 +25,48 @@
           "Required": true
         }
       }
+    },
+
+    "tbl_arbitration": {
+      "QueryParams": {
+        "[Detail]": {
+          "Required": true
+        }
+      }
+    },
+    "tbl_beneficiary_account": {
+      "QueryParams": {
+        "[CompanyName]": {
+          "Required": true
+        },
+        "[BinNo]": {
+          "Required": true
+        },
+        "[Address]": {
+          "Required": true
+        }
+      }
+
+    },
+    "tbl_beneficiary_bank": {
+      "QueryParams": {
+        "[BankName]"
+        : {
+          "Required":true
+
+        },
+        "[AccountNo]": {
+          "Required": true
+        },
+        "[Branch]": {
+          "Reqired": true
+        },
+        "[Address]": {
+          "Required": true
+        }
+      
+      }
+      }
     }
-  }
 }
 

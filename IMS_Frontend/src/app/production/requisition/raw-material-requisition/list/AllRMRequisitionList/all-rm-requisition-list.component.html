@@ -1,23 +1,25 @@
 <div class="container">
   <h1 class="theme-text">ALL RM Requisition List</h1>
 
-  <form [formGroup]="dateForm" class="d-flex gap-3 mb-3" (ngSubmit)="loadAllRequisitions()">
-  <div class="col-md-2">
-    <label class="form-label">From Date</label>
-    <input type="date" class="form-control" formControlName="fromDate" />
-  </div>
+   <form [formGroup]="dateForm" class="row p-3 shadow-sm g-3 align-items-end mb-3" (ngSubmit)="loadAllRequisitions()">
+    <div class="col-md-3">
+      <label class="form-label fw-bold">From Date</label>
+      <input type="date" class="form-control form-control-sm" formControlName="fromDate" />
+    </div>
 
-  <div class="col-md-2">
-    <label class="form-label">To Date</label>
-    <input type="date" class="form-control" formControlName="toDate" />
-  </div>
+    <div class="col-md-3">
+      <label class="form-label fw-bold">To Date</label>
+      <input type="date" class="form-control form-control-sm" formControlName="toDate" />
+    </div>
 
-  <div class="align-self-end">
-    <button type="submit" class="btn btn-primary" [disabled]="dateForm.invalid">Load</button>
-  </div>
-</form>
-
-  <p-table 
+    <div class="col-md-2">
+      <button type="submit" class="btn btn-sm theme-btn w-100" [disabled]="dateForm.invalid">
+        <i class="pi pi-download me-1"></i> Load
+      </button>
+    </div>
+  </form>
+<div class="shadow-sm p-2">
+   <p-table 
            *ngIf="tableVisible"
            #dt
            [value]="allRequisitions"
@@ -119,4 +121,6 @@
       </p-table>
     </div>
   </p-dialog>
+</div>
+ 
 </div>

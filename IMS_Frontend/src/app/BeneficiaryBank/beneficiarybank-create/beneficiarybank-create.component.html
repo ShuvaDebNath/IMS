@@ -1,65 +1,59 @@
 <div class="container form-container my-4">
   <div class="card shadow-sm">
-    <!-- Header -->
-    <div class="card-header d-flex align-items-center theme-text">
+    <div class="card-header d-flex align-items-center theme-text ">
       <div class="icon-wrapper me-2">
-        <i class="fas fa-user-friends"></i>
+        <!-- <i class="fas fa-university"></i> -->
       </div>
-      <h3 class="fw-bold mb-0">
-        {{ !isEdit ? 'Create New Beneficiary' : 'Edit Beneficiary' }}
-      </h3>
+      <h3 class="fw-bold">{{ !isEdit ? 'Create New Bank' : 'Edit Bank' }}</h3>
     </div>
 
-    <!-- Body -->
     <div class="card-body">
       <form [formGroup]="Formgroup">
         <div class="row g-3">
-          <!-- Company Name -->
           <div class="col-md-6">
-            <label class="form-label required-field">Company Name</label>
-            <input type="text" formControlName="CompanyName" class="form-control" placeholder="Enter company name" />
+            <label class="form-label required-field">Bank Name</label>
+            <input formControlName="BankName" class="form-control" />
           </div>
 
-          <!-- BIN No -->
           <div class="col-md-6">
-            <label class="form-label">BIN No</label>
-            <input type="number" formControlName="BinNo" class="form-control" placeholder="Enter BIN No" />
+            <label class="form-label required-field">Account No</label>
+            <input formControlName="AccountNo" class="form-control" />
           </div>
 
-          <!-- Address -->
+          <div class="col-md-6">
+            <label class="form-label">Branch</label>
+            <input formControlName="Branch" class="form-control" />
+          </div>
+
           <div class="col-md-6">
             <label class="form-label">Address</label>
-            <input type="text" formControlName="Address" class="form-control" placeholder="Enter address" />
+            <input formControlName="Address" class="form-control" />
           </div>
 
-          <!-- City -->
           <div class="col-md-6">
             <label class="form-label">City</label>
-            <input type="text" formControlName="City" class="form-control" placeholder="Enter city" />
+            <input formControlName="City" class="form-control" />
           </div>
 
-          <!-- Country -->
+          <!-- Country dropdown -->
           <div class="col-md-6">
-            <label class="form-label required-field">Country</label>
+            <label class="form-label">Country</label>
             <select formControlName="Country_ID" class="form-select">
               <option value="">-- Select Country --</option>
               <option *ngFor="let c of countryData" [value]="c.id">{{ c.name }}</option>
             </select>
           </div>
 
-          <!-- ETIN -->
           <div class="col-md-6">
-            <label class="form-label">ETIN</label>
-            <input type="text" formControlName="ETIN" class="form-control" placeholder="Enter ETIN" />
+            <label class="form-label">Currency Details</label>
+            <input formControlName="CourrencyDetails" class="form-control" />
           </div>
 
-          <!-- VAT Reg No -->
           <div class="col-md-6">
-            <label class="form-label">VAT Reg No</label>
-            <input type="text" formControlName="VATRegNo" class="form-control" placeholder="Enter VAT Registration No" />
+            <label class="form-label">Swift Code</label>
+            <input formControlName="SwiftCode" class="form-control" />
           </div>
 
-          <!-- Available -->
           <div class="col-md-6 d-flex align-items-center">
             <div class="form-check mt-4">
               <input type="checkbox" formControlName="IsAvailable" class="form-check-input" id="isAvailable" />
@@ -67,9 +61,9 @@
             </div>
           </div>
 
-          <!-- Payment Type -->
+          <!-- Payment Type dropdown -->
           <div class="col-md-6">
-            <label class="form-label required-field">Payment Type</label>
+            <label class="form-label">Payment Type</label>
             <select formControlName="PaymentTypeId" class="form-select">
               <option value="">-- Select Payment Type --</option>
               <option *ngFor="let pt of paymentTypes" [value]="pt.id">{{ pt.name }}</option>
@@ -78,10 +72,9 @@
         </div>
       </form>
 
-      <!-- Buttons -->
       <div class="d-flex justify-content-end gap-2 mt-4">
-        <button routerLink="/beneficiary-list" class="btn btn-danger" type="button">
-          <i class="fas fa-times-circle me-2"></i> Cancel
+        <button routerLink="/beneficiarybank-list" class="btn btn-danger" type="button">
+          Cancel
         </button>
 
         <button *ngIf="!isEdit" class="btn theme-btn-add" type="button" (click)="saveData()" [disabled]="Formgroup.invalid">

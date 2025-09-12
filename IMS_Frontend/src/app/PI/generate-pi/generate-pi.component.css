@@ -11,3 +11,18 @@
   padding: 10px;
   border-bottom: 1px solid #ccc;
 }
+.my-dropdown .icon-inner, .ionicon, svg {
+    display: block!important;
+    height: 20px!important;
+    width: 20px!important;
+}
+.p-element svg {
+    display: block!important;
+    height: 20px!important;
+    width: 20px!important;
+}
+th,
+td,
+tr {
+    border: 1px solid #6a1a3f !important;
+}

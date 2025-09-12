@@ -39,10 +39,10 @@
           class="form-control form-control-sm"
           [(ngModel)]="searchText"
           placeholder="Search..."
-        />
-        <!-- to do ====need to handle it -->
-                  <!-- (keyup)="getBeneficiaries({offset:0}, 1, pageSize, searchText)" -->
+                            (keyup)="getArbitration({offset:0}, 1, pageSize, searchText)"
 
+        />
+   
       </div>
     </div>
 
@@ -50,7 +50,7 @@
       <table class="table table-bordered table-striped">
         <thead>
           <tr style="background-color: #f5f5f5">
-            <th class="p-2">Id</th>
+            <th class="p-2">SL</th>
             <th class="p-2">Detail</th>
             <th class="p-2">Action</th>
           </tr>
@@ -58,26 +58,23 @@
 
         <tbody class="text-dark">
           <tr *ngFor="let item of rows; let i = index">
-            <td class="align-middle">{{ item.CompanyName }}</td>
-            <td class="align-middle">{{ item.BinNo }}</td>
-            <td class="align-middle">{{ item.City }}</td>
-            <td class="align-middle">{{ item.Country_ID }}</td>
-            <td class="align-middle">{{ item.ETIN }}</td>
-            <td class="align-middle">{{ item.VATRegNo }}</td>
-            <td class="align-middle">
-              <ng-container [ngSwitch]="item.PaymentTypeId">
-                <span *ngSwitchCase="1">Cash</span>
-                <span *ngSwitchCase="2">LC</span>
-                <span *ngSwitchCase="3">Both</span>
-              </ng-container>
-            </td>
+                        <td class="align-middle">{{ i }}</td>
+
+            <td class="align-middle">{{ item.Detail.split(' ').length > 20 
+      ? (item.Detail.split(' ').slice(0, 20).join(' ') + '...') 
+      : item.Detail }}</td>
+<td class="align-middle">
+  <span *ngIf="item.IsAvailable==1" class="badge bg-success">Available</span>
+  <span *ngIf="item.IsAvailable==0" class="badge bg-danger">Not Available</span>
+</td>
+           
             <td class="text-center align-middle p-0 m-0">
               <a
                 *ngIf="updatePermissions"
                 class="btn theme-btn btn-sm text-white m-1"
                 title="Edit"
-                [routerLink]="['/beneficiary-create']"
-                [queryParams]="{ Beneficiary_Account_ID: item.Beneficiary_Account_ID }"
+                [routerLink]="['/arbitration-create']"
+[queryParams]="{ Arbitration_Id: item.Arbitration_ID }"
               >
                 <i class="fa fa-edit"></i>
               </a>
@@ -94,7 +91,7 @@
                 *ngIf="deletePermissions"
                 class="btn btn-sm text-white m-1"
                 title="Delete"
-                (click)="deleteBeneficiary(item)"
+                (click)="deleteArbitration(item)"
                 style="background-color: #dc3545"
               >
                 <i class="fas fa-trash"></i>

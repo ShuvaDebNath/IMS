@@ -1,26 +1,18 @@
 <div class="card card-default">
-  <div
-    class="content-heading"
-    style="border-bottom: 1px solid rgba(0, 0, 0, 0.125) !important"
-  >
+  <div class="content-heading" style="border-bottom: 1px solid rgba(0, 0, 0, 0.125) !important">
     <h2 class="p-2 font-weight-bold theme-color">
-      <i class="fas fa-list-alt fa-1x"></i>&nbsp;Beneficiary List
+      <i class="fas fa-list-alt fa-1x"></i>&nbsp;Beneficiary Bank List
     </h2>
   </div>
 
   <div class="card-body">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <div class="d-flex align-items-center">
-        <button
-          *ngIf="insertPermissions"
-          class="btn theme-btn"
-          style="color: white"
-          routerLink="/beneficiary-create"
-        >
+        <button *ngIf="insertPermissions" class="btn theme-btn" style="color: white" routerLink="/beneficiary-bank-create">
           <i class="fas fa-plus"></i>&nbsp;Create New
         </button>
 
-     
+      
       </div>
 
       <div class="d-flex align-items-center">
@@ -29,7 +21,7 @@
           type="text"
           class="form-control form-control-sm"
           [(ngModel)]="searchText"
-          (keyup)="getBeneficiaries({offset:0}, 1, pageSize, searchText)"
+          (keyup)="getBeneficiaryBanks({offset:0}, 1, pageSize, searchText)"
           placeholder="Search..."
         />
       </div>
@@ -39,12 +31,13 @@
       <table class="table table-bordered table-striped">
         <thead>
           <tr style="background-color: #f5f5f5">
-            <th class="p-2">Company Name</th>
-            <th class="p-2">BIN No</th>
+            <th class="p-2">Bank Name</th>
+            <th class="p-2">Account No</th>
+            <th class="p-2">Branch</th>
             <th class="p-2">City</th>
             <th class="p-2">Country</th>
-            <th class="p-2">ETIN</th>
-            <th class="p-2">VAT Reg</th>
+            <th class="p-2">Currency</th>
+            <th class="p-2">Swift Code</th>
             <th class="p-2">Payment Type</th>
             <th class="p-2">Action</th>
           </tr>
@@ -52,45 +45,31 @@
 
         <tbody class="text-dark">
           <tr *ngFor="let item of rows; let i = index">
-            <td class="align-middle">{{ item.CompanyName }}</td>
-            <td class="align-middle">{{ item.BinNo }}</td>
-            <td class="align-middle">{{ item.City }}</td>
-            <td class="align-middle">{{ getCountryName(item.Country_ID )}}</td>
-            <td class="align-middle">{{ item.ETIN }}</td>
-            <td class="align-middle">{{ item.VATRegNo }}</td>
-            <td class="align-middle">
+            <td>{{ item.BankName }}</td>
+            <td>{{ item.AccountNo }}</td>
+            <td>{{ item.Branch }}</td>
+            <td>{{ item.City }}</td>
+<td>{{ getCountryName(item.Country_ID) }}</td>
+            <td>{{ item.CourrencyDetails }}</td>
+            <td>{{ item.SwiftCode }}</td>
+            <td>
               <ng-container [ngSwitch]="item.PaymentTypeId">
                 <span *ngSwitchCase="1">Cash</span>
                 <span *ngSwitchCase="2">LC</span>
                 <span *ngSwitchCase="3">Both</span>
               </ng-container>
             </td>
-            <td class="text-center align-middle p-0 m-0">
-              <a
-                *ngIf="updatePermissions"
-                class="btn theme-btn btn-sm text-white m-1"
-                title="Edit"
-                [routerLink]="['/beneficiary-create']"
-                [queryParams]="{ Beneficiary_Account_ID: item.Beneficiary_Account_ID }"
-              >
+            <td class="text-center d-flex align-middle p-0 m-0">
+              <a *ngIf="updatePermissions" class="btn theme-btn btn-sm text-white m-1"
+                 [routerLink]="['/beneficiarybank-create']"
+                 [queryParams]="{ Beneficiary_Bank_ID: item.Beneficiary_Bank_ID }">
                 <i class="fa fa-edit"></i>
               </a>
 
-              <a
-                *ngIf="allPermissions"
-                class="btn btn-sm text-white m-1 theme-btn"
-                title="Details"
-              >
-                <i class="fa fa-info-circle"></i>
-              </a>
-
-              <button
-                *ngIf="deletePermissions"
+              <button *ngIf="deletePermissions"
                 class="btn btn-sm text-white m-1"
-                title="Delete"
-                (click)="deleteBeneficiary(item)"
                 style="background-color: #dc3545"
-              >
+                (click)="deleteBeneficiaryBank(item)">
                 <i class="fas fa-trash"></i>
               </button>
             </td>
@@ -105,7 +84,6 @@
         [length]="length"
         [pageSize]="pageSize"
         [pageSizeOptions]="pageSizeOptions"
-        aria-label="Select page of periodic elements"
       >
       </mat-paginator>
     </div>

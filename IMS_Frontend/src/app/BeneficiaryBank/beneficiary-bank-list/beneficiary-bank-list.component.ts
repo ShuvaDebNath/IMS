@@ -1,22 +1,19 @@
-
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { Title } from '@angular/platform-browser';
 import { MatPaginator } from '@angular/material/paginator';
-import swal from 'sweetalert2';
-
-import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
-import { GlobalServiceService } from 'src/app/services/Global-service.service';
+import { Title } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { GetDataModel } from 'src/app/models/GetDataModel';
 import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
+import { GlobalServiceService } from 'src/app/services/Global-service.service';
+import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
+import swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-beneficiary-list',
-  templateUrl: './beneficiary-list.component.html',
-  styleUrls: ['./beneficiary-list.component.css']
+  selector: 'app-beneficiary-bank-list',
+  templateUrl: './beneficiary-bank-list.component.html',
+  styleUrls: ['./beneficiary-bank-list.component.css']
 })
-export class BeneficiaryListComponent implements OnInit {
-
+export class BeneficiaryBankListComponent implements OnInit {
   pageIndex: number = 1;
   searchText: string = '';
   length = 100;
@@ -29,21 +26,9 @@ export class BeneficiaryListComponent implements OnInit {
   updatePermissions: boolean = true;
   deletePermissions: boolean = true;
   printPermissions: boolean = true;
-
   allPermissions: boolean = true;
-
-  displayedColumns: string[] = [
-    'Sl',
-    'Company Name',
-    'BIN No',
-    'City',
-    'Country',
-    'ETIN',
-    'VATRegNo',
-    'PaymentType',
-    'Action',
-  ];
 countryData: any[] = [];
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   rows: any[] = [];
 
@@ -55,43 +40,10 @@ countryData: any[] = [];
   ) {}
 
   ngOnInit() {
-    // check permissions from menu
-    this.menu = window.localStorage.getItem('UserMenuWithPermission');
-    this.menu = JSON.parse(this.menu);
-
-    let countFound = 0;
-    this.menu.forEach((e: any) => {
-      e.Children = JSON.parse(e.Children);
-      e.Children.forEach((childMenu: any) => {
-        if (childMenu.SubMenuName == 'Beneficiary') {
-          countFound++;
-          const buttonPermissions = childMenu.ButtonName;
-
-          buttonPermissions.forEach((btn: any) => {
-            if (btn.ButtonName == 'Insert') this.insertPermissions = true;
-            if (btn.ButtonName == 'Update') this.updatePermissions = true;
-            if (btn.ButtonName == 'Delete') this.deletePermissions = true;
-            if (btn.ButtonName == 'View') this.printPermissions = true;
-          });
-        }
-      });
-    });
-
-    // if (countFound == 0) {
-    //   window.location.href = 'dashboard';
-    // }
-
-    this.title.setTitle('Beneficiary List');
+    this.title.setTitle('Beneficiary Bank List');
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
-    this.getCountries()
-// console.log(this.pageIndex,this.pageSize,"--")
-    this.getBeneficiaries(
-      { offset: 0 },
-      this.pageIndex,
-      this.pageSize,
-      this.searchText
-    );
-
+ this.getCountries(); 
+    this.getBeneficiaryBanks({ offset: 0 }, this.pageIndex, this.pageSize, this.searchText);
   }
 getCountries() {
   this.service.GetDataTable({
@@ -117,14 +69,9 @@ getCountryName(id: any): string {
   const country = this.countryData.find(c => c.id == id);
   return country ? country.name : id; 
 }
-  getBeneficiaries(
-    pageInfo: any,
-    pageIndex: number,
-    pageSize: number,
-    searchText: string
-  ) {
+  getBeneficiaryBanks(pageInfo: any, pageIndex: number, pageSize: number, searchText: string) {
     let param = new GetDataModel();
-    param.procedureName = '[usp_GetBeneficiaryAccounts]'; 
+    param.procedureName = '[usp_GetBeneficiaryBank]'; // 👉 এই SP লিখে নিতে হবে SQL এ
     param.parameters = {
       PageIndex: pageIndex,
       PageSize: pageSize,
@@ -136,7 +83,6 @@ getCountryName(id: any): string {
         if (results.status) {
           let tables = JSON.parse(results.data);
           this.rows = tables.Tables1;
-          console.log( tables.Tables1)
           this.isPage = this.rows[0]?.TotalLen > 10;
           this.length = this.rows[0]?.TotalLen || 0;
         } else if (results.msg == 'Invalid Token') {
@@ -148,19 +94,17 @@ getCountryName(id: any): string {
     });
   }
 
-
   paginatiorChange(e: any) {
-
     this.pageIndex = e.pageIndex + 1;
     this.pageSize = e.pageSize;
-    this.getBeneficiaries(e, e.pageIndex + 1, e.pageSize, this.searchText);
+    this.getBeneficiaryBanks(e, e.pageIndex + 1, e.pageSize, this.searchText);
   }
 
-  deleteBeneficiary(e: any) {
+  deleteBeneficiaryBank(e: any) {
     swal
       .fire({
         title: 'Wait!',
-        html: `<span>Once you delete, you won't be able to revert this!<br> <b>[${e.CompanyName}]</b></span>`,
+        html: `<span>Once you delete, you won't be able to revert this!<br> <b>[${e.BankName}]</b></span>`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -170,9 +114,9 @@ getCountryName(id: any): string {
       .then((result) => {
         if (result.isConfirmed == true) {
           let param = new MasterEntryModel();
-          param.tableName = 'tbl_beneficiary_account';
-          param.queryParams = { CompanyName: e.CompanyName };
-          param.whereParams = { Beneficiary_Account_ID: e.Beneficiary_Account_ID };
+          param.tableName = 'tbl_beneficiary_bank';
+          param.queryParams = { BankName: e.BankName };
+          param.whereParams = { Beneficiary_Bank_ID: e.Beneficiary_Bank_ID };
 
           this.service.DeleteData(param).subscribe({
             next: (results: any) => {
@@ -185,12 +129,7 @@ getCountryName(id: any): string {
                     timer: 3000,
                   })
                   .then(() => {
-                    this.getBeneficiaries(
-                      { offset: 0 },
-                      1,
-                      this.pageSize,
-                      this.searchText
-                    );
+                    this.getBeneficiaryBanks({ offset: 0 }, 1, this.pageSize, this.searchText);
                   });
               } else if (results.message == 'Invalid Token') {
                 swal.fire('Session Expired!', 'Please Login Again.', 'info');

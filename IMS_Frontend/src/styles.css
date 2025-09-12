@@ -19,7 +19,9 @@
     background-color: #6a1a3f;
     color: white;
 }
-
+.p-datatable-thead{
+  background:#6a1a3f;
+}
 .theme-text{
     color: #6a1a3f;
 }
@@ -56,7 +58,7 @@ table-bordered td, .table-bordered th,tr,td {
     color: #6a1a3f;
 }
 
- td,
+ 
 .table-bordered th,
 td,
 tr {
@@ -223,7 +225,7 @@ datatable-header-cell.dt-ledger-name
 }
 
 .table-bordered td, .table-bordered th {
-  border: 1px solid #3daf57 !important;
+  border: 1px solid #6a1a3f !important;
 }
 
 .input-group-text{

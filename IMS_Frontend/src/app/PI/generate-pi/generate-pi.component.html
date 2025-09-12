@@ -1,9 +1,11 @@
+<div class="p-2 m-2 shadow-sm">
+
 <form name="PIForm" [formGroup]="Formgroup" role="form">
   <div class="card">
     <div class="card-header sticky-header">
-      <h3 class="card-title mb-0">Proforma Invoice</h3>
+      <h3 class=" theme-text mb-0">Proforma Invoice</h3>
       <div class="float-right">
-        <button class="btn btn-sm btn-success mr-2" (click)="Save()" [disabled]="!Formgroup.valid"><i class="fas fa-save"></i>&nbsp;Save</button>
+        <button class="btn btn-sm theme-btn-save mr-2" (click)="Save()" [disabled]="!Formgroup.valid"><i class="fas fa-save"></i>&nbsp;Save</button>
         <button class="btn btn-sm btn-primary" (click)="RefrashDDL()"><i class="fas fa-sync"></i>&nbsp;Refresh</button>
       </div>
     </div>
@@ -493,3 +495,4 @@
     </div>
   </div>
 </form>
+</div>
