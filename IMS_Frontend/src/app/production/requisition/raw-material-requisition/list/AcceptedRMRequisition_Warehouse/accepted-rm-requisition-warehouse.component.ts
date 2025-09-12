@@ -229,7 +229,6 @@ export class AcceptedRMRequisitionWareHouseComponent implements OnInit {
             whereParams: { RM_Requisition_MasterID: data?.RM_Requisition_MasterID ?? '' }
         };
 
-        console.log('WAREHOUSE SEND PAYLOAD', payload);
 
         this.doubleMasterEntryService.SaveDataMasterDetailsWithReferenceTableUpdate(detailsData,'tbl_rm_send_details',
              masterData,'tbl_rm_send_master','RM_Send_MasterID','RM_Send_MasterID','','',whereParams,

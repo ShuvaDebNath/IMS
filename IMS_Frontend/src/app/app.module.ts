@@ -24,7 +24,6 @@ import { TableModule } from 'primeng/table';
 
 
 
-
 const CustomSelectOptions: INgxSelectOptions = {
   keepSelectedItems: false,
   allowClear: true,
@@ -40,7 +39,6 @@ const CustomSelectOptions: INgxSelectOptions = {
     PageNotFoundComponent,
     LogoutComponent,
     ResetPasswordComponent
-
   ],
   imports: [
     FormsModule,

@@ -14,33 +14,20 @@ import { GetDataModel } from 'src/app/models/GetDataModel';
 import { LC } from 'src/app/models/LCModel';
 import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
 import { DoubleMasterEntryModel } from 'src/app/models/DoubleMasterEntryModel';
-import { CD } from 'src/app/models/CDModel';
 
 @Component({
-  selector: 'app-all-commercial-invoice',
-  templateUrl: './all-commercial-invoice.component.html',
-  styleUrls: ['./all-commercial-invoice.component.css']
+  selector: 'app-all-pi',
+  templateUrl: './all-pi.component.html',
+  styleUrls: ['./all-pi.component.css'],
 })
-export class AllCommercialInvoiceComponent {
-pageIndex = 1;
+export class AllPiComponent {
+  pageIndex = 1;
   searchText = '';
   length = 100;
   pageSize = 10;
-  detailsTableData:any;
-    tableData!: CD[];
+  detailsTableData: any;
+  tableData!: any;
   pageSizeOptions: number[] = [];
-  displayedColumns: string[] = [
-    'Sl',
-    'Date',
-    'Voucher Type',
-    'Voucher No',
-    'Debit',
-    'Credit',
-    'Prepared By',
-    'Approved By',
-    'Status',
-    'Action',
-  ];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   page = new Page();
@@ -48,7 +35,7 @@ pageIndex = 1;
   SearchForm!: FormGroup;
   fromDate: any;
   toDate: any;
-  CDNo:string='';
+  CDNo: string = '';
 
   showPaginator = false;
   insertPermissions: boolean = true;
@@ -57,8 +44,8 @@ pageIndex = 1;
   printPermissions: boolean = true;
   allPersmissions: boolean = true;
   getDataModel: GetDataModel = new GetDataModel();
-  detailsData:any;
-  isDetailsVisible:boolean = false;
+  detailsData: any;
+  isDetailsVisible: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -66,132 +53,139 @@ pageIndex = 1;
     private gs: GlobalServiceService,
     private pagesComponent: PagesComponent,
     private masterEntryService: MasterEntryService,
-    private title:Title
+    private title: Title
   ) {
-  }
-  ngOnInit(): void {
-    this.initForm();
-    this.pageSizeOptions = this.gs.GetPageSizeOptions();
-    this.title.setTitle('All Commercial Documents');
     
+  }
+
+  ngOnInit():void{
+    this.initForm();
+    var permissions = this.gs.CheckUserPermission("All PI");
+    this.insertPermissions = permissions.insertPermissions;
+    this.updatePermissions = permissions.updatePermissions;
+    this.deletePermissions = permissions.deletePermissions;
+    this.printPermissions = permissions.printPermissions;
+    
+    if(!this.printPermissions){
+      window.location.href='dashboard';
+    }   
+    this.pageSizeOptions = this.gs.GetPageSizeOptions();
+    this.title.setTitle('All PI');
+
     var fDate = new Date();
     const mm = String(fDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
     const dd = String(fDate.getDate()).padStart(2, '0');
     const yyyy = fDate.getFullYear();
 
-    const formatted = `${dd}/${mm}/${yyyy}`;    
-    
+    const formatted = `${dd}/${mm}/${yyyy}`;
+
     const threeMonthsAgo = new Date();
     threeMonthsAgo.setMonth(fDate.getMonth() - 3);
-    
+
     const mmT = String(threeMonthsAgo.getMonth() + 1).padStart(2, '0'); // Months are 0-based
     const ddT = String(threeMonthsAgo.getDate()).padStart(2, '0');
     const yyyyT = threeMonthsAgo.getFullYear();
 
     const formattedT = `${ddT}/${mmT}/${yyyyT}`;
-    
+
     this.SearchForm.get('fromDate')?.setValue(formattedT);
     this.SearchForm.get('toDate')?.setValue(formatted);
 
     this.Search();
   }
+
   initForm(): void {
     this.SearchForm = this.fb.group({
-      fromDate: ['',[Validators.required]],
-      toDate: ['',[Validators.required]],
-      cdNo: [''],
+      fromDate: ['', [Validators.required]],
+      toDate: ['', [Validators.required]],
+      piNo: [''],
     });
   }
-  Search(){
-    var finput = new Date();    
-    var fromDate = this.SearchForm.value.fromDate;
-    if (this.SearchForm.value.fromDate instanceof Date) {
+  Search() {
+    var finput = new Date();
+    if (!(this.SearchForm.value.fromDate instanceof Date)) {
       finput = new Date(this.SearchForm.value.fromDate); // try converting if it's not already a Date
-      const fday = String(finput.getDate()).padStart(2, '0');
-      const fmonth = String(finput.getMonth() + 1).padStart(2, '0'); // months are 0-based
-      const fyear = finput.getFullYear();
-      
-      fromDate = `${fday}/${fmonth}/${fyear}`;
-    }    
+    }
+
+
+    const fday = String(finput.getDate()).padStart(2, '0');
+    const fmonth = String(finput.getMonth() + 1).padStart(2, '0'); // months are 0-based
+    const fyear = finput.getFullYear();
+    var fromDate = this.SearchForm.value.fromDate;
+    fromDate = `${fday}/${fmonth}/${fyear}`;
 
     var tinput = new Date();
-    var toDate = this.SearchForm.value.toDate;
-    if (this.SearchForm.value.toDate instanceof Date) {
+    if (!(this.SearchForm.value.fromDate instanceof Date)) {
       tinput = new Date(this.SearchForm.value.toDate); // try converting if it's not already a Date
-      
-      const tday = String(tinput.getDate()).padStart(2, '0');
-      const tmonth = String(tinput.getMonth() + 1).padStart(2, '0'); // months are 0-based
-      const tyear = tinput.getFullYear();
-
-      toDate = `${tday}/${tmonth}/${tyear}`;
     }
-    
+
+    const tday = String(tinput.getDate()).padStart(2, '0');
+    const tmonth = String(tinput.getMonth() + 1).padStart(2, '0'); // months are 0-based
+    const tyear = tinput.getFullYear();
+    var toDate = this.SearchForm.value.toDate;
+    toDate = `${tday}/${tmonth}/${tyear}`;
+
     let param = new GetDataModel();
-    param.procedureName = '[usp_CD_List]';
+    param.procedureName = '[usp_ProformaInvoice_GetLIst]';
     param.parameters = {
       FromDate: fromDate,
       ToDate: toDate,
-      CDNo: this.SearchForm.value.cdNo,
-      PageIndex:this.pageIndex,
-      PageSize:this.pageSize      
+      PINo: this.SearchForm.value.piNo,
+      PageIndex: this.pageIndex,
+      PageSize: this.pageSize,
     };
-    
+
     this.masterEntryService.GetInitialData(param).subscribe({
       next: (results) => {
-        
         if (results.status) {
           this.tableData = [];
           let tables = JSON.parse(results.data);
-          this.tableData = tables.Tables1; 
-          //  this.isPage=this.rows[0].totallen>10;
+          this.tableData = tables.Tables1;
           this.length = parseInt(this.tableData[0].totallen);
         }
-
-      }
-
+      },
     });
-
   }
 
-  DeleteData(item:any){
+  DeleteData(item: any) {
+    
     swal
-                .fire({
-                  title: 'Wait!',
-                  html: `<span>Once you delete, you won't be able to revert this!<br> <b>[${item.LC_No}]</b></span>`,
-                  icon: 'warning',
-                  showCancelButton: true,
-                  confirmButtonColor: '#3085d6',
-                  cancelButtonColor: '#d33',
-                  confirmButtonText: 'Yes, delete it!',
-                })
-                .then((result) => {
-                  if (result.isConfirmed==true) {
-                    let param = new GetDataModel();
-                    param.procedureName = "usp_CD_Delete";
-                    param.parameters = 
-                    {
-                      'Commercial_Invoice_ID':item.Commercial_Invoice_ID
-                    };
-          
-      
+      .fire({
+        title: 'Wait!',
+        html: `<span>Once you delete, you won't be able to revert this!<br> <b>[${item.PI_No}]</b></span>`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+      })
+      .then((result) => {
+        if (result.isConfirmed == true) {
+          let param = new GetDataModel();
+          param.procedureName = 'usp_ProformaInvoice_Delete';
+          param.parameters = {
+            PI_Id: item.PI_Master_ID,
+          };
+
           this.masterEntryService.GetInitialData(param).subscribe({
-            next: (results:any) => {
+            next: (results: any) => {
               
               if (results.status) {
                 var effectedRows = JSON.parse(results.data).Tables1;
-                if(effectedRows[0].AffectedRows>0){
-                  swal.fire({
-                            text: `Data Deleted Successfully !`,
-                            title: `Delete Successfully!`,
-                            icon: 'success',
-                            timer: 5000,
-                          })
-                          .then((result) => {
-                            this.ngOnInit();
-                            this.Search();
-                          });
+                if (effectedRows[0].AffectedRows > 0) {
+                  swal
+                    .fire({
+                      text: `Data Deleted Successfully !`,
+                      title: `Delete Successfully!`,
+                      icon: 'success',
+                      timer: 5000,
+                    })
+                    .then((result) => {
+                      this.ngOnInit();
+                      this.Search();
+                    });
                 }
-                
+
                 this.Search();
               } else if (results.message == 'Invalid Token') {
                 swal.fire('Session Expierd!', 'Please Login Again.', 'info');
@@ -201,18 +195,17 @@ pageIndex = 1;
             },
             error: (err) => {},
           });
-                  }
-                });
-    
+        }
+      });
   }
 
-    viewDetails(table:any){
+  viewDetails(table:any){
       this.isDetailsVisible = true;
       
       let param = new GetDataModel();
-      param.procedureName = '[usp_LC_Details]';
+      param.procedureName = '[usp_ProformaInvoice_DetailsForList]';
       param.parameters = {
-        Commercial_Invoice_ID: table.Commercial_Invoice_ID,     
+        PINo: table.PI_No,     
       };
 
     this.masterEntryService.GetInitialData(param).subscribe({

@@ -337,7 +337,6 @@ export class GeneratePiComponent implements OnInit {
       "tbl_pi_master",
       "PI_Master_ID"
     ).subscribe(res=>{
-      console.log(res);
       if(res.messageType=='Success' && res.status){
         Swal.fire(res.messageType, res.message, 'success').then(()=>{
               this.ngOnInit();
@@ -349,7 +348,6 @@ export class GeneratePiComponent implements OnInit {
         }else{
           Swal.fire(res.messageType, res.message, 'error');
         }
-        console.log(res);
       }
     });
 

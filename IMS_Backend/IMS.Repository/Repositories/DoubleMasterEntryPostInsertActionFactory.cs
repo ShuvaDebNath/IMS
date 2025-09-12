@@ -21,6 +21,10 @@ namespace Boilerplate.Repository.Repositories
             {
                 return _actions.Where(a => a is UpdateRequisitionMasterAction);
             }
+            //else if (model.TableNameMaster == "tbl_cash_receive_master")
+            //{
+            //    return _actions.Where(a => a is UpdateCashReceiveMasterAction);
+            //}
             return Enumerable.Empty<IDoubleMasterEntryPostInsertAction>();
         }
     }

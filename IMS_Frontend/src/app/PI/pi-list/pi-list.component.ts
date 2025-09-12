@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ButtonModule } from 'primeng/button';
@@ -9,24 +9,26 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { GetDataService } from 'src/app/services/getData/getDataService.service';
 import { GlobalServiceService } from 'src/app/services/Global-service.service';
-import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 import Swal from 'sweetalert2';
 import { DividerModule } from 'primeng/divider';
+import { FieldsetModule } from 'primeng/fieldset';
+import { DropdownModule } from "primeng/dropdown";
 
 @Component({
   standalone:true,
   selector: 'app-pi-list',
   templateUrl: './pi-list.component.html',
   styleUrls: ['./pi-list.component.css'],
-  imports: [FormsModule, CommonModule, TableModule, InputTextModule, DialogModule, ButtonModule,BsDatepickerModule,DividerModule  ]
+  imports: [FormsModule,ReactiveFormsModule, CommonModule, TableModule, InputTextModule, DialogModule, ButtonModule, BsDatepickerModule, DividerModule, FieldsetModule, DropdownModule]
 })
 export class PiListComponent implements OnInit {
 @Input() PiStatus!:any;
   DataTable!:any[];
   PIData!:any;
   PIDetails!:any[];
-  first: any;
-  rows: any;
+  PITypeList:any[]=[{value:0,text:''},{value:1,text:'LC'},{value:1,text:'Cash'}];
+  first: any=1;
+  rows: any=10;
   totalRecords!: number;
   isViewDetails: boolean=false;
   PageTitle: any;
@@ -37,15 +39,34 @@ export class PiListComponent implements OnInit {
   ShowbtnRej:boolean=false;
   ShowbtnSpecial:boolean=false;
 
+    SearchFormgroup!: FormGroup;
+
 
   constructor(
       private getDataService: GetDataService,
-      private masterEntyService: MasterEntryService,
       private gs: GlobalServiceService,
-      private title: Title
+      private title: Title,
+      private fb: FormBuilder
   ) { }
 
+  GenerateSearchFrom() {
+    this.SearchFormgroup = this.fb.group({
+      PI_Status: [this.PiStatus],
+      PINo: [''],
+      FromDate: [''],
+      ToDate: [''],
+      Shipper: [''],
+      Consignee: [''],
+      CreateBY: [''],
+      PIType: [''],
+      PageNumber: [''],
+      PageSize : ['']
+    });
+    }
+
   ngOnInit() {
+
+    this.DataTable=[];
 
     this.ShowbtnPar=false;
     this.ShowbtnQar=false;
@@ -78,18 +99,14 @@ export class PiListComponent implements OnInit {
       this.PageTitle='Delivered PI'
     }
     this.title.setTitle(this.PageTitle);
-    this.LoadTableData();
+    // this.LoadTableData();
+    this.GenerateSearchFrom();
   }
   ReloadTable(event:any) {
-
-     console.clear();
-     console.log(event.filters);
-
     this.first = event.first;
     this.rows = event.rows;
     this.first=(this.first/this.rows)+1;
     this.LoadTableData();
-
   }
 OpenSpecialApprove(Id:number){
   Swal.fire('Not yet worked!', Id+'', 'info');
@@ -121,12 +138,15 @@ OpenSpecialApprove(Id:number){
   }
 
   LoadTableData(): void {
-      const procedureData = {
-        procedureName: 'usp_ProformaInvoice_GetDataDataTable',
-        parameters: {
+    this.SearchFormgroup.controls['PageNumber'].setValue(this.first);
+    this.SearchFormgroup.controls['PageSize'].setValue(this.rows);
+    let permas=this.SearchFormgroup.value;
+
+    /*
+    {
           PINO :'',
-          FromDate :'2025-01-01',
-          ToDate :'2025-09-30',
+          FromDate :'',
+          ToDate :'',
           Shipper :'',
           Consignee :'',
           CreateBY :'',
@@ -135,7 +155,15 @@ OpenSpecialApprove(Id:number){
           PageNumber   : this.first,
           PageSize    : this.rows
         }
+          */
+    
+      const procedureData = {
+        procedureName: 'usp_ProformaInvoice_GetDataDataTable',
+        parameters: permas
       };
+      console.clear();
+      console.log(procedureData);
+      // return;
      
       this.getDataService.GetInitialData(procedureData).subscribe({
         next: (results) => {

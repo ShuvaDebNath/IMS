@@ -1,4 +1,4 @@
-<form name="PIForm"  role="form">
+
   <div class="card">
     <div class="card-header sticky-header">
       <h3 class="card-title mb-0">
@@ -16,44 +16,116 @@
 
     </div>
     <div class="card-body">
+      <form id="Search" [formGroup]="SearchFormgroup" forle="form">
+      
+      <fieldset class="border p-3">
+        <legend class="w-auto px-2">Search</legend>
+        <p-divider />
+      <div class="form-row align-items-center">
+        <div class="col-auto mb-2">
+            <label class="">Cash or LC </label>            
+            <p-dropdown 
+              formControlName="PIType"
+              [options]="PITypeList"  [showClear]="true"              
+              optionLabel="text" 
+              optionValue="value" 
+              [style]="{width: '100%'}"
+              placeholder="Select a type" />
+        </div>
+        <div class="col-auto mb-2">
+          <label class="control-label" for="inlineFormInputGroup">From Date</label>
+          <div class="input-group">
+            <div class="input-group-sm input-group-prepend">
+              <div class="input-group-text" (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
+            </div>
+            <input type="text" 
+              autocomplete="off" 
+              placement="right" 
+              formControlName="FromDate"
+              [bsConfig]="{
+              dateInputFormat: 'DD/MM/YYYY',
+              containerClass: 'theme-green'
+            }" class="form-control-sm form-control bg-white" id="fromdate" name="fromdate" placeholder="From Date" 
+              #dpfrom="bsDatepicker" bsDatepicker/>
+          </div>
+
+        </div>
+        <div class="col-auto mb-2">
+          <label class="control-label" for="inlineFormInputGroup">To Date</label>
+          <div class="input-group">
+            <div class="input-group-sm input-group-prepend">
+              <div class="input-group-text" (click)="dpto.toggle()"><i class="fas fa-calendar"></i></div>
+            </div>
+            <input type="text" 
+              autocomplete="off" 
+              placement="right" 
+              formControlName="ToDate"
+              [bsConfig]="{
+              dateInputFormat: 'DD/MM/YYYY',
+              containerClass: 'theme-green'
+              
+            }" class="form-control-sm form-control bg-white" id="todate" name="todate" placeholder="To Date"
+              #dpto="bsDatepicker" bsDatepicker />
+          </div>
+        </div>
+        
+        <div class="col-auto mb-2">
+            <label for="PINo" class="">PI No </label>
+            <input autocomplete="off" type="text"
+            formControlName="PINo"
+            class="form-control form-control-sm"
+            placeholder="PI No" id="PINo" name="PINo" value="">
+        </div>
+
+        <div class="col-auto mb-2">
+            <label for="Shipper" class="">Shipper </label>
+            <input autocomplete="off" type="text"
+            formControlName="Shipper"
+            class="form-control form-control-sm"
+            placeholder="Shipper" id="Shipper" name="Shipper" value="">
+        </div>
+        <div class="col-auto mb-2">
+            <label for="Consignee" class="">Consignee </label>
+            <input autocomplete="off" type="text"
+            formControlName="Consignee"
+            class="form-control form-control-sm"
+            placeholder="Consignee" id="Consignee" name="Consignee" value="">
+        </div>
+        <div class="col-auto mb-2">
+            <label for="GeneBy" class="">Genereted By </label>
+            <input autocomplete="off" type="text"
+            formControlName="CreateBY"
+            class="form-control form-control-sm"
+            placeholder="Genereted By" id="GeneBy" name="GeneBy" value="">
+        </div>
+
+        <div class="col-auto mt-auto mb-2">
+          <button title="Search" type="button" (click)="LoadTableData()"
+            class="btn btn-sm btn-outline-primary bg-gradient-primary">
+            <i class="fas fa-search"></i>&nbsp;Search</button>
+        </div>
+      </div>
+      </fieldset>
+
+      </form>
+      
+        <div *ngIf="DataTable.length>0">
+          <p-divider />
         <p-table #table [value]="DataTable" [paginator]="true" [rows]="10" [totalRecords]="totalRecords" [showCurrentPageReport]="true"
         [lazy]="true" 
         (onLazyLoad)="ReloadTable($event)"
-        [rowsPerPageOptions]="[10,20,50,100]" [globalFilterFields]="['PINo','PIDate','BeneficiaryCompanyName','CustomerName','CreatedByUserName']"
+        [rowsPerPageOptions]="[10,20,50,100]"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
-
-        <ng-template pTemplate="caption">
-            <div class="flex justify-content-between align-items-center">
-                <button pButton type="button" icon="pi pi-filter-slash" label="Clear" (click)="table.clear()">
-                </button>
-
-                <span class="p-input-icon-left">
-                    <i class="pi pi-search"></i>
-                    <input pInputText type="text" (input)="table.filterGlobal($any($event.target).value, 'contains')"
-                        placeholder="Global Search" />
-                </span>
-            </div>
-        </ng-template>
 
         <ng-template pTemplate="header">
             <tr>
                 <th style="width: 4rem"><p-tableHeaderCheckbox /></th>
                 <th style="text-align: center;">Serial No</th>
-                <th pSortableColumn="PINo">PI No <p-sortIcon field="PINo"></p-sortIcon>
-                    <p-columnFilter type="text" field="PINo" display="PINo"></p-columnFilter>
-                </th>
-                <th pSortableColumn="PIDate">Date <p-sortIcon field="PIDate"></p-sortIcon>
-                    <p-columnFilter type="date" field="PIDate" display="PIDate"></p-columnFilter>
-                </th>
-                <th pSortableColumn="BeneficiaryCompanyName">Shippeer <p-sortIcon field="BeneficiaryCompanyName"></p-sortIcon>
-                    <p-columnFilter type="text" field="BeneficiaryCompanyName" display="BeneficiaryCompanyName"></p-columnFilter>
-                </th>
-                <th pSortableColumn="CustomerName">Consignee <p-sortIcon field="CustomerName"></p-sortIcon>
-                    <p-columnFilter type="text" field="CustomerName" display="CustomerName"></p-columnFilter>
-                </th>
-                <th pSortableColumn="CreatedByUserName">Generated By <p-sortIcon field="CreatedByUserName"></p-sortIcon>
-                    <p-columnFilter type="text" field="CreatedByUserName" display="CreatedByUserName"></p-columnFilter>
-                </th>
+                <th pSortableColumn="PINo">PI No</th>
+                <th pSortableColumn="PIDate">Date</th>
+                <th pSortableColumn="BeneficiaryCompanyName">Shippeer</th>
+                <th pSortableColumn="CustomerName">Consignee</th>
+                <th pSortableColumn="CreatedByUserName">Generated By</th>
                 <th style="text-align: center;">Action</th>
             </tr>
         </ng-template>
@@ -83,11 +155,11 @@
             </tr>
         </ng-template>
 
-    </p-table>
-
+        </p-table>
+        </div>
     </div>
   </div>
-</form>
+
 
         <p-dialog header="Details" [(visible)]="isViewDetails" [modal]="true" [closable]="true"
             [style]="{ width: '50rem' }" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" 

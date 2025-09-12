@@ -140,6 +140,32 @@ export class MasterEntryService {
         })
       );
   }
+  public SaveSingleDataAndUpdateAnotherTable(fd: any, tableName: any,updateTableName:any,updateSerialColumnName:any,whereParams:any) {
+    
+    let model: MasterEntryWithSlUpdateModel=new MasterEntryWithSlUpdateModel();
+    model.tableName=tableName;
+    model.queryParams=fd;
+    model.updateTableName = updateTableName;
+    model.updateColumnName = updateSerialColumnName;
+    model.whereParams = whereParams;
+    
+    return this.http
+      .post<ResponseModel>(
+        this.baseUrlApi + this.postApiMasterEntryController + '/InsertThenUpdateRefTable',
+        model,
+        {
+          headers: new HttpHeaders({
+            Authorization: 'Bearer ' + this.token,
+            'Content-Type': 'application/json',
+          }),
+        }
+      )
+      .pipe(
+        map((Response) => {
+          return Response;
+        })
+      );
+  }
 
   public DeleteDataAndUpdateSerial(fd: any, tableName: any,updateTableName:any,updateSerialColumnName:any,whereParams:any) {
     
@@ -288,7 +314,7 @@ public GetAllData(model: GetDataModel){
       );
   }
 
-  public SaveDataMasterDetails(fd: any, tableName: any,fdMaster:any,tableNameMaster: any,primaryColumnName: any,ColumnNameForign: any,serialType:any,ColumnNameSerialNo:any,GuidKey:any = false) {
+  public SaveDataMasterDetails(fd: any, tableName: any,fdMaster:any,tableNameMaster: any,primaryColumnName: any,ColumnNameForign: any,serialType:any,ColumnNameSerialNo:any,GuidKey:any = false,whereparam:any = {}) {
     let model: DoubleMasterEntryModel=new DoubleMasterEntryModel();
 
     model.tableNameMaster = tableNameMaster;
@@ -301,7 +327,7 @@ public GetAllData(model: GetDataModel){
     model.isFlag = null;
     model.detailsData=fd;
     model.data  =fdMaster;
-    model.whereParams = null;
+    model.whereParams = whereparam;
     model.GuidKey = GuidKey;
 
     return this.http
