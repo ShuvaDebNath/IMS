@@ -62,6 +62,9 @@ import { CashReceiveUpdateComponent } from '../lc/cash-receive-update/cash-recei
 import { RawMaterialStockComponent } from '../rm-fg-material-infos-with-stock/raw-material-info-with-stock/raw-material-stock.component';
 
 import { GenerateCpiComponent } from '../PI/generate-cpi/generate-cpi.component';
+import { AllSalesContractComponent } from '../sales-contract/all-sales-contract/all-sales-contract.component';
+import { SalesContractDetailsComponent } from '../sales-contract/sales-contract-details/sales-contract-details.component';
+import { GenerateSalesContractComponent } from '../sales-contract/generate-sales-contract/generate-sales-contract.component';
 
 const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more options
   keepSelectedItems: false,
@@ -92,11 +95,14 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     AllCashReceiveComponent,
     GenerateCashReceiveComponent,
     CashReceiveDetailsComponent,
-    CashReceiveUpdateComponent
+    CashReceiveUpdateComponent,
     AllCommercialInvoiceComponent,
     ChangePasswordComponent,
     GeneratePiComponent,
-    GenerateCpiComponent
+    GenerateCpiComponent,
+    AllSalesContractComponent,
+    SalesContractDetailsComponent,
+    GenerateSalesContractComponent
     ],
   imports: [
 
@@ -173,6 +179,9 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'cash-receive-details', component: CashReceiveDetailsComponent },
           { path: 'cash-receive-update', component: CashReceiveUpdateComponent },
           { path: 'generate-cpi', component: GenerateCpiComponent },
+          { path: 'generate-sales-contract', component: GenerateSalesContractComponent },
+          { path: 'all-sales-contract', component: AllSalesContractComponent },
+          { path: 'sales-contract-details', component: SalesContractDetailsComponent },
         ]
       }
     ]),

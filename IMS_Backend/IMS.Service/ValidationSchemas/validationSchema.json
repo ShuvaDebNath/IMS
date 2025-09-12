@@ -26,13 +26,23 @@
         }
       }
     },
+    "tbl_sales_contract": {
+      "QueryParams": {
+        "[PIs]": {
+          "Required": true
+        }
+      }
+    },
     "tbl_cash_receive_detail": {
       "QueryParams": {
         "[CR_ID]": {
-    "tbl_stock": {
-      "QueryParams": {
-        "[RawMaterial_ID]": {
-          "Required": true
+          "tbl_stock": {
+            "QueryParams": {
+              "[RawMaterial_ID]": {
+                "Required": true
+              }
+            }
+          }
         }
       }
     }
