@@ -58,6 +58,7 @@ export class AllSalesContractComponent {
   getDataModel: GetDataModel = new GetDataModel();
   detailsData: any;
   isDetailsVisible: boolean = false;
+  detailsTableData:any;
 
   constructor(
     private fb: FormBuilder,
@@ -161,46 +162,56 @@ export class AllSalesContractComponent {
   }
 
   DeleteData(item: any) {
-
-    swal
-      .fire({
-        title: 'Wait!',
-        html: `<span>Once you delete, you won't be able to revert this!<br> <b>[${item.SalesContractNo}]</b></span>`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!',
-      })
-      .then((result) => {
-        if (result.isConfirmed == true) {
-          let param = new MasterEntryModel();
-          param.tableName = 'tbl_sales_contract';
-          param.whereParams = { 'Id': item.Id };
-
-          this.masterEntryService.DeleteData(param).subscribe({
-            next: (results: any) => {
-              if (results.status) {
-                swal.fire({
-                  title: `${results.message}!`,
-                  text: `Save Successfully!`,
-                  icon: 'success',
-                  timer: 5000,
-                })
-                  .then((result) => {
-                    this.ngOnInit();
-                  });
-              } else if (results.message == 'Invalid Token') {
-                swal.fire('Session Expierd!', 'Please Login Again.', 'info');
-                this.gs.Logout();
-              } else {
-              }
-            },
-            error: (err) => { },
-          });
-        }
-      });
-  }
+      
+      swal
+        .fire({
+          title: 'Wait!',
+          html: `<span>Once you delete, you won't be able to revert this!<br> <b>[${item.SalesContractNo}]</b></span>`,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!',
+        })
+        .then((result) => {
+          if (result.isConfirmed == true) {
+            let param = new GetDataModel();
+            param.procedureName = 'usp_SC_Delete';
+            param.parameters = {
+              Id: item.Id,
+            };
+  
+            this.masterEntryService.GetInitialData(param).subscribe({
+              next: (results: any) => {
+                
+                if (results.status) {
+                  var effectedRows = JSON.parse(results.data).Tables1;
+                  if (effectedRows[0].AffectedRows > 0) {
+                    swal
+                      .fire({
+                        text: `Data Deleted Successfully !`,
+                        title: `Delete Successfully!`,
+                        icon: 'success',
+                        timer: 5000,
+                      })
+                      .then((result) => {
+                        this.ngOnInit();
+                        this.Search();
+                      });
+                  }
+  
+                  this.Search();
+                } else if (results.message == 'Invalid Token') {
+                  swal.fire('Session Expierd!', 'Please Login Again.', 'info');
+                  this.gs.Logout();
+                } else {
+                }
+              },
+              error: (err) => {},
+            });
+          }
+        });
+    }
 
   paginatiorChange(e: any) {
     this.pageIndex = e.pageIndex + 1;
@@ -208,8 +219,26 @@ export class AllSalesContractComponent {
     this.Search();
   }
 
-  viewDetails(table: any) {
-    this.isDetailsVisible = true;
-    this.detailsData = table;
+  viewDetails(table:any){
+      this.isDetailsVisible = true;
+      
+      let param = new GetDataModel();
+      param.procedureName = '[usp_SC_DetailsForList]';
+      param.parameters = {
+        Id: table.Id,     
+      };
+
+    this.masterEntryService.GetInitialData(param).subscribe({
+      next: (results) => {
+        
+        if (results.status) {
+          let tables = JSON.parse(results.data);
+          
+          this.detailsData = tables.Tables1[0]; 
+          this.detailsTableData = tables.Tables2;
+          
+        }
+      }
+    });
   }
 }

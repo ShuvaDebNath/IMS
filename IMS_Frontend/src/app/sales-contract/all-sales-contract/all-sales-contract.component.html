@@ -1,5 +1,8 @@
 <div class="card card-default">
-  <div class="content-heading" style="border-bottom: 1px solid rgba(0,0,0,.125) !important;">
+  <div
+    class="content-heading"
+    style="border-bottom: 1px solid rgba(0, 0, 0, 0.125) !important"
+  >
     <div class="row">
       <div class="col-6">
         <h2 class="p-2">All Sales Contract</h2>
@@ -10,94 +13,396 @@
     <form [formGroup]="SearchForm">
       <div class="form-row align-items-center">
         <div class="col-auto">
-          <label class="control-label" for="inlineFormInputGroup">From Date</label>
+          <label class="control-label" for="inlineFormInputGroup"
+            >From Date</label
+          >
           <div class="input-group mb-2">
             <div class="input-group-sm input-group-prepend">
-              <div class="input-group-text" (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
+              <div class="input-group-text" (click)="dpfrom.toggle()">
+                <i class="fas fa-calendar"></i>
+              </div>
             </div>
-            <input type="text" autocomplete="off" formControlName="fromDate" [bsConfig]="{
-              dateInputFormat: 'DD/MM/YYYY',
-              containerClass: 'theme-green'
-            }" class="form-control-sm form-control bg-white" id="fromdate" name="fromdate" placeholder="From Date" 
-              #dpfrom="bsDatepicker" bsDatepicker/>
+            <input
+              type="text"
+              autocomplete="off"
+              formControlName="fromDate"
+              [bsConfig]="{
+                dateInputFormat: 'DD/MM/YYYY',
+                containerClass: 'theme-green'
+              }"
+              class="form-control-sm form-control bg-white"
+              id="fromdate"
+              name="fromdate"
+              placeholder="From Date"
+              #dpfrom="bsDatepicker"
+              bsDatepicker
+            />
           </div>
-
         </div>
         <div class="col-auto">
-          <label class="control-label" for="inlineFormInputGroup">To Date</label>
+          <label class="control-label" for="inlineFormInputGroup"
+            >To Date</label
+          >
           <div class="input-group mb-2">
             <div class="input-group-sm input-group-prepend">
-              <div class="input-group-text" (click)="dpto.toggle()"><i class="fas fa-calendar"></i></div>
+              <div class="input-group-text" (click)="dpto.toggle()">
+                <i class="fas fa-calendar"></i>
+              </div>
             </div>
-            <input type="text" autocomplete="off" formControlName="toDate" [bsConfig]="{
-              dateInputFormat: 'DD/MM/YYYY',
-              containerClass: 'theme-green'
-            }" class="form-control-sm form-control bg-white" id="todate" name="todate" placeholder="To Date"
-              #dpto="bsDatepicker" bsDatepicker />
+            <input
+              type="text"
+              autocomplete="off"
+              formControlName="toDate"
+              [bsConfig]="{
+                dateInputFormat: 'DD/MM/YYYY',
+                containerClass: 'theme-green'
+              }"
+              class="form-control-sm form-control bg-white"
+              id="todate"
+              name="todate"
+              placeholder="To Date"
+              #dpto="bsDatepicker"
+              bsDatepicker
+            />
           </div>
         </div>
         <div class="col-auto">
-          <button title="Search" type="button" (click)="Search()"
-            class="btn btn-sm btn-outline-primary bg-gradient-primary mb-2 mr-2" style="margin-top: 2.3em !important;">
-            <i class="fas fa-search"></i>&nbsp;Search</button>
+          <button
+            title="Search"
+            type="button"
+            (click)="Search()"
+            class="btn btn-sm btn-outline-primary bg-gradient-primary mb-2 mr-2"
+            style="margin-top: 2.3em !important"
+          >
+            <i class="fas fa-search"></i>&nbsp;Search
+          </button>
         </div>
       </div>
     </form>
-    <hr>
+    <hr />
 
-      <p-table #dt
-           [value]="tableData"
-           [paginator]="true"
-           [rows]="10"
-           [responsive]="true"
-           [showCurrentPageReport]="true"
-           [globalFilterFields]="['SalesContractNo','PIs','CreatedById','CreatedDate']"
-           
-           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+    <p-table
+      #dt
+      [value]="tableData"
+      [paginator]="true"
+      [rows]="10"
+      [responsive]="true"
+      [showCurrentPageReport]="true"
+      [globalFilterFields]="[
+        'SalesContractNo',
+        'PIs',
+        'CreatedById',
+        'CreatedDate'
+      ]"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    >
+      <ng-template pTemplate="caption">
+        <div class="table-toolbar">
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              type="text"
+              (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+              placeholder="Global Search"
+            />
+          </span>
+        </div>
+      </ng-template>
 
-    <ng-template pTemplate="caption">
-      <div class="table-toolbar">
-        <span class="p-input-icon-left">
-          <i class="pi pi-search"></i>
-          <input pInputText type="text"
-                 (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                 placeholder="Global Search" />
-        </span>
-      </div>
-    </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="bg-gradient-success">SL</th>
+          <th class="bg-gradient-success">Sales Contract No</th>
+          <th class="bg-gradient-success">PIs</th>
+          <th class="bg-gradient-success">Created By</th>
+          <th class="bg-gradient-success">Created Date</th>
+          <th class="bg-gradient-success" *ngIf="allPersmissions">Action</th>
+        </tr>
+      </ng-template>
 
-    <ng-template pTemplate="header">
-      <tr>
-        <th class="bg-gradient-success">SL</th>
-        <th class="bg-gradient-success">Sales Contract No</th>
-        <th class="bg-gradient-success">PIs</th>
-        <th class="bg-gradient-success">Created By</th>
-        <th class="bg-gradient-success">Created Date</th>
-        <th class="bg-gradient-success" *ngIf="allPersmissions">Action</th>
-      </tr>
-    </ng-template>
-
-    <ng-template pTemplate="body" let-table let-i="rowIndex">
-      <tr>
-        <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
-        <td class="text-center align-middle">{{table.SalesContractNo}}</td>
-        <td class="text-center align-middle">{{table.PIs}}</td>
-        <td class="text-center align-middle">{{table.CreatedBy}}</td>
-        <td class="text-center align-middle">{{table.CreatedDate}}</td>
-        <td class="text-center align-middle p-0 m-0">
-            <a class="btn bg-gradient-cyan btn-xs mr-2 d-none" target="_blank" title="View Details" [routerLink]="['/cash-receive-details']"
-              [queryParams]="{SC_Id:table.SC_Id}"><i class="fa fa-eye" ></i></a> 
-            <a *ngIf="updatePermissions" class="btn bg-gradient-cyan btn-xs mr-2" target="_blank" title="Edit" [routerLink]="['/generate-sales-contract']"
-              [queryParams]="{SC_Id:table.SC_Id}"><i class="fa fa-edit" ></i></a> 
-            <button *ngIf="deletePermissions" class="btn bg-gradient-danger btn-xs" title="Delete" (click)="DeleteData(table)"><i
-                class="fas fa-trash"></i></button>
-        </td>
-      </tr>
-    </ng-template>
-
-  </p-table>
-
-    </div>
-    
-
+      <ng-template pTemplate="body" let-table let-i="rowIndex">
+        <tr>
+          <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
+          <td class="text-center align-middle">{{ table.SalesContractNo }}</td>
+          <td class="text-center align-middle">{{ table.PIs }}</td>
+          <td class="text-center align-middle">{{ table.CreatedBy }}</td>
+          <td class="text-center align-middle">{{ table.CreatedDate }}</td>
+          <td class="text-center align-middle p-0 m-0">
+            <a
+              class="btn bg-gradient-cyan btn-xs mr-2"
+              target="_blank"
+              title="View"
+              (click)="viewDetails(table)"
+              ><i class="fa fa-eye"></i
+            ></a>
+            <a
+              *ngIf="updatePermissions"
+              class="btn bg-gradient-cyan btn-xs mr-2"
+              target="_blank"
+              title="Edit"
+              [routerLink]="['/generate-sales-contract']"
+              [queryParams]="{ SC_Id: table.Id }"
+              ><i class="fa fa-edit"></i
+            ></a>
+            <button
+              *ngIf="deletePermissions"
+              class="btn bg-gradient-danger btn-xs"
+              title="Delete"
+              (click)="DeleteData(table)"
+            >
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
   </div>
+  <p-dialog
+    header="Details"
+    [(visible)]="isDetailsVisible"
+    [modal]="true"
+    [closable]="true"
+    [style]="{ width: '50rem' }"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+    [style]="{ width: '100vw', height: '100vh', top: '0', left: '0' }"
+    [contentStyle]="{ height: 'calc(100vh - 100px)' }"
+    [maximizable]="true"
+    (onHide)="isDetailsVisible = false"
+    styleClass="wide-dialog"
+  >
+    <form>
+      <div class="card card-primary">
+        <div class="card-header m-0 p-2 sticky-header">
+          <div class="float-left">
+            <h5>{{ detailsData?.SalesContractNo }}</h5>
+            <h5>{{ detailsData?.PIs }}</h5>
+            <span>{{ detailsData?.CreatedDate | date : "dd/MM/yyyy HH:mm:ss" }}</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="row">
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Consignee Initial</strong>
+                </div>
+                <div class="col-md-8 mt-2">{{ detailsData?.Consignee_Initial }}</div>
+
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Shipper</strong>
+                </div>
+                <div class="col-md-8 mt-2">
+                  {{ detailsData?.Shipper }}
+                </div>
+
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Beneficiary Bank</strong>
+                </div>
+                <div class="col-md-8 mt-2">
+                  {{ detailsData?.BenificiaryBank }}
+                </div>
+
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Consignee</strong>
+                </div>
+                <div class="col-md-8 mt-2">{{ detailsData?.Consignee }}</div>
+
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Applicant Bank</strong>
+                </div>
+                <div class="col-md-8 mt-2">{{ detailsData?.ApplicantBank }}</div>
+
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Buyer Name</strong>
+                </div>
+                <div class="col-md-8 mt-2">{{ detailsData?.Buyer_Name }}</div>
+
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Country Of Origin</strong>
+                </div>
+                <div class="col-md-8 mt-2">
+                  {{ detailsData?.Country }}
+                </div>
+
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Delivery Details</strong>
+                </div>
+                <div class="col-md-8 mt-2">{{ detailsData?.DeliveryDetails }}</div>
+
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Terms of Delivery</strong>
+                </div>
+                <div class="col-md-8 mt-2">
+                  {{ detailsData?.termsOfDelivery }}
+                </div>
+
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Force Majeure</strong>
+                </div>
+                <div class="col-md-8 mt-2">{{ detailsData?.forceMajeure }}</div>
+
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Loading Mode</strong>
+                </div>
+                <div class="col-md-8 mt-2">{{ detailsData?.LoadingMode }}</div>
+
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Contact Person</strong>
+                </div>
+                <div class="col-md-8 mt-2">{{ detailsData?.Contact_Person }}</div>
+
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Packing Mode</strong>
+                </div>
+                <div class="col-md-8 mt-2">{{ detailsData?.PackingMode }}</div>
+
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Expire Date</strong>
+                </div>
+                <div class="col-md-8 mt-2">
+                  {{ detailsData?.ExpireDate | date : "dd/MM/yyyy HH:mm:ss" }}
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="row">
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Arbitration</strong>
+                </div>
+                <div class="col-md-8 mt-2">{{ detailsData?.arbitation }}</div>
+
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Remarks</strong>
+                </div>
+                <div class="col-md-8 mt-2">{{ detailsData?.Remarks }}</div>
+
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Style</strong>
+                </div>
+                <div class="col-md-8 mt-2">{{ detailsData?.Style }}</div>
+
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Payment Terms</strong>
+                </div>
+                <div class="col-md-8 mt-2">{{ detailsData?.PaymentTerms }}</div>
+
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Price Term</strong>
+                </div>
+                <div class="col-md-8 mt-2">{{ detailsData?.PriceTerm }}</div>
+
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Partial Shipment</strong>
+                </div>
+                <div class="col-md-8 mt-2">{{ detailsData?.partialAllowed }}</div>
+
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Delivery Address</strong>
+                </div>
+                <div class="col-md-8 mt-2">{{ detailsData?.Delivery_Address }}</div>
+
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Documents</strong>
+                </div>
+                <div class="col-md-8 mt-2">{{ detailsData?.Documents }}</div>
+
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Goods Description</strong>
+                </div>
+                <div class="col-md-8 mt-2">{{ detailsData?.Good_Description }}</div>
+
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Shipping Marks</strong>
+                </div>
+                <div class="col-md-8 mt-2">{{ detailsData?.Shipping_Marks }}</div>
+
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Loading Port</strong>
+                </div>
+                <div class="col-md-8 mt-2">{{ detailsData?.Loading_Port }}</div>
+
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Destination Port</strong>
+                </div>
+                <div class="col-md-8 mt-2">{{ detailsData?.Destination_Port }}</div>
+
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Created By</strong>
+                </div>
+                <div class="col-md-8 mt-2">{{ detailsData?.Created_By }}</div>
+
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Superior</strong>
+                </div>
+                <div class="col-md-8 mt-2">{{ detailsData?.SuperiorName }}</div>
+
+                <div class="col-md-4 mt-2 text-right content-middle">
+                  <strong>Status</strong>
+                </div>
+                <div class="col-md-8 mt-2">
+                  <span class="text-danger"
+                    ><strong>{{ detailsData?.Status | uppercase }}</strong></span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <p-divider />
+          <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover">
+              <tr class="bg-gradient-success">
+                <th class="text-center align-middle">Article</th>
+                <th class="text-center align-middle">A. A.</th>
+                <th class="text-center align-middle">Description</th>
+                <th class="text-center align-middle">Width</th>
+                <th class="text-center align-middle">Color</th>
+                <th class="text-center align-middle">Packaging</th>
+                <th class="text-center align-middle">Qty</th>
+                <th class="text-center align-middle">Unit</th>
+                <th class="text-center align-middle">
+                  Unit Price ({{ detailsData?.IsMPI == false ? "USD" : "BDT" }})
+                </th>
+                <th class="text-center align-middle">
+                  Total Amount ({{ detailsData?.IsMPI == false ? "USD" : "BDT" }})
+                </th>
+                <th class="text-center align-middle">Prod. Cost Unit</th>
+                <th class="text-center align-middle">Total Prod. Cost</th>
+                <th class="text-center align-middle">Delivered</th>
+              </tr>
+
+              <tr *ngFor="let item of detailsTableData">
+                <td>{{ item.Article }}</td>
+                <td>{{ item.ActualArticle }}</td>
+                <td>{{ item.Description }}</td>
+                <td>{{ item.Width }}</td>
+                <td>{{ item.Color }}</td>
+                <td>{{ item.Packaging }}</td>
+                <td>{{ item.Quantity }}</td>
+                <td>{{ item.Unit }}</td>
+                <td>{{ item.Unit_Price }}</td>
+                <td>
+                  {{
+                    detailsData?.IsMPI == 0
+                      ? item.Total_Amount
+                      : item.Total_Amount_Tk
+                  }}
+                </td>
+                <td>{{ item.CommissionUnit }}</td>
+                <td>{{ item.TotalCommission }}</td>
+                <td>{{ item.Delivered_Quantity }}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="card-footer m-0 p-2">
+          <div class="float-left">
+            <span
+              ><strong>{{ detailsData?.AmountInWord }}</strong></span
+            >
+          </div>
+        </div>
+      </div>
+    </form>
+  </p-dialog>
+</div>

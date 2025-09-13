@@ -65,8 +65,6 @@ export class GenerateSalesContractComponent {
     this.title.setTitle('Generate Sales Contract');
     this.GenerateFrom();
     this.getInitialData();
-
-
   }
 
   GenerateFrom() {
@@ -166,6 +164,8 @@ export class GenerateSalesContractComponent {
     sc.PIs = selectedLabels.join(',');
     sc.FirstPIId = this.Formgroup.value.PINo[0];
     sc.ExpiryDate = formattedAfterTwoMonth;
+    sc.PINo = this.Formgroup.value.PINo.join(',');
+    sc.MarketingConcernId = this.Formgroup.value.Marketing_Concern;
 
     this.masterEntyService
       .SaveSingleData(
@@ -183,7 +183,6 @@ export class GenerateSalesContractComponent {
             })
             .then((result) => {
               this.ngOnInit();
-              window.location.href = 'sales-contract-details';
             });
         } else {
           if (res.message == 'Data already exist') {
@@ -214,21 +213,12 @@ export class GenerateSalesContractComponent {
       next: (results) => {
         if (results.status) {
           this.PINo = JSON.parse(results.data).Tables1;
-
+          
           var tableData = JSON.parse(results.data).Tables2;
 
           tableData.forEach((e: any) => {
 
-            var filterSuperior = this.MarketingConcern.filter(
-              (e: any) => e.Superior_ID == e.Superior_ID
-            );
-
-
-            this.Formgroup.controls.Marketing_Concern.setValue(filterSuperior[0].User_ID);
-            this.getPINoByMarketingConcern();
-            //
-            var piArr = e.PIs.split(',');
-            const piArrInt = piArr.map(Number);
+            this.Formgroup.controls.Marketing_Concern.patchValue(e.MarketingConcernId);
 
             const preselectedLabels = e.PIs.split(',').map((l: any) => l.trim());
             const preselectedValues = this.PINo
@@ -286,7 +276,8 @@ export class GenerateSalesContractComponent {
     sc.ModifiedDate = formatted;
     sc.PIs = selectedLabels.join(',');
     sc.FirstPIId = this.Formgroup.value.PINo[0];
-
+    sc.PINo = this.Formgroup.value.PINo.join(',');
+    sc.MarketingConcernId = this.Formgroup.value.Marketing_Concern;
 
     let queryParams = sc
     let condition = {
@@ -305,7 +296,7 @@ export class GenerateSalesContractComponent {
           })
           .then((result) => {
             this.ngOnInit();
-            window.location.href = 'sales-contract-details';
+            
           });
       } else {
         if (res.message == 'Invalid Token') {

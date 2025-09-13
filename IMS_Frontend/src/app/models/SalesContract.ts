@@ -9,5 +9,6 @@ export class SC {
   ModifiedById!: number;
   ModifiedDate!: string;
   ExpiryDate!: string;
-
+  PINo!:string;
+  MarketingConcernId!:number;
 }

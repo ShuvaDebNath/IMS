@@ -65,6 +65,7 @@ import { GenerateCpiComponent } from '../PI/generate-cpi/generate-cpi.component'
 import { AllSalesContractComponent } from '../sales-contract/all-sales-contract/all-sales-contract.component';
 import { SalesContractDetailsComponent } from '../sales-contract/sales-contract-details/sales-contract-details.component';
 import { GenerateSalesContractComponent } from '../sales-contract/generate-sales-contract/generate-sales-contract.component';
+import{DividerModule} from 'primeng/divider'
 
 const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more options
   keepSelectedItems: false,
@@ -127,8 +128,8 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     CheckboxModule,
     InputTextModule,
     PopoverModule,
-    
     DatePipe,
+    DividerModule,
     UiSwitchModule.forRoot({
       size: 'small',
       color: 'rgb(0, 189, 99)',

@@ -16,7 +16,7 @@
             <label>Sales Contract</label>
             <div class="col-md-6">
             <label>Marketing Concern <span>*</span></label>
-            <p-dropdown [style]="{'width':'100%'}"  class="p-0" [options]="MarketingConcern" (onChange)="getPINoByMarketingConcern()"  optionLabel="UserName" [filter]="true" filterBy="UserName" [showClear]="true" styleClass="listBottom" placeholder="Please Select" optionValue="User_ID" formControlName="Marketing_Concern" [readonly]="isEdit">
+            <p-dropdown [style]="{'width':'100%'}"  class="p-0" [options]="MarketingConcern" (onChange)="getPINoByMarketingConcern()"  optionLabel="UserName" [filter]="true" filterBy="UserName" [showClear]="true" styleClass="listBottom" placeholder="Please Select" optionValue="User_ID" formControlName="Marketing_Concern">
               <ng-template let-MarketingConcern pTemplate="item">
                       <div class="flex align-items-center gap-2">  
                           <div>{{ MarketingConcern.UserName }}</div>

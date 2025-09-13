@@ -219,5 +219,5 @@ export class AllPiComponent {
         }
       }
     });
-    }
+  }
 }
