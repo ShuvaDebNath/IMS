@@ -58,7 +58,7 @@ export class DeliveredPiComponent {
 
   ngOnInit(): void {
     this.initForm();
-    var permissions = this.gs.CheckUserPermission('All PI');
+    var permissions = this.gs.CheckUserPermission('Delivered PI');
     this.insertPermissions = permissions.insertPermissions;
     this.updatePermissions = permissions.updatePermissions;
     this.deletePermissions = permissions.deletePermissions;
@@ -68,7 +68,7 @@ export class DeliveredPiComponent {
       window.location.href = 'dashboard';
     }
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
-    this.title.setTitle('All PI');
+    this.title.setTitle('Delivered PI');
 
     var fDate = new Date();
     const mm = String(fDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
