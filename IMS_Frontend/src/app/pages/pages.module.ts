@@ -60,8 +60,11 @@ import { GenerateCashReceiveComponent } from '../lc/generate-cash-receive/genera
 import { CashReceiveDetailsComponent } from '../lc/cash-receive-details/cash-receive-details.component';
 import { CashReceiveUpdateComponent } from '../lc/cash-receive-update/cash-receive-update.component';
 import { RawMaterialStockComponent } from '../rm-fg-material-infos-with-stock/raw-material-info-with-stock/raw-material-stock.component';
-
 import { GenerateCpiComponent } from '../PI/generate-cpi/generate-cpi.component';
+import { UnApprovePiComponent } from '../PI/un-approve-pi/un-approve-pi.component';
+import { PartialApprovePiComponent } from '../PI/partial-approve-pi/partial-approve-pi.component';
+import { QuarterApprovePiComponent } from '../PI/quarter-approve-pi/quarter-approve-pi.component';
+import { FullApprovePiComponent } from '../PI/full-approve-pi/full-approve-pi.component';
 
 const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more options
   keepSelectedItems: false,
@@ -92,7 +95,7 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     AllCashReceiveComponent,
     GenerateCashReceiveComponent,
     CashReceiveDetailsComponent,
-    CashReceiveUpdateComponent
+    CashReceiveUpdateComponent,
     AllCommercialInvoiceComponent,
     ChangePasswordComponent,
     GeneratePiComponent,
@@ -173,6 +176,12 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'cash-receive-details', component: CashReceiveDetailsComponent },
           { path: 'cash-receive-update', component: CashReceiveUpdateComponent },
           { path: 'generate-cpi', component: GenerateCpiComponent },
+          { path: 'generate-cpi', component: GenerateCpiComponent },          
+          { path: 'unapproved-pi', component: UnApprovePiComponent },
+          { path: 'partialapproved-pi', component: PartialApprovePiComponent },
+          { path: 'quarterapproved-pi', component: QuarterApprovePiComponent },
+          { path: 'fullapproved-pi', component: FullApprovePiComponent },
+
         ]
       }
     ]),
