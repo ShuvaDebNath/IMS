@@ -41,7 +41,6 @@ export class GenerateLcComponent {
     let has = this.activeLink.snapshot.queryParamMap.has('LC_No');
     if (has) {
       this.LCId = this.activeLink.snapshot.queryParams['LC_No'];
-      this.getPINoByLCID();
       this.isEdit = true;
     } else {
       this.isEdit = false;

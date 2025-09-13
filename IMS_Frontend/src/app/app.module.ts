@@ -21,6 +21,9 @@ import { DatePipe } from '@angular/common';
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { TableModule } from 'primeng/table';
+import { GenerateSalesContractComponent } from './sales-contract/generate-sales-contract/generate-sales-contract.component';
+import { AllSalesContractComponent } from './sales-contract/all-sales-contract/all-sales-contract.component';
+import { SalesContractDetailsComponent } from './sales-contract/sales-contract-details/sales-contract-details.component';
 
 
 
@@ -38,7 +41,7 @@ const CustomSelectOptions: INgxSelectOptions = {
     ForbiddenErrorComponent,
     PageNotFoundComponent,
     LogoutComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
   ],
   imports: [
     FormsModule,

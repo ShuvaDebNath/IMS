@@ -61,6 +61,10 @@ import { CashReceiveDetailsComponent } from '../lc/cash-receive-details/cash-rec
 import { CashReceiveUpdateComponent } from '../lc/cash-receive-update/cash-receive-update.component';
 import { RawMaterialStockComponent } from '../rm-fg-material-infos-with-stock/raw-material-info-with-stock/raw-material-stock.component';
 import { GenerateCpiComponent } from '../PI/generate-cpi/generate-cpi.component';
+import { AllSalesContractComponent } from '../sales-contract/all-sales-contract/all-sales-contract.component';
+import { SalesContractDetailsComponent } from '../sales-contract/sales-contract-details/sales-contract-details.component';
+import { GenerateSalesContractComponent } from '../sales-contract/generate-sales-contract/generate-sales-contract.component';
+import{DividerModule} from 'primeng/divider'
 import { UnApprovePiComponent } from '../PI/un-approve-pi/un-approve-pi.component';
 import { PartialApprovePiComponent } from '../PI/partial-approve-pi/partial-approve-pi.component';
 import { QuarterApprovePiComponent } from '../PI/quarter-approve-pi/quarter-approve-pi.component';
@@ -100,7 +104,10 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     AllCommercialInvoiceComponent,
     ChangePasswordComponent,
     GeneratePiComponent,
-    GenerateCpiComponent
+    GenerateCpiComponent,
+    AllSalesContractComponent,
+    SalesContractDetailsComponent,
+    GenerateSalesContractComponent
     ],
   imports: [
 
@@ -125,8 +132,8 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     CheckboxModule,
     InputTextModule,
     PopoverModule,
-    
     DatePipe,
+    DividerModule,
     UiSwitchModule.forRoot({
       size: 'small',
       color: 'rgb(0, 189, 99)',
@@ -178,12 +185,14 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'cash-receive-details', component: CashReceiveDetailsComponent },
           { path: 'cash-receive-update', component: CashReceiveUpdateComponent },
           { path: 'generate-cpi', component: GenerateCpiComponent },
+          { path: 'generate-sales-contract', component: GenerateSalesContractComponent },
+          { path: 'all-sales-contract', component: AllSalesContractComponent },
+          { path: 'sales-contract-details', component: SalesContractDetailsComponent },
           { path: 'generate-cpi', component: GenerateCpiComponent },          
           { path: 'unapproved-pi', component: UnApprovePiComponent },
           { path: 'partialapproved-pi', component: PartialApprovePiComponent },
           { path: 'quarterapproved-pi', component: QuarterApprovePiComponent },
           { path: 'fullapproved-pi', component: FullApprovePiComponent },
-
         ]
       }
     ]),

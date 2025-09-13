@@ -26,6 +26,13 @@
         }
       }
     },
+    "tbl_sales_contract": {
+      "QueryParams": {
+        "[PIs]": {
+          "Required": true
+        }
+      }
+    },
     "tbl_cash_receive_detail": {
       "QueryParams": {
         "[CR_ID]": {
