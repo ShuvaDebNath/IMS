@@ -14,6 +14,7 @@ import { DividerModule } from 'primeng/divider';
 import { FieldsetModule } from 'primeng/fieldset';
 import { DropdownModule } from "primeng/dropdown";
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
+import { GetDataModel } from 'src/app/models/GetDataModel';
 
 @Component({
   standalone:true,
@@ -25,10 +26,17 @@ import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.ser
 export class PiListComponent implements OnInit {
   @Input() PiStatus!:any;
   datePipe = new DatePipe('en-US');
+
+  PITypeList:any[]=[{value:1,text:'LC'},{value:2,text:'Cash'}];
+  ShipperList: any|[];
+  ConsigneeList: any|[];
+  UserList: any|[];
+  PIList: any|[];
+
   DataTable!:any[];
   PIData!:any;
   PIDetails!:any[];
-  PITypeList:any[]=[{value:1,text:'LC'},{value:2,text:'Cash'}];
+  
   first: any=1;
   rows: any=10;
   totalRecords!: number;
@@ -108,6 +116,7 @@ export class PiListComponent implements OnInit {
     this.title.setTitle(this.PageTitle);
     // this.LoadTableData();
     this.GenerateSearchFrom();
+    this.GetInitialData();
   }
   ReloadTable(event:any) {
     this.first = event.first;
@@ -144,18 +153,46 @@ OpenSpecialApprove(Id:number){
       });
   }
 
+  GetInitialData():void{
+      this.ShipperList=[];
+      let model=new GetDataModel();
+      model.procedureName="usp_ProformaInvoice_GetInitialData";
+      model.parameters={
+        userID:this.gs.getSessionData('userId'),
+        roleID:this.gs.getSessionData('roleId'),
+        PaymentType:0
+      };
+      this.service.GetInitialData(model).subscribe((res:any) => {
+        if (res.status) {
+  
+          let DataSet = JSON.parse(res.data);
+          
+          this.ShipperList=DataSet.Tables1;
+          this.ConsigneeList=DataSet.Tables7;
+          this.UserList=DataSet.Tables24;
+          this.PIList=DataSet.Tables31;
+  
+        } else {
+          if (res.msg == 'Invalid Token') {
+            this.gs.Logout();
+          } else {
+          }
+        }
+      });    
+    }
+
   LoadTableData(): void {
     this.SearchFormgroup.controls['PageNumber'].setValue(this.first);
     this.SearchFormgroup.controls['PageSize'].setValue(this.rows);
     let permas=this.SearchFormgroup.value;
-
+    console.log(permas);
     this.DataTable=[];
 
     
       const procedureData = {
         procedureName: 'usp_ProformaInvoice_GetDataDataTable',
         parameters: {
-          PINO :permas.PINO?permas.PINO:'',
+          PINO :permas.PINo?permas.PINo:'',
           FromDate :permas.FromDate? this.datePipe.transform(permas.FromDate, 'yyyy-MM-dd') :'',
           ToDate :permas.ToDate? this.datePipe.transform(permas.ToDate, 'yyyy-MM-dd') :'',
           Shipper :permas.Shipper?permas.Shipper:'',
@@ -167,9 +204,6 @@ OpenSpecialApprove(Id:number){
           PageSize    : this.rows
         }
       };
-      console.clear();
-      console.log(procedureData);
-      // return;
      
       this.getDataService.GetInitialData(procedureData).subscribe({
         next: (results) => {
