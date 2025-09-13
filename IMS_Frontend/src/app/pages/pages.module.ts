@@ -65,6 +65,7 @@ import { UnApprovePiComponent } from '../PI/un-approve-pi/un-approve-pi.componen
 import { PartialApprovePiComponent } from '../PI/partial-approve-pi/partial-approve-pi.component';
 import { QuarterApprovePiComponent } from '../PI/quarter-approve-pi/quarter-approve-pi.component';
 import { FullApprovePiComponent } from '../PI/full-approve-pi/full-approve-pi.component';
+import { FinishGoodsInfoWithStockComponent } from '../rm-fg-material-infos-with-stock/finish-goods-info-with-stock/finish-goods-info-with-stock.component';
 
 const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more options
   keepSelectedItems: false,
@@ -155,6 +156,7 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'all-rm-requisition-list', component: AllRMRequisitionListComponent },
           { path: 'issued-rm-requisition-list-warehouse', component: IssuedRMRequisitionListWarehouseComponent },
           { path: 'raw-material-stock', component: RawMaterialStockComponent },
+          { path: 'finish-goods-stock', component: FinishGoodsInfoWithStockComponent },
 
           {
             path: 'pending-rm-requisition/edit/:reqId',

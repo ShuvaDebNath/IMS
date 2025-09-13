@@ -1,7 +1,7 @@
 <div class="container">
-    <h1>Raw Material Info with Stock</h1>
-    <p-table #table [value]="rawMaterialItems" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
-        [rowsPerPageOptions]="[10,20,50]" [globalFilterFields]="['Article_No','Color','Measurement','Unit','Weight','StockQuantity','RollQuantity','BagQuantity']"
+    <h1>Finish Goods Info with Stock</h1>
+    <p-table #table [value]="finishGoodsItemsWithStock" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        [rowsPerPageOptions]="[10,20,50]" [globalFilterFields]="['Article_No','Color','Measurement','Unit','Packaging','GSM','Weight','StockQuantity','RollQuantity','Stock_Location_Name']"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
 
         <ng-template pTemplate="caption">
@@ -32,6 +32,12 @@
                 <th pSortableColumn="Unit">Unit <p-sortIcon field="Unit"></p-sortIcon>
                     <p-columnFilter type="text" field="Unit" display="Unit"></p-columnFilter>
                 </th>
+                <th pSortableColumn="Packaging">Packaging <p-sortIcon field="Packaging"></p-sortIcon>
+                    <p-columnFilter type="text" field="Packaging" display="Packaging"></p-columnFilter>
+                </th>
+                <th pSortableColumn="GSM">GSM <p-sortIcon field="GSM"></p-sortIcon>
+                    <p-columnFilter type="text" field="GSM" display="GSM"></p-columnFilter>
+                </th>
                 <th pSortableColumn="Weight">Weight <p-sortIcon field="Weight"></p-sortIcon>
                     <p-columnFilter type="text" field="Weight" display="Weight"></p-columnFilter>
                 </th>
@@ -41,8 +47,8 @@
                 <th pSortableColumn="RollQuantity">Roll <p-sortIcon field="RollQuantity"></p-sortIcon>
                     <p-columnFilter type="numeric" field="RollQuantity" display="RollQuantity"></p-columnFilter>
                 </th>
-                <th pSortableColumn="BagQuantity">Bag <p-sortIcon field="BagQuantity"></p-sortIcon>
-                    <p-columnFilter type="numeric" field="BagQuantity" display="BagQuantity"></p-columnFilter>
+                <th pSortableColumn="Stock_Location_Name">Location <p-sortIcon field="Stock_Location_Name"></p-sortIcon>
+                    <p-columnFilter type="text" field="Stock_Location_Name" display="Stock_Location_Name"></p-columnFilter>
                 </th>
                 <th style="text-align: center;">Action</th>
             </tr>
@@ -55,10 +61,12 @@
                 <td>{{ row.Color }}</td>
                 <td>{{ row.Measurement }}</td>
                 <td>{{ row.Unit }}</td>
+                <td>{{ row.Packaging }}</td>
+                <td>{{ row.GSM }}</td>
                 <td>{{ row.Weight }}</td>
                 <td>{{ row.StockQuantity }}</td>
                 <td>{{ row.RollQuantity }}</td>
-                <td>{{ row.BagQuantity }}</td>
+                <td>{{ row.Stock_Location_Name }}</td>
                 <td style="text-align: center;">
                     <!-- Stock In -->
                     <p-button icon="pi pi-plus" styleClass="p-button-success p-button-sm me-2"
@@ -81,7 +89,7 @@
 
     </p-table>
 
-        <p-dialog header="Stock In RM" [(visible)]="isStockInVisible" [modal]="true" [closable]="true"
+        <p-dialog header="Stock In Finish Goods" [(visible)]="isStockInVisible" [modal]="true" [closable]="true"
             [style]="{ width: '40vw' }" (onHide)="isStockInVisible = false" styleClass="wide-dialog">
             <form>
                 <div class="form-group row mb-2">
@@ -127,9 +135,11 @@
                     </div>
                 </div>
                 <div class="form-group row mb-2">
-                    <label class="col-sm-3 col-form-label">Bag</label>
+                    <label class="col-sm-3 col-form-label">Stock Location</label>
                     <div class="col-sm-9">
-                        <input class="form-control" type="number" [(ngModel)]="stockInForm.Bag_In" name="Bag" />
+                        <select  class="form-select" [(ngModel)]="stockInForm.Stock_Location_ID" name="Stock_Location_ID">
+                            <option *ngFor="let loc of StockLocationItems" [value]="loc.Stock_Location_ID">{{ loc.Stock_Location_Name }}</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group row mb-2">
@@ -145,7 +155,7 @@
             </form>
         </p-dialog>
 
-         <p-dialog header="Stock Out RM" [(visible)]="isStockOutVisible" [modal]="true" [closable]="true"
+         <p-dialog header="Stock Out Finish Goods" [(visible)]="isStockOutVisible" [modal]="true" [closable]="true"
             [style]="{ width: '40vw' }" (onHide)="isStockOutVisible = false" styleClass="wide-dialog">
             <form>
                 <div class="form-group row mb-2">
@@ -191,10 +201,15 @@
                     </div>
                 </div>
                 <div class="form-group row mb-2">
-                    <label class="col-sm-3 col-form-label">Bag</label>
+                    <label class="col-sm-3 col-form-label">Stock Location</label>
                     <div class="col-sm-9">
-                        <input class="form-control" type="number" [(ngModel)]="stockOutForm.Bag_Out" name="Bag" />
+                        <input class="form-control" [value]="selectedRow?.Stock_Location_Name" readonly />
                     </div>
+                    <!-- <div class="col-sm-9">
+                        <select class="form-select" [(ngModel)]="stockOutForm.Stock_Location_ID" name="Stock_Location_ID">
+                            <option *ngFor="let loc of StockLocationItems" [value]="loc.Stock_Location_ID">{{ loc.Stock_Location_Name }}</option>
+                        </select>
+                    </div> -->
                 </div>
                 <div class="form-group row mb-2">
                     <label class="col-sm-3 col-form-label">Note</label>
