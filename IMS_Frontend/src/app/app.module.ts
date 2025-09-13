@@ -26,6 +26,7 @@ import { AllSalesContractComponent } from './sales-contract/all-sales-contract/a
 import { SalesContractDetailsComponent } from './sales-contract/sales-contract-details/sales-contract-details.component';
 
 
+
 const CustomSelectOptions: INgxSelectOptions = {
   keepSelectedItems: false,
   allowClear: true,

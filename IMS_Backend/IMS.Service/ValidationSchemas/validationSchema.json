@@ -36,13 +36,17 @@
     "tbl_cash_receive_detail": {
       "QueryParams": {
         "[CR_ID]": {
-          "tbl_stock": {
-            "QueryParams": {
-              "[RawMaterial_ID]": {
-                "Required": true
-              }
-            }
-          }
+          "Required": true
+        }
+      }
+    },
+    "tbl_stock": {
+      "QueryParams": {
+        "[RawMaterial_ID]": {
+          "Required": true
+        },
+        "[Item_ID]": {
+          "Required": true
         }
       }
     }

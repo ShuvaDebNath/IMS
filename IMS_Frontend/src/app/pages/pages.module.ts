@@ -60,12 +60,16 @@ import { GenerateCashReceiveComponent } from '../lc/generate-cash-receive/genera
 import { CashReceiveDetailsComponent } from '../lc/cash-receive-details/cash-receive-details.component';
 import { CashReceiveUpdateComponent } from '../lc/cash-receive-update/cash-receive-update.component';
 import { RawMaterialStockComponent } from '../rm-fg-material-infos-with-stock/raw-material-info-with-stock/raw-material-stock.component';
-
 import { GenerateCpiComponent } from '../PI/generate-cpi/generate-cpi.component';
 import { AllSalesContractComponent } from '../sales-contract/all-sales-contract/all-sales-contract.component';
 import { SalesContractDetailsComponent } from '../sales-contract/sales-contract-details/sales-contract-details.component';
 import { GenerateSalesContractComponent } from '../sales-contract/generate-sales-contract/generate-sales-contract.component';
 import{DividerModule} from 'primeng/divider'
+import { UnApprovePiComponent } from '../PI/un-approve-pi/un-approve-pi.component';
+import { PartialApprovePiComponent } from '../PI/partial-approve-pi/partial-approve-pi.component';
+import { QuarterApprovePiComponent } from '../PI/quarter-approve-pi/quarter-approve-pi.component';
+import { FullApprovePiComponent } from '../PI/full-approve-pi/full-approve-pi.component';
+import { FinishGoodsInfoWithStockComponent } from '../rm-fg-material-infos-with-stock/finish-goods-info-with-stock/finish-goods-info-with-stock.component';
 
 const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more options
   keepSelectedItems: false,
@@ -159,6 +163,7 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'all-rm-requisition-list', component: AllRMRequisitionListComponent },
           { path: 'issued-rm-requisition-list-warehouse', component: IssuedRMRequisitionListWarehouseComponent },
           { path: 'raw-material-stock', component: RawMaterialStockComponent },
+          { path: 'finish-goods-stock', component: FinishGoodsInfoWithStockComponent },
 
           {
             path: 'pending-rm-requisition/edit/:reqId',
@@ -183,6 +188,11 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'generate-sales-contract', component: GenerateSalesContractComponent },
           { path: 'all-sales-contract', component: AllSalesContractComponent },
           { path: 'sales-contract-details', component: SalesContractDetailsComponent },
+          { path: 'generate-cpi', component: GenerateCpiComponent },          
+          { path: 'unapproved-pi', component: UnApprovePiComponent },
+          { path: 'partialapproved-pi', component: PartialApprovePiComponent },
+          { path: 'quarterapproved-pi', component: QuarterApprovePiComponent },
+          { path: 'fullapproved-pi', component: FullApprovePiComponent },
         ]
       }
     ]),
