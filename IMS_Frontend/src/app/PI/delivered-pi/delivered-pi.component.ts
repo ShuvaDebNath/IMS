@@ -124,7 +124,7 @@ export class DeliveredPiComponent {
     }
 
     let param = new GetDataModel();
-    param.procedureName = '[usp_ProformaInvoice_GetLIst]';
+    param.procedureName = '[usp_ProformaInvoice_Delivered_GetLIst]';
     param.parameters = {
       FromDate: fromDate,
       ToDate: toDate,
