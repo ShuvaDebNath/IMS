@@ -1,0 +1,75 @@
+<div class="card card-default">
+  <div class="content-heading" style="border-bottom: 1px solid rgba(0, 0, 0, 0.125) !important">
+    <h2 class="p-2 font-weight-bold theme-color">
+      <i class="fas fa-list-alt fa-1x"></i>&nbsp;Applicant Bank List
+    </h2>
+  </div>
+
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div class="d-flex align-items-center">
+        <button *ngIf="insertPermissions" class="btn theme-btn text-white" routerLink="/applicantbank-create">
+          <i class="fas fa-plus"></i>&nbsp;Create New
+        </button>
+      </div>
+
+      <div class="d-flex align-items-center">
+        <label class="mb-0 mr-2">Search:</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          [(ngModel)]="searchText"
+          (keyup)="getApplicantBanks({offset:0}, 1, pageSize, searchText)"
+          placeholder="Search..."
+        />
+      </div>
+    </div>
+
+    <div class="datatable">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr style="background-color: #f5f5f5">
+            <th class="p-2">Bank Code</th>
+            <th class="p-2">Bank Name</th>
+            <th class="p-2">Details</th>
+            <th class="p-2">Action</th>
+          </tr>
+        </thead>
+
+        <tbody class="text-dark">
+          <tr *ngFor="let item of rows; let i = index">
+            <td>{{ item.BankCode }}</td>
+            <td>{{ item.BankName }}</td>
+            <td>
+              {{ item.Details?.length > 50 ? (item.Details | slice:0:50) + '...' : item.Details }}
+            </td>
+            <td class="text-center d-flex align-middle p-0 m-0">
+              <a *ngIf="updatePermissions"
+                 class="btn theme-btn btn-sm text-white m-1"
+                 [routerLink]="['/applicantbank-create']"
+                 [queryParams]="{ Applicant_Bank_ID: item.Applicant_Bank_ID }">
+                <i class="fa fa-edit"></i>
+              </a>
+
+              <button *ngIf="deletePermissions"
+                class="btn btn-sm text-white m-1"
+                style="background-color: #dc3545"
+                (click)="deleteApplicantBank(item)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <mat-paginator
+        class="theme-btn"
+        showFirstLastButtons
+        (page)="paginatiorChange($event)"
+        [length]="length"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="pageSizeOptions">
+      </mat-paginator>
+    </div>
+  </div>
+</div>

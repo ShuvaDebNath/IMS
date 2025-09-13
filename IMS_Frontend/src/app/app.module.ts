@@ -26,6 +26,8 @@ import { ArbitrationCreateComponent } from './arbitration/arbitration-create/arb
 import { ArbitrationListComponent } from './arbitration/arbitration-list/arbitration-list.component';
 import { BeneficiarybankCreateComponent } from './BeneficiaryBank/beneficiarybank-create/beneficiarybank-create.component';
 import { BeneficiaryBankListComponent } from './BeneficiaryBank/beneficiary-bank-list/beneficiary-bank-list.component';
+import { ApplicantbankCreateComponent } from './ApplicantBank/applicantbank-create/applicantbank-create.component';
+import { ApplicantbankListComponent } from './ApplicantBank/applicantbank-list/applicantbank-list.component';
 
 
 const CustomSelectOptions: INgxSelectOptions = {
@@ -48,7 +50,9 @@ const CustomSelectOptions: INgxSelectOptions = {
     ArbitrationCreateComponent,
     ArbitrationListComponent,
     BeneficiarybankCreateComponent,
-    BeneficiaryBankListComponent
+    BeneficiaryBankListComponent,
+    ApplicantbankCreateComponent,
+    ApplicantbankListComponent
 
   ],
   imports: [

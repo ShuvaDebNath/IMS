@@ -5,7 +5,11 @@
   font-family: 'Roboto Slab';
   font-size: medium;
 }
-
+.icon-inner, .ionicon, svg {
+  height: 20px !important;
+  width: 20px !important;
+  display: inline-block !important;
+}
 /* default theme variable */
 .theme-bg{
     background-color: #6a1a3f!important;
@@ -33,7 +37,7 @@ table-bordered td, .table-bordered th,tr,td {
 }
 .theme-btn {
     border-radius: 5px;
-    background-color: #6a1a3f;
+    background-color: #6a1a3f!important;
     color: white;
 }
 
