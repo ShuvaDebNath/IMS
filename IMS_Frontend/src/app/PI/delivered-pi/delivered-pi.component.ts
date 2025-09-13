@@ -58,7 +58,7 @@ export class DeliveredPiComponent {
 
   ngOnInit(): void {
     this.initForm();
-    var permissions = this.gs.CheckUserPermission('All PI');
+    var permissions = this.gs.CheckUserPermission('Delivered PI');
     this.insertPermissions = permissions.insertPermissions;
     this.updatePermissions = permissions.updatePermissions;
     this.deletePermissions = permissions.deletePermissions;
@@ -68,7 +68,7 @@ export class DeliveredPiComponent {
       window.location.href = 'dashboard';
     }
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
-    this.title.setTitle('All PI');
+    this.title.setTitle('Delivered PI');
 
     var fDate = new Date();
     const mm = String(fDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
@@ -101,29 +101,30 @@ export class DeliveredPiComponent {
   }
   Search() {
     var finput = new Date();
-    if (!(this.SearchForm.value.fromDate instanceof Date)) {
-      finput = new Date(this.SearchForm.value.fromDate); // try converting if it's not already a Date
-    }
-
-    const fday = String(finput.getDate()).padStart(2, '0');
-    const fmonth = String(finput.getMonth() + 1).padStart(2, '0'); // months are 0-based
-    const fyear = finput.getFullYear();
     var fromDate = this.SearchForm.value.fromDate;
-    fromDate = `${fday}/${fmonth}/${fyear}`;
+    if (this.SearchForm.value.fromDate instanceof Date) {
+      finput = new Date(this.SearchForm.value.fromDate); // try converting if it's not already a Date
+      const fday = String(finput.getDate()).padStart(2, '0');
+      const fmonth = String(finput.getMonth() + 1).padStart(2, '0'); // months are 0-based
+      const fyear = finput.getFullYear();
+
+      fromDate = `${fday}/${fmonth}/${fyear}`;
+    }
 
     var tinput = new Date();
-    if (!(this.SearchForm.value.fromDate instanceof Date)) {
+    var toDate = this.SearchForm.value.toDate;
+    if (this.SearchForm.value.toDate instanceof Date) {
       tinput = new Date(this.SearchForm.value.toDate); // try converting if it's not already a Date
+
+      const tday = String(tinput.getDate()).padStart(2, '0');
+      const tmonth = String(tinput.getMonth() + 1).padStart(2, '0'); // months are 0-based
+      const tyear = tinput.getFullYear();
+
+      toDate = `${tday}/${tmonth}/${tyear}`;
     }
 
-    const tday = String(tinput.getDate()).padStart(2, '0');
-    const tmonth = String(tinput.getMonth() + 1).padStart(2, '0'); // months are 0-based
-    const tyear = tinput.getFullYear();
-    var toDate = this.SearchForm.value.toDate;
-    toDate = `${tday}/${tmonth}/${tyear}`;
-
     let param = new GetDataModel();
-    param.procedureName = '[usp_ProformaInvoice_GetLIst]';
+    param.procedureName = '[usp_ProformaInvoice_Delivered_GetLIst]';
     param.parameters = {
       FromDate: fromDate,
       ToDate: toDate,
