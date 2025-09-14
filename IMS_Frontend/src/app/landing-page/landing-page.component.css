@@ -19,3 +19,14 @@
             font-size: 1.3rem;
             margin-top: 10px;
         }
+        .ims-custom-footer {
+  background-color: #6a1a3f;
+  color: white;
+  font-size: 10px !important;
+  padding: 5px !important;
+  text-align: center;
+  flex-shrink: 0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}

@@ -1,0 +1,90 @@
+<div class="container form-container my-4">
+  <div class="card shadow-sm">
+    <div class="card-header d-flex align-items-center theme-text ">
+      <div class="icon-wrapper me-2">
+        <!-- <i class="fas fa-university"></i> -->
+      </div>
+      <h3 class="fw-bold">{{ !isEdit ? 'Create New Bank' : 'Edit Bank' }}</h3>
+    </div>
+
+    <div class="card-body">
+      <form [formGroup]="Formgroup">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label required-field">Bank Name</label>
+            <input formControlName="BankName" class="form-control" />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label required-field">Account No</label>
+            <input formControlName="AccountNo" class="form-control" />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Branch</label>
+            <input formControlName="Branch" class="form-control" />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Address</label>
+            <input formControlName="Address" class="form-control" />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">City</label>
+            <input formControlName="City" class="form-control" />
+          </div>
+
+          <!-- Country dropdown -->
+          <div class="col-md-6">
+            <label class="form-label">Country</label>
+            <select formControlName="Country_ID" class="form-select">
+              <option value="">-- Select Country --</option>
+              <option *ngFor="let c of countryData" [value]="c.id">{{ c.name }}</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Currency Details</label>
+            <input formControlName="CourrencyDetails" class="form-control" />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Swift Code</label>
+            <input formControlName="SwiftCode" class="form-control" />
+          </div>
+
+          <div class="col-md-6 d-flex align-items-center">
+            <div class="form-check mt-4">
+              <input type="checkbox" formControlName="IsAvailable" class="form-check-input" id="isAvailable" />
+              <label class="form-check-label" for="isAvailable">Available</label>
+            </div>
+          </div>
+
+          <!-- Payment Type dropdown -->
+          <div class="col-md-6">
+            <label class="form-label">Payment Type</label>
+            <select formControlName="PaymentTypeId" class="form-select">
+              <option value="">-- Select Payment Type --</option>
+              <option *ngFor="let pt of paymentTypes" [value]="pt.id">{{ pt.name }}</option>
+            </select>
+          </div>
+        </div>
+      </form>
+
+      <div class="d-flex justify-content-end gap-2 mt-4">
+        <button routerLink="/beneficiarybank-list" class="btn btn-danger" type="button">
+          Cancel
+        </button>
+
+        <button *ngIf="!isEdit" class="btn theme-btn-add" type="button" (click)="saveData()" [disabled]="Formgroup.invalid">
+          <i class="fas fa-save me-2"></i> Save
+        </button>
+
+        <button *ngIf="isEdit" class="btn theme-btn-edit" type="button" (click)="updateData()" [disabled]="Formgroup.invalid">
+          <i class="fas fa-sync-alt me-2"></i> Update
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

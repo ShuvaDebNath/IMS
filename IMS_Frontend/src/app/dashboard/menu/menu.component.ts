@@ -14,24 +14,41 @@ export class MenuComponent implements OnInit {
   userName: any;
   isShowComInfo = false;
   openDropdownId: number | null = null;
-
+  currentTime: string = '';
+  private timerInterval: any;
   constructor(private gs: GlobalServiceService,
-              private masterEntryService: MasterEntryService) {}
+    private masterEntryService: MasterEntryService) { }
 
   ngOnInit(): void {
+    this.startTimer()
     this.userName = window.localStorage.getItem('userName');
-    if(this.userName!=undefined && this.userName!=null)
+    if (this.userName != undefined && this.userName != null)
       this.isShowComInfo = true;
   }
-
+  startTimer() {
+    this.updateTime();
+    this.timerInterval = setInterval(() => {
+      this.updateTime();
+    }, 1000);
+  }
+  updateTime() {
+    const now = new Date();
+    this.currentTime = now.toLocaleTimeString('en-GB');
+  }
+  ngOnDestroy(): void {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+    }
+    this.startTimer()
+  }
   toggleDropdown(id: number, event: Event) {
     event.preventDefault();
     event.stopPropagation();
 
     if (this.openDropdownId === id) {
-      this.openDropdownId = null; 
+      this.openDropdownId = null;
     } else {
-      this.openDropdownId = id;   
+      this.openDropdownId = id;
     }
   }
 

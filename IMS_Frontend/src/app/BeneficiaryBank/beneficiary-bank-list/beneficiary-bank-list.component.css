@@ -1,0 +1,8 @@
+.mat-mdc-paginator{
+ background-color: #6a1a3f!important;
+    color: white;
+}
+.table-bordered td, .table-bordered th, tr, td
+ {
+    border: 1px solid #6a1a3f !important;
+}

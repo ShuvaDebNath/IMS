@@ -1,54 +1,36 @@
-.blue-green-palet{
- color: #0d6b19 !important;
- background-color: #FCF6F5FF !important;
-}
-.overlay{
-  margin-top:150px;
-  text-align: center;
-  backdrop-filter: blur(6px);
-  z-index: 1051 !important;
-}
-
-
-  .container {
-    width: 100%;
-    height: 100%;
-    position: relative;
-  }
-
-  .box {
-  overflow-y: scroll;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: -20px;
-    left: 0;
-    opacity: 0.8;  /* for demo purpose  */
-  }
-
-  .stack-top {
-    z-index: 9;
-    margin: 20px; /* for demo purpose  */
-  }
-  .spinner-img {
-height: 20vh;
-width: 20vh;
-position: absolute;
-top: 0;
-bottom: 0;
-left: 0;
-right: 0;
-margin: auto;
-animation: loading-spinner-img 3s linear infinite;
+.loader-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%!important;
+  background: #fff;
 }
 
-.blink {
-animation: blinker 3s linear infinite;
-margin-top: 150px;
-font-size: 40px;
-color: black;
+.circle {
+  width: 120px;
+  height: 120px;
+  border: 8px solid #f1c40f;      /* circle color */
+  border-top: 8px solid #e74c3c;  /* top color */
+  border-radius: 50%;
+  animation: spin 1.5s linear infinite;
+  position: relative;             /* needed for absolute positioning of logo */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-@keyframes blinker {
-50% { opacity: 0; }
+.loader-logo {
+  width: 100px;   /* adjust size as needed */
+  height: 100px;
+  object-fit: contain;
+  position: absolute;
+}
+.footer{
+  margin-top: 50px;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

@@ -53,6 +53,14 @@ import {DialogModule} from 'primeng/dialog'
 import { GenerateCommercialInvoiceComponent } from '../commercial-document/generate-commercial-invoice/generate-commercial-invoice.component';
 import { AllCommercialInvoiceComponent } from '../commercial-document/all-commercial-invoice/all-commercial-invoice.component';
 import { GeneratePiComponent } from '../PI/generate-pi/generate-pi.component';
+import { BeneficiaryCreateComponent } from '../Beneficiary/beneficiary-create/beneficiary-create.component';
+import { BeneficiaryListComponent } from '../beneficiary/beneficiary-list/beneficiary-list.component';
+import { ArbitrationCreateComponent } from '../arbitration/arbitration-create/arbitration-create.component';
+import { ArbitrationListComponent } from '../arbitration/arbitration-list/arbitration-list.component';
+import { BeneficiarybankCreateComponent } from '../BeneficiaryBank/beneficiarybank-create/beneficiarybank-create.component';
+import { BeneficiaryBankListComponent } from '../BeneficiaryBank/beneficiary-bank-list/beneficiary-bank-list.component';
+import { ApplicantbankCreateComponent } from '../ApplicantBank/applicantbank-create/applicantbank-create.component';
+import { ApplicantbankListComponent } from '../ApplicantBank/applicantbank-list/applicantbank-list.component';
 import { AllPiComponent } from '../PI/all-pi/all-pi.component';
 import { DeliveredPiComponent } from '../PI/delivered-pi/delivered-pi.component';
 import { AllCashReceiveComponent } from '../lc/all-cash-receive/all-cash-receive.component';
@@ -178,6 +186,31 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
            {path: 'all-commercial-invoice', component: AllCommercialInvoiceComponent},
            {path: 'generate-commercial-invoice', component: GenerateCommercialInvoiceComponent},
           { path: 'generate-pi', component: GeneratePiComponent },
+          {
+            path:"arbitration-create",component:ArbitrationCreateComponent
+          },
+          {
+            path:"arbitration-list",component:ArbitrationListComponent
+          },
+           {
+            path:"beneficiary-create",component:BeneficiaryCreateComponent
+          },
+          {
+            path:"beneficiary-list",component:BeneficiaryListComponent
+          },
+          {
+            path:"beneficiarybank-create",component:BeneficiarybankCreateComponent
+          },
+          {
+            path:"beneficiarybank-list",component:BeneficiaryBankListComponent
+          },{
+                        path:"applicantbank-create",component:ApplicantbankCreateComponent
+
+          },
+          {
+                        path:"applicantbank-list",component:ApplicantbankListComponent
+
+          },
           { path: 'all-pi', component: AllPiComponent },
           { path: 'delivered-pi', component: DeliveredPiComponent },
           { path: 'all-cash-receive', component: AllCashReceiveComponent },
@@ -192,7 +225,7 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'unapproved-pi', component: UnApprovePiComponent },
           { path: 'partialapproved-pi', component: PartialApprovePiComponent },
           { path: 'quarterapproved-pi', component: QuarterApprovePiComponent },
-          { path: 'fullapproved-pi', component: FullApprovePiComponent },
+          { path: 'fullapproved-pi', component: FullApprovePiComponent }
         ]
       }
     ]),

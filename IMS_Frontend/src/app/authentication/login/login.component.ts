@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import swal from 'sweetalert2';
-import{ Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { LoginServiceService } from '../../services/authentication/Login-service.service';
 import { GlobalServiceService } from '../../services/Global-service.service';
 import {
@@ -22,9 +22,11 @@ export class LoginComponent implements OnInit {
   companyId: any;
   LoginForm!: FormGroup;
   isSubmit = false;
-  comLogoPath="";
-  comImagePath="";
-  constructor(private router: Router,private service: LoginServiceService, private fb: FormBuilder,private gs:GlobalServiceService,private ms:MasterEntryService) {
+  comLogoPath = "";
+  comImagePath = "";
+  currentTime: string = '';
+  private timerInterval: any;
+  constructor(private router: Router, private service: LoginServiceService, private fb: FormBuilder, private gs: GlobalServiceService, private ms: MasterEntryService) {
     gs.ClearSession();
   }
 
@@ -34,14 +36,30 @@ export class LoginComponent implements OnInit {
       password: ['', [Validators.required]],
     });
     this.GetBasicData('');
+    this.startTimer();
+  }
+  startTimer() {
+    this.updateTime();
+    this.timerInterval = setInterval(() => {
+      this.updateTime();
+    }, 1000);
+  }
+  updateTime() {
+    const now = new Date();
+    this.currentTime = now.toLocaleTimeString('en-GB');
+  }
+  ngOnDestroy(): void {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+    }
   }
 
-  GetBasicData(comId:string) {
+  GetBasicData(comId: string) {
     this.service.GetBasicData().subscribe((res) => {
-      if (comId=='') {
+      if (comId == '') {
         this.companyList = JSON.parse(res.companylist);
-        this.comLogoPath=this.gs.baseUrl+this.companyList[0].ComLogo;
-        this.comImagePath=this.gs.baseUrl+this.companyList[0].ComImage;
+        this.comLogoPath = this.gs.baseUrl + this.companyList[0].ComLogo;
+        this.comImagePath = this.gs.baseUrl + this.companyList[0].ComImage;
       }
       //this.fiscalYears = JSON.parse(res.fiscalyearlist);
     });
@@ -56,7 +74,7 @@ export class LoginComponent implements OnInit {
     this.service.UserLogin(this.LoginForm.value).subscribe((res) => {
       if (res.isAuthorized) {
         // let company = this.companyList.filter((x: { ComId: any; })=> x.ComId == this.LoginForm.controls.comId.value);
-         window.localStorage.setItem('token', res.token);
+        window.localStorage.setItem('token', res.token);
         // debugger;
         window.localStorage.setItem('userName', res.userName);
         window.localStorage.setItem('companyId', res.companyId);
@@ -66,31 +84,31 @@ export class LoginComponent implements OnInit {
         var menu = "";
         var menuWithButtonPermission = "";
         var ProcedureData = {
-              procedureName: 'usp_GetMenuTree_By_Role',
-              parameters: {
-                "Role_id":res.role_Id
-              }
-            }; 
-        
-            this.ms.GetInitialData(ProcedureData).subscribe({
-              next: (results) => {
-                if (results.status) {
-                  menu = JSON.parse(results.data).Tables2;
-                  menuWithButtonPermission = JSON.parse(results.data).Tables1;
-                  window.localStorage.setItem('UserMenu', JSON.stringify(menu));  
-                  window.localStorage.setItem('UserMenuWithPermission', JSON.stringify(menuWithButtonPermission)); 
-                  this.router.navigate(['/dashboard']).then(() => {
-                    window.location.reload();
-                  });      
-                } else if (results.msg == 'Invalid Token') {
-                  swal.fire('Session Expierd!', 'Please Login Again.', 'info');
-                  this.gs.Logout();
-                } else {}
-              },
-              error: (err) => {},
-            });
+          procedureName: 'usp_GetMenuTree_By_Role',
+          parameters: {
+            "Role_id": res.role_Id
+          }
+        };
 
-        
+        this.ms.GetInitialData(ProcedureData).subscribe({
+          next: (results) => {
+            if (results.status) {
+              menu = JSON.parse(results.data).Tables2;
+              menuWithButtonPermission = JSON.parse(results.data).Tables1;
+              window.localStorage.setItem('UserMenu', JSON.stringify(menu));
+              window.localStorage.setItem('UserMenuWithPermission', JSON.stringify(menuWithButtonPermission));
+              this.router.navigate(['/dashboard']).then(() => {
+                window.location.reload();
+              });
+            } else if (results.msg == 'Invalid Token') {
+              swal.fire('Session Expierd!', 'Please Login Again.', 'info');
+              this.gs.Logout();
+            } else { }
+          },
+          error: (err) => { },
+        });
+
+
       } else {
         swal.fire(res.msg, 'Wrong password', 'error');
 

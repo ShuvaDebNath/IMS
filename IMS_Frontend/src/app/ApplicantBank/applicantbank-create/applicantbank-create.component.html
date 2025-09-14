@@ -1,0 +1,42 @@
+<div class="container form-container my-4">
+  <div class="card shadow-sm">
+    <div class="card-header d-flex align-items-center theme-text">
+      <h3 class="fw-bold">{{ !isEdit ? 'Create New Applicant Bank' : 'Edit Applicant Bank' }}</h3>
+    </div>
+
+    <div class="card-body">
+      <form [formGroup]="Formgroup">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label required-field">Bank Code</label>
+            <input formControlName="BankCode" class="form-control" />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label required-field">Bank Name</label>
+            <input formControlName="BankName" class="form-control" />
+          </div>
+
+          <div class="col-md-12">
+            <label class="form-label">Details</label>
+            <textarea formControlName="Details" class="form-control" rows="3"></textarea>
+          </div>
+        </div>
+      </form>
+
+      <div class="d-flex justify-content-end gap-2 mt-4">
+        <button routerLink="/applicantbank-list" class="btn btn-danger" type="button">
+          Cancel
+        </button>
+
+        <button *ngIf="!isEdit" class="btn theme-btn-add" type="button" (click)="saveData()" [disabled]="Formgroup.invalid">
+          <i class="fas fa-save me-2"></i> Save
+        </button>
+
+        <button *ngIf="isEdit" class="btn theme-btn-edit" type="button" (click)="updateData()" [disabled]="Formgroup.invalid">
+          <i class="fas fa-sync-alt me-2"></i> Update
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
