@@ -1,0 +1,159 @@
+<div class="row d-flex justify-content-center">
+  <div class="col-md-6">
+    <div class="card card-default">
+      <div class="content-heading" style="border-bottom: 1px solid rgba(0,0,0,.125) !important;">
+          <div class="row">
+            <div class="col-6">
+              <h2 class="p-2"></h2>
+            </div>
+          </div>
+          <h2 class="p-2 font-weight-bold">{{!isEdit?'Add':'Edit'}}&nbsp;Generate Customer</h2>
+      </div>
+      <div class="card-body">
+        <form name="newForm" [formGroup]="Formgroup" role="form">
+          <div class="row">
+            <div class="col-md-6">
+                <label class="control-label" for="inlineFormInputGroup">Company Name</label>
+                <div class="form-group d-inline">
+                    <input autocomplete="off" type="text"                  
+                    formControlName="Company_Name"
+                    class="form-control"
+                    placeholder="Company Name" id="Company_Name" Company_Name="Company_Name" value="">
+                    </div>
+            </div>
+            <div class="col-md-6">
+                <label class="control-label" for="inlineFormInputGroup">Designation</label>
+                <div class="form-group d-inline">
+                    <input autocomplete="off" type="text"                  
+                    formControlName="Contact_Title"
+                    class="form-control"
+                    placeholder="Designation" id="Contact_Title" Company_Name="Contact_Title" value="">
+                    </div>
+            </div>
+            <div class="col-md-6">
+                <label class="control-label" for="inlineFormInputGroup">Customer Address</label>
+                <div class="form-group d-inline">
+                    <input autocomplete="off" type="text"                  
+                    formControlName="Customer_Address"
+                    class="form-control"
+                    placeholder="Customer Address" id="Customer_Address" name="Customer_Address" value="">
+                    </div>
+            </div>
+            <div class="col-md-6">
+                <label class="control-label" for="inlineFormInputGroup">Phone Number</label>
+                <div class="form-group d-inline">
+                    <input autocomplete="off" type="text"                  
+                    formControlName="Phone_No"
+                    class="form-control"
+                    placeholder="Phone Number" id="Phone_No" name="Phone_No" value="">
+                    </div>
+            </div>
+            <div class="col-md-6">
+                <label class="control-label" for="inlineFormInputGroup">Company Info</label>
+                <div class="form-group d-inline">
+                    <input autocomplete="off" type="text"                  
+                    formControlName="Company_Info"
+                    class="form-control"
+                    placeholder="Company Info" id="Company_Info" name="Company_Info" value="">
+                    </div>
+            </div>
+            <div class="col-md-6">
+                <label class="control-label" for="inlineFormInputGroup">Fax Number</label>
+                <div class="form-group d-inline">
+                    <input autocomplete="off" type="text"                  
+                    formControlName="FAX_No"
+                    class="form-control"
+                    placeholder="Fax Number" id="FAX_No" name="FAX_No" value="">
+                    </div>
+            </div>
+            
+            <div class="col-md-6">
+                <label class="control-label" for="inlineFormInputGroup">Contact Person</label>
+                <div class="form-group d-inline">
+                    <input autocomplete="off" type="text"                  
+                    formControlName="Contact_Name"
+                    class="form-control"
+                    placeholder="Contact Name" id="Contact_Name" Company_Name="Contact_Name" value="">
+                    </div>
+            </div>
+            
+            <div class="col-md-6">
+                <label class="control-label" for="inlineFormInputGroup">E-Mail Address</label>
+                <div class="form-group d-inline">
+                    <input autocomplete="off" type="text"                  
+                    formControlName="Email"
+                    class="form-control"
+                    placeholder="Email" id="Email" Company_Name="Email" value="">
+                    </div>
+            </div>
+            <div class="col-md-6">
+                <label class="control-label" for="inlineFormInputGroup">City</label>
+                <div class="form-group d-inline">
+                    <input autocomplete="off" type="text"                  
+                    formControlName="City"
+                    class="form-control"
+                    placeholder="City" id="City" name="City" value="">
+                    </div>
+            </div>
+            <div class="col-md-6">
+                <label class="control-label" for="inlineFormInputGroup">Notes</label>
+                <div class="form-group d-inline">
+                    <input autocomplete="off" type="text"                  
+                    formControlName="Notes"
+                    class="form-control"
+                    placeholder="Notes" id="Notes" name="Notes" value="">
+                    </div>
+            </div>
+            <div class="col-md-6">
+                <label class="control-label" for="inlineFormInputGroup">Postal Code</label>
+                <div class="form-group d-inline">
+                    <input autocomplete="off" type="text"                  
+                    formControlName="Postal_Code"
+                    class="form-control"
+                    placeholder="Postal Code" id="Postal_Code" name="Postal_Code" value="">
+                    </div>
+            </div>
+            <div class="col-md-6">
+                <label>Group Head <span>*</span></label>
+                <p-dropdown [style]="{'width':'100%'}"  class="p-0" [options]="UserList"  optionLabel="UserName" [filter]="true" filterBy="UserName" [showClear]="true" styleClass="listBottom" placeholder="Please Select" optionValue="User_Id" formControlName="Superior_ID">
+                <ng-template let-AB pTemplate="item">
+                        <div class="flex align-items-center gap-2">  
+                            <div>{{ AB.UserName }}</div>
+                        </div>
+                    </ng-template>
+                </p-dropdown> 
+            </div>
+            <div class="col-md-6">
+                <label>Group Head <span>*</span></label>
+                <p-dropdown [style]="{'width':'100%'}"  class="p-0" [options]="CountryList"  optionLabel="Country" [filter]="true" filterBy="Country" [showClear]="true" styleClass="listBottom" placeholder="Please Select" optionValue="Country_ID" formControlName="Country_ID">
+                <ng-template let-AB pTemplate="item">
+                        <div class="flex align-items-center gap-2">  
+                            <div>{{ AB.Country }}</div>
+                        </div>
+                    </ng-template>
+                </p-dropdown> 
+            </div>
+            <div class="col-md-6">
+                <p-checkbox formControlName="IsAvailable" [binary]="true" label="Is Available"></p-checkbox>
+            </div>
+            </div>
+        </form>
+        <div class="flexbox mt-5">
+          <!-- <button [routerLink]="['/all-']" class="btn btn-w-xl text-white btn-outline-danger bg-gradient-danger" type="button"
+            >
+            Cancel
+          </button> -->
+          <button  class="btn btn-w-xl text-white btn-outline-success bg-gradient-success px-5 float-right" type="button" (click)="saveData()"
+            [disabled]="Formgroup.invalid" [hidden]="isEdit">
+            Save
+          </button>
+          <button [hidden]="!isEdit" class="btn btn-w-xl text-white btn-outline-success bg-gradient-success px-5 float-right" type="button" (click)="updateData()"
+            [disabled]="Formgroup.invalid">
+            Update
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

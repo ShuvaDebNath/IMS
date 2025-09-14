@@ -24,6 +24,9 @@ import { TableModule } from 'primeng/table';
 import { GenerateSalesContractComponent } from './sales-contract/generate-sales-contract/generate-sales-contract.component';
 import { AllSalesContractComponent } from './sales-contract/all-sales-contract/all-sales-contract.component';
 import { SalesContractDetailsComponent } from './sales-contract/sales-contract-details/sales-contract-details.component';
+import { UnapprovedBuyingHouseComponent } from './buying-house/unapproved-buying-house/unapproved-buying-house.component';
+import { AllBuyingHouseComponent } from './buying-house/all-buying-house/all-buying-house.component';
+import { GenerateBuyingHouseComponent } from './buying-house/generate-buying-house/generate-buying-house.component';
 
 
 

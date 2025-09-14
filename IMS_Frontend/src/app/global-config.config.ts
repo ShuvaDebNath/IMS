@@ -9,10 +9,10 @@ export class GlobalConfig {
     public static BASE_URL = 'http://localhost:5077/api/';
  public static BASE_URL_REPORT = 'http://localhost:5077/';
 
-  // public static BASE_URL_USERMANAGE = 'http://163.47.146.42:8092/DB/api/';
-  //  public static LOGIN_URL_USERMANAGE = 'http://163.47.146.42:8092/login';
-  //  public static BASE_URL = 'http://163.47.146.42:9001/DB/api/';
-  //  public static BASE_URL_REPORT = 'http://163.47.146.42:9001/DB/';
+  // public static BASE_URL_USERMANAGE = 'http://119.18.147.187:5077/DB/api/';
+  //  public static LOGIN_URL_USERMANAGE = 'http://119.18.147.187:5077/DB/login';
+  //  public static BASE_URL = 'http://119.18.147.187:5077/DB/api/';
+  //  public static BASE_URL_REPORT = 'http://119.18.147.187:5077/DB/';
 
 
   public static USER_NAME = '';
