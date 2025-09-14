@@ -31,7 +31,7 @@ export class DdlLazyloadingService {
     this.token = gs.getSessionData('token');
   }
   public GetCountryDDLLazyLoad(first: number|undefined, rows: number|undefined, filter: string = '') {
-    console.log('asdfsdf');
+    
     var model=new GetDataModel();
     model.procedureName="GetCountryLazyLoad";
     model.parameters={first:first,rows:rows,filter:filter};

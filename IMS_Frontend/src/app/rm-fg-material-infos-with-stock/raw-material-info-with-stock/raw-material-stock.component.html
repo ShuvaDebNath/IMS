@@ -1,0 +1,211 @@
+<div class="container">
+    <h1>Raw Material Info with Stock</h1>
+    <p-table #table [value]="rawMaterialItems" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        [rowsPerPageOptions]="[10,20,50]" [globalFilterFields]="['Article_No','Color','Measurement','Unit','Weight','StockQuantity','RollQuantity','BagQuantity']"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+
+        <ng-template pTemplate="caption">
+            <div class="flex justify-content-between align-items-center">
+                <button pButton type="button" icon="pi pi-filter-slash" label="Clear" (click)="table.clear()">
+                </button>
+
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="table.filterGlobal($any($event.target).value, 'contains')"
+                        placeholder="Global Search" />
+                </span>
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="text-align: center;">Serial No</th>
+                <th pSortableColumn="Article_No">Article No <p-sortIcon field="Article_No"></p-sortIcon>
+                    <p-columnFilter type="text" field="Article_No" display="Article_No"></p-columnFilter>
+                </th>
+                <th pSortableColumn="Color">Color <p-sortIcon field="Color"></p-sortIcon>
+                    <p-columnFilter type="text" field="Color" display="Color"></p-columnFilter>
+                </th>
+                <th pSortableColumn="Width">Width <p-sortIcon field="Width"></p-sortIcon>
+                    <p-columnFilter type="text" field="Width" display="Width"></p-columnFilter>
+                </th>
+                <th pSortableColumn="Unit">Unit <p-sortIcon field="Unit"></p-sortIcon>
+                    <p-columnFilter type="text" field="Unit" display="Unit"></p-columnFilter>
+                </th>
+                <th pSortableColumn="Weight">Weight <p-sortIcon field="Weight"></p-sortIcon>
+                    <p-columnFilter type="text" field="Weight" display="Weight"></p-columnFilter>
+                </th>
+                <th pSortableColumn="StockQuantity">Stock <p-sortIcon field="StockQuantity"></p-sortIcon>
+                    <p-columnFilter type="numeric" field="StockQuantity" display="StockQuantity"></p-columnFilter>
+                </th>
+                <th pSortableColumn="RollQuantity">Roll <p-sortIcon field="RollQuantity"></p-sortIcon>
+                    <p-columnFilter type="numeric" field="RollQuantity" display="RollQuantity"></p-columnFilter>
+                </th>
+                <th pSortableColumn="BagQuantity">Bag <p-sortIcon field="BagQuantity"></p-sortIcon>
+                    <p-columnFilter type="numeric" field="BagQuantity" display="BagQuantity"></p-columnFilter>
+                </th>
+                <th style="text-align: center;">Action</th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row let-i="rowIndex">
+            <tr>
+                <td style="text-align: center;">{{ i + 1 }}</td>
+                <td>{{ row.Article_No }}</td>
+                <td>{{ row.Color }}</td>
+                <td>{{ row.Measurement }}</td>
+                <td>{{ row.Unit }}</td>
+                <td>{{ row.Weight }}</td>
+                <td>{{ row.StockQuantity }}</td>
+                <td>{{ row.RollQuantity }}</td>
+                <td>{{ row.BagQuantity }}</td>
+                <td style="text-align: center;">
+                    <!-- Stock In -->
+                    <p-button icon="pi pi-plus" styleClass="p-button-success p-button-sm me-2"
+                        (onClick)="onStockIn(row)">
+                    </p-button>
+
+                    <!-- Stock Out -->
+                    <p-button icon="pi pi-minus" styleClass="p-button-danger p-button-sm" (onClick)="onStockOut(row)">
+                    </p-button>
+
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="6">No data found.</td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+
+        <p-dialog header="Stock In RM" [(visible)]="isStockInVisible" [modal]="true" [closable]="true"
+            [style]="{ width: '40vw' }" (onHide)="isStockInVisible = false" styleClass="wide-dialog">
+            <form>
+                <div class="form-group row mb-2">
+                    <label class="col-sm-3 col-form-label">Article No</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" [value]="selectedRow?.Article_No" readonly />
+                    </div>
+                </div>
+                <div class="form-group row mb-2">
+                    <label class="col-sm-3 col-form-label">Color</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" [value]="selectedRow?.Color" readonly />
+                    </div>
+                </div>
+                <div class="form-group row mb-2">
+                    <label class="col-sm-3 col-form-label">Width</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" [value]="selectedRow?.Measurement" readonly />
+                    </div>
+                </div>
+                <div class="form-group row mb-2">
+                    <label class="col-sm-3 col-form-label">Unit</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" [value]="selectedRow?.Unit" readonly />
+                    </div>
+                </div>
+                <div class="form-group row mb-2">
+                    <label class="col-sm-3 col-form-label">Weight</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" [value]="selectedRow?.Weight" readonly />
+                    </div>
+                </div>
+                <div class="form-group row mb-2">
+                    <label class="col-sm-3 col-form-label">Quantity</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="number" [(ngModel)]="stockInForm.Stock_In" name="Quantity" />
+                    </div>
+                </div>
+                <div class="form-group row mb-2">
+                    <label class="col-sm-3 col-form-label">Roll</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="number" [(ngModel)]="stockInForm.Roll_In" name="Roll" />
+                    </div>
+                </div>
+                <div class="form-group row mb-2">
+                    <label class="col-sm-3 col-form-label">Bag</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="number" [(ngModel)]="stockInForm.Bag_In" name="Bag" />
+                    </div>
+                </div>
+                <div class="form-group row mb-2">
+                    <label class="col-sm-3 col-form-label">Note</label>
+                    <div class="col-sm-9">
+                        <textarea class="form-control" rows="2" [(ngModel)]="stockInForm.Note" name="Note"></textarea>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-secondary" (click)="isStockInVisible = false">&#10006; Close</button>
+                    <button type="button" class="btn btn-success" (click)="onSaveStockIn()">&#10004; Save</button>
+                </div>
+            </form>
+        </p-dialog>
+
+         <p-dialog header="Stock Out RM" [(visible)]="isStockOutVisible" [modal]="true" [closable]="true"
+            [style]="{ width: '40vw' }" (onHide)="isStockOutVisible = false" styleClass="wide-dialog">
+            <form>
+                <div class="form-group row mb-2">
+                    <label class="col-sm-3 col-form-label">Article No</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" [value]="selectedRow?.Article_No" readonly />
+                    </div>
+                </div>
+                <div class="form-group row mb-2">
+                    <label class="col-sm-3 col-form-label">Color</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" [value]="selectedRow?.Color" readonly />
+                    </div>
+                </div>
+                <div class="form-group row mb-2">
+                    <label class="col-sm-3 col-form-label">Width</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" [value]="selectedRow?.Measurement" readonly />
+                    </div>
+                </div>
+                <div class="form-group row mb-2">
+                    <label class="col-sm-3 col-form-label">Unit</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" [value]="selectedRow?.Unit" readonly />
+                    </div>
+                </div>
+                <div class="form-group row mb-2">
+                    <label class="col-sm-3 col-form-label">Weight</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" [value]="selectedRow?.Weight" readonly />
+                    </div>
+                </div>
+                <div class="form-group row mb-2">
+                    <label class="col-sm-3 col-form-label">Quantity</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="number" [(ngModel)]="stockOutForm.Stock_Out" name="Quantity" />
+                    </div>
+                </div>
+                <div class="form-group row mb-2">
+                    <label class="col-sm-3 col-form-label">Roll</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="number" [(ngModel)]="stockOutForm.Roll_Out" name="Roll" />
+                    </div>
+                </div>
+                <div class="form-group row mb-2">
+                    <label class="col-sm-3 col-form-label">Bag</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="number" [(ngModel)]="stockOutForm.Bag_Out" name="Bag" />
+                    </div>
+                </div>
+                <div class="form-group row mb-2">
+                    <label class="col-sm-3 col-form-label">Note</label>
+                    <div class="col-sm-9">
+                        <textarea class="form-control" rows="2" [(ngModel)]="stockOutForm.Note" name="Note"></textarea>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-secondary" (click)="isStockOutVisible = false">&#10006; Close</button>
+                    <button type="button" class="btn btn-success" (click)="onSaveStockOut()">&#10004; Save</button>
+                </div>
+            </form>
+        </p-dialog>
+</div>

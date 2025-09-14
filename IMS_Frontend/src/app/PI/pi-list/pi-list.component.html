@@ -1,0 +1,341 @@
+
+  <div class="card">
+    <div class="card-header sticky-header">
+      <h3 class="card-title mb-0">
+        <strong>{{PageTitle}}</strong>
+      </h3>
+      <div class="float-right">
+        <div class="btn-group" role="group" aria-label="Basic example">
+          
+          <button *ngIf="ShowbtnPar" (click)="getSelectedRows('Partial Approved')" type="button" class="btn btn-success mr-2"><i class="fas fa-check"></i>&nbsp;Approve Partially</button>
+          <button *ngIf="ShowbtnQar" (click)="getSelectedRows('Quartar Approved')" type="button" class="btn btn-primary mr-2"><i class="fas fa-check"></i>&nbsp;Approve Quarterly</button>
+          <button *ngIf="ShowbtnFull" (click)="getSelectedRows('Full Approved')" type="button" class="btn btn-warning mr-2"><i class="fas fa-check"></i>&nbsp;Approve Full</button>
+          <button *ngIf="ShowbtnRej" (click)="getSelectedRows('Rejected')" type="button" class="btn btn-danger mr-2"><i class="fas fa-times"></i>&nbsp;Reject</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="card-body">
+    <form id="Search" [formGroup]="SearchFormgroup" forle="form">
+      
+      <fieldset class="border p-3">
+        <legend class="w-auto px-2">Search</legend>
+        <p-divider />
+        <div class="form-row align-items-center">
+          <div class="col-auto mb-2">
+              <label class="">Cash or LC </label>            
+              <p-dropdown 
+                formControlName="PIType"
+                [options]="PITypeList"  [showClear]="true"              
+                optionLabel="text" 
+                optionValue="value" 
+                [style]="{width: '100%'}"
+                placeholder="Select a type" 
+              />
+          </div>
+          <div class="col-auto mb-2">
+            <label class="control-label" for="inlineFormInputGroup">From Date</label>
+            <div class="input-group">
+              <div class="input-group-sm input-group-prepend">
+                <div class="input-group-text" (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
+              </div>
+              <input type="text" 
+                autocomplete="off" 
+                placement="right" 
+                formControlName="FromDate"
+                [bsConfig]="{
+                dateInputFormat: 'DD/MM/YYYY',
+                containerClass: 'theme-green'
+              }" class="form-control-sm form-control bg-white" id="fromdate" name="fromdate" placeholder="From Date" 
+                #dpfrom="bsDatepicker" bsDatepicker/>
+            </div>
+          </div>
+
+          <div class="col-auto mb-2">
+            <label class="control-label" for="inlineFormInputGroup">To Date</label>
+            <div class="input-group">
+              <div class="input-group-sm input-group-prepend">
+                <div class="input-group-text" (click)="dpto.toggle()"><i class="fas fa-calendar"></i></div>
+              </div>
+              <input type="text" 
+                autocomplete="off" 
+                placement="right" 
+                formControlName="ToDate"
+                [bsConfig]="{
+                dateInputFormat: 'DD/MM/YYYY',
+                containerClass: 'theme-green'
+                
+              }" class="form-control-sm form-control bg-white" id="todate" name="todate" placeholder="To Date"
+                #dpto="bsDatepicker" bsDatepicker />
+            </div>
+          </div>
+        
+          <div class="col-auto mb-2">
+              <label for="PINo" class="">PI No </label>
+              <input autocomplete="off" type="text"
+              formControlName="PINo"
+              class="form-control form-control-sm"
+              placeholder="PI No" id="PINo" name="PINo" value="">
+              
+          </div>
+
+          <div class="col-auto mb-2">
+              <label for="Shipper" class="">Shipper </label>
+              <input autocomplete="off" type="text"
+              formControlName="Shipper"
+              class="form-control form-control-sm"
+              placeholder="Shipper" id="Shipper" name="Shipper" value="">
+          </div>
+
+          <div class="col-auto mb-2">
+              <label for="Consignee" class="">Consignee </label>
+              <input autocomplete="off" type="text"
+              formControlName="Consignee"
+              class="form-control form-control-sm"
+              placeholder="Consignee" id="Consignee" name="Consignee" value="">
+          </div>
+          <div class="col-auto mb-2">
+              <label for="GeneBy" class="">Genereted By </label>
+              <input autocomplete="off" type="text"
+              formControlName="CreateBY"
+              class="form-control form-control-sm"
+              placeholder="Genereted By" id="GeneBy" name="GeneBy" value="">
+          </div>
+
+          <div class="col-auto mt-auto mb-2">
+            <button title="Search" type="button" (click)="LoadTableData()"
+              class="btn btn-sm btn-outline-primary bg-gradient-primary">
+              <i class="fas fa-search"></i>&nbsp;Search</button>
+          </div>
+        </div>
+      </fieldset>
+
+      </form>
+      
+        <form >
+        <p-divider />
+        <p-table #table [value]="DataTable" 
+        [paginator]="DataTable.length>0" [rows]="10"  [lazy]="true" 
+        [totalRecords]="totalRecords" [showCurrentPageReport]="DataTable.length>0"        
+        [(selection)]="selectedRows"
+        dataKey="PI_Master_ID"
+        (onLazyLoad)="ReloadTable($event)"
+        [rowsPerPageOptions]="[10,20,50,100,totalRecords]"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+
+        <ng-template pTemplate="header">
+            <tr>
+                <th *ngIf="PiStatus!='Full Approved'" style="width: 4rem"><p-tableHeaderCheckbox /></th>
+                <th style="text-align: center;">Serial No</th>
+                <th pSortableColumn="PINo">PI No</th>
+                <th pSortableColumn="PIDate">Date</th>
+                <th pSortableColumn="BeneficiaryCompanyName">Shippeer</th>
+                <th pSortableColumn="CustomerName">Consignee</th>
+                <th pSortableColumn="CreatedByUserName">Generated By</th>
+                <th style="text-align: center;">Action</th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row let-i="rowIndex">
+            <tr>
+                <td *ngIf="PiStatus!='Full Approved'">
+                  <p-tableCheckbox [value]="row"/>
+                </td>
+                <td style="text-align: center;">{{ i + 1 }}</td>
+                <td>{{ row.PINo }}</td>
+                <td>{{ row.PIDate | date:'dd-MM-yyyy'}}</td>
+                <td>{{ row.BeneficiaryCompanyName }}</td>
+                <td>{{ row.CustomerName }}</td>
+                <td>{{ row.CreatedByUserName }}</td>
+                <td style="text-align: center;">  
+                    <p-button icon="pi pi-eye" styleClass="p-button-primary" size="small" (onClick)="ViewDetails(row.PI_Master_ID)" pTooltip="View Details" tooltipPosition="bottom"></p-button>
+                    <p-button *ngIf="ShowbtnSpecial" icon="pi pi-check" styleClass="p-button-success" size="small" (onClick)="OpenSpecialApprove(row.PI_Master_ID)" pTooltip="Special Approval" tooltipPosition="bottom"></p-button>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="6">No data found.</td>
+            </tr>
+        </ng-template>
+
+        </p-table>
+        </form>
+    </div>
+  </div>
+
+
+        <p-dialog header="Details" [(visible)]="isViewDetails" [modal]="true" [closable]="true"
+            [style]="{ width: '50rem' }" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" 
+            [style]="{width: '100vw', height: '100vh', top: '0', left: '0'}"
+            [contentStyle]="{'height':'calc(100vh - 100px)'}"
+            [maximizable]="true" (onHide)="isViewDetails = false" styleClass="wide-dialog">
+            <form>
+
+              <div class="card card-primary">
+                <div class="card-header m-0 p-2 sticky-header">
+                  <div class="float-left">
+                    <h5>{{PIData?.PINo}}</h5>
+                    <span>{{PIData?.PIDate | date:'dd/MM/yyyy HH:mm:ss'}}</span>
+                  </div>
+                  
+                        <div class="float-right">
+                          <div class="btn-group" role="group" aria-label="Basic example">
+                            <button type="button" class="btn btn-outline-success bg-gradient-warning  btn-sm mr-2">PI Log</button>
+                            <button type="button" class="btn btn-outline-success bg-gradient-warning btn-sm mr-2">PI Detail Log</button>
+                            <button type="button" class="btn btn-outline-success bg-gradient-success btn-sm mr-2"><i class="fas fa-file-excel"></i>&nbsp;Excel</button>
+                            <button type="button" class="btn btn-outline-success bg-gradient-warning btn-sm mr-2"><i class="fas fa-file-pdf"></i>&nbsp;PDF</button>
+                            <button type="button" class="btn btn-outline-success bg-gradient-success btn-sm mr-2">Delivery Detail</button>
+                          </div>
+                        </div>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="row">
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Consignee Initial</strong></div>
+                        <div class="col-md-8 mt-2">{{PIData?.Consignee_Initial}}</div>
+
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Shipper</strong></div>
+                        <div class="col-md-8 mt-2">{{PIData?.BeneficiaryCompanyName}}</div>
+
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Beneficiary Bank</strong></div>
+                        <div class="col-md-8 mt-2">{{PIData?.BeneficiaryBankName}}</div>
+
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Consignee</strong></div>
+                        <div class="col-md-8 mt-2">{{PIData?.CustomerName}}</div>
+
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Applicant Bank</strong></div>
+                        <div class="col-md-8 mt-2">{{PIData?.CustomerBankName}}</div>
+
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Buyer Name</strong></div>
+                        <div class="col-md-8 mt-2">{{PIData?.BuyerName}}</div>
+
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Country Of Origin</strong></div>
+                        <div class="col-md-8 mt-2">{{PIData?.CountryOfOriginName}}</div>
+
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Delivery Details</strong></div>
+                        <div class="col-md-8 mt-2">{{PIData?.Delivery}}</div>
+
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Terms of Delivery</strong></div>
+                        <div class="col-md-8 mt-2">{{PIData?.TermsOfDeliveryName}}</div>
+
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Force Majeure</strong></div>
+                        <div class="col-md-8 mt-2">{{PIData?.ForceMajeureName}}</div>
+
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Loading Mode</strong></div>
+                        <div class="col-md-8 mt-2">{{PIData?.LoadingModeName}}</div>
+
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Contact Person</strong></div>
+                        <div class="col-md-8 mt-2">{{PIData?.Contact_Person}}</div>
+
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Packing Mode</strong></div>
+                        <div class="col-md-8 mt-2">{{PIData?.PackingName}}</div>
+
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Expire Date</strong></div>
+                        <div class="col-md-8 mt-2">{{PIData?.ExpireDate|date:'dd/MM/yyyy HH:mm:ss'}}</div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="row">
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Arbitration</strong></div>
+                        <div class="col-md-8 mt-2">{{PIData?.ArbitrationName}}</div>
+
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Remarks</strong></div>
+                        <div class="col-md-8 mt-2">{{PIData?.Remarks}}</div>
+
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Style</strong></div>
+                        <div class="col-md-8 mt-2">{{PIData?.Style}}</div>
+
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Payment Terms</strong></div>
+                        <div class="col-md-8 mt-2">{{PIData?.PaymentTermName}}</div>
+
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Price Term</strong></div>
+                        <div class="col-md-8 mt-2">{{PIData?.PriceTermName}}</div>
+
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Partial Shipment</strong></div>
+                        <div class="col-md-8 mt-2">{{PIData?.ShipmentName}}</div>
+
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Delivery Address</strong></div>
+                        <div class="col-md-8 mt-2">{{PIData?.Delivery_Address}}</div>
+
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Documents</strong></div>
+                        <div class="col-md-8 mt-2">{{PIData?.Documents}}</div>
+
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Goods Description</strong></div>
+                        <div class="col-md-8 mt-2">{{PIData?.GoodsDescription}}</div>
+
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Shipping Marks</strong></div>
+                        <div class="col-md-8 mt-2">{{PIData?.ShippingMarks}}</div>
+
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Loading Port</strong></div>
+                        <div class="col-md-8 mt-2">{{PIData?.Loading_Port}}</div>
+
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Destination Port</strong></div>
+                        <div class="col-md-8 mt-2">{{PIData?.Destination_Port}}</div>
+
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Created By</strong></div>
+                        <div class="col-md-8 mt-2">{{PIData?.CreatedByUserName}}</div>
+
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Superior</strong></div>
+                        <div class="col-md-8 mt-2">{{PIData?.SuperiorName}}</div>
+
+                        <div class="col-md-4 mt-2 text-right content-middle"><strong>Status</strong></div>
+                        <div class="col-md-8 mt-2"><span class="text-danger"><strong>{{PIData?.Status | uppercase}}</strong></span></div>
+                      </div>
+                    </div>
+                  </div>
+                  <p-divider />
+                    <div class="table-responsive">
+                      <table class="table table-striped table-bordered  table-hover">
+                        
+                            <tr class="bg-gradient-success">
+                                <th class="text-center align-middle" >Article</th>
+                                <th class="text-center align-middle">A. A.</th>
+                                <th class="text-center align-middle">Description</th>
+                                <th class="text-center align-middle">Width</th>
+                                <th class="text-center align-middle">Color</th>
+                                <th class="text-center align-middle">Packaging</th>
+                                <th class="text-center align-middle">Qty</th>
+                                <th class="text-center align-middle">Unit</th>
+                                <th class="text-center align-middle">Unit Price ({{PIData?.IsMPI==false?'USD':'BDT'}})</th>
+                                <th class="text-center align-middle">Total Amount ({{PIData?.IsMPI==false?'USD':'BDT'}})</th>
+                                <th class="text-center align-middle">Prod. Cost Unit</th>
+                                <th class="text-center align-middle">Total Prod. Cost</th>
+                                <th class="text-center align-middle">Delivered</th>
+                            </tr>
+                       
+                            <tr *ngFor="let item of PIDetails">
+                                <td>{{ item.Article }}</td>
+                                <td>{{ item.ArticleNo_from_StaticInfo }}</td>
+                                <td>{{ item.Description }}</td>
+                                <td>{{ item.Width }}</td>
+                                <td>{{ item.Color }}</td>
+                                <td>{{ item.Packaging }}</td>
+                                <td>{{ item.Quantity }}</td>
+                                <td>{{ item.Unit }}</td>
+                                <td>{{ item.Unit_Price }}</td>
+                                <td>{{PIData?.IsMPI==false?item.Total_Amount:item.Total_Amount_Tk}}</td>
+                                <td>{{ item.CommissionUnit }}</td>
+                                <td>{{ item.TotalCommission }}</td>
+                                <td>{{ item.Delivered_Quantity }}</td>
+                                
+                                
+                            </tr>
+                       
+                      </table>
+                    </div>
+
+                </div>
+                <div class="card-footer m-0 p-2">
+                  <div class="float-left">
+                    <span><strong>{{PIData?.AmountInWord}}</strong></span>
+                  </div>
+                </div>
+              </div>
+
+                
+                
+            </form>
+        </p-dialog>

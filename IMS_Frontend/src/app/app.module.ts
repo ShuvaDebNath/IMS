@@ -28,6 +28,10 @@ import { BeneficiarybankCreateComponent } from './BeneficiaryBank/beneficiaryban
 import { BeneficiaryBankListComponent } from './BeneficiaryBank/beneficiary-bank-list/beneficiary-bank-list.component';
 import { ApplicantbankCreateComponent } from './ApplicantBank/applicantbank-create/applicantbank-create.component';
 import { ApplicantbankListComponent } from './ApplicantBank/applicantbank-list/applicantbank-list.component';
+import { TableModule } from 'primeng/table';
+import { GenerateSalesContractComponent } from './sales-contract/generate-sales-contract/generate-sales-contract.component';
+import { AllSalesContractComponent } from './sales-contract/all-sales-contract/all-sales-contract.component';
+import { SalesContractDetailsComponent } from './sales-contract/sales-contract-details/sales-contract-details.component';
 
 
 const CustomSelectOptions: INgxSelectOptions = {
@@ -53,7 +57,6 @@ const CustomSelectOptions: INgxSelectOptions = {
     BeneficiaryBankListComponent,
     ApplicantbankCreateComponent,
     ApplicantbankListComponent
-
   ],
   imports: [
     FormsModule,

@@ -103,16 +103,39 @@ pageIndex = 1;
     });
   }
   Search(){
+    var finput = new Date();    
+    var fromDate = this.SearchForm.value.fromDate;
+    if (this.SearchForm.value.fromDate instanceof Date) {
+      finput = new Date(this.SearchForm.value.fromDate); // try converting if it's not already a Date
+      const fday = String(finput.getDate()).padStart(2, '0');
+      const fmonth = String(finput.getMonth() + 1).padStart(2, '0'); // months are 0-based
+      const fyear = finput.getFullYear();
+      
+      fromDate = `${fday}/${fmonth}/${fyear}`;
+    }    
+
+    var tinput = new Date();
+    var toDate = this.SearchForm.value.toDate;
+    if (this.SearchForm.value.toDate instanceof Date) {
+      tinput = new Date(this.SearchForm.value.toDate); // try converting if it's not already a Date
+      
+      const tday = String(tinput.getDate()).padStart(2, '0');
+      const tmonth = String(tinput.getMonth() + 1).padStart(2, '0'); // months are 0-based
+      const tyear = tinput.getFullYear();
+
+      toDate = `${tday}/${tmonth}/${tyear}`;
+    }
+    
     let param = new GetDataModel();
-    param.procedureName = '[usp_CDList]';
+    param.procedureName = '[usp_CD_List]';
     param.parameters = {
-      FromDate: this.SearchForm.value.fromDate,
-      ToDate: this.SearchForm.value.toDate,
+      FromDate: fromDate,
+      ToDate: toDate,
       CDNo: this.SearchForm.value.cdNo,
       PageIndex:this.pageIndex,
       PageSize:this.pageSize      
     };
-
+    
     this.masterEntryService.GetInitialData(param).subscribe({
       next: (results) => {
         

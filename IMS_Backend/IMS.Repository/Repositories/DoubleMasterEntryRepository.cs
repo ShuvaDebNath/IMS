@@ -242,7 +242,7 @@ namespace Boilerplate.Repository.Repositories
             return await cmd.ExecuteNonQueryAsync();
         }
         private async Task<int> MasterTabelUpdate(DoubleMasterEntryModel model, SqlCommand cmd, string authUserName)
-          {
+        {
             string? masterTablename = model.TableNameMaster;
             string primeryKey = "";
             cmd.Parameters.Clear();
@@ -446,6 +446,11 @@ namespace Boilerplate.Repository.Repositories
 
                     if (rowAffect > 0)
                     {
+                        JObject obj = JObject.Parse(model.Data.ToString());
+
+                        obj["PrimaryKey"] = newPrimaryKey;
+                        model.Data = obj;
+
                         var actions = _postInsertActionFactory.GetActions(model);
                         foreach (var action in actions)
                         {

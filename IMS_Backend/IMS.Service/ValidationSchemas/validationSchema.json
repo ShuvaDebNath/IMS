@@ -29,7 +29,14 @@
 
     "tbl_arbitration": {
       "QueryParams": {
-        "[Detail]": {
+	"[Detail]": {
+		"Required": true
+	}
+	}
+	},
+    "tbl_sales_contract": {
+      "QueryParams": {
+        "[PIs]": {
           "Required": true
         }
       }
@@ -65,7 +72,22 @@
           "Required": true
         }
       
+      },
+    "tbl_cash_receive_detail": {
+      "QueryParams": {
+        "[CR_ID]": {
+          "Required": true
+        }
       }
+    },
+    "tbl_stock": {
+      "QueryParams": {
+        "[RawMaterial_ID]": {
+          "Required": true
+        },
+        "[Item_ID]": {
+          "Required": true
+        }
       }
     }
 }

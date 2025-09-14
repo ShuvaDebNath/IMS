@@ -25,9 +25,9 @@ public class ValidationHelper
         if (!_schemaCache.ValidationSchemas.TryGetValue(schemaKey, out var rules))
             throw new Exception($"No validation rules found for the entity: {schemaKey}");
         ValidateProperty(model.TableName, rules.TableName, "TableName");
-        ValidateParameters(model.ColumnNames, rules.ColumnNames, "ColumnNames");
-        ValidateParameters(model.QueryParams, rules.QueryParams, "QueryParams");
-        ValidateParameters(model.WhereParams, rules.WhereParams, "WhereParams");
+        ValidateParameters(model.ColumnNames, rules.ColumnNames, "ColumnNames", schemaKey);
+        ValidateParameters(model.QueryParams, rules.QueryParams, "QueryParams", schemaKey);
+        ValidateParameters(model.WhereParams, rules.WhereParams, "WhereParams", schemaKey);
     }
 
     public void ValidateModelWithUpdateSl(MasterEntryWithSlUpdateModel model, string schemaKey)
@@ -35,9 +35,9 @@ public class ValidationHelper
         if (!_schemaCache.ValidationSchemas.TryGetValue(schemaKey, out var rules))
             throw new Exception($"No validation rules found for the entity: {schemaKey}");
         ValidateProperty(model.TableName, rules.TableName, "TableName");
-        ValidateParameters(model.ColumnNames, rules.ColumnNames, "ColumnNames");
-        ValidateParameters(model.QueryParams, rules.QueryParams, "QueryParams");
-        ValidateParameters(model.WhereParams, rules.WhereParams, "WhereParams");
+        ValidateParameters(model.ColumnNames, rules.ColumnNames, "ColumnNames", schemaKey);
+        ValidateParameters(model.QueryParams, rules.QueryParams, "QueryParams", schemaKey);
+        ValidateParameters(model.WhereParams, rules.WhereParams, "WhereParams", schemaKey);
     }
 
     private void ValidateProperty(object? columnNames1, Dictionary<string, PropertyRule>? columnNames2, string v)
@@ -56,12 +56,24 @@ public class ValidationHelper
             throw new ArgumentException($"{propertyName} exceeds max count of {propertyRules.MaxCount}.");
     }
 
-    private void ValidateParameters(object? parameters, Dictionary<string, PropertyRule>? paramRules, string paramType)
+    private void ValidateParameters(object? parameters, Dictionary<string, PropertyRule>? paramRules, string paramType, string? schemaKey = null)
     {
         if (parameters == null || paramRules == null) return;
         var paramCollection = JsonConvert.DeserializeObject<Dictionary<string, object>>(parameters.ToString() ?? "{}") ?? new();
         if (!paramCollection.Any())
             throw new ArgumentException($"{paramType} is empty or invalid.");
+        if (schemaKey == "tbl_stock" && paramType == "QueryParams")
+        {
+            var hasRawMaterial = paramCollection.Any(kv => kv.Key.Trim().Equals("RawMaterial_ID", StringComparison.OrdinalIgnoreCase)
+                                                && !string.IsNullOrWhiteSpace(kv.Value?.ToString()));
+            var hasItem = paramCollection.Any(kv => kv.Key.Trim().Equals("Item_ID", StringComparison.OrdinalIgnoreCase)
+                                         && !string.IsNullOrWhiteSpace(kv.Value?.ToString()));
+
+            if (!hasRawMaterial && !hasItem)
+                throw new ArgumentException("Either [RawMaterial_ID] or [Item_ID] is required in QueryParams for tbl_stock.");
+            if (hasRawMaterial && hasItem)
+                throw new ArgumentException("Only one of [RawMaterial_ID] or [Item_ID] should be provided in QueryParams for tbl_stock.");
+        }
         foreach (var param in paramCollection)
         {
             if (!paramRules.TryGetValue(param.Key, out var paramRule)) continue;
