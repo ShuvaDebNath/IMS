@@ -1,56 +1,68 @@
+<!-- Top Bar -->
 <div class="top-bar">
   <div>
     <a class="text-white fw-bold company-name" href="#">SUNSHINE</a>
   </div>
-  <span id="time">{{currentTime}}</span>
+  <span id="time">{{ currentTime }}</span>
   <div class="right-section">
     <div class="btn-group" dropdown>
-      <a *ngIf="userName" id="button-animated" dropdownToggle type="button" class="btn theme-btn dropdown-toggle"
-        aria-controls="dropdown-animated">
-        <i class="fas fa-user-circle"></i> &nbsp; Hello &nbsp; <span>{{userName}}</span> <span class="caret"></span>
+      <a *ngIf="userName" id="button-animated" dropdownToggle type="button"
+         class="btn theme-btn dropdown-toggle" aria-controls="dropdown-animated">
+        <i class="fas fa-user-circle"></i> &nbsp; Hello &nbsp; <span>{{ userName }}</span>
       </a>
-      <a *ngIf="!userName" href="/login" type="button" class="btn theme-btn ">
-        <i class="fas fa-user-circle"></i> login<span class="caret"></span>
+      <a *ngIf="!userName" href="/login" type="button" class="btn theme-btn">
+        <i class="fas fa-user-circle"></i> login
       </a>
-      <ul id="dropdown-animated" *dropdownMenu class="dropdown-menu mt-2 dropdown-menu-right" role="menu"
-        aria-labelledby="button-animated">
-        <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);" (click)="ChangePassword()"><i
-              class="fas fa-cog"></i> Change Password</a></li>
-        <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);" (click)="Logout()"><i
-              class="fas fa-sign-out-alt"></i> Logout</a>
-
-          <!-- <li role="menuitem"><a class="dropdown-item" [routerLink]="['/login']"><i class="fas fa-sign-out-alt"></i> Logout</a> -->
+      <ul id="dropdown-animated" *dropdownMenu
+          class="dropdown-menu mt-2 dropdown-menu-right" role="menu"
+          aria-labelledby="button-animated">
+        <li role="menuitem">
+          <a class="dropdown-item" href="javascript:void(0);" (click)="ChangePassword()">
+            <i class="fas fa-cog"></i> Change Password
+          </a>
+        </li>
+        <li role="menuitem">
+          <a class="dropdown-item" href="javascript:void(0);" (click)="Logout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </a>
         </li>
       </ul>
     </div>
   </div>
 </div>
-<nav class="navbar navbar-expand-lg custom-header">
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark custom-header">
   <div class="container-fluid">
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+    <!-- Mobile Toggle Button -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTop">
       <span class="navbar-toggler-icon"></span>
     </button>
 
+    <!-- Collapsible Menu -->
     <div class="collapse navbar-collapse" id="navbarTop">
       <ul class="navbar-nav mr-auto">
         <ng-container *ngFor="let item of menu">
 
           <!-- Top-level dropdown -->
           <li class="nav-item dropdown" *ngIf="item.Children?.length; else singleLink">
-            <a class="nav-link dropdown-toggle" href="#" role="button" (click)="toggleDropdown(item.MenuId, $event)">
+            <a class="nav-link dropdown-toggle" href="javascript:void(0);" role="button"
+               (click)="toggleDropdown(item.MenuId, $event)">
               {{ item.SubMenuName }}
             </a>
 
             <ul class="dropdown-menu" [class.show]="isOpen(item.MenuId)">
               <ng-container *ngFor="let child of item.Children">
 
+                <!-- Child with further children -->
                 <ng-container *ngIf="child.Children?.length; else childLink">
                   <li class="dropdown-submenu" [class.show]="isOpen(child.MenuId)">
-                    <a class="dropdown-item dropdown-toggle" href="#" (click)="toggleDropdown(child.MenuId, $event)">
+                    <a class="dropdown-item dropdown-toggle" href="javascript:void(0);"
+                       (click)="toggleDropdown(child.MenuId, $event)">
                       {{ child.SubMenuName }}
                     </a>
-                    <ul class="dropdown-menu " [class.show]="isOpen(child.MenuId)">
+                    <ul class="dropdown-menu" [class.show]="isOpen(child.MenuId)">
                       <ng-container *ngFor="let grandchild of child.Children">
                         <li>
                           <a class="dropdown-item" [routerLink]="grandchild.UiLink">
@@ -75,7 +87,7 @@
             </ul>
           </li>
 
-          <!-- Top-level link without children -->
+          <!-- Top-level single link -->
           <ng-template #singleLink>
             <li class="nav-item">
               <a class="nav-link" [routerLink]="item.UiLink">{{ item.SubMenuName }}</a>
@@ -84,35 +96,11 @@
 
         </ng-container>
       </ul>
-      <ul class="navbar-nav ml-auto">
-        <li>
-          <div class="btn-group" dropdown>
-            <!-- <a *ngIf="userName" id="button-animated" dropdownToggle type="button" class="btn theme-btn dropdown-toggle"
-                aria-controls="dropdown-animated">
-          <i class="fas fa-user-circle"></i>  &nbsp; Hello &nbsp; <span>{{userName}}</span> <span class="caret"></span>
-        </a> -->
-            <!-- <a *ngIf="!userName" href="" dropdownToggle type="button" class="btn theme-btn dropdown-toggle"
-                aria-controls="dropdown-animated">
-          <i class="fas fa-user-circle"></i>  login<span class="caret"></span>
-        </a> -->
-            <!-- <ul id="dropdown-animated" *dropdownMenu class="dropdown-menu mt-2 dropdown-menu-right"
-            role="menu" aria-labelledby="button-animated">
-          <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);" (click)="ChangePassword()"><i class="fas fa-cog"></i> Change Password</a></li>
-          <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);" (click)="Logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
-
-          </li>
-        </ul> -->
-          </div>
-        </li>
-        <!-- Notifications Dropdown Menu -->
-      </ul>
     </div>
   </div>
-
-
-
 </nav>
-<div>
 
-<app-landing-page *ngIf="!isShowComInfo"></app-landing-page>
+<!-- Landing Page -->
+<div>
+  <app-landing-page *ngIf="!isShowComInfo"></app-landing-page>
 </div>
