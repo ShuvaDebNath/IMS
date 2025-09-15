@@ -124,11 +124,13 @@
 
 
     <div class="d-flex justify-content-end gap-2 mt-3">
-      <button type="button" class="btn btn-outline-success btn-rounded" (click)="addItem()">
+      <button type="button" class="btn btn-outline-success " (click)="addItem()">
         <i class="bi bi-plus-circle me-1"></i> Add Row
       </button>
 
-      <button type="submit" (click)="saveData()" class="btn btn-primary btn-rounded" [disabled]="requisitionForm.invalid">
+      <button type="submit" (click)="saveData()" [ngClass]="{
+        'theme-btn-disable': requisitionForm.invalid
+      }" class="btn theme-btn btn-rounded" [disabled]="requisitionForm.invalid">
         <i class="bi bi-save me-1"></i> Save
       </button>
     </div>

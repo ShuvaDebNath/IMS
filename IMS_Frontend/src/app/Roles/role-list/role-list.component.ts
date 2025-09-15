@@ -96,37 +96,37 @@ export class RoleListComponent {
   }
 
   GetAllNullTrackIdProject(
-    pageInfo: any,
-    pageIndex: number,
-    pageSize: number,
-    searchText: string
-  ) {
-    let param = new GetDataModel();
-    param.procedureName = '[usp_GetRoles]';
-    param.parameters = {
-      PageIndex: pageIndex,
-      PageSize: pageSize,
-      SearchText: searchText,
-    }
+      pageInfo: any,
+      pageIndex: number,
+      pageSize: number,
+      searchText: string
+    ) {
+      let param = new GetDataModel();
+      param.procedureName = '[usp_GetRoles]';
+      param.parameters = {
+        PageIndex: pageIndex,
+        PageSize:pageSize,
+        SearchText:searchText,
+      }  
+  
+      this.service.GetInitialData(param).subscribe({
+        next: (results) => {
+          if (results.status) {
+  
+            let tables = JSON.parse(results.data);
 
-    this.service.GetInitialData(param).subscribe({
-      next: (results) => {
-        if (results.status) {
-
-          let tables = JSON.parse(results.data);
-          this.rows = tables.Tables1
-          this.isPage = this.rows[0].totallen > 10;
-          this.length = this.rows[0].totallen;
-        } else if (results.msg == 'Invalid Token') {
-          swal.fire('Session Expierd!', 'Please Login Again.', 'info');
-          this.gs.Logout();
-        } else {
-        }
-      },
-      error: (err) => { },
-    });
-
-
+          
+            this.rows = tables.Tables1
+            this.isPage=this.rows[0].totallen>10;
+            this.length = this.rows[0].totallen;
+          } else if (results.msg == 'Invalid Token') {
+            swal.fire('Session Expierd!', 'Please Login Again.', 'info');
+            this.gs.Logout();
+          } else {
+          }
+        },
+        error: (err) => {},
+      });
   }
 
   paginatiorChange(e: any) {

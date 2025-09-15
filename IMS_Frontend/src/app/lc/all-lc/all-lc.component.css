@@ -16,3 +16,19 @@
 .pi .pi-search{
     left: 6.75em !important;
 }
+th,
+td,
+tr {
+    border: 1px solid #6a1a3f !important;
+}
+th{
+  background-color: white;
+}
+thead{
+  background-color: #6a1a3f!important;
+}
+.p-datatable-thead{
+
+    background-color: #6a1a3f!important;
+
+}

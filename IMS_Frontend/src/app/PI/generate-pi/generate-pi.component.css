@@ -1,0 +1,30 @@
+
+.w-full{
+    width: 100% !important;
+}
+
+
+.sticky-header {
+  position: sticky;
+  top: 4.5rem;
+  z-index: 100;
+  background-color: white; /* Ensure it's not transparent */
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+.my-dropdown .icon-inner, .ionicon, svg {
+    display: block!important;
+    height: 20px!important;
+    width: 20px!important;
+}
+.p-element svg {
+    display: block!important;
+    height: 20px!important;
+    width: 20px!important;
+}
+th,
+td,
+tr {
+    border: 1px solid #6a1a3f !important;
+}
+
