@@ -38,10 +38,10 @@ Formgroup!: FormGroup;
   ) {
     // this.gs.CheckToken().subscribe();
     let has = this.activeLink.snapshot.queryParamMap.has(
-      'CustomerId'
+      'Customer_Id'
     );
     if (has) {
-      this.CustomerId = this.activeLink.snapshot.queryParams['CustomerId'];
+      this.CustomerId = this.activeLink.snapshot.queryParams['Customer_Id'];
       this.isEdit = true;
     } else {
       this.isEdit = false;
@@ -66,7 +66,7 @@ Formgroup!: FormGroup;
     this.getInitialData();
 
     if (this.isEdit) {
-      this.GetCustomerEditDataById(this.CustomerId);
+      this.GetCustomerEditDataById();
     }
   }
 
@@ -87,7 +87,7 @@ Formgroup!: FormGroup;
       Email: [''],
       Notes: [''],
       Company_Info:[''],
-      Superior_ID: [''],
+      User_Id: [''],
       IsAvailable: ['', [Validators.required]],
       Status: [''],
     });
@@ -134,6 +134,7 @@ Formgroup!: FormGroup;
     cd.Company_Name = this.Formgroup.value.Company_Name;
     cd.Contact_Name = this.Formgroup.value.Contact_Name;
     cd.Customer_Address = this.Formgroup.value.Customer_Address;
+    cd.Company_Info = this.Formgroup.value.Company_Info;
     cd.City = this.Formgroup.value.City;
     cd.Postal_Code = this.Formgroup.value.Postal_Code;
     cd.Country_ID = this.Formgroup.value.Country_ID;
@@ -142,7 +143,7 @@ Formgroup!: FormGroup;
     cd.FAX_No = this.Formgroup.value.FAX_No;
     cd.Email = this.Formgroup.value.Email;
     cd.Notes = this.Formgroup.value.Notes;
-    cd.Superior_ID = this.Formgroup.value.Superior_ID;
+    cd.Superior_ID = this.Formgroup.value.User_Id;
     cd.IsAvailable = this.Formgroup.value.IsAvailable;
     cd.Status = 'Unapproved';    
     cd.Created_By = this.Formgroup.value.FreightCharge;
@@ -183,7 +184,9 @@ Formgroup!: FormGroup;
       });
   }
 
-  GetCustomerEditDataById(LCID: any) {
+  GetCustomerEditDataById() {
+    console.log(this.CustomerId);
+    
     var ProcedureData = {
       procedureName: '[usp_Customer_ById]',
       parameters: {
@@ -192,6 +195,8 @@ Formgroup!: FormGroup;
     };
     this.masterEntyService.GetInitialData(ProcedureData).subscribe({
       next: (results) => {
+        console.log(results);
+        
         if (results.status) {
           var tableData = JSON.parse(results.data).Tables1;
 
@@ -199,6 +204,7 @@ Formgroup!: FormGroup;
             this.Formgroup.controls.Company_Name.setValue(e.Company_Name);
             this.Formgroup.controls.Contact_Name.setValue(e.Contact_Name);
             this.Formgroup.controls.Customer_Address.setValue(e.Customer_Address);
+            this.Formgroup.controls.Company_Info.setValue(e.Company_Info);
             this.Formgroup.controls.City.setValue(e.City);
             this.Formgroup.controls.Postal_Code.setValue(e.Postal_Code);
             this.Formgroup.controls.Country_ID.setValue(e.Country_ID);
@@ -207,7 +213,9 @@ Formgroup!: FormGroup;
             this.Formgroup.controls.FAX_No.setValue(e.FAX_No);
             this.Formgroup.controls.Email.setValue(e.Email);
             this.Formgroup.controls.Notes.setValue(e.Notes);
-            this.Formgroup.controls.Superior_ID.setValue(e.Superior_ID);
+            console.log(e.Superior_ID);
+            
+            this.Formgroup.controls.User_Id.setValue(e.Superior_ID);
             this.Formgroup.controls.IsAvailable.setValue(e.IsAvailable);
             this.Formgroup.controls.Status.setValue(e.Status);
           });
@@ -237,6 +245,7 @@ Formgroup!: FormGroup;
     var cd = new Customers();
     cd.Company_Name = this.Formgroup.value.Company_Name;
     cd.Contact_Name = this.Formgroup.value.Contact_Name;
+    cd.Company_Info = this.Formgroup.value.Company_Info;
     cd.Customer_Address = this.Formgroup.value.Customer_Address;
     cd.City = this.Formgroup.value.City;
     cd.Postal_Code = this.Formgroup.value.Postal_Code;
@@ -246,13 +255,16 @@ Formgroup!: FormGroup;
     cd.FAX_No = this.Formgroup.value.FAX_No;
     cd.Email = this.Formgroup.value.Email;
     cd.Notes = this.Formgroup.value.Notes;
-    cd.Superior_ID = this.Formgroup.value.Superior_ID;
+    console.log(this.Formgroup.value.User_Id);
+    
+    cd.Superior_ID = this.Formgroup.value.User_Id;
     cd.IsAvailable = this.Formgroup.value.IsAvailable;
     cd.Status = 'Unapproved';    
     cd.Created_By = this.Formgroup.value.FreightCharge;
     cd.Created_At = formatted;
     cd.Created_By = userId == undefined ? '' : userId;
-
+    console.log(cd);
+    
     var tableName = 'tbl_customer';
 
 

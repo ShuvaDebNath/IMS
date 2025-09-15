@@ -54,7 +54,6 @@ import { GenerateCommercialInvoiceComponent } from '../commercial-document/gener
 import { AllCommercialInvoiceComponent } from '../commercial-document/all-commercial-invoice/all-commercial-invoice.component';
 import { GeneratePiComponent } from '../PI/generate-pi/generate-pi.component';
 import { BeneficiaryCreateComponent } from '../Beneficiary/beneficiary-create/beneficiary-create.component';
-import { BeneficiaryListComponent } from '../beneficiary/beneficiary-list/beneficiary-list.component';
 import { ArbitrationCreateComponent } from '../arbitration/arbitration-create/arbitration-create.component';
 import { ArbitrationListComponent } from '../arbitration/arbitration-list/arbitration-list.component';
 import { BeneficiarybankCreateComponent } from '../BeneficiaryBank/beneficiarybank-create/beneficiarybank-create.component';
@@ -84,6 +83,7 @@ import { UnapprovedCustomerComponent } from '../customer/unapproved-customer/una
 import { UnapprovedBuyingHouseComponent } from '../buying-house/unapproved-buying-house/unapproved-buying-house.component';
 import { AllBuyingHouseComponent } from '../buying-house/all-buying-house/all-buying-house.component';
 import { GenerateBuyingHouseComponent } from '../buying-house/generate-buying-house/generate-buying-house.component';
+import { BeneficiaryListComponent } from '../Beneficiary/beneficiary-list/beneficiary-list.component';
 
 const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more options
   keepSelectedItems: false,
@@ -128,6 +128,7 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     UnapprovedBuyingHouseComponent,
     AllBuyingHouseComponent,
     GenerateBuyingHouseComponent,
+    BeneficiaryListComponent
   ],
   imports: [
 
@@ -236,7 +237,7 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'unapproved-pi', component: UnApprovePiComponent },
           { path: 'partialapproved-pi', component: PartialApprovePiComponent },
           { path: 'quarterapproved-pi', component: QuarterApprovePiComponent },
-          { path: 'fullapproved-pi', component: FullApprovePiComponent }
+          { path: 'fullapproved-pi', component: FullApprovePiComponent },
           { path: 'all-customers', component: AllCustomersComponent },
           { path: 'generate-customers', component: GenerateCustomerComponent },
           { path: 'unapproved-customers', component: UnapprovedCustomerComponent },

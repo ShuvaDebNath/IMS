@@ -2,6 +2,7 @@ export class Customers {
   Customer_ID!: string;
   Company_Name!: string;
   Contact_Name!: string;
+  Company_Info!: string;
   Customer_Address!: string;
   City!: string;
   Postal_Code!: string;
