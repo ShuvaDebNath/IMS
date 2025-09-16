@@ -57,7 +57,7 @@ Formgroup!: FormGroup;
     this.deletePermissions = permissions.deletePermissions;
     this.printPermissions = permissions.printPermissions;
 
-    if (!this.printPermissions) {
+    if (!this.insertPermissions) {
       window.location.href = 'All Customers';
     }
 
