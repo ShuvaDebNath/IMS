@@ -87,6 +87,13 @@
         }
       }
     },
+    "tbl_buyer": {
+      "QueryParams": {
+        "[Buyer_Name]": {
+          "Required": true
+        }
+      }
+    },
     "tbl_stock": {
       "QueryParams": {
         "[RawMaterial_ID]": {
