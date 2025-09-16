@@ -80,7 +80,7 @@ export class AllCustomersComponent {
       error: (err) => {},
     });
   }
-  loadAllRequisitions(): void {
+  loadAllCustomers(): void {
     if (this.dateForm.invalid) {
       swal.fire(
         'Validation Error!',
@@ -109,7 +109,7 @@ export class AllCustomersComponent {
         ToDateInput: toDate,
         Superior_Id: SuperioId,
         Customer_Id: CustomerId,
-        Status: 'Approved',
+        Status: 'All',
         User: sentBy,
       },
     };
@@ -171,7 +171,7 @@ export class AllCustomersComponent {
     swal
       .fire({
         title: 'Are you sure?',
-        text: `Delete requisition ${row?.Company_Name || ''}?`,
+        text: `Delete customer ${row?.Company_Name || ''}?`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Yes, delete',
@@ -197,7 +197,7 @@ export class AllCustomersComponent {
                 'Customer deleted successfully.',
                 'success'
               );
-              this.loadAllRequisitions(); // refresh the table
+              this.loadAllCustomers(); // refresh the table
             },
             error: (err) => {
               console.error(err);
