@@ -40,9 +40,6 @@ import { PendingRMRequisitionProductionComponent } from '../production/requisiti
 import {  IssuedRMRequisitionProductionComponent } from '../production/requisition/raw-material-requisition/list/IssuedRMRequisition_Production/issued-rm-requisition-production.component';
 import { ReceivedRMListComponent } from '../production/requisition/raw-material-requisition/list/ReceivedRMList/received-rm-list.component';
 import { AllRMRequisitionListComponent } from '../production/requisition/raw-material-requisition/list/AllRMRequisitionList/all-rm-requisition-list.component';
-import { PendingRMRequisitionWareHouseComponent } from '../production/requisition/raw-material-requisition/list/PendingRMRequisition_Warehouse/pending-rm-requisition-warehouse.component';
-import { AcceptedRMRequisitionWareHouseComponent } from '../production/requisition/raw-material-requisition/list/AcceptedRMRequisition_Warehouse/accepted-rm-requisition-warehouse.component';
-import { IssuedRMRequisitionListWarehouseComponent } from '../production/requisition/raw-material-requisition/list/IssuedRMRequisitionList_Warehouse/issued-rm-requisition-list-warehouse.component';
 import { ChangePasswordComponent } from '../authentication/change-password/change-password.component';
 import { LandingPageComponent } from '../landing-page/landing-page.component';
 import { GenerateLcComponent } from '../lc/generate-lc/generate-lc.component';
@@ -54,7 +51,6 @@ import { GenerateCommercialInvoiceComponent } from '../commercial-document/gener
 import { AllCommercialInvoiceComponent } from '../commercial-document/all-commercial-invoice/all-commercial-invoice.component';
 import { GeneratePiComponent } from '../PI/generate-pi/generate-pi.component';
 import { BeneficiaryCreateComponent } from '../Beneficiary/beneficiary-create/beneficiary-create.component';
-import { BeneficiaryListComponent } from '../beneficiary/beneficiary-list/beneficiary-list.component';
 import { ArbitrationCreateComponent } from '../arbitration/arbitration-create/arbitration-create.component';
 import { ArbitrationListComponent } from '../arbitration/arbitration-list/arbitration-list.component';
 import { BeneficiarybankCreateComponent } from '../BeneficiaryBank/beneficiarybank-create/beneficiarybank-create.component';
@@ -67,7 +63,6 @@ import { AllCashReceiveComponent } from '../lc/all-cash-receive/all-cash-receive
 import { GenerateCashReceiveComponent } from '../lc/generate-cash-receive/generate-cash-receive.component';
 import { CashReceiveDetailsComponent } from '../lc/cash-receive-details/cash-receive-details.component';
 import { CashReceiveUpdateComponent } from '../lc/cash-receive-update/cash-receive-update.component';
-import { RawMaterialStockComponent } from '../rm-fg-material-infos-with-stock/raw-material-info-with-stock/raw-material-stock.component';
 import { GenerateCpiComponent } from '../PI/generate-cpi/generate-cpi.component';
 import { AllSalesContractComponent } from '../sales-contract/all-sales-contract/all-sales-contract.component';
 import { SalesContractDetailsComponent } from '../sales-contract/sales-contract-details/sales-contract-details.component';
@@ -77,7 +72,14 @@ import { UnApprovePiComponent } from '../PI/un-approve-pi/un-approve-pi.componen
 import { PartialApprovePiComponent } from '../PI/partial-approve-pi/partial-approve-pi.component';
 import { QuarterApprovePiComponent } from '../PI/quarter-approve-pi/quarter-approve-pi.component';
 import { FullApprovePiComponent } from '../PI/full-approve-pi/full-approve-pi.component';
-import { FinishGoodsInfoWithStockComponent } from '../rm-fg-material-infos-with-stock/finish-goods-info-with-stock/finish-goods-info-with-stock.component';
+import { RawMaterialStockComponent } from '../warehouse/rm-fg-material-infos-with-stock/raw-material-info-with-stock/raw-material-stock.component';
+import { FinishGoodsInfoWithStockComponent } from '../warehouse/rm-fg-material-infos-with-stock/finish-goods-info-with-stock/finish-goods-info-with-stock.component';
+import { BeneficiaryListComponent } from '../Beneficiary/beneficiary-list/beneficiary-list.component';
+import { PendingRMRequisitionWareHouseComponent } from '../warehouse/requisition/raw-material-requisition/list/PendingRMRequisition_Warehouse/pending-rm-requisition-warehouse.component';
+import { AcceptedRMRequisitionWareHouseComponent } from '../warehouse/requisition/raw-material-requisition/list/AcceptedRMRequisition_Warehouse/accepted-rm-requisition-warehouse.component';
+import { IssuedRMRequisitionListWarehouseComponent } from '../warehouse/requisition/raw-material-requisition/list/IssuedRMRequisitionList_Warehouse/issued-rm-requisition-list-warehouse.component';
+import { SendFinishGoodsComponent } from '../production/finishgoods/send-finish-goods/send-finish-goods.component';
+
 
 const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more options
   keepSelectedItems: false,
@@ -172,6 +174,7 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'issued-rm-requisition-list-warehouse', component: IssuedRMRequisitionListWarehouseComponent },
           { path: 'raw-material-stock', component: RawMaterialStockComponent },
           { path: 'finish-goods-stock', component: FinishGoodsInfoWithStockComponent },
+          { path: 'send-finish-goods', component: SendFinishGoodsComponent },
 
           {
             path: 'pending-rm-requisition/edit/:reqId',

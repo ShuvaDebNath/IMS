@@ -5,8 +5,6 @@ import { IssuedRMRequisitionProductionComponent } from './IssuedRMRequisition_Pr
 import { ReceivedRMListComponent } from './ReceivedRMList/received-rm-list.component';
 import { AllRMRequisitionListComponent } from './AllRMRequisitionList/all-rm-requisition-list.component';
 import { PendingRMRequisitionProductionComponent } from './PendingRMRequisition_Production/pending-rm-requisition-production.component';
-import { PendingRMRequisitionWareHouseComponent } from './PendingRMRequisition_Warehouse/pending-rm-requisition-warehouse.component';
-import { IssuedRMRequisitionListWarehouseComponent } from './IssuedRMRequisitionList_Warehouse/issued-rm-requisition-list-warehouse.component';
 
 @Component({
   selector: 'app-list-page',
@@ -15,11 +13,9 @@ import { IssuedRMRequisitionListWarehouseComponent } from './IssuedRMRequisition
   standalone: true,
   imports: [
     PendingRMRequisitionProductionComponent, 
-    PendingRMRequisitionWareHouseComponent, 
     IssuedRMRequisitionProductionComponent, 
     ReceivedRMListComponent, 
-    AllRMRequisitionListComponent,
-    IssuedRMRequisitionListWarehouseComponent
+    AllRMRequisitionListComponent
   ]
 })
 export class ListPageComponent {

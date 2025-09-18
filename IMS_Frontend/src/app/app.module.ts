@@ -21,7 +21,7 @@ import { DatePipe } from '@angular/common';
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { BeneficiaryCreateComponent } from './Beneficiary/beneficiary-create/beneficiary-create.component';
-import { BeneficiaryListComponent } from './beneficiary/beneficiary-list/beneficiary-list.component';
+import { BeneficiaryListComponent } from './Beneficiary/beneficiary-list/beneficiary-list.component';
 import { ArbitrationCreateComponent } from './arbitration/arbitration-create/arbitration-create.component';
 import { ArbitrationListComponent } from './arbitration/arbitration-list/arbitration-list.component';
 import { BeneficiarybankCreateComponent } from './BeneficiaryBank/beneficiarybank-create/beneficiarybank-create.component';
