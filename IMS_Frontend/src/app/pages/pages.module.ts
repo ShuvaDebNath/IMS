@@ -19,8 +19,8 @@ import { TreeTableModule } from 'primeng/treetable';
 import { TreeModule } from 'primeng/tree';
 import { DropdownModule } from 'primeng/dropdown'
 import { SelectButtonModule } from 'primeng/selectbutton';
-import {PopoverModule} from 'ngx-bootstrap/popover';
-import {DatePipe} from '@angular/common';
+import { PopoverModule } from 'ngx-bootstrap/popover';
+import { DatePipe } from '@angular/common';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { PagesComponent } from './pages.component';
@@ -37,7 +37,7 @@ import { CreatePageComponent } from '../production/requisition/raw-material-requ
 import { EditPageComponent } from '../production/requisition/raw-material-requisition/edit/edit-page.component';
 import { ListPageComponent } from '../production/requisition/raw-material-requisition/list/list-page.component';
 import { PendingRMRequisitionProductionComponent } from '../production/requisition/raw-material-requisition/list/PendingRMRequisition_Production/pending-rm-requisition-production.component';
-import {  IssuedRMRequisitionProductionComponent } from '../production/requisition/raw-material-requisition/list/IssuedRMRequisition_Production/issued-rm-requisition-production.component';
+import { IssuedRMRequisitionProductionComponent } from '../production/requisition/raw-material-requisition/list/IssuedRMRequisition_Production/issued-rm-requisition-production.component';
 import { ReceivedRMListComponent } from '../production/requisition/raw-material-requisition/list/ReceivedRMList/received-rm-list.component';
 import { AllRMRequisitionListComponent } from '../production/requisition/raw-material-requisition/list/AllRMRequisitionList/all-rm-requisition-list.component';
 import { ChangePasswordComponent } from '../authentication/change-password/change-password.component';
@@ -46,7 +46,7 @@ import { GenerateLcComponent } from '../lc/generate-lc/generate-lc.component';
 import { AllLcComponent } from '../lc/all-lc/all-lc.component';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TableModule } from 'primeng/table';
-import {DialogModule} from 'primeng/dialog'
+import { DialogModule } from 'primeng/dialog'
 import { GenerateCommercialInvoiceComponent } from '../commercial-document/generate-commercial-invoice/generate-commercial-invoice.component';
 import { AllCommercialInvoiceComponent } from '../commercial-document/all-commercial-invoice/all-commercial-invoice.component';
 import { GeneratePiComponent } from '../PI/generate-pi/generate-pi.component';
@@ -67,7 +67,7 @@ import { GenerateCpiComponent } from '../PI/generate-cpi/generate-cpi.component'
 import { AllSalesContractComponent } from '../sales-contract/all-sales-contract/all-sales-contract.component';
 import { SalesContractDetailsComponent } from '../sales-contract/sales-contract-details/sales-contract-details.component';
 import { GenerateSalesContractComponent } from '../sales-contract/generate-sales-contract/generate-sales-contract.component';
-import{DividerModule} from 'primeng/divider'
+import { DividerModule } from 'primeng/divider'
 import { UnApprovePiComponent } from '../PI/un-approve-pi/un-approve-pi.component';
 import { PartialApprovePiComponent } from '../PI/partial-approve-pi/partial-approve-pi.component';
 import { QuarterApprovePiComponent } from '../PI/quarter-approve-pi/quarter-approve-pi.component';
@@ -79,7 +79,15 @@ import { PendingRMRequisitionWareHouseComponent } from '../warehouse/requisition
 import { AcceptedRMRequisitionWareHouseComponent } from '../warehouse/requisition/raw-material-requisition/list/AcceptedRMRequisition_Warehouse/accepted-rm-requisition-warehouse.component';
 import { IssuedRMRequisitionListWarehouseComponent } from '../warehouse/requisition/raw-material-requisition/list/IssuedRMRequisitionList_Warehouse/issued-rm-requisition-list-warehouse.component';
 import { SendFinishGoodsComponent } from '../production/finishgoods/send-finish-goods/send-finish-goods.component';
-
+import { FinishGoodsInfoWithStockComponent } from '../rm-fg-material-infos-with-stock/finish-goods-info-with-stock/finish-goods-info-with-stock.component';
+import { AllCustomersComponent } from '../customer/all-customers/all-customers.component';
+import { GenerateCustomerComponent } from '../customer/generate-customer/generate-customer.component';
+import { UnapprovedCustomerComponent } from '../customer/unapproved-customer/unapproved-customer.component';
+import { UnapprovedBuyingHouseComponent } from '../buying-house/unapproved-buying-house/unapproved-buying-house.component';
+import { AllBuyingHouseComponent } from '../buying-house/all-buying-house/all-buying-house.component';
+import { GenerateBuyingHouseComponent } from '../buying-house/generate-buying-house/generate-buying-house.component';
+import { BeneficiaryListComponent } from '../Beneficiary/beneficiary-list/beneficiary-list.component';
+>>>>>>> 079e225a9655a21be1779b66b00478d10937bd05
 
 const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more options
   keepSelectedItems: false,
@@ -117,8 +125,15 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     GenerateCpiComponent,
     AllSalesContractComponent,
     SalesContractDetailsComponent,
-    GenerateSalesContractComponent
-    ],
+    GenerateSalesContractComponent,
+    AllCustomersComponent,
+    GenerateCustomerComponent,
+    UnapprovedCustomerComponent,
+    UnapprovedBuyingHouseComponent,
+    AllBuyingHouseComponent,
+    GenerateBuyingHouseComponent,
+    BeneficiaryListComponent
+  ],
   imports: [
 
     CommonModule,
@@ -132,12 +147,12 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     TreeModule,
     DropdownModule,
     SelectButtonModule,
-    PopoverModule,MultiSelectModule,
+    PopoverModule, MultiSelectModule,
     TableModule,
     DialogModule,
     CheckboxModule,
     InputTextModule,
-    PopoverModule,    
+    PopoverModule,
     DatePipe,
     CheckboxModule,
     InputTextModule,
@@ -175,19 +190,18 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'raw-material-stock', component: RawMaterialStockComponent },
           { path: 'finish-goods-stock', component: FinishGoodsInfoWithStockComponent },
           { path: 'send-finish-goods', component: SendFinishGoodsComponent },
-
           {
             path: 'pending-rm-requisition/edit/:reqId',
             loadComponent: () =>
               import('../production/requisition/raw-material-requisition/edit/PendingRMRequisitionProduction/pending-rm-requisition-production-edit.component')
                 .then(m => m.PendingRMRequisitionProductionEditComponent)
           },
-           {path: 'change-password', component: ChangePasswordComponent},       
-           {path: 'landing-page',component:LandingPageComponent},
-           {path: 'all-lc', component: AllLcComponent},
-           {path: 'generate-lc', component: GenerateLcComponent},
-           {path: 'all-commercial-invoice', component: AllCommercialInvoiceComponent},
-           {path: 'generate-commercial-invoice', component: GenerateCommercialInvoiceComponent},
+          { path: 'change-password', component: ChangePasswordComponent },
+          { path: 'landing-page', component: LandingPageComponent },
+          { path: 'all-lc', component: AllLcComponent },
+          { path: 'generate-lc', component: GenerateLcComponent },
+          { path: 'all-commercial-invoice', component: AllCommercialInvoiceComponent },
+          { path: 'generate-commercial-invoice', component: GenerateCommercialInvoiceComponent },
           { path: 'generate-pi', component: GeneratePiComponent },
           {
             path:"arbitration-create",component:ArbitrationCreateComponent
@@ -224,11 +238,17 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'generate-sales-contract', component: GenerateSalesContractComponent },
           { path: 'all-sales-contract', component: AllSalesContractComponent },
           { path: 'sales-contract-details', component: SalesContractDetailsComponent },
-          { path: 'generate-cpi', component: GenerateCpiComponent },          
+          { path: 'generate-cpi', component: GenerateCpiComponent },
           { path: 'unapproved-pi', component: UnApprovePiComponent },
           { path: 'partialapproved-pi', component: PartialApprovePiComponent },
           { path: 'quarterapproved-pi', component: QuarterApprovePiComponent },
-          { path: 'fullapproved-pi', component: FullApprovePiComponent }
+          { path: 'fullapproved-pi', component: FullApprovePiComponent },
+          { path: 'all-customers', component: AllCustomersComponent },
+          { path: 'generate-customers', component: GenerateCustomerComponent },
+          { path: 'unapproved-customers', component: UnapprovedCustomerComponent },
+          { path: 'all-buying-house', component: AllBuyingHouseComponent },
+          { path: 'generate-buying-house', component: GenerateBuyingHouseComponent },
+          { path: 'unapproved-buying-house', component: UnapprovedBuyingHouseComponent },
         ]
       }
     ]),

@@ -13,7 +13,6 @@
         <form name="newForm" [formGroup]="Formgroup" role="form">
           <div class="row">
            
-            <label>Generate Cash Receive</label>
             <div class="col-md-6">
             <label>Marketing Concern <span>*</span></label>
             <p-dropdown [style]="{'width':'100%'}"  class="p-0" [options]="MarketingConcern" (onChange)="getPINoByMarketingConcern()"  optionLabel="UserName" [filter]="true" filterBy="UserName" [showClear]="true" styleClass="listBottom" placeholder="Please Select" optionValue="User_ID" formControlName="Marketing_Concern" [readonly]="isEdit">
@@ -66,16 +65,6 @@
                     </ng-template>
                 </p-dropdown> 
             </div>
-            <div class="col-md-6" *ngIf="!isEdit">
-                <label>PIs <span>*</span></label>
-                <p-dropdown [style]="{'width':'100%'}" (onChange)="getCashReceiveInfoByPI()"  class="p-0" [options]="PIList"  optionLabel="label" [filter]="true" filterBy="label" [showClear]="true" styleClass="listBottom" placeholder="Please Select" optionValue="value" formControlName="PI">
-                <ng-template let-PI pTemplate="item">
-                        <div class="flex align-items-center gap-2">  
-                            <div>{{ PI.label }}</div>
-                        </div>
-                    </ng-template>
-                </p-dropdown> 
-            </div>
             <div class="col-md-6" *ngIf="isEdit">
                 <label class="control-label" for="inlineFormInputGroup">PI No <span>*</span></label>
                 <div class="form-group d-inline">
@@ -83,6 +72,15 @@
                     formControlName="PINo"
                     class="form-control"
                     placeholder="PINo" id="PINo" name="PINo" value="0" readonly>
+                    </div>
+            </div>
+            <div class="col-md-6" *ngIf="!isEdit">
+                <label class="control-label" for="inlineFormInputGroup">PI Value <span>*</span></label>
+                <div class="form-group d-inline">
+                    <input autocomplete="off" type="text"                  
+                    formControlName="PIValue"
+                    class="form-control"
+                    placeholder="PIValue" id="PIValue" name="PIValue" value="0" readonly>
                     </div>
             </div>
             <div class="col-md-6" *ngIf="!isEdit">
