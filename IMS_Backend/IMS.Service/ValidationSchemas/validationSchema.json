@@ -29,6 +29,11 @@
 
     "tbl_arbitration": {
       "QueryParams": {
+	"[Detail]": {
+		"Required": true
+	}
+	}
+	},
         "[Detail]": {
           "Required": true
         }
@@ -57,6 +62,9 @@
     },
     "tbl_beneficiary_bank": {
       "QueryParams": {
+        "[BankName]"
+        : {
+          "Required":true
         "[BankName]": {
           "Required": true
 
@@ -70,12 +78,28 @@
         "[Address]": {
           "Required": true
         }
+      
+      },
 
       }
     },
     "tbl_cash_receive_detail": {
       "QueryParams": {
         "[CR_ID]": {
+          "Required": true
+        }
+      }
+    },
+    "tbl_customer": {
+      "QueryParams": {
+        "[Company_Name]": {
+          "Required": true
+        }
+      }
+    },
+    "tbl_buyer": {
+      "QueryParams": {
+        "[Buyer_Name]": {
           "Required": true
         }
       }
@@ -90,6 +114,7 @@
         }
       }
     }
+}
   }
-  }
+}
 

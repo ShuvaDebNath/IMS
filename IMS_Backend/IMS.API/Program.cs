@@ -76,7 +76,10 @@ authConfigurator.ConfigureCustomeAuthorization(builder.Services);
 builder.Host.UseContentRoot(Directory.GetCurrentDirectory());
 
 var app = builder.Build();
-
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
 // Enable Swagger in all environments
 app.UseSwagger();
 app.UseSwaggerUI();

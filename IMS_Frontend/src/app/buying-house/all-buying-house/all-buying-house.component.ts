@@ -14,15 +14,15 @@ import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.ser
 import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
 
 @Component({
-  selector: 'app-delivery-log-report',
-  templateUrl: './delivery-log-report.component.html',
-  styleUrls: ['./delivery-log-report.component.css']
+  selector: 'app-all-buying-house',
+  templateUrl: './all-buying-house.component.html',
+  styleUrls: ['./all-buying-house.component.css'],
 })
-export class DeliveryLogReportComponent {
-PIReport: any[] = [];
+export class AllBuyingHouseComponent {
+  allBuyers: any[] = [];
   detailsData: any = null;
   isDetailsVisible = false;
-  PIList: any;
+  BuyerList: any;
   dateForm!: FormGroup;
   tableVisible = false;
   SuperiorList: any;
@@ -42,7 +42,7 @@ PIReport: any[] = [];
   ) {}
 
   ngOnInit(): void {
-    var permissions = this.gs.CheckUserPermission('Delivey Log Report');
+    var permissions = this.gs.CheckUserPermission('All Buying House');
     this.insertPermissions = permissions.insertPermissions;
     this.updatePermissions = permissions.updatePermissions;
     this.deletePermissions = permissions.deletePermissions;
@@ -51,24 +51,26 @@ PIReport: any[] = [];
     if (!this.printPermissions) {
       window.location.href = 'dashboard';
     }
-    this.title.setTitle('Delivey Log Report');
+    this.title.setTitle('All Buying House List');
     this.getInitialData();
     this.dateForm = this.fb.group({
       fromDate: [null, Validators.required],
       toDate: [null, Validators.required],
-      PIId: [''],
+      BuyerId: [''],
+      SuperioId: [''],
     });
   }
   getInitialData() {
     var ProcedureData = {
-      procedureName: '[usp_ProformaInvoice_GetInitial_Report]',
+      procedureName: '[usp_BuyingHouse_GetInitialData]',
       parameters: {},
     };
 
     this.getDataService.GetInitialData(ProcedureData).subscribe({
       next: (results) => {
         if (results.status) {
-          this.PIList = JSON.parse(results.data).Tables1;
+          this.BuyerList = JSON.parse(results.data).Tables3;
+          this.SuperiorList = JSON.parse(results.data).Tables2;
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
           this.gs.Logout();
@@ -78,7 +80,7 @@ PIReport: any[] = [];
       error: (err) => {},
     });
   }
-  loadAllPI(): void {
+  loadAllBuyers(): void {
     if (this.dateForm.invalid) {
       swal.fire(
         'Validation Error!',
@@ -87,7 +89,7 @@ PIReport: any[] = [];
       );
       return;
     }
-    const { fromDate, toDate, PIId } = this.dateForm.value;
+    const { fromDate, toDate, BuyerId, SuperioId } = this.dateForm.value;
     if (new Date(fromDate) > new Date(toDate)) {
       swal.fire(
         'Validation Error!',
@@ -99,22 +101,25 @@ PIReport: any[] = [];
 
     const sentByStr = localStorage.getItem('userId');
     const sentBy = sentByStr ? Number(sentByStr) : null;
-    
+
     const procedureData = {
-      procedureName: 'usp_ProformaInvoice_DeliveryLog_Report',
+      procedureName: 'usp_Buyer_GetBuyerData',
       parameters: {
-        FromDate: fromDate,
-        ToDate: toDate,
-        PI_Master_Id: PIId,
+        FromDateInput: fromDate,
+        ToDateInput: toDate,
+        Superior_Id: SuperioId,
+        Buyer_Id: BuyerId,
+        Status: 'Approved',
+        User: sentBy,
       },
     };
 
     this.getDataService.GetInitialData(procedureData).subscribe({
       next: (results) => {
+        console.log(results, procedureData);
         if (results.status) {
-          this.PIReport = JSON.parse(results.data).Tables1;
+          this.allBuyers = JSON.parse(results.data).Tables1;
 
-    console.log(this.PIReport);
           this.tableVisible = true;
         } else if (results.msg === 'Invalid Token') {
           swal.fire('Session Expired!', 'Please Login Again.', 'info');
@@ -123,5 +128,78 @@ PIReport: any[] = [];
       },
       error: () => swal.fire('Error!', 'Failed to load data.', 'error'),
     });
+  }
+
+  onDetails(row: any): void {
+    const procedureData = {
+      procedureName: 'usp_Buyer_GetDataById',
+      parameters: { Buyer_Id: row.Id },
+    };
+
+    this.getDataService.GetInitialData(procedureData).subscribe({
+      next: (results) => {
+
+        if (results.status) {
+          this.detailsData = JSON.parse(results.data).Tables1[0];
+          this.isDetailsVisible = true; // open dialog
+        } else if (results.msg === 'Invalid Token') {
+          swal.fire('Session Expired!', 'Please Login Again.', 'info');
+          this.gs.Logout();
+        } else {
+          swal.fire('Error!', 'Failed to load details.', 'error');
+        }
+      },
+      error: () =>
+        swal.fire(
+          'Error!',
+          'An error occurred while fetching details.',
+          'error'
+        ),
+    });
+  }
+
+  onDelete(row: any) {
+    const id = String(row?.Id ?? '');
+
+    if (!id) {
+      swal.fire('Missing Id', 'Buyer Id not found.', 'error');
+      return;
+    }
+
+    swal
+      .fire({
+        title: 'Are you sure?',
+        text: `Delete requisition ${row?.Buyer_Name || ''}?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete',
+        cancelButtonText: 'Cancel',
+        reverseButtons: true,
+      })
+      .then((res) => {
+        if (!res.isConfirmed) return;
+
+        const tableName = 'tbl_Buyer';
+        const whereParams = { Id: row?.Id };
+
+        var masterEntryModel = new MasterEntryModel();
+        masterEntryModel.tableName = tableName;
+        masterEntryModel.whereParams = whereParams;
+
+        this.ms.DeleteData(masterEntryModel).subscribe({
+          next: () => {
+            swal.fire('Deleted!', 'Customer deleted successfully.', 'success');
+            this.loadAllBuyers(); // refresh the table
+          },
+          error: (err) => {
+            console.error(err);
+            swal.fire(
+              'Delete Failed',
+              err?.error?.message || 'Something went wrong.',
+              'error'
+            );
+          },
+        });
+      });
   }
 }

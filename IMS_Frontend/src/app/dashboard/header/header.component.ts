@@ -43,6 +43,7 @@ export class HeaderComponent implements OnInit {
 
   GetDynamicMenu(){
     this.menu = window.localStorage.getItem('UserMenu');
+    
     this.menu = JSON.parse(this.menu)
           this.menu.forEach((e:any)=>{
             e.Children = JSON.parse(e.Children);
