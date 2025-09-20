@@ -6,7 +6,7 @@
     class="row p-3 shadow-sm g-3 align-items-end mb-3"
     (ngSubmit)="loadAllPI()"
   >
-    <div class="col-md-3">
+    <div class="col-md-2">
       <label class="form-label fw-bold">From Date</label>
       <input
         type="date"
@@ -15,7 +15,7 @@
       />
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-2">
       <label class="form-label fw-bold">To Date</label>
       <input
         type="date"
@@ -24,7 +24,7 @@
       />
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-2">
       <label>PI No <span>*</span></label>
       <p-dropdown
         [style]="{ width: '100%' }"
@@ -42,6 +42,53 @@
         <ng-template let-AB pTemplate="item">
           <div class="flex align-items-center gap-2">
             <div>{{ AB.PINo }}</div>
+          </div>
+        </ng-template>
+      </p-dropdown>
+    </div>
+    
+    <div class="col-md-2">
+      <label>Client List<span>*</span></label>
+      <p-dropdown
+        [style]="{ width: '100%' }"
+        class="p-0"
+        [options]="ClientList"
+        optionLabel="Company_Name"
+        [filter]="true"
+        filterBy="Company_Name"
+        [showClear]="true"
+        styleClass="listBottom"
+        placeholder="Please Select"
+        optionValue="Customer_ID"
+        formControlName="ClientId"
+        [virtualScroll]="true"
+        [virtualScrollItemSize]="30"
+      >
+        <ng-template let-AB pTemplate="item">
+          <div class="flex align-items-center gap-2">
+            <div>{{ AB.Company_Name }}</div>
+          </div>
+        </ng-template>
+      </p-dropdown>
+    </div>
+    <div class="col-md-2">
+      <label>Marketing Concern <span>*</span></label>
+      <p-dropdown
+        [style]="{ width: '100%' }"
+        class="p-0"
+        [options]="SuperiorList"
+        optionLabel="UserName"
+        [filter]="true"
+        filterBy="UserName"
+        [showClear]="true"
+        styleClass="listBottom"
+        placeholder="Please Select"
+        optionValue="User_ID"
+        formControlName="SuperiorId"
+      >
+        <ng-template let-AB pTemplate="item">
+          <div class="flex align-items-center gap-2">
+            <div>{{ AB.UserName }}</div>
           </div>
         </ng-template>
       </p-dropdown>
@@ -134,7 +181,7 @@
       <ng-template pTemplate="body" let-PIDetailsList let-i="rowIndex">
         <tr>
           <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
-          <td class="text-center">{{ PIDetailsList.PINo }}</td>
+          <td class="text-center"><div style="color: blue;" class="piNoView" (click)="piNoClick(PIDetailsList.PINo,PIDetailsList.LC_No)">{{ PIDetailsList.PINo }}</div></td>
           <td class="text-center">{{ PIDetailsList.Date| date : "dd-MMM-yyyy" }}</td>
           <td class="text-center">{{ PIDetailsList.Consignee }}</td>
           <td class="text-center">{{ PIDetailsList.Contact_Name }}</td>

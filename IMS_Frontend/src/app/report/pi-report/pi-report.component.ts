@@ -134,16 +134,18 @@ export class PiReportComponent {
     });
   }
 
-  piNoClick(piNo: any) {
+  piNoClick(piNo: any,lc:any) {
+    console.log(piNo,lc);
+    
     swal.fire({
       title: 'Save Voucher?',
       text: 'Do you want to save, discard, or cancel?',
       icon: 'warning',
-      showCancelButton: true,
+      showCancelButton: lc==null?false:true,
       showDenyButton: true,
-      confirmButtonText: 'Save',
-      denyButtonText: 'Discard',
-      cancelButtonText: 'Cancel',
+      confirmButtonText: 'PI Report',
+      denyButtonText: 'Delivery Report',
+      cancelButtonText: 'Cash Report',
     }).then((result) => {
       if (result.isConfirmed) {
         //this.updateVoucherData(); // your Angular fn

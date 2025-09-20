@@ -26,6 +26,7 @@ PIReport: any[] = [];
   dateForm!: FormGroup;
   tableVisible = false;
   SuperiorList: any;
+  ClientList: any;
 
   insertPermissions: boolean = false;
   updatePermissions: boolean = false;
@@ -57,6 +58,8 @@ PIReport: any[] = [];
       fromDate: [null, Validators.required],
       toDate: [null, Validators.required],
       PIId: [''],
+      SuperiorId: [''],
+      ClientId: [''],
     });
   }
   getInitialData() {
@@ -69,6 +72,8 @@ PIReport: any[] = [];
       next: (results) => {
         if (results.status) {
           this.PIList = JSON.parse(results.data).Tables1;
+          this.SuperiorList = JSON.parse(results.data).Tables2;
+          this.ClientList = JSON.parse(results.data).Tables3;
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
           this.gs.Logout();
@@ -87,7 +92,7 @@ PIReport: any[] = [];
       );
       return;
     }
-    const { fromDate, toDate, PIId } = this.dateForm.value;
+    const { fromDate, toDate, PIId , SuperiorId, ClientId} = this.dateForm.value;
     if (new Date(fromDate) > new Date(toDate)) {
       swal.fire(
         'Validation Error!',
@@ -106,6 +111,8 @@ PIReport: any[] = [];
         FromDate: fromDate,
         ToDate: toDate,
         PI_Master_Id: PIId,
+        Client_Id: ClientId,
+        User_Id: SuperiorId,
       },
     };
 
@@ -124,4 +131,27 @@ PIReport: any[] = [];
       error: () => swal.fire('Error!', 'Failed to load data.', 'error'),
     });
   }
+
+  piNoClick(piNo: any,lc:any) {
+        console.log(piNo,lc);
+        
+        swal.fire({
+          title: 'Save Voucher?',
+          text: 'Do you want to save, discard, or cancel?',
+          icon: 'warning',
+          showCancelButton: lc==null?false:true,
+          showDenyButton: true,
+          confirmButtonText: 'PI Report',
+          denyButtonText: 'Delivery Report',
+          cancelButtonText: 'Cash Report',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            //this.updateVoucherData(); // your Angular fn
+          } else if (result.isDenied) {
+            console.log('Changes discarded.');
+          } else {
+            console.log('User canceled.');
+          }
+        });
+      }
 }
