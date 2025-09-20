@@ -16,16 +16,17 @@ import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
 @Component({
   selector: 'app-pi-report',
   templateUrl: './pi-report.component.html',
-  styleUrls: ['./pi-report.component.css']
+  styleUrls: ['./pi-report.component.css'],
 })
 export class PiReportComponent {
-PIReport: any[] = [];
+  PIReport: any[] = [];
   detailsData: any = null;
   isDetailsVisible = false;
   PIList: any;
   dateForm!: FormGroup;
   tableVisible = false;
   SuperiorList: any;
+  ClientList: any;
 
   insertPermissions: boolean = false;
   updatePermissions: boolean = false;
@@ -57,6 +58,8 @@ PIReport: any[] = [];
       fromDate: [null, Validators.required],
       toDate: [null, Validators.required],
       PIId: [''],
+      SuperiorId: [''],
+      ClientId: [''],
     });
   }
   getInitialData() {
@@ -69,6 +72,9 @@ PIReport: any[] = [];
       next: (results) => {
         if (results.status) {
           this.PIList = JSON.parse(results.data).Tables1;
+          this.SuperiorList = JSON.parse(results.data).Tables2;
+          this.ClientList = JSON.parse(results.data).Tables3;
+          console.log(this.ClientList, this.SuperiorList);
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
           this.gs.Logout();
@@ -87,7 +93,8 @@ PIReport: any[] = [];
       );
       return;
     }
-    const { fromDate, toDate, PIId } = this.dateForm.value;
+    const { fromDate, toDate, PIId, SuperiorId, ClientId } =
+      this.dateForm.value;
     if (new Date(fromDate) > new Date(toDate)) {
       swal.fire(
         'Validation Error!',
@@ -99,13 +106,15 @@ PIReport: any[] = [];
 
     const sentByStr = localStorage.getItem('userId');
     const sentBy = sentByStr ? Number(sentByStr) : null;
-    
+
     const procedureData = {
       procedureName: 'usp_ProformaInvoice_Report',
       parameters: {
         FromDate: fromDate,
         ToDate: toDate,
         PI_Master_Id: PIId,
+        Client_Id: ClientId,
+        User_Id: SuperiorId,
       },
     };
 
@@ -114,7 +123,7 @@ PIReport: any[] = [];
         if (results.status) {
           this.PIReport = JSON.parse(results.data).Tables1;
 
-    console.log(this.PIReport);
+          console.log(this.PIReport);
           this.tableVisible = true;
         } else if (results.msg === 'Invalid Token') {
           swal.fire('Session Expired!', 'Please Login Again.', 'info');
@@ -125,5 +134,24 @@ PIReport: any[] = [];
     });
   }
 
- 
+  piNoClick(piNo: any) {
+    swal.fire({
+      title: 'Save Voucher?',
+      text: 'Do you want to save, discard, or cancel?',
+      icon: 'warning',
+      showCancelButton: true,
+      showDenyButton: true,
+      confirmButtonText: 'Save',
+      denyButtonText: 'Discard',
+      cancelButtonText: 'Cancel',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        //this.updateVoucherData(); // your Angular fn
+      } else if (result.isDenied) {
+        console.log('Changes discarded.');
+      } else {
+        console.log('User canceled.');
+      }
+    });
+  }
 }
