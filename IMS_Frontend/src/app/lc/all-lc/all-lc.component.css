@@ -32,3 +32,33 @@ thead{
     background-color: #6a1a3f!important;
 
 }
+.theme-btn-edit { background-color: #b23b60; color: #fff; }
+.btn-edit:hover { background-color: #c94d77!important; }
+
+.bs-datepicker-container.theme-date-picker {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid #6a1a3f; /* primary color */
+  background-color: #f9faff;
+  color: #212529;
+}
+
+.bs-datepicker-container.theme-date-picker .bs-datepicker-head {
+  background-color: #6a1a3f!important; /* header background */
+  color: #fff;
+  font-weight: 600;
+  text-align: center;
+}
+
+.bs-datepicker-container.theme-date-picker .bs-datepicker-body table td.day:hover {
+  background-color: #cce5ff; 
+  cursor: pointer;
+  border-radius: 0.25rem;
+}
+
+.bs-datepicker-container.theme-userfriendly .bs-datepicker-body table td.day.active {
+  background-color: #0056b3; 
+  color: #fff;
+  border-radius: 0.25rem;
+}

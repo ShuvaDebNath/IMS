@@ -82,24 +82,89 @@ p-paginator .p-paginator-current {
    color: white!important;
 }
 /* Add / Create */
-.theme-btn-add { background-color: #a12c64; color: #fff; }
+.theme-btn-add { background-color: #a12c64!important; color: #fff; }
 .theme-btn-add:hover { background-color: #b23b75; }
 
 /* Edit / Update */
 .theme-btn-edit { background-color: #b23b60; color: #fff; }
-.btn-edit:hover { background-color: #c94d77; }
+.btn-edit:hover { background-color: #c94d77!important; }
 
 /* Delete */
-.theme-btn-delete { background-color: #d32f2f; color: #fff; }
-.theme-btn-delete:hover { background-color: #e53935; }
+.theme-btn-delete { background-color: #d32f2f!important; color: #fff; }
+.theme-btn-delete:hover { background-color: #e53935!important; }
 
 /* View / Details */
-.theme-btn-view { background-color: #51223c; color: #fff; }
-.theme-btn-view:hover { background-color: #6a1a3f; }
+.theme-btn-view { background-color: #51223c!important; color: #fff; }
+.theme-btn-view:hover { background-color: #6a1a3f!important; }
 
 /* Cancel */
-.theme-btn-cancel { background-color: #aa607f; color: #fff; }
-.theme-btn-cancel:hover { background-color: #bb708f; }
+.theme-btn-cancel { background-color: #aa607f!important; color: #fff; }
+.theme-btn-cancel:hover { background-color: #bb708f!important; }
+.bs-datepicker-container.theme-date-picker {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 1px solid #6a1a3f;
+    background-color: #f9faff;
+    color: #212529;
+  }
+
+  .bs-datepicker-container.theme-date-picker .bs-datepicker-head {
+    background-color: #6a1a3f !important;
+    color: #fff;
+    font-weight: 600;
+    text-align: center;
+    min-width: 270px;
+    height: 50px;
+    padding: 10px;
+    border-radius: 0.5rem 0.5rem 0 0;
+  }
+
+  .bs-datepicker-container.theme-date-picker .bs-datepicker-body table td.day:hover {
+    background-color: #f0c2d0;
+    cursor: pointer;
+    border-radius: 0.25rem;
+  }
+
+  .bs-datepicker-container.theme-date-picker .bs-datepicker-body table td.day.active {
+    background-color: #6a1a3f;
+    color: #fff;
+    border-radius: 0.25rem;
+  }
+
+  .bs-datepicker-container.theme-date-picker .bs-datepicker-body table td.day.selected {
+    background-color: #8a1a5f;
+    color: #fff;
+    border-radius: 0.25rem;
+  }
+
+  .bs-datepicker-container.theme-date-picker .bs-datepicker-body table td.day.is-highlighted {
+    background-color: #f0c2d0;
+    color: #212529;
+    border-radius: 0.25rem;
+  }
+
+  .bs-datepicker-container.theme-date-picker .bs-datepicker-body table td.day.is-highlighted:hover {
+    background-color: #e0a2b0;
+  }
+
+  .bs-datepicker-container.theme-date-picker .bs-datepicker-body table th {
+    color: #6a1a3f;
+    font-weight: 600;
+  }
+
+  .bs-datepicker-container.theme-date-picker .bs-datepicker-body table td span {
+    border-radius: 0.25rem;
+  }
+
+  .bs-datepicker-container.theme-date-picker .bs-datepicker-body table td span:hover {
+    background-color: #f0c2d0;
+  }
+
+  .bs-datepicker-container.theme-date-picker .bs-datepicker-body table td span.active {
+    background-color: #6a1a3f;
+    color: #fff;
+  }
 
 .ngx-datatable.bootstrap {
   background-color: transparent;
