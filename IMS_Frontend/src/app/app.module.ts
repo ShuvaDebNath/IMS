@@ -34,6 +34,8 @@ import { SalesContractDetailsComponent } from './sales-contract/sales-contract-d
 import { UnapprovedBuyingHouseComponent } from './buying-house/unapproved-buying-house/unapproved-buying-house.component';
 import { AllBuyingHouseComponent } from './buying-house/all-buying-house/all-buying-house.component';
 import { GenerateBuyingHouseComponent } from './buying-house/generate-buying-house/generate-buying-house.component';
+import { ExportRawMaterialComponent } from './export-module/export-raw-material/export-raw-material.component';
+import { OtwRawMaterialComponent } from './export-module/otw-raw-material/otw-raw-material.component';
 
 
 const CustomSelectOptions: INgxSelectOptions = {

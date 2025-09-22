@@ -1,0 +1,235 @@
+<div class="container shadow-sm p-3 mb-5 bg-white rounded">
+    <h1 class="theme-text">Raw Material Requisition Form</h1>
+
+    <br />
+    <form [formGroup]="exportForm">
+
+        <!-- Header fields -->
+        <div class="row mb-3">
+            <!-- Export Date -->
+            <div class="col-md-6">
+                <label class="form-label">Export Date</label>
+                <input type="date" class="form-control" formControlName="ExportDate" />
+            </div>
+        </div>
+        <div class="row mb-3">
+            <!-- Invoice No -->
+            <div class="col-md-6">
+                <label class="form-label">Invoice No</label>
+                <input autocomplete="off" type="text"                  
+                    formControlName="InvoiceNo"
+                    class="form-control"
+                    placeholder="invoiceNo Code" id="invoiceNo" name="invoiceNo" value="">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label>Loading Port <span>*</span></label>
+                <p-dropdown [style]="{'width':'100%'}" class="p-0" [options]="LoadingPortList" optionLabel="Loading_Port_Name"
+                    [filter]="true" filterBy="Loading_Port_Name" [showClear]="true" styleClass="listBottom"
+                    placeholder="Please Select" optionValue="Loading_Port_ID" formControlName="Loading_Port">
+                    <ng-template let-AB pTemplate="item">
+                        <div class="flex align-items-center gap-2">
+                            <div>{{ AB.Loading_Port_Name }}</div>
+                        </div>
+                    </ng-template>
+                </p-dropdown>
+            </div>
+            <div class="col-md-6">
+                <label>Destination Port <span>*</span></label>
+                <p-dropdown [style]="{'width':'100%'}" class="p-0" [options]="DestinationPortList" optionLabel="Destination_Port_Name"
+                    [filter]="true" filterBy="Destination_Port_Name" [showClear]="true" styleClass="listBottom"
+                    placeholder="Please Select" optionValue="Destination_Port_ID" formControlName="Destination_Port">
+                    <ng-template let-AB pTemplate="item">
+                        <div class="flex align-items-center gap-2">
+                            <div>{{ AB.Destination_Port_Name }}</div>
+                        </div>
+                    </ng-template>
+                </p-dropdown>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Shipping Information</label>
+                <textarea class="form-control" formControlName="ShippingInformation" rows="1"></textarea>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Remarks</label>
+                <textarea class="form-control" formControlName="remarks" rows="1"></textarea>
+            </div>
+        </div>
+
+
+        <h3><strong>Details </strong></h3>
+        <!-- Items table -->
+        <table class="table table-bordered">
+
+            <colgroup>
+                <col style="width: 15%;">
+                <col style="width: 15%;">
+                <col style="width: 5%;">
+                <col style="width: 5%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 5%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 5%;">
+            </colgroup>
+            <thead>
+                <tr>
+
+                    <th class="th-article" style="text-align: center;">
+                        <span>Article</span>
+
+                        <!-- PrimeIcons version (PrimeNG) -->
+                        <button type="button" class="icon-btn" [disabled]="reloadingArticles"
+                            (click)="refreshArticles()" title="Refresh articles">
+                            <i class="pi" [ngClass]="reloadingArticles ? 'pi-spinner pi-spin' : 'pi-refresh'"></i>
+                        </button>
+                    </th>
+                    <th style="text-align: center;">Description</th>
+                    <th style="text-align: center;">Color</th>
+                    <th style="text-align: center;">Width</th>
+                    <th style="text-align: center;">Roll/Bag</th>
+                    <th style="text-align: center;">Roll/Bag Qty</th>
+                    <th style="text-align: center;">Unit</th>
+                    <th style="text-align: center;">Qty</th>
+                    <th style="text-align: center;">Weight</th>
+                    <th style="text-align: center;">Gross Weight</th>
+                    <th style="width: 60px;"></th>
+                </tr>
+            </thead>
+
+            <tbody formArrayName="items">
+                <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
+                    <td>
+                        <div class="form-group">
+
+                            <p-dropdown class="p-0 rm-dd" [style]="{ width: '100%' }" [panelStyle]="{ width: '100%' }"
+                                [options]="RawMaterialList" optionLabel="Article_No"
+                                optionValue="RawMaterial_ID" [filter]="true" filterBy="Article_No"
+                                [showClear]="true" placeholder="Please Select" formControlName="article">
+                                <ng-template let-article pTemplate="item">
+                                    <div class="flex align-items-center gap-2">
+                                        <div>{{ article.Article_No }}</div>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                    </td>
+
+                    <td class="col-description">
+                        <input class="form-control" formControlName="description" />
+                    </td>
+                    <td>
+                        <div class="form-group">
+
+                            <p-dropdown class="p-0 rm-dd" [style]="{ width: '100%' }" [panelStyle]="{ width: '100%' }"
+                                [options]="ColorList" optionLabel="Color"
+                                optionValue="Color_ID" [filter]="true" filterBy="Color"
+                                [showClear]="true" placeholder="Please Select" formControlName="color">
+                                <ng-template let-color pTemplate="item">
+                                    <div class="flex align-items-center gap-2">
+                                        <div>{{ color.Color }}</div>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+
+                            <p-dropdown class="p-0 rm-dd" [style]="{ width: '100%' }" [panelStyle]="{ width: '100%' }"
+                                [options]="WidthList" optionLabel="Measurement"
+                                optionValue="Width_ID" [filter]="true" filterBy="Measurement"
+                                [showClear]="true" placeholder="Please Select" formControlName="width">
+                                <ng-template let-width pTemplate="item">
+                                    <div class="flex align-items-center gap-2">
+                                        <div>{{ width.Measurement }}</div>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                    </td>
+                    <td>
+                        <select class="form-control" formControlName="rollOrBag">
+                            <option>Rolls</option>
+                            <option>Bags</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control" formControlName="rollBagQty"
+                            style="text-align: center;" />
+                    </td>
+
+                    <td>
+                        <div class="form-group">
+
+                            <p-dropdown class="p-0 rm-dd" [style]="{ width: '100%' }" [panelStyle]="{ width: '100%' }"
+                                [options]="UnitList" optionLabel="Unit"
+                                optionValue="Unit_ID" [filter]="true" filterBy="Unit"
+                                [showClear]="true" placeholder="Please Select" formControlName="unitId">
+                                <ng-template let-Unit pTemplate="item">
+                                    <div class="flex align-items-center gap-2">
+                                        <div>{{ Unit.Unit }}</div>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control" formControlName="qty" style="text-align: center;" />
+                    </td>
+                    <td>
+                        <input type="number" class="form-control" formControlName="weight" style="text-align: center;" />
+                    </td>
+                    <td>
+                        <input type="number" class="form-control" formControlName="grossWeight" style="text-align: center;" />
+                    </td>
+
+
+
+                    <td>
+                        <button type="button" class="btn btn-sm btn-danger" (click)="removeItem(i)">
+                            ×
+                        </button>
+                </tr>
+            </tbody>
+
+
+            <tr class="totals-row">
+                <td></td>
+                <td class="text-end fw-bold">Totals:</td>
+                <td></td>
+                <td></td>
+                <td>
+                    <div class="rbq-label">Rolls</div>
+                    <div class="rbq-label">Bags</div>
+                </td>
+                <td></td>
+                <td>
+                    <input class="form-control text-end" [value]="totalQty" disabled />
+                </td>
+                <td></td>
+                <td>
+                    <input class="form-control text-end" [value]="totalQty" disabled />
+                </td>
+            </tr>
+
+        </table>
+
+
+        <div class="d-flex justify-content-end gap-2 mt-3">
+            <button type="button" class="btn btn-outline-success " (click)="addItem()">
+                <i class="bi bi-plus-circle me-1"></i> Add Row
+            </button>
+
+            <button type="submit" (click)="saveData()" [ngClass]="{
+        'theme-btn-disable': exportForm.invalid
+      }" class="btn theme-btn btn-rounded" >
+                <i class="bi bi-save me-1"></i> Save
+            </button>
+        </div>
+    </form>
+
+</div>

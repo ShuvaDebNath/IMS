@@ -84,6 +84,8 @@ import { UnapprovedBuyingHouseComponent } from '../buying-house/unapproved-buyin
 import { AllBuyingHouseComponent } from '../buying-house/all-buying-house/all-buying-house.component';
 import { GenerateBuyingHouseComponent } from '../buying-house/generate-buying-house/generate-buying-house.component';
 import { BeneficiaryListComponent } from '../Beneficiary/beneficiary-list/beneficiary-list.component';
+import { OtwRawMaterialComponent } from '../export-module/otw-raw-material/otw-raw-material.component';
+import { ExportRawMaterialComponent } from '../export-module/export-raw-material/export-raw-material.component';
 
 const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more options
   keepSelectedItems: false,
@@ -128,7 +130,9 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     UnapprovedBuyingHouseComponent,
     AllBuyingHouseComponent,
     GenerateBuyingHouseComponent,
-    BeneficiaryListComponent
+    BeneficiaryListComponent,
+    ExportRawMaterialComponent,
+    OtwRawMaterialComponent
   ],
   imports: [
 
@@ -244,6 +248,8 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'all-buying-house', component: AllBuyingHouseComponent },
           { path: 'generate-buying-house', component: GenerateBuyingHouseComponent },
           { path: 'unapproved-buying-house', component: UnapprovedBuyingHouseComponent },
+          { path: 'export-raw-material', component: ExportRawMaterialComponent },
+          { path: 'otw-raw-material', component: OtwRawMaterialComponent },
         ]
       }
     ]),
