@@ -34,6 +34,7 @@ import { SalesContractDetailsComponent } from './sales-contract/sales-contract-d
 import { UnapprovedBuyingHouseComponent } from './buying-house/unapproved-buying-house/unapproved-buying-house.component';
 import { AllBuyingHouseComponent } from './buying-house/all-buying-house/all-buying-house.component';
 import { GenerateBuyingHouseComponent } from './buying-house/generate-buying-house/generate-buying-house.component';
+import { CurrencyCreateComponent } from './MasterEntry/Currency/currency-create/currency-create.component';
 
 
 const CustomSelectOptions: INgxSelectOptions = {
@@ -57,7 +58,8 @@ const CustomSelectOptions: INgxSelectOptions = {
     BeneficiarybankCreateComponent,
     BeneficiaryBankListComponent,
     ApplicantbankCreateComponent,
-    ApplicantbankListComponent
+    ApplicantbankListComponent,
+    CurrencyCreateComponent
   ],
   imports: [
     FormsModule,

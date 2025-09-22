@@ -32,9 +32,13 @@
 .theme-color{
     color: #6a1a3f;
 }
-table-bordered td, .table-bordered th,tr,td {
+/* table-bordered td,
+ .table-bordered th,tr,td {
     border: 1px solid #6a1a3f !important;
-}
+} */
+ .table-bordered th,tr,td {
+    border: 1px solid #6a1a3f !important;
+} 
 .theme-btn {
     border-radius: 5px;
     background-color: #6a1a3f!important;
@@ -63,11 +67,11 @@ table-bordered td, .table-bordered th,tr,td {
 }
 
  
-.table-bordered th,
+/* .table-bordered th,
 td,
 tr {
     border: 1px solid #6a1a3f !important;
-}
+} */
 /* over-right */
 
 .p-paginator {
@@ -232,9 +236,9 @@ datatable-header-cell.dt-ledger-name
   border: 1px solid #6a1a3f !important;
 }
 
-.input-group-text{
+/* .input-group-text{
   height: calc(1.8125rem + 2px) !important;
-}
+} */
 .datatable table,tr,td,th{
   font-size: 14px !important;
   font-weight: bold;

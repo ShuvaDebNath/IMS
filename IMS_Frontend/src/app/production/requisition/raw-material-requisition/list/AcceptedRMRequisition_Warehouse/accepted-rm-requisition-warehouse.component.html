@@ -36,15 +36,18 @@
         <td style="text-align: center;">{{ requisition.Total_bag }}</td>
         <td style="text-align: center;">{{ requisition.Total_Roll }}</td>
         <td style="text-align: center;">{{ requisition.Status }}</td>
-        <td class="d-flex gap-2" style="justify-content: center;">
-          <button class="btn btn-info btn-sm text-white d-inline-flex align-items-center"
+        <td style="text-align: center;">
+          <div class="d-flex gap-2" style="justify-content: center;">
+            <button class="btn theme-btn-view btn-sm text-white d-inline-flex align-items-center"
             (click)="onDetails(requisition)">
-            <i class="pi pi-eye me-1"></i>
+            <i class="pi pi-eye "></i>
           </button>
-          <button class="btn btn-primary btn-xl text-white d-inline-flex align-items-center"
+          <button class="btn theme-btn-view btn-sm text-white d-inline-flex align-items-center"
             (click)="showDataBeforeSend(requisition)">
-            <i class="fa fa-paper-plane me-1"></i>
+            <i class="fa fa-paper-plane "></i>
           </button>
+          </div>
+          
         </td>
 
       </tr>
