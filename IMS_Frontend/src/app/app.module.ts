@@ -19,21 +19,6 @@ import { NgxSelectModule, INgxSelectOptions } from 'ngx-select-ex';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { DatePipe } from '@angular/common';
 import { MatPaginatorModule } from "@angular/material/paginator";
-import { LandingPageComponent } from './landing-page/landing-page.component';
-import { BeneficiaryCreateComponent } from './Beneficiary/beneficiary-create/beneficiary-create.component';
-import { ArbitrationCreateComponent } from './arbitration/arbitration-create/arbitration-create.component';
-import { ArbitrationListComponent } from './arbitration/arbitration-list/arbitration-list.component';
-import { BeneficiarybankCreateComponent } from './BeneficiaryBank/beneficiarybank-create/beneficiarybank-create.component';
-import { BeneficiaryBankListComponent } from './BeneficiaryBank/beneficiary-bank-list/beneficiary-bank-list.component';
-import { ApplicantbankCreateComponent } from './ApplicantBank/applicantbank-create/applicantbank-create.component';
-import { ApplicantbankListComponent } from './ApplicantBank/applicantbank-list/applicantbank-list.component';
-import { TableModule } from 'primeng/table';
-import { GenerateSalesContractComponent } from './sales-contract/generate-sales-contract/generate-sales-contract.component';
-import { AllSalesContractComponent } from './sales-contract/all-sales-contract/all-sales-contract.component';
-import { SalesContractDetailsComponent } from './sales-contract/sales-contract-details/sales-contract-details.component';
-import { UnapprovedBuyingHouseComponent } from './buying-house/unapproved-buying-house/unapproved-buying-house.component';
-import { AllBuyingHouseComponent } from './buying-house/all-buying-house/all-buying-house.component';
-import { GenerateBuyingHouseComponent } from './buying-house/generate-buying-house/generate-buying-house.component';
 
 
 const CustomSelectOptions: INgxSelectOptions = {
@@ -50,14 +35,7 @@ const CustomSelectOptions: INgxSelectOptions = {
     ForbiddenErrorComponent,
     PageNotFoundComponent,
     LogoutComponent,
-    ResetPasswordComponent,
-    BeneficiaryCreateComponent,
-    ArbitrationCreateComponent,
-    ArbitrationListComponent,
-    BeneficiarybankCreateComponent,
-    BeneficiaryBankListComponent,
-    ApplicantbankCreateComponent,
-    ApplicantbankListComponent
+    ResetPasswordComponent
   ],
   imports: [
     FormsModule,
