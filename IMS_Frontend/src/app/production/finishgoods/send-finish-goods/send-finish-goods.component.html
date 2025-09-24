@@ -9,15 +9,17 @@
         <label class="form-label">Export Date</label>
         <input type="date" class="form-control" formControlName="ExportDate" />
       </div>
-      <div class="col-md-8">
+      <div class="col-md-3">
         <label class="form-label">Sent From</label>
-        <textbox class="form-control" formControlName="SentFrom" rows="1"></textbox>
+        <input type="text" class="form-control" formControlName="SentFrom">
       </div>
-    </div>
-    <div class="col-md-8">
+
+      <div class="col-md-3">
       <label class="form-label">Note</label>
       <textarea class="form-control" formControlName="Note" rows="1"></textarea>
     </div>
+    </div>
+    
 
     <h3><strong>Details </strong></h3>
     <!-- Items table -->
@@ -53,7 +55,7 @@
               <p-dropdown class="p-0 rm-dd" [style]="{ width: '100%' }" [panelStyle]="{ width: '100%' }"
                 [options]="finishGoodsArticles" optionLabel="Article_No" optionValue="Item_ID" [filter]="true"
                 filterBy="Article_No" [showClear]="true" placeholder="Please Select"
-                (onChange)="onArticleChange(i, $event.value)" formControlName="Item_ID">
+                (onChange)="onArticleChange(i, $event.value)" formControlName="Item_ID" [virtualScroll]="true" [itemSize]="30">
                 <ng-template let-article pTemplate="item">
                   <div class="flex align-items-center gap-2">
                     <div>{{ article.Article_No }}</div>
@@ -69,6 +71,8 @@
             <input type="number" class="form-control" formControlName="Quantity" style="text-align: center;" />
           </td>
           <td>
+            <input type="number" class="form-control" formControlName="Unit_ID" />
+            <input type="text" class="form-control" formControlName="Roll_Bag" />
             <input type="number" class="form-control" formControlName="Sent_RollBag_Quantity" style="text-align: center;" />
           </td>
           <td>
@@ -85,13 +89,16 @@
         <td></td>
         <td class="text-end fw-bold">Totals:</td>
         <td>
-          <input class="form-control text-end" [value]="totalQty" disabled />
+          <input class="form-control text-center" [value]="totalQty" disabled />
         </td>
         <td>
-          <input class="form-control text-end" [value]="totalSentRollBagQty" disabled />
+          Roll: <input class="form-control text-center" [value]="totalRoll" disabled />
+          Bag: <input class="form-control text-center" [value]="totalBag" disabled />
+          KG: <input class="form-control text-center" [value]="totalKG" disabled />
+          Piece: <input class="form-control text-center" [value]="totalPiece" disabled />
         </td>
         <td>
-          <input class="form-control text-end" [value]="totalGrossWeight" disabled />
+          <input class="form-control text-center" [value]="totalGrossWeight" disabled />
         </td>
         <td></td>
       </tr>

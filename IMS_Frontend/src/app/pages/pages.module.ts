@@ -79,15 +79,16 @@ import { PendingRMRequisitionWareHouseComponent } from '../warehouse/requisition
 import { AcceptedRMRequisitionWareHouseComponent } from '../warehouse/requisition/raw-material-requisition/list/AcceptedRMRequisition_Warehouse/accepted-rm-requisition-warehouse.component';
 import { IssuedRMRequisitionListWarehouseComponent } from '../warehouse/requisition/raw-material-requisition/list/IssuedRMRequisitionList_Warehouse/issued-rm-requisition-list-warehouse.component';
 import { SendFinishGoodsComponent } from '../production/finishgoods/send-finish-goods/send-finish-goods.component';
-import { FinishGoodsInfoWithStockComponent } from '../rm-fg-material-infos-with-stock/finish-goods-info-with-stock/finish-goods-info-with-stock.component';
 import { AllCustomersComponent } from '../customer/all-customers/all-customers.component';
 import { GenerateCustomerComponent } from '../customer/generate-customer/generate-customer.component';
 import { UnapprovedCustomerComponent } from '../customer/unapproved-customer/unapproved-customer.component';
 import { UnapprovedBuyingHouseComponent } from '../buying-house/unapproved-buying-house/unapproved-buying-house.component';
 import { AllBuyingHouseComponent } from '../buying-house/all-buying-house/all-buying-house.component';
 import { GenerateBuyingHouseComponent } from '../buying-house/generate-buying-house/generate-buying-house.component';
-import { BeneficiaryListComponent } from '../Beneficiary/beneficiary-list/beneficiary-list.component';
->>>>>>> 079e225a9655a21be1779b66b00478d10937bd05
+import { PendingFinishGoodsSentListProductionComponent } from '../production/finishgoods/pending-finish-goods-sent-list-production/pending-finish-goods-sent-list-production.component';
+import { ReceivedFinishGoodsProductionComponent } from '../production/finishgoods/received-finish-goods-list-production/received-finish-goods-list-production.component';
+import { PendingFinishGoodsSentListWarehouseComponent } from '../warehouse/finishgoods/pending-finish-goods-sent-list-warehouse/pending-finish-goods-sent-list-warehouse.component';
+import { ReceivedFinishGoodsWarehouseComponent } from '../warehouse/finishgoods/received-finish-goods-list-warehouse/received-finish-goods-list-warehouse.component';
 
 const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more options
   keepSelectedItems: false,
@@ -190,6 +191,10 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'raw-material-stock', component: RawMaterialStockComponent },
           { path: 'finish-goods-stock', component: FinishGoodsInfoWithStockComponent },
           { path: 'send-finish-goods', component: SendFinishGoodsComponent },
+          { path: 'pending-fg-sent-list-production', component: PendingFinishGoodsSentListProductionComponent },
+          { path: 'received-fg-list-production', component: ReceivedFinishGoodsProductionComponent },
+          { path: 'pending-fg-sent-list-warehouse', component: PendingFinishGoodsSentListWarehouseComponent },
+          { path: 'received-fg-list-warehouse', component: ReceivedFinishGoodsWarehouseComponent },
           {
             path: 'pending-rm-requisition/edit/:reqId',
             loadComponent: () =>

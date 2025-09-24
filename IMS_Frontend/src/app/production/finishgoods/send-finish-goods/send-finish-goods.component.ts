@@ -8,17 +8,18 @@ import swal from 'sweetalert2';
 import { GlobalServiceService } from 'src/app/services/Global-service.service';
 import { GetDataService } from 'src/app/services/getData/getDataService.service';
 import { DoubleMasterEntryService } from 'src/app/services/doubleEntry/doubleEntryService.service';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
 import { CreateSendFinishGoodsItem, CreateSendFinishGoodsRequest } from 'src/app/models/requisition/sendFinishGoods';
+import { DropdownModule } from 'primeng/dropdown';
 
 @Component({
   standalone: true,
   selector: 'app-send-finish-goods',
   templateUrl: './send-finish-goods.component.html',
   styleUrls: ['./send-finish-goods.component.css'],
-  imports: [CommonModule, TableModule, InputTextModule, DialogModule],
+  imports: [CommonModule, TableModule, InputTextModule, DialogModule, DropdownModule,ReactiveFormsModule],
 })
 export class SendFinishGoodsComponent implements OnInit {
   finishGoodsArticles: any[] = [];
@@ -85,13 +86,16 @@ export class SendFinishGoodsComponent implements OnInit {
             this.finishGoodsArticles = JSON.parse(results.data).Tables28;
             this.finishGoodsArticlesBackup = [...this.finishGoodsArticles];
 
-            this.unitByArticleId = new Map(
-              this.finishGoodsArticles.map((r: any) => {
-                const unit =
-                  r.Unit_ID ?? r.UnitId ?? r.UnitID ?? null; 
-                return [Number(r.RawMaterial_ID), unit != null ? Number(unit) : null];
-              })
-            );
+            // this.unitByArticleId = new Map(
+            //   this.finishGoodsArticles.map((r: any) => {
+            //     const unit =
+            //       r.Unit_ID ?? r.Unit_ID ?? r.Unit_ID ?? null; 
+            //     return [Number(r.Item_ID), unit != null ? Number(unit) : null];
+            //   })
+            // );
+
+            //console.log(this.unitByArticleId);
+            
   
           } else if (results.msg == 'Invalid Token') {
             swal.fire('Session Expierd!', 'Please Login Again.', 'info');
@@ -113,7 +117,9 @@ export class SendFinishGoodsComponent implements OnInit {
           Note: [''],
           Quantity: [0, [Validators.required, Validators.min(1)]],
           Sent_RollBag_Quantity: [0, [Validators.required, Validators.min(1)]],
-          Gross_Weight: [0, [Validators.required, Validators.min(0.1)]]
+          Gross_Weight: [0, [Validators.required, Validators.min(0.1)]],
+          Unit_ID: [null],
+          Roll_Bag: ['']
         })
       );
     }
@@ -126,18 +132,57 @@ export class SendFinishGoodsComponent implements OnInit {
   totalQty = 0;
   totalSentRollBagQty = 0;
   totalGrossWeight = 0;
+  totalBag = 0;
+  totalRoll = 0;
+  totalKG = 0;
+  totalPiece = 0;
 
   // call this on init and whenever the rows change
   private recalcTotals(): void {
     const rows = this.items.getRawValue() as Array<{
-      qty: number;
+      Quantity: number;
       Sent_RollBag_Quantity: number;
       Gross_Weight: number;
+      Unit_ID: number | null;
     }>;
-  
-    this.totalQty  = rows.reduce((s, r) => s + (Number(r.qty) || 0), 0);
-    this.totalSentRollBagQty  = rows.reduce((s, r) => s + (Number(r.Sent_RollBag_Quantity) || 0), 0);
-    this.totalGrossWeight  = rows.reduce((s, r) => s + (Number(r.Gross_Weight) || 0), 0);
+
+    this.totalBag = 0;
+    this.totalRoll = 0;
+    this.totalPiece = 0;
+    this.totalKG = 0;
+
+    rows.forEach(r => {
+      const qty = Number(r.Sent_RollBag_Quantity) || 0;
+      const unitId = Number(r.Unit_ID); 
+
+      console.log({ r, qty, unitId });
+      
+
+      switch (unitId) {
+        case 1: // YARD => ROLL
+          this.totalRoll += qty;
+          break;
+        case 2: // METER => BAG
+          this.totalBag += qty;
+          break;
+        case 3: // KG
+          this.totalKG += qty;
+          break;
+        case 4: // PIECE
+          this.totalPiece += qty;
+          break;
+      }
+    });
+
+    console.log({
+    Bag: this.totalBag,
+    Roll: this.totalRoll,
+    Piece: this.totalPiece,
+    KG: this.totalKG
+  });
+
+    this.totalQty = rows.reduce((s, r) => s + (Number(r.Quantity) || 0), 0);
+    this.totalGrossWeight = rows.reduce((s, r) => s + (Number(r.Gross_Weight) || 0), 0);
 
   }
   
@@ -145,8 +190,15 @@ export class SendFinishGoodsComponent implements OnInit {
     trackById = (_: number, a: any) => a?.Item_ID ?? _;
   
     onArticleChange(i: number, Item_ID: number) {
-    const unitId = this.unitByArticleId.get(Number(Item_ID)) ?? null;
-    (this.items.at(i) as FormGroup).patchValue({ unitId });
+    const article = this.finishGoodsArticles.find(a => a.Item_ID === Number(Item_ID));
+  if (!article) return;
+
+  const row = this.items.at(i); // 👈 get the row (FormGroup)
+  row.patchValue({
+    Unit_ID: article.Unit_ID,
+    Roll_Bag: article.Unit
+  });
+  console.log(`Row ${i} updated → Item_ID: ${Item_ID}, Unit_ID: ${article.Unit_ID}`);
   }
   
   
@@ -200,29 +252,29 @@ export class SendFinishGoodsComponent implements OnInit {
         sentBy: sentByStr ? Number(sentByStr) : null,
         status: 'Pending',
         isSeen: false,
-        totalRoll: 0,
-        totalBag: 0,
-        totalKG: 0,
-        totalPiece: 0,
+        totalRoll: this.totalRoll,
+        totalBag: this.totalBag,
+        totalKG: this.totalKG,
+        totalPiece: this.totalPiece,
         totalNetWeight: this.totalGrossWeight,
         actionApplied: null
 
       };
   
       const masterRow = {
-        ExportNumber: 'RMRequisition - ',
+        ExportNumber: 'FGSend - ',
         ExportDate: payload.exportDate,
+        Note: payload.note ?? null,
         Total_Qty: payload.totalQty,
+        Status: 'Pending',
         Sent_By: window.localStorage.getItem('userId'),
-        Status: payload.status ?? null,
-        IsSeen: payload.isSeen ?? false,
-        Remarks: payload.note ?? null,
         Total_Roll: payload.totalRoll ?? 0,
         Total_Bag: payload.totalBag ?? 0,
         Total_KG: payload.totalKG ?? 0,
         Total_Piece: payload.totalPiece ?? 0,
-        Total_Net_Weight: payload.totalNetWeight ?? 0,
-        ActionApplied: payload.actionApplied ?? null
+        Net_Weight: payload.totalNetWeight ?? 0,
+        ActionApplied: payload.actionApplied ?? null,
+        SentFrom: fv.SentFrom ?? null
       };
       
       const detailRows = payload.items.map(i => ({
@@ -234,26 +286,29 @@ export class SendFinishGoodsComponent implements OnInit {
         Sent_RollBag_Quantity: i.Sent_RollBag_Quantity,
         Gross_Weight: i.Gross_Weight ?? null,
       }));
+
+      console.log('Master Row:', masterRow);
+      console.log('Detail Rows:', detailRows);
   
-      // this.doubleMasterEntryService.SaveDataMasterDetails(
-      //   detailRows,                          // fd (child rows)
-      //   'tbl_finished_goods_delivery_details',        // tableName (child)
-      //   masterRow,                           // fdMaster (master row)
-      //   'tbl_finished_goods_delivery_master',         // tableNameMaster (master)
-      //   'ExportMasterID',           // columnNamePrimary (PK)
-      //   'FG_DeliveryMasterID',           // columnNameForign (FK in child)
-      //   'Export',                     // serialType (your code uses it)
-      //   'Export'                      // columnNameSerialNo (series name)
-      // )
-      //   .subscribe({
-      //     next: (res: any) => {
-      //       swal.fire('Success', 'Finish Goods sent saved successfully', 'success');
-      //       this.finishGoodsProductionForm.reset({ ExportDate: new Date(), SentFrom: '', Note: '' });
-      //       this.items.clear(); this.addItem();
-      //     },
-      //     error: () => {
-      //       swal.fire('Error', 'Could not save requisition', 'error');
-      //     }
-      //   });
+      this.doubleMasterEntryService.SaveDataMasterDetails(
+        detailRows,                          // fd (child rows)
+        'tbl_finished_goods_delivery_details',        // tableName (child)
+        masterRow,                           // fdMaster (master row)
+        'tbl_finished_goods_delivery_master',         // tableNameMaster (master)
+        'ExportMasterID',           // columnNamePrimary (PK)
+        'FG_DeliveryMasterID',           // columnNameForign (FK in child)
+        'FGSend',                     // serialType (your code uses it)
+        'FGSend'                      // columnNameSerialNo (series name)
+      )
+        .subscribe({
+          next: (res: any) => {
+            swal.fire('Success', 'Finish Goods sent saved successfully', 'success');
+            this.finishGoodsProductionForm.reset({ ExportDate: new Date(), SentFrom: '', Note: '' });
+            this.items.clear(); this.addItem();
+          },
+          error: () => {
+            swal.fire('Error', 'Could not save requisition', 'error');
+          }
+        });
     }
 }

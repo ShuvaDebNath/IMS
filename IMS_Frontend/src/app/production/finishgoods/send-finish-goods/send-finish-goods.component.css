@@ -1,18 +1,97 @@
-.table-toolbar{
+
+/* Limit to this component only */
+:host ::ng-deep .rm-dd .p-dropdown-panel {
+  width: 100% !important;                 /* panel matches trigger width */
+}
+
+:host ::ng-deep .rm-dd .p-dropdown-header {
+  padding: 0.5rem 1rem;                   /* default-ish header padding */
+}
+
+:host ::ng-deep .rm-dd .p-dropdown-items {
+  padding: 0 1rem 0.5rem;                 /* match header’s side padding */
+  box-sizing: border-box;                 /* keep width consistent */
+}
+
+:host ::ng-deep .rm-dd .p-dropdown-item {
+  padding: 0.5rem 0;                      /* vertical rhythm only */
+  white-space: normal;                    /* wrap long lines if needed */
+}
+
+/* Optional: keep the search input visually full width */
+:host ::ng-deep .rm-dd .p-dropdown-filter {
+  width: 100%;
+}
+
+.btn-rounded {
+  border-radius: 50px;      /* pill shape */
+  padding: 0.5rem 1.5rem;   /* more breathing room */
+  font-weight: 500;
+  font-size: 0.95rem;
   display: flex;
-  justify-content: flex-end;   /* push to the right */
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-rounded:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* subtle band for totals row */
+.totals-row td {
+  background: #eef6ff;              /* light blue like your sample */
+  border-top: 1px solid #cfe0ff;
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+}
+
+/* container that stacks Rolls/Bags like your reference */
+.rbq-total-cell {
+  padding: .5rem .75rem !important;
+}
+
+.rbq-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;  /* label | value */
+  gap: .35rem .5rem;
+  align-items: center;
+}
+
+.rbq-label {
+  font-weight: 600;
+  color: #2d3a4a;
+  min-width: 3.5rem;                /* keeps labels aligned */
+}
+
+.rbq-grid .form-control {
+  height: 2rem;
   padding: .25rem .5rem;
+  text-align: right;
+  background: #e9eef6;              /* disabled-like look */
+  border-color: #d7dde6;
 }
 
-.table-toolbar .p-inputtext{
-  width: 260px;                /* adjust as you like */
+.th-article { position: relative; }
+.th-article .icon-btn{
+  position: absolute;
+  right: .5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  padding: 0;
+  line-height: 1;
+  cursor: pointer;
+  color: #0d6efd;      /* tweak to match your theme */
 }
+.th-article .icon-btn:disabled { opacity: .5; cursor: not-allowed; }
 
-/* Optional: full width on small screens */
-@media (max-width: 576px){
-  .table-toolbar .p-inputtext{ width: 100%; }
-}
-/* Styles for Pending RM Requisition */
+
+
 
 /* Add your CSS styles here */
 .theme-bg{
@@ -64,34 +143,9 @@ table-bordered td, .table-bordered th,tr,td {
     color: #6a1a3f;
 }
 
- td,
+table-bordered td,
 .table-bordered th,
 td,
 tr {
     border: 1px solid #6a1a3f !important;
 }
-/* over-right */
-
-.p-paginator {
-  background-color: #6a1a3f!important;
-    color: white!important;
-}
-/* Add / Create */
-.theme-btn-add { background-color: #a12c64; color: #fff; }
-.theme-btn-add:hover { background-color: #b23b75; }
-
-/* Edit / Update */
-.theme-btn-edit { background-color: #b23b60; color: #fff; }
-.btn-edit:hover { background-color: #c94d77; }
-
-/* Delete */
-.theme-btn-delete { background-color: #d32f2f; color: #fff; }
-.theme-btn-delete:hover { background-color: #e53935; }
-
-/* View / Details */
-.theme-btn-view { background-color: #51223c; color: #fff; }
-.theme-btn-view:hover { background-color: #6a1a3f; }
-
-/* Cancel */
-.theme-btn-cancel { background-color: #aa607f; color: #fff; }
-.theme-btn-cancel:hover { background-color: #bb708f; }
