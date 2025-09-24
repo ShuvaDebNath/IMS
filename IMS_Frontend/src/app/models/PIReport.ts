@@ -1,0 +1,25 @@
+export class PIReport {
+  PINo!:string;
+  Date!:string;
+  Consignee!:string;
+  Contact_Name!:string;
+  PaymentTerms!:string;
+  Article!:string;
+  ActualArticle!:string;
+  Color!:string;
+  Packaging!:string;
+  UsdPrice!:number;
+  BDTPrice!:number;
+  Quantity!:number;
+  Unit!:string;
+  Total_Amount!:number;
+  TotalUSD!:number;
+  Total_Amount_Tk!:number;
+  TotalBDT!:number;
+  ProdCostUnt!:number;
+  ProdCostTotal!:number;
+  Delivered_Quantity!:number;
+  Created_By!:string;
+  LC_No!:string;
+  totallen!:number;
+}

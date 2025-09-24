@@ -36,7 +36,6 @@ import { UnapprovedBuyingHouseComponent } from './buying-house/unapproved-buying
 import { AllBuyingHouseComponent } from './buying-house/all-buying-house/all-buying-house.component';
 import { GenerateBuyingHouseComponent } from './buying-house/generate-buying-house/generate-buying-house.component';
 
-
 const CustomSelectOptions: INgxSelectOptions = {
   keepSelectedItems: false,
   allowClear: true,
@@ -51,14 +50,7 @@ const CustomSelectOptions: INgxSelectOptions = {
     ForbiddenErrorComponent,
     PageNotFoundComponent,
     LogoutComponent,
-    ResetPasswordComponent,
-    BeneficiaryCreateComponent,
-    ArbitrationCreateComponent,
-    ArbitrationListComponent,
-    BeneficiarybankCreateComponent,
-    BeneficiaryBankListComponent,
-    ApplicantbankCreateComponent,
-    ApplicantbankListComponent
+    ResetPasswordComponent
   ],
   imports: [
     FormsModule,

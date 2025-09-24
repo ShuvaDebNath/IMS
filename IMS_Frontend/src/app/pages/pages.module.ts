@@ -17,7 +17,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { Select2Module } from 'ng-select2-component';
 import { TreeTableModule } from 'primeng/treetable';
 import { TreeModule } from 'primeng/tree';
-import { DropdownModule } from 'primeng/dropdown'
+import { DropdownModule } from 'primeng/dropdown';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { DatePipe } from '@angular/common';
@@ -46,7 +46,7 @@ import { GenerateLcComponent } from '../lc/generate-lc/generate-lc.component';
 import { AllLcComponent } from '../lc/all-lc/all-lc.component';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TableModule } from 'primeng/table';
-import { DialogModule } from 'primeng/dialog'
+import { DialogModule } from 'primeng/dialog';
 import { GenerateCommercialInvoiceComponent } from '../commercial-document/generate-commercial-invoice/generate-commercial-invoice.component';
 import { AllCommercialInvoiceComponent } from '../commercial-document/all-commercial-invoice/all-commercial-invoice.component';
 import { GeneratePiComponent } from '../PI/generate-pi/generate-pi.component';
@@ -67,11 +67,12 @@ import { GenerateCpiComponent } from '../PI/generate-cpi/generate-cpi.component'
 import { AllSalesContractComponent } from '../sales-contract/all-sales-contract/all-sales-contract.component';
 import { SalesContractDetailsComponent } from '../sales-contract/sales-contract-details/sales-contract-details.component';
 import { GenerateSalesContractComponent } from '../sales-contract/generate-sales-contract/generate-sales-contract.component';
-import { DividerModule } from 'primeng/divider'
+import { DividerModule } from 'primeng/divider';
 import { UnApprovePiComponent } from '../PI/un-approve-pi/un-approve-pi.component';
 import { PartialApprovePiComponent } from '../PI/partial-approve-pi/partial-approve-pi.component';
 import { QuarterApprovePiComponent } from '../PI/quarter-approve-pi/quarter-approve-pi.component';
 import { FullApprovePiComponent } from '../PI/full-approve-pi/full-approve-pi.component';
+
 import { RawMaterialStockComponent } from '../warehouse/rm-fg-material-infos-with-stock/raw-material-info-with-stock/raw-material-stock.component';
 import { FinishGoodsInfoWithStockComponent } from '../warehouse/rm-fg-material-infos-with-stock/finish-goods-info-with-stock/finish-goods-info-with-stock.component';
 import { BeneficiaryListComponent } from '../Beneficiary/beneficiary-list/beneficiary-list.component';
@@ -89,10 +90,16 @@ import { PendingFinishGoodsSentListProductionComponent } from '../production/fin
 import { ReceivedFinishGoodsProductionComponent } from '../production/finishgoods/received-finish-goods-list-production/received-finish-goods-list-production.component';
 import { PendingFinishGoodsSentListWarehouseComponent } from '../warehouse/finishgoods/pending-finish-goods-sent-list-warehouse/pending-finish-goods-sent-list-warehouse.component';
 import { ReceivedFinishGoodsWarehouseComponent } from '../warehouse/finishgoods/received-finish-goods-list-warehouse/received-finish-goods-list-warehouse.component';
+import { FinishGoodsInfoWithStockComponent } from '../rm-fg-material-infos-with-stock/finish-goods-info-with-stock/finish-goods-info-with-stock.component';
+import { PiReportComponent } from '../report/pi-report/pi-report.component';
+import { PiBottomPriceReportComponent } from '../report/pi-bottom-price-report/pi-bottom-price-report.component';
+import { DeliveryLogReportComponent } from '../report/delivery-log-report/delivery-log-report.component';
 
-const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more options
+
+const CustomSelectOptions: INgxSelectOptions = {
+  // Check the interface for more options
   keepSelectedItems: false,
-  allowClear: true
+  allowClear: true,
 };
 
 @NgModule({
@@ -127,16 +134,18 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     AllSalesContractComponent,
     SalesContractDetailsComponent,
     GenerateSalesContractComponent,
-    AllCustomersComponent,
-    GenerateCustomerComponent,
-    UnapprovedCustomerComponent,
-    UnapprovedBuyingHouseComponent,
-    AllBuyingHouseComponent,
-    GenerateBuyingHouseComponent,
-    BeneficiaryListComponent
+    BeneficiaryCreateComponent,
+    ArbitrationCreateComponent,
+    ArbitrationListComponent,
+    BeneficiarybankCreateComponent,
+    BeneficiaryBankListComponent,
+    ApplicantbankCreateComponent,
+    ApplicantbankListComponent,
+    PiReportComponent,
+    PiBottomPriceReportComponent,
+    DeliveryLogReportComponent,
   ],
   imports: [
-
     CommonModule,
     Select2Module,
     HttpClientModule,
@@ -148,7 +157,8 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     TreeModule,
     DropdownModule,
     SelectButtonModule,
-    PopoverModule, MultiSelectModule,
+    PopoverModule,
+    MultiSelectModule,
     TableModule,
     DialogModule,
     CheckboxModule,
@@ -167,12 +177,13 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
       defaultBgColor: '#00ACFF',
       defaultBoColor: '#476EFF',
       checkedLabel: 'on',
-      uncheckedLabel: 'off'
+      uncheckedLabel: 'off',
     }),
     ModalModule.forRoot(),
     RouterModule.forChild([
       {
-        path: '', component: PagesComponent,
+        path: '',
+        component: PagesComponent,
         children: [
           { path: 'dashboard', component: BaseContentComponent },
           { path: 'role-list', component: RoleListComponent },
@@ -181,13 +192,34 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'create-raw-material', component: CreatePageComponent },
           { path: 'edit-raw-material', component: EditPageComponent },
           { path: 'list-raw-material', component: ListPageComponent },
-          { path: 'pending-rm-requisition-production', component: PendingRMRequisitionProductionComponent },
-          { path: 'pending-rm-requisition-warehouse', component: PendingRMRequisitionWareHouseComponent },
-          { path: 'accepted-rm-requisition-warehouse', component: AcceptedRMRequisitionWareHouseComponent },
-          { path: 'issued-rm-requisition-production', component: IssuedRMRequisitionProductionComponent },
-          { path: 'received-raw-material-production', component: ReceivedRMListComponent },
-          { path: 'all-rm-requisition-list', component: AllRMRequisitionListComponent },
-          { path: 'issued-rm-requisition-list-warehouse', component: IssuedRMRequisitionListWarehouseComponent },
+          {
+            path: 'pending-rm-requisition-production',
+            component: PendingRMRequisitionProductionComponent,
+          },
+          {
+            path: 'pending-rm-requisition-warehouse',
+            component: PendingRMRequisitionWareHouseComponent,
+          },
+          {
+            path: 'accepted-rm-requisition-warehouse',
+            component: AcceptedRMRequisitionWareHouseComponent,
+          },
+          {
+            path: 'issued-rm-requisition-production',
+            component: IssuedRMRequisitionProductionComponent,
+          },
+          {
+            path: 'received-raw-material-production',
+            component: ReceivedRMListComponent,
+          },
+          {
+            path: 'all-rm-requisition-list',
+            component: AllRMRequisitionListComponent,
+          },
+          {
+            path: 'issued-rm-requisition-list-warehouse',
+            component: IssuedRMRequisitionListWarehouseComponent,
+          },
           { path: 'raw-material-stock', component: RawMaterialStockComponent },
           { path: 'finish-goods-stock', component: FinishGoodsInfoWithStockComponent },
           { path: 'send-finish-goods', component: SendFinishGoodsComponent },
@@ -196,66 +228,92 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'pending-fg-sent-list-warehouse', component: PendingFinishGoodsSentListWarehouseComponent },
           { path: 'received-fg-list-warehouse', component: ReceivedFinishGoodsWarehouseComponent },
           {
+            path: 'finish-goods-stock',
+            component: FinishGoodsInfoWithStockComponent,
+          },
+          {
             path: 'pending-rm-requisition/edit/:reqId',
             loadComponent: () =>
-              import('../production/requisition/raw-material-requisition/edit/PendingRMRequisitionProduction/pending-rm-requisition-production-edit.component')
-                .then(m => m.PendingRMRequisitionProductionEditComponent)
+              import(
+                '../production/requisition/raw-material-requisition/edit/PendingRMRequisitionProduction/pending-rm-requisition-production-edit.component'
+              ).then((m) => m.PendingRMRequisitionProductionEditComponent),
           },
           { path: 'change-password', component: ChangePasswordComponent },
           { path: 'landing-page', component: LandingPageComponent },
           { path: 'all-lc', component: AllLcComponent },
           { path: 'generate-lc', component: GenerateLcComponent },
-          { path: 'all-commercial-invoice', component: AllCommercialInvoiceComponent },
-          { path: 'generate-commercial-invoice', component: GenerateCommercialInvoiceComponent },
+          {
+            path: 'all-commercial-invoice',
+            component: AllCommercialInvoiceComponent,
+          },
+          {
+            path: 'generate-commercial-invoice',
+            component: GenerateCommercialInvoiceComponent,
+          },
           { path: 'generate-pi', component: GeneratePiComponent },
           {
-            path:"arbitration-create",component:ArbitrationCreateComponent
+            path: 'arbitration-create',
+            component: ArbitrationCreateComponent,
           },
           {
-            path:"arbitration-list",component:ArbitrationListComponent
-          },
-           {
-            path:"beneficiary-create",component:BeneficiaryCreateComponent
+            path: 'arbitration-list',
+            component: ArbitrationListComponent,
           },
           {
-            path:"beneficiary-list",component:BeneficiaryListComponent
+            path: 'beneficiary-create',
+            component: BeneficiaryCreateComponent,
           },
           {
-            path:"beneficiarybank-create",component:BeneficiarybankCreateComponent
+            path: 'beneficiarybank-create',
+            component: BeneficiarybankCreateComponent,
           },
           {
-            path:"beneficiarybank-list",component:BeneficiaryBankListComponent
-          },{
-                        path:"applicantbank-create",component:ApplicantbankCreateComponent
-
+            path: 'beneficiarybank-list',
+            component: BeneficiaryBankListComponent,
           },
           {
-                        path:"applicantbank-list",component:ApplicantbankListComponent
-
+            path: 'applicantbank-create',
+            component: ApplicantbankCreateComponent,
+          },
+          {
+            path: 'applicantbank-list',
+            component: ApplicantbankListComponent,
           },
           { path: 'all-pi', component: AllPiComponent },
           { path: 'delivered-pi', component: DeliveredPiComponent },
           { path: 'all-cash-receive', component: AllCashReceiveComponent },
-          { path: 'generate-cash-receive', component: GenerateCashReceiveComponent },
-          { path: 'cash-receive-details', component: CashReceiveDetailsComponent },
-          { path: 'cash-receive-update', component: CashReceiveUpdateComponent },
+          {
+            path: 'generate-cash-receive',
+            component: GenerateCashReceiveComponent,
+          },
+          {
+            path: 'cash-receive-details',
+            component: CashReceiveDetailsComponent,
+          },
+          {
+            path: 'cash-receive-update',
+            component: CashReceiveUpdateComponent,
+          },
           { path: 'generate-cpi', component: GenerateCpiComponent },
-          { path: 'generate-sales-contract', component: GenerateSalesContractComponent },
+          {
+            path: 'generate-sales-contract',
+            component: GenerateSalesContractComponent,
+          },
           { path: 'all-sales-contract', component: AllSalesContractComponent },
-          { path: 'sales-contract-details', component: SalesContractDetailsComponent },
+          {
+            path: 'sales-contract-details',
+            component: SalesContractDetailsComponent,
+          },
           { path: 'generate-cpi', component: GenerateCpiComponent },
           { path: 'unapproved-pi', component: UnApprovePiComponent },
           { path: 'partialapproved-pi', component: PartialApprovePiComponent },
           { path: 'quarterapproved-pi', component: QuarterApprovePiComponent },
           { path: 'fullapproved-pi', component: FullApprovePiComponent },
-          { path: 'all-customers', component: AllCustomersComponent },
-          { path: 'generate-customers', component: GenerateCustomerComponent },
-          { path: 'unapproved-customers', component: UnapprovedCustomerComponent },
-          { path: 'all-buying-house', component: AllBuyingHouseComponent },
-          { path: 'generate-buying-house', component: GenerateBuyingHouseComponent },
-          { path: 'unapproved-buying-house', component: UnapprovedBuyingHouseComponent },
-        ]
-      }
+          { path: 'pi-report', component: PiReportComponent },
+          { path: 'pi-bottom-price-report', component: PiBottomPriceReportComponent },
+          { path: 'delivery-log-report', component: DeliveryLogReportComponent },
+        ],
+      },
     ]),
     BrowserAnimationsModule,
     ModalModule.forRoot(),
@@ -264,7 +322,7 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     NgxSelectModule.forRoot(CustomSelectOptions),
     AccordionModule.forRoot(),
     UiSwitchModule,
-    MatPaginatorModule
-  ]
+    MatPaginatorModule,
+  ],
 })
-export class PagesModule { }
+export class PagesModule {}
