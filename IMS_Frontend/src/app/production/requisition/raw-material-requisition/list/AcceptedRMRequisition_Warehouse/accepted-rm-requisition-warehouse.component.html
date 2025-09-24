@@ -1,5 +1,9 @@
-<div class="container">
-  <h1 class="theme-text">Pending RM Requisition List</h1>
+<div class="m-2 p-2 shadow-sm">
+  <div class="card">
+    <div class="card-header theme-bg">
+      <h1 class="">Accepted RM Requisition List</h1>
+    </div>
+    <div class="card-body">
   <p-table #dt [value]="pendingRequisitions" [paginator]="true" [rows]="10" [responsive]="true"
     [showCurrentPageReport]="true"
     [globalFilterFields]="['RequisitionNumber','RequisitionDate','Total_Qty','Total_bag','Total_Roll','status']"
@@ -174,4 +178,6 @@
       </div>
     </div>
   </p-dialog>
+</div>
+
 </div>

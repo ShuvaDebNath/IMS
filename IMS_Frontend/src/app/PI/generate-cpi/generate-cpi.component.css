@@ -19,3 +19,8 @@
     color:
         #6a1a3f;
 }
+card-body::after, .card-footer::after, .card-header::after {
+    display: none;
+    clear: both;
+    content: "";
+}

@@ -129,7 +129,7 @@
           <td class="text-center align-middle p-2 m-0">
             <div class="d-flex justify-content-center gap-1" >
                <a
-              class="btn theme-btn-view btn-xs mr-2"
+              class="btn theme-btn-view  "
               target="_blank"
               title="View"
               (click)="viewDetails(table)"
@@ -137,7 +137,7 @@
             ></a>
             <a
               *ngIf="updatePermissions"
-              class="btn theme-btn-edit btn-xs mr-2"
+              class="btn theme-btn-edit  "
               target="_blank"
               title="Edit"
               [routerLink]="['/generate-sales-contract']"
@@ -146,7 +146,7 @@
             ></a>
             <button
               *ngIf="deletePermissions"
-              class="btn theme-btn-delete btn-xs"
+              class="btn theme-btn-delete "
               title="Delete"
               (click)="DeleteData(table)"
             >
