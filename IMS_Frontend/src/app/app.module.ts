@@ -34,13 +34,14 @@ import { AllSalesContractComponent } from './sales-contract/all-sales-contract/a
 import { SalesContractDetailsComponent } from './sales-contract/sales-contract-details/sales-contract-details.component';
 
 
+
 const CustomSelectOptions: INgxSelectOptions = {
   keepSelectedItems: false,
   allowClear: true,
 };
 
 @NgModule({
-  declarations: [
+  declarations: [	
     AppComponent,
     LoginComponent,
     PageNotFoundComponent,
@@ -57,7 +58,7 @@ const CustomSelectOptions: INgxSelectOptions = {
     BeneficiaryBankListComponent,
     ApplicantbankCreateComponent,
     ApplicantbankListComponent
-  ],
+   ],
   imports: [
     FormsModule,
     ReactiveFormsModule,

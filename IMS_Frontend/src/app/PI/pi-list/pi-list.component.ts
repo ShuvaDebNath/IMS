@@ -83,9 +83,7 @@ export class PiListComponent implements OnInit {
         PIPercentage:[0],
         status:[this.PiStatus]
       }
-    );
-
- 
+    ); 
   }
 
 

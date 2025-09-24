@@ -54,7 +54,7 @@ import { GenerateCommercialInvoiceComponent } from '../commercial-document/gener
 import { AllCommercialInvoiceComponent } from '../commercial-document/all-commercial-invoice/all-commercial-invoice.component';
 import { GeneratePiComponent } from '../PI/generate-pi/generate-pi.component';
 import { BeneficiaryCreateComponent } from '../Beneficiary/beneficiary-create/beneficiary-create.component';
-import { BeneficiaryListComponent } from '../beneficiary/beneficiary-list/beneficiary-list.component';
+
 import { ArbitrationCreateComponent } from '../arbitration/arbitration-create/arbitration-create.component';
 import { ArbitrationListComponent } from '../arbitration/arbitration-list/arbitration-list.component';
 import { BeneficiarybankCreateComponent } from '../BeneficiaryBank/beneficiarybank-create/beneficiarybank-create.component';
@@ -78,6 +78,8 @@ import { PartialApprovePiComponent } from '../PI/partial-approve-pi/partial-appr
 import { QuarterApprovePiComponent } from '../PI/quarter-approve-pi/quarter-approve-pi.component';
 import { FullApprovePiComponent } from '../PI/full-approve-pi/full-approve-pi.component';
 import { FinishGoodsInfoWithStockComponent } from '../rm-fg-material-infos-with-stock/finish-goods-info-with-stock/finish-goods-info-with-stock.component';
+import { DeliveryComponent } from '../delivery/delivery.component';
+import { BeneficiaryListComponent } from '../beneficiary/beneficiary-list/beneficiary-list.component';
 
 const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more options
   keepSelectedItems: false,
@@ -118,7 +120,7 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     GenerateSalesContractComponent
     ],
   imports: [
-
+    
     CommonModule,
     Select2Module,
     HttpClientModule,
@@ -225,7 +227,8 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'unapproved-pi', component: UnApprovePiComponent },
           { path: 'partialapproved-pi', component: PartialApprovePiComponent },
           { path: 'quarterapproved-pi', component: QuarterApprovePiComponent },
-          { path: 'fullapproved-pi', component: FullApprovePiComponent }
+          { path: 'fullapproved-pi', component: FullApprovePiComponent },
+          { path: 'delivery', component: DeliveryComponent }
         ]
       }
     ]),
