@@ -34,6 +34,11 @@
 	}
 	}
 	},
+        "[Detail]": {
+          "Required": true
+        }
+      }
+    },
     "tbl_sales_contract": {
       "QueryParams": {
         "[PIs]": {
@@ -60,6 +65,8 @@
         "[BankName]"
         : {
           "Required":true
+        "[BankName]": {
+          "Required": true
 
         },
         "[AccountNo]": {
@@ -73,9 +80,26 @@
         }
       
       },
+
+      }
+    },
     "tbl_cash_receive_detail": {
       "QueryParams": {
         "[CR_ID]": {
+          "Required": true
+        }
+      }
+    },
+    "tbl_customer": {
+      "QueryParams": {
+        "[Company_Name]": {
+          "Required": true
+        }
+      }
+    },
+    "tbl_buyer": {
+      "QueryParams": {
+        "[Buyer_Name]": {
           "Required": true
         }
       }
@@ -90,5 +114,7 @@
         }
       }
     }
+}
+  }
 }
 
