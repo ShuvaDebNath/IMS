@@ -80,6 +80,7 @@ import { FinishGoodsInfoWithStockComponent } from '../rm-fg-material-infos-with-
 import { PiReportComponent } from '../report/pi-report/pi-report.component';
 import { PiBottomPriceReportComponent } from '../report/pi-bottom-price-report/pi-bottom-price-report.component';
 import { DeliveryLogReportComponent } from '../report/delivery-log-report/delivery-log-report.component';
+import { DeliveryComponent } from '../delivery/delivery.component';
 
 const CustomSelectOptions: INgxSelectOptions = {
   // Check the interface for more options
@@ -292,12 +293,11 @@ const CustomSelectOptions: INgxSelectOptions = {
           { path: 'pi-report', component: PiReportComponent },
           { path: 'pi-bottom-price-report', component: PiBottomPriceReportComponent },
           { path: 'delivery-log-report', component: DeliveryLogReportComponent },
-        ],
-      },
           { path: 'fullapproved-pi', component: FullApprovePiComponent },
           { path: 'delivery', component: DeliveryComponent }
-        ]
-      }
+        ],
+      },
+
     ]),
     BrowserAnimationsModule,
     ModalModule.forRoot(),

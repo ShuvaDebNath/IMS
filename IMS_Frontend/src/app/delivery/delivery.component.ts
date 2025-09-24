@@ -16,6 +16,7 @@ import { DropdownChangeEvent, DropdownModule } from "primeng/dropdown";
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 import { GetDataModel } from 'src/app/models/GetDataModel';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { Goods_Delivery_serviceService } from '../services/delivery/Goods_Delivery_service.service';
 
 @Component({
   standalone:true,
@@ -27,16 +28,19 @@ import { InputNumberModule } from 'primeng/inputnumber';
 export class DeliveryComponent implements OnInit {
 
 
+
   PITypeList:any[]=[{value:1,text:'LC'},{value:2,text:'Cash'}];
-  PIList:any[]=[];
+  PIList:any[]=[];  
+  StoreLocation:any[]=[];
   PITypeID!:number;
   SearchFormgroup!: FormGroup;
   Formgroup!: FormGroup;
   Delivers!:[];
-
+  datePipe = new DatePipe('en-US');
 
   constructor(
     private service:MasterEntryService,
+    private deliveryService:Goods_Delivery_serviceService,
     private getDataService: GetDataService,
     private gs: GlobalServiceService,
     private title: Title,
@@ -56,11 +60,21 @@ export class DeliveryComponent implements OnInit {
     });
 
     this.Formgroup = this.fb.group({
-      PINo: [''],
-      PIId: [''],
-      PIType: ['']
+      PIStatus:[''],
+      RestQty:[''],
+      LCNo:[''],
+      IsCash:[''],
+
+      ItemArray:this.fb.array([]),
     });    
+
+
   }
+
+    getControls() {
+    return (this.Formgroup.get('ItemArray') as FormArray).controls;
+  }
+
 
   onChange($event: DropdownChangeEvent) {
 
@@ -73,6 +87,7 @@ export class DeliveryComponent implements OnInit {
         if (res.status) {  
           let DataSet = JSON.parse(res.data);
           this.PIList=DataSet.Tables1;
+          this.StoreLocation=DataSet.Tables2;
   
         } else {
           if (res.msg == 'Invalid Token') {
@@ -95,7 +110,37 @@ export class DeliveryComponent implements OnInit {
         if (res.status) {  
           let DataSet = JSON.parse(res.data);
           this.Delivers=DataSet.Tables1;
-          console.log(this.Delivers);
+          
+          this.Formgroup.controls['PIStatus'].setValue(DataSet.Tables1[0].IsMPI==0?'LC':'Cash');
+          this.Formgroup.controls['RestQty'].setValue(DataSet.Tables1[0].DeliverableQty);
+          this.Formgroup.controls['LCNo'].setValue(DataSet.Tables1[0].LC_No);
+          this.Formgroup.controls['IsCash'].setValue(DataSet.Tables1[0].CR_NO);
+
+          let itemarray=this.Formgroup.get('ItemArray') as FormArray;
+          
+          DataSet.Tables1.forEach((item:any)=>{
+           
+          itemarray.push(this.fb.group({ 
+            PI_Detail_ID: [item.PI_Detail_ID],
+            Date: [new Date],
+            Ordered: [0],
+            Delivered: [0], 
+            Roll: [0],
+            Remark: [''],
+            Chalan_No: [0],
+            Item_ID: [item.Item_ID],
+            Stock_Location_ID: [''],
+            Description:[item.Description],
+            Color:[item.Color],
+            Packaging:[item.Packaging],
+            Measurement:[item.Measurement],
+            ActualArticle:[item.ActualArticle],
+            UndeliveredQty:[item.UndeliveredQty],
+            UnitName:[item.UnitName],
+          }));
+          });
+          
+          
   
         } else {
           if (res.msg == 'Invalid Token') {
@@ -104,6 +149,25 @@ export class DeliveryComponent implements OnInit {
           }
         }
       });
+  }
+
+  Save() {
+    console.log(this.Formgroup.controls['ItemArray'].value);
+    // return;
+    this.deliveryService.SaveData(this.Formgroup.controls['ItemArray'].value).subscribe(res=>{
+      if(res.messageType=='Success' && res.status){
+        Swal.fire(res.messageType, res.message, 'success').then(()=>{
+              this.ngOnInit();
+        });
+        
+      }else{
+        if(!res.isAuthorized){
+          this.gs.Logout();
+        }else{
+          Swal.fire(res.messageType, res.message, 'error');
+        }
+      }
+    });
   }
 
 }

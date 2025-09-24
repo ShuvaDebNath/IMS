@@ -2,6 +2,7 @@
 using Boilerplate.Contracts.Repositories;
 using Boilerplate.Repository.Repositories;
 using IMS.Contracts.Repositories;
+using IMS.Repository.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Boilerplate.Repository;
@@ -19,5 +20,6 @@ public static class DataAccessRegistration
         service.AddTransient<IDoubleMasterEntryPostInsertAction, UpdateRequisitionMasterAction>();
         service.AddTransient<IDoubleMasterEntryPostInsertAction, UpdateCashReceiveMasterAction>();
         service.AddSingleton<IDoubleMasterEntryPostInsertActionFactory, DoubleMasterEntryPostInsertActionFactory>();
+        service.AddSingleton<IGoodsDeliveryRepository, GoodsDeliveryRepository>();
     }
 }
