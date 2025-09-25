@@ -97,7 +97,12 @@ export class DeliveryComponent implements OnInit {
         }
       });    
   }
-
+  SetMeterValue(event:any,item:any){
+    console.log(event.target.value);
+    let unitID=item.controls["Unit_ID"].value;
+    let value= unitID==2? event.target.value*1.09361 : 0;
+    item.controls["Deliverd_In_Meter"].setValue(value);
+  }
   GetPIByPID() {
     let model=new GetDataModel();
       model.procedureName="usp_ProformaInvoice_DeliveryInfoByPIId";
@@ -105,6 +110,7 @@ export class DeliveryComponent implements OnInit {
         TypeId:this.SearchFormgroup.controls["PIId"].value
       };
       console.log(model);
+      this.Formgroup.setControl('items', this.fb.array([]));
 
       this.service.GetInitialData(model).subscribe((res:any) => {
         if (res.status) {  
@@ -120,24 +126,30 @@ export class DeliveryComponent implements OnInit {
           
           DataSet.Tables1.forEach((item:any)=>{
            
-          itemarray.push(this.fb.group({ 
-            PI_Detail_ID: [item.PI_Detail_ID],
-            Date: [new Date],
-            Ordered: [0],
-            Delivered: [0], 
-            Roll: [0],
-            Remark: [''],
-            Chalan_No: [0],
-            Item_ID: [item.Item_ID],
-            Stock_Location_ID: [''],
-            Description:[item.Description],
-            Color:[item.Color],
-            Packaging:[item.Packaging],
-            Measurement:[item.Measurement],
-            ActualArticle:[item.ActualArticle],
-            UndeliveredQty:[item.UndeliveredQty],
-            UnitName:[item.UnitName],
-          }));
+            itemarray.push(this.fb.group({ 
+              PI_Detail_ID: [item.PI_Detail_ID],
+              Date: [new Date],
+              Ordered: [0],
+              Delivered: [0], 
+              Roll: [0],
+              Remark: [''],
+              Chalan_No: [0],
+              Item_ID: [item.Item_ID],
+              Stock_Location_ID: [''],
+              Description:[item.Description],
+              Color:[item.Color],
+              Packaging:[item.Packaging],
+              Measurement:[item.Measurement],
+              ActualArticle:[item.ActualArticle],
+              UndeliveredQty:[item.UndeliveredQty],
+              UnitName:[item.UnitName],
+              Unit_ID:[item.Unit_ID],
+              StockBalance:[item.Stock],
+              Stock_In_MeterBalance:[item.Stock_In_Meter],
+              RollBalance:[item.Roll],
+              BagBalance:[item.Bag],
+              Deliverd_In_Meter:[0],
+            }));
           });
           
           
@@ -153,7 +165,16 @@ export class DeliveryComponent implements OnInit {
 
   Save() {
     console.log(this.Formgroup.controls['ItemArray'].value);
-    // return;
+    let listData=this.Formgroup.controls['ItemArray'].value;
+    
+    let unAllowedList=listData.filter((x:any)=> (x.Unit_ID!=2 && x.Delivered>x.StockBalance) || (x.Unit_ID==2 && (x.Delivered*1.09361)>x.Stock_In_MeterBalance));
+
+    if(unAllowedList.length>0){
+      Swal.fire('Save Fail!', 'Stock Unavailable.', 'error');
+      return;
+    }
+
+     
     this.deliveryService.SaveData(this.Formgroup.controls['ItemArray'].value).subscribe(res=>{
       if(res.messageType=='Success' && res.status){
         Swal.fire(res.messageType, res.message, 'success').then(()=>{

@@ -21,7 +21,9 @@ namespace IMS.Repository.Repositories
            ,[Remark]
            ,[Chalan_No]
            ,[User_ID]
-           ,[Item_ID]
+           ,[Item_ID]           
+           ,[Deliverd_In_Meter]
+
            ,[Stock_Location_ID])
      VALUES
            (@PI_Detail_ID
@@ -33,10 +35,11 @@ namespace IMS.Repository.Repositories
            ,@Chalan_No
            ,@User_ID
            ,@Item_ID
+           ,@Deliverd_In_Meter
            ,@Stock_Location_ID)";
 
         private string qryPIDetilas = @"UPDATE [dbo].[tbl_pi_detail]
-   SET [Delivered_Quantity] = @Delivered
+   SET [Delivered_Quantity] = Delivered_Quantity+ @Delivered
  WHERE PI_Detail_ID=@PI_Detail_ID";
 
         public GoodsDeliveryRepository(IConfiguration configuration) : base(configuration)
@@ -47,39 +50,39 @@ namespace IMS.Repository.Repositories
         public async Task<bool> Save(List<PI_Ledger> model, string AuthUserId)
         {
             int rowAffect = 0;
-            conn = new SqlConnection(_connectionStringUserDB);
-
-            if (conn.State != ConnectionState.Open)
-                await conn.OpenAsync();
-            var trn = await conn.BeginTransactionAsync();
-
-            try
+            using (conn = new SqlConnection(_connectionStringUserDB))
             {
-                
-
-                if (model.Any())
+                if (conn.State != ConnectionState.Open)
+                    await conn.OpenAsync();
+                using (var trn = await conn.BeginTransactionAsync())
                 {
-                    model.ForEach(async item => {
-                        item.User_ID = int.Parse(AuthUserId);
-                        rowAffect = await ExecuteAsync(qryPILedger, conn, trn, item);
-                        rowAffect += await ExecuteAsync(qryPIDetilas, conn, trn, item);
-                    });
+                    try
+                    {
 
-                   await trn.CommitAsync();
+                        if (model.Any())
+                        {
+                            model.ForEach(item =>
+                            {
+                                item.User_ID = int.Parse(AuthUserId);
+                                rowAffect = conn.Execute(qryPILedger, item, trn);
+                                rowAffect += conn.Execute(qryPIDetilas, item, trn);
+                            });
+
+                            await trn.CommitAsync();
+                        }
+
+                    }
+                    catch (Exception)
+                    {
+                        await trn.RollbackAsync();
+                        throw;
+                    }
+                    finally
+                    {
+                        await conn.CloseAsync();
+                    }
                 }
-
-                
             }
-            catch (Exception)
-            {
-                await trn.RollbackAsync();
-                throw;
-            }
-            finally
-            {
-                await conn.CloseAsync();
-            }
-
 
             return rowAffect > 0;
         }

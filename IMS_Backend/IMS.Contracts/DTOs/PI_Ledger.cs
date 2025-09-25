@@ -8,6 +8,7 @@ public class PI_Ledger
     public DateTime? Date { get; set; }
     public decimal? Ordered { get; set; }
     public decimal? Delivered { get; set; }
+    public decimal? Deliverd_In_Meter { get; set; }
     public decimal? Roll { get; set; }
     public string? Remark { get; set; }
     public int? Chalan_No { get; set; }

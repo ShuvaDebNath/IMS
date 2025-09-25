@@ -108,7 +108,7 @@
             <td>{{ item.value.UndeliveredQty }}</td>
             <td>{{ item.value.UnitName }}</td>
             <td>
-              <input type="text" pInputText  placeholder="Deliver Quantity" formControlName="Delivered" />
+              <input type="text" pInputText  placeholder="Deliver Quantity" formControlName="Delivered" (change)="SetMeterValue($event,item)" />
             </td>
             <td>
               <input type="text" pInputText  placeholder="Roll/BOX/PCS" formControlName="Roll"/>
