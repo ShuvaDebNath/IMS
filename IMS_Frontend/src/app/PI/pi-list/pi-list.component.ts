@@ -15,13 +15,14 @@ import { FieldsetModule } from 'primeng/fieldset';
 import { DropdownModule } from "primeng/dropdown";
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 import { GetDataModel } from 'src/app/models/GetDataModel';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @Component({
   standalone:true,
   selector: 'app-pi-list',
   templateUrl: './pi-list.component.html',
   styleUrls: ['./pi-list.component.css'],
-  imports: [FormsModule,ReactiveFormsModule, CommonModule, TableModule, InputTextModule, DialogModule, ButtonModule, BsDatepickerModule, DividerModule, FieldsetModule, DropdownModule]
+  imports: [FormsModule,ReactiveFormsModule, CommonModule, TableModule, InputNumberModule , InputTextModule, DialogModule, ButtonModule, BsDatepickerModule, DividerModule, FieldsetModule, DropdownModule]
 })
 export class PiListComponent implements OnInit {
   @Input() PiStatus!:any;
@@ -41,6 +42,8 @@ export class PiListComponent implements OnInit {
   rows: any=10;
   totalRecords!: number;
   isViewDetails: boolean=false;
+  openSpecialApprove: boolean=false;
+  PINo!:string;
   PageTitle: any;
 
   ShowbtnPar:boolean=false;
@@ -50,6 +53,7 @@ export class PiListComponent implements OnInit {
   ShowbtnSpecial:boolean=false;
 
   SearchFormgroup!: FormGroup;
+  SpecialApproveFormgroup!: FormGroup;
   selectedRows: any[] = []; 
 
 
@@ -73,8 +77,13 @@ export class PiListComponent implements OnInit {
       PageNumber: [''],
       PageSize : ['']
     });
-
- 
+    this.SpecialApproveFormgroup=this.fb.group(
+      {
+        PIID:[],
+        PIPercentage:[0],
+        status:[this.PiStatus]
+      }
+    ); 
   }
 
 
@@ -114,19 +123,84 @@ export class PiListComponent implements OnInit {
       this.PageTitle='Delivered PI'
     }
     this.title.setTitle(this.PageTitle);
-    // this.LoadTableData();
+    //this.LoadTableData();
     this.GenerateSearchFrom();
     this.GetInitialData();
   }
+
   ReloadTable(event:any) {
     this.first = event.first;
     this.rows = event.rows;
     this.first=(this.first/this.rows)+1;
     this.LoadTableData();
   }
-OpenSpecialApprove(Id:number){
-  Swal.fire('Not yet worked!', Id+'', 'info');
+
+
+  OpenSpecialApprove(Id:number,PINo:string){
+  // Swal.fire('Not yet worked!', Id+'', 'info');
+    this.SpecialApproveFormgroup.controls["PIID"].setValue(Id);
+    this.openSpecialApprove=true;
+    this.PINo=PINo;
+  }
+
+  SpecialApprove(){
+  let value=this.SpecialApproveFormgroup.value;
+  let percent=value.PIPercentage;
+  let piId=value.PIID;
+
+  this.openSpecialApprove=false;
+
+  if(this.PiStatus=='Partial Approved' && (percent<20 || percent>=50)) {
+    
+    Swal.fire('Wearning','Deliverable must be greater than 20% and less than 50%','info');
+    return;
+  }
+
+  if(this.PiStatus=='Quartar Approved' && (percent<50 || percent>=100)) {
+    
+    Swal.fire('Wearning','Deliverable must be greater than 50% and less than 100%','info');
+    return;
+  }  
+
+  percent=percent/100.00;
+
+  Swal.fire({
+        title: `Do you want to Special Apprve?`,
+        showDenyButton: true,
+        confirmButtonText: "Yes",
+      }).then((result) => {
+
+        if (result.isConfirmed) {
+          
+        
+
+          let queryParams={CustomMaxDeliveryPercentage:percent,LastUpdateDate:new Date()};
+            let condition={PI_Master_ID:piId};
+            
+            this.service.UpdateData(queryParams,condition,'tbl_pi_master').subscribe({
+              next: (results) => {
+
+                if (results.status) {
+
+                  Swal.fire(results.messageType, results.message, 'success').then(()=>{
+                    this.SpecialApproveFormgroup.controls['PIPercentage'].setValue(0);
+                    this.SpecialApproveFormgroup.controls['PIID'].setValue('');
+                    
+                  });
+                } 
+                else if (results.message == 'Invalid Token') {
+                  Swal.fire('Session Expired!', 'Please Login Again.', 'info');
+                  this.gs.Logout();
+                }
+              },
+              error: (err) => { },
+            });
+
+        }
+      });
+
 }
+
   ViewDetails(Id:number){
 
     const procedureData = {
@@ -185,7 +259,7 @@ OpenSpecialApprove(Id:number){
     this.SearchFormgroup.controls['PageNumber'].setValue(this.first);
     this.SearchFormgroup.controls['PageSize'].setValue(this.rows);
     let permas=this.SearchFormgroup.value;
-    console.log(permas);
+
     this.DataTable=[];
 
     
@@ -223,7 +297,7 @@ OpenSpecialApprove(Id:number){
     }
 
 
-    getSelectedRows(status:string) {
+    SetPIStatus(status:string) {
       if (this.selectedRows.length<=0) {
         return;
       }
@@ -238,6 +312,7 @@ OpenSpecialApprove(Id:number){
         if (result.isConfirmed) {
 
           selectedIds.forEach((id:any)=>{
+
             let queryParams={Status:status,LastUpdateDate:new Date()};
             let condition={PI_Master_ID:id};
             
@@ -247,7 +322,8 @@ OpenSpecialApprove(Id:number){
                 if (results.status) {
 
                   Swal.fire(results.messageType, results.message, 'success').then(()=>{
-                    this.ngOnInit();
+                    //this.ngOnInit();
+                    this.LoadTableData();
                   });
                 } 
                 else if (results.message == 'Invalid Token') {

@@ -36,13 +36,14 @@ import { UnapprovedBuyingHouseComponent } from './buying-house/unapproved-buying
 import { AllBuyingHouseComponent } from './buying-house/all-buying-house/all-buying-house.component';
 import { GenerateBuyingHouseComponent } from './buying-house/generate-buying-house/generate-buying-house.component';
 
+
 const CustomSelectOptions: INgxSelectOptions = {
   keepSelectedItems: false,
   allowClear: true,
 };
 
 @NgModule({
-  declarations: [
+  declarations: [	
     AppComponent,
     LoginComponent,
     PageNotFoundComponent,
@@ -51,7 +52,7 @@ const CustomSelectOptions: INgxSelectOptions = {
     PageNotFoundComponent,
     LogoutComponent,
     ResetPasswordComponent
-  ],
+   ],
   imports: [
     FormsModule,
     ReactiveFormsModule,
