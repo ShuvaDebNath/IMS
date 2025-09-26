@@ -40,9 +40,6 @@ import { PendingRMRequisitionProductionComponent } from '../production/requisiti
 import { IssuedRMRequisitionProductionComponent } from '../production/requisition/raw-material-requisition/list/IssuedRMRequisition_Production/issued-rm-requisition-production.component';
 import { ReceivedRMListComponent } from '../production/requisition/raw-material-requisition/list/ReceivedRMList/received-rm-list.component';
 import { AllRMRequisitionListComponent } from '../production/requisition/raw-material-requisition/list/AllRMRequisitionList/all-rm-requisition-list.component';
-import { PendingRMRequisitionWareHouseComponent } from '../production/requisition/raw-material-requisition/list/PendingRMRequisition_Warehouse/pending-rm-requisition-warehouse.component';
-import { AcceptedRMRequisitionWareHouseComponent } from '../production/requisition/raw-material-requisition/list/AcceptedRMRequisition_Warehouse/accepted-rm-requisition-warehouse.component';
-import { IssuedRMRequisitionListWarehouseComponent } from '../production/requisition/raw-material-requisition/list/IssuedRMRequisitionList_Warehouse/issued-rm-requisition-list-warehouse.component';
 import { ChangePasswordComponent } from '../authentication/change-password/change-password.component';
 import { LandingPageComponent } from '../landing-page/landing-page.component';
 import { GenerateLcComponent } from '../lc/generate-lc/generate-lc.component';
@@ -66,7 +63,6 @@ import { AllCashReceiveComponent } from '../lc/all-cash-receive/all-cash-receive
 import { GenerateCashReceiveComponent } from '../lc/generate-cash-receive/generate-cash-receive.component';
 import { CashReceiveDetailsComponent } from '../lc/cash-receive-details/cash-receive-details.component';
 import { CashReceiveUpdateComponent } from '../lc/cash-receive-update/cash-receive-update.component';
-import { RawMaterialStockComponent } from '../rm-fg-material-infos-with-stock/raw-material-info-with-stock/raw-material-stock.component';
 import { GenerateCpiComponent } from '../PI/generate-cpi/generate-cpi.component';
 import { AllSalesContractComponent } from '../sales-contract/all-sales-contract/all-sales-contract.component';
 import { SalesContractDetailsComponent } from '../sales-contract/sales-contract-details/sales-contract-details.component';
@@ -76,10 +72,29 @@ import { UnApprovePiComponent } from '../PI/un-approve-pi/un-approve-pi.componen
 import { PartialApprovePiComponent } from '../PI/partial-approve-pi/partial-approve-pi.component';
 import { QuarterApprovePiComponent } from '../PI/quarter-approve-pi/quarter-approve-pi.component';
 import { FullApprovePiComponent } from '../PI/full-approve-pi/full-approve-pi.component';
+
+import { RawMaterialStockComponent } from '../warehouse/rm-fg-material-infos-with-stock/raw-material-info-with-stock/raw-material-stock.component';
+import { FinishGoodsInfoWithStockComponent } from '../warehouse/rm-fg-material-infos-with-stock/finish-goods-info-with-stock/finish-goods-info-with-stock.component';
+import { BeneficiaryListComponent } from '../Beneficiary/beneficiary-list/beneficiary-list.component';
+import { PendingRMRequisitionWareHouseComponent } from '../warehouse/requisition/raw-material-requisition/list/PendingRMRequisition_Warehouse/pending-rm-requisition-warehouse.component';
+import { AcceptedRMRequisitionWareHouseComponent } from '../warehouse/requisition/raw-material-requisition/list/AcceptedRMRequisition_Warehouse/accepted-rm-requisition-warehouse.component';
+import { IssuedRMRequisitionListWarehouseComponent } from '../warehouse/requisition/raw-material-requisition/list/IssuedRMRequisitionList_Warehouse/issued-rm-requisition-list-warehouse.component';
+import { SendFinishGoodsComponent } from '../production/finishgoods/send-finish-goods/send-finish-goods.component';
+import { AllCustomersComponent } from '../customer/all-customers/all-customers.component';
+import { GenerateCustomerComponent } from '../customer/generate-customer/generate-customer.component';
+import { UnapprovedCustomerComponent } from '../customer/unapproved-customer/unapproved-customer.component';
+import { UnapprovedBuyingHouseComponent } from '../buying-house/unapproved-buying-house/unapproved-buying-house.component';
+import { AllBuyingHouseComponent } from '../buying-house/all-buying-house/all-buying-house.component';
+import { GenerateBuyingHouseComponent } from '../buying-house/generate-buying-house/generate-buying-house.component';
+import { PendingFinishGoodsSentListProductionComponent } from '../production/finishgoods/pending-finish-goods-sent-list-production/pending-finish-goods-sent-list-production.component';
+import { ReceivedFinishGoodsProductionComponent } from '../production/finishgoods/received-finish-goods-list-production/received-finish-goods-list-production.component';
+import { PendingFinishGoodsSentListWarehouseComponent } from '../warehouse/finishgoods/pending-finish-goods-sent-list-warehouse/pending-finish-goods-sent-list-warehouse.component';
+import { ReceivedFinishGoodsWarehouseComponent } from '../warehouse/finishgoods/received-finish-goods-list-warehouse/received-finish-goods-list-warehouse.component';
 import { FinishGoodsInfoWithStockComponent } from '../rm-fg-material-infos-with-stock/finish-goods-info-with-stock/finish-goods-info-with-stock.component';
 import { PiReportComponent } from '../report/pi-report/pi-report.component';
 import { PiBottomPriceReportComponent } from '../report/pi-bottom-price-report/pi-bottom-price-report.component';
 import { DeliveryLogReportComponent } from '../report/delivery-log-report/delivery-log-report.component';
+
 
 const CustomSelectOptions: INgxSelectOptions = {
   // Check the interface for more options
@@ -206,11 +221,16 @@ const CustomSelectOptions: INgxSelectOptions = {
             component: IssuedRMRequisitionListWarehouseComponent,
           },
           { path: 'raw-material-stock', component: RawMaterialStockComponent },
+          { path: 'finish-goods-stock', component: FinishGoodsInfoWithStockComponent },
+          { path: 'send-finish-goods', component: SendFinishGoodsComponent },
+          { path: 'pending-fg-sent-list-production', component: PendingFinishGoodsSentListProductionComponent },
+          { path: 'received-fg-list-production', component: ReceivedFinishGoodsProductionComponent },
+          { path: 'pending-fg-sent-list-warehouse', component: PendingFinishGoodsSentListWarehouseComponent },
+          { path: 'received-fg-list-warehouse', component: ReceivedFinishGoodsWarehouseComponent },
           {
             path: 'finish-goods-stock',
             component: FinishGoodsInfoWithStockComponent,
           },
-
           {
             path: 'pending-rm-requisition/edit/:reqId',
             loadComponent: () =>
