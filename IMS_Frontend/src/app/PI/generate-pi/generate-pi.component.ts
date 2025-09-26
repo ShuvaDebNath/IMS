@@ -264,7 +264,7 @@ export class GeneratePiComponent implements OnInit {
         this.ColorList=DataSet.Tables13;
         this.PackagingList=DataSet.Tables14;
         this.UnitList=DataSet.Tables15;
-        this.AAList=DataSet.Tables16;
+        this.AAList=DataSet.Tables28;
         this.DeliveryConditionList=DataSet.Tables17;
         this.PartialShipmentList=DataSet.Tables18;
         this.PriceTermsList=DataSet.Tables19;

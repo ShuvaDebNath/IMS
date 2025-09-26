@@ -193,6 +193,7 @@ export class IssuedRMRequisitionProductionComponent {
 
     const detailRowsForStockUpdate = (data.Items as any[]).map(r => ({
       RawMaterial_ID: r?.RawMaterial_ID,
+      Stock_Change_Date: this.nowSql(),
       Stock_Out: Number(r?.AcceptedQuantity ?? 0),
       RM_Requisition_MasterID: data.RM_Requisition_MasterID,
       Roll_Out: r?.Roll_Bag === 'roll' ? Number(r?.AcceptedRollBag_Qty ?? 0) : 0,
@@ -238,5 +239,11 @@ export class IssuedRMRequisitionProductionComponent {
       }
     });
   }
+
+  private nowSql(d = new Date()): string {
+        const pad = (n: number) => String(n).padStart(2, '0');
+        return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} `
+            + `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    }
 
 }

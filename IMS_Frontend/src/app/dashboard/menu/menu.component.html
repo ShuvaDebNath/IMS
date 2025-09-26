@@ -30,9 +30,13 @@
     </div>
   </div>
 </div>
-
+<nav *ngIf="userName==undefined" class="navbar navbar-expand-lg navbar-dark custom-header">
+  <div class="container-fluid" style="height: 44px !important;">
+    <a class="navbar-brand" href="#"></a>
+  </div>
+  </nav>
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark custom-header">
+<nav *ngIf="userName!=undefined"  class="navbar navbar-expand-lg navbar-dark custom-header">
   <div class="container-fluid">
 
     <!-- Mobile Toggle Button -->

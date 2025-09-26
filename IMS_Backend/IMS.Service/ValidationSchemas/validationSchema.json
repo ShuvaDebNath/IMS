@@ -26,7 +26,6 @@
         }
       }
     },
-
     "tbl_arbitration": {
       "QueryParams": {
 	"[Detail]": {
@@ -58,7 +57,6 @@
           "Required": true
         }
       }
-
     },
     "tbl_beneficiary_bank": {
       "QueryParams": {
@@ -67,20 +65,17 @@
           "Required":true
         "[BankName]": {
           "Required": true
-
         },
         "[AccountNo]": {
           "Required": true
         },
         "[Branch]": {
-          "Reqired": true
+          "Required": true
         },
         "[Address]": {
           "Required": true
-        }
-      
+        }      
       },
-
       }
     },
     "tbl_cash_receive_detail": {
