@@ -156,6 +156,8 @@ export class GeneratePiComponent implements OnInit {
       Item_ID: [''],
       ActualArticle: [''],
       Unit_ID: [''],
+      Quantity_In_Meter: [0], 
+      Delivered_Quantity_In_Meter: [0]
     });
   }
   SetActualArticle(itemrow:any){ 
@@ -325,10 +327,16 @@ export class GeneratePiComponent implements OnInit {
       Customer_Bank_ID: this.Formgroup.controls['Customer_Bank_ID'].value
     };
 
-    
-    // model.PINo=`${model.Consignee_Initial}-${this.datePipe.transform(model.Date, 'yyyyMMdd')}`;
+    let details=this.Formgroup.value.ItemArray;
 
-    this.service.SaveDataMasterDetails(this.Formgroup.value.ItemArray,
+    details.forEach((element:any) => {
+      if(element.Unit_ID==2){
+        element.Quantity_In_Meter=element.Quantity;
+        element.Quantity=element.Quantity_In_Meter*1.09361;
+      }
+    });
+
+    this.service.SaveDataMasterDetails(details,
       "tbl_pi_detail",
       model,
       "tbl_pi_master",

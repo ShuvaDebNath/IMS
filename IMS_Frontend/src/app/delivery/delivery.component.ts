@@ -23,7 +23,7 @@ import { Goods_Delivery_serviceService } from '../services/delivery/Goods_Delive
   selector: 'app-delivery',
   templateUrl: './delivery.component.html',
   styleUrls: ['./delivery.component.css'],
-  imports: [FormsModule, InputTextModule , ReactiveFormsModule, CommonModule, TableModule, ButtonModule, DividerModule, FieldsetModule, DropdownModule]
+  imports: [FormsModule, InputTextModule , InputNumberModule, ReactiveFormsModule, CommonModule, TableModule, ButtonModule, DividerModule, FieldsetModule, DropdownModule]
 })
 export class DeliveryComponent implements OnInit {
 
@@ -118,7 +118,7 @@ export class DeliveryComponent implements OnInit {
           this.Delivers=DataSet.Tables1;
           
           this.Formgroup.controls['PIStatus'].setValue(DataSet.Tables1[0].IsMPI==0?'LC':'Cash');
-          this.Formgroup.controls['RestQty'].setValue(DataSet.Tables1[0].DeliverableQty);
+          this.Formgroup.controls['RestQty'].setValue(DataSet.Tables1[0].Unit_ID==2 ? DataSet.Tables1[0].DeliverableQty_In_Meter : DataSet.Tables1[0].DeliverableQty);
           this.Formgroup.controls['LCNo'].setValue(DataSet.Tables1[0].LC_No);
           this.Formgroup.controls['IsCash'].setValue(DataSet.Tables1[0].CR_NO);
 
@@ -141,7 +141,7 @@ export class DeliveryComponent implements OnInit {
               Packaging:[item.Packaging],
               Measurement:[item.Measurement],
               ActualArticle:[item.ActualArticle],
-              UndeliveredQty:[item.UndeliveredQty],
+              UndeliveredQty:[item.Unit_ID==2?item.UndeliveredQty_In_Meter: item.UndeliveredQty],
               UnitName:[item.UnitName],
               Unit_ID:[item.Unit_ID],
               StockBalance:[item.Stock],
@@ -166,16 +166,32 @@ export class DeliveryComponent implements OnInit {
   Save() {
     console.log(this.Formgroup.controls['ItemArray'].value);
     let listData=this.Formgroup.controls['ItemArray'].value;
-    
-    let unAllowedList=listData.filter((x:any)=> (x.Unit_ID!=2 && x.Delivered>x.StockBalance) || (x.Unit_ID==2 && (x.Delivered*1.09361)>x.Stock_In_MeterBalance));
+    let restQty=this.Formgroup.controls['RestQty'].value;
+    let sum = 0;
+    listData.forEach((element:any) => {
+        sum+=element.Delivered;
+        if(element.Unit_ID==2){
+          element.Deliverd_In_Meter=element.Delivered;
+          element.Delivered=element.Deliverd_In_Meter*1.09361;
+        }
+      });
+
+      if(sum>restQty){
+        Swal.fire('Save Fail!', 'Deliverable Excced.', 'error');
+        return;
+      }
+
+    let unAllowedList=listData.filter((x:any)=> (x.Unit_ID!=2 && x.Delivered>x.StockBalance) || (x.Unit_ID==2 && x.Deliverd_In_Meter>x.Stock_In_MeterBalance));
 
     if(unAllowedList.length>0){
       Swal.fire('Save Fail!', 'Stock Unavailable.', 'error');
       return;
     }
 
+ 
+
      
-    this.deliveryService.SaveData(this.Formgroup.controls['ItemArray'].value).subscribe(res=>{
+    this.deliveryService.SaveData(listData).subscribe(res=>{
       if(res.messageType=='Success' && res.status){
         Swal.fire(res.messageType, res.message, 'success').then(()=>{
               this.ngOnInit();

@@ -64,7 +64,7 @@
 
       <div class="col-auto">
         <label class="mr-2">Deliverable</label>
-        <input type="text" pInputText formControlName="RestQty" />
+        <p-inputNumber   formControlName="RestQty" />
       </div>
 
       <div class="col-auto">
@@ -108,10 +108,10 @@
             <td>{{ item.value.UndeliveredQty }}</td>
             <td>{{ item.value.UnitName }}</td>
             <td>
-              <input type="text" pInputText  placeholder="Deliver Quantity" formControlName="Delivered" (change)="SetMeterValue($event,item)" />
+              <p-inputNumber placeholder="Deliver Quantity" formControlName="Delivered" (change)="SetMeterValue($event,item)" />
             </td>
             <td>
-              <input type="text" pInputText  placeholder="Roll/BOX/PCS" formControlName="Roll"/>
+              <p-inputNumber placeholder="Roll/BOX/PCS" formControlName="Roll"/>
             </td>
             <td>
               <input type="text" pInputText  placeholder="Remark" formControlName="Remark"/>

@@ -123,7 +123,7 @@ export class PiListComponent implements OnInit {
       this.PageTitle='Delivered PI'
     }
     this.title.setTitle(this.PageTitle);
-    // this.LoadTableData();
+    //this.LoadTableData();
     this.GenerateSearchFrom();
     this.GetInitialData();
   }
@@ -256,7 +256,7 @@ SpecialApprove(){
     this.SearchFormgroup.controls['PageNumber'].setValue(this.first);
     this.SearchFormgroup.controls['PageSize'].setValue(this.rows);
     let permas=this.SearchFormgroup.value;
-    console.log(permas);
+
     this.DataTable=[];
 
     
