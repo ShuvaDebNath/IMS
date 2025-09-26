@@ -127,20 +127,23 @@ export class PiListComponent implements OnInit {
     this.GenerateSearchFrom();
     this.GetInitialData();
   }
+
   ReloadTable(event:any) {
     this.first = event.first;
     this.rows = event.rows;
     this.first=(this.first/this.rows)+1;
     this.LoadTableData();
   }
-OpenSpecialApprove(Id:number,PINo:string){
-  // Swal.fire('Not yet worked!', Id+'', 'info');
-  this.SpecialApproveFormgroup.controls["PIID"].setValue(Id);
-  this.openSpecialApprove=true;
-  this.PINo=PINo;
-}
 
-SpecialApprove(){
+
+  OpenSpecialApprove(Id:number,PINo:string){
+  // Swal.fire('Not yet worked!', Id+'', 'info');
+    this.SpecialApproveFormgroup.controls["PIID"].setValue(Id);
+    this.openSpecialApprove=true;
+    this.PINo=PINo;
+  }
+
+  SpecialApprove(){
   let value=this.SpecialApproveFormgroup.value;
   let percent=value.PIPercentage;
   let piId=value.PIID;
@@ -169,7 +172,7 @@ SpecialApprove(){
 
         if (result.isConfirmed) {
           
-          alert('11');
+        
 
           let queryParams={CustomMaxDeliveryPercentage:percent,LastUpdateDate:new Date()};
             let condition={PI_Master_ID:piId};
@@ -309,6 +312,7 @@ SpecialApprove(){
         if (result.isConfirmed) {
 
           selectedIds.forEach((id:any)=>{
+
             let queryParams={Status:status,LastUpdateDate:new Date()};
             let condition={PI_Master_ID:id};
             
@@ -318,7 +322,8 @@ SpecialApprove(){
                 if (results.status) {
 
                   Swal.fire(results.messageType, results.message, 'success').then(()=>{
-                    this.ngOnInit();
+                    //this.ngOnInit();
+                    this.LoadTableData();
                   });
                 } 
                 else if (results.message == 'Invalid Token') {
