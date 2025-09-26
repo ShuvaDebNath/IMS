@@ -251,17 +251,10 @@ export class ExportRawMaterialComponent {
       ExportMasterID: null,
     }));
 
-    const detailRowsForStockUpdate = (fv.items.map((r:any) => ({
-      RawMaterial_ID: r?.RawMaterial_ID,
-      Stock_Out: Number(r?.AcceptedQuantity ?? 0),
-      RM_Requisition_MasterID: data.RM_Requisition_MasterID,
-      Roll_Out: r?.Roll_Bag === 'roll' ? Number(r?.AcceptedRollBag_Qty ?? 0) : 0,
-      Bag_Out: r?.Roll_Bag === 'bag' ? Number(r?.AcceptedRollBag_Qty ?? 0) : 0,
-      RM_Send_MasterID: data.RM_Send_MasterID,
-    })));
+   
 
     this.doubleMasterEntryService
-      .SaveDataMasterDetails(
+      .SaveDataMasterDetailsGetId(
         detailRows, // fd (child rows)
         'tbl_export_details', // tableName (child)
         masterRow, // fdMaster (master row)
@@ -273,6 +266,16 @@ export class ExportRawMaterialComponent {
       )
       .subscribe({
         next: (res: any) => {
+          console.log(res);
+          
+           const detailRowsForStockUpdate = (fv.items.map((r:any) => ({
+              RawMaterial_ID: r?.article,
+              Stock_Out: Number(r?.qty ?? 0),
+              ExportMasterID: res,
+              Roll_Out: r?.Roll_Bag === 'roll' ? Number(r?.RollBag_Quantity ?? 0) : 0,
+              Bag_Out: r?.Roll_Bag === 'bag' ? Number(r?.RollBag_Quantity ?? 0) : 0,
+              
+            })));
           this.doubleMasterEntryService
             .SaveData(detailRowsForStockUpdate, 'tbl_stock')
             .subscribe({

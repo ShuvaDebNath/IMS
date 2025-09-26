@@ -459,6 +459,7 @@ namespace Boilerplate.Repository.Repositories
                     }
                 }
                 await cmd.Transaction.CommitAsync();
+                rowAffect = newPrimaryKey;
             }
             catch (Exception)
             {
