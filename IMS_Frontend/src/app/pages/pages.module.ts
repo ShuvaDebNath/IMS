@@ -86,6 +86,9 @@ import { GenerateBuyingHouseComponent } from '../buying-house/generate-buying-ho
 import { BeneficiaryListComponent } from '../Beneficiary/beneficiary-list/beneficiary-list.component';
 import { OtwRawMaterialComponent } from '../export-module/otw-raw-material/otw-raw-material.component';
 import { ExportRawMaterialComponent } from '../export-module/export-raw-material/export-raw-material.component';
+import { ResolvedReturnListComponent } from '../export-module/export return/resolved-return-list/resolved-return-list.component';
+import { PendingReturnListComponent } from '../export-module/export return/pending-return-list/pending-return-list.component';
+import { AllRmExportReportComponent } from '../export-module/report/all-rm-export-report/all-rm-export-report.component';
 
 const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more options
   keepSelectedItems: false,
@@ -132,7 +135,10 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     GenerateBuyingHouseComponent,
     BeneficiaryListComponent,
     ExportRawMaterialComponent,
-    OtwRawMaterialComponent
+    OtwRawMaterialComponent,
+    ResolvedReturnListComponent,
+    PendingReturnListComponent,
+    AllRmExportReportComponent
   ],
   imports: [
 
@@ -250,6 +256,9 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
           { path: 'unapproved-buying-house', component: UnapprovedBuyingHouseComponent },
           { path: 'export-raw-material', component: ExportRawMaterialComponent },
           { path: 'otw-raw-material', component: OtwRawMaterialComponent },
+          { path: 'all-rm-export-report', component: AllRmExportReportComponent },
+          { path: 'resolved-return-list', component: ResolvedReturnListComponent },
+          { path: 'pending-return-list', component: PendingReturnListComponent },
         ]
       }
     ]),

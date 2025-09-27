@@ -59,7 +59,7 @@ const CustomSelectOptions: INgxSelectOptions = {
     BeneficiarybankCreateComponent,
     BeneficiaryBankListComponent,
     ApplicantbankCreateComponent,
-    ApplicantbankListComponent
+    ApplicantbankListComponent,
   ],
   imports: [
     FormsModule,
