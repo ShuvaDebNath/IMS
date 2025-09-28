@@ -446,9 +446,7 @@ export class ExportRawMaterialComponent {
       console.log(matches);
     });
     const detailRows = fv.items.map((i: any) => ({
-      RawMaterial_ID: this.RawMaterialList.filter((e: any) => {
-        e.Article_No == i.article;
-      })[0].RawMaterial_ID,
+      RawMaterial_ID: i.RawMaterial_ID,
       Quantity: i.qty,
       Article_No: i.article,
       Description: i.description,
