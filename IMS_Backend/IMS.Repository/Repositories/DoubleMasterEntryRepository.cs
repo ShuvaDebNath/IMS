@@ -588,7 +588,7 @@ namespace Boilerplate.Repository.Repositories
                 }
                 await cmd.Transaction.CommitAsync();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 await cmd.Transaction.RollbackAsync();
                 throw;

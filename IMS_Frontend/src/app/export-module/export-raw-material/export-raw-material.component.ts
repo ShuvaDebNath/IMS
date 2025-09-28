@@ -34,6 +34,7 @@ import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.ser
 export class ExportRawMaterialComponent {
   exportForm!: FormGroup;
   isEdit = false;
+  exportDate: Date = new Date();
   private destroy$ = new Subject<void>();
   private unitByArticleId = new Map<number, number | null>();
   rollOrBagOptions = [
@@ -56,7 +57,7 @@ export class ExportRawMaterialComponent {
     private gs: GlobalServiceService,
     private activeLink: ActivatedRoute,
     private title: Title,
-    private masterEntryService:MasterEntryService
+    private masterEntryService: MasterEntryService
   ) {}
 
   ngOnInit(): void {
@@ -191,7 +192,6 @@ export class ExportRawMaterialComponent {
       .filter((r) => r.rollOrBag === 'bag')
       .reduce((s, r) => s + (Number(r.weight) || 0), 0);
     this.totalGross = this.totalQty * this.totalWeight;
-    
   }
 
   trackById = (_: number, a: any) => a?.RawMaterial_ID ?? _;
@@ -254,7 +254,7 @@ export class ExportRawMaterialComponent {
       Total_Bag: 0,
     };
     const detailRows = fv.items.map((i: any) => ({
-      RawMaterial_ID: i.article,
+      RawMaterial_ID: i.RawMaterial_ID,
       Quantity: i.qty,
       Article_No: i.article,
       Description: i.description,
@@ -350,8 +350,8 @@ export class ExportRawMaterialComponent {
 
           tableData.forEach((e: any) => {
             var exportDate = new Date(e.ExportDate);
-            console.log(e.ExportDate);
-            
+            console.log(exportDate);
+
             this.exportForm.controls.ExportDate.setValue(exportDate);
             this.exportForm.controls.Loading_Port.setValue(e.Loading_Port_ID);
             this.exportForm.controls.Destination_Port.setValue(
@@ -409,7 +409,6 @@ export class ExportRawMaterialComponent {
   }
 
   UpdateData(): void {
-
     if (this.exportForm.invalid) {
       swal.fire(
         'Validation Error',
@@ -439,8 +438,17 @@ export class ExportRawMaterialComponent {
       Total_Roll: 0,
       Total_Bag: 0,
     };
+    fv.items.map((e: any) => {
+      const matches = JSON.parse(JSON.stringify(this.RawMaterialList)).filter(
+        (f: any) => f.Article_No == e.article
+      );
+
+      console.log(matches);
+    });
     const detailRows = fv.items.map((i: any) => ({
-      RawMaterial_ID: i.article,
+      RawMaterial_ID: this.RawMaterialList.filter((e: any) => {
+        e.Article_No == i.article;
+      })[0].RawMaterial_ID,
       Quantity: i.qty,
       Article_No: i.article,
       Description: i.description,
@@ -456,8 +464,8 @@ export class ExportRawMaterialComponent {
     }));
 
     var whereParam = {
-      'ExportMasterID':this.ExportMasterID
-    }
+      ExportMasterID: this.ExportMasterID,
+    };
 
     this.doubleMasterEntryService
       .UpdateDataMasterDetails(
@@ -468,12 +476,11 @@ export class ExportRawMaterialComponent {
         'ExportMasterID', // columnNamePrimary (PK)
         'ExportMasterID', // columnNameForign (FK in child)
         'Export', // serialType (your code uses it)
-        'Export' ,// columnNameSerialNo (series name)
+        'Export', // columnNameSerialNo (series name)
         whereParam
       )
       .subscribe({
         next: (res: any) => {
-
           const detailRowsForStockUpdate = fv.items.map((r: any) => ({
             RawMaterial_ID: r?.article,
             Stock_Out: Number(r?.qty ?? 0),
@@ -484,9 +491,8 @@ export class ExportRawMaterialComponent {
               r?.Roll_Bag === 'bag' ? Number(r?.RollBag_Quantity ?? 0) : 0,
           }));
 
-
           this.masterEntryService
-            .UpdateData(detailRowsForStockUpdate,whereParam, 'tbl_stock')
+            .UpdateData(detailRowsForStockUpdate, whereParam, 'tbl_stock')
             .subscribe({
               next: (res) => {
                 if (res.messageType === 'Success' && res.status) {
@@ -520,5 +526,33 @@ export class ExportRawMaterialComponent {
           swal.fire('Error', 'Could not save requisition', 'error');
         },
       });
+  }
+
+  RMOptionChange(item:any){   
+    console.log(item);
+    
+    var ProcedureData = {
+      procedureName: '[usp_RawMaterialDetails]',
+      parameters: {
+        'RawMaterial_ID':item.value.article
+      },
+    };
+
+    this.getDataService.GetInitialData(ProcedureData).subscribe({
+      next: (results) => {
+        if (results.status) {
+          var rmDetails = JSON.parse(results.data).Tables1;          
+          item.controls.color.setValue(rmDetails[0].ColorId);     
+          item.controls.unitId.setValue(rmDetails[0].UnitId);     
+          item.controls.width.setValue(rmDetails[0].WidthId);     
+          item.controls.weight.setValue(rmDetails[0].Weight);
+        } else if (results.msg == 'Invalid Token') {
+          swal.fire('Session Expierd!', 'Please Login Again.', 'info');
+          this.gs.Logout();
+        } else {
+        }
+      },
+      error: (err) => {},
+    });
   }
 }

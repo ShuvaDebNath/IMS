@@ -18,10 +18,10 @@ import { CG } from 'src/app/models/cg';
 @Component({
   selector: 'app-otw-raw-material',
   templateUrl: './otw-raw-material.component.html',
-  styleUrls: ['./otw-raw-material.component.css']
+  styleUrls: ['./otw-raw-material.component.css'],
 })
 export class OtwRawMaterialComponent {
-pageIndex = 1;
+  pageIndex = 1;
   searchText = '';
   length = 100;
   pageSize = 10;
@@ -40,17 +40,16 @@ pageIndex = 1;
     'Action',
   ];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  isEdit:any;
+  isEdit: any;
   page = new Page();
   rows: any;
   SearchForm!: FormGroup;
   fromDate: any;
   toDate: any;
   LCNo: string = '';
-  CR_Id:any;
-  tableVisible:boolean = false;
-  detailsTableData:any;
-
+  CR_Id: any;
+  tableVisible: boolean = false;
+  detailsTableData: any;
 
   showPaginator = false;
   insertPermissions: boolean = true;
@@ -72,8 +71,9 @@ pageIndex = 1;
     private title: Title
   ) {}
   ngOnInit(): void {
-
-    var permissions = this.gs.CheckUserPermission("On the Way Raw Material List");
+    var permissions = this.gs.CheckUserPermission(
+      'On the Way Raw Material List'
+    );
     this.insertPermissions = permissions.insertPermissions;
     this.updatePermissions = permissions.updatePermissions;
     this.deletePermissions = permissions.deletePermissions;
@@ -82,8 +82,7 @@ pageIndex = 1;
     if (!this.printPermissions) {
       window.location.href = 'dashboard';
     }
-    
-    
+
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
     this.title.setTitle('On the Way Raw Material List');
@@ -96,10 +95,10 @@ pageIndex = 1;
       toDate: ['', [Validators.required]],
     });
   }
-  Search() {    
+  Search() {
     var fromDate = this.SearchForm.value.fromDate;
-    var toDate = this.SearchForm.value.toDate;    
-    
+    var toDate = this.SearchForm.value.toDate;
+
     let param = new GetDataModel();
     param.procedureName = '[usp_ExportRM_List]';
     param.parameters = {
@@ -111,7 +110,6 @@ pageIndex = 1;
 
     this.masterEntryService.GetInitialData(param).subscribe({
       next: (results) => {
-
         if (results.status) {
           this.tableData = [];
           this.tableVisible = true;
@@ -125,7 +123,7 @@ pageIndex = 1;
 
   DeleteData(item: any) {
     console.log(item);
-    
+
     swal
       .fire({
         title: 'Wait!',
@@ -146,7 +144,6 @@ pageIndex = 1;
 
           this.masterEntryService.GetInitialData(param).subscribe({
             next: (results: any) => {
-
               if (results.status) {
                 var effectedRows = JSON.parse(results.data).Tables1;
                 if (effectedRows[0].AffectedRows > 0) {
@@ -181,25 +178,24 @@ pageIndex = 1;
     this.Search();
   }
 
-  viewDetails(table:any){
-      this.isDetailsVisible = true;
-      
-      let param = new GetDataModel();
-      param.procedureName = '[usp_ExportRM_Details]';
-      param.parameters = {
-        ExportMasterID: table.ExportMasterID,     
-      };
+  viewDetails(table: any) {
+    this.isDetailsVisible = true;
+
+    let param = new GetDataModel();
+    param.procedureName = '[usp_ExportRM_Details]';
+    param.parameters = {
+      ExportMasterID: table.ExportMasterID,
+    };
 
     this.masterEntryService.GetInitialData(param).subscribe({
       next: (results) => {
-        
         if (results.status) {
           let tables = JSON.parse(results.data);
-          
-          this.detailsData = tables.Tables1[0]; 
+
+          this.detailsData = tables.Tables1[0];
           this.detailsTableData = tables.Tables2;
         }
-      }
+      },
     });
-    }
+  }
 }

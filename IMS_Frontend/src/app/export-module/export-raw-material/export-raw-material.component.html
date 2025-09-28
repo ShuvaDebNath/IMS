@@ -123,6 +123,7 @@
                 [style]="{ width: '100px !important' }"
                 [panelStyle]="{ width: '100%' }"
                 [options]="RawMaterialList"
+                (onChange)="RMOptionChange(item)"
                 optionLabel="Article_No"
                 optionValue="RawMaterial_ID"
                 [filter]="true"
