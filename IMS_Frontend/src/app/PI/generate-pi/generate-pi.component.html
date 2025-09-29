@@ -135,7 +135,9 @@
           styleClass="my-dropdown"
           panelStyleClass="my-dropdown-panel"
           [style]="{width: '100%'}"
-          placeholder="Select a Consignee">
+          placeholder="Select a Consignee"
+          [virtualScroll]="true"
+          [itemSize]="30">
           </p-dropdown>          
         </div>
         <div class="col-md-4 mb-2">
