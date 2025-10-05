@@ -1,5 +1,9 @@
-<div class="container">
-  <h1>Issued RM List</h1>
+<div class="m-2 p-2 shadow-sm">
+  <div class="card">
+    <div class="card-header theme-bg">
+      <h1 class="">Issued RM List</h1>
+    </div>
+    <div class="card-body">
   <p-table #dt [value]="issuedRequisitions" [paginator]="true" [rows]="10" [responsive]="true"
     [showCurrentPageReport]="true"
     [globalFilterFields]="['RequisitionNumber','RequisitionDate','SentStatus_from_Warehouse','IssueNumber','IssueDate','ReceivedStatus_from_Production','SentBy']"
@@ -38,8 +42,8 @@
         <td style="text-align: center;">{{ requisition.IssueDate }}</td>
         <td style="text-align: center;">{{ requisition.ReceivedStatus_from_Production }}</td>
         <td style="text-align: center;">{{ requisition.SentBy }}</td>
-        <td class="d-flex gap-2" style="justify-content: center;">
-          <button class="btn btn-info btn-sm text-white d-inline-flex align-items-center"
+        <td style="text-align: center;">
+          <button class="btn theme-btn btn-sm text-white d-inline-flex align-items-center"
             (click)="onDetails(requisition)">
             <i class="pi pi-eye me-1"></i>
           </button>
@@ -88,4 +92,8 @@
       </p-table>
     </div>
   </p-dialog>
+</div>
+
+    </div>
+
 </div>

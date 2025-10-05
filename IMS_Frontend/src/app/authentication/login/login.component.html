@@ -42,9 +42,17 @@
               </div>
             </div>
             <div class="form-group">
-              <button [disabled]="LoginForm.invalid" class="btn btn-primary" type="submit" (click)="login()">
-                Login
-              </button>
+              <button
+  [disabled]="LoginForm.invalid || isLoading"
+  class="btn btn-primary"
+  type="submit"
+  (click)="login()"
+>
+  <span *ngIf="!isLoading">Login</span>
+  <span *ngIf="isLoading">
+    <i class="fa fa-spinner fa-spin"></i> Logging in...
+  </span>
+</button>
             </div>
           </div>
         </div>

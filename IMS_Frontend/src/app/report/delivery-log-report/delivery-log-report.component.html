@@ -1,7 +1,10 @@
-<div class="container">
-  <h1 class="theme-text">Delivery Log Report</h1>
-
-  <form
+<div class="m-2 p-2 shadow-sm">
+  <div class="card">
+    <div class="card-header theme-bg">
+      <h1>Delivery Log Report</h1>
+    </div>
+    <div class="card-body">
+        <form
     [formGroup]="dateForm"
     class="row p-3 shadow-sm g-3 align-items-end mb-3"
     (ngSubmit)="loadAllPI()"
@@ -10,7 +13,7 @@
       <label class="form-label fw-bold">From Date</label>
       <input
         type="date"
-        class="form-control form-control-sm"
+        class="form-control "
         formControlName="fromDate"
       />
     </div>
@@ -19,7 +22,7 @@
       <label class="form-label fw-bold">To Date</label>
       <input
         type="date"
-        class="form-control form-control-sm"
+        class="form-control "
         formControlName="toDate"
       />
     </div>
@@ -98,7 +101,7 @@
     <div class="col-md-2">
       <button
         type="submit"
-        class="btn btn-sm theme-btn w-100"
+        class="btn btn-sm theme-btn w-100 pt-3"
         [disabled]="dateForm.invalid"
       >
         <i class="pi pi-download me-1"></i> Load
@@ -207,4 +210,8 @@
       </ng-template>
     </p-table>
   </div>
+      </div>
+  </div>
+
 </div>
+

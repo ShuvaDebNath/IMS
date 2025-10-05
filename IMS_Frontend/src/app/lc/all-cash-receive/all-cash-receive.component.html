@@ -1,10 +1,9 @@
-<div class="card card-default">
-  <div class="content-heading" style="border-bottom: 1px solid rgba(0,0,0,.125) !important;">
-    <div class="row">
-      <div class="col-6">
+<div class="m-2 p-2 shadow-sm">
+  <div class="card ">
+  <div class="card-header theme-bg" style="">
+    
         <h2 class="p-2">All Cash Receive</h2>
-      </div>
-    </div>
+    
   </div>
   <div class="card-body">
     <form [formGroup]="SearchForm">
@@ -12,12 +11,12 @@
         <div class="col-auto">
           <label class="control-label" for="inlineFormInputGroup">From Date</label>
           <div class="input-group mb-2">
-            <div class="input-group-sm input-group-prepend">
-              <div class="input-group-text" (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
+            <div class="input-group-sm  input-group-prepend">
+              <div class="input-group-text theme-btn" (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
             </div>
             <input type="text" autocomplete="off" formControlName="fromDate" [bsConfig]="{
               dateInputFormat: 'DD/MM/YYYY',
-              containerClass: 'theme-green'
+              containerClass: 'theme-bg'
             }" class="form-control-sm form-control bg-white" id="fromdate" name="fromdate" placeholder="From Date" 
               #dpfrom="bsDatepicker" bsDatepicker/>
           </div>
@@ -26,19 +25,19 @@
         <div class="col-auto">
           <label class="control-label" for="inlineFormInputGroup">To Date</label>
           <div class="input-group mb-2">
-            <div class="input-group-sm input-group-prepend">
-              <div class="input-group-text" (click)="dpto.toggle()"><i class="fas fa-calendar"></i></div>
+            <div class="input-group-sm  input-group-prepend">
+              <div class="input-group-text theme-btn" (click)="dpto.toggle()"><i class="fas fa-calendar"></i></div>
             </div>
             <input type="text" autocomplete="off" formControlName="toDate" [bsConfig]="{
               dateInputFormat: 'DD/MM/YYYY',
-              containerClass: 'theme-green'
+              containerClass: 'theme-btn'
             }" class="form-control-sm form-control bg-white" id="todate" name="todate" placeholder="To Date"
               #dpto="bsDatepicker" bsDatepicker />
           </div>
         </div>
         <div class="col-auto">
           <button title="Search" type="button" (click)="Search()"
-            class="btn btn-sm btn-outline-primary bg-gradient-primary mb-2 mr-2" style="margin-top: 2.3em !important;">
+            class="btn btn-sm theme-btn mb-2 mr-2" style="margin-top: 2.3em !important;">
             <i class="fas fa-search"></i>&nbsp;Search</button>
         </div>
       </div>
@@ -56,7 +55,7 @@
            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
 
     <ng-template pTemplate="caption">
-      <div class="table-toolbar">
+      <div class="table-toolbar d-flex justify-content-end">
         <span class="p-input-icon-left">
           <i class="pi pi-search"></i>
           <input pInputText type="text"
@@ -68,18 +67,18 @@
 
     <ng-template pTemplate="header">
       <tr>
-        <th class="bg-gradient-success">SL</th>
-        <th class="bg-gradient-success">PI No</th>
-        <th class="bg-gradient-success">Consignee Name</th>
-        <th class="bg-gradient-success">PI Value</th>
-        <th class="bg-gradient-success">Issue Date</th>
-        <th class="bg-gradient-success">Total Receive Amount</th>
-        <th class="bg-gradient-success">Last Receive Date</th>
-        <th class="bg-gradient-success">Balance</th>
-        <th class="bg-gradient-success">Created Date</th>
-        <th class="bg-gradient-success">Remarks</th>
-        <th class="bg-gradient-success">Payment Terms</th>
-        <th class="bg-gradient-success" *ngIf="allPersmissions">Action</th>
+        <th class="">SL</th>
+        <th class="">PI No</th>
+        <th class="">Consignee Name</th>
+        <th class="">PI Value</th>
+        <th class="">Issue Date</th>
+        <th class="">Total Receive Amount</th>
+        <th class="">Last Receive Date</th>
+        <th class="">Balance</th>
+        <th class="">Created Date</th>
+        <th class="">Remarks</th>
+        <th class="">Payment Terms</th>
+        <th class="" *ngIf="allPersmissions">Action</th>
       </tr>
     </ng-template>
 
@@ -96,15 +95,19 @@
         <td class="text-center align-middle">{{table.System_Created_Date}}</td>
         <td class="text-center align-middle">{{table.Remarks}}</td>
         <td class="text-center align-middle">{{table.Payment_Terms}}</td>
-        <td class="text-center align-middle p-0 m-0">
-            <a *ngIf="updatePermissions && table.Balance!=0" class="btn bg-gradient-cyan btn-xs mr-2" target="_blank" title="Add Receive Amount" [routerLink]="['/cash-receive-update']"
+        <td class="text-center align-middle p-1 m-0">
+          <div class="d-flex gap-1">
+             <a *ngIf="updatePermissions && table.Balance!=0" class="btn theme-btn-add btn-sm mr-2" target="_blank" title="Add Receive Amount" [routerLink]="['/cash-receive-update']"
               [queryParams]="{CR_Id:table.CR_ID}"><i class="fa fa-plus" ></i></a> 
-            <a class="btn bg-gradient-cyan btn-xs mr-2" target="_blank" title="View Details" [routerLink]="['/cash-receive-details']"
+            <a class="btn theme-btn-view btn-sm mr-2" target="_blank" title="View Details" [routerLink]="['/cash-receive-details']"
               [queryParams]="{CR_Id:table.CR_ID}"><i class="fa fa-eye" ></i></a> 
-            <a *ngIf="updatePermissions" class="btn bg-gradient-cyan btn-xs mr-2" target="_blank" title="Edit" [routerLink]="['/generate-cash-receive']"
+            <a *ngIf="updatePermissions" class="btn theme-btn-edit btn-sm mr-2" target="_blank" title="Edit" [routerLink]="['/generate-cash-receive']"
               [queryParams]="{CR_Id:table.CR_ID}"><i class="fa fa-edit" ></i></a> 
-            <button *ngIf="deletePermissions" class="btn bg-gradient-danger btn-xs" title="Delete" (click)="DeleteData(table)"><i
+            <button *ngIf="deletePermissions" class="btn theme-btn-delete btn-sm" title="Delete" (click)="DeleteData(table)"><i
                 class="fas fa-trash"></i></button>
+
+          </div>
+           
         </td>
       </tr>
     </ng-template>
@@ -115,3 +118,6 @@
     
 
   </div>
+
+</div>
+

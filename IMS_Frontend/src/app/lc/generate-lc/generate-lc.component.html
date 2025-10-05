@@ -1,15 +1,9 @@
 <div class="row d-flex justify-content-center">
-  <div class="col-md-6">
-    <div class="card card-default">
+  <div class="m-2 p-2 shadow">
+    <div class="card ">
       <div
-        class="content-heading"
-        style="border-bottom: 1px solid rgba(0,0,0,.125) !important;"
+        class="card-header theme-bg text-white"
       >
-        <div class="row">
-          <div class="col-6">
-            <h2 class="p-2"></h2>
-          </div>
-        </div>
         <h2 class="p-2 font-weight-bold">
           {{!isEdit?'Add':'Edit'}}&nbsp;Create LC
         </h2>
@@ -104,15 +98,14 @@
               </p-dropdown>
             </div>
           </div>
-          <label>LC Receiving Date : </label>
           <div class="row">
             <div class="col-md-6">
               <label class="control-label" for="inlineFormInputGroup"
                 >LC Receiving Date By Mail/Draft</label
               >
               <div class="input-group mb-2">
-                <div class="input-group-sm input-group-prepend">
-                  <div class="input-group-text" (click)="dpfrom.toggle()">
+                <div class=" input-group-prepend">
+                  <div class="input-group-text theme-btn" (click)="dpfrom.toggle()">
                     <i class="fas fa-calendar"></i>
                   </div>
                 </div>
@@ -122,7 +115,7 @@
                   formControlName="LCReceivingDateByDraft"
                   [bsConfig]="{
                     dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-green'
+                    containerClass: 'theme-date-picker theme-bg'
                     }"
                   class="form-control-sm form-control bg-white"
                   id="LCReceivingDateByDraft"
@@ -140,7 +133,7 @@
               >
               <div class="input-group mb-2">
                 <div class="input-group-sm input-group-prepend">
-                  <div class="input-group-text" (click)="dpfrom.toggle()">
+                  <div class="input-group-text theme-btn" (click)="dpfrom.toggle()">
                     <i class="fas fa-calendar"></i>
                   </div>
                 </div>
@@ -150,7 +143,7 @@
                   formControlName="LCReceivingDateOrgBank"
                   [bsConfig]="{
                     dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-green'
+                    containerClass: 'theme-date-picker theme-bg'
                     }"
                   class="form-control-sm form-control bg-white"
                   id="LCReceivingDateOrgBank"
@@ -204,7 +197,7 @@
               >
               <div class="input-group mb-2">
                 <div class="input-group-sm input-group-prepend">
-                  <div class="input-group-text" (click)="dpfrom.toggle()">
+                  <div class="input-group-text theme-btn" (click)="dpfrom.toggle()">
                     <i class="fas fa-calendar"></i>
                   </div>
                 </div>
@@ -214,7 +207,7 @@
                   formControlName="IssueDate"
                   [bsConfig]="{
                     dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-green'
+                    containerClass: 'theme-date-picker theme-bg'
                     }"
                   class="form-control-sm form-control bg-white"
                   id="IssueDate"
@@ -232,7 +225,7 @@
               >
               <div class="input-group mb-2">
                 <div class="input-group-sm input-group-prepend">
-                  <div class="input-group-text" (click)="dpfrom.toggle()">
+                  <div class="input-group-text theme-btn" (click)="dpfrom.toggle()">
                     <i class="fas fa-calendar"></i>
                   </div>
                 </div>
@@ -242,7 +235,7 @@
                   formControlName="ExpiryDate"
                   [bsConfig]="{
                     dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-green'
+                    containerClass: 'theme-date-picker theme-bg'
                     }"
                   class="form-control-sm form-control bg-white"
                   id="ExpiryDate"
@@ -277,7 +270,7 @@
               >
               <div class="input-group mb-2">
                 <div class="input-group-sm input-group-prepend">
-                  <div class="input-group-text" (click)="dpfrom.toggle()">
+                  <div class="input-group-text theme-btn" (click)="dpfrom.toggle()">
                     <i class="fas fa-calendar"></i>
                   </div>
                 </div>
@@ -287,7 +280,7 @@
                   formControlName="InvoiceNoWitDate"
                   [bsConfig]="{
                     dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-green'
+                    containerClass: 'theme-date-picker theme-bg'
                     }"
                   class="form-control-sm form-control bg-white"
                   id="InvoiceNoWitDate"
@@ -305,7 +298,7 @@
               >
               <div class="input-group mb-2">
                 <div class="input-group-sm input-group-prepend">
-                  <div class="input-group-text" (click)="dpfrom.toggle()">
+                  <div class="input-group-text theme-btn" (click)="dpfrom.toggle()">
                     <i class="fas fa-calendar"></i>
                   </div>
                 </div>
@@ -315,7 +308,7 @@
                   formControlName="IPDocSendingDate"
                   [bsConfig]="{
                     dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-green'
+                    containerClass: 'theme-date-picker theme-bg'
                     }"
                   class="form-control-sm form-control bg-white"
                   id="IPDocSendingDate"
@@ -333,7 +326,7 @@
               >
               <div class="input-group mb-2">
                 <div class="input-group-sm input-group-prepend">
-                  <div class="input-group-text" (click)="dpfrom.toggle()">
+                  <div class="input-group-text theme-btn" (click)="dpfrom.toggle()">
                     <i class="fas fa-calendar"></i>
                   </div>
                 </div>
@@ -343,7 +336,7 @@
                   formControlName="IPDocReceivingDate"
                   [bsConfig]="{
                     dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-green'
+                    containerClass: 'theme-date-picker theme-bg'
                     }"
                   class="form-control-sm form-control bg-white"
                   id="ExpiryDate"
@@ -383,7 +376,7 @@
               >
               <div class="input-group mb-2">
                 <div class="input-group-sm input-group-prepend">
-                  <div class="input-group-text" (click)="dpfrom.toggle()">
+                  <div class="input-group-text theme-btn" (click)="dpfrom.toggle()">
                     <i class="fas fa-calendar"></i>
                   </div>
                 </div>
@@ -393,7 +386,7 @@
                   formControlName="MaturityDate"
                   [bsConfig]="{
                     dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-green'
+                    containerClass: 'theme-date-picker theme-bg'
                     }"
                   class="form-control-sm form-control bg-white"
                   id="MaturityDate"
@@ -411,7 +404,7 @@
               >
               <div class="input-group mb-2">
                 <div class="input-group-sm input-group-prepend">
-                  <div class="input-group-text" (click)="dpfrom.toggle()">
+                  <div class="input-group-text theme-btn" (click)="dpfrom.toggle()">
                     <i class="fas fa-calendar"></i>
                   </div>
                 </div>
@@ -421,7 +414,7 @@
                   formControlName="DocPresBankDate"
                   [bsConfig]="{
                     dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-green'
+                    containerClass: 'theme-date-picker theme-bg'
                     }"
                   class="form-control-sm form-control bg-white"
                   id="DocPresBankDate"
@@ -439,7 +432,7 @@
               >
               <div class="input-group mb-2">
                 <div class="input-group-sm input-group-prepend">
-                  <div class="input-group-text" (click)="dpfrom.toggle()">
+                  <div class="input-group-text theme-btn" (click)="dpfrom.toggle()">
                     <i class="fas fa-calendar"></i>
                   </div>
                 </div>
@@ -449,7 +442,7 @@
                   formControlName="FDDRecDate"
                   [bsConfig]="{
                     dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-green'
+                    containerClass: 'theme-date-picker theme-bg'
                     }"
                   class="form-control-sm form-control bg-white"
                   id="FDDRecDate"
@@ -486,7 +479,7 @@
               >
               <div class="input-group mb-2">
                 <div class="input-group-sm input-group-prepend">
-                  <div class="input-group-text" (click)="dpfrom.toggle()">
+                  <div class="input-group-text theme-btn" (click)="dpfrom.toggle()">
                     <i class="fas fa-calendar"></i>
                   </div>
                 </div>
@@ -496,7 +489,7 @@
                   formControlName="ActualPaymentRecDate"
                   [bsConfig]="{
                     dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-green'
+                    containerClass: 'theme-date-picker theme-bg'
                     }"
                   class="form-control-sm form-control bg-white"
                   id="ActualPaymentRecDate"
@@ -514,7 +507,7 @@
               >
               <div class="input-group mb-2">
                 <div class="input-group-sm input-group-prepend">
-                  <div class="input-group-text" (click)="dpfrom.toggle()">
+                  <div class="input-group-text theme-btn" (click)="dpfrom.toggle()">
                     <i class="fas fa-calendar"></i>
                   </div>
                 </div>
@@ -524,7 +517,7 @@
                   formControlName="ExportLCSCDate"
                   [bsConfig]="{
                     dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-green'
+                    containerClass: 'theme-date-picker theme-bg'
                     }"
                   class="form-control-sm form-control bg-white"
                   id="ExportLCSCDate"
@@ -674,13 +667,13 @@
         <div class="flexbox mt-5">
           <button
             [routerLink]="['/all-lc']"
-            class="btn btn-w-xl text-white btn-outline-danger bg-gradient-danger"
+            class="btn btn-w-xl text-white theme-btn-cancel"
             type="button"
           >
             Cancel
           </button>
           <button
-            class="btn btn-w-xl text-white btn-outline-success bg-gradient-success px-5 float-right"
+            class="btn btn-w-xl text-white theme-btn px-5 float-right"
             type="button"
             (click)="saveData()"
             [disabled]="Formgroup.invalid"
@@ -690,7 +683,7 @@
           </button>
           <button
             [hidden]="!isEdit"
-            class="btn btn-w-xl text-white btn-outline-success bg-gradient-success px-5 float-right"
+            class="btn btn-w-xl text-white theme-btn-edit px-5 float-right"
             type="button"
             (click)="updateData()"
             [disabled]="Formgroup.invalid"

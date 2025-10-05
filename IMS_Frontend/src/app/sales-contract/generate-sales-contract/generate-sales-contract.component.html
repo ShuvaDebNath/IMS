@@ -1,12 +1,9 @@
-<div class="row d-flex justify-content-center">
-  <div class="col-md-6">
-    <div class="card card-default">
-      <div class="content-heading" style="border-bottom: 1px solid rgba(0,0,0,.125) !important;">
-          <div class="row">
-            <div class="col-6">
-              <h2 class="p-2"></h2>
-            </div>
-          </div>
+<div class="m-2 p-2 shadow-sm">
+  <div class="row d-flex justify-content-center">
+  <div class="">
+    <div class="card ">
+      <div class="card-header theme-bg">
+          
           <h2 class="p-2 font-weight-bold">{{!isEdit?'Add':'Edit'}}&nbsp;Sales Contract</h2>
       </div>
       <div class="card-body">
@@ -54,11 +51,11 @@
             >
             Cancel
           </button> -->
-          <button  class="btn btn-w-xl text-white btn-outline-success bg-gradient-success px-5 float-right" type="button" (click)="saveData()"
+          <button  class="btn btn-w-xl text-white theme-btn-add px-5 float-right" type="button" (click)="saveData()"
             [disabled]="Formgroup.invalid" [hidden]="isEdit">
             Save
           </button>
-          <button [hidden]="!isEdit" class="btn btn-w-xl text-white btn-outline-success bg-gradient-success px-5 float-right" type="button" (click)="updateData()"
+          <button [hidden]="!isEdit" class="btn btn-w-xl text-white theme-btn-edit  px-5 float-right" type="button" (click)="updateData()"
             [disabled]="Formgroup.invalid">
             Update
           </button>
@@ -68,3 +65,5 @@
 
   </div>
 </div>
+  </div>
+

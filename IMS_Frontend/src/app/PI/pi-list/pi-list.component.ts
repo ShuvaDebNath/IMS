@@ -1,340 +1,363 @@
-import { CommonModule, DatePipe } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Title } from '@angular/platform-browser';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
-import { InputTextModule } from 'primeng/inputtext';
-import { TableModule } from 'primeng/table';
-import { GetDataService } from 'src/app/services/getData/getDataService.service';
-import { GlobalServiceService } from 'src/app/services/Global-service.service';
-import Swal from 'sweetalert2';
-import { DividerModule } from 'primeng/divider';
-import { FieldsetModule } from 'primeng/fieldset';
-import { DropdownModule } from "primeng/dropdown";
-import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
+import { DatePipe } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GetDataModel } from 'src/app/models/GetDataModel';
-import { InputNumberModule } from 'primeng/inputnumber';
+import { GlobalServiceService } from 'src/app/services/Global-service.service';
+import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
+import Swal from 'sweetalert2';
+
+
 
 @Component({
-  standalone:true,
-  selector: 'app-pi-list',
-  templateUrl: './pi-list.component.html',
-  styleUrls: ['./pi-list.component.css'],
-  imports: [FormsModule,ReactiveFormsModule, CommonModule, TableModule, InputNumberModule , InputTextModule, DialogModule, ButtonModule, BsDatepickerModule, DividerModule, FieldsetModule, DropdownModule]
+  selector: 'app-generate-pi',
+  templateUrl: './generate-pi.component.html',
+  styleUrls: ['./generate-pi.component.css'],
 })
-export class PiListComponent implements OnInit {
-  @Input() PiStatus!:any;
+export class GeneratePiComponent implements OnInit {
   datePipe = new DatePipe('en-US');
 
-  PITypeList:any[]=[{value:1,text:'LC'},{value:2,text:'Cash'}];
+
   ShipperList: any|[];
+  BenificaryBankList: any|[];
+  CountryList: any|[];
+  PackingList: any|[];
+  LoadingModeList: any|[];
+  PaymentModeList: any|[];
   ConsigneeList: any|[];
-  UserList: any|[];
-  PIList: any|[];
-
-  DataTable!:any[];
-  PIData!:any;
-  PIDetails!:any[];
-  
-  first: any=1;
-  rows: any=10;
-  totalRecords!: number;
-  isViewDetails: boolean=false;
-  openSpecialApprove: boolean=false;
+  ApplicantBankList: any|[];
+  BuyingHouseList: any|[];
+  TermsofDeliveryList: any|[];
+  DescriptionList: any|[];
+  WidthList: any|[];
+  ColorList: any|[];
+  PackagingList: any|[];
+  UnitList: any|[];
+  AAList: any|[];
+  DeliveryConditionList: any|[];
+  PartialShipmentList: any|[];
+  PriceTermsList: any|[];
+  ForceMajeureList: any|[];
+  ArbitrationList: any|[];
   PINo!:string;
-  PageTitle: any;
 
-  ShowbtnPar:boolean=false;
-  ShowbtnQar:boolean=false;
-  ShowbtnFull:boolean=false;
-  ShowbtnRej:boolean=false;
-  ShowbtnSpecial:boolean=false;
-
-  SearchFormgroup!: FormGroup;
-  SpecialApproveFormgroup!: FormGroup;
-  selectedRows: any[] = []; 
-
+  Formgroup!: FormGroup;
+  isSubmit!: boolean;
+  SetDDL:boolean=true;
+  GTQTY: any=0;
+  GTAMNT: any=0;
 
   constructor( private service:MasterEntryService,
-      private getDataService: GetDataService,
-      private gs: GlobalServiceService,
-      private title: Title,
-      private fb: FormBuilder
-  ) { }
+    private gs: GlobalServiceService,
+    private fb: FormBuilder
+  ) {}
 
-  GenerateSearchFrom() {
-    this.SearchFormgroup = this.fb.group({
-      PI_Status: [this.PiStatus],
-      PINo: [''],
-      FromDate: [''],
-      ToDate: [''],
-      Shipper: [''],
-      Consignee: [''],
-      CreateBY: [''],
-      PIType: [''],
-      PageNumber: [''],
-      PageSize : ['']
-    });
-    this.SpecialApproveFormgroup=this.fb.group(
-      {
-        PIID:[],
-        PIPercentage:[0],
-        status:[this.PiStatus]
-      }
-    ); 
-  }
-
-
-
-  ngOnInit() {
-
-    this.DataTable=[];
-
-    this.ShowbtnPar=false;
-    this.ShowbtnQar=false;
-    this.ShowbtnFull=false;
-    this.ShowbtnRej=false;
-    this.ShowbtnSpecial=false;
-
-    if(this.PiStatus=='Pending'){
-      this.PageTitle='Unapproved PI'
-      this.ShowbtnPar=true;
-      this.ShowbtnQar=true;
-      this.ShowbtnFull=true;
-      this.ShowbtnRej=true;
-    }
-    else if(this.PiStatus=='Partial Approved'){
-      this.PageTitle='Partially Approved PI'
-      this.ShowbtnQar=true;
-      this.ShowbtnFull=true;
-      this.ShowbtnSpecial=true;
-    }
-    else if(this.PiStatus=='Quartar Approved'){
-      this.PageTitle='Quartar Approved PI'
-      this.ShowbtnFull=true;
-      this.ShowbtnSpecial=true;
-    }
-    else if(this.PiStatus=='Full Approved'){
-      this.PageTitle='Full Approved PI'
-    }
-    else if(this.PiStatus=='Delivered'){
-      this.PageTitle='Delivered PI'
-    }
-    this.title.setTitle(this.PageTitle);
-    //this.LoadTableData();
-    this.GenerateSearchFrom();
+  ngOnInit(): void {
+    this.SetDDL=true;
+    this.GenerateFrom(); 
     this.GetInitialData();
+    this.BuyerToggle(false);
+    this.RegisterFormControlsChangeEvent();    
+    this.GTQTY=0;
+    this.GTAMNT=0;
   }
 
-  ReloadTable(event:any) {
-    this.first = event.first;
-    this.rows = event.rows;
-    this.first=(this.first/this.rows)+1;
-    this.LoadTableData();
+  RegisterFormControlsChangeEvent(){
+    this.Formgroup.get('IsBuyerMandatory')?.valueChanges.subscribe(value => {
+      this.BuyerToggle(value);
+    });
+
+    this.Formgroup.get('Consignee_Initial')?.valueChanges.subscribe(value => {
+      let piNo= value? `${value}-${this.PINo}`: this.PINo;
+      this.Formgroup.controls["PINo"].setValue(piNo);
+    });
+
+    this.Formgroup.get('Customer_ID')?.valueChanges.subscribe(value => {
+      let contactPerson=this.ConsigneeList.filter((x:any)=>x.Customer_ID==value)[0];
+      this.Formgroup.controls["Contact_Person"].setValue(contactPerson.Contact_Name);
+    });
+
   }
 
 
-  OpenSpecialApprove(Id:number,PINo:string){
-  // Swal.fire('Not yet worked!', Id+'', 'info');
-    this.SpecialApproveFormgroup.controls["PIID"].setValue(Id);
-    this.openSpecialApprove=true;
-    this.PINo=PINo;
+  BuyerToggle(value:boolean){
+      if(value){
+        this.Formgroup.get('Buyer_ID')?.enable();
+      }else{
+        this.Formgroup.get('Buyer_ID')?.disable();
+      }
   }
 
-  SpecialApprove(){
-  let value=this.SpecialApproveFormgroup.value;
-  let percent=value.PIPercentage;
-  let piId=value.PIID;
+  GenerateFrom() {
+    this.Formgroup = this.fb.group({
+      PI_Master_ID: [''],
+      PINo: [''],
+      Consignee_Initial: ['',[Validators.required,Validators.minLength(3),Validators.maxLength(3)]],
+      Date: [this.datePipe.transform(new Date, 'MM/dd/yyyy')],
+      Beneficiary_Account_ID: [''],
+      Beneficiary_Bank_ID: [''],
+      Country_Of_Orgin_ID: [''],
+      Packing_ID: [''],
+      Loading_Mode_ID: [''],
+      Payment_Term_ID: [''],
+      Consignee: [''],
+      Contact_Person: [''],
+      Buyer_Name: [''],
+      Delivery_Address: [''],
+      Style: [''],
+      Marketing_Concern_ID: [''],
+      Delivery_Condition_ID: [''],
+      Shipment_Condition_ID: [''],
+      Price_Term_ID: [''],
+      Good_Description: [''],
+      Documents: [''],
+      Shipping_Marks: [''],
+      Loading_Port: [''],
+      Destination_Port: [''],
+      Remarks: [''],
+      Force_Majeure_ID: [''],
+      Arbitration_ID: [''],
+      Status: ['Pending'],
+      User_ID: [''],
+      Superior_ID: [''],
+      LC_ID: [''],
+      Customer_ID: [''],
+      Currency_ID: [''],
+      IsMPI: [0],
+      CR_ID: [''],
+      LastUpdateDate: [new Date()],
+      ExpireDate: [''],
+      Terms_of_Delivery_ID: [''],
+      Buyer_ID: [''],
+      SalesContractId: [''],
+      IsBuyerMandatory: [false],
+      CustomMaxDeliveryPercentage: [''],
+      Customer_Bank_ID: [''],
+      GrandTotalAmount_LC: [''],
+      GrandTotalAmount_Cash: [''],
+      GrandTotalAmount_Both: [''],
 
-  this.openSpecialApprove=false;
-
-  if(this.PiStatus=='Partial Approved' && (percent<20 || percent>=50)) {
-    
-    Swal.fire('Wearning','Deliverable must be greater than 20% and less than 50%','info');
-    return;
+      ItemArray: this.fb.array([this.InitRow()]),
+    });
+  }
+  InitRow() {
+    return this.fb.group({
+      PI_Master_ID: [''],
+      Article: [''],
+      Description: [''],
+      Width_ID: [''],
+      Color_ID: [''],
+      Packaging_ID: [''],
+      Quantity: [''],
+      Total_Amount: [''],
+      Delivered_Quantity: [0],
+      Unit_Price: [''],
+      CommissionUnit: [''],
+      TotalCommission: [''],
+      Item_ID: [''],
+      ActualArticle: [''],
+      Unit_ID: [''],
+      Quantity_In_Meter: [0], 
+      Delivered_Quantity_In_Meter: [0]
+    });
+  }
+  SetActualArticle(itemrow:any){ 
+    let articleID=itemrow.controls["Item_ID"].value;
+    let articleNo=this.AAList.filter((x:any)=>x.Item_ID==articleID)[0].Article_No;
+    itemrow.controls["ActualArticle"].setValue(articleNo);
+  }
+  getControls() {
+    return (this.Formgroup.get('ItemArray') as FormArray).controls;
   }
 
-  if(this.PiStatus=='Quartar Approved' && (percent<50 || percent>=100)) {
-    
-    Swal.fire('Wearning','Deliverable must be greater than 50% and less than 100%','info');
-    return;
-  }  
+  Addrow() {
+    const con = <FormArray>this.Formgroup.controls['ItemArray'];
+    con.push(this.InitRow());
+  }
 
-  percent=percent/100.00;
+  DeleteRow(index: any) {
+    const con = <FormArray>this.Formgroup.controls['ItemArray'];
+    if (con != null && con.length>1) {
+        con.removeAt(index);
+        this.calculatetotalGrandTotal();
+    }
+  }
 
-  Swal.fire({
-        title: `Do you want to Special Apprve?`,
-        showDenyButton: true,
-        confirmButtonText: "Yes",
-      }).then((result) => {
+  RemoveLast() {
+    const con = <FormArray>this.Formgroup.controls['ItemArray'];
+    if (con != null && con.length>1) {
+        con.removeAt(con.length-1);
+        this.calculatetotalGrandTotal();
+    }
+  }
+  calculateAmount(itemrow:any){
+    let qty=itemrow.controls["Quantity"].value;
+    let rate=itemrow.controls["Unit_Price"].value;
+    let proCostUnti=itemrow.controls["CommissionUnit"].value;
+    itemrow.controls["Total_Amount"].setValue(qty*rate);
+    itemrow.controls["TotalCommission"].setValue(qty*proCostUnti);
+    this.calculatetotalGrandTotal();
+  }
 
-        if (result.isConfirmed) {
-          
-        
+  calculatetotalGrandTotal() {
+    this.GTQTY=0;this.GTAMNT=0;
+    const itemArray = this.Formgroup.get('ItemArray') as FormArray;
+    itemArray.controls.forEach(control => {
+      this.GTQTY+=control.value.Quantity;
+      this.GTAMNT+=control.value.Total_Amount;
+    });
+  }
 
-          let queryParams={CustomMaxDeliveryPercentage:percent,LastUpdateDate:new Date()};
-            let condition={PI_Master_ID:piId};
-            
-            this.service.UpdateData(queryParams,condition,'tbl_pi_master').subscribe({
-              next: (results) => {
+  isInvalid(itemrow:any,controlName:any){
+    if (itemrow.controls[controlName].invalid && (itemrow.controls[controlName].touched||this.isSubmit)) {
+      return true;
+    }else{
+      return false;
+    }
+  }
 
-                if (results.status) {
+  SetDDLDefaultValue():void{
+        this.Formgroup.controls["Beneficiary_Account_ID"].setValue(1);
+        this.Formgroup.controls["Beneficiary_Bank_ID"].setValue(1);
+        this.Formgroup.controls["Country_Of_Orgin_ID"].setValue(1);
+        this.Formgroup.controls["Packing_ID"].setValue(1);
+        this.Formgroup.controls["Loading_Mode_ID"].setValue(1);
+        this.Formgroup.controls["Payment_Term_ID"].setValue(1);
+        this.Formgroup.controls["Terms_of_Delivery_ID"].setValue(1);
+        this.Formgroup.controls["Delivery_Condition_ID"].setValue(3);
+        this.Formgroup.controls["Shipment_Condition_ID"].setValue(1);
+        this.Formgroup.controls["Price_Term_ID"].setValue(1);
+        this.Formgroup.controls["PINo"].setValue(this.PINo);
+  }
+  
 
-                  Swal.fire(results.messageType, results.message, 'success').then(()=>{
-                    this.SpecialApproveFormgroup.controls['PIPercentage'].setValue(0);
-                    this.SpecialApproveFormgroup.controls['PIID'].setValue('');
-                    
-                  });
-                } 
-                else if (results.message == 'Invalid Token') {
-                  Swal.fire('Session Expired!', 'Please Login Again.', 'info');
-                  this.gs.Logout();
-                }
-              },
-              error: (err) => { },
-            });
-
-        }
-      });
-
-}
-
-  ViewDetails(Id:number){
-
-    const procedureData = {
-        procedureName: 'usp_ProformaInvoice_GetDataById',
-        parameters: {
-          PI_Master_ID :Id
-        }
-      };
-   
-    this.isViewDetails=true;
-        this.getDataService.GetInitialData(procedureData).subscribe({
-        next: (results) => {
-          if (results.status) {
-            this.PIDetails = JSON.parse(results.data).Tables1;
-            this.PIData = this.PIDetails[0];
-            console.clear();
-            console.log(this.PIData);
-          } else if (results.msg == 'Invalid Token') {
-            Swal.fire('Session Expired!', 'Please Login Again.', 'info');
-            this.gs.Logout();
-          }
-        },
-        error: (err) => { },
-      });
+  RefrashDDL():void{
+    this.SetDDL=false;
+    this.GetInitialData()
   }
 
   GetInitialData():void{
-      this.ShipperList=[];
-      let model=new GetDataModel();
-      model.procedureName="usp_ProformaInvoice_GetInitialData";
-      model.parameters={
-        userID:this.gs.getSessionData('userId'),
-        roleID:this.gs.getSessionData('roleId'),
-        PaymentType:0
-      };
-      this.service.GetInitialData(model).subscribe((res:any) => {
-        if (res.status) {
-  
-          let DataSet = JSON.parse(res.data);
-          
-          this.ShipperList=DataSet.Tables1;
-          this.ConsigneeList=DataSet.Tables7;
-          this.UserList=DataSet.Tables24;
-          this.PIList=DataSet.Tables31;
-  
+    this.ShipperList=[];
+    let model=new GetDataModel();
+    model.procedureName="usp_ProformaInvoice_GetInitialData";
+    model.parameters={
+      userID:this.gs.getSessionData('userId'),
+      roleID:this.gs.getSessionData('roleId'),
+      PaymentType:2
+    };
+    this.service.GetInitialData(model).subscribe((res:any) => {
+      if (res.status) {
+
+        let DataSet = JSON.parse(res.data);
+        
+        this.ShipperList=DataSet.Tables1;
+        this.BenificaryBankList=DataSet.Tables2;
+        this.CountryList=DataSet.Tables3;
+        this.PackingList=DataSet.Tables4;
+        this.LoadingModeList=DataSet.Tables5;
+        this.PaymentModeList=DataSet.Tables6;
+        this.ConsigneeList=DataSet.Tables7;
+        this.ApplicantBankList=DataSet.Tables8;
+        this.BuyingHouseList=DataSet.Tables9;
+        this.TermsofDeliveryList=DataSet.Tables10;
+        this.DescriptionList=DataSet.Tables11;
+        this.WidthList=DataSet.Tables12;
+        this.ColorList=DataSet.Tables13;
+        this.PackagingList=DataSet.Tables14;
+        this.UnitList=DataSet.Tables15;
+        this.AAList=DataSet.Tables28;
+        this.DeliveryConditionList=DataSet.Tables17;
+        this.PartialShipmentList=DataSet.Tables18;
+        this.PriceTermsList=DataSet.Tables19;
+        this.ForceMajeureList=DataSet.Tables20;
+        this.ArbitrationList=DataSet.Tables21;
+
+        this.PINo=DataSet.Tables30[0].PINO;
+
+        if (this.SetDDL){
+          this.SetDDLDefaultValue();
+        }
+
+      } else {
+        if (res.msg == 'Invalid Token') {
+          this.gs.Logout();
         } else {
-          if (res.msg == 'Invalid Token') {
-            this.gs.Logout();
-          } else {
-          }
         }
-      });    
-    }
-
-  LoadTableData(): void {
-    this.SearchFormgroup.controls['PageNumber'].setValue(this.first);
-    this.SearchFormgroup.controls['PageSize'].setValue(this.rows);
-    let permas=this.SearchFormgroup.value;
-
-    this.DataTable=[];
-
-    
-      const procedureData = {
-        procedureName: 'usp_ProformaInvoice_GetDataDataTable',
-        parameters: {
-          PINO :permas.PINo?permas.PINo:'',
-          FromDate :permas.FromDate? this.datePipe.transform(permas.FromDate, 'yyyy-MM-dd') :'',
-          ToDate :permas.ToDate? this.datePipe.transform(permas.ToDate, 'yyyy-MM-dd') :'',
-          Shipper :permas.Shipper?permas.Shipper:'',
-          Consignee :permas.Consignee?permas.Consignee:'',
-          CreateBY :permas.CreateBY?permas.CreateBY:'',
-          PIType :permas.PIType?permas.PIType:null,
-          PI_Status   : this.PiStatus,
-          PageNumber   : this.first,
-          PageSize    : this.rows
-        }
-      };
-     
-      this.getDataService.GetInitialData(procedureData).subscribe({
-        next: (results) => {
-          if (results.status) {
-            this.DataTable = JSON.parse(results.data).Tables1;
-            this.totalRecords=this.DataTable[0]?.TotalCount;
-
-      
-
-          } else if (results.msg == 'Invalid Token') {
-            Swal.fire('Session Expired!', 'Please Login Again.', 'info');
-            this.gs.Logout();
-          }
-        },
-        error: (err) => { },
-      });
-    }
-
-
-    SetPIStatus(status:string) {
-      if (this.selectedRows.length<=0) {
-        return;
       }
-      const selectedIds = this.selectedRows.map(r => r.PI_Master_ID);
+    });    
+  }
 
-      Swal.fire({
-        title: `Do you want to ${status}?`,
-        showDenyButton: true,
-        confirmButtonText: "Yes",
-      }).then((result) => {
 
-        if (result.isConfirmed) {
+  Save():void{
+    let model= {
+      PI_Master_ID: this.Formgroup.controls['PI_Master_ID'].value,
+      PINo: this.Formgroup.controls['PINo'].value,
+      Consignee_Initial: this.Formgroup.controls['Consignee_Initial'].value,
+      Date: this.Formgroup.controls['Date'].value,
+      Beneficiary_Account_ID: this.Formgroup.controls['Beneficiary_Account_ID'].value,
+      Beneficiary_Bank_ID: this.Formgroup.controls['Beneficiary_Bank_ID'].value,
+      Country_Of_Orgin_ID: this.Formgroup.controls['Country_Of_Orgin_ID'].value,
+      Packing_ID: this.Formgroup.controls['Packing_ID'].value,
+      Loading_Mode_ID: this.Formgroup.controls['Loading_Mode_ID'].value,
+      Payment_Term_ID: this.Formgroup.controls['Payment_Term_ID'].value,
+      Consignee: this.Formgroup.controls['Consignee'].value,
+      Contact_Person: this.Formgroup.controls['Contact_Person'].value,
+      Buyer_Name: this.Formgroup.controls['Buyer_Name'].value,
+      Delivery_Address: this.Formgroup.controls['Delivery_Address'].value,
+      Style: this.Formgroup.controls['Style'].value,
+      Delivery_Condition_ID: this.Formgroup.controls['Delivery_Condition_ID'].value,
+      Shipment_Condition_ID: this.Formgroup.controls['Shipment_Condition_ID'].value,
+      Price_Term_ID: this.Formgroup.controls['Price_Term_ID'].value,
+      Good_Description: this.Formgroup.controls['Good_Description'].value,
+      Documents: this.Formgroup.controls['Documents'].value,
+      Shipping_Marks: this.Formgroup.controls['Shipping_Marks'].value,
+      Loading_Port: this.Formgroup.controls['Loading_Port'].value,
+      Destination_Port: this.Formgroup.controls['Destination_Port'].value,
+      Remarks: this.Formgroup.controls['Remarks'].value,
+      Force_Majeure_ID: this.Formgroup.controls['Force_Majeure_ID'].value,
+      Arbitration_ID: this.Formgroup.controls['Arbitration_ID'].value,
+      Status: this.Formgroup.controls['Status'].value,
+      User_ID: this.gs.getSessionData('userId'),
+      Superior_ID: this.gs.getSessionData('userId'),
+      Customer_ID: this.Formgroup.controls['Customer_ID'].value,
+      IsMPI: this.Formgroup.controls['IsMPI'].value,      
+      LastUpdateDate: this.Formgroup.controls['LastUpdateDate'].value,
+      ExpireDate: this.Formgroup.controls['ExpireDate'].value,
+      Terms_of_Delivery_ID: this.Formgroup.controls['Terms_of_Delivery_ID'].value,  
+      IsBuyerMandatory: this.Formgroup.controls['IsBuyerMandatory'].value,    
+      Customer_Bank_ID: this.Formgroup.controls['Customer_Bank_ID'].value
+    };
 
-          selectedIds.forEach((id:any)=>{
+    let details=this.Formgroup.value.ItemArray;
 
-            let queryParams={Status:status,LastUpdateDate:new Date()};
-            let condition={PI_Master_ID:id};
-            
-            this.service.UpdateData(queryParams,condition,'tbl_pi_master').subscribe({
-              next: (results) => {
+    details.forEach((element:any) => {
+      if(element.Unit_ID==2){
+        element.Quantity_In_Meter=element.Quantity;
+        element.Quantity=element.Quantity_In_Meter*1.09361;
+      }
+    });
 
-                if (results.status) {
-
-                  Swal.fire(results.messageType, results.message, 'success').then(()=>{
-                    //this.ngOnInit();
-                    this.LoadTableData();
-                  });
-                } 
-                else if (results.message == 'Invalid Token') {
-                  Swal.fire('Session Expired!', 'Please Login Again.', 'info');
-                  this.gs.Logout();
-                }
-              },
-              error: (err) => { },
-            });
-          });
+    this.service.SaveDataMasterDetails(details,
+      "tbl_pi_detail",
+      model,
+      "tbl_pi_master",
+      "PI_Master_ID",
+      "PI_Master_ID",
+      "tbl_pi_master",
+      "PI_Master_ID"
+    ).subscribe(res=>{
+      if(res.messageType=='Success' && res.status){
+        Swal.fire(res.messageType, res.message, 'success').then(()=>{
+              this.ngOnInit();
+        });
+        
+      }else{
+        if(!res.isAuthorized){
+          this.gs.Logout();
+        }else{
+          Swal.fire(res.messageType, res.message, 'error');
         }
-      });
-    }
+      }
+    });
+
+  }
 }

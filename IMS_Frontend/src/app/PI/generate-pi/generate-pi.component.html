@@ -2,11 +2,11 @@
 
 <form name="PIForm" [formGroup]="Formgroup" role="form">
   <div class="card">
-    <div class="card-header sticky-header">
-      <h3 class="card-title mb-0"><strong>Proforma Invoice</strong></h3>
+    <div class="theme-bg sticky-header d-flex align-items-center justify-content-between">
+      <h1 class=" ">Proforma Invoice</h1>
       <div class="float-right">
-        <button class="btn btn-sm theme-btn-save mr-2" (click)="Save()" [disabled]="!Formgroup.valid"><i class="fas fa-save"></i>&nbsp;Save</button>
-        <button class="btn btn-sm btn-primary" (click)="RefrashDDL()"><i class="fas fa-sync"></i>&nbsp;Refresh</button>
+        <button class="btn btn-sm btn-pi-save mr-2" (click)="Save()" [disabled]="!Formgroup.valid"><i class="fas fa-save"></i>&nbsp;Save</button>
+        <button class="btn btn-sm btn-pi-refresh" (click)="RefrashDDL()"><i class="fas fa-sync"></i>&nbsp;Refresh</button>
       </div>
     </div>
     <div class="card-body">
@@ -209,7 +209,7 @@
             placement="bottom"
             [bsConfig]="{ isAnimated: true }">
               <div class="input-group-append">
-                <button class="btn btn-sm btn-outline-success" type="button" (click)="dp.toggle()" [attr.aria-expanded]="dp.isOpen">
+                <button class="btn btn-sm theme-btn" type="button" (click)="dp.toggle()" [attr.aria-expanded]="dp.isOpen">
                   <i class="far fa-calendar" aria-hidden="true"></i>
                 </button>
               </div>
@@ -237,7 +237,7 @@
           <thead>
             <tr>
               <th class="text-center align-middle sticky-table-column">
-                <button class="btn btn-xs btn-primary" (click)="Addrow()" type="button"><i class="fas fa-plus"></i></button>
+                <button class="btn btn-xs theme-btn" (click)="Addrow()" type="button"><i class="fas fa-plus"></i></button>
               </th>
               <th class="text-center align-middle">Article No</th>
               <th class="text-center align-middle">Description</th>
