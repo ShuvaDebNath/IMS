@@ -188,10 +188,11 @@ export class ExportRawMaterialComponent {
     this.totalBag = rows
       .filter((r) => r.rollOrBag === 'bag')
       .reduce((s, r) => s + (Number(r.rollBagQty) || 0), 0);
-    this.totalWeight = rows
-      .filter((r) => r.rollOrBag === 'bag')
-      .reduce((s, r) => s + (Number(r.weight) || 0), 0);
-    this.totalGross = this.totalQty * this.totalWeight;
+    this.totalWeight = rows.reduce((s, r) => s + (Number(r.weight) || 0), 0);
+    this.totalGross = rows.reduce(
+      (s, r) => s + (Number(r.grossWeight) || 0),
+      0
+    );
   }
 
   trackById = (_: number, a: any) => a?.RawMaterial_ID ?? _;
@@ -254,13 +255,13 @@ export class ExportRawMaterialComponent {
       Total_Bag: 0,
     };
     const detailRows = fv.items.map((i: any) => ({
-      RawMaterial_ID: i.RawMaterial_ID,
+      RawMaterial_ID: i.article,
       Quantity: i.qty,
       Article_No: i.article,
       Description: i.description,
       Color_ID: i.color,
       Width_ID: i.width,
-      Roll_Bag: i.rollOrBag === 'Rolls' ? 'roll' : 'bag',
+      Roll_Bag: i.rollOrBag === 'roll' ? 'roll' : 'bag',
       Unit: i.unitId,
       Weight: i.weight,
       Gross_Weight: i.grossWeight,
@@ -331,6 +332,8 @@ export class ExportRawMaterialComponent {
   }
 
   GetExportRMDataById() {
+    this.recalcTotals();
+
     // crm.User_ID,Beneficiary_Bank_ID,crm.Consignee_Name,Customer_Bank,PI_Master_ID,PI_Value,ReceiveAmount,ReceiveDate,Issue_Date,Payment_Term_ID,Remarks
     var ProcedureData = {
       procedureName: '[usp_ExportRM_ById]',
@@ -352,7 +355,13 @@ export class ExportRawMaterialComponent {
             var exportDate = new Date(e.ExportDate);
             console.log(exportDate);
 
-            this.exportForm.controls.ExportDate.setValue(exportDate);
+            const year = exportDate.getFullYear();
+            const month = ('0' + (exportDate.getMonth() + 1)).slice(-2);
+            const day = ('0' + exportDate.getDate()).slice(-2);
+
+            this.exportForm.controls.ExportDate.setValue(
+              `${year}-${month}-${day}`
+            );
             this.exportForm.controls.Loading_Port.setValue(e.Loading_Port_ID);
             this.exportForm.controls.Destination_Port.setValue(
               e.Destination_Port_ID
@@ -384,8 +393,8 @@ export class ExportRawMaterialComponent {
               weight: this.fb.control<number>(0),
               grossWeight: this.fb.control<number>(0),
             });
-            arrayGroup.controls.article.setValue(e.Article_No);
-            arrayGroup.controls.description.setValue(e.description);
+            arrayGroup.controls.article.setValue(e.RawMaterial_ID);
+            arrayGroup.controls.description.setValue(e.Description);
             arrayGroup.controls.color.setValue(e.Color_ID);
             arrayGroup.controls.width.setValue(e.Width_ID);
             arrayGroup.controls.rollOrBag.setValue(e.Roll_Bag);
@@ -394,7 +403,25 @@ export class ExportRawMaterialComponent {
             arrayGroup.controls.qty.setValue(e.Quantity);
             arrayGroup.controls.weight.setValue(e.Weight);
             arrayGroup.controls.grossWeight.setValue(e.Gross_Weight);
+            
 
+            arrayGroup.get('qty')!.valueChanges.subscribe(() => {
+              const qty = arrayGroup.get('qty')!.value ?? 0;
+              const weight = arrayGroup.get('weight')!.value ?? 0;
+
+              arrayGroup
+                .get('grossWeight')!
+                .setValue(qty * weight, { emitEvent: false });
+            });
+
+            arrayGroup.get('weight')!.valueChanges.subscribe(() => {
+              const qty = arrayGroup.get('qty')!.value ?? 0;
+              const weight = arrayGroup.get('weight')!.value ?? 0;
+
+              arrayGroup
+                .get('grossWeight')!
+                .setValue(qty * weight, { emitEvent: false });
+            });
             frmArray.push(arrayGroup);
           });
           this.recalcTotals();
@@ -438,21 +465,15 @@ export class ExportRawMaterialComponent {
       Total_Roll: 0,
       Total_Bag: 0,
     };
-    fv.items.map((e: any) => {
-      const matches = JSON.parse(JSON.stringify(this.RawMaterialList)).filter(
-        (f: any) => f.Article_No == e.article
-      );
-
-      console.log(matches);
-    });
+    console.log(fv);
     const detailRows = fv.items.map((i: any) => ({
-      RawMaterial_ID: i.RawMaterial_ID,
+      RawMaterial_ID: i.article,
       Quantity: i.qty,
       Article_No: i.article,
       Description: i.description,
       Color_ID: i.color,
       Width_ID: i.width,
-      Roll_Bag: i.rollOrBag === 'Rolls' ? 'roll' : 'bag',
+      Roll_Bag: i.rollOrBag === 'roll' ? 'roll' : 'bag',
       Unit: i.unitId,
       Weight: i.weight,
       Gross_Weight: i.grossWeight,
@@ -482,43 +503,42 @@ export class ExportRawMaterialComponent {
           const detailRowsForStockUpdate = fv.items.map((r: any) => ({
             RawMaterial_ID: r?.article,
             Stock_Out: Number(r?.qty ?? 0),
-            ExportMasterID: res,
+            ExportMasterID: this.ExportMasterID,
             Roll_Out:
               r?.Roll_Bag === 'roll' ? Number(r?.RollBag_Quantity ?? 0) : 0,
             Bag_Out:
               r?.Roll_Bag === 'bag' ? Number(r?.RollBag_Quantity ?? 0) : 0,
           }));
 
-          this.masterEntryService
-            .UpdateData(detailRowsForStockUpdate, whereParam, 'tbl_stock')
-            .subscribe({
-              next: (res) => {
-                if (res.messageType === 'Success' && res.status) {
-                  swal.fire('Success', 'Export Update successfully', 'success');
-                  // Optionally reset form / navigate
-                  this.exportForm.reset({
-                    requisitionDate: new Date(),
-                    remarks: '',
-                  });
-                  this.items.clear();
-                  this.addItem();
-                } else {
+          detailRowsForStockUpdate.forEach((e: any) => {
+            this.masterEntryService
+              .UpdateData(e, whereParam, 'tbl_stock')
+              .subscribe({
+                next: (res) => {
+                  if (res.messageType === 'Success' && res.status) {
+                    swal.fire(
+                      'Success',
+                      'Export Update successfully',
+                      'success'
+                    );
+                  } else {
+                    swal.fire(
+                      'Stock Update Failed',
+                      res?.message || 'Stock update failed.',
+                      'error'
+                    );
+                  }
+                },
+                error: (err) => {
+                  console.error(err);
                   swal.fire(
                     'Stock Update Failed',
-                    res?.message || 'Stock update failed.',
+                    err?.error?.message || 'Stock update failed.',
                     'error'
                   );
-                }
-              },
-              error: (err) => {
-                console.error(err);
-                swal.fire(
-                  'Stock Update Failed',
-                  err?.error?.message || 'Stock update failed.',
-                  'error'
-                );
-              },
-            });
+                },
+              });
+          });
         },
         error: () => {
           swal.fire('Error', 'Could not save requisition', 'error');
@@ -526,23 +546,23 @@ export class ExportRawMaterialComponent {
       });
   }
 
-  RMOptionChange(item:any){   
+  RMOptionChange(item: any) {
     console.log(item);
-    
+
     var ProcedureData = {
       procedureName: '[usp_RawMaterialDetails]',
       parameters: {
-        'RawMaterial_ID':item.value.article
+        RawMaterial_ID: item.value.article,
       },
     };
 
     this.getDataService.GetInitialData(ProcedureData).subscribe({
       next: (results) => {
         if (results.status) {
-          var rmDetails = JSON.parse(results.data).Tables1;          
-          item.controls.color.setValue(rmDetails[0].ColorId);     
-          item.controls.unitId.setValue(rmDetails[0].UnitId);     
-          item.controls.width.setValue(rmDetails[0].WidthId);     
+          var rmDetails = JSON.parse(results.data).Tables1;
+          item.controls.color.setValue(rmDetails[0].ColorId);
+          item.controls.unitId.setValue(rmDetails[0].UnitId);
+          item.controls.width.setValue(rmDetails[0].WidthId);
           item.controls.weight.setValue(rmDetails[0].Weight);
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');

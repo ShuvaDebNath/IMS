@@ -157,6 +157,7 @@
                 [showClear]="true"
                 placeholder="Please Select"
                 formControlName="color"
+                [readonly]="true"
               >
                 <ng-template let-color pTemplate="item">
                   <div class="flex align-items-center gap-2">
@@ -180,6 +181,7 @@
                 [showClear]="true"
                 placeholder="Please Select"
                 formControlName="width"
+                [readonly]="true"
               >
                 <ng-template let-width pTemplate="item">
                   <div class="flex align-items-center gap-2">
@@ -221,6 +223,7 @@
                 [showClear]="true"
                 placeholder="Please Select"
                 formControlName="unitId"
+                [readonly]="true"
               >
                 <ng-template let-Unit pTemplate="item">
                   <div class="flex align-items-center gap-2">
@@ -255,6 +258,7 @@
               class="form-control"
               formControlName="grossWeight"
               style="text-align: center"
+              readonly
             />
           </td>
 
