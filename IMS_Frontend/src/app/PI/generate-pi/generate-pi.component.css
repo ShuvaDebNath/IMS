@@ -4,14 +4,6 @@
 }
 
 
-.sticky-header {
-  position: sticky;
-  top: 4.5rem;
-  z-index: 100;
-  background-color: white; /* Ensure it's not transparent */
-  padding: 10px;
-  border-bottom: 1px solid #ccc;
-}
 .my-dropdown .icon-inner, .ionicon, svg {
     display: block!important;
     height: 20px!important;
@@ -28,3 +20,24 @@ tr {
     border: 1px solid #6a1a3f !important;
 }
 
+.btn-pi-save {
+    background-color: #ffb400;
+    color:
+        white;
+}
+.btn-pi-refresh {
+    background-color:#f8f9fa;
+    color:
+        #6a1a3f;
+}
+.btn-pi-save:hover {
+    background-color: #e6a200;
+    color:
+        white;
+}
+
+.btn-pi-refresh:hover {
+    background-color:#e2e6ea;
+    color:
+        #6a1a3f;
+}

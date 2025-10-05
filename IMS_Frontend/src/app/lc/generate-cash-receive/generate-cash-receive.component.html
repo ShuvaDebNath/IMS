@@ -1,13 +1,10 @@
-<div class="row d-flex justify-content-center">
-  <div class="col-md-6">
+<div class="m-2 p-2 shadow-sm">
+  <div class="row d-flex justify-content-center">
+  <div class="">
     <div class="card card-default">
-      <div class="content-heading" style="border-bottom: 1px solid rgba(0,0,0,.125) !important;">
-          <div class="row">
-            <div class="col-6">
-              <h2 class="p-2"></h2>
-            </div>
-          </div>
-          <h2 class="p-2 font-weight-bold">{{!isEdit?'Add':'Edit'}}&nbsp;Generate Cash Receive</h2>
+      <div class="card-header theme-bg" >
+          
+          <h2 class="">{{!isEdit?'Add':'Edit'}}&nbsp;Generate Cash Receive</h2>
       </div>
       <div class="card-body">
         <form name="newForm" [formGroup]="Formgroup" role="form">
@@ -97,11 +94,11 @@
                 <label class="control-label" for="inlineFormInputGroup">Receive Date <span>*</span></label>
                 <div class="input-group mb-2">
                     <div class="input-group-sm input-group-prepend">
-                    <div class="input-group-text" (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
+                    <div class="input-group-text theme-btn" (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
                     </div>
                     <input type="text" autocomplete="off" formControlName="ReceiveDate" [bsConfig]="{
                     dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-green'
+                    containerClass: 'theme-bg'
                     }" class="form-control-sm form-control bg-white" id="ReceiveDate" name="ReceiveDate" placeholder="DD/MM/YYYY"
                     #dpfrom="bsDatepicker" bsDatepicker readonly />
                 </div>
@@ -110,11 +107,11 @@
                 <label class="control-label" for="inlineFormInputGroup">Issue Date <span>*</span></label>
                 <div class="input-group mb-2">
                     <div class="input-group-sm input-group-prepend">
-                    <div class="input-group-text" (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
+                    <div class="input-group-text theme-btn" (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
                     </div>
                     <input type="text" autocomplete="off" formControlName="IssueDate" [bsConfig]="{
                     dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-green'
+                    containerClass: 'theme-bg'
                     }" class="form-control-sm form-control bg-white" id="IssueDate" name="IssueDate" placeholder="From Date"
                     #dpfrom="bsDatepicker" bsDatepicker readonly />
                 </div>
@@ -148,11 +145,11 @@
             >
             Cancel
           </button> -->
-          <button  class="btn btn-w-xl text-white btn-outline-success bg-gradient-success px-5 float-right" type="button" (click)="saveData()"
+          <button  class="btn btn-w-xl text-white theme-btn px-5 float-right" type="button" (click)="saveData()"
             [disabled]="Formgroup.invalid" [hidden]="isEdit">
             Save
           </button>
-          <button [hidden]="!isEdit" class="btn btn-w-xl text-white btn-outline-success bg-gradient-success px-5 float-right" type="button" (click)="updateData()"
+          <button [hidden]="!isEdit" class="btn btn-w-xl text-white theme-btn-edit px-5 float-right" type="button" (click)="updateData()"
             [disabled]="Formgroup.invalid">
             Update
           </button>
@@ -161,4 +158,5 @@
     </div>
 
   </div>
+</div>
 </div>

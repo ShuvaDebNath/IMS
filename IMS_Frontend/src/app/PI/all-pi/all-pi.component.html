@@ -1,102 +1,69 @@
-<div class="card card-default">
-  <div
-    class="content-heading"
-    style="border-bottom: 1px solid rgba(0, 0, 0, 0.125) !important"
-  >
-    <div class="row">
-      <div class="col-6">
-        <h2 class="p-2">All PI</h2>
-      </div>
-    </div>
+<div class="m-2 p-2">
+  <div class="card shadow-sm border-0">
+  <div class="card-header text-white d-flex justify-content-between align-items-center" style="background:#6a1a3f">
+    <h4 class="m-0">📑 All PI</h4>
   </div>
+
   <div class="card-body">
-    <form [formGroup]="SearchForm">
-      <div class="form-row align-items-center">
-        <div class="col-auto">
-          <label class="control-label" for="inlineFormInputGroup"
-            >From Date</label
-          >
-          <div class="input-group mb-2">
-            <div class="input-group-sm input-group-prepend">
-              <div class="input-group-text" (click)="dpfrom.toggle()">
-                <i class="fas fa-calendar"></i>
-              </div>
+    <form [formGroup]="SearchForm" class="mb-3">
+      <div class="form-row">
+        <div class="col-md-3 mb-2">
+          <label for="fromdate" class="small font-weight-bold">From Date</label>
+          <div class="input-group ">
+            <div class="input-group-prepend" (click)="dpfrom.toggle()">
+              <span class="input-group-text theme-btn"><i class="fas fa-calendar"></i></span>
             </div>
             <input
               type="text"
-              autocomplete="off"
               formControlName="fromDate"
-              [bsConfig]="{
-                dateInputFormat: 'DD/MM/YYYY',
-                containerClass: 'theme-green'
-              }"
-              class="form-control-sm form-control bg-white"
-              id="fromdate"
-              name="fromdate"
-              placeholder="From Date"
+              autocomplete="off"
+              class="form-control"
+              placeholder="DD/MM/YYYY"
               #dpfrom="bsDatepicker"
               bsDatepicker
+              [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass: 'theme-green' }"
             />
           </div>
         </div>
-        <div class="col-auto">
-          <label class="control-label" for="inlineFormInputGroup"
-            >To Date</label
-          >
-          <div class="input-group mb-2">
-            <div class="input-group-sm input-group-prepend">
-              <div class="input-group-text" (click)="dpto.toggle()">
-                <i class="fas fa-calendar"></i>
-              </div>
+
+        <div class="col-md-3 mb-2">
+          <label for="todate" class="small font-weight-bold">To Date</label>
+          <div class="input-group ">
+            <div class="input-group-prepend" (click)="dpto.toggle()">
+              <span class="input-group-text theme-btn"><i class="fas fa-calendar"></i></span>
             </div>
             <input
               type="text"
-              autocomplete="off"
               formControlName="toDate"
-              [bsConfig]="{
-                dateInputFormat: 'DD/MM/YYYY',
-                containerClass: 'theme-green'
-              }"
-              class="form-control-sm form-control bg-white"
-              id="todate"
-              name="todate"
-              placeholder="To Date"
+              autocomplete="off"
+              class="form-control"
+              placeholder="DD/MM/YYYY"
               #dpto="bsDatepicker"
               bsDatepicker
+              [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass: 'theme-bg' }"
             />
           </div>
         </div>
-        <div class="col-auto">
-          <label for="PINo" class="">PI No </label>
-          <div class="">
-            <div class="form-group d-inline">
-              <input
-                autocomplete="off"
-                type="text"
-                formControlName="piNo"
-                class="form-control"
-                placeholder="PI No"
-                id="PINo"
-                name="PINo"
-                value=""
-              />
-            </div>
-          </div>
+
+        <div class="col-md-3 mb-2">
+          <label for="PINo" class="small font-weight-bold">PI No</label>
+          <input
+            type="text"
+            formControlName="piNo"
+            class="form-control "
+            placeholder="Enter PI No"
+          />
         </div>
-        <div class="col-auto">
-          <button
-            title="Search"
-            type="button"
-            (click)="Search()"
-            class="btn btn-sm btn-outline-primary bg-gradient-primary mb-2 mr-2"
-            style="margin-top: 2.3em !important"
-          >
-            <i class="fas fa-search"></i>&nbsp;Search
+
+        <div class="col-md-3 mb-2 d-flex align-items-end">
+          <button type="button" (click)="Search()" class="btn  theme-btn w-100">
+            <i class="fas fa-search"></i> Search
           </button>
         </div>
       </div>
     </form>
-    <hr />
+
+    <!-- Table -->
     <p-table
       #dt
       [value]="tableData"
@@ -104,25 +71,18 @@
       [rows]="10"
       [responsive]="true"
       [showCurrentPageReport]="true"
-      [globalFilterFields]="[
-        'PI_No',
-        'Date',
-        'Shipper',
-        'Consignee',
-        'Status',
-        'GeneratedBy'
-      ]"
+      [globalFilterFields]="['PI_No','Date','Shipper','Consignee','Status','GeneratedBy']"
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     >
       <ng-template pTemplate="caption">
-        <div class="table-toolbar">
+        <div class="d-flex justify-content-end mb-2">
           <span class="p-input-icon-left">
             <i class="pi pi-search"></i>
             <input
               pInputText
               type="text"
               (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-              placeholder="Global Search"
+              placeholder="Global Search..."
             />
           </span>
         </div>
@@ -130,49 +90,44 @@
 
       <ng-template pTemplate="header">
         <tr>
-          <th class="bg-gradient-success">SL</th>
-          <th class="bg-gradient-success">PI No</th>
-          <th class="bg-gradient-success">Date</th>
-          <th class="bg-gradient-success">Shipper</th>
-          <th class="bg-gradient-success">Consignee</th>
-          <th class="bg-gradient-success">Status</th>
-          <th class="bg-gradient-success">Generated By</th>
-          <th class="bg-gradient-success" *ngIf="allPersmissions">Action</th>
+          <th>SL</th>
+          <th>PI No</th>
+          <th>Date</th>
+          <th>Shipper</th>
+          <th>Consignee</th>
+          <th>Status</th>
+          <th>Generated By</th>
+          <th *ngIf="allPersmissions">Action</th>
         </tr>
       </ng-template>
 
       <ng-template pTemplate="body" let-table let-i="rowIndex">
         <tr>
           <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
-          <td class="text-center align-middle">{{ table.PI_No }}</td>
-          <td class="text-center align-middle">{{ table.Date }}</td>
-          <td class="text-center align-middle">{{ table.Shipper }}</td>
-          <td class="text-center align-middle">{{ table.Consignee }}</td>
-          <td class="text-center align-middle">{{ table.Status }}</td>
-          <td class="text-center align-middle">{{ table.GeneratedBy }}</td>
-          <td class="text-center align-middle p-0 m-0">
-            <a
-              class="btn bg-gradient-cyan btn-xs mr-2"
-              target="_blank"
-              title="View"
-              (click)="viewDetails(table)"
-              ><i class="fa fa-eye"></i
-            ></a>
-            <a
-              *ngIf="updatePermissions"
-              class="btn bg-gradient-cyan btn-xs mr-2"
-              target="_blank"
-              title="Edit"
-              [routerLink]="['/generate-pi']"
-              [queryParams]="{ PI_No: table.PI_No }"
-              ><i class="fa fa-edit"></i
-            ></a>
-            <button
-              *ngIf="deletePermissions"
-              class="btn bg-gradient-danger btn-xs"
-              title="Delete"
-              (click)="DeleteData(table)"
-            >
+          <td class="text-center">{{ table.PI_No }}</td>
+          <td class="text-center">{{ table.Date }}</td>
+          <td class="text-center">{{ table.Shipper }}</td>
+          <td class="text-center">{{ table.Consignee }}</td>
+          <td class="text-center">
+            <span [ngClass]="{
+              'badge badge-success': table.Status === 'Approved',
+              'badge badge-warning': table.Status === 'Pending',
+              'badge badge-danger': table.Status === 'Rejected'
+            }">
+              {{ table.Status }}
+            </span>
+          </td>
+          <td class="text-center">{{ table.GeneratedBy }}</td>
+          <td class="text-center">
+            <button class="btn theme-btn-view btn-sm mr-1" title="View" (click)="viewDetails(table)">
+              <i class="fa fa-eye"></i>
+            </button>
+            <button *ngIf="updatePermissions" class="btn theme-btn-edit btn-sm mr-1" title="Edit"
+              [routerLink]="['/generate-pi']" [queryParams]="{ PI_No: table.PI_No }">
+              <i class="fa fa-edit"></i>
+            </button>
+            <button *ngIf="deletePermissions" class="btn theme-btn-delete btn-sm" title="Delete"
+              (click)="DeleteData(table)">
               <i class="fas fa-trash"></i>
             </button>
           </td>
@@ -180,119 +135,85 @@
       </ng-template>
     </p-table>
   </div>
-  <!--/Region Mat Datatable"-->
-  <p-dialog
-    header="Detail"
-    [(visible)]="isDetailsVisible"
-    [modal]="true"
-    [closable]="true"
-    [style]="{ width: '70vw' }"
-    (onHide)="detailsData = null"
-  >
-    <div *ngIf="detailsData">
-      <p>Consignee Initial: {{ detailsData.Consignee_Initial }}</p>
-      <p>Shipper: {{ detailsData.Shipper }}</p>
-      <p>Benificiary Bank: {{ detailsData.BenificiaryBank }}</p>
-      <p>Consignee: {{ detailsData.Consignee }}</p>
-      <p>Applicant Bank: {{ detailsData.ApplicantBank }}</p>
-      <p>Buyer Name: {{ detailsData.Buyer_Name }}</p>
-      <p>Country: {{ detailsData.Country }}</p>
-      <p>Delivery Details: {{ detailsData.DeliveryDetails }}</p>
-      <p>Force Majeure: {{ detailsData.forceMajeure }}</p>
-      <p>Loading Mode: {{ detailsData.LoadingMode }}</p>
-      <p>Contact Person: {{ detailsData.Contact_Person }}</p>
-      <p>Packing Mode: {{ detailsData.PackingMode }}</p>
-      <p>Expire Date: {{ detailsData.ExpireDate }}</p>
-      <p>Remarks: {{ detailsData.Remarks }}</p>
-      <p>Style: {{ detailsData.Style }}</p>
-      <p>Payment Terms: {{ detailsData.PaymentTerms }}</p>
-      <p>Price Term: {{ detailsData.PriceTerm }}</p>
-      <p>Partial Allowed: {{ detailsData.partialAllowed }}</p>
-      <p>Delivery Address: {{ detailsData.Delivery_Address }}</p>
-      <p>Documents: {{ detailsData.Documents }}</p>
-      <p>Good Description: {{ detailsData.Good_Description }}</p>
-      <p>Shipping Marks: {{ detailsData.Shipping_Marks }}</p>
-      <p>Loading Port: {{ detailsData.Loading_Port }}</p>
-      <p>Destination Port: {{ detailsData.Destination_Port }}</p>
-      <p>Created By.: {{ detailsData.Created_By }}</p>
-      <p>Superior Name.: {{ detailsData.SuperiorName }}</p>
-      <p>Status: {{ detailsData.Status }}</p>
-      <p-table
-        #dt
-        [value]="detailsTableData"
-        [paginator]="true"
-        [rows]="10"
-        [responsive]="true"
-        [showCurrentPageReport]="true"
-        [globalFilterFields]="[
-          'Article',
-          'ActualArticle',
-          'Description',
-          'Width',
-          'Color',
-          'Packaging',
-          'Quantity',
-          'Unit',
-          'Unit_Price',
-          'Total_Amount',
-          'Delivered_Quantity',
-          'ProdCost',
-          'TotalProdCost'
-        ]"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-      >
-        <ng-template pTemplate="caption">
-          <div class="table-toolbar">
-            <span class="p-input-icon-left">
-              <i class="pi pi-search"></i>
-              <input
-                pInputText
-                type="text"
-                (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                placeholder="Global Search"
-              />
-            </span>
-          </div>
-        </ng-template>
 
-        <ng-template pTemplate="header">
-          <tr>
-            <th class="bg-gradient-success">SL</th>
-            <th class="bg-gradient-success">Article</th>
-            <th class="bg-gradient-success">ActualArticle</th>
-            <th class="bg-gradient-success">Description</th>
-            <th class="bg-gradient-success">Width</th>
-            <th class="bg-gradient-success">Color</th>
-            <th class="bg-gradient-success">Packaging</th>
-            <th class="bg-gradient-success">Quantity</th>
-            <th class="bg-gradient-success">Unit</th>
-            <th class="bg-gradient-success">Unit_Price</th>
-            <th class="bg-gradient-success">Total_Amount</th>
-            <th class="bg-gradient-success">Delivered_Quantity</th>
-            <th class="bg-gradient-success">ProdCost</th>
-            <th class="bg-gradient-success">TotalProdCost</th>
-          </tr>
-        </ng-template>
-
-        <ng-template pTemplate="body" let-table let-i="rowIndex">
-          <tr>
-            <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
-            <td class="text-center align-middle">{{ table.Article }}</td>
-            <td class="text-center align-middle">{{ table.ActualArticle }}</td>
-            <td class="text-center align-middle">{{ table.Description }}</td>
-            <td class="text-center align-middle">{{ table.Width }}</td>
-            <td class="text-center align-middle">{{ table.Color }}</td>
-            <td class="text-center align-middle">{{ table.Packaging }}</td>
-            <td class="text-center align-middle">{{ table.Quantity }}</td>
-            <td class="text-center align-middle">{{ table.Unit }}</td>
-            <td class="text-center align-middle">{{ table.Unit_Price }}</td>
-            <td class="text-center align-middle">{{ table.Total_Amount }}</td>
-            <td class="text-center align-middle">{{ table.Delivered_Quantity }}</td>
-            <td class="text-center align-middle">{{ table.ProdCost }}</td>
-            <td class="text-center align-middle">{{ table.TotalProdCost }}</td>
-          </tr>
-        </ng-template>
-      </p-table>
+  <!-- Dialog -->
+  <p-dialog header="PI Details" [(visible)]="isDetailsVisible" [modal]="true" [closable]="true" [style]="{ width: '70vw' }">
+    <div *ngIf="detailsData" class="row">
+      <div class="col-md-6" *ngFor="let field of [
+        {label:'Consignee Initial', value: detailsData.Consignee_Initial},
+        {label:'Shipper', value: detailsData.Shipper},
+        {label:'Benificiary Bank', value: detailsData.BenificiaryBank},
+        {label:'Consignee', value: detailsData.Consignee},
+        {label:'Applicant Bank', value: detailsData.ApplicantBank},
+        {label:'Buyer Name', value: detailsData.Buyer_Name},
+        {label:'Country', value: detailsData.Country},
+        {label:'Delivery Details', value: detailsData.DeliveryDetails},
+        {label:'Force Majeure', value: detailsData.forceMajeure},
+        {label:'Loading Mode', value: detailsData.LoadingMode},
+        {label:'Contact Person', value: detailsData.Contact_Person},
+        {label:'Packing Mode', value: detailsData.PackingMode},
+        {label:'Expire Date', value: detailsData.ExpireDate},
+        {label:'Remarks', value: detailsData.Remarks},
+        {label:'Style', value: detailsData.Style},
+        {label:'Payment Terms', value: detailsData.PaymentTerms},
+        {label:'Price Term', value: detailsData.PriceTerm},
+        {label:'Partial Allowed', value: detailsData.partialAllowed},
+        {label:'Delivery Address', value: detailsData.Delivery_Address},
+        {label:'Documents', value: detailsData.Documents},
+        {label:'Good Description', value: detailsData.Good_Description},
+        {label:'Shipping Marks', value: detailsData.Shipping_Marks},
+        {label:'Loading Port', value: detailsData.Loading_Port},
+        {label:'Destination Port', value: detailsData.Destination_Port},
+        {label:'Created By', value: detailsData.Created_By},
+        {label:'Superior Name', value: detailsData.SuperiorName},
+        {label:'Status', value: detailsData.Status}
+      ]">
+        <p><strong>{{ field.label }}:</strong> {{ field.value }}</p>
+      </div>
     </div>
+
+    <!-- Nested Table -->
+    <p-table [value]="detailsTableData" [paginator]="true" [rows]="10" [showCurrentPageReport]="true">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>SL</th>
+          <th>Article</th>
+          <th>ActualArticle</th>
+          <th>Description</th>
+          <th>Width</th>
+          <th>Color</th>
+          <th>Packaging</th>
+          <th>Quantity</th>
+          <th>Unit</th>
+          <th>Unit Price</th>
+          <th>Total Amount</th>
+          <th>Delivered Qty</th>
+          <th>Prod Cost</th>
+          <th>Total Prod Cost</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-table let-i="rowIndex">
+        <tr>
+          <td>{{ (dt.first || 0) + i + 1 }}</td>
+          <td>{{ table.Article }}</td>
+          <td>{{ table.ActualArticle }}</td>
+          <td>{{ table.Description }}</td>
+          <td>{{ table.Width }}</td>
+          <td>{{ table.Color }}</td>
+          <td>{{ table.Packaging }}</td>
+          <td>{{ table.Quantity }}</td>
+          <td>{{ table.Unit }}</td>
+          <td>{{ table.Unit_Price }}</td>
+          <td>{{ table.Total_Amount }}</td>
+          <td>{{ table.Delivered_Quantity }}</td>
+          <td>{{ table.ProdCost }}</td>
+          <td>{{ table.TotalProdCost }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
   </p-dialog>
 </div>
+
+</div>
+
+

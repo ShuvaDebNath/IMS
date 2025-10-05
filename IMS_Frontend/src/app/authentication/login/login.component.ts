@@ -25,6 +25,7 @@ export class LoginComponent implements OnInit {
   comLogoPath = "";
   comImagePath = "";
   currentTime: string = '';
+  isLoading = false;
   private timerInterval: any;
   constructor(private router: Router, private service: LoginServiceService, private fb: FormBuilder, private gs: GlobalServiceService, private ms: MasterEntryService) {
     gs.ClearSession();
@@ -71,7 +72,9 @@ export class LoginComponent implements OnInit {
       swal.fire('Invalid Input', '', 'error');
       return;
     }
+    this.isLoading = true;
     this.service.UserLogin(this.LoginForm.value).subscribe((res) => {
+      
       if (res.isAuthorized) {
         // let company = this.companyList.filter((x: { ComId: any; })=> x.ComId == this.LoginForm.controls.comId.value);
         window.localStorage.setItem('token', res.token);
@@ -93,6 +96,7 @@ export class LoginComponent implements OnInit {
         this.ms.GetInitialData(ProcedureData).subscribe({
           next: (results) => {
             if (results.status) {
+               this.isLoading = false; 
               menu = JSON.parse(results.data).Tables2;
               menuWithButtonPermission = JSON.parse(results.data).Tables1;
               window.localStorage.setItem('UserMenu', JSON.stringify(menu));
@@ -105,11 +109,14 @@ export class LoginComponent implements OnInit {
               this.gs.Logout();
             } else { }
           },
-          error: (err) => { },
+          error: (err) => { 
+            this.isLoading = false;
+          },
         });
 
 
       } else {
+        this.isLoading = false;
         swal.fire(res.msg, 'Wrong password', 'error');
 
       }

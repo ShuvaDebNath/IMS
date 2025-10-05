@@ -1,10 +1,9 @@
-<div class="card card-default">
-  <div class="content-heading" style="border-bottom: 1px solid rgba(0,0,0,.125) !important;">
-    <div class="row">
-      <div class="col-6">
+<div class="p-2 m-2 shadow-sm">
+  <div class="card shadow-sm">
+  <div class="card-header theme-bg">
+  
         <h2 class="p-2">All Commercial Invoice</h2>
-      </div>
-    </div>
+   
   </div>
   <div class="card-body">
     <form [formGroup]="SearchForm">
@@ -13,11 +12,11 @@
           <label class="control-label" for="inlineFormInputGroup">From Date</label>
           <div class="input-group mb-2">
             <div class="input-group-sm input-group-prepend">
-              <div class="input-group-text" (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
+              <div class="input-group-text theme-btn " (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
             </div>
             <input type="text" autocomplete="off" formControlName="fromDate" [bsConfig]="{
               dateInputFormat: 'DD/MM/YYYY',
-              containerClass: 'theme-green'
+              containerClass: 'theme-bg'
             }" class="form-control-sm form-control bg-white" id="fromdate" name="fromdate" placeholder="From Date" 
               #dpfrom="bsDatepicker" bsDatepicker/>
           </div>
@@ -27,11 +26,11 @@
           <label class="control-label" for="inlineFormInputGroup">To Date</label>
           <div class="input-group mb-2">
             <div class="input-group-sm input-group-prepend">
-              <div class="input-group-text" (click)="dpto.toggle()"><i class="fas fa-calendar"></i></div>
+              <div class="input-group-text theme-btn" (click)="dpto.toggle()"><i class="fas fa-calendar"></i></div>
             </div>
             <input type="text" autocomplete="off" formControlName="toDate" [bsConfig]="{
               dateInputFormat: 'DD/MM/YYYY',
-              containerClass: 'theme-green'
+              containerClass: 'theme-bg'
             }" class="form-control-sm form-control bg-white" id="todate" name="todate" placeholder="To Date"
               #dpto="bsDatepicker" bsDatepicker />
           </div>
@@ -66,7 +65,7 @@
            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
 
     <ng-template pTemplate="caption">
-      <div class="table-toolbar">
+      <div class="table-toolbar d-flex justify-content-end">
         <span class="p-input-icon-left">
           <i class="pi pi-search"></i>
           <input pInputText type="text"
@@ -96,12 +95,16 @@
         <td class="text-center align-middle">{{table.PI_No}}</td>
         <td class="text-center align-middle">{{table.Date}}</td>
         <td class="text-center align-middle">{{table.UserName}}</td>
-        <td class="text-center align-middle p-0 m-0">
-            <a  class="btn bg-gradient-cyan btn-xs mr-2" target="_blank" title="View" (click)="viewDetails(table)"><i class="fa fa-eye" ></i></a> 
-            <a *ngIf="updatePermissions" class="btn bg-gradient-cyan btn-xs mr-2" target="_blank" title="Edit" [routerLink]="['/generate-commercial-invoice']"
+        <td class="text-center align-middle p-1 m-0">
+          <div class="d-flex justify-content-center gap-1">
+               <a  class="btn theme-btn-view btn-sm " target="_blank" title="View" (click)="viewDetails(table)"><i class="fa fa-eye" ></i></a> 
+            <a *ngIf="updatePermissions" class="btn theme-btn-edit " target="_blank" title="Edit" [routerLink]="['/generate-commercial-invoice']"
               [queryParams]="{Commercial_Invoice_ID:table.Commercial_Invoice_ID}"><i class="fa fa-edit" ></i></a> 
-            <button *ngIf="deletePermissions" class="btn bg-gradient-danger btn-xs" title="Delete" (click)="DeleteData(table)"><i
+            <button *ngIf="deletePermissions" class="btn theme-btn-delete " title="Delete" (click)="DeleteData(table)"><i
                 class="fas fa-trash"></i></button>
+
+          </div>
+         
         </td>
       </tr>
     </ng-template>
@@ -184,3 +187,8 @@
   </p-dialog>
 
   </div>
+
+
+</div>
+
+

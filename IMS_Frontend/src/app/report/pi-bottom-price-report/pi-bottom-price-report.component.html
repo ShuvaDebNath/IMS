@@ -1,0 +1,217 @@
+
+
+<div class="m-2 p-2 shadow-sm">
+  <div>
+    <div class="card-header theme-bg">
+        <h1 class="">PI Bottom Price Report</h1>
+        </div>
+        <div class="card-body">
+           <form
+    [formGroup]="dateForm"
+    class="row p-3 shadow-sm g-3 align-items-end mb-3"
+    (ngSubmit)="loadAllPI()"
+  >
+    <div class="col-md-2">
+      <label class="form-label fw-bold">From Date</label>
+      <input
+        type="date"
+        class="form-control "
+        formControlName="fromDate"
+      />
+    </div>
+
+    <div class="col-md-2">
+      <label class="form-label fw-bold">To Date</label>
+      <input
+        type="date"
+        class="form-control "
+        formControlName="toDate"
+      />
+    </div>
+
+    <div class="col-md-2">
+      <label>PI No <span>*</span></label>
+      <p-dropdown
+        [style]="{ width: '100%' }"
+        class="p-0"
+        [options]="PIList"
+        optionLabel="PINo"
+        [filter]="true"
+        filterBy="PINo"
+        [showClear]="true"
+        styleClass="listBottom"
+        placeholder="Please Select"
+        optionValue="PI_Master_Id"
+        formControlName="PIId"
+      >
+        <ng-template let-AB pTemplate="item">
+          <div class="flex align-items-center gap-2">
+            <div>{{ AB.PINo }}</div>
+          </div>
+        </ng-template>
+      </p-dropdown>
+    </div>
+    
+    <div class="col-md-2">
+      <label>Client List<span>*</span></label>
+      <p-dropdown
+        [style]="{ width: '100%' }"
+        class="p-0"
+        [options]="ClientList"
+        optionLabel="Company_Name"
+        [filter]="true"
+        filterBy="Company_Name"
+        [showClear]="true"
+        styleClass="listBottom"
+        placeholder="Please Select"
+        optionValue="Customer_ID"
+        formControlName="ClientId"
+        [virtualScroll]="true"
+        [virtualScrollItemSize]="30"
+      >
+        <ng-template let-AB pTemplate="item">
+          <div class="flex align-items-center gap-2">
+            <div>{{ AB.Company_Name }}</div>
+          </div>
+        </ng-template>
+      </p-dropdown>
+    </div>
+    <div class="col-md-2">
+      <label>Marketing Concern <span>*</span></label>
+      <p-dropdown
+        [style]="{ width: '100%' }"
+        class="p-0"
+        [options]="SuperiorList"
+        optionLabel="UserName"
+        [filter]="true"
+        filterBy="UserName"
+        [showClear]="true"
+        styleClass="listBottom"
+        placeholder="Please Select"
+        optionValue="User_ID"
+        formControlName="SuperiorId"
+      >
+        <ng-template let-AB pTemplate="item">
+          <div class="flex align-items-center gap-2">
+            <div>{{ AB.UserName }}</div>
+          </div>
+        </ng-template>
+      </p-dropdown>
+    </div>
+    <div class="col-md-2">
+      <button
+        type="submit"
+        class="btn pt-3 theme-btn w-100"
+        [disabled]="dateForm.invalid"
+      >
+        <i class="pi pi-download me-1"></i> Load
+      </button>
+    </div>
+  </form>
+  <div class="shadow-sm p-2">
+    <p-table
+      *ngIf="tableVisible"
+      #dt
+      [value]="PIReport"
+      [paginator]="true"
+      [rows]="10"
+      [responsive]="true"
+      [showCurrentPageReport]="true"
+      [globalFilterFields]="[
+        'PINo',
+        'Date',
+        'Consignee',
+        'Contact_Name',
+        'PaymentTerms',
+        'Article',
+        'ActualArticle',
+        'Color',
+        'Packaging',
+        'BottomPrice',
+        'UsdPrice',
+        'BDTPrice',
+        'Quantity',
+        'Unit',
+        'Total_Amount',
+        'TotalUSD',
+        'TotalBDT',
+        'ProdCostUnt',
+        'ProdCostTotal',
+        'Delivered_Quantity',
+        'Created_By',
+        'LC_No'
+      ]"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    >
+      <ng-template pTemplate="caption">
+        <div class="table-toolbar">
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              type="text"
+              (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+              placeholder="Global Search"
+            />
+          </span>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="text-center">Sl No</th>
+          <th class="text-center">PI No</th>
+          <th class="text-center">Date</th>
+          <th class="text-center">Consignee</th>
+          <th class="text-center">Merch. Name</th>
+          <th class="text-center">Payment Terms</th>
+          <th class="text-center">Article</th>
+          <th class="text-center">Actual Article</th>
+          <th class="text-center">Color</th>
+          <th class="text-center">Bottom Price</th>
+          <th class="text-center">Unit Price (USD)</th>
+          <th class="text-center">Unit Price (BDT)</th>
+          <th class="text-center">Quantity</th>
+          <th class="text-center">Unit</th>
+          <th class="text-center">Total Amount (USD)</th>
+          <th class="text-center">Total Amount (BDT)</th>
+          <th class="text-center">Prod. Cost Unit</th>
+          <th class="text-center">Total Prod. Cost</th>
+          <th class="text-center">Delivered Qty</th>
+          <th class="text-center">Generated By</th>
+          <th class="text-center">LC</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-PIDetailsList let-i="rowIndex">
+        <tr>
+          <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
+          <td class="text-center"><div style="color: blue;" class="piNoView" (click)="piNoClick(PIDetailsList.PINo,PIDetailsList.LC_No)">{{ PIDetailsList.PINo }}</div></td>
+          <td class="text-center">{{ PIDetailsList.Date| date : "dd-MMM-yyyy" }}</td>
+          <td class="text-center">{{ PIDetailsList.Consignee }}</td>
+          <td class="text-center">{{ PIDetailsList.Contact_Name }}</td>
+          <td class="text-center">{{ PIDetailsList.PaymentTerms }}</td>
+          <td class="text-center">{{ PIDetailsList.Article }}</td>
+          <td class="text-center">{{ PIDetailsList.ActualArticle }}</td>
+          <td class="text-center">{{ PIDetailsList.Color }}</td>
+          <td class="text-center" style="color:blue">{{ PIDetailsList.BottomPrice }}</td>
+          <td class="text-center" [ngStyle]="{ 'color': PIDetailsList.BottomPrice > PIDetailsList.UsdPrice  ? 'red' : 'black' }">{{ PIDetailsList.UsdPrice }}</td>
+          <td class="text-center">{{ PIDetailsList.BDTPrice }}</td>
+          <td class="text-center">{{ PIDetailsList.Quantity }}</td>
+          <td class="text-center">{{ PIDetailsList.Unit }}</td>
+          <td class="text-center">{{ PIDetailsList.TotalUSD }}</td>
+          <td class="text-center">{{ PIDetailsList.TotalBDT }}</td>
+          <td class="text-center">{{ PIDetailsList.ProdCostUnt }}</td>
+          <td class="text-center">{{ PIDetailsList.ProdCostTotal }}</td>
+          <td class="text-center">{{ PIDetailsList.Delivered_Quantity }}</td>
+          <td class="text-center">{{ PIDetailsList.Created_By }}</td>
+          <td class="text-center">{{ PIDetailsList.LC_No }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+        </div>
+  </div>
+
+</div>

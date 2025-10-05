@@ -1,13 +1,11 @@
-<div class="card card-default">
+<div class=" m-2 p-2 shadow-sm">
+  <div class="card card-default">
   <div
-    class="content-heading"
-    style="border-bottom: 1px solid rgba(0, 0, 0, 0.125) !important"
+    class="card-header theme-bg"
   >
-    <div class="row">
-      <div class="col-6">
+   
         <h2 class="p-2">All Sales Contract</h2>
-      </div>
-    </div>
+      
   </div>
   <div class="card-body">
     <form [formGroup]="SearchForm">
@@ -18,7 +16,7 @@
           >
           <div class="input-group mb-2">
             <div class="input-group-sm input-group-prepend">
-              <div class="input-group-text" (click)="dpfrom.toggle()">
+              <div class="input-group-text theme-btn" (click)="dpfrom.toggle()">
                 <i class="fas fa-calendar"></i>
               </div>
             </div>
@@ -28,7 +26,7 @@
               formControlName="fromDate"
               [bsConfig]="{
                 dateInputFormat: 'DD/MM/YYYY',
-                containerClass: 'theme-green'
+                containerClass: 'theme-bg'
               }"
               class="form-control-sm form-control bg-white"
               id="fromdate"
@@ -45,7 +43,7 @@
           >
           <div class="input-group mb-2">
             <div class="input-group-sm input-group-prepend">
-              <div class="input-group-text" (click)="dpto.toggle()">
+              <div class="input-group-text theme-btn" (click)="dpto.toggle()">
                 <i class="fas fa-calendar"></i>
               </div>
             </div>
@@ -55,7 +53,7 @@
               formControlName="toDate"
               [bsConfig]="{
                 dateInputFormat: 'DD/MM/YYYY',
-                containerClass: 'theme-green'
+                containerClass: 'theme-bg'
               }"
               class="form-control-sm form-control bg-white"
               id="todate"
@@ -71,7 +69,7 @@
             title="Search"
             type="button"
             (click)="Search()"
-            class="btn btn-sm btn-outline-primary bg-gradient-primary mb-2 mr-2"
+            class="btn btn-sm theme-btn mb-2 mr-2"
             style="margin-top: 2.3em !important"
           >
             <i class="fas fa-search"></i>&nbsp;Search
@@ -97,7 +95,7 @@
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     >
       <ng-template pTemplate="caption">
-        <div class="table-toolbar">
+        <div class="table-toolbar d-flex justify-content-end">
           <span class="p-input-icon-left">
             <i class="pi pi-search"></i>
             <input
@@ -112,12 +110,12 @@
 
       <ng-template pTemplate="header">
         <tr>
-          <th class="bg-gradient-success">SL</th>
-          <th class="bg-gradient-success">Sales Contract No</th>
-          <th class="bg-gradient-success">PIs</th>
-          <th class="bg-gradient-success">Created By</th>
-          <th class="bg-gradient-success">Created Date</th>
-          <th class="bg-gradient-success" *ngIf="allPersmissions">Action</th>
+          <th class="">SL</th>
+          <th class="">Sales Contract No</th>
+          <th class="">PIs</th>
+          <th class="">Created By</th>
+          <th class="">Created Date</th>
+          <th class="" *ngIf="allPersmissions">Action</th>
         </tr>
       </ng-template>
 
@@ -128,9 +126,10 @@
           <td class="text-center align-middle">{{ table.PIs }}</td>
           <td class="text-center align-middle">{{ table.CreatedBy }}</td>
           <td class="text-center align-middle">{{ table.CreatedDate }}</td>
-          <td class="text-center align-middle p-0 m-0">
-            <a
-              class="btn bg-gradient-cyan btn-xs mr-2"
+          <td class="text-center align-middle p-2 m-0">
+            <div class="d-flex justify-content-center gap-1" >
+               <a
+              class="btn theme-btn-view  "
               target="_blank"
               title="View"
               (click)="viewDetails(table)"
@@ -138,7 +137,7 @@
             ></a>
             <a
               *ngIf="updatePermissions"
-              class="btn bg-gradient-cyan btn-xs mr-2"
+              class="btn theme-btn-edit  "
               target="_blank"
               title="Edit"
               [routerLink]="['/generate-sales-contract']"
@@ -147,12 +146,14 @@
             ></a>
             <button
               *ngIf="deletePermissions"
-              class="btn bg-gradient-danger btn-xs"
+              class="btn theme-btn-delete "
               title="Delete"
               (click)="DeleteData(table)"
             >
               <i class="fas fa-trash"></i>
             </button>
+            </div>
+           
           </td>
         </tr>
       </ng-template>
@@ -351,7 +352,7 @@
           <p-divider />
           <div class="table-responsive">
             <table class="table table-striped table-bordered table-hover">
-              <tr class="bg-gradient-success">
+              <tr class="">
                 <th class="text-center align-middle">Article</th>
                 <th class="text-center align-middle">A. A.</th>
                 <th class="text-center align-middle">Description</th>
@@ -406,3 +407,7 @@
     </form>
   </p-dialog>
 </div>
+
+</div>
+
+

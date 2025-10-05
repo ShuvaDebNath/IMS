@@ -1,5 +1,10 @@
-<div class="container">
-  <h1>Issued RM List from Warehouse</h1>
+<div class="m-2 p-2 shadow-sm">
+  <div class="card">
+    <div class="card-header theme-bg">
+        <h1>Issued RM List from Warehouse</h1>
+
+    </div>
+    <div class="card-body">
   <p-table #dt [value]="issuedRequisitions" [paginator]="true" [rows]="10" [responsive]="true"
     [showCurrentPageReport]="true"
     [globalFilterFields]="['RequisitionNumber','RequisitionDate','SentStatus_from_Warehouse','IssueNumber','IssueDate','ReceivedStatus_from_Production','SentBy']"
@@ -172,4 +177,7 @@
       </div>
     </div>
   </p-dialog>
+</div>
+
+  </div>
 </div>
