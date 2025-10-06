@@ -35,6 +35,11 @@ import { SalesContractDetailsComponent } from './sales-contract/sales-contract-d
 import { UnapprovedBuyingHouseComponent } from './buying-house/unapproved-buying-house/unapproved-buying-house.component';
 import { AllBuyingHouseComponent } from './buying-house/all-buying-house/all-buying-house.component';
 import { GenerateBuyingHouseComponent } from './buying-house/generate-buying-house/generate-buying-house.component';
+import { PendingRmImportListComponent } from './warehouse/import/pending-rm-import-list/pending-rm-import-list.component';
+import { ImportedRmListComponent } from './warehouse/import/imported-rm-list/imported-rm-list.component';
+import { RmReturnListToSupplierComponent } from './warehouse/all-return/rm-return-list-to-supplier/rm-return-list-to-supplier.component';
+import { RmReturnListFromProductionComponent } from './warehouse/all-return/rm-return-list-from-production/rm-return-list-from-production.component';
+import { FinishedGoodReturnListComponent } from './warehouse/all-return/finished-good-return-list/finished-good-return-list.component';
 
 
 const CustomSelectOptions: INgxSelectOptions = {
@@ -51,7 +56,7 @@ const CustomSelectOptions: INgxSelectOptions = {
     ForbiddenErrorComponent,
     PageNotFoundComponent,
     LogoutComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
    ],
   imports: [
     FormsModule,

@@ -90,11 +90,15 @@ import { PendingFinishGoodsSentListProductionComponent } from '../production/fin
 import { ReceivedFinishGoodsProductionComponent } from '../production/finishgoods/received-finish-goods-list-production/received-finish-goods-list-production.component';
 import { PendingFinishGoodsSentListWarehouseComponent } from '../warehouse/finishgoods/pending-finish-goods-sent-list-warehouse/pending-finish-goods-sent-list-warehouse.component';
 import { ReceivedFinishGoodsWarehouseComponent } from '../warehouse/finishgoods/received-finish-goods-list-warehouse/received-finish-goods-list-warehouse.component';
-import { FinishGoodsInfoWithStockComponent } from '../rm-fg-material-infos-with-stock/finish-goods-info-with-stock/finish-goods-info-with-stock.component';
 import { PiReportComponent } from '../report/pi-report/pi-report.component';
 import { PiBottomPriceReportComponent } from '../report/pi-bottom-price-report/pi-bottom-price-report.component';
 import { DeliveryLogReportComponent } from '../report/delivery-log-report/delivery-log-report.component';
 import { DeliveryComponent } from '../delivery/delivery.component';
+import { FinishedGoodReturnListComponent } from '../warehouse/all-return/finished-good-return-list/finished-good-return-list.component';
+import { RmReturnListFromProductionComponent } from '../warehouse/all-return/rm-return-list-from-production/rm-return-list-from-production.component';
+import { PendingRmImportListComponent } from '../warehouse/import/pending-rm-import-list/pending-rm-import-list.component';
+import { ImportedRmListComponent } from '../warehouse/import/imported-rm-list/imported-rm-list.component';
+import { RmReturnListToSupplierComponent } from '../warehouse/all-return/rm-return-list-to-supplier/rm-return-list-to-supplier.component';
 
 
 const CustomSelectOptions: INgxSelectOptions = {
@@ -145,6 +149,20 @@ const CustomSelectOptions: INgxSelectOptions = {
     PiReportComponent,
     PiBottomPriceReportComponent,
     DeliveryLogReportComponent,
+    UnapprovedCustomerComponent,
+    GenerateCustomerComponent,
+    AllCustomersComponent,
+    UnapprovedCustomerComponent,
+    UnapprovedBuyingHouseComponent,
+    GenerateBuyingHouseComponent,
+    AllBuyingHouseComponent,
+    GeneratePiComponent,
+    BeneficiaryListComponent,  
+    PendingRmImportListComponent,
+    ImportedRmListComponent,
+    RmReturnListToSupplierComponent,
+    RmReturnListFromProductionComponent,
+    FinishedGoodReturnListComponent  
   ],
   imports: [
     CommonModule,
@@ -314,7 +332,11 @@ const CustomSelectOptions: INgxSelectOptions = {
           { path: 'pi-bottom-price-report', component: PiBottomPriceReportComponent },
           { path: 'delivery-log-report', component: DeliveryLogReportComponent },
           { path: 'fullapproved-pi', component: FullApprovePiComponent },
-          { path: 'delivery', component: DeliveryComponent }
+          { path: 'pending-rm-import-list', component: PendingRmImportListComponent },
+          { path: 'imported-rm-list', component: ImportedRmListComponent },
+          { path: 'rm-return-list-to', component: RmReturnListToSupplierComponent },
+          { path: 'rm-return-from-production', component: RmReturnListFromProductionComponent },
+          { path: 'finished-good-return-list', component: FinishedGoodReturnListComponent }
         ],
       },
 
