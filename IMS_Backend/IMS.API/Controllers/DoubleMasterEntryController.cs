@@ -26,6 +26,18 @@ namespace Boilerplate.API.Controllers
                 throw new Exception(ex.ToString());
             }
         }
+        [HttpPost(nameof(InsertGetId))]
+        public async Task<IActionResult> InsertGetId([FromBody] DoubleMasterEntryModel item)
+        {
+            try
+            {
+                return Ok(await _masterEntryService.InsertGetId(item, AuthUserName));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+        }
         [HttpPost(nameof(InsertListData))]
         public async Task<IActionResult> InsertListData([FromBody] DoubleMasterEntryModel item)
         {
