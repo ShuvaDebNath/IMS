@@ -3,11 +3,11 @@ import { throwError } from 'rxjs';
 
 export class GlobalConfig {
 
-    public static BASE_URL_USERMANAGE = 'https://localhost:7056/api/';
-  public static LOGIN_URL_USERMANAGE = 'https://localhost:7056/login';
+    public static BASE_URL_USERMANAGE = 'http://localhost:5077/api/';
+  public static LOGIN_URL_USERMANAGE = 'http://localhost:5077/login';
 
-    public static BASE_URL = 'https://localhost:7056/api/';
- public static BASE_URL_REPORT = 'https://localhost:7056/';
+    public static BASE_URL = 'http://localhost:5077/api/';
+ public static BASE_URL_REPORT = 'http://localhost:5077/';
 
   // public static BASE_URL_USERMANAGE = 'http://119.18.147.187:5077/DB/api/';
   //  public static LOGIN_URL_USERMANAGE = 'http://119.18.147.187:5077/DB/login';
