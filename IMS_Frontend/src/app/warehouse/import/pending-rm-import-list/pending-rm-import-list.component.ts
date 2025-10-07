@@ -14,6 +14,7 @@ import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
 import { DoubleMasterEntryModel } from 'src/app/models/DoubleMasterEntryModel';
 import { CG } from 'src/app/models/cg';
 import { GlobalServiceService } from 'src/app/services/Global-service.service';
+import { DoubleMasterEntryService } from 'src/app/services/doubleEntry/doubleEntryService.service';
 
 @Component({
   selector: 'app-pending-rm-import-list',
@@ -26,6 +27,7 @@ export class PendingRmImportListComponent {
   length = 100;
   pageSize = 10;
   tableData!: CG[];
+  SelectedExportMasterId = '0';
   pageSizeOptions: number[] = [];
   displayedColumns: string[] = [
     'Sl',
@@ -70,7 +72,8 @@ export class PendingRmImportListComponent {
     private pagesComponent: PagesComponent,
     private masterEntryService: MasterEntryService,
     private activeLink: ActivatedRoute,
-    private title: Title
+    private title: Title,
+    private doubleMasterEntryService: DoubleMasterEntryService
   ) {}
   ngOnInit(): void {
     var permissions = this.gs.CheckUserPermission('Pending RM Import List');
@@ -130,7 +133,6 @@ export class PendingRmImportListComponent {
 
   viewDetails(table: any) {
     this.isDetailsVisible = true;
-
     let param = new GetDataModel();
     param.procedureName = '[usp_ExportRM_Details]';
     param.parameters = {
@@ -156,6 +158,7 @@ export class PendingRmImportListComponent {
   ReceiveExport(table: any) {
     this.isReceiveInfoVisible = true;
 
+    this.SelectedExportMasterId = table.ExportMasterID;
     let param = new GetDataModel();
     param.procedureName = '[usp_ExportRM_Details]';
     param.parameters = {
@@ -171,8 +174,8 @@ export class PendingRmImportListComponent {
           this.detailsTableData = tables.Tables2;
 
           this.detailsTableData.forEach((e: any) => {
-            e.AccptQuantity = 0;
-            e.AccptRoll = 0;
+            e.AccptQuantity = e.Quantity;
+            e.AccptRoll = e.RollBag_Quantity;
             e.Note = '';
 
             this.totalQty += e.Quantity;
@@ -182,31 +185,114 @@ export class PendingRmImportListComponent {
     });
   }
 
-  receiveItem(table: any) {
+  receiveItem(table: any[]) {
     console.log(table);
+
+    // Validate first; if any row is invalid, show alert and stop
+    const hasInvalid = table.some(
+      (e: any) => e.AccptQuantity == 0 || e.AccptRoll == 0
+    );
+    if (hasInvalid) {
+      swal.fire('Error', 'Please fill up all fields', 'error');
+      return;
+    }
+
+    const sentByStr = localStorage.getItem('userId') ?? '';
+
+    const fDate = new Date();
+    const mm = String(fDate.getMonth() + 1).padStart(2, '0');
+    const dd = String(fDate.getDate()).padStart(2, '0');
+    const yyyy = fDate.getFullYear();
+    const formatted = `${mm}/${dd}/${yyyy}`;
+
+    const masterRow = {
+      Received_By: sentByStr,
+      Received_Date: formatted,
+      Status: 'Received',
+    };
+
+    // Build details array (map returns a new array; don't use forEach here)
+    var detailsData: any[] = [];
+    table.forEach((i: any) => {
+      var signleArr = {
+        AcceptedQuantity: i.AccptQuantity,
+        AcceptedRollBag_Qty: i.AccptRoll,
+        RawMaterial_ID: i.RawMaterial_ID,
+        Article_No: i.article,
+        Description: i.description,
+        Color_ID: i.color,
+        Width_ID: i.width,
+        Roll_Bag: i.rollOrBag === 'roll' ? 'roll' : 'bag',
+        Unit: i.unitId,
+        Weight: i.weight,
+        Gross_Weight: i.grossWeight,
+        RollBag_Quantity: i.rollBagQty,
+        Unit_ID: i.unitId ?? null,
+        ExportMasterID: null, // keep as your original unless backend expects the selected ID here
+      };
+      detailsData.push(signleArr);
+    });
+    console.log(detailsData);
+
+    const whereParam = {
+      ExportMasterID: this.SelectedExportMasterId,
+    };
+
+    this.doubleMasterEntryService
+      .UpdateDataMasterDetails(
+        detailsData, // child rows
+        'tbl_export_details', // child table
+        masterRow, // master row
+        'tbl_export_master', // master table
+        'ExportMasterID', // PK column in master
+        'ExportMasterID', // FK column in child
+        'Export', // serialType
+        'Export', // columnNameSerialNo
+        whereParam
+      )
+      .subscribe({
+        next: (res: any) => {
+          if (res.messageType === 'Success' && res.status) {
+            swal.fire('Success', 'Received successfully', 'success');
+          } else {
+            swal.fire(
+              'Error',
+              res?.message || 'Could not save requisition',
+              'error'
+            );
+          }
+        },
+        error: () => {
+          swal.fire('Error', 'Could not save requisition', 'error');
+        },
+      });
   }
 
-  CheckAccptQty(item: any) {
-    console.log(item);
-    
+  CheckAccptQty(e: any, item: any) {
+    console.log(e, item);
+    item.AccptQuantity = e.target.value;
     if (item.AccptQuantity > item.Quantity) {
-      swal.fire(
-        'error',
-        'Receive Quantity can not be greater then export quantity',
-        'error'
-      );
+      swal.fire({
+        title: 'error',
+        text: 'Receive Quantity can not be greater then export quantity!!',
+        icon: 'error',
+        customClass: {
+          popup: 'swal-on-top-of-primeng',
+        },
+      });
       item.AccptQuantity = item.Quantity;
     }
   }
 
-  CheckRollBagQty(item: any) {
+  CheckRollBagQty(e: any, item: any) {
+    item.AccptRoll = e.target.value;
     if (item.AccptRoll > item.RollBag_Quantity) {
       swal.fire(
         'error',
         'Receive Roll/Bag Quantity can not be greater then export Roll/Bag quantity',
         'error'
       );
-      item.AccptRoll = item.Quantity;
+      item.AccptRoll = item.RollBag_Quantity;
     }
   }
 }

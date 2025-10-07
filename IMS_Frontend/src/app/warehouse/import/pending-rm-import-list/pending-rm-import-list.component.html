@@ -1,3 +1,4 @@
+
 <div class="card card-default">
   <div
     class="content-heading"
@@ -173,7 +174,7 @@
     [(visible)]="isReceiveInfoVisible"
     [modal]="true"
     [closable]="true"
-    [style]="{ width: '70vw' }"
+    style="z-index: 9 !important;"
     (onHide)="detailsData = null"
   >
     <div *ngIf="detailsData">
@@ -217,15 +218,14 @@
             <td>
               <input
                 class="form-control text-end"
-                (keyup)="CheckAccptQty(detailsTableData)"
-                [value]="detailsTableData.AccptQuantity"
-                
+                (keyup)="CheckAccptQty($event,detailsTableData)"
+                [value]="detailsTableData.AccptQuantity"                            
               />
             </td>
             <td>
               <input
                 class="form-control text-end"
-                (keyup)="CheckRollBagQty(detailsTableData)"
+                (keyup)="CheckRollBagQty($event,detailsTableData)"
                 [value]="detailsTableData.AccptRoll"
               />
             </td>
