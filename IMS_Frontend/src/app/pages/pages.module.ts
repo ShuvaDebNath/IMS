@@ -90,7 +90,6 @@ import { PendingFinishGoodsSentListProductionComponent } from '../production/fin
 import { ReceivedFinishGoodsProductionComponent } from '../production/finishgoods/received-finish-goods-list-production/received-finish-goods-list-production.component';
 import { PendingFinishGoodsSentListWarehouseComponent } from '../warehouse/finishgoods/pending-finish-goods-sent-list-warehouse/pending-finish-goods-sent-list-warehouse.component';
 import { ReceivedFinishGoodsWarehouseComponent } from '../warehouse/finishgoods/received-finish-goods-list-warehouse/received-finish-goods-list-warehouse.component';
-import { FinishGoodsInfoWithStockComponent } from '../rm-fg-material-infos-with-stock/finish-goods-info-with-stock/finish-goods-info-with-stock.component';
 import { PiReportComponent } from '../report/pi-report/pi-report.component';
 import { PiBottomPriceReportComponent } from '../report/pi-bottom-price-report/pi-bottom-price-report.component';
 import { DeliveryLogReportComponent } from '../report/delivery-log-report/delivery-log-report.component';
@@ -127,9 +126,7 @@ const CustomSelectOptions: INgxSelectOptions = {
     AllCashReceiveComponent,
     GenerateCashReceiveComponent,
     CashReceiveDetailsComponent,
-    CashReceiveUpdateComponent,
-    AllCommercialInvoiceComponent,
-    ChangePasswordComponent,
+    CashReceiveUpdateComponent, 
     GeneratePiComponent,
     GenerateCpiComponent,
     AllSalesContractComponent,
@@ -145,6 +142,13 @@ const CustomSelectOptions: INgxSelectOptions = {
     PiReportComponent,
     PiBottomPriceReportComponent,
     DeliveryLogReportComponent,
+    UnapprovedCustomerComponent,
+    AllCustomersComponent,
+    GenerateCustomerComponent,
+    UnapprovedBuyingHouseComponent,
+    AllBuyingHouseComponent,
+    GenerateBuyingHouseComponent,
+    BeneficiaryListComponent
   ],
   imports: [
     CommonModule,
@@ -171,6 +175,9 @@ const CustomSelectOptions: INgxSelectOptions = {
     PopoverModule,
     DatePipe,
     DividerModule,
+    MultiSelectModule,
+    TableModule,
+    DialogModule,
     UiSwitchModule.forRoot({
       size: 'small',
       color: 'rgb(0, 189, 99)',
@@ -314,7 +321,16 @@ const CustomSelectOptions: INgxSelectOptions = {
           { path: 'pi-bottom-price-report', component: PiBottomPriceReportComponent },
           { path: 'delivery-log-report', component: DeliveryLogReportComponent },
           { path: 'fullapproved-pi', component: FullApprovePiComponent },
-          { path: 'delivery', component: DeliveryComponent }
+          { path: 'delivery', component: DeliveryComponent },
+          { path: 'all-customers', component: AllCustomersComponent },
+          { path: 'generate-customers', component: GenerateCustomerComponent },
+          { path: 'unapproved-customers', component: UnapprovedCustomerComponent },
+          { path: 'all-buying-house', component: AllBuyingHouseComponent },
+          { path: 'generate-buying-house', component: GenerateBuyingHouseComponent },
+          { path: 'unapproved-buying-house', component: UnapprovedBuyingHouseComponent },
+          {
+            path: "beneficiary-list", component: BeneficiaryListComponent
+          },
         ],
       },
 
@@ -329,4 +345,4 @@ const CustomSelectOptions: INgxSelectOptions = {
     MatPaginatorModule,
   ],
 })
-export class PagesModule {}
+export class PagesModule { }
