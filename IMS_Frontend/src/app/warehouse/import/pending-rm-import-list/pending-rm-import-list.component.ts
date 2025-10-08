@@ -104,7 +104,7 @@ export class PendingRmImportListComponent {
     var toDate = this.SearchForm.value.toDate;
 
     let param = new GetDataModel();
-    param.procedureName = '[usp_ExportRM_Pending_List]';
+    param.procedureName = '[usp_ExportRM_ReceivePending_List]';
     param.parameters = {
       FromDate: fromDate,
       ToDate: toDate,
@@ -160,7 +160,7 @@ export class PendingRmImportListComponent {
 
     this.SelectedExportMasterId = table.ExportMasterID;
     let param = new GetDataModel();
-    param.procedureName = '[usp_ExportRM_Details]';
+    param.procedureName = '[usp_ExportRM_Details_ForReceive]';
     param.parameters = {
       ExportMasterID: table.ExportMasterID,
     };
@@ -174,8 +174,8 @@ export class PendingRmImportListComponent {
           this.detailsTableData = tables.Tables2;
 
           this.detailsTableData.forEach((e: any) => {
-            e.AccptQuantity = e.Quantity;
-            e.AccptRoll = e.RollBag_Quantity;
+            e.AccptQuantity = e.AcceptedQuantity;
+            e.AccptRoll = e.AcceptedRollBag_Qty;
             e.Note = '';
 
             this.totalQty += e.Quantity;
@@ -186,15 +186,14 @@ export class PendingRmImportListComponent {
   }
 
   receiveItem(table: any[]) {
-    console.log(table);
 
     // Validate first; if any row is invalid, show alert and stop
     const hasInvalid = table.some(
       (e: any) => e.AccptQuantity == 0 || e.AccptRoll == 0
     );
+    var status = 'Received'
     if (hasInvalid) {
-      swal.fire('Error', 'Please fill up all fields', 'error');
-      return;
+      status = 'Partially Received'
     }
 
     const sentByStr = localStorage.getItem('userId') ?? '';
@@ -208,7 +207,7 @@ export class PendingRmImportListComponent {
     const masterRow = {
       Received_By: sentByStr,
       Received_Date: formatted,
-      Status: 'Received',
+      Status: status,
     };
 
     // Build details array (map returns a new array; don't use forEach here)
@@ -218,16 +217,19 @@ export class PendingRmImportListComponent {
         AcceptedQuantity: i.AccptQuantity,
         AcceptedRollBag_Qty: i.AccptRoll,
         RawMaterial_ID: i.RawMaterial_ID,
-        Article_No: i.article,
-        Description: i.description,
-        Color_ID: i.color,
-        Width_ID: i.width,
-        Roll_Bag: i.rollOrBag === 'roll' ? 'roll' : 'bag',
-        Unit: i.unitId,
-        Weight: i.weight,
-        Gross_Weight: i.grossWeight,
-        RollBag_Quantity: i.rollBagQty,
-        Unit_ID: i.unitId ?? null,
+        Article_No: i.RawMaterial_ID,
+        Description: i.Description,
+        Color_ID: i.Color_ID,
+        Width_ID: i.Width_ID,
+        Roll_Bag: i.Roll_Bag === 'roll' ? 'roll' : 'bag',
+        Unit: i.Unit_ID,
+        Weight: i.Weight,
+        Gross_Weight: i.Gross_Weight,
+        RollBag_Quantity: i.RollBag_Quantity,
+        Unit_ID: i.Unit_ID ?? null,
+        Received_By:sentByStr,
+        Received_Date:formatted,
+        ExportDetailsID:i.ExportDetailsID,
         ExportMasterID: null, // keep as your original unless backend expects the selected ID here
       };
       detailsData.push(signleArr);
@@ -253,6 +255,8 @@ export class PendingRmImportListComponent {
       .subscribe({
         next: (res: any) => {
           if (res.messageType === 'Success' && res.status) {
+            this.Search();
+            this.isReceiveInfoVisible = false;
             swal.fire('Success', 'Received successfully', 'success');
           } else {
             swal.fire(
