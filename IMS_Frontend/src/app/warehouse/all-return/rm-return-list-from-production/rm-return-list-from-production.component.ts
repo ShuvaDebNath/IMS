@@ -50,6 +50,7 @@ export class RmReturnListFromProductionComponent {
   CR_Id:any;
   tableVisible:boolean = false;
   detailsTableData:any;
+  warehouseList:any;
 
 
   showPaginator = false;
@@ -102,7 +103,7 @@ export class RmReturnListFromProductionComponent {
     var toDate = this.SearchForm.value.toDate;    
     
     let param = new GetDataModel();
-    param.procedureName = '[usp_ExportRM_Pending_List]';
+    param.procedureName = '[usp_IssueRM_Pending_List]';
     param.parameters = {
       FromDate: fromDate,
       ToDate: toDate,
@@ -118,63 +119,15 @@ export class RmReturnListFromProductionComponent {
           this.tableVisible = true;
           let tables = JSON.parse(results.data);
           this.tableData = tables.Tables1;
+          this.warehouseList = tables.Tables2;
+          console.log(this.tableData);
+          
           //  this.isPage=this.rows[0].totallen>10;
         }
       },
     });
   }
 
-  DeleteData(item: any) {
-    console.log(item);
-    
-    swal
-      .fire({
-        title: 'Wait!',
-        html: `<span>Once you delete, you won't be able to revert this!</span>`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!',
-      })
-      .then((result) => {
-        if (result.isConfirmed == true) {
-          let param = new GetDataModel();
-          param.procedureName = 'usp_ExportRM_Delete';
-          param.parameters = {
-            ExportMasterId: item.ExportMasterID,
-          };
-
-          this.masterEntryService.GetInitialData(param).subscribe({
-            next: (results: any) => {
-
-              if (results.status) {
-                var effectedRows = JSON.parse(results.data).Tables1;
-                if (effectedRows[0].AffectedRows > 0) {
-                  swal
-                    .fire({
-                      text: `Data Deleted Successfully !`,
-                      title: `Delete Successfully!`,
-                      icon: 'success',
-                      timer: 5000,
-                    })
-                    .then((result) => {
-                      this.ngOnInit();
-                    });
-                }
-
-                this.Search();
-              } else if (results.message == 'Invalid Token') {
-                swal.fire('Session Expierd!', 'Please Login Again.', 'info');
-                this.gs.Logout();
-              } else {
-              }
-            },
-            error: (err) => {},
-          });
-        }
-      });
-  }
 
   paginatiorChange(e: any) {
     this.pageIndex = e.pageIndex + 1;
@@ -188,9 +141,9 @@ export class RmReturnListFromProductionComponent {
       
       this.RMReturnID = table.ReturnID;
       let param = new GetDataModel();
-      param.procedureName = '[usp_ExportRM_Return_Details]';
+      param.procedureName = '[usp_IssueRM_Return_Details]';
       param.parameters = {
-        ExportMasterID: table.ExportMasterID,     
+        RM_Send_MasterID: table.RM_Send_MasterID,     
       };
 
     this.masterEntryService.GetInitialData(param).subscribe({
@@ -199,18 +152,18 @@ export class RmReturnListFromProductionComponent {
         if (results.status) {
           let tables = JSON.parse(results.data);
           
-          this.detailsData = tables.Tables1[0]; 
-          this.detailsTableData = tables.Tables2;
+          this.detailsTableData = tables.Tables1;
         }
       }
     });
     }
 
-    ResolveRMReturn(){
+    ResolveRMReturn(table:any){
       
       
           let queryParams = {
-            'Status':'Resolved'
+            'Status':'Resolved',
+            'Stock_Location_ID':table[0].Stock_Location_ID
           };
           let condition = {
             'ReturnId': this.RMReturnID,
@@ -246,5 +199,9 @@ export class RmReturnListFromProductionComponent {
                 }
               }
             });
+    }
+
+    StockLocationChange(e:any,table:any){
+      table[0].Stock_Location_ID = e.target.value;
     }
 }
