@@ -52,7 +52,7 @@
       [rows]="10"
       [responsive]="true"
       [showCurrentPageReport]="true"
-      [globalFilterFields]="['ExportNumber', 'ExportDate', 'Note', 'Status']"
+      [globalFilterFields]="['IssueNumber', 'IssueDate', 'Status']"
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     >
       <ng-template pTemplate="caption">
@@ -104,9 +104,9 @@
     [modal]="true"
     [closable]="true"
     [style]="{ width: '70vw' }"
-    (onHide)="detailsData = null"
+    (onHide)="detailsTableData = null"
   >
-    <div *ngIf="detailsData">
+    <div *ngIf="detailsTableData">
       <h5>
   <button
     type="submit"

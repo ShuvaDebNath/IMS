@@ -120,7 +120,7 @@ export class RmReturnListFromProductionComponent {
           let tables = JSON.parse(results.data);
           this.tableData = tables.Tables1;
           this.warehouseList = tables.Tables2;
-          console.log(this.tableData);
+          console.log(this.warehouseList);
           
           //  this.isPage=this.rows[0].totallen>10;
         }
@@ -151,6 +151,7 @@ export class RmReturnListFromProductionComponent {
         
         if (results.status) {
           let tables = JSON.parse(results.data);
+          console.log(tables);
           
           this.detailsTableData = tables.Tables1;
         }

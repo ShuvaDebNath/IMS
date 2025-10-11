@@ -74,7 +74,6 @@
           <th class="bg-gradient-success">SL</th>
           <th class="bg-gradient-success">Export No</th>
           <th class="bg-gradient-success">Date</th>
-          <th class="bg-gradient-success">Note</th>
           <th class="bg-gradient-success">Status</th>
           <th class="bg-gradient-success" *ngIf="allPersmissions">Action</th>
         </tr>
@@ -85,7 +84,6 @@
           <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
           <td class="text-center align-middle">{{ table.ExportNumber }}</td>
           <td class="text-center align-middle">{{ table.ExportDate }}</td>
-          <td class="text-center align-middle">{{ table.Note }}</td>
           <td class="text-center align-middle">{{ table.Status }}</td>
           <td class="text-center align-middle p-0 m-0">
             <a

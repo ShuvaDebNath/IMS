@@ -140,7 +140,7 @@ pageIndex = 1;
       let param = new GetDataModel();
       param.procedureName = '[usp_FinishGood_Return_Details]';
       param.parameters = {
-        ExportMasterID: table.ExportMasterID,     
+        ReturnID: table.ReturnID,     
       };
 
     this.masterEntryService.GetInitialData(param).subscribe({
