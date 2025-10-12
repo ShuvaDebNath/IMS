@@ -95,3 +95,15 @@ tr {
 /* Cancel */
 .theme-btn-cancel { background-color: #aa607f; color: #fff; }
 .theme-btn-cancel:hover { background-color: #bb708f; }
+
+.qr-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.qr-item {
+  text-align: center;
+  margin: 10px;
+}
+
