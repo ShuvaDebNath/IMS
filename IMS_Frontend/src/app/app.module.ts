@@ -40,6 +40,7 @@ import { ImportedRmListComponent } from './warehouse/import/imported-rm-list/imp
 import { RmReturnListToSupplierComponent } from './warehouse/all-return/rm-return-list-to-supplier/rm-return-list-to-supplier.component';
 import { RmReturnListFromProductionComponent } from './warehouse/all-return/rm-return-list-from-production/rm-return-list-from-production.component';
 import { FinishedGoodReturnListComponent } from './warehouse/all-return/finished-good-return-list/finished-good-return-list.component';
+import { RmIssueReportComponent } from './warehouse/rm-fg-material-infos-with-stock/rm-issue-report/rm-issue-report.component';
 
 
 const CustomSelectOptions: INgxSelectOptions = {

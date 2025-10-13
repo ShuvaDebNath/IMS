@@ -99,6 +99,7 @@ import { RmReturnListFromProductionComponent } from '../warehouse/all-return/rm-
 import { PendingRmImportListComponent } from '../warehouse/import/pending-rm-import-list/pending-rm-import-list.component';
 import { ImportedRmListComponent } from '../warehouse/import/imported-rm-list/imported-rm-list.component';
 import { RmReturnListToSupplierComponent } from '../warehouse/all-return/rm-return-list-to-supplier/rm-return-list-to-supplier.component';
+import { RmIssueReportComponent } from '../warehouse/rm-fg-material-infos-with-stock/rm-issue-report/rm-issue-report.component';
 
 
 const CustomSelectOptions: INgxSelectOptions = {
@@ -162,7 +163,8 @@ const CustomSelectOptions: INgxSelectOptions = {
     ImportedRmListComponent,
     RmReturnListToSupplierComponent,
     RmReturnListFromProductionComponent,
-    FinishedGoodReturnListComponent  
+    FinishedGoodReturnListComponent,
+    RmIssueReportComponent
   ],
   imports: [
     CommonModule,
@@ -336,7 +338,8 @@ const CustomSelectOptions: INgxSelectOptions = {
           { path: 'imported-rm-list', component: ImportedRmListComponent },
           { path: 'rm-return-list-to', component: RmReturnListToSupplierComponent },
           { path: 'rm-return-from-production', component: RmReturnListFromProductionComponent },
-          { path: 'finished-good-return-list', component: FinishedGoodReturnListComponent }
+          { path: 'finished-good-return-list', component: FinishedGoodReturnListComponent },
+          { path: 'rm-issue-report', component: RmIssueReportComponent }
         ],
       },
 
