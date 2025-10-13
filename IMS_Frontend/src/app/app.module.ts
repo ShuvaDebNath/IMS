@@ -42,6 +42,16 @@ import { RmReturnListFromProductionComponent } from './warehouse/all-return/rm-r
 import { FinishedGoodReturnListComponent } from './warehouse/all-return/finished-good-return-list/finished-good-return-list.component';
 import { RmIssueReportComponent } from './warehouse/rm-fg-material-infos-with-stock/rm-issue-report/rm-issue-report.component';
 
+import { PendingRmImportListComponent } from './warehouse/import/pending-rm-import-list/pending-rm-import-list.component';
+import { ImportedRmListComponent } from './warehouse/import/imported-rm-list/imported-rm-list.component';
+import { RmReturnListToSupplierComponent } from './warehouse/all-return/rm-return-list-to-supplier/rm-return-list-to-supplier.component';
+import { RmReturnListFromProductionComponent } from './warehouse/all-return/rm-return-list-from-production/rm-return-list-from-production.component';
+import { FinishedGoodReturnListComponent } from './warehouse/all-return/finished-good-return-list/finished-good-return-list.component';
+
+import { ExportRawMaterialComponent } from './export-module/export-raw-material/export-raw-material.component';
+import { OtwRawMaterialComponent } from './export-module/otw-raw-material/otw-raw-material.component';
+
+
 
 const CustomSelectOptions: INgxSelectOptions = {
   keepSelectedItems: false,
@@ -58,7 +68,8 @@ const CustomSelectOptions: INgxSelectOptions = {
     PageNotFoundComponent,
     LogoutComponent,
     ResetPasswordComponent,
-   ],
+  ],
+
   imports: [
     FormsModule,
     ReactiveFormsModule,

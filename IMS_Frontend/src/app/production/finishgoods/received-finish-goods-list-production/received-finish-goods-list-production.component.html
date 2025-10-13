@@ -96,6 +96,7 @@
             <th style="text-align: center;">Gross Weight</th>
             <th style="text-align: center;">Accepted Qty</th>
             <th style="text-align: center;">Accepted RollBag Qty</th>
+            <th style="text-align: center;">Generate QR Code</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-item>
@@ -108,9 +109,30 @@
             <td style="text-align: center;">{{ item.Gross_Weight }}</td>
             <td style="text-align: center;">{{ item.AcceptedQuantity }}</td>
             <td style="text-align: center;">{{ item.AcceptedRollBag_Qty }}</td>
+            <td style="text-align:center;">
+              <button pButton icon="pi pi-qrcode" label="Generate" class="p-button-sm p-button-primary"
+                (click)="generateQrCodes(item)">
+              </button>
+            </td>
           </tr>
         </ng-template>
       </p-table>
+
+      <p-dialog 
+  header="Generated QR Codes" 
+  [(visible)]="isQrDialogVisible" 
+  [modal]="true" 
+  [style]="{width: '80vw'}"
+  [maximizable]="true"
+>
+  <div class="qr-container">
+    <div class="qr-item" *ngFor="let data of qrDataList; let i = index">
+      <qrcode [qrdata]="data" [width]="120" [errorCorrectionLevel]="'M'"></qrcode>
+      <p>Roll {{ i + 1 }} of Total {{ qrDataList.length }}</p>
+    </div>
+  </div>
+</p-dialog>
+
     </div>
   </p-dialog>
 

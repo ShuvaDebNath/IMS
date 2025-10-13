@@ -85,6 +85,39 @@ public class DoubleMasterEntryService : IDoubleMasterEntryService
             throw;
         }
     }
+
+    public async Task<int> InsertGetId(DoubleMasterEntryModel model, string authUserName)
+    {
+        try
+        {
+            if (model.IsFlag != null)
+            {
+                bool isMemberFind = await IsMemberNotExist(model);
+
+                if (isMemberFind == false)
+                {
+
+                    return 0;
+                }
+                else
+                {
+
+                    return await SaveDataGatewayReturnId(model, authUserName);
+                }
+            }
+            else
+            {
+                return await SaveDataGatewayReturnId(model, authUserName);
+            }
+
+        }
+        catch (Exception ex)
+        {
+            string innserMsg = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+            _logger.LogInformation($"Sourc: {ex.Source};\t Stack Trace: {ex.StackTrace};\t Message: {ex.Message};\t Inner Exception: {innserMsg};\n", "");
+            throw;
+        }
+    }
     private async Task<Messages> SaveDataGatewayWithGuid(DoubleMasterEntryModel model, string authUserName)
     {
         int rowAffect = await _doubleMasterEntryRepository.SaveData(model, authUserName);
@@ -106,6 +139,17 @@ public class DoubleMasterEntryService : IDoubleMasterEntryService
         }
         _logger.LogInformation($"Data Save Fail!");
         return MessageType.SaveError(null);
+    }
+    private async Task<int> SaveDataGatewayReturnId(DoubleMasterEntryModel model, string authUserName)
+    {
+        int rowAffect = await _doubleMasterEntryRepository.SaveDataWithIdentity(model, authUserName);
+        if (rowAffect > 0)
+        {
+            _logger.LogInformation($"Data Save Success!");
+            return rowAffect;
+        }
+        _logger.LogInformation($"Data Save Fail!");
+        return rowAffect;
     }
 
     public async Task<Messages> UpdateData(DoubleMasterEntryModel model, string authUserName)

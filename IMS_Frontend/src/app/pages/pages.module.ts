@@ -86,6 +86,12 @@ import { UnapprovedCustomerComponent } from '../customer/unapproved-customer/una
 import { UnapprovedBuyingHouseComponent } from '../buying-house/unapproved-buying-house/unapproved-buying-house.component';
 import { AllBuyingHouseComponent } from '../buying-house/all-buying-house/all-buying-house.component';
 import { GenerateBuyingHouseComponent } from '../buying-house/generate-buying-house/generate-buying-house.component';
+import { BeneficiaryListComponent } from '../Beneficiary/beneficiary-list/beneficiary-list.component';
+import { OtwRawMaterialComponent } from '../export-module/otw-raw-material/otw-raw-material.component';
+import { ExportRawMaterialComponent } from '../export-module/export-raw-material/export-raw-material.component';
+import { ResolvedReturnListComponent } from '../export-module/export return/resolved-return-list/resolved-return-list.component';
+import { PendingReturnListComponent } from '../export-module/export return/pending-return-list/pending-return-list.component';
+import { AllRmExportReportComponent } from '../export-module/report/all-rm-export-report/all-rm-export-report.component';
 import { PendingFinishGoodsSentListProductionComponent } from '../production/finishgoods/pending-finish-goods-sent-list-production/pending-finish-goods-sent-list-production.component';
 import { ReceivedFinishGoodsProductionComponent } from '../production/finishgoods/received-finish-goods-list-production/received-finish-goods-list-production.component';
 import { PendingFinishGoodsSentListWarehouseComponent } from '../warehouse/finishgoods/pending-finish-goods-sent-list-warehouse/pending-finish-goods-sent-list-warehouse.component';
@@ -99,7 +105,9 @@ import { RmReturnListFromProductionComponent } from '../warehouse/all-return/rm-
 import { PendingRmImportListComponent } from '../warehouse/import/pending-rm-import-list/pending-rm-import-list.component';
 import { ImportedRmListComponent } from '../warehouse/import/imported-rm-list/imported-rm-list.component';
 import { RmReturnListToSupplierComponent } from '../warehouse/all-return/rm-return-list-to-supplier/rm-return-list-to-supplier.component';
+
 import { RmIssueReportComponent } from '../warehouse/rm-fg-material-infos-with-stock/rm-issue-report/rm-issue-report.component';
+
 
 
 const CustomSelectOptions: INgxSelectOptions = {
@@ -132,14 +140,24 @@ const CustomSelectOptions: INgxSelectOptions = {
     AllCashReceiveComponent,
     GenerateCashReceiveComponent,
     CashReceiveDetailsComponent,
-    CashReceiveUpdateComponent,
-    AllCommercialInvoiceComponent,
-    ChangePasswordComponent,
+    CashReceiveUpdateComponent, 
     GeneratePiComponent,
     GenerateCpiComponent,
     AllSalesContractComponent,
     SalesContractDetailsComponent,
     GenerateSalesContractComponent,
+    AllCustomersComponent,
+    GenerateCustomerComponent,
+    UnapprovedCustomerComponent,
+    UnapprovedBuyingHouseComponent,
+    AllBuyingHouseComponent,
+    GenerateBuyingHouseComponent,
+    BeneficiaryListComponent,
+    ExportRawMaterialComponent,
+    OtwRawMaterialComponent,
+    ResolvedReturnListComponent,
+    PendingReturnListComponent,
+    AllRmExportReportComponent,
     BeneficiaryCreateComponent,
     ArbitrationCreateComponent,
     ArbitrationListComponent,
@@ -164,7 +182,13 @@ const CustomSelectOptions: INgxSelectOptions = {
     RmReturnListToSupplierComponent,
     RmReturnListFromProductionComponent,
     FinishedGoodReturnListComponent,
-    RmIssueReportComponent
+    RmIssueReportComponent,
+    AllCustomersComponent,
+    GenerateCustomerComponent,
+    UnapprovedBuyingHouseComponent,
+    AllBuyingHouseComponent,
+    GenerateBuyingHouseComponent,
+    BeneficiaryListComponent
   ],
   imports: [
     CommonModule,
@@ -191,6 +215,9 @@ const CustomSelectOptions: INgxSelectOptions = {
     PopoverModule,
     DatePipe,
     DividerModule,
+    MultiSelectModule,
+    TableModule,
+    DialogModule,
     UiSwitchModule.forRoot({
       size: 'small',
       color: 'rgb(0, 189, 99)',
@@ -330,6 +357,17 @@ const CustomSelectOptions: INgxSelectOptions = {
           { path: 'partialapproved-pi', component: PartialApprovePiComponent },
           { path: 'quarterapproved-pi', component: QuarterApprovePiComponent },
           { path: 'fullapproved-pi', component: FullApprovePiComponent },
+          { path: 'all-customers', component: AllCustomersComponent },
+          { path: 'generate-customers', component: GenerateCustomerComponent },
+          { path: 'unapproved-customers', component: UnapprovedCustomerComponent },
+          { path: 'all-buying-house', component: AllBuyingHouseComponent },
+          { path: 'generate-buying-house', component: GenerateBuyingHouseComponent },
+          { path: 'unapproved-buying-house', component: UnapprovedBuyingHouseComponent },
+          { path: 'export-raw-material', component: ExportRawMaterialComponent },
+          { path: 'otw-raw-material', component: OtwRawMaterialComponent },
+          { path: 'all-rm-export-report', component: AllRmExportReportComponent },
+          { path: 'resolved-return-list', component: ResolvedReturnListComponent },
+          { path: 'pending-return-list', component: PendingReturnListComponent },       
           { path: 'pi-report', component: PiReportComponent },
           { path: 'pi-bottom-price-report', component: PiBottomPriceReportComponent },
           { path: 'delivery-log-report', component: DeliveryLogReportComponent },
@@ -340,6 +378,18 @@ const CustomSelectOptions: INgxSelectOptions = {
           { path: 'rm-return-from-production', component: RmReturnListFromProductionComponent },
           { path: 'finished-good-return-list', component: FinishedGoodReturnListComponent },
           { path: 'rm-issue-report', component: RmIssueReportComponent }
+          { path: 'finished-good-return-list', component: FinishedGoodReturnListComponent }
+
+          { path: 'delivery', component: DeliveryComponent },
+          { path: 'all-customers', component: AllCustomersComponent },
+          { path: 'generate-customers', component: GenerateCustomerComponent },
+          { path: 'unapproved-customers', component: UnapprovedCustomerComponent },
+          { path: 'all-buying-house', component: AllBuyingHouseComponent },
+          { path: 'generate-buying-house', component: GenerateBuyingHouseComponent },
+          { path: 'unapproved-buying-house', component: UnapprovedBuyingHouseComponent },
+          {
+            path: "beneficiary-list", component: BeneficiaryListComponent
+          },
         ],
       },
 
@@ -354,4 +404,4 @@ const CustomSelectOptions: INgxSelectOptions = {
     MatPaginatorModule,
   ],
 })
-export class PagesModule {}
+export class PagesModule { }
