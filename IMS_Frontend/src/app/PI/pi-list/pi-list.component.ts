@@ -10,8 +10,8 @@ import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-generate-pi',
-  templateUrl: './generate-pi.component.html',
-  styleUrls: ['./generate-pi.component.css'],
+  templateUrl: './pi-list.component.html',
+  styleUrls: ['./pi-list.component.css'],
 })
 export class GeneratePiComponent implements OnInit {
   datePipe = new DatePipe('en-US');
