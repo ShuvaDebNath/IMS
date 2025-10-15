@@ -6,7 +6,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DialogModule } from 'primeng/dialog';
 import swal from 'sweetalert2';
 import { GlobalServiceService } from 'src/app/services/Global-service.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GetDataService } from 'src/app/services/getData/getDataService.service';
 import { DoubleMasterEntryService } from 'src/app/services/doubleEntry/doubleEntryService.service';
 import { FormsModule } from '@angular/forms';
@@ -18,7 +18,15 @@ import { QRCodeModule } from 'angularx-qrcode';
   selector: 'app-received-fg-list-production',
   templateUrl: './received-finish-goods-list-production.component.html',
   styleUrls: ['./received-finish-goods-list-production.component.css'],
-  imports: [FormsModule, CommonModule, TableModule, InputTextModule, DialogModule, ButtonModule,QRCodeModule],
+  imports: [
+    FormsModule,
+    CommonModule,
+    TableModule,
+    InputTextModule,
+    DialogModule,
+    ButtonModule,
+    QRCodeModule,
+  ],
 })
 export class ReceivedFinishGoodsProductionComponent implements OnInit {
   receivedFinishGoodsList: any[] = [];
@@ -28,14 +36,15 @@ export class ReceivedFinishGoodsProductionComponent implements OnInit {
   isDetailsVisible_for_Receive = false;
 
   selectedItemForQr: any = null;
-isQrDialogVisible = false;
-qrDataList: string[] = [];
+  isQrDialogVisible = false;
+  qrDataList: string[] = [];
 
   constructor(
     private getDataService: GetDataService,
     private gs: GlobalServiceService,
     private title: Title,
     private router: Router,
+    private activeLink: ActivatedRoute,
     private dme: DoubleMasterEntryService
   ) {}
 
@@ -50,7 +59,7 @@ qrDataList: string[] = [];
 
     const procedureData = {
       procedureName: 'usp_FinishGoods_Send_and_Receive_InitialData',
-      parameters: { Type: '' }
+      parameters: { Type: '' },
     };
 
     this.getDataService.GetInitialData(procedureData).subscribe({
@@ -62,16 +71,14 @@ qrDataList: string[] = [];
           this.gs.Logout();
         }
       },
-      error: () => {}
+      error: () => {},
     });
   }
-
- 
 
   onDetails(row: any): void {
     const procedureData = {
       procedureName: 'usp_FinishGoods_Send_and_Receive_GetDataById',
-      parameters: { ExportMasterID: row.ExportMasterID }
+      parameters: { ExportMasterID: row.ExportMasterID },
     };
 
     this.getDataService.GetInitialData(procedureData).subscribe({
@@ -93,10 +100,10 @@ qrDataList: string[] = [];
             ReceiveBy: row.ReceiveBy,
             TotalAcceptQty: row.TotalAcceptQty,
             TotalAcceptRollBagQty: row.TotalAcceptRollBagQty,
-            Items: items
+            Items: items,
           };
-          
-          this.isDetailsVisible = true; 
+
+          this.isDetailsVisible = true;
         } else if (results.msg === 'Invalid Token') {
           swal.fire('Session Expired!', 'Please Login Again.', 'info');
           this.gs.Logout();
@@ -104,33 +111,22 @@ qrDataList: string[] = [];
           swal.fire('Error!', 'Failed to load details.', 'error');
         }
       },
-      error: () => swal.fire('Error!', 'An error occurred while fetching details.', 'error')
+      error: () =>
+        swal.fire(
+          'Error!',
+          'An error occurred while fetching details.',
+          'error'
+        ),
     });
   }
 
-  generateQrCodes(item: any): void {
-  this.qrDataList = [];
-  const total = Number(item.AcceptedRollBag_Qty) || 0;
+  generateQrCodes(item: any): void {    
 
-  for (let i = 1; i <= total; i++) {
-    const qrInfo = {
-      ExportNumber: this.detailsData.ExportNumber,
-      ExportDate: this.detailsData.Export_Date,
-      Article: item.Article_No,
-      UoM: item.Roll_Bag,
-      AcceptedQty: item.AcceptedQuantity,
-      AcceptedRollBagQty: item.AcceptedRollBag_Qty,
-      ProductionDate: item.Production_Date,
-      RollNo: i,
-    };
-    this.qrDataList.push(JSON.stringify(qrInfo));
+    const url = this.router.createUrlTree(['/barcode-generate'], {
+      queryParams: { ExportMasterID: item.ExportMasterID },
+    });
+
+    const fullUrl = this.router.serializeUrl(url);
+    window.open(fullUrl, '_blank');
   }
-
-  this.isQrDialogVisible = true;
-
-  console.log(this.qrDataList);
-  
-}
-
-
 }
