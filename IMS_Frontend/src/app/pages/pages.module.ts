@@ -75,7 +75,6 @@ import { FullApprovePiComponent } from '../PI/full-approve-pi/full-approve-pi.co
 
 import { RawMaterialStockComponent } from '../warehouse/rm-fg-material-infos-with-stock/raw-material-info-with-stock/raw-material-stock.component';
 import { FinishGoodsInfoWithStockComponent } from '../warehouse/rm-fg-material-infos-with-stock/finish-goods-info-with-stock/finish-goods-info-with-stock.component';
-import { BeneficiaryListComponent } from '../Beneficiary/beneficiary-list/beneficiary-list.component';
 import { PendingRMRequisitionWareHouseComponent } from '../warehouse/requisition/raw-material-requisition/list/PendingRMRequisition_Warehouse/pending-rm-requisition-warehouse.component';
 import { AcceptedRMRequisitionWareHouseComponent } from '../warehouse/requisition/raw-material-requisition/list/AcceptedRMRequisition_Warehouse/accepted-rm-requisition-warehouse.component';
 import { IssuedRMRequisitionListWarehouseComponent } from '../warehouse/requisition/raw-material-requisition/list/IssuedRMRequisitionList_Warehouse/issued-rm-requisition-list-warehouse.component';
@@ -106,6 +105,10 @@ import { PendingRmImportListComponent } from '../warehouse/import/pending-rm-imp
 import { ImportedRmListComponent } from '../warehouse/import/imported-rm-list/imported-rm-list.component';
 import { RmReturnListToSupplierComponent } from '../warehouse/all-return/rm-return-list-to-supplier/rm-return-list-to-supplier.component';
 import { RmIssueReportComponent } from '../warehouse/rm-fg-material-infos-with-stock/rm-issue-report/rm-issue-report.component';
+import { PendingFgReturnListComponent } from '../production/fg-return/pending-fg-return-list/pending-fg-return-list.component';
+import { ResolvedFgReturnListComponent } from '../production/fg-return/resolved-fg-return-list/resolved-fg-return-list.component';
+import { AllFgSentReportComponent } from '../production/fg-sent-report/all-fg-sent-report/all-fg-sent-report.component';
+import { BarcodeGenerateComponent } from '../production/finishgoods/barcode-generate/barcode-generate.component';
 
 
 
@@ -187,7 +190,10 @@ const CustomSelectOptions: INgxSelectOptions = {
     UnapprovedBuyingHouseComponent,
     AllBuyingHouseComponent,
     GenerateBuyingHouseComponent,
-    BeneficiaryListComponent
+    BeneficiaryListComponent,
+    PendingFgReturnListComponent,
+    ResolvedFgReturnListComponent,
+    AllFgSentReportComponent
   ],
   imports: [
     CommonModule,
@@ -272,6 +278,7 @@ const CustomSelectOptions: INgxSelectOptions = {
           { path: 'send-finish-goods', component: SendFinishGoodsComponent },
           { path: 'pending-fg-sent-list-production', component: PendingFinishGoodsSentListProductionComponent },
           { path: 'received-fg-list-production', component: ReceivedFinishGoodsProductionComponent },
+          { path: 'barcode-generate', component: BarcodeGenerateComponent },
           { path: 'pending-fg-sent-list-warehouse', component: PendingFinishGoodsSentListWarehouseComponent },
           { path: 'received-fg-list-warehouse', component: ReceivedFinishGoodsWarehouseComponent },
           {
@@ -388,6 +395,9 @@ const CustomSelectOptions: INgxSelectOptions = {
           {
             path: "beneficiary-list", component: BeneficiaryListComponent
           },
+          { path: 'pending-fg-return-list', component: PendingFgReturnListComponent },
+          { path: 'resolved-fg-return-list', component: ResolvedFgReturnListComponent },
+          { path: 'all-fg-sent-report', component: AllFgSentReportComponent },
 
         ],
       },

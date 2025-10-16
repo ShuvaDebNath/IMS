@@ -1,0 +1,18 @@
+<div class="container">
+  <h1 class="theme-text">Generated QR Codes</h1>
+  <div class="qr-container">
+    <div class="row">
+      <div
+        class="qr-item col-md-3"
+        *ngFor="let data of qrDataList; let i = index"
+      >
+        <qrcode
+          [qrdata]="data"
+          [width]="120"
+          [errorCorrectionLevel]="'M'"
+        ></qrcode>
+        <p>Roll {{ i + 1 }} of Total {{ qrDataList.length }}</p>
+      </div>
+    </div>
+  </div>
+</div>
