@@ -6,6 +6,10 @@
     background-color: #800080;
     color: white;
 }
+.table-bordered th, tr, td {
+    /* border: none!important; */
+    border: 1px solid !important;
+}
 
 .theme-text{
     color: #6a1a3f;
@@ -13,6 +17,6 @@
 .theme-color{
     color: #6a1a3f;
 }
-table-bordered td, .table-bordered th,td,tr {
+/* table-bordered td, .table-bordered th,td,tr {
     border: 1px solid #6a1a3f !important;
-}
+} */
