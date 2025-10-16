@@ -109,6 +109,9 @@ import { PendingFgReturnListComponent } from '../production/fg-return/pending-fg
 import { ResolvedFgReturnListComponent } from '../production/fg-return/resolved-fg-return-list/resolved-fg-return-list.component';
 import { AllFgSentReportComponent } from '../production/fg-sent-report/all-fg-sent-report/all-fg-sent-report.component';
 import { BarcodeGenerateComponent } from '../production/finishgoods/barcode-generate/barcode-generate.component';
+import { SampleRequestFormComponent } from '../production/sample-request-form/sample-request-form.component';
+import { SampleRequestInsertFormComponent } from '../production/sample-request-insert-form/sample-request-insert-form.component';
+import { SampleRequestListComponent } from '../production/sample-request-list/sample-request-list.component';
 
 
 
@@ -193,7 +196,10 @@ const CustomSelectOptions: INgxSelectOptions = {
     BeneficiaryListComponent,
     PendingFgReturnListComponent,
     ResolvedFgReturnListComponent,
-    AllFgSentReportComponent
+    AllFgSentReportComponent,
+    SampleRequestInsertFormComponent,
+    SampleRequestFormComponent,    
+    SampleRequestListComponent,
   ],
   imports: [
     CommonModule,
@@ -398,7 +404,9 @@ const CustomSelectOptions: INgxSelectOptions = {
           { path: 'pending-fg-return-list', component: PendingFgReturnListComponent },
           { path: 'resolved-fg-return-list', component: ResolvedFgReturnListComponent },
           { path: 'all-fg-sent-report', component: AllFgSentReportComponent },
-
+          { path: 'sample-request-edit-form', component: SampleRequestFormComponent },
+          { path: 'sample-request-form', component: SampleRequestInsertFormComponent },
+          { path: 'sample-request-list', component: SampleRequestListComponent },
         ],
       },
 

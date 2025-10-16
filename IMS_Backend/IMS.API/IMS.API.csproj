@@ -42,6 +42,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="RDLCSimplified">
+      <HintPath>..\..\..\MTI_Accounts\AccountingBackEnd\AccountingBackEnd\RDLCSimplified.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="wwwroot\Reports\PriceDeclarationInfos\PriceDeclarationInfo.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
