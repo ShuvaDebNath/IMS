@@ -19,6 +19,7 @@ namespace Boilerplate.Service
             services.AddTransient<IDoubleMasterEntryService, DoubleMasterEntryService>();
             services.AddScoped<IGetDataService, GetDataService>();
             services.AddScoped<IGoodsDeliveryService, GoodsDeliveryService>();
+            services.AddScoped<IReportService, ReportService>();
             services.AddSingleton<ValidationHelper>();
             ConfigureCors(services);
         }

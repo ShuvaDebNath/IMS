@@ -459,6 +459,7 @@ namespace Boilerplate.Repository.Repositories
                     }
                 }
                 await cmd.Transaction.CommitAsync();
+                rowAffect = newPrimaryKey;
             }
             catch (Exception)
             {
@@ -587,7 +588,7 @@ namespace Boilerplate.Repository.Repositories
                 }
                 await cmd.Transaction.CommitAsync();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 await cmd.Transaction.RollbackAsync();
                 throw;
@@ -862,12 +863,17 @@ namespace Boilerplate.Repository.Repositories
                         var col = prop.Name;
 
                         // Never update PK or FK; skip insert-only audit columns
-                        if (col.Equals(childPkName, StringComparison.OrdinalIgnoreCase)) continue;
+                        //if (col.Equals(childPkName, StringComparison.OrdinalIgnoreCase)) continue;
                         if (col.Equals(fkCol, StringComparison.OrdinalIgnoreCase)) continue;                          
 
                         var pName = "@p_" + col;
-                        sets.Add($"[{col}] = {pName}");
-                        upParams.Add(new SqlParameter(pName, ToDbValue(prop.Value)));
+                        if(col!= childPkName)
+                        {
+                            pName = "@" + col;
+                            sets.Add($"[{col}] = {pName}");
+                            upParams.Add(new SqlParameter(pName, ToDbValue(prop.Value)));
+                        }
+                        
                     }
 
                     // Keys
@@ -879,7 +885,7 @@ namespace Boilerplate.Repository.Repositories
                     cmd.CommandText =
                         $"UPDATE [{schema}].[{table}] SET {string.Join(", ", sets)} " +
                         $"WHERE [{childPkName}] = @p_childPk AND [{fkCol}] = @p_fk;";
-
+                    cmd.Parameters.AddRange(upParams.ToArray());
                     var affected = await cmd.ExecuteNonQueryAsync(ct);
                     if (affected > 0) continue; // updated; skip insert fallback
                 }

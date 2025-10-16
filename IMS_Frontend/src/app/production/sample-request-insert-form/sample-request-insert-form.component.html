@@ -1,0 +1,226 @@
+<div class="container shadow-sm mb-5 bg-white rounded">
+  <h1 class="theme-text">Sample Request Form</h1>
+
+  <br />
+  <form [formGroup]="Formgroup">
+    <!-- Header fields -->
+
+    <h3><strong>Details </strong></h3>
+    <!-- Items table -->
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th style="text-align: center">Request Date</th>
+          <th style="text-align: center">Customer Name</th>
+          <th style="text-align: center">Customer Contact Info</th>
+          <th style="text-align: center">Product Description</th>
+          <th style="text-align: center">Article No</th>
+          <th style="text-align: center">Requested Quantity</th>
+          <th style="text-align: center">Shipping Address</th>
+          <th style="text-align: center">Request Status</th>
+          <th style="text-align: center">Remarks</th>
+          <th style="width: 60px"></th>
+        </tr>
+      </thead>
+
+      <tbody formArrayName="items">
+        <tr
+          *ngFor="let item of items.controls; let i = index"
+          [formGroupName]="i"
+        >
+          <td>
+            <div class="input-group mb-2">
+              <div class="input-group-prepend">
+                <div
+                  class="input-group-text theme-btn"
+                  (click)="dpfrom.toggle()"
+                >
+                  <i class="fas fa-calendar"></i>
+                </div>
+              </div>
+              <input
+                type="text"
+                autocomplete="off"
+                formControlName="RequestDate"
+                [bsConfig]="{
+                  dateInputFormat: 'DD/MM/YYYY',
+                  containerClass: 'theme-date-picker theme-bg'
+                }"
+                class="form-control-sm form-control bg-white"
+                id="RequestDate"
+                name="RequestDate"
+                placeholder="RequestDate"
+                #dpfrom="bsDatepicker"
+                bsDatepicker
+              />
+            </div>
+          </td>
+
+          <td class="col-description">
+            <div class="form-group d-inline">
+              <p-dropdown
+                [style]="{ width: '100%' }"
+                class="p-0"
+                [options]="CustomerList"
+                optionLabel="CustomerName"
+                [filter]="true"
+                filterBy="CustomerName"
+                [showClear]="true"
+                styleClass="listBottom"
+                placeholder="Please Select"
+                optionValue="Customer_ID"
+                formControlName="CustomerName"
+                [virtualScroll]="true"
+                [virtualScrollItemSize]="30"
+              >
+                <ng-template let-CustomerName pTemplate="item">
+                  <div class="flex align-items-center gap-2">
+                    <div>{{ CustomerName.CustomerName }}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+            </div>
+          </td>
+          <td>
+            <div class="form-group">
+              <input
+                autocomplete="off"
+                type="text"
+                formControlName="Customer_Contact_Info"
+                class="form-control"
+                placeholder="Customer Contact Info"
+                id="Customer_Contact_Info"
+                name="Customer_Contact_Info"
+                value=""
+              />
+            </div>
+          </td>
+          <td>
+            <textarea
+              autocomplete="off"
+              type="text"
+              formControlName="Product_Description"
+              class="form-control"
+              placeholder="Product Description Info"
+              id="Product_Description"
+              name="Product_Description"
+              value=""
+            ></textarea>
+          </td>
+          <td>
+            <p-dropdown
+              [style]="{ width: '100%' }"
+              class="p-0"
+              [options]="ArticleList"
+              optionLabel="Article_No"
+              [filter]="true"
+              filterBy="Article_No"
+              [showClear]="true"
+              styleClass="listBottom"
+              placeholder="Please Select"
+              optionValue="Item_ID"
+              formControlName="ArticleNo"
+              [virtualScroll]="true"
+              [virtualScrollItemSize]="30"
+            >
+              <ng-template let-ArticleNo pTemplate="item">
+                <div class="flex align-items-center gap-2">
+                  <div>{{ ArticleNo.Article_No }}</div>
+                </div>
+              </ng-template>
+            </p-dropdown>
+          </td>
+          <td>
+            <input
+              autocomplete="off"
+              type="number"
+              formControlName="Requested_Quantity"
+              class="form-control"
+              placeholder="Requested Quantity"
+              id="Requested_Quantity"
+              name="Requested_Quantity"
+              value=""
+            />
+          </td>
+
+          <td>
+            <textarea
+              autocomplete="off"
+              type="text"
+              formControlName="Shipping_Address"
+              class="form-control"
+              placeholder="Shipping Address"
+              id="Shipping_Address"
+              name="Shipping_Address"
+              value=""
+            ></textarea>
+          </td>
+          <td>
+            <p-dropdown
+              [style]="{ width: '100%' }"
+              class="p-0"
+              [options]="RequestStatus"
+              optionLabel="text"
+              [filter]="true"
+              filterBy="text"
+              [showClear]="true"
+              styleClass="listBottom"
+              placeholder="Please Select"
+              optionValue="value"
+              formControlName="RequestStatus"
+            >
+              <ng-template let-RequestStatus pTemplate="item">
+                <div class="flex align-items-center gap-2">
+                  <div>{{ RequestStatus.text }}</div>
+                </div>
+              </ng-template>
+            </p-dropdown>
+          </td>
+          <td>
+            <textarea
+              autocomplete="off"
+              type="text"
+              formControlName="Remarks"
+              class="form-control"
+              placeholder="Remarks"
+              id="Remarks"
+              name="Remarks"
+              value=""
+            ></textarea>
+          </td>
+
+          <td>
+            <button
+              type="button"
+              class="btn btn-sm btn-danger"
+              (click)="removeItem(i)"
+            >
+              ×
+            </button>
+          </td>
+        </tr>
+      </tbody>
+
+      
+    </table>
+
+    <div class="d-flex justify-content-end gap-2 mt-3">
+      <button type="button" class="btn btn-outline-success" (click)="addItem()">
+        <i class="bi bi-plus-circle me-1"></i> Add Row
+      </button>
+
+      <button
+        type="submit"
+        (click)="saveData()"
+        [ngClass]="{
+          'theme-btn-disable': Formgroup.invalid
+        }"
+        class="btn theme-btn btn-rounded"
+        [disabled]="Formgroup.invalid"
+        *ngIf="!isEdit"
+      >
+        <i class="bi bi-save me-1"></i> Save
+      </button>
+    </div>
+  </form>
+</div>
