@@ -45,6 +45,9 @@ import { FinishedGoodReturnListComponent } from './warehouse/all-return/finished
 import { ExportRawMaterialComponent } from './export-module/export-raw-material/export-raw-material.component';
 import { OtwRawMaterialComponent } from './export-module/otw-raw-material/otw-raw-material.component';
 import { BarcodeGenerateComponent } from './production/finishgoods/barcode-generate/barcode-generate.component';
+import { SampleRequestFormComponent } from './production/sample-request-form/sample-request-form.component';
+import { SampleRequestInsertFormComponent } from './production/sample-request-insert-form/sample-request-insert-form.component';
+import { SampleRequestListComponent } from './production/sample-request-list/sample-request-list.component';
 
 
 
@@ -62,7 +65,7 @@ const CustomSelectOptions: INgxSelectOptions = {
     ForbiddenErrorComponent,
     PageNotFoundComponent,
     LogoutComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
   ],
 
   imports: [

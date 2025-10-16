@@ -90,6 +90,13 @@
         }
       }
     },
+    "tbl_SampleRequestForm": {
+      "QueryParams": {
+        "[CustomerName]": {
+          "Required": true
+        }
+      }
+    },
     "tbl_stock": {
       "QueryParams": {
         "[RawMaterial_ID]": {
