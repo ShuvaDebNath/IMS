@@ -62,6 +62,7 @@
 
 .custom-header .navbar-nav .dropdown-menu {
   font-size: 14px;
+  min-width: 200px!important;
 }
 
 /* Hover/Focus styles */
@@ -97,4 +98,25 @@
     padding: 10px 15px;
     border-bottom: 1px solid rgba(255,255,255,0.2);
   }
+}
+/* Allow navbar items to wrap into the next line instead of overflowing */
+.navbar-nav {
+  flex-wrap: wrap !important;
+}
+
+/* Ensure each item adjusts nicely when wrapped */
+.navbar-nav .nav-item {
+  flex: 0 0 auto;
+}
+
+/* Fix dropdown alignment when wrapped */
+.navbar-nav .dropdown-menu {
+  position: absolute;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Fix spacing when wrapping happens */
+.navbar-nav .nav-link {
+  padding-right: 10px;
+  padding-left: 10px;
 }

@@ -1,7 +1,11 @@
-<div class="container">
-  <h1 class="theme-text">Pending Finish Goods Sent List</h1>
+<div class="m-2 p-2">
+  <div class="card">
+    <div class="card-header theme-bg">
+        <h1 class="">Pending Finish Goods Sent List</h1>
 
-  <p-table class="theme-bg" #dt
+    </div>
+    <div class="card-body">
+       <p-table class="theme-bg" #dt
            [value]="pendingFinishGoodsSentList"
            [paginator]="true"
            [rows]="10"
@@ -179,4 +183,7 @@
       </div>
     </div>
   </p-dialog>
+    </div>
+  </div>
+
 </div>
