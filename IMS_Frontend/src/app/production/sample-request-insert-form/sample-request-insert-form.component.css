@@ -1,57 +1,56 @@
-/* ✅ Global input height fix */
-.table .form-control,
-.table textarea,
-.table .input-group-text {
-  height: 34px !important;
-  padding: 4px 8px !important;
-  font-size: 13px !important;
+.form-control-lg,
+textarea.form-control-lg,
+.custom-dropdown .p-dropdown {
+  height: 48px !important;
+  font-size: 16px !important;
+  line-height: 1.4 !important;
+}
+.p-dropdown-items-wrapper{
+  min-width:250px!important;
+}
+.p-dropdown-items {
+    min-width:250px!important;
+
+}
+.wide-dropdown {
+  width: 320px !important; 
+}
+/* ::ng-deep .p-dropdown-panel {
+  transform-origin: top center !important;
+  top: 100% !important;
+  bottom: auto !important;
+  margin-top: 4px !important;
+} */
+
+::ng-deep .custom-dropdown .p-dropdown-label {
+  width: 280px!important;
+  padding: 10px 12px !important;
+  font-size: 16px !important;
+  white-space: nowrap !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* ✅ Prevent textarea from expanding */
-.table textarea {
-  resize: none !important;
-  min-height: 34px !important;
-  max-height: 34px !important;
+.pointer {
+  cursor: pointer;
 }
 
-/* ✅ PrimeNG Dropdown height normalize */
-.p-dropdown, .p-inputwrapper, .p-dropdown-label {
-  height: 34px !important;
-  line-height: 32px !important;
-  font-size: 13px !important;
-  padding: 0 6px !important;
+.custom-input-group .input-group-text {
+  height: 48px;
+  background-color: #f8f9fa;
+  border-right: none;
   display: flex;
   align-items: center;
-}
-
-/* ✅ Align PrimeNG dropdown inner panel */
-.p-dropdown .p-dropdown-trigger {
-  height: 32px !important;
-  align-items: center;
-  display: flex;
-}
-
-/* ✅ Datepicker icon alignment */
-.input-group-text {
-  min-width: 34px !important;
-  display: flex;
   justify-content: center;
-  align-items: center;
-}
-:host ::ng-deep .p-dropdown {
-  width: 100% !important;
-  padding: 0 !important;
-  height: calc(2.25rem + 2px); /* Same as Bootstrap input height */
 }
 
-:host ::ng-deep .p-dropdown .p-dropdown-label {
-  padding: 6px 8px !important; /* Align text like input */
+.custom-input-group .form-control {
+  border-left: none;
+  height: 48px;
+  font-size: 16px;
 }
 
-:host ::ng-deep .p-inputtext {
-  padding: 6px 8px !important; /* Same for text inside dropdown */
-}
-
-:host ::ng-deep .p-dropdown .p-dropdown-trigger {
-  padding: 4px !important; /* Reduce trigger button padding */
+/* Scroll setup */
+.table-responsive {
+  overflow-x: auto;
 }

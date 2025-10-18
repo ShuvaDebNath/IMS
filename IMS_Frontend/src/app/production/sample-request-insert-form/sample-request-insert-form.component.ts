@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -90,7 +90,7 @@ export class SampleRequestInsertFormComponent {
     this.getInitialData();
     this.addItem();
   }
-
+  // @ViewChildren('dateInput') dateInputs!: QueryList<ElementRef<HTMLInputElement>>;
   GenerateFrom() {
     this.Formgroup = this.fb.group({
       items: this.fb.array([]),
@@ -145,7 +145,7 @@ export class SampleRequestInsertFormComponent {
         } else {
         }
       },
-      error: (err) => {},
+      error: (err) => { },
     });
   }
 
@@ -164,7 +164,7 @@ export class SampleRequestInsertFormComponent {
     const fv = this.Formgroup.value;
     console.log(fv.items);
 
-    const multipleRows:any = [];
+    const multipleRows: any = [];
 
     for (const index in fv.items) {
       console.log(index, fv.items[index]);
