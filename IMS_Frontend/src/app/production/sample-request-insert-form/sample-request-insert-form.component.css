@@ -6,10 +6,10 @@ textarea.form-control-lg,
   line-height: 1.4 !important;
 }
 .p-dropdown-items-wrapper{
-  min-width:250px!important;
+  min-width:300px!important;
 }
 .p-dropdown-items {
-    min-width:250px!important;
+    min-width:300px!important;
 
 }
 .wide-dropdown {
