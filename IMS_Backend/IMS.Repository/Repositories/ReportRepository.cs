@@ -38,10 +38,12 @@ namespace Boilerplate.Repository.Repositories
             {
                 var parametars = new
                 {
-                    param.Id,
+                    param.fromDate,
+                    param.toDate,
+                    param.requestStatus
                 };
 
-                string query = @"exec [prcRequisitionIndividualPDF] @reqid";
+                string query = @"exec [usp_SampleRequest_Report] @fromDate,@toDate,@requestStatus";
                 var ds = await GetDataInDataSetAsync(query, parametars);
 
                 return ds;

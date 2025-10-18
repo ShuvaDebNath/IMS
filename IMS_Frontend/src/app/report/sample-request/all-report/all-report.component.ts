@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { GlobalServiceService } from '../../services/Global-service.service';
 import swal from 'sweetalert2';
 import { Page } from 'src/app/models/Page';
 import { GlobalClass } from 'src/app/shared/global-class';
@@ -14,13 +13,16 @@ import { GetDataModel } from 'src/app/models/GetDataModel';
 import { LC } from 'src/app/models/LCModel';
 import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
 import { DoubleMasterEntryModel } from 'src/app/models/DoubleMasterEntryModel';
+import { GlobalServiceService } from 'src/app/services/Global-service.service';
+import { ReportService } from 'src/app/services/reportService/report-service.service';
 
 @Component({
-  selector: 'app-sample-request-list',
-  templateUrl: './sample-request-list.component.html',
-  styleUrls: ['./sample-request-list.component.css'],
+  selector: 'app-all-report',
+  templateUrl: './all-report.component.html',
+  styleUrls: ['./all-report.component.css']
 })
-export class SampleRequestListComponent {
+export class AllReportComponent {
+
   pageIndex = 1;
   searchText = '';
   length = 100;
@@ -47,6 +49,20 @@ export class SampleRequestListComponent {
   fromDate: any;
   toDate: any;
   LCNo: string = '';
+  RequestStatus: any = [
+    {
+      value: '',
+      text: '--Select Request Status--',
+    },
+    {
+      value: 'Messenger',
+      text: 'Messenger',
+    },
+    {
+      value: 'By Own',
+      text: 'By Own',
+    },
+  ];
 
   showPaginator = false;
   insertPermissions: boolean = true;
@@ -64,6 +80,7 @@ export class SampleRequestListComponent {
     private gs: GlobalServiceService,
     private pagesComponent: PagesComponent,
     private masterEntryService: MasterEntryService,
+    private reportService:ReportService,
     private title: Title
   ) {}
   ngOnInit(): void {
@@ -76,44 +93,23 @@ export class SampleRequestListComponent {
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
     this.title.setTitle('Sample Request List');
-
-    // var fDate = new Date();
-    // const mm = String(fDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-    // const dd = String(fDate.getDate()).padStart(2, '0');
-    // const yyyy = fDate.getFullYear();
-
-    // const formatted = `${dd}/${mm}/${yyyy}`;
-
-    // const threeMonthsAgo = new Date();
-    // threeMonthsAgo.setMonth(fDate.getMonth() - 3);
-
-    // const mmT = String(threeMonthsAgo.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-    // const ddT = String(threeMonthsAgo.getDate()).padStart(2, '0');
-    // const yyyyT = threeMonthsAgo.getFullYear();
-
-    // const formattedT = `${ddT}/${mmT}/${yyyyT}`;
-
-    // this.SearchForm.get('fromDate')?.setValue(formattedT);
-    // this.SearchForm.get('toDate')?.setValue(formatted);
   }
   initForm(): void {
     this.SearchForm = this.fb.group({
       fromDate: ['', [Validators.required]],
       toDate: ['', [Validators.required]],
+      status:['']
     });
   }
   Search() {
     var fromDate = this.SearchForm.value.fromDate;
     var toDate = this.SearchForm.value.toDate;
-    var userId = window.localStorage.getItem('userId');
     let param = new GetDataModel();
-    param.procedureName = '[usp_SampleRequest_List]';
+    param.procedureName = '[usp_SampleRequest_Report]';
     param.parameters = {
       FromDate: fromDate,
       ToDate: toDate,
-      PageIndex: this.pageIndex,
-      PageSize: this.pageSize,
-      UserId:userId
+      RequestStatus:this.SearchForm.value.status
     };
 
     this.masterEntryService.GetInitialData(param).subscribe({
@@ -133,74 +129,14 @@ export class SampleRequestListComponent {
     });
   }
 
-  DeleteData(item: any) {
-    swal
-      .fire({
-        title: 'Wait!',
-        html: `<span>Once you delete, you won't be able to revert this!</span>`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!',
-      })
-      .then((result) => {
-        if (result.isConfirmed == true) {
-          let param = new MasterEntryModel();
-          param.tableName = 'tbl_SampleRequestForm';
-          param.whereParams = { Id: item.Id };
+  Print(){
 
-          this.masterEntryService.DeleteData(param).subscribe({
-            next: (results: any) => {
-              if (results.status) {
-                swal
-                  .fire({
-                    title: `${results.message}!`,
-                    text: `Save Successfully!`,
-                    icon: 'success',
-                    timer: 5000,
-                  })
-                  .then((result) => {
-                    this.ngOnInit();
-                  });
-                this.Search()
-              } else if (results.message == 'Invalid Token') {
-                swal.fire('Session Expierd!', 'Please Login Again.', 'info');
-                this.gs.Logout();
-              } else {
-              }
-            },
-            error: (err:any) => {},
-          });
-        }
-      });
-  }
+    var item = {
+      'fromDate':this.SearchForm.value.fromDate,
+      'toDate':this.SearchForm.value.toDate,
+      'requestStatus':this.SearchForm.value.status,
+    }
 
-  paginatiorChange(e: any) {
-    this.pageIndex = e.pageIndex + 1;
-    this.pageSize = e.pageSize;
-    this.Search();
-  }
-
-  viewDetails(table: any) {
-    let param = new GetDataModel();
-    param.procedureName = '[usp_SampleRequest_GetDetails]';
-    param.parameters = {
-      Id: table.Id,
-    };
-
-    this.masterEntryService.GetInitialData(param).subscribe({
-      next: (results) => {
-        if (results.status) {
-          let tables = JSON.parse(results.data);
-          this.detailsData = tables.Tables1[0];
-          console.log(this.detailsData);
-
-          this.isDetailsVisible = true;
-
-          //  this.isPage=this.rows[0].totallen>10;
-        }
-      },
-    });
+    this.reportService.PrintSampleRequest(item, 'pdf','T');
   }
 }

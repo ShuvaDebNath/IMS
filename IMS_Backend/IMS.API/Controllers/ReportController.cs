@@ -13,24 +13,22 @@ namespace IMS.API.Controllers
     public class ReportController : BaseApiController
     {
         public readonly IReportService _reportService;
-        private readonly ILogger<ReportController> _logger;
         string userName = null;
-        public ReportController(ILogger<ReportController> logger, IReportService reportService)
+        public ReportController(IReportService reportService)
         {
-            _logger = logger;
             _reportService = reportService;
         }
 
         [HttpGet]
-        [Route("RequisitionIndividualReport")]
-        public async Task<IActionResult> SampleRequestReport(String rptType, string Id)
+        [Route("SampleRequestReport")]
+        public async Task<IActionResult> SampleRequestReport(String rptType, string fromDate,string toDate,string requestStatus="")
         {
             try
             {
                 var currentUser = HttpContext.User;
 
                 string reportPath = "SampleRequestReport\\";
-                DataSet ds = await _reportService.SampleRequestReport(Id);
+                DataSet ds = await _reportService.SampleRequestReport(fromDate, toDate, requestStatus);
 
                 if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
                 {
@@ -38,11 +36,11 @@ namespace IMS.API.Controllers
                     return Ok(new { msg = "Data Not Found" });
                 }
 
-                ds.Tables[0].TableName = "DataSet1";
+                ds.Tables[0].TableName = "SampleRequestReport";
 
                 var reportName = "Sample Request Report";
 
-                reportPath += "RequisitionIndividual.rdlc";
+                reportPath += "rptSampleRequestReport.rdlc";
 
 
                 var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);

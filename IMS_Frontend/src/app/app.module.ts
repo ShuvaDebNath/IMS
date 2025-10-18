@@ -48,6 +48,8 @@ import { BarcodeGenerateComponent } from './production/finishgoods/barcode-gener
 import { SampleRequestFormComponent } from './production/sample-request-form/sample-request-form.component';
 import { SampleRequestInsertFormComponent } from './production/sample-request-insert-form/sample-request-insert-form.component';
 import { SampleRequestListComponent } from './production/sample-request-list/sample-request-list.component';
+import { AllReportComponent } from './report/sample-request/all-report/all-report.component';
+import { MessengerReportComponent } from './report/sample-request/messenger-report/messenger-report.component';
 
 
 

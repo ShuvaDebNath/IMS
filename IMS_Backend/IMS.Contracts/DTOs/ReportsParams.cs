@@ -6,8 +6,9 @@ namespace AccountingBackEnd.DAL.DTOs
 {
     public class ReportsParams
     {
-        public string fromdate { get; set; }
-        public string todate { get; set; }
+        public string fromDate { get; set; }
+        public string toDate { get; set; }
+        public string requestStatus { get; set; }
         public string Id { get; set; }
         public string companyId { get; set; }
     }
