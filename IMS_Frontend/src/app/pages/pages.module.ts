@@ -112,6 +112,8 @@ import { BarcodeGenerateComponent } from '../production/finishgoods/barcode-gene
 import { SampleRequestFormComponent } from '../production/sample-request-form/sample-request-form.component';
 import { SampleRequestInsertFormComponent } from '../production/sample-request-insert-form/sample-request-insert-form.component';
 import { SampleRequestListComponent } from '../production/sample-request-list/sample-request-list.component';
+import { AllReportComponent } from '../report/sample-request/all-report/all-report.component';
+import { MessengerReportComponent } from '../report/sample-request/messenger-report/messenger-report.component';
 
 
 
@@ -200,6 +202,8 @@ const CustomSelectOptions: INgxSelectOptions = {
     SampleRequestInsertFormComponent,
     SampleRequestFormComponent,    
     SampleRequestListComponent,
+    AllReportComponent,
+    MessengerReportComponent,
   ],
   imports: [
     CommonModule,
@@ -407,6 +411,8 @@ const CustomSelectOptions: INgxSelectOptions = {
           { path: 'sample-request-edit-form', component: SampleRequestFormComponent },
           { path: 'sample-request-form', component: SampleRequestInsertFormComponent },
           { path: 'sample-request-list', component: SampleRequestListComponent },
+          { path: 'all-report', component: AllReportComponent },
+          { path: 'messsenger-report', component: MessengerReportComponent },
         ],
       },
 

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Data;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Boilerplate.Service.Services;
 
@@ -22,13 +23,15 @@ public class ReportService : IReportService
         _logger = logger;
     }
 
-    public async Task<DataSet> SampleRequestReport(string Id)
+    public async Task<DataSet> SampleRequestReport(string fromDate, string toDate, string requestStatus)
     {
         try
         {
             ReportsParams param = new ReportsParams
             {
-                Id = Id,
+                fromDate = fromDate,
+                toDate = toDate,
+                requestStatus = requestStatus,
 
             };
             return await _reportRepository.SampleRequestReport(param);
