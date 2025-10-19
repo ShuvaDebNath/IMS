@@ -72,13 +72,13 @@
           <tr>
             <th class="text-center">SL</th>
             <th class="text-center">Request Date</th>
-            <th class="text-center">Customer Name</th>
+            <th class="text-left">Customer Name</th>
             <th class="text-center">Customer Contact Info</th>
             <th class="text-center">Article</th>
             <th class="text-center">Product Description</th>
             <th class="text-center">Quantity</th>
             <th class="text-center">Request By</th>
-            <th class="text-center">Request Status</th>
+            <th class="text-center">Carried By</th>
           </tr>
         </ng-template>
 
@@ -86,7 +86,7 @@
           <tr>
             <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
             <td class="text-center align-middle">{{ table.RequestDate }}</td>
-            <td class="text-center align-middle">{{ table.CustomerName }}</td>
+            <td class="text-left align-middle">{{ table.CustomerName }}</td>
             <td class="text-center align-middle">
               {{ table.CustomerContactInfo }}
             </td>
@@ -132,7 +132,7 @@
         <p>Color: {{ detailsData.Color }}</p>
         <p>Quantity Requested: {{ detailsData.RequestedQuantity }}</p>
         <p>Shipping Address: {{ detailsData.ShippingAddress }}</p>
-        <p>Request Status: {{ detailsData.RequestStatus }}</p>
+        <p>Carried By: {{ detailsData.RequestStatus }}</p>
         <p>Remarks: {{ detailsData.Remarks }}</p>
       </div>
     </p-dialog>

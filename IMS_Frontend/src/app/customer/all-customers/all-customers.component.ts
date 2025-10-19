@@ -54,23 +54,26 @@ export class AllCustomersComponent {
     this.title.setTitle('All Customer List');
     this.getInitialData();
     this.dateForm = this.fb.group({
-      fromDate: [null, Validators.required],
-      toDate: [null, Validators.required],
       CustomerId: [''],
       SuperioId: [''],
     });
   }
   getInitialData() {
+    
+    var userId = window.localStorage.getItem('userId');
     var ProcedureData = {
       procedureName: '[usp_Customer_GetInitialData]',
-      parameters: {},
+      parameters: {
+        'User_Id':userId
+      },
     };
 
     this.getDataService.GetInitialData(ProcedureData).subscribe({
       next: (results) => {
         if (results.status) {
-          this.CustomerList = JSON.parse(results.data).Tables3;
-          this.SuperiorList = JSON.parse(results.data).Tables2;
+          this.CustomerList = JSON.parse(results.data).Tables2;
+          if(JSON.parse(results.data).Tables3!=undefined)
+          this.SuperiorList = JSON.parse(results.data).Tables3;
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
           this.gs.Logout();
@@ -89,7 +92,7 @@ export class AllCustomersComponent {
       );
       return;
     }
-    const { fromDate, toDate, CustomerId, SuperioId } = this.dateForm.value;
+    var { fromDate, toDate, CustomerId, SuperioId } = this.dateForm.value;
     if (new Date(fromDate) > new Date(toDate)) {
       swal.fire(
         'Validation Error!',
@@ -101,12 +104,14 @@ export class AllCustomersComponent {
 
     const sentByStr = localStorage.getItem('userId');
     const sentBy = sentByStr ? Number(sentByStr) : null;
+    var userId = window.localStorage.getItem('userId');
+    
+    if(SuperioId==undefined || SuperioId=='')
+      SuperioId = userId
 
     const procedureData = {
       procedureName: 'usp_Customer_GetCustomerData',
       parameters: {
-        FromDateInput: fromDate,
-        ToDateInput: toDate,
         Superior_Id: SuperioId,
         Customer_Id: CustomerId,
         Status: 'All',
@@ -209,5 +214,11 @@ export class AllCustomersComponent {
             },
           });
       });
+  }
+
+  getCustomerList(){
+    var SuperioId = this.dateForm.value.SuperioId;
+    this.CustomerList = this.CustomerList.filter((e:any)=>e.Superior_ID == SuperioId);
+    
   }
 }

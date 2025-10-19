@@ -161,9 +161,9 @@ export class SampleRequestListComponent {
                     timer: 5000,
                   })
                   .then((result) => {
-                    this.ngOnInit();
+                     this.Search()
                   });
-                this.Search()
+               
               } else if (results.message == 'Invalid Token') {
                 swal.fire('Session Expierd!', 'Please Login Again.', 'info');
                 this.gs.Logout();
