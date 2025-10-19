@@ -17,6 +17,7 @@ namespace Boilerplate.Service
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IMasterEntryService, MasterEntryService>();
             services.AddTransient<IDoubleMasterEntryService, DoubleMasterEntryService>();
+            services.AddTransient<IReportService, ReportService>();
             services.AddScoped<IGetDataService, GetDataService>();
             services.AddScoped<IGoodsDeliveryService, GoodsDeliveryService>();
             services.AddSingleton<ValidationHelper>();

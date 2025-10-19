@@ -1,0 +1,171 @@
+<div class="m-2 p-2">
+  <div class="card shadow-sm">
+    <div class="card-header theme-bg">
+      <h1 class="fs-5 m-0">Sample Request Form</h1>
+    </div>
+
+    <div class="card-body">
+      <form [formGroup]="Formgroup">
+        <h3 class="fs-6"><strong>Details</strong></h3>
+
+        <div class="table-responsive" style="overflow-x: auto;">
+          <table class="table table-bordered align-middle" style="min-width: 2000px;">
+            <thead class="table-light">
+              <tr>
+                <th class="text-center">Request Date</th>
+                <th class="text-center">Customer Name</th>
+                <th class="text-center">Contact Info</th>
+                <th class="text-center">Product Description</th>
+                <th class="text-center">Article No</th>
+                <th class="text-center">Qty</th>
+                <th class="text-center">Shipping Address</th>
+                <th class="text-center">Status</th>
+                <th class="text-center">Remarks</th>
+                <th style="width: 50px"></th>
+              </tr>
+            </thead>
+
+            <tbody formArrayName="items">
+              <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
+                <!-- DATE -->
+                <td class="p-1">
+                  <div class="input-group custom-input-group">
+                    <!-- <span class="input-group-text pointer" >
+                      <i class="fas fa-calendar"></i>
+                    </span> -->
+                    <input
+                      #dateInput
+                      type="date"
+                      formControlName="RequestDate"
+                      class="form-control form-control-lg"
+                      placeholder="Date"
+                    />
+                  </div>
+                </td>
+
+                <td class="p-1">
+                  <p-dropdown
+                    [options]="CustomerList"
+                    optionLabel="CustomerName"
+                    [filter]="true"
+                    filterBy="CustomerName"
+                    [showClear]="true"
+                    placeholder="Select"
+                    optionValue="Customer_ID"
+                    formControlName="CustomerName"
+                    [virtualScroll]="true"
+                     appendTo="body"
+                    [virtualScrollItemSize]="30"
+                    styleClass="custom-dropdown wide-dropdown"
+                  ></p-dropdown>
+                </td>
+
+                <td class="p-1">
+                  <input
+                    type="text"
+                    formControlName="Customer_Contact_Info"
+                    class="form-control form-control-lg"
+                    placeholder="Contact"
+                  />
+                </td>
+
+                <!-- PRODUCT DESCRIPTION -->
+                <td class="p-1">
+                  <textarea
+                    formControlName="Product_Description"
+                    class="form-control form-control-lg"
+                    placeholder="Description"
+                    style="height: 48px;"
+                  ></textarea>
+                </td>
+
+                <!-- ARTICLE -->
+                <td class="p-1">
+                  <p-dropdown
+                    [options]="ArticleList"
+                    optionLabel="Article_No"
+                    [filter]="true"
+                    filterBy="Article_No"
+                    [showClear]="true"
+                    placeholder="Select"
+                    optionValue="Item_ID"
+                    formControlName="ArticleNo"
+                     appendTo="body"
+                    styleClass="custom-dropdown wide-dropdown"
+                  ></p-dropdown>
+                </td>
+
+                <!-- QTY -->
+                <td class="p-1" style="max-width: 100px;">
+                  <input
+                    type="number"
+                    formControlName="Requested_Quantity"
+                    class="form-control form-control-lg text-center"
+                    placeholder="Qty"
+                  />
+                </td>
+
+                <!-- ADDRESS -->
+                <td class="p-1">
+                  <textarea
+                    formControlName="Shipping_Address"
+                    class="form-control form-control-lg"
+                    placeholder="Address"
+                    style="height: 48px;"
+                  ></textarea>
+                </td>
+
+                <!-- STATUS -->
+                <td class="p-1">
+                  <p-dropdown
+                    [options]="RequestStatus"
+                    optionLabel="text"
+                    [filter]="true"
+                    filterBy="text"
+                    [showClear]="true"
+                    placeholder="Select"
+                    optionValue="value"
+                    formControlName="RequestStatus"
+                     appendTo="body"
+                    styleClass="custom-dropdown wide-dropdown"
+                  ></p-dropdown>
+                </td>
+
+                <!-- REMARKS -->
+                <td class="p-1">
+                  <textarea
+                    formControlName="Remarks"
+                    class="form-control form-control-lg"
+                    placeholder="Remarks"
+                    style="height: 48px;"
+                  ></textarea>
+                </td>
+
+                <!-- DELETE BUTTON -->
+                <td class="text-center">
+                  <button type="button" class="btn btn-sm btn-danger px-2 py-1" (click)="removeItem(i)">×</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 mt-3">
+          <button type="button" class="btn btn-outline-success btn-sm" (click)="addItem()">
+            <i class="bi bi-plus-circle me-1"></i> Add Row
+          </button>
+
+          <button
+            type="submit"
+            (click)="saveData()"
+            class="btn theme-btn btn-sm"
+            [disabled]="Formgroup.invalid"
+            *ngIf="!isEdit"
+          >
+            <i class="bi bi-save me-1"></i> Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

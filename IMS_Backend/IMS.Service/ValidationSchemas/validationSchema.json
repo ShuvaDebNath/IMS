@@ -28,11 +28,6 @@
     },
     "tbl_arbitration": {
       "QueryParams": {
-	"[Detail]": {
-		"Required": true
-	}
-	}
-	},
         "[Detail]": {
           "Required": true
         }
@@ -60,9 +55,6 @@
     },
     "tbl_beneficiary_bank": {
       "QueryParams": {
-        "[BankName]"
-        : {
-          "Required":true
         "[BankName]": {
           "Required": true
         },
@@ -74,8 +66,7 @@
         },
         "[Address]": {
           "Required": true
-        }      
-      },
+        }
       }
     },
     "tbl_cash_receive_detail": {
@@ -99,6 +90,13 @@
         }
       }
     },
+    "tbl_SampleRequestForm": {
+      "QueryParams": {
+        "[CustomerName]": {
+          "Required": true
+        }
+      }
+    },
     "tbl_stock": {
       "QueryParams": {
         "[RawMaterial_ID]": {
@@ -109,7 +107,5 @@
         }
       }
     }
-}
   }
 }
-

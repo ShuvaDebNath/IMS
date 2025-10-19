@@ -6,25 +6,9 @@
     class="row p-3 shadow-sm g-3 align-items-end mb-3"
     (ngSubmit)="loadAllCustomers()"
   >
-    <div class="col-md-3">
-      <label class="form-label fw-bold">From Date</label>
-      <input
-        type="date"
-        class="form-control form-control-sm"
-        formControlName="fromDate"
-      />
-    </div>
+    
 
-    <div class="col-md-3">
-      <label class="form-label fw-bold">To Date</label>
-      <input
-        type="date"
-        class="form-control form-control-sm"
-        formControlName="toDate"
-      />
-    </div>
-
-    <div class="col-md-3">
+    <div class="col-md-3" *ngIf="SuperiorList">
       <label>Superior Name <span>*</span></label>
       <p-dropdown
         [style]="{ width: '100%' }"
@@ -37,6 +21,7 @@
         styleClass="listBottom"
         placeholder="Please Select"
         optionValue="User_ID"
+        (onChange)="getCustomerList()"
         formControlName="SuperioId"
       >
         <ng-template let-AB pTemplate="item">
@@ -60,6 +45,8 @@
         placeholder="Please Select"
         optionValue="Customer_ID"
         formControlName="CustomerId"
+        [virtualScroll]="true"
+        [virtualScrollItemSize]=30
       >
         <ng-template let-AB pTemplate="item">
           <div class="flex align-items-center gap-2">

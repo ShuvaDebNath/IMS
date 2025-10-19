@@ -24,11 +24,20 @@ namespace Boilerplate.Repository
 
         public async Task<IList<TDto>> GetAllAsync(string query, object? param = null)
         {
-            using var connection = new SqlConnection(_connectionStringUserDB);
+            try
+            {
+                using var connection = new SqlConnection(_connectionStringUserDB);
 
-            var result = await connection.QueryAsync<TDto>(query, param);
+                var result = await connection.QueryAsync<TDto>(query, param);
 
-            return result.ToList();
+                return result.ToList();
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            
         }
 
         public async Task<TResult> GetAllSingleAsync<TResult>(string query, object? param = null)
