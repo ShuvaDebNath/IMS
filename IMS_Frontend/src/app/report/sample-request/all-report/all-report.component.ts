@@ -19,10 +19,9 @@ import { ReportService } from 'src/app/services/reportService/report-service.ser
 @Component({
   selector: 'app-all-report',
   templateUrl: './all-report.component.html',
-  styleUrls: ['./all-report.component.css']
+  styleUrls: ['./all-report.component.css'],
 })
 export class AllReportComponent {
-
   pageIndex = 1;
   searchText = '';
   length = 100;
@@ -52,7 +51,7 @@ export class AllReportComponent {
   RequestStatus: any = [
     {
       value: '',
-      text: '--Select Request Status--',
+      text: '--Select Carried By--',
     },
     {
       value: 'Messenger',
@@ -80,7 +79,7 @@ export class AllReportComponent {
     private gs: GlobalServiceService,
     private pagesComponent: PagesComponent,
     private masterEntryService: MasterEntryService,
-    private reportService:ReportService,
+    private reportService: ReportService,
     private title: Title
   ) {}
   ngOnInit(): void {
@@ -96,20 +95,26 @@ export class AllReportComponent {
   }
   initForm(): void {
     this.SearchForm = this.fb.group({
-      fromDate: ['', [Validators.required]],
-      toDate: ['', [Validators.required]],
-      status:['']
+      fromDate: [''],
+      toDate: [''],
+      status: [''],
     });
   }
   Search() {
     var fromDate = this.SearchForm.value.fromDate;
     var toDate = this.SearchForm.value.toDate;
     let param = new GetDataModel();
+    if (fromDate == undefined) {
+      const dateString = '2000-01-01';
+      const date = new Date(dateString);
+      fromDate = date;
+      toDate = new Date();
+    }
     param.procedureName = '[usp_SampleRequest_Report]';
     param.parameters = {
       FromDate: fromDate,
       ToDate: toDate,
-      RequestStatus:this.SearchForm.value.status
+      RequestStatus: this.SearchForm.value.status,
     };
 
     this.masterEntryService.GetInitialData(param).subscribe({
@@ -129,14 +134,13 @@ export class AllReportComponent {
     });
   }
 
-  Print(){
-
+  Print() {
     var item = {
-      'fromDate':this.SearchForm.value.fromDate,
-      'toDate':this.SearchForm.value.toDate,
-      'requestStatus':this.SearchForm.value.status,
-    }
+      fromDate: this.SearchForm.value.fromDate,
+      toDate: this.SearchForm.value.toDate,
+      requestStatus: this.SearchForm.value.status,
+    };
 
-    this.reportService.PrintSampleRequest(item, 'pdf','T');
+    this.reportService.PrintSampleRequest(item, 'pdf', 'T');
   }
 }

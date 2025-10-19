@@ -21,7 +21,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("SampleRequestReport")]
-        public async Task<IActionResult> SampleRequestReport(String rptType, string fromDate,string toDate,string requestStatus="")
+        public async Task<IActionResult> SampleRequestReport(String rptType, string fromDate = "", string toDate = "", string requestStatus="")
         {
             try
             {
