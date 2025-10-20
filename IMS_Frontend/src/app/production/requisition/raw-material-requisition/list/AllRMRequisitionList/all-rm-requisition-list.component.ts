@@ -79,7 +79,7 @@ export class AllRMRequisitionListComponent {
           this.gs.Logout();
         }
       },
-      error: () => swal.fire('Error!', 'Failed to load data.', 'error')
+      error: () => swal.fire('Error!', 'Failed to load data.', 'info')
     });
   }
 
@@ -107,10 +107,10 @@ export class AllRMRequisitionListComponent {
             swal.fire('Session Expired!', 'Please Login Again.', 'info');
             this.gs.Logout();
           } else {
-            swal.fire('Error!', 'Failed to load details.', 'error');
+            swal.fire('Error!', 'Failed to load details.', 'info');
           }
         },
-        error: () => swal.fire('Error!', 'An error occurred while fetching details.', 'error')
+        error: () => swal.fire('Error!', 'An error occurred while fetching details.', 'info')
       });
     }
 
@@ -119,7 +119,7 @@ export class AllRMRequisitionListComponent {
          const id = String(row?.RM_Requisition_MasterID ?? '');
     
         if (!id) {
-          swal.fire('Missing Id', 'RM_Requisition_MasterID not found.', 'error');
+          swal.fire('Missing Id', 'RM_Requisition_MasterID not found.', 'info');
           return;
         }
     
@@ -161,7 +161,7 @@ export class AllRMRequisitionListComponent {
             },
             error: (err) => {
               console.error(err);
-              swal.fire('Delete Failed', err?.error?.message || 'Something went wrong.', 'error');
+              swal.fire('Delete Failed', err?.error?.message || 'Something went wrong.', 'info');
             }
           });
         });

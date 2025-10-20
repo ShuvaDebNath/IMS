@@ -82,7 +82,7 @@ export class ApplicantbankCreateComponent implements OnInit {
           Swal.fire('Session Expired!', 'Please Login Again.', 'info');
           this.gs.Logout();
         } else {
-          Swal.fire('Failed!', 'Save Failed!', 'error');
+          Swal.fire('Failed!', 'Save Failed!', 'info');
         }
       }
     });
@@ -90,7 +90,7 @@ export class ApplicantbankCreateComponent implements OnInit {
 
   updateData() {
     if (this.Formgroup.invalid) {
-      Swal.fire('Invalid Input', 'Please check inputs', 'error');
+      Swal.fire('Invalid Input', 'Please check inputs', 'info');
       return;
     }
 
@@ -114,7 +114,7 @@ export class ApplicantbankCreateComponent implements OnInit {
           Swal.fire('Session Expired!', 'Please Login Again.', 'info');
           this.gs.Logout();
         } else {
-          Swal.fire('Failed!', 'Update Failed!', 'error');
+          Swal.fire('Failed!', 'Update Failed!', 'info');
         }
       }
     });
