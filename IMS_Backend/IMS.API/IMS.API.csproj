@@ -48,7 +48,7 @@
 
   <ItemGroup>
     <Reference Include="RDLCSimplified">
-      <HintPath>D:\RDLCSimplified.dll</HintPath>
+      <HintPath>..\..\..\RDLCSimplified.dll</HintPath>
     </Reference>
   </ItemGroup>
 
