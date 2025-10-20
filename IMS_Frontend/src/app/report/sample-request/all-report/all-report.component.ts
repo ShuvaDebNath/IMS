@@ -137,10 +137,12 @@ export class AllReportComponent {
   }
 
   Print() {
+    var userId = window.localStorage.getItem('userId');
     var item = {
       fromDate: this.SearchForm.value.fromDate,
       toDate: this.SearchForm.value.toDate,
       requestStatus: this.SearchForm.value.status,
+      UserID:userId
     };
 
     this.reportService.PrintSampleRequest(item, 'pdf', 'T');

@@ -128,11 +128,13 @@ pageIndex = 1;
   }
 
   Print(){
+    var userId = window.localStorage.getItem('userId');
 
     var item = {
       'fromDate':new Date(),
       'toDate':new Date(),
       'requestStatus':'Messenger',
+      'UserID':userId
     }
 
     this.reportService.PrintSampleRequest(item, 'pdf','T');

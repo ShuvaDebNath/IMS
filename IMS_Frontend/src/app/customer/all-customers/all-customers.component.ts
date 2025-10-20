@@ -115,7 +115,7 @@ export class AllCustomersComponent {
         Superior_Id: SuperioId,
         Customer_Id: CustomerId,
         Status: 'All',
-        User: sentBy,
+        UserID: sentBy,
       },
     };
 
