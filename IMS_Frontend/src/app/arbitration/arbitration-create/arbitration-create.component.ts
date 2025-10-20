@@ -100,7 +100,7 @@ export class ArbitrationCreateComponent {
           swal.fire('Session Expired!', 'Please Login Again.', 'info');
           this.gs.Logout();
         } else {
-          swal.fire('Failed!', 'Save Failed!', 'error');
+          swal.fire('Failed!', 'Save Failed!', 'info');
         }
       }
     });
@@ -108,7 +108,7 @@ export class ArbitrationCreateComponent {
 
   updateData() {
     if (this.Formgroup.invalid) {
-      swal.fire('Invalid Input', 'Please check inputs', 'error');
+      swal.fire('Invalid Input', 'Please check inputs', 'info');
       return;
     }
 
@@ -137,7 +137,7 @@ export class ArbitrationCreateComponent {
           swal.fire('Session Expired!', 'Please Login Again.', 'info');
           this.gs.Logout();
         } else {
-          swal.fire('Failed!', 'Update Failed!', 'error');
+          swal.fire('Failed!', 'Update Failed!', 'info');
         }
       }
     });

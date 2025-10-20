@@ -177,14 +177,14 @@ export class DeliveryComponent implements OnInit {
       });
 
       if(sum>restQty){
-        Swal.fire('Save Fail!', 'Deliverable Excced.', 'error');
+        Swal.fire('Save Fail!', 'Deliverable Excced.', 'info');
         return;
       }
 
     let unAllowedList=listData.filter((x:any)=> (x.Unit_ID!=2 && x.Delivered>x.StockBalance) || (x.Unit_ID==2 && x.Deliverd_In_Meter>x.Stock_In_MeterBalance));
 
     if(unAllowedList.length>0){
-      Swal.fire('Save Fail!', 'Stock Unavailable.', 'error');
+      Swal.fire('Save Fail!', 'Stock Unavailable.', 'info');
       return;
     }
 
@@ -201,7 +201,7 @@ export class DeliveryComponent implements OnInit {
         if(!res.isAuthorized){
           this.gs.Logout();
         }else{
-          Swal.fire(res.messageType, res.message, 'error');
+          Swal.fire(res.messageType, res.message, 'info');
         }
       }
     });

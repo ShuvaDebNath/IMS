@@ -40,10 +40,11 @@ namespace Boilerplate.Repository.Repositories
                 {
                     param.fromDate,
                     param.toDate,
-                    param.requestStatus
+                    param.requestStatus,
+                    param.Id
                 };
 
-                string query = @"exec [usp_SampleRequest_Report] @fromDate,@toDate,@requestStatus";
+                string query = @"exec [usp_SampleRequest_Report] @fromDate,@toDate,@requestStatus,@Id";
                 var ds = await GetDataInDataSetAsync(query, parametars);
 
                 return ds;

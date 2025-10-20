@@ -94,10 +94,10 @@ export class PendingFinishGoodsSentListWarehouseComponent implements OnInit {
           swal.fire('Session Expired!', 'Please Login Again.', 'info');
           this.gs.Logout();
         } else {
-          swal.fire('Error!', 'Failed to load details.', 'error');
+          swal.fire('Error!', 'Failed to load details.', 'info');
         }
       },
-      error: () => swal.fire('Error!', 'An error occurred while fetching details.', 'error')
+      error: () => swal.fire('Error!', 'An error occurred while fetching details.', 'info')
     });
   }
 
@@ -131,10 +131,10 @@ export class PendingFinishGoodsSentListWarehouseComponent implements OnInit {
           swal.fire('Session Expired!', 'Please Login Again.', 'info');
           this.gs.Logout();
         } else {
-          swal.fire('Error!', 'Failed to load details.', 'error');
+          swal.fire('Error!', 'Failed to load details.', 'info');
         }
       },
-      error: () => swal.fire('Error!', 'An error occurred while fetching details.', 'error')
+      error: () => swal.fire('Error!', 'An error occurred while fetching details.', 'info')
     });
   }
 
@@ -220,18 +220,18 @@ export class PendingFinishGoodsSentListWarehouseComponent implements OnInit {
                           this.loadPendingFinishGoodsSendList();
                         });
                       } else {
-                        swal.fire('Stock Update Failed', res?.message || 'Stock update failed.', 'error');
+                        swal.fire('Stock Update Failed', res?.message || 'Stock update failed.', 'info');
                       }
                     },
                     error: (err) => {
                       console.error(err);
-                      swal.fire('Stock Update Failed', err?.error?.message || 'Stock update failed.', 'error');
+                      swal.fire('Stock Update Failed', err?.error?.message || 'Stock update failed.', 'info');
                     }
                   });
                 },
                 error: (err) => {
                   console.error(err);
-                  swal.fire('Accept Failed', err?.error?.message || 'Something went wrong.', 'error');
+                  swal.fire('Accept Failed', err?.error?.message || 'Something went wrong.', 'info');
                 }
               });
       }

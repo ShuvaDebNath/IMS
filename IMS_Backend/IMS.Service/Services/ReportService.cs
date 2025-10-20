@@ -23,7 +23,7 @@ public class ReportService : IReportService
         _logger = logger;
     }
 
-    public async Task<DataSet> SampleRequestReport(string fromDate, string toDate, string requestStatus)
+    public async Task<DataSet> SampleRequestReport(string fromDate, string toDate, string requestStatus, string UserID)
     {
         try
         {
@@ -32,6 +32,7 @@ public class ReportService : IReportService
                 fromDate = fromDate,
                 toDate = toDate,
                 requestStatus = requestStatus,
+                Id = UserID,
 
             };
             return await _reportRepository.SampleRequestReport(param);

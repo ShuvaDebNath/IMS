@@ -142,7 +142,7 @@ export class AllLcComponent {
           if (this.tableData.length > 0) {
             this.length = parseInt(this.tableData[0].totallen);
           } else {
-            swal.fire('error', 'No Data Found!!', 'error');
+            swal.fire('info', 'No Data Found!!', 'info');
           }
           //  this.isPage=this.rows[0].totallen>10;
         }

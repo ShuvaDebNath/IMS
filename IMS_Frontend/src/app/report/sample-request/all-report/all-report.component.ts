@@ -83,7 +83,7 @@ export class AllReportComponent {
     private title: Title
   ) {}
   ngOnInit(): void {
-    var permissions = this.gs.CheckUserPermission('Sample Request List');
+    var permissions = this.gs.CheckUserPermission('All Report');
     this.insertPermissions = permissions.insertPermissions;
     this.updatePermissions = permissions.updatePermissions;
     this.deletePermissions = permissions.deletePermissions;
@@ -91,7 +91,7 @@ export class AllReportComponent {
 
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
-    this.title.setTitle('Sample Request List');
+    this.title.setTitle('All Report');
   }
   initForm(): void {
     this.SearchForm = this.fb.group({
@@ -103,6 +103,7 @@ export class AllReportComponent {
   Search() {
     var fromDate = this.SearchForm.value.fromDate;
     var toDate = this.SearchForm.value.toDate;
+    var userId = window.localStorage.getItem('userId');
     let param = new GetDataModel();
     if (fromDate == undefined) {
       const dateString = '2000-01-01';
@@ -115,6 +116,7 @@ export class AllReportComponent {
       FromDate: fromDate,
       ToDate: toDate,
       RequestStatus: this.SearchForm.value.status,
+      UserID:userId
     };
 
     this.masterEntryService.GetInitialData(param).subscribe({
@@ -126,7 +128,7 @@ export class AllReportComponent {
           if (this.tableData.length > 0) {
             this.length = parseInt(this.tableData[0].totallen);
           } else {
-            swal.fire('error', 'No Data Found!!', 'error');
+            swal.fire('info', 'No Data Found!!', 'info');
           }
           //  this.isPage=this.rows[0].totallen>10;
         }
@@ -135,10 +137,12 @@ export class AllReportComponent {
   }
 
   Print() {
+    var userId = window.localStorage.getItem('userId');
     var item = {
       fromDate: this.SearchForm.value.fromDate,
       toDate: this.SearchForm.value.toDate,
       requestStatus: this.SearchForm.value.status,
+      UserID:userId
     };
 
     this.reportService.PrintSampleRequest(item, 'pdf', 'T');

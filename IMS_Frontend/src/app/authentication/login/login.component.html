@@ -25,7 +25,7 @@
                 <i class="fa fa-user"></i>
                 <input formControlName="userName" autocomplete="off" [class]="{
                   'form-control': true,
-                  'error': LoginForm.controls.userName.invalid && (LoginForm.controls.userName.touched || isSubmit),
+                  'info': LoginForm.controls.userName.invalid && (LoginForm.controls.userName.touched || isSubmit),
                   'success': LoginForm.controls.userName.valid && (LoginForm.controls.userName.touched || isSubmit)
                 }" type="text" id="username" name="username" placeholder="Enter your username" />
               </div>
@@ -36,7 +36,7 @@
                 <i class="fa fa-key"></i>
                 <input formControlName="password" type="password" [class]="{
                   'form-control': true,
-                  'error': LoginForm.controls.password.invalid && (LoginForm.controls.password.touched || isSubmit),
+                  'info': LoginForm.controls.password.invalid && (LoginForm.controls.password.touched || isSubmit),
                   'success': LoginForm.controls.password.valid && (LoginForm.controls.password.touched || isSubmit)
                 }" id="password" name="password" placeholder="Enter your password" />
               </div>

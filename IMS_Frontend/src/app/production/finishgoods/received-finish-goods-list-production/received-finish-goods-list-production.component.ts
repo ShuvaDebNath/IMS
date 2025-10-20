@@ -108,14 +108,14 @@ export class ReceivedFinishGoodsProductionComponent implements OnInit {
           swal.fire('Session Expired!', 'Please Login Again.', 'info');
           this.gs.Logout();
         } else {
-          swal.fire('Error!', 'Failed to load details.', 'error');
+          swal.fire('Error!', 'Failed to load details.', 'info');
         }
       },
       error: () =>
         swal.fire(
           'Error!',
           'An error occurred while fetching details.',
-          'error'
+          'info'
         ),
     });
   }

@@ -88,7 +88,7 @@ export class SidebarComponent implements OnInit {
           {
             title: `Invalid token!`,
             text: `Please Login!`,
-            icon: 'error',
+            icon: 'info',
           }
         );
       }
