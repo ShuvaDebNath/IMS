@@ -56,7 +56,7 @@ export class PendingRMRequisitionProductionEditComponent implements OnInit {
 
     // const id = this.getReqId();           // <- read from URL/State
     // if (id == null) {
-    //   swal.fire('Missing id', 'No reqId found in route.', 'error');
+    //   swal.fire('Missing id', 'No reqId found in route.', 'info');
     //   // optional: navigate back
     //   this.router.navigate(['/pending-rm-requisition']);
     //   return;
@@ -163,10 +163,10 @@ export class PendingRMRequisitionProductionEditComponent implements OnInit {
         } else if (results.msg === 'Invalid Token' || results.message === 'Invalid Token') {
           swal.fire('Session Expired!', 'Please Login Again.', 'info'); this.gs.Logout();
         } else {
-          swal.fire('Error!', 'Failed to load items.', 'error');
+          swal.fire('Error!', 'Failed to load items.', 'info');
         }
       },
-      error: () => swal.fire('Error!', 'An error occurred while fetching items.', 'error')
+      error: () => swal.fire('Error!', 'An error occurred while fetching items.', 'info')
     });
   }
 
@@ -334,7 +334,7 @@ export class PendingRMRequisitionProductionEditComponent implements OnInit {
       },
       error: (err) => {
         console.error(err);
-        swal.fire('Update Failed', err?.error?.message || 'Something went wrong.', 'error');
+        swal.fire('Update Failed', err?.error?.message || 'Something went wrong.', 'info');
       }
     });
   }

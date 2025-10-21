@@ -177,7 +177,7 @@ Formgroup!: FormGroup;
             swal.fire({
               title: `Faild!`,
               text: `Save Faild!`,
-              icon: 'error',
+              icon: 'info',
               timer: 5000,
             });
           }
@@ -232,7 +232,7 @@ Formgroup!: FormGroup;
 
   updateData() {
     if (this.Formgroup.invalid) {
-      swal.fire('Invaild Input', 'Please check inputs', 'error');
+      swal.fire('Invaild Input', 'Please check inputs', 'info');
       return;
     }
     var fDate = new Date();
@@ -293,7 +293,7 @@ Formgroup!: FormGroup;
             swal.fire({
               title: `Faild!`,
               text: `Save Faild!`,
-              icon: 'error',
+              icon: 'info',
               timer: 5000,
             });
           }

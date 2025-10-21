@@ -35,6 +35,7 @@ export class ReportService {
     const requestStatus = report.requestStatus ?? '';
     const fromDate = report.fromDate ? this.formatDate(report.fromDate) : '';
     const toDate = report.toDate ? this.formatDate(report.toDate) : '';
+    const UserID = report.UserID ? report.UserID : '';
 
     const url = `${this.baseUrl}${this.apiController}/SampleRequestReport`;
     const token = this.gs.getSessionData('token');
@@ -46,7 +47,7 @@ export class ReportService {
     this.http
       .get(url, {
         headers,
-        params: { rptType, fromDate, toDate, requestStatus },
+        params: { rptType, fromDate, toDate, requestStatus,UserID },
         responseType: 'blob',
       })
       .subscribe((res: Blob) => {

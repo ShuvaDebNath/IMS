@@ -14,6 +14,7 @@ import { GetDataModel } from 'src/app/models/GetDataModel';
 import { LC } from 'src/app/models/LCModel';
 import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
 import { DoubleMasterEntryModel } from 'src/app/models/DoubleMasterEntryModel';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-sample-request-list',
@@ -106,6 +107,12 @@ export class SampleRequestListComponent {
     });
   }
   Search() {
+    if (this.SearchForm.invalid) {
+          Swal.fire('Invalid Inputs!', 'Please Select From Date and To Date.', 'info');
+          return;
+        }
+    
+
     var fromDate = this.SearchForm.value.fromDate;
     var toDate = this.SearchForm.value.toDate;
     var userId = window.localStorage.getItem('userId');
@@ -128,7 +135,7 @@ export class SampleRequestListComponent {
           if (this.tableData.length > 0) {
             this.length = parseInt(this.tableData[0].totallen);
           } else {
-            swal.fire('error', 'No Data Found!!', 'error');
+            swal.fire('info', 'No Data Found!!', 'info');
           }
           //  this.isPage=this.rows[0].totallen>10;
         }
@@ -164,9 +171,8 @@ export class SampleRequestListComponent {
                     timer: 5000,
                   })
                   .then((result) => {
-                    this.ngOnInit();
+                     this.Search()
                   });
-                this.Search();
               } else if (results.message == 'Invalid Token') {
                 swal.fire('Session Expierd!', 'Please Login Again.', 'info');
                 this.gs.Logout();

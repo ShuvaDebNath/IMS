@@ -128,7 +128,7 @@ PIReport: any[] = [];
           this.gs.Logout();
         }
       },
-      error: () => swal.fire('Error!', 'Failed to load data.', 'error'),
+      error: () => swal.fire('Error!', 'Failed to load data.', 'info'),
     });
   }
 

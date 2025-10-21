@@ -161,7 +161,7 @@ export class BeneficiaryCreateComponent implements OnInit {
           swal.fire('Session Expired!', 'Please Login Again.', 'info');
           this.gs.Logout();
         } else {
-          swal.fire('Failed!', 'Save Failed!', 'error');
+          swal.fire('Failed!', 'Save Failed!', 'info');
         }
       }
     });
@@ -171,7 +171,7 @@ export class BeneficiaryCreateComponent implements OnInit {
 
   updateData() {
     if (this.Formgroup.invalid) {
-      swal.fire('Invalid Inputs!', 'Please check inputs', 'error');
+      swal.fire('Invalid Inputs!', 'Please check inputs', 'info');
       return;
     }
 
@@ -196,7 +196,7 @@ export class BeneficiaryCreateComponent implements OnInit {
           swal.fire('Session Expired!', 'Please Login Again.', 'info');
           this.gs.Logout();
         } else {
-          swal.fire('Failed!', 'Update Failed!', 'error');
+          swal.fire('Failed!', 'Update Failed!', 'info');
         }
       }
     });

@@ -307,7 +307,7 @@ export class SendFinishGoodsComponent implements OnInit {
             this.items.clear(); this.addItem();
           },
           error: () => {
-            swal.fire('Error', 'Could not save requisition', 'error');
+            swal.fire('info', 'Could not save requisition', 'info');
           }
         });
     }

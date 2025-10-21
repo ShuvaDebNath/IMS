@@ -88,14 +88,14 @@ export class RmIssueReportComponent {
           swal.fire('Session Expired!', 'Please Login Again.', 'info');
           this.gs.Logout();
         } else {
-          swal.fire('Error!', 'Failed to load details.', 'error');
+          swal.fire('Error!', 'Failed to load details.', 'info');
         }
       },
       error: () =>
         swal.fire(
           'Error!',
           'An error occurred while fetching details.',
-          'error'
+          'info'
         ),
     });
   }
@@ -124,14 +124,14 @@ export class RmIssueReportComponent {
           swal.fire('Session Expired!', 'Please Login Again.', 'info');
           this.gs.Logout();
         } else {
-          swal.fire('Error!', 'Failed to load details.', 'error');
+          swal.fire('info!', 'Failed to load details.', 'info');
         }
       },
       error: () =>
         swal.fire(
-          'Error!',
+          'info!',
           'An error occurred while fetching details.',
-          'error'
+          'info'
         ),
     });
   }
@@ -230,7 +230,7 @@ export class RmIssueReportComponent {
                 swal.fire(
                   'Stock Update Failed',
                   res?.message || 'Stock update failed.',
-                  'error'
+                  'info'
                 );
               }
             },
@@ -239,7 +239,7 @@ export class RmIssueReportComponent {
               swal.fire(
                 'Stock Update Failed',
                 err?.error?.message || 'Stock update failed.',
-                'error'
+                'info'
               );
             },
           });
@@ -249,7 +249,7 @@ export class RmIssueReportComponent {
           swal.fire(
             'Accept Failed',
             err?.error?.message || 'Something went wrong.',
-            'error'
+            'info'
           );
         },
       });

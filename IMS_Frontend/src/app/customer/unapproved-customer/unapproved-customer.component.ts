@@ -54,23 +54,25 @@ allCustomers: any[] = [];
     this.title.setTitle('Unapproved Customer List');
     this.getInitialData();
     this.dateForm = this.fb.group({
-      fromDate: [null, Validators.required],
-      toDate: [null, Validators.required],
       CustomerId: [''],
       SuperioId: [''],
     });
   }
   getInitialData() {
+    var userId = window.localStorage.getItem('userId');
     var ProcedureData = {
       procedureName: '[usp_Customer_GetInitialData]',
-      parameters: {},
+      parameters: {
+        'User_Id':userId
+      },
     };
 
     this.getDataService.GetInitialData(ProcedureData).subscribe({
       next: (results) => {
         if (results.status) {
-          this.CustomerList = JSON.parse(results.data).Tables3;
-          this.SuperiorList = JSON.parse(results.data).Tables2;
+          this.CustomerList = JSON.parse(results.data).Tables2;
+          if(JSON.parse(results.data).Tables3!=undefined)
+          this.SuperiorList = JSON.parse(results.data).Tables3;
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
           this.gs.Logout();
@@ -89,7 +91,7 @@ allCustomers: any[] = [];
       );
       return;
     }
-    const { fromDate, toDate, CustomerId, SuperioId } = this.dateForm.value;
+    var { fromDate, toDate, CustomerId, SuperioId } = this.dateForm.value;
     if (new Date(fromDate) > new Date(toDate)) {
       swal.fire(
         'Validation Error!',
@@ -101,12 +103,14 @@ allCustomers: any[] = [];
 
     const sentByStr = localStorage.getItem('userId');
     const sentBy = sentByStr ? Number(sentByStr) : null;
+    var userId = window.localStorage.getItem('userId');
+    
+    if(SuperioId==undefined || SuperioId=='')
+      SuperioId = userId
 
     const procedureData = {
       procedureName: 'usp_Customer_GetCustomerData',
       parameters: {
-        FromDateInput: fromDate,
-        ToDateInput: toDate,
         Superior_Id: SuperioId,
         Customer_Id: CustomerId,
         Status: 'Unapproved',
@@ -126,7 +130,7 @@ allCustomers: any[] = [];
           this.gs.Logout();
         }
       },
-      error: () => swal.fire('Error!', 'Failed to load data.', 'error'),
+      error: () => swal.fire('Error!', 'Failed to load data.', 'info'),
     });
   }
 
@@ -148,14 +152,14 @@ allCustomers: any[] = [];
           swal.fire('Session Expired!', 'Please Login Again.', 'info');
           this.gs.Logout();
         } else {
-          swal.fire('Error!', 'Failed to load details.', 'error');
+          swal.fire('Error!', 'Failed to load details.', 'info');
         }
       },
       error: () =>
         swal.fire(
           'Error!',
           'An error occurred while fetching details.',
-          'error'
+          'info'
         ),
     });
   }
@@ -164,7 +168,7 @@ allCustomers: any[] = [];
     const id = String(row?.Customer_ID ?? '');
 
     if (!id) {
-      swal.fire('Missing Id', 'Customer Id not found.', 'error');
+      swal.fire('Missing Id', 'Customer Id not found.', 'info');
       return;
     }
 
@@ -204,7 +208,7 @@ allCustomers: any[] = [];
               swal.fire(
                 'Delete Failed',
                 err?.error?.message || 'Something went wrong.',
-                'error'
+                'info'
               );
             },
           });
@@ -214,7 +218,7 @@ allCustomers: any[] = [];
   approeReq(row: any){
     const id = String(row?.Customer_ID ?? '');
     if (!id) {
-      swal.fire('Missing Id', 'Customer Id not found.', 'error');
+      swal.fire('Missing Id', 'Customer Id not found.', 'info');
       return;
     }
 
@@ -251,10 +255,16 @@ allCustomers: any[] = [];
               swal.fire(
                 'Approve Failed',
                 err?.error?.message || 'Something went wrong.',
-                'error'
+                'info'
               );
             },
           });
       });
+  }
+
+  getCustomerList(){
+    var SuperioId = this.dateForm.value.SuperioId;
+    this.CustomerList = this.CustomerList.filter((e:any)=>e.Superior_ID == SuperioId);
+    
   }
 }

@@ -6,25 +6,8 @@
     class="row p-3 shadow-sm g-3 align-items-end mb-3"
     (ngSubmit)="loadAllCustomers()"
   >
-    <div class="col-md-3">
-      <label class="form-label fw-bold">From Date</label>
-      <input
-        type="date"
-        class="form-control form-control-sm"
-        formControlName="fromDate"
-      />
-    </div>
 
-    <div class="col-md-3">
-      <label class="form-label fw-bold">To Date</label>
-      <input
-        type="date"
-        class="form-control form-control-sm"
-        formControlName="toDate"
-      />
-    </div>
-
-    <div class="col-md-3">
+    <div class="col-md-3" *ngIf="SuperiorList">
       <label>Superior Name <span>*</span></label>
       <p-dropdown
         [style]="{ width: '100%' }"
@@ -38,6 +21,7 @@
         placeholder="Please Select"
         optionValue="User_ID"
         formControlName="SuperioId"
+        (onChange)="getCustomerList()"
       >
         <ng-template let-AB pTemplate="item">
           <div class="flex align-items-center gap-2">
@@ -60,6 +44,8 @@
         placeholder="Please Select"
         optionValue="Customer_ID"
         formControlName="CustomerId"
+        [virtualScroll]="true"
+        [virtualScrollItemSize]=30
       >
         <ng-template let-AB pTemplate="item">
           <div class="flex align-items-center gap-2">
@@ -145,11 +131,11 @@
           <th class="text-center">Group Head</th>
           <th class="text-center">Phone Number</th>
           <th class="text-center">E-mail Address</th>
-          <th class="text-center">Created By</th>
+          <!-- <th class="text-center">Created By</th>
           <th class="text-center">Created Date</th>
           <th class="text-center">Status</th>
           <th class="text-center">Approved By</th>
-          <th class="text-center">Approved Date</th>
+          <th class="text-center">Approved Date</th> -->
           <th class="text-center">Action</th>
         </tr>
       </ng-template>
@@ -164,18 +150,18 @@
           <td class="text-start">{{ CustomersLIst.UserName }}</td>
           <td class="text-start">{{ CustomersLIst.Phone_No }}</td>
           <td class="text-start">{{ CustomersLIst.Email }}</td>
-          <td class="text-start">{{ CustomersLIst.CreatedBy }}</td>
+          <!-- <td class="text-start">{{ CustomersLIst.CreatedBy }}</td>
           <td class="text-center">
             {{ CustomersLIst.Created_At | date : "dd-MMM-yyyy" }}
           </td>
           <td class="text-start">{{ CustomersLIst.Status }}</td>
           <td class="text-center">{{ CustomersLIst.ApprovedBy }}</td>
-          <td class="text-center">{{ CustomersLIst.ApprovedDate | date : "dd-MMM-yyyy" }}</td>
+          <td class="text-center">{{ CustomersLIst.ApprovedDate | date : "dd-MMM-yyyy" }}</td> -->
 
           <td class="d-flex gap-2 justify-content-center">
             <a *ngIf="updatePermissions" class="btn bg-gradient-cyan btn-xs mr-2" target="_blank" title="Edit" [routerLink]="['/generate-customers']"
               [queryParams]="{Customer_Id:CustomersLIst.Customer_ID}"><i class="fa fa-edit" ></i></a> 
-            <button class="btn btn-danger btn-sm d-inline-flex align-items-center" (click)="onDelete(CustomersLIst)" title="Delete" aria-label="Delete">
+            <button *ngIf="deletePermissions" class="btn btn-danger btn-sm d-inline-flex align-items-center" (click)="onDelete(CustomersLIst)" title="Delete" aria-label="Delete">
                 <i class="pi pi-trash me-1"></i>
             </button>
             <!-- ✅ call the handler that opens the dialog -->

@@ -94,16 +94,19 @@ Formgroup!: FormGroup;
   }
 
   getInitialData() {
+    var userId = window.localStorage.getItem('userId');
     var ProcedureData = {
       procedureName: '[usp_Customer_GetInitialData]',
-      parameters: {},
+      parameters: {
+        'User_Id':userId
+      },
     };
-
     this.masterEntyService.GetInitialData(ProcedureData).subscribe({
       next: (results) => {
         if (results.status) {
           this.CountryList = JSON.parse(results.data).Tables1;
-          this.UserList = JSON.parse(results.data).Tables2;
+          if(JSON.parse(results.data).Tables3!=undefined)
+          this.UserList = JSON.parse(results.data).Tables3;``
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
           this.gs.Logout();
@@ -176,7 +179,7 @@ Formgroup!: FormGroup;
             swal.fire({
               title: `Faild!`,
               text: `Save Faild!`,
-              icon: 'error',
+              icon: 'info',
               timer: 5000,
             });
           }
@@ -231,7 +234,7 @@ Formgroup!: FormGroup;
 
   updateData() {
     if (this.Formgroup.invalid) {
-      swal.fire('Invaild Input', 'Please check inputs', 'error');
+      swal.fire('Invaild Input', 'Please check inputs', 'info');
       return;
     }
     var fDate = new Date();
@@ -295,7 +298,7 @@ Formgroup!: FormGroup;
             swal.fire({
               title: `Faild!`,
               text: `Save Faild!`,
-              icon: 'error',
+              icon: 'info',
               timer: 5000,
             });
           }

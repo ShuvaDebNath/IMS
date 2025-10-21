@@ -21,14 +21,14 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("SampleRequestReport")]
-        public async Task<IActionResult> SampleRequestReport(String rptType, string fromDate,string toDate,string requestStatus="")
+        public async Task<IActionResult> SampleRequestReport(String rptType, string fromDate = "", string toDate = "", string requestStatus="" ,string UserID="")
         {
             try
             {
                 var currentUser = HttpContext.User;
 
                 string reportPath = "SampleRequestReport\\";
-                DataSet ds = await _reportService.SampleRequestReport(fromDate, toDate, requestStatus);
+                DataSet ds = await _reportService.SampleRequestReport(fromDate, toDate, requestStatus, UserID);
 
                 if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
                 {

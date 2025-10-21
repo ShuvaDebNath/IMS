@@ -48,7 +48,7 @@
       <hr>
 
       <p-table #dt [value]="tableData" [paginator]="true" [rows]="10" [responsive]="true" [showCurrentPageReport]="true"
-        [globalFilterFields]="['RequestDate','CustomerName','Article_No','Color','RequestedQuantity','RequestStatus','RequestBy']"
+        [globalFilterFields]="['RequestDate','CustomerName','Article','Color','RequestedQuantity','RequestStatus','RequestBy']"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
 
         <ng-template pTemplate="caption">
@@ -63,15 +63,14 @@
 
         <ng-template pTemplate="header">
           <tr>
-            <th class="">SL</th>
-            <th class="">Request Date</th>
-            <th class="">Customer Name</th>
-            <th class="">Article</th>
-            <th class="">Color</th>
-            <th class="">Quantity</th>
-            <th class="">Request By</th>
-            <th class="">Request Status</th>
-            <th class="" *ngIf="allPersmissions">Action</th>
+            <th class="text-center">SL</th>
+            <th class="text-center">Request Date</th>
+            <th class="text-left">Customer Name</th>
+            <th class="text-center">Article</th>
+            <th class="text-center">Quantity</th>
+            <th class="text-center">Request By</th>
+            <th class="text-center">Carried By</th>
+            <th class="text-center" *ngIf="allPersmissions">Action</th>
           </tr>
         </ng-template>
 
@@ -79,9 +78,8 @@
           <tr>
             <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
             <td class="text-center align-middle">{{table.RequestDate}}</td>
-            <td class="text-center align-middle">{{table.CustomerName}}</td>
-            <td class="text-center align-middle">{{table.Article_No}}</td>
-            <td class="text-center align-middle">{{table.Color}}</td>
+            <td class="text-left align-left">{{table.CustomerName}}</td>
+            <td class="text-center align-middle">{{table.Article}}</td>
             <td class="text-center align-middle">{{table.RequestedQuantity}}</td>
             <td class="text-center align-middle">{{table.RequestBy}}</td>
             <td class="text-center align-middle">{{table.RequestStatus}}</td>
@@ -111,12 +109,12 @@
         <p>Request By: {{ detailsData.RequestBy }}</p>
         <p>Customer Name: {{ detailsData.CustomerName }}</p>
         <p>Customer Contact Info: {{ detailsData.CustomerContactInfo }}</p>
-        <p>Article No: {{ detailsData.Article_No }}</p>
+        <p>Article: {{ detailsData.Article }}</p>
         <p>Product Description: {{ detailsData.ProductDescription }}</p>
         <p>Color: {{ detailsData.Color }}</p>
         <p>Quantity Requested: {{ detailsData.RequestedQuantity }}</p>
         <p>Shipping Address: {{ detailsData.ShippingAddress }}</p>
-        <p>Request Status: {{ detailsData.RequestStatus }}</p>
+        <p>Carried By: {{ detailsData.RequestStatus }}</p>
         <p>Remarks: {{ detailsData.Remarks }}</p>
       </div>
     </p-dialog>

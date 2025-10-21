@@ -93,10 +93,10 @@ export class AcceptedRMRequisitionWareHouseComponent implements OnInit {
                     swal.fire('Session Expired!', 'Please Login Again.', 'info');
                     this.gs.Logout();
                 } else {
-                    swal.fire('Error!', 'Failed to load details.', 'error');
+                    swal.fire('Error!', 'Failed to load details.', 'info');
                 }
             },
-            error: () => swal.fire('Error!', 'An error occurred while fetching details.', 'error')
+            error: () => swal.fire('Error!', 'An error occurred while fetching details.', 'info')
         });
     }
 
@@ -126,10 +126,10 @@ export class AcceptedRMRequisitionWareHouseComponent implements OnInit {
                     swal.fire('Session Expired!', 'Please Login Again.', 'info');
                     this.gs.Logout();
                 } else {
-                    swal.fire('Error!', 'Failed to load details.', 'error');
+                    swal.fire('Error!', 'Failed to load details.', 'info');
                 }
             },
-            error: () => swal.fire('Error!', 'An error occurred while fetching details.', 'error')
+            error: () => swal.fire('Error!', 'An error occurred while fetching details.', 'info')
         });
 
     }
@@ -240,7 +240,7 @@ export class AcceptedRMRequisitionWareHouseComponent implements OnInit {
                     this.loadPendingRequisitions();
                 },
                 error: () => {
-                    swal.fire('Error', 'Could not save requisition', 'error');
+                    swal.fire('info', 'Could not save requisition', 'info');
                 }
             });
     }

@@ -51,7 +51,7 @@ export class AllReportComponent {
   RequestStatus: any = [
     {
       value: '',
-      text: '--Select Request Status--',
+      text: '--Select Carried By--',
     },
     {
       value: 'Messenger',
@@ -100,20 +100,28 @@ export class AllReportComponent {
   }
   initForm(): void {
     this.SearchForm = this.fb.group({
-      fromDate: ['', [Validators.required]],
-      toDate: ['', [Validators.required]],
+      fromDate: [''],
+      toDate: [''],
       status: [''],
     });
   }
   Search() {
     var fromDate = this.SearchForm.value.fromDate;
     var toDate = this.SearchForm.value.toDate;
+    var userId = window.localStorage.getItem('userId');
     let param = new GetDataModel();
+    if (fromDate == undefined) {
+      const dateString = '2000-01-01';
+      const date = new Date(dateString);
+      fromDate = date;
+      toDate = new Date();
+    }
     param.procedureName = '[usp_SampleRequest_Report]';
     param.parameters = {
       FromDate: fromDate,
       ToDate: toDate,
       RequestStatus: this.SearchForm.value.status,
+      UserID:userId
     };
 
     this.masterEntryService.GetInitialData(param).subscribe({
@@ -127,7 +135,7 @@ export class AllReportComponent {
           if (this.tableData.length > 0) {
             this.length = parseInt(this.tableData[0].totallen);
           } else {
-            swal.fire('error', 'No Data Found!!', 'error');
+            swal.fire('info', 'No Data Found!!', 'info');
           }
           //  this.isPage=this.rows[0].totallen>10;
         }
@@ -135,7 +143,8 @@ export class AllReportComponent {
     });
   }
 
-  Print() {
+  Print() 
+    var userId = window.localStorage.getItem('userId');
     var item = {
       fromDate: this.SearchForm.value.fromDate,
       toDate: this.SearchForm.value.toDate,
@@ -192,5 +201,9 @@ export class AllReportComponent {
         },
         error: (err: any) => {},
       });
+      UserID:userId
+    };
+
+    this.reportService.PrintSampleRequest(item, 'pdf', 'T');
   }
 }
