@@ -182,13 +182,22 @@
             <td class="text-center align-middle">{{ table.HandoverStatus==''?'Not handovered yet':'Handovered '+table.HandoverStatus }}</td>
             <td class="text-center align-middle">
               <button
-                *ngIf="updatePermissions"
+                *ngIf="updatePermissions && table.RequestStatus!='By Own'"
                 class="btn theme-btn-view"
                 [disabled]="table.HandoverStatus!='' "
                 title="Handover to Messenger"
                 (click)="handoverSample(table,'To Messenger')"
               >
                 Handover to Messenger
+              </button>
+              <button
+                *ngIf="updatePermissions && table.RequestStatus=='By Own'"
+                class="btn theme-btn-view"
+                [disabled]="table.HandoverStatus=='To Client' "
+                title="Handover to Client"
+                (click)="handoverSample(table,'To Client')"
+              >
+                Handover to Client
               </button>
               <button
                 *ngIf="updatePermissions && (roleId=='1' || roleId=='2')"

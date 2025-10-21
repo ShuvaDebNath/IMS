@@ -70,6 +70,7 @@
             <th class="text-center">Quantity</th>
             <th class="text-center">Request By</th>
             <th class="text-center">Carried By</th>
+            <th class="text-center">Handover Status</th>
             <th class="text-center" *ngIf="allPersmissions">Action</th>
           </tr>
         </ng-template>
@@ -83,6 +84,7 @@
             <td class="text-center align-middle">{{table.RequestedQuantity}}</td>
             <td class="text-center align-middle">{{table.RequestBy}}</td>
             <td class="text-center align-middle">{{table.RequestStatus}}</td>
+            <td class="text-center align-middle">{{ table.HandoverStatus==''?'Not handovered yet':'Handovered '+table.HandoverStatus }}</td>
             <td class="text-center align-middle p-1 m-0">
               <div class="d-flex justify-content-center gap-1">
                 <a class="btn theme-btn-view " target="_blank" title="View" (click)="viewDetails(table)"><i

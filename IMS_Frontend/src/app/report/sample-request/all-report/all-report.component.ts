@@ -143,7 +143,7 @@ export class AllReportComponent {
     });
   }
 
-  Print() 
+  Print() {
     var userId = window.localStorage.getItem('userId');
     var item = {
       fromDate: this.SearchForm.value.fromDate,
@@ -167,6 +167,16 @@ export class AllReportComponent {
       };
       message = 'Sample handover to messenger Successfully!';
     }
+    else if(status=='To Client'){
+      param.queryParams = {
+        ClientHandoverDate: new Date(),
+        ClinetHandoverBy: this.userId,
+        HandoverStatus: status,
+      };
+      
+      message = 'Sample handover to client Successfully!';
+    }
+
     else if(status==''){
       param.queryParams = {
         MessengerHandoverDate: null,
@@ -174,7 +184,7 @@ export class AllReportComponent {
         HandoverStatus: status,
       };
       
-      message = 'Sample handover to reverted Successfully!';
+      message = 'Sample handover reverted Successfully!';
     }
 
     this.masterEntryService
@@ -201,9 +211,7 @@ export class AllReportComponent {
         },
         error: (err: any) => {},
       });
-      UserID:userId
-    };
-
-    this.reportService.PrintSampleRequest(item, 'pdf', 'T');
+    
   }
+  
 }
