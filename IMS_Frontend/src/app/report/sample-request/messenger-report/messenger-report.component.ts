@@ -72,6 +72,8 @@ pageIndex = 1;
   getDataModel: GetDataModel = new GetDataModel();
   detailsData: any;
   isDetailsVisible: boolean = false;
+  roleId: any = '';
+  userId: any = '';
 
   constructor(
     private fb: FormBuilder,
@@ -83,15 +85,17 @@ pageIndex = 1;
     private title: Title
   ) {}
   ngOnInit(): void {
-    var permissions = this.gs.CheckUserPermission('Sample Request List');
+    var permissions = this.gs.CheckUserPermission('Messenger Report');
     this.insertPermissions = permissions.insertPermissions;
     this.updatePermissions = permissions.updatePermissions;
     this.deletePermissions = permissions.deletePermissions;
     this.printPermissions = permissions.printPermissions;
+    this.roleId = window.localStorage.getItem('roleId');
+    this.userId = window.localStorage.getItem('userId');
 
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
-    this.title.setTitle('Sample Request List');
+    this.title.setTitle('Messenger Report');
   }
   initForm(): void {
     this.SearchForm = this.fb.group({
@@ -135,4 +139,53 @@ pageIndex = 1;
 
     this.reportService.PrintSampleRequest(item, 'pdf','T');
   }
+
+  handoverSample(e: any, status: any) {
+      let param = new MasterEntryModel();
+      param.tableName = 'tbl_SampleRequestForm';
+      param.whereParams = { Id: e.Id };
+      var message = '';
+      if (status == 'To Client') {
+        param.queryParams = {
+          ClientHandoverDate: new Date(),
+          ClinetHandoverBy: this.userId,
+          HandoverStatus: status,
+        };
+        message = 'Sample handover to client Successfully!';
+      }
+      else if(status==''){
+        param.queryParams = {
+          ClientHandoverDate: null,
+          ClinetHandoverBy: null,
+          HandoverStatus: status,
+        };
+        
+        message = 'Sample handover to reverted Successfully!';
+      }
+  
+      this.masterEntryService
+        .UpdateData(param.queryParams, param.whereParams, param.tableName)
+        .subscribe({
+          next: (results: any) => {
+            if (results.status) {
+              swal
+                .fire({
+                  title: `${results.message}!`,
+                  text: message,
+                  icon: 'success',
+                  timer: 5000,
+                })
+                .then((result) => {
+                  this.Search();
+                });
+              this.Search();
+            } else if (results.message == 'Invalid Token') {
+              swal.fire('Session Expierd!', 'Please Login Again.', 'info');
+              this.gs.Logout();
+            } else {
+            }
+          },
+          error: (err: any) => {},
+        });
+    }
 }

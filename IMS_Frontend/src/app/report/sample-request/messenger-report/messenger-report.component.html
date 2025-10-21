@@ -79,6 +79,8 @@
             <th class="text-center">Quantity</th>
             <th class="text-center">Request By</th>
             <th class="text-center">Request Status</th>
+            <th class="text-center">Handover Status</th>
+            <th class="text-center">Action</th>
           </tr>
         </ng-template>
 
@@ -99,6 +101,28 @@
             </td>
             <td class="text-center align-middle">{{ table.RequestBy }}</td>
             <td class="text-center align-middle">{{ table.RequestStatus }}</td>
+            <td class="text-center align-middle">{{ table.HandoverStatus==''?'Not handovered yet':'Handovered '+table.HandoverStatus }}</td>
+            <td class="text-center align-middle">
+              <button
+                *ngIf="updatePermissions"
+                class="btn theme-btn-view"
+                [disabled]="table.HandoverStatus=='To Client' && roleId!='1' && roleId!='2'"
+                title="Handover to Client"
+                (click)="handoverSample(table,'To Client')"
+              >
+                Handover to Client
+              </button>
+              <button
+                *ngIf="updatePermissions && (roleId=='1' || roleId=='2')"
+                class="btn theme-btn-delete"
+                [disabled]="table.HandoverStatus=='To Messenger'"
+                title="Revert"
+                (click)="handoverSample(table,'To Messenger')"
+              >
+                Revert
+              </button>
+
+            </td>
           </tr>
         </ng-template>
         <!-- 'Sample Request Report' title,CONVERT(varchar, RequestDate, 105) AS RequestDate,

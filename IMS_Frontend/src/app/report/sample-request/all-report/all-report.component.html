@@ -88,7 +88,7 @@
             </p-dropdown>
           </div>
           <div class="col-3 d-flex">
-            <div style="margin-right: 10px;">
+            <div style="margin-right: 10px">
               <button
                 title="Search"
                 type="button"
@@ -98,7 +98,7 @@
                 <i class="fas fa-search"></i>&nbsp;Load
               </button>
             </div>
-            <div *ngIf="tableData!=undefined">
+            <div *ngIf="tableData != undefined">
               <button
                 title="Print"
                 type="button"
@@ -157,6 +157,8 @@
             <th class="text-center">Quantity</th>
             <th class="text-center">Request By</th>
             <th class="text-center">Request Status</th>
+            <th class="text-center">Handover Status</th>
+            <th class="text-center">Action</th>
           </tr>
         </ng-template>
 
@@ -177,6 +179,28 @@
             </td>
             <td class="text-center align-middle">{{ table.RequestBy }}</td>
             <td class="text-center align-middle">{{ table.RequestStatus }}</td>
+            <td class="text-center align-middle">{{ table.HandoverStatus==''?'Not handovered yet':'Handovered '+table.HandoverStatus }}</td>
+            <td class="text-center align-middle">
+              <button
+                *ngIf="updatePermissions"
+                class="btn theme-btn-view"
+                [disabled]="table.HandoverStatus!='' "
+                title="Handover to Messenger"
+                (click)="handoverSample(table,'To Messenger')"
+              >
+                Handover to Messenger
+              </button>
+              <button
+                *ngIf="updatePermissions && (roleId=='1' || roleId=='2')"
+                class="btn theme-btn-delete"
+                [disabled]="table.HandoverStatus==''"
+                title="Revert"
+                (click)="handoverSample(table,'')"
+              >
+                Revert
+              </button>
+
+            </td>
           </tr>
         </ng-template>
         <!-- 'Sample Request Report' title,CONVERT(varchar, RequestDate, 105) AS RequestDate,

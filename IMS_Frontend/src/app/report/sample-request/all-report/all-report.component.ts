@@ -19,10 +19,9 @@ import { ReportService } from 'src/app/services/reportService/report-service.ser
 @Component({
   selector: 'app-all-report',
   templateUrl: './all-report.component.html',
-  styleUrls: ['./all-report.component.css']
+  styleUrls: ['./all-report.component.css'],
 })
 export class AllReportComponent {
-
   pageIndex = 1;
   searchText = '';
   length = 100;
@@ -73,6 +72,8 @@ export class AllReportComponent {
   getDataModel: GetDataModel = new GetDataModel();
   detailsData: any;
   isDetailsVisible: boolean = false;
+  roleId: any = '';
+  userId: any = '';
 
   constructor(
     private fb: FormBuilder,
@@ -80,25 +81,28 @@ export class AllReportComponent {
     private gs: GlobalServiceService,
     private pagesComponent: PagesComponent,
     private masterEntryService: MasterEntryService,
-    private reportService:ReportService,
+    private reportService: ReportService,
     private title: Title
   ) {}
   ngOnInit(): void {
-    var permissions = this.gs.CheckUserPermission('Sample Request List');
+    var permissions = this.gs.CheckUserPermission('All Report');
     this.insertPermissions = permissions.insertPermissions;
     this.updatePermissions = permissions.updatePermissions;
     this.deletePermissions = permissions.deletePermissions;
     this.printPermissions = permissions.printPermissions;
+    this.roleId = window.localStorage.getItem('roleId');
+
+    this.userId = window.localStorage.getItem('userId');
 
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
-    this.title.setTitle('Sample Request List');
+    this.title.setTitle('All Report');
   }
   initForm(): void {
     this.SearchForm = this.fb.group({
       fromDate: ['', [Validators.required]],
       toDate: ['', [Validators.required]],
-      status:['']
+      status: [''],
     });
   }
   Search() {
@@ -109,7 +113,7 @@ export class AllReportComponent {
     param.parameters = {
       FromDate: fromDate,
       ToDate: toDate,
-      RequestStatus:this.SearchForm.value.status
+      RequestStatus: this.SearchForm.value.status,
     };
 
     this.masterEntryService.GetInitialData(param).subscribe({
@@ -118,6 +122,8 @@ export class AllReportComponent {
           this.tableData = [];
           let tables = JSON.parse(results.data);
           this.tableData = tables.Tables1;
+          console.log(this.tableData);
+          
           if (this.tableData.length > 0) {
             this.length = parseInt(this.tableData[0].totallen);
           } else {
@@ -129,14 +135,62 @@ export class AllReportComponent {
     });
   }
 
-  Print(){
-
+  Print() {
     var item = {
-      'fromDate':this.SearchForm.value.fromDate,
-      'toDate':this.SearchForm.value.toDate,
-      'requestStatus':this.SearchForm.value.status,
+      fromDate: this.SearchForm.value.fromDate,
+      toDate: this.SearchForm.value.toDate,
+      requestStatus: this.SearchForm.value.status,
+    };
+
+    this.reportService.PrintSampleRequest(item, 'pdf', 'T');
+  }
+
+  handoverSample(e: any, status: any) {
+    let param = new MasterEntryModel();
+    param.tableName = 'tbl_SampleRequestForm';
+    param.whereParams = { Id: e.Id };
+    var message = '';
+    if (status == 'To Messenger') {
+      param.queryParams = {
+        MessengerHandoverDate: new Date(),
+        MessengerHandoverBy: this.userId,
+        HandoverStatus: status,
+      };
+      message = 'Sample handover to messenger Successfully!';
+    }
+    else if(status==''){
+      param.queryParams = {
+        MessengerHandoverDate: null,
+        MessengerHandoverBy: null,
+        HandoverStatus: status,
+      };
+      
+      message = 'Sample handover to reverted Successfully!';
     }
 
-    this.reportService.PrintSampleRequest(item, 'pdf','T');
+    this.masterEntryService
+      .UpdateData(param.queryParams, param.whereParams, param.tableName)
+      .subscribe({
+        next: (results: any) => {
+          if (results.status) {
+            swal
+              .fire({
+                title: `${results.message}!`,
+                text: message,
+                icon: 'success',
+                timer: 5000,
+              })
+              .then((result) => {
+                this.Search();
+              });
+            this.Search();
+          } else if (results.message == 'Invalid Token') {
+            swal.fire('Session Expierd!', 'Please Login Again.', 'info');
+            this.gs.Logout();
+          } else {
+          }
+        },
+        error: (err: any) => {},
+      });
   }
 }

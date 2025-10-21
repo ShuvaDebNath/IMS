@@ -57,6 +57,7 @@ export class SampleRequestListComponent {
   getDataModel: GetDataModel = new GetDataModel();
   detailsData: any;
   isDetailsVisible: boolean = false;
+  roleId: any = '';
 
   constructor(
     private fb: FormBuilder,
@@ -76,6 +77,8 @@ export class SampleRequestListComponent {
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
     this.title.setTitle('Sample Request List');
+
+    this.roleId = window.localStorage.getItem('roleId');
 
     // var fDate = new Date();
     // const mm = String(fDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
@@ -113,7 +116,7 @@ export class SampleRequestListComponent {
       ToDate: toDate,
       PageIndex: this.pageIndex,
       PageSize: this.pageSize,
-      UserId:userId
+      UserId: userId,
     };
 
     this.masterEntryService.GetInitialData(param).subscribe({
@@ -163,14 +166,14 @@ export class SampleRequestListComponent {
                   .then((result) => {
                     this.ngOnInit();
                   });
-                this.Search()
+                this.Search();
               } else if (results.message == 'Invalid Token') {
                 swal.fire('Session Expierd!', 'Please Login Again.', 'info');
                 this.gs.Logout();
               } else {
               }
             },
-            error: (err:any) => {},
+            error: (err: any) => {},
           });
         }
       });
@@ -203,4 +206,37 @@ export class SampleRequestListComponent {
       },
     });
   }
+
+  checkPermission(e: any) {
+    console.log(e,this.roleId);
+    
+    if (this.roleId == '50') {
+      if (e.HandoverStatus != '') {
+        swal.fire(
+          'info',
+          'Sample already handovered and cannot edit anymore',
+          'info'
+        );
+      } else {
+        if (this.updatePermissions) {
+          const url = this.router.createUrlTree(['/sample-request-edit-form'], {
+            queryParams: { SRId:e.Id },
+          });
+
+          const fullUrl = this.router.serializeUrl(url);
+          window.open(fullUrl, '_blank');
+        } 
+      }
+    } else {
+      if (this.updatePermissions) {
+        const url = this.router.createUrlTree(['/sample-request-edit-form'], {
+            queryParams: { SRId:e.Id },
+          });
+
+          const fullUrl = this.router.serializeUrl(url);
+          window.open(fullUrl, '_blank');
+      } 
+    }
+  }
+
 }
