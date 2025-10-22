@@ -119,7 +119,7 @@
               <button
                 *ngIf="updatePermissions"
                 class="btn theme-btn-view"
-                [disabled]="table.HandoverStatus=='Received' && roleId!='1' && roleId!='2'"
+                [disabled]="table.HandoverStatus=='Received'"
                 title="Receive"
                 (click)="handoverSample(table,'Received')"
               >
@@ -128,7 +128,7 @@
               <button
                 *ngIf="updatePermissions"
                 class="btn theme-btn-view"
-                [disabled]="table.HandoverStatus!='Received' && roleId!='1' && roleId!='2'"
+                [disabled]="table.HandoverStatus=='To Client'"
                 title="Handover to Client"
                 (click)="handoverSample(table,'To Client')"
               >

@@ -211,7 +211,7 @@
               </button>
               <button
                 *ngIf="updatePermissions && table.RequestStatus == 'By Own'"
-                class="btn theme-btn-view"
+                class="btn theme-btn-view d-none"
                 [disabled]="table.HandoverStatus == 'To Client'"
                 title="Handover to Client"
                 (click)="InputSampleQty(table, 'To Client')"
@@ -219,7 +219,7 @@
                 Handover to Client
               </button>
               <button
-                *ngIf="updatePermissions && (roleId == '1' || roleId == '2')"
+                *ngIf="updatePermissions && table.RequestStatus != 'By Own' && (roleId == '1' || roleId == '2')"
                 class="btn theme-btn-delete"
                 [disabled]="table.HandoverStatus == ''"
                 title="Revert"
