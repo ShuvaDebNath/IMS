@@ -46,7 +46,10 @@
           'RequestDate',
           'CustomerName',
           'CustomerContactInfo',
-          'Article',
+          'Article_No',
+          'Color',
+          'Measurement',
+          'Unit',
           'ProductDescription',
           'RequestedQuantity',
           'RequestStatus',
@@ -74,11 +77,17 @@
             <th class="text-center">Request Date</th>
             <th class="text-left">Customer Name</th>
             <th class="text-center">Customer Contact Info</th>
-            <th class="text-center">Article</th>
+            <th class="text-center">Article No</th>
+            <th class="text-center">Color</th>
+            <th class="text-center">Width</th>
+            <th class="text-center">Measurement</th>
             <th class="text-center">Product Description</th>
-            <th class="text-center">Quantity</th>
+            <th class="text-center">Requested Quantity</th>
+            <th class="text-center">Approved Quantity</th>
             <th class="text-center">Request By</th>
             <th class="text-center">Carried By</th>
+            <th class="text-center">Handover Status</th>
+            <th class="text-center">Action</th>
           </tr>
         </ng-template>
 
@@ -90,15 +99,52 @@
             <td class="text-center align-middle">
               {{ table.CustomerContactInfo }}
             </td>
-            <td class="text-center align-middle">{{ table.Article }}</td>
+            <td class="text-center align-left">{{ table.Article_No }}</td>
+            <td class="text-center align-left">{{ table.Color }}</td>
+            <td class="text-center align-left">{{ table.Measurement }}</td>
+            <td class="text-center align-left">{{ table.Unit }}</td>
             <td class="text-center align-middle">
               {{ table.ProductDescription }}
             </td>
             <td class="text-center align-middle">
               {{ table.RequestedQuantity }}
             </td>
+            <td class="text-center align-middle">
+              {{ table.ApprovedQty }}
+            </td>
             <td class="text-center align-middle">{{ table.RequestBy }}</td>
             <td class="text-center align-middle">{{ table.RequestStatus }}</td>
+            <td class="text-center align-middle">{{ table.HandoverStatus==''?'Not handovered yet':'Handovered '+table.HandoverStatus }}</td>
+            <td class="text-center align-middle">
+              <button
+                *ngIf="updatePermissions"
+                class="btn theme-btn-view"
+                [disabled]="table.HandoverStatus=='Received' && roleId!='1' && roleId!='2'"
+                title="Receive"
+                (click)="handoverSample(table,'Received')"
+              >
+                Receive
+              </button>
+              <button
+                *ngIf="updatePermissions"
+                class="btn theme-btn-view"
+                [disabled]="table.HandoverStatus!='Received' && roleId!='1' && roleId!='2'"
+                title="Handover to Client"
+                (click)="handoverSample(table,'To Client')"
+              >
+                Handover to Client
+              </button>
+              <button
+                *ngIf="updatePermissions && (roleId=='1' || roleId=='2')"
+                class="btn theme-btn-delete"
+                [disabled]="table.HandoverStatus=='To Messenger'"
+                title="Revert"
+                (click)="handoverSample(table,'Revert')"
+              >
+                Revert
+              </button>
+
+            </td>
           </tr>
         </ng-template>
         <!-- 'Sample Request Report' title,CONVERT(varchar, RequestDate, 105) AS RequestDate,

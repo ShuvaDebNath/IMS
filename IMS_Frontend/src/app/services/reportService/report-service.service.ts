@@ -29,13 +29,15 @@ export class ReportService {
     }),
   };
 
-  PrintSampleRequest(report: any, rptType: any, isView: any) {
-    console.log(report);
-    
+  PrintSampleRequest(
+    report: any,
+    rptType: 'pdf' | 'excel' | 'word',
+    isView: boolean
+  ) {
     const requestStatus = report.requestStatus ?? '';
     const fromDate = report.fromDate ? this.formatDate(report.fromDate) : '';
     const toDate = report.toDate ? this.formatDate(report.toDate) : '';
-    const UserID = report.UserID ? report.UserID : '';
+    const UserID = report.UserID ?? '';
 
     const url = `${this.baseUrl}${this.apiController}/SampleRequestReport`;
     const token = this.gs.getSessionData('token');
@@ -47,12 +49,37 @@ export class ReportService {
     this.http
       .get(url, {
         headers,
-        params: { rptType, fromDate, toDate, requestStatus,UserID },
+        params: { rptType, fromDate, toDate, requestStatus, UserID },
         responseType: 'blob',
       })
       .subscribe((res: Blob) => {
-        const fileURL = window.URL.createObjectURL(res);
-        window.open(fileURL, '_blank');
+        const blobType =
+          rptType === 'pdf'
+            ? 'application/pdf'
+            : rptType === 'excel'
+            ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+
+        const blob = new Blob([res], { type: blobType });
+
+        const fileName =
+          rptType === 'pdf'
+            ? 'SampleRequestReport.pdf'
+            : rptType === 'excel'
+            ? 'SampleRequestReport.xlsx'
+            : 'SampleRequestReport.docx';
+
+        if (isView && rptType === 'pdf') {
+          // View PDF in new tab
+          const fileURL = window.URL.createObjectURL(blob);
+          window.open(fileURL, '_blank');
+        } else {
+          // Force download
+          const link = document.createElement('a');
+          link.href = window.URL.createObjectURL(blob);
+          link.download = fileName;
+          link.click();
+        }
       });
   }
 
