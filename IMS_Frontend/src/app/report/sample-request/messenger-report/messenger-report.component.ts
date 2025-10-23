@@ -109,7 +109,7 @@ export class MessengerReportComponent {
     var toDate = new Date();
     let param = new GetDataModel();
     var userId = window.localStorage.getItem('userId');
-    param.procedureName = '[usp_SampleRequest_Report]';
+    param.procedureName = '[usp_SampleRequest_Messenger_Report]';
     param.parameters = {
       FromDate: fromDate,
       ToDate: toDate,
@@ -203,7 +203,7 @@ export class MessengerReportComponent {
         param.queryParams = {
           ReceiveDate: new Date(),
           ReceiveBy: this.userId,
-          HandoverStatus: status,
+          HandoverStatus: 'Received',
         };
         
         message = 'Sample received Successfully!';

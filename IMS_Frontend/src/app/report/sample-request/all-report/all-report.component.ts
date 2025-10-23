@@ -49,6 +49,7 @@ export class AllReportComponent {
   fromDate: any;
   toDate: any;
   LCNo: string = '';
+  errorMessage:string = '';
   errorShow = false;
   RequestStatus: any = [
     {
@@ -205,77 +206,91 @@ export class AllReportComponent {
   }
 
   ApproveQtyModal() {
+    this.ApprovedQty = 0
     this.isApproveQty = true;
   }
 
   handoverSample() {
-    this.isApproveQty = false;
     console.log(this.ApprovedQty);
-    if(this.ApprovedQty==0){
-      swal.fire('info','Approved qty should be greater then 0','info');
-      return;
+    if (this.ApprovedQty == 0 || this.ApprovedQty==null) {
+      this.errorShow = true;
+      this.errorMessage = "Approved qty can not be 0 or empty";
+    } else {
+      
+    this.isApproveQty = false;
+      var e = this.sampleData;
+      var status = this.sampleStatus;
+      let param = new MasterEntryModel();
+      param.tableName = 'tbl_SampleRequestForm';
+      param.whereParams = { Id: e.Id };
+      var message = '';
+      if (status == 'To Messenger') {
+        param.queryParams = {
+          MessengerHandoverDate: new Date(),
+          MessengerHandoverBy: this.userId,
+          HandoverStatus: status,
+          ApprovedQty: this.ApprovedQty,
+        };
+        message = 'Sample handover to messenger Successfully!';
+      } else if (status == 'To Client') {
+        param.queryParams = {
+          ClientHandoverDate: new Date(),
+          ClinetHandoverBy: this.userId,
+          HandoverStatus: status,
+          ApprovedQty: this.ApprovedQty,
+        };
+
+        message = 'Sample handover to client Successfully!';
+      }else if (status == 'To Marketing') {
+        param.queryParams = {
+          ClientHandoverDate: new Date(),
+          ClinetHandoverBy: this.userId,
+          HandoverStatus: status,
+          ApprovedQty: this.ApprovedQty,
+        };
+
+        message = 'Sample handover to client Successfully!';
+      } else if (status == '') {
+        param.queryParams = {
+          MessengerHandoverDate: null,
+          MessengerHandoverBy: null,
+          HandoverStatus: status,
+          ApprovedQty: 0,
+        };
+
+        message = 'Sample handover reverted Successfully!';
+      }
+
+      this.masterEntryService
+        .UpdateData(param.queryParams, param.whereParams, param.tableName)
+        .subscribe({
+          next: (results: any) => {
+            if (results.status) {
+              swal
+                .fire({
+                  title: `${results.message}!`,
+                  text: message,
+                  icon: 'success',
+                  timer: 5000,
+                })
+                .then((result) => {
+                  this.Search();
+                });
+              this.Search();
+            } else if (results.message == 'Invalid Token') {
+              swal.fire('Session Expierd!', 'Please Login Again.', 'info');
+              this.gs.Logout();
+            } else {
+            }
+          },
+          error: (err: any) => {},
+        });
     }
-    var e = this.sampleData;
-    var status = this.sampleStatus;
-    let param = new MasterEntryModel();
-    param.tableName = 'tbl_SampleRequestForm';
-    param.whereParams = { Id: e.Id };
-    var message = '';
-    if (status == 'To Messenger') {
-      param.queryParams = {
-        MessengerHandoverDate: new Date(),
-        MessengerHandoverBy: this.userId,
-        HandoverStatus: status,
-        ApprovedQty: this.ApprovedQty,
-      };
-      message = 'Sample handover to messenger Successfully!';
-    } else if (status == 'To Client') {
-      param.queryParams = {
-        ClientHandoverDate: new Date(),
-        ClinetHandoverBy: this.userId,
-        HandoverStatus: status,
-        ApprovedQty: this.ApprovedQty,
-      };
-
-      message = 'Sample handover to client Successfully!';
-    } else if (status == '') {
-      param.queryParams = {
-        MessengerHandoverDate: null,
-        MessengerHandoverBy: null,
-        HandoverStatus: status,
-        ApprovedQty: 0,
-      };
-
-      message = 'Sample handover reverted Successfully!';
-    }
-
-    this.masterEntryService
-      .UpdateData(param.queryParams, param.whereParams, param.tableName)
-      .subscribe({
-        next: (results: any) => {
-          if (results.status) {
-            swal
-              .fire({
-                title: `${results.message}!`,
-                text: message,
-                icon: 'success',
-                timer: 5000,
-              })
-              .then((result) => {
-                this.Search();
-              });
-            this.Search();
-          } else if (results.message == 'Invalid Token') {
-            swal.fire('Session Expierd!', 'Please Login Again.', 'info');
-            this.gs.Logout();
-          } else {
-          }
-        },
-        error: (err: any) => {},
-      });
   }
 
   InputSampleQty(e: any, status: any) {
+    
+    this.ApprovedQty = 0
     let param = new MasterEntryModel();
     param.tableName = 'tbl_SampleRequestForm';
     param.whereParams = { Id: e.Id };
@@ -321,13 +336,13 @@ export class AllReportComponent {
     }
   }
 
-  checkQty(){
-    if(this.ApprovedQty>this.sampleData.RequestedQuantity){
-      this.errorShow = true;
+  checkQty() {
+    if (this.ApprovedQty > this.sampleData.RequestedQuantity) {
+      this.errorShow = true;      
+      this.errorMessage = "Approved qty can not be greater then Requested Quantity";
       this.ApprovedQty = 0;
       return;
-    }
-    else{
+    } else {
       this.errorShow = false;
     }
   }

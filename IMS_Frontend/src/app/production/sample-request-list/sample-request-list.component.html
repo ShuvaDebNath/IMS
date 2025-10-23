@@ -69,7 +69,7 @@
           <tr>
             <th class="text-center">SL</th>
             <th class="text-center">Request Date</th>
-            <th class="text-left">Customer Name</th>
+            <th class="text-center">Customer Name</th>
             <th class="text-center">Article No</th>
             <th class="text-center">Color</th>
             <th class="text-center">Width</th>
@@ -98,6 +98,11 @@
             </td>
             <td class="text-center align-middle">{{table.RequestBy}}</td>
             <td class="text-center align-middle">{{table.RequestStatus}}</td>
+            <td class="text-center align-middle">{{
+                table.HandoverStatus == ""
+                  ? "Not handovered yet"
+                  : table.HandoverStatus == "Received"?"Messenger Received":"Handovered " + table.HandoverStatus
+              }}</td>
             <td class="text-center align-middle p-1 m-0">
               <div class="d-flex justify-content-center gap-1">
                 <a class="btn theme-btn-view " target="_blank" title="View" (click)="viewDetails(table)"><i

@@ -44,7 +44,7 @@ namespace Boilerplate.Repository.Repositories
                     param.Id
                 };
 
-                string query = @"exec [usp_SampleRequest_Report] @fromDate,@toDate,@requestStatus,@Id";
+                string query = @"exec [usp_SampleRequest_Messenger_Report] @fromDate,@toDate,@requestStatus,@Id";
                 var ds = await GetDataInDataSetAsync(query, parametars);
 
                 return ds;
