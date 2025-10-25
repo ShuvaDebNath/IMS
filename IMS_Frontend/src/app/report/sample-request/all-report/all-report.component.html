@@ -201,7 +201,7 @@
               <button
                 *ngIf="updatePermissions && table.RequestStatus != 'By Own'"
                 class="btn theme-btn-view"
-                [disabled]="table.HandoverStatus != '' && roleId!=1 && roleId!=2 && roleId!=51"
+                [disabled]="table.HandoverStatus && table.HandoverStatus.trim() !== '' && +roleId !== 1 && +roleId !== 2 && +roleId !== 51"
                 title="Handover to Messenger"
                 (click)="InputSampleQty(table, 'To Messenger')"
               >
@@ -212,7 +212,7 @@
                 class="btn theme-btn-view"
                 [disabled]="table.HandoverStatus == 'To Marketing' && roleId!=1 && roleId!=2 && roleId!=51"
                 title="Handover to Marketing"
-                (click)="InputSampleQty(table, 'To Marketing')"
+                (click)="InputSampleQty(table, 'To Messenger')"
               >
                 <i class="fa fa-user"></i>
               </button>

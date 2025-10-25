@@ -104,6 +104,8 @@ export class AllReportComponent {
     this.title.setTitle('All Report');
 
     this.roleId = window.localStorage.getItem('roleId');
+    console.log(this.roleId);
+    
     this.userId = window.localStorage.getItem('userId');
 
     this.SearchForm.get('fromDate')?.setValue(new Date());
@@ -345,5 +347,13 @@ export class AllReportComponent {
     } else {
       this.errorShow = false;
     }
+  }
+
+  checkDisable(table:any){
+    if(table.HandoverStatus != '' && this.roleId!=1 && this.roleId!=2 && this.roleId!=51){
+    console.log(table);
+      return true
+    }
+    return false;
   }
 }

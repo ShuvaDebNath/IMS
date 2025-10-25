@@ -31,6 +31,9 @@ export class SampleRequestInsertFormComponent {
   companyId!: string;
   menu: any;
   ArticleList: any;
+  ColorList:any;
+  WidthList:any;
+  UnitList:any;
   CustomerList: any;
   SRId = '';
   RequestStatus: any = [
@@ -108,6 +111,9 @@ export class SampleRequestInsertFormComponent {
       Customer_Contact_Info: this.fb.control<string>(''),
       Product_Description: this.fb.control<string>(''),
       ArticleNo: this.fb.control<string | null>(null, Validators.required),
+      Color: this.fb.control<string | null>(null, Validators.required),
+      Width: this.fb.control<string | null>(null, Validators.required),
+      Unit: this.fb.control<string | null>(null, Validators.required),
       Requested_Quantity: this.fb.control<number | null>(
         null,
         Validators.required
@@ -138,6 +144,9 @@ export class SampleRequestInsertFormComponent {
         if (results.status) {
           this.CustomerList = JSON.parse(results.data).Tables1;
           this.ArticleList = JSON.parse(results.data).Tables2;
+          this.ColorList = JSON.parse(results.data).Tables3;
+          this.WidthList = JSON.parse(results.data).Tables4;
+          this.UnitList = JSON.parse(results.data).Tables5;
           console.log(results);
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
@@ -178,6 +187,9 @@ export class SampleRequestInsertFormComponent {
       sr.CustomerContactInfo = fv.items[index].Customer_Contact_Info;
       sr.ProductDescription = fv.items[index].Product_Description;
       sr.ItemId = fv.items[index].ArticleNo;
+      sr.ColorId = fv.items[index].Color;
+      sr.WidthId = fv.items[index].Width;
+      sr.UnitId = fv.items[index].Unit;
       sr.RequestedQuantity = fv.items[index].Requested_Quantity;
       sr.ShippingAddress = fv.items[index].Shipping_Address;
       sr.RequestStatus = fv.items[index].RequestStatus;
