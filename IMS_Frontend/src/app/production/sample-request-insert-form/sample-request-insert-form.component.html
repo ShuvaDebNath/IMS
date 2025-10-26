@@ -24,7 +24,7 @@
                 <th class="text-center">Shipping Address</th>
                 <th class="text-center">Status</th>
                 <th class="text-center">Remarks</th>
-                <th style="width: 50px"></th>
+                <th></th>
               </tr>
             </thead>
 
@@ -94,6 +94,8 @@
                     optionValue="Item_ID"
                     formControlName="ArticleNo"
                      appendTo="body"
+                    [virtualScroll]="true"
+                    [virtualScrollItemSize]="30"
                     styleClass="custom-dropdown wide-dropdown"
                   ></p-dropdown>
                 </td>
@@ -106,11 +108,12 @@
                     optionLabel="Color"
                     [filter]="true"
                     filterBy="Color"
+                     appendTo="body"
                     [showClear]="true"
-                    styleClass="listBottom"
                     placeholder="Please Select"
                     optionValue="Color_ID"
                     formControlName="Color"
+                    styleClass="custom-dropdown wide-dropdown"
                     [virtualScroll]="true"
                     [virtualScrollItemSize]="30"
                   >
@@ -131,10 +134,11 @@
                     [filter]="true"
                     filterBy="Measurement"
                     [showClear]="true"
-                    styleClass="listBottom"
+                     appendTo="body"
                     placeholder="Please Select"
                     optionValue="Width_ID"
                     formControlName="Width"
+                    styleClass="custom-dropdown wide-dropdown"
                     [virtualScroll]="true"
                     [virtualScrollItemSize]="30"
                   >
@@ -155,6 +159,7 @@
                     [filter]="true"
                     filterBy="Unit"
                     [showClear]="true"
+                     appendTo="body"
                     styleClass="listBottom"
                     placeholder="Please Select"
                     optionValue="Unit_ID"

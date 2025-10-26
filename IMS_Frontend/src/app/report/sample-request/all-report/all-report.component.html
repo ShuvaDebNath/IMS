@@ -212,12 +212,12 @@
                 class="btn theme-btn-view"
                 [disabled]="table.HandoverStatus == 'To Marketing' && roleId!=1 && roleId!=2 && roleId!=51"
                 title="Handover to Marketing"
-                (click)="InputSampleQty(table, 'To Messenger')"
+                (click)="InputSampleQty(table, 'To Marketing')"
               >
                 <i class="fa fa-user"></i>
               </button>
               <button
-                *ngIf="updatePermissions && table.RequestStatus != 'By Own' && roleId!=1 && roleId!=2 && roleId!=51"
+                *ngIf="updatePermissions  && roleId==1 && roleId==2 && roleId==51"
                 class="btn theme-btn-delete"
                 [disabled]="table.HandoverStatus == ''"
                 title="Revert"
@@ -225,6 +225,7 @@
               >
                 <i class="fa fa-calendar"></i>
               </button>
+              
             </td>
           </tr>
         </ng-template>
