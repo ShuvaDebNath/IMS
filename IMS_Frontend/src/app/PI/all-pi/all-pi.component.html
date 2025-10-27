@@ -1,6 +1,6 @@
 <div class="m-2 p-2">
   <div class="card shadow-sm border-0">
-  <div class="card-header text-white d-flex justify-content-between align-items-center" style="background:#6a1a3f">
+  <div class="card-header  theme-bg">
     <h4 class="m-0">📑 All PI</h4>
   </div>
 
@@ -109,27 +109,35 @@
           <td class="text-center">{{ table.Shipper }}</td>
           <td class="text-center">{{ table.Consignee }}</td>
           <td class="text-center">
-            <span [ngClass]="{
-              'badge badge-success': table.Status === 'Approved',
-              'badge badge-warning': table.Status === 'Pending',
-              'badge badge-danger': table.Status === 'Rejected'
-            }">
+            <span>
               {{ table.Status }}
             </span>
           </td>
           <td class="text-center">{{ table.GeneratedBy }}</td>
-          <td class="text-center">
-            <button class="btn theme-btn-view btn-sm mr-1" title="View" (click)="viewDetails(table)">
+          <td class="d-flex justify-content-between align-items-center gap-1">
+          
+            <div>
+  <button class="btn theme-btn-view " title="View" (click)="viewDetails(table)">
               <i class="fa fa-eye"></i>
             </button>
-            <button *ngIf="updatePermissions" class="btn theme-btn-edit btn-sm mr-1" title="Edit"
+            </div>
+
+            <div>
+                 <button *ngIf="updatePermissions" class="btn theme-btn-edit " title="Edit"
               [routerLink]="['/generate-pi']" [queryParams]="{ PI_No: table.PI_No }">
               <i class="fa fa-edit"></i>
             </button>
-            <button *ngIf="deletePermissions" class="btn theme-btn-delete btn-sm" title="Delete"
+
+            </div>
+            <div>
+   <button *ngIf="deletePermissions" class="btn theme-btn-delete" title="Delete"
               (click)="DeleteData(table)">
               <i class="fas fa-trash"></i>
             </button>
+            </div>
+        
+         
+         
           </td>
         </tr>
       </ng-template>
