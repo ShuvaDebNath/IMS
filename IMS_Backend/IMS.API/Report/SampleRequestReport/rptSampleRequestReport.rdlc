@@ -6,64 +6,64 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>0.87498in</Width>
+              <Width>1.17813in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.84536in</Width>
+              <Width>0.81515in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.84536in</Width>
+              <Width>0.81515in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.90409in</Width>
+              <Width>0.87388in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.72036in</Width>
+              <Width>0.69015in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.60577in</Width>
+              <Width>0.57556in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.55369in</Width>
+              <Width>0.52348in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.47036in</Width>
+              <Width>0.44015in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.55369in</Width>
+              <Width>0.67973in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.54325in</Width>
+              <Width>0.63804in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.8766in</Width>
+              <Width>0.84639in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.92869in</Width>
+              <Width>0.89848in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.61619in</Width>
+              <Width>0.58598in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.54328in</Width>
+              <Width>0.51307in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1in</Width>
+              <Width>0.77187in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1in</Width>
+              <Width>0.70937in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1in</Width>
+              <Width>0.73018in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1in</Width>
+              <Width>0.59479in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1in</Width>
+              <Width>0.70937in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1in</Width>
+              <Width>0.68854in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1192,7 +1192,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Left</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -1296,7 +1296,7 @@
                               <Style>
                                 <FontFamily>times New Roman</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <Format>d MMM yyyy</Format>
+                                <Format>dddd, MMMM d, yyyy h:mm:ss tt</Format>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1316,6 +1316,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -1374,14 +1375,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Article">
+                    <Textbox Name="Article_No">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Article.Value</Value>
+                              <Value>=Fields!Article_No.Value</Value>
                               <Style>
                                 <FontFamily>times New Roman</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1393,7 +1394,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Article</rd:DefaultName>
+                      <rd:DefaultName>Article_No</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>Solid</Style>
@@ -1887,7 +1888,7 @@
                               <Style>
                                 <FontFamily>times New Roman</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <Format>d MMM yyyy</Format>
+                                <Format>dddd, MMMM d, yyyy h:mm:ss tt</Format>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1927,6 +1928,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -1996,7 +1998,7 @@
                               <Style>
                                 <FontFamily>times New Roman</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <Format>d MMM yyyy</Format>
+                                <Format>dddd, MMMM d, yyyy h:mm:ss tt</Format>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -2036,6 +2038,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -2105,7 +2108,7 @@
                               <Style>
                                 <FontFamily>times New Roman</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <Format>d MMM yyyy</Format>
+                                <Format>dddd, MMMM d, yyyy h:mm:ss tt</Format>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -2145,6 +2148,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -2233,6 +2237,7 @@
           <TablixMembers>
             <TablixMember>
               <KeepWithGroup>After</KeepWithGroup>
+              <RepeatOnNewPage>true</RepeatOnNewPage>
             </TablixMember>
             <TablixMember>
               <Group Name="Details" />
@@ -2243,7 +2248,7 @@
         <Top>0.10633in</Top>
         <Left>0.03in</Left>
         <Height>0.5in</Height>
-        <Width>15.88167in</Width>
+        <Width>14.2775in</Width>
         <Style>
           <Border>
             <Style>Solid</Style>
@@ -2254,7 +2259,7 @@
     <Height>0.76258in</Height>
     <Style />
   </Body>
-  <Width>15.91167in</Width>
+  <Width>14.3075in</Width>
   <Page>
     <PageHeader>
       <Height>0.98617in</Height>
@@ -2283,7 +2288,7 @@
           </Paragraphs>
           <rd:DefaultName>Textbox2</rd:DefaultName>
           <Height>0.25348in</Height>
-          <Width>15.91167in</Width>
+          <Width>14.3075in</Width>
           <Style>
             <Border>
               <Style>None</Style>
@@ -2316,7 +2321,7 @@
           <rd:DefaultName>Textbox1</rd:DefaultName>
           <Top>0.25348in</Top>
           <Height>0.20959in</Height>
-          <Width>15.91167in</Width>
+          <Width>14.3075in</Width>
           <ZIndex>1</ZIndex>
           <Style>
             <Border>
@@ -2351,7 +2356,7 @@
           <rd:DefaultName>Textbox4</rd:DefaultName>
           <Top>0.45265in</Top>
           <Height>0.25568in</Height>
-          <Width>15.91167in</Width>
+          <Width>14.3075in</Width>
           <ZIndex>2</ZIndex>
           <Style>
             <Border>
@@ -2386,7 +2391,7 @@
           <rd:DefaultName>Textbox4</rd:DefaultName>
           <Top>0.72007in</Top>
           <Height>0.25568in</Height>
-          <Width>15.91167in</Width>
+          <Width>14.3075in</Width>
           <ZIndex>3</ZIndex>
           <Style>
             <Border>
@@ -2464,7 +2469,7 @@
           </Paragraphs>
           <rd:DefaultName>Textbox20</rd:DefaultName>
           <Top>0.02778in</Top>
-          <Left>7.15123in</Left>
+          <Left>6.30485in</Left>
           <Height>0.17708in</Height>
           <Width>2.02083in</Width>
           <ZIndex>1</ZIndex>
@@ -2499,7 +2504,7 @@
           </Paragraphs>
           <rd:DefaultName>Textbox22</rd:DefaultName>
           <Top>0.02778in</Top>
-          <Left>14.95114in</Left>
+          <Left>13.32614in</Left>
           <Height>0.1875in</Height>
           <Width>0.898in</Width>
           <ZIndex>2</ZIndex>
@@ -2534,7 +2539,7 @@
           </Paragraphs>
           <rd:DefaultName>Textbox22</rd:DefaultName>
           <Top>0.24306in</Top>
-          <Left>14.41989in</Left>
+          <Left>12.79489in</Left>
           <Height>0.1875in</Height>
           <Width>1.42925in</Width>
           <ZIndex>3</ZIndex>
@@ -2555,8 +2560,8 @@
         </Border>
       </Style>
     </PageFooter>
-    <PageHeight>11.69in</PageHeight>
-    <PageWidth>10.5in</PageWidth>
+    <PageHeight>8.27in</PageHeight>
+    <PageWidth>15in</PageWidth>
     <LeftMargin>0.1in</LeftMargin>
     <RightMargin>0.1in</RightMargin>
     <TopMargin>0.1in</TopMargin>
