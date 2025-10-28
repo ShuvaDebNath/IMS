@@ -50,6 +50,8 @@ import { SampleRequestInsertFormComponent } from './production/sample-request-in
 import { SampleRequestListComponent } from './production/sample-request-list/sample-request-list.component';
 import { AllReportComponent } from './report/sample-request/all-report/all-report.component';
 import { MessengerReportComponent } from './report/sample-request/messenger-report/messenger-report.component';
+import { AllApplicationComponent } from './application/all-application/all-application.component';
+import { GenerateApplicationComponent } from './application/generate-application/generate-application.component';
 
 
 
