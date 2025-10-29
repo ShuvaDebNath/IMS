@@ -126,7 +126,7 @@ allBuyers: any[] = [];
           this.gs.Logout();
         }
       },
-      error: () => swal.fire('Error!', 'Failed to load data.', 'error'),
+      error: () => swal.fire('Error!', 'Failed to load data.', 'info'),
     });
   }
 
@@ -146,14 +146,14 @@ allBuyers: any[] = [];
           swal.fire('Session Expired!', 'Please Login Again.', 'info');
           this.gs.Logout();
         } else {
-          swal.fire('Error!', 'Failed to load details.', 'error');
+          swal.fire('Error!', 'Failed to load details.', 'info');
         }
       },
       error: () =>
         swal.fire(
           'Error!',
           'An error occurred while fetching details.',
-          'error'
+          'info'
         ),
     });
   }
@@ -164,7 +164,7 @@ allBuyers: any[] = [];
     const id = String(row?.Id ?? '');
 
     if (!id) {
-      swal.fire('Missing Id', 'Buyer Id not found.', 'error');
+      swal.fire('Missing Id', 'Buyer Id not found.', 'info');
       return;
     }
 
@@ -198,7 +198,7 @@ allBuyers: any[] = [];
             swal.fire(
               'Delete Failed',
               err?.error?.message || 'Something went wrong.',
-              'error'
+              'info'
             );
           },
         });
@@ -208,7 +208,7 @@ allBuyers: any[] = [];
   approeReq(row: any){
       const id = String(row?.Id ?? '');
       if (!id) {
-        swal.fire('Missing Id', 'Buyer Id not found.', 'error');
+        swal.fire('Missing Id', 'Buyer Id not found.', 'info');
         return;
       }
   
@@ -245,7 +245,7 @@ allBuyers: any[] = [];
                 swal.fire(
                   'Approve Failed',
                   err?.error?.message || 'Something went wrong.',
-                  'error'
+                  'info'
                 );
               },
             });

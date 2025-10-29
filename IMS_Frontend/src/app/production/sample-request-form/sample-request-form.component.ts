@@ -184,7 +184,7 @@ export class SampleRequestFormComponent {
             swal.fire({
               title: `Faild!`,
               text: `Save Faild!`,
-              icon: 'error',
+              icon: 'info',
               timer: 5000,
             });
           }
@@ -245,7 +245,7 @@ export class SampleRequestFormComponent {
             swal.fire({
               title: `Faild!`,
               text: `Save Faild!`,
-              icon: 'error',
+              icon: 'info',
               timer: 5000,
             });
           }

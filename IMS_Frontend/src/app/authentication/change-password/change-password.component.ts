@@ -43,11 +43,11 @@ export class ChangePasswordComponent implements OnInit {
   ResetPassword() {
   
       if (this.Formgroup.invalid) {
-        swal.fire('Invaild Input', 'Please check inputs', 'error');
+        swal.fire('Invaild Input', 'Please check inputs', 'info');
         return;
       }
       if(this.Formgroup.value.NewPassword!=this.Formgroup.value.ConfirmPassword){
-        swal.fire('Invaild Input', 'New Password and Confirm Password not matched', 'error');
+        swal.fire('Invaild Input', 'New Password and Confirm Password not matched', 'info');
         return;
       }
      var role = new Roles();
@@ -80,7 +80,7 @@ export class ChangePasswordComponent implements OnInit {
             swal.fire({
               title: `Faild!`,
               text: `Save Faild!`,
-              icon: 'error',
+              icon: 'info',
               timer: 5000,
             });
           }

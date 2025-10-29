@@ -83,7 +83,7 @@ pageIndex = 1;
     private title: Title
   ) {}
   ngOnInit(): void {
-    var permissions = this.gs.CheckUserPermission('Sample Request List');
+    var permissions = this.gs.CheckUserPermission('Messenger Report');
     this.insertPermissions = permissions.insertPermissions;
     this.updatePermissions = permissions.updatePermissions;
     this.deletePermissions = permissions.deletePermissions;
@@ -91,7 +91,7 @@ pageIndex = 1;
 
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
-    this.title.setTitle('Sample Request List');
+    this.title.setTitle('Messenger Report');
   }
   initForm(): void {
     this.SearchForm = this.fb.group({
@@ -101,11 +101,13 @@ pageIndex = 1;
     var fromDate = new Date();
     var toDate = new Date();
     let param = new GetDataModel();
+    var userId = window.localStorage.getItem('userId');
     param.procedureName = '[usp_SampleRequest_Report]';
     param.parameters = {
       FromDate: fromDate,
       ToDate: toDate,
-      RequestStatus:'Messenger'
+      RequestStatus:'Messenger',
+      UserID:userId
     };
 
     this.masterEntryService.GetInitialData(param).subscribe({
@@ -117,7 +119,7 @@ pageIndex = 1;
           if (this.tableData.length > 0) {
             this.length = parseInt(this.tableData[0].totallen);
           } else {
-            swal.fire('error', 'No Data Found!!', 'error');
+            swal.fire('info', 'No Data Found!!', 'info');
           }
           //  this.isPage=this.rows[0].totallen>10;
         }
@@ -126,11 +128,13 @@ pageIndex = 1;
   }
 
   Print(){
+    var userId = window.localStorage.getItem('userId');
 
     var item = {
       'fromDate':new Date(),
       'toDate':new Date(),
       'requestStatus':'Messenger',
+      'UserID':userId
     }
 
     this.reportService.PrintSampleRequest(item, 'pdf','T');

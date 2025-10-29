@@ -90,10 +90,10 @@ export class PendingRMRequisitionWareHouseComponent implements OnInit {
                     swal.fire('Session Expired!', 'Please Login Again.', 'info');
                     this.gs.Logout();
                 } else {
-                    swal.fire('Error!', 'Failed to load details.', 'error');
+                    swal.fire('Error!', 'Failed to load details.', 'info');
                 }
             },
-            error: () => swal.fire('Error!', 'An error occurred while fetching details.', 'error')
+            error: () => swal.fire('Error!', 'An error occurred while fetching details.', 'info')
         });
     }
 
@@ -116,7 +116,7 @@ export class PendingRMRequisitionWareHouseComponent implements OnInit {
                     swal.fire('Session Expired!', 'Please Login Again.', 'info');
                     this.gs.Logout();
                 } else {
-                    swal.fire('Rejected!', 'Requisition has been rejected.', 'error');
+                    swal.fire('Rejected!', 'Requisition has been rejected.', 'info');
                     this.isDetailsVisible = false;
                     this.loadPendingRequisitions();
                 }
@@ -137,7 +137,7 @@ export class PendingRMRequisitionWareHouseComponent implements OnInit {
 
         this.masterEntryService.UpdateData(queryParams, condition, tableName).subscribe((res: any) => {
             if (res.status) {
-                swal.fire('Rejected!', 'Requisition has been rejected.', 'error');
+                swal.fire('Rejected!', 'Requisition has been rejected.', 'info');
                 this.isDetailsVisible = false;
                 this.loadPendingRequisitions(); 
             } else {
@@ -145,7 +145,7 @@ export class PendingRMRequisitionWareHouseComponent implements OnInit {
                     swal.fire('Session Expired!', 'Please Login Again.', 'info');
                     this.gs.Logout();
                 } else {
-                    swal.fire('Rejected!', 'Requisition has been rejected.', 'error');
+                    swal.fire('Rejected!', 'Requisition has been rejected.', 'info');
                     this.isDetailsVisible = false;
                     this.loadPendingRequisitions();
                 }

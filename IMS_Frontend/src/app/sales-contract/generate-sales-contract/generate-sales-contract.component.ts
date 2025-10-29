@@ -194,7 +194,7 @@ export class GenerateSalesContractComponent {
             swal.fire({
               title: `Faild!`,
               text: `Save Faild!`,
-              icon: 'error',
+              icon: 'info',
               timer: 5000,
             });
           }
@@ -241,7 +241,7 @@ export class GenerateSalesContractComponent {
 
   updateData() {
     if (this.Formgroup.invalid) {
-      swal.fire('Invaild Input', 'Please check inputs', 'error');
+      swal.fire('Invaild Input', 'Please check inputs', 'info');
       return;
     }
     var filterSuperior = this.MarketingConcern.filter(
@@ -306,7 +306,7 @@ export class GenerateSalesContractComponent {
           swal.fire({
             title: `Faild!`,
             text: `Save Faild!`,
-            icon: 'error',
+            icon: 'info',
             timer: 5000,
           });
         }

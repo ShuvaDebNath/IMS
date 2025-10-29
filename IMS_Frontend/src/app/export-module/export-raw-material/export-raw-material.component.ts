@@ -311,7 +311,7 @@ export class ExportRawMaterialComponent {
                   swal.fire(
                     'Stock Update Failed',
                     res?.message || 'Stock update failed.',
-                    'error'
+                    'info'
                   );
                 }
               },
@@ -320,13 +320,13 @@ export class ExportRawMaterialComponent {
                 swal.fire(
                   'Stock Update Failed',
                   err?.error?.message || 'Stock update failed.',
-                  'error'
+                  'info'
                 );
               },
             });
         },
         error: () => {
-          swal.fire('Error', 'Could not save requisition', 'error');
+          swal.fire('info', 'Could not save requisition', 'info');
         },
       });
   }
@@ -525,7 +525,7 @@ export class ExportRawMaterialComponent {
                     swal.fire(
                       'Stock Update Failed',
                       res?.message || 'Stock update failed.',
-                      'error'
+                      'info'
                     );
                   }
                 },
@@ -534,14 +534,14 @@ export class ExportRawMaterialComponent {
                   swal.fire(
                     'Stock Update Failed',
                     err?.error?.message || 'Stock update failed.',
-                    'error'
+                    'info'
                   );
                 },
               });
           });
         },
         error: () => {
-          swal.fire('Error', 'Could not save requisition', 'error');
+          swal.fire('info', 'Could not save requisition', 'info');
         },
       });
   }

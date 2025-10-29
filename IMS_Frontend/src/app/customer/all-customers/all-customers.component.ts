@@ -115,7 +115,7 @@ export class AllCustomersComponent {
         Superior_Id: SuperioId,
         Customer_Id: CustomerId,
         Status: 'All',
-        User: sentBy,
+        UserID: sentBy,
       },
     };
 
@@ -131,7 +131,7 @@ export class AllCustomersComponent {
           this.gs.Logout();
         }
       },
-      error: () => swal.fire('Error!', 'Failed to load data.', 'error'),
+      error: () => swal.fire('Error!', 'Failed to load data.', 'info'),
     });
   }
 
@@ -153,14 +153,14 @@ export class AllCustomersComponent {
           swal.fire('Session Expired!', 'Please Login Again.', 'info');
           this.gs.Logout();
         } else {
-          swal.fire('Error!', 'Failed to load details.', 'error');
+          swal.fire('Error!', 'Failed to load details.', 'info');
         }
       },
       error: () =>
         swal.fire(
           'Error!',
           'An error occurred while fetching details.',
-          'error'
+          'info'
         ),
     });
   }
@@ -169,7 +169,7 @@ export class AllCustomersComponent {
     const id = String(row?.Customer_ID ?? '');
 
     if (!id) {
-      swal.fire('Missing Id', 'Customer Id not found.', 'error');
+      swal.fire('Missing Id', 'Customer Id not found.', 'info');
       return;
     }
 
@@ -209,7 +209,7 @@ export class AllCustomersComponent {
               swal.fire(
                 'Delete Failed',
                 err?.error?.message || 'Something went wrong.',
-                'error'
+                'info'
               );
             },
           });
