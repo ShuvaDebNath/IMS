@@ -108,7 +108,7 @@
                 <a class="btn theme-btn-view " target="_blank" title="View" (click)="viewDetails(table)"><i
                     class="fa fa-eye"></i></a>
 
-                <a *ngIf="updatePermissions" (click)="checkPermission(table)" class="btn theme-btn-edit" target="_blank" title="Edit"><i class="fa fa-edit"></i></a>
+                <a *ngIf="updatePermissions && (roleId==1 || roleId==2 || table.RequesterId==uId)" (click)="checkPermission(table)" class="btn theme-btn-edit" target="_blank" title="Edit"><i class="fa fa-edit"></i></a>
 
                 <button *ngIf="deletePermissions" class="btn theme-btn-delete " title="Delete"
                   (click)="DeleteData(table)"><i class="fas fa-trash"></i></button>

@@ -59,6 +59,7 @@ export class SampleRequestListComponent {
   detailsData: any;
   isDetailsVisible: boolean = false;
   roleId: any = '';
+  uId:any = '';
 
   constructor(
     private fb: FormBuilder,
@@ -82,6 +83,8 @@ export class SampleRequestListComponent {
 
     this.SearchForm.get('fromDate')?.setValue(new Date());
     this.SearchForm.get('toDate')?.setValue(new Date());
+    
+    this.uId = window.localStorage.getItem('userId');
   }
   initForm(): void {
     this.SearchForm = this.fb.group({
@@ -95,7 +98,6 @@ export class SampleRequestListComponent {
           return;
         }
     
-
     var fromDate = this.SearchForm.value.fromDate;
     var toDate = this.SearchForm.value.toDate;
     var userId = window.localStorage.getItem('userId');
@@ -115,6 +117,8 @@ export class SampleRequestListComponent {
           this.tableData = [];
           let tables = JSON.parse(results.data);
           this.tableData = tables.Tables1;
+          console.log(this.tableData,this.uId);
+          
           if (this.tableData.length > 0) {
             this.length = parseInt(this.tableData[0].totallen);
           } else {
