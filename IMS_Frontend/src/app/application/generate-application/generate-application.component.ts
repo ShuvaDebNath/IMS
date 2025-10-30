@@ -51,6 +51,7 @@ export class GenerateApplicationComponent {
   ExportMasterID: any = '';
   CustomerList: any[] = [];
   PIList: any[] = [];
+  PIPreviewList:any[] = [];
   FormType: any[] = [
     {
       value: '0',
@@ -82,15 +83,11 @@ export class GenerateApplicationComponent {
     this.addItem();
     this.loadPageData();
 
-    this.items.valueChanges
-      .pipe(startWith(this.items.value), takeUntil(this.destroy$))
-      .subscribe(() => this.recalcTotals());
     let has = this.activeLink.snapshot.queryParamMap.has('ExportMasterID');
     if (has) {
       this.ExportMasterID =
         this.activeLink.snapshot.queryParams['ExportMasterID'];
       this.isEdit = true;
-      this.GetExportRMDataById();
     } else {
       this.isEdit = false;
     }
@@ -106,7 +103,7 @@ export class GenerateApplicationComponent {
       FormType: ['', Validators.required],
       Customer: ['', Validators.required],
       PINo: ['', Validators.required],
-      items: this.fb.array([], { validators: [this.rowsCompleteValidator()] }),
+      items: this.fb.array([]),
     });
   }
 
@@ -179,61 +176,7 @@ export class GenerateApplicationComponent {
   }
 
   // totals (bind to UI + send to API)
-  totalQty = 0;
-  totalRoll = 0;
-  totalBag = 0;
-  totalGross = 0;
-  totalWeight = 0;
-
-  // call this on init and whenever the rows change
-  private recalcTotals(): void {
-    const rows = this.items.getRawValue() as Array<{
-      qty: number;
-      rollOrBag: 'roll' | 'bag';
-      rollBagQty: number;
-      weight: number;
-      grossWeight: number;
-    }>;
-
-    this.totalQty = rows.reduce((s, r) => s + (Number(r.qty) || 0), 0);
-    this.totalRoll = rows
-      .filter((r) => r.rollOrBag === 'roll')
-      .reduce((s, r) => s + (Number(r.rollBagQty) || 0), 0);
-    this.totalBag = rows
-      .filter((r) => r.rollOrBag === 'bag')
-      .reduce((s, r) => s + (Number(r.rollBagQty) || 0), 0);
-    this.totalWeight = rows.reduce((s, r) => s + (Number(r.weight) || 0), 0);
-    this.totalGross = rows.reduce(
-      (s, r) => s + (Number(r.grossWeight) || 0),
-      0
-    );
-  }
-
-  trackById = (_: number, a: any) => a?.RawMaterial_ID ?? _;
-
-  private rowsCompleteValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const arr = control as FormArray;
-      if (arr.length === 0) return { noRows: true };
-
-      for (const g of arr.controls) {
-        const rawMaterialId = g.get('article')?.value;
-        const qty = Number(g.get('qty')?.value);
-        const rollBagQty = Number(g.get('rollBagQty')?.value);
-
-        if (
-          !rawMaterialId ||
-          !qty ||
-          qty <= 0 ||
-          !rollBagQty ||
-          rollBagQty <= 0
-        ) {
-          return { incompleteRow: true };
-        }
-      }
-      return null;
-    };
-  }
+  
 
   saveData(): void {
     console.log(this.Formgroup);
@@ -247,13 +190,9 @@ export class GenerateApplicationComponent {
       return;
     }
 
-    const sentByStr = localStorage.getItem('userId');
-    const sentBy = sentByStr ? Number(sentByStr) : null;
-
     // 1) Form -> DTO (typed)
     const fv = this.Formgroup.value;
 
-    this.recalcTotals();
     const masterRow = {
       ExportNumber: 'Export - ',
       ExportDate: fv.ExportDate,
@@ -345,108 +284,7 @@ export class GenerateApplicationComponent {
       });
   }
 
-  GetExportRMDataById() {
-    this.recalcTotals();
-
-    // crm.User_ID,Beneficiary_Bank_ID,crm.Consignee_Name,Customer_Bank,PI_Master_ID,PI_Value,ReceiveAmount,ReceiveDate,Issue_Date,Payment_Term_ID,Remarks
-    var ProcedureData = {
-      procedureName: '[usp_ExportRM_ById]',
-      parameters: {
-        ExportMasterID: this.ExportMasterID,
-      },
-    };
-    this.getDataService.GetInitialData(ProcedureData).subscribe({
-      next: (results) => {
-        if (results.status) {
-          var tableData = JSON.parse(results.data).Tables1;
-          var tableDetailsData = JSON.parse(results.data).Tables2;
-
-          console.log(tableDetailsData);
-
-          let frmArray = this.Formgroup.controls.items as FormArray;
-
-          tableData.forEach((e: any) => {
-            var exportDate = new Date(e.ExportDate);
-            console.log(exportDate);
-
-            const year = exportDate.getFullYear();
-            const month = ('0' + (exportDate.getMonth() + 1)).slice(-2);
-            const day = ('0' + exportDate.getDate()).slice(-2);
-
-            this.Formgroup.controls.ExportDate.setValue(
-              `${year}-${month}-${day}`
-            );
-            this.Formgroup.controls.Loading_Port.setValue(e.Loading_Port_ID);
-            this.Formgroup.controls.Destination_Port.setValue(
-              e.Destination_Port_ID
-            );
-            this.Formgroup.controls.ShippingInformation.setValue(
-              e.Shipping_Information
-            );
-            this.Formgroup.controls.remarks.setValue(e.Note);
-          });
-          while (frmArray.length !== 0) {
-            frmArray.removeAt(0);
-          }
-          tableDetailsData.forEach((e: any) => {
-            let arrayGroup = this.fb.group({
-              article: this.fb.control<string | null>(
-                null,
-                Validators.required
-              ),
-              description: this.fb.control<string>(''),
-              color: this.fb.control<string | null>(null, Validators.required),
-              width: this.fb.control<number | null>(null, Validators.required),
-              rollOrBag: this.fb.control<'Rolls' | 'Bags'>('Rolls'),
-              rollBagQty: this.fb.control<number>(0),
-              unitId: this.fb.control<number | null>(null),
-              qty: this.fb.control<number>(0, [
-                Validators.required,
-                Validators.min(1),
-              ]),
-              weight: this.fb.control<number>(0),
-              grossWeight: this.fb.control<number>(0),
-            });
-            arrayGroup.controls.article.setValue(e.RawMaterial_ID);
-            arrayGroup.controls.description.setValue(e.Description);
-            arrayGroup.controls.color.setValue(e.Color_ID);
-            arrayGroup.controls.width.setValue(e.Width_ID);
-            arrayGroup.controls.rollOrBag.setValue(e.Roll_Bag);
-            arrayGroup.controls.rollBagQty.setValue(e.RollBag_Quantity);
-            arrayGroup.controls.unitId.setValue(e.Unit_ID);
-            arrayGroup.controls.qty.setValue(e.Quantity);
-            arrayGroup.controls.weight.setValue(e.Weight);
-            arrayGroup.controls.grossWeight.setValue(e.Gross_Weight);
-
-            arrayGroup.get('qty')!.valueChanges.subscribe(() => {
-              const qty = arrayGroup.get('qty')!.value ?? 0;
-              const weight = arrayGroup.get('weight')!.value ?? 0;
-
-              arrayGroup
-                .get('grossWeight')!
-                .setValue(qty * weight, { emitEvent: false });
-            });
-
-            arrayGroup.get('weight')!.valueChanges.subscribe(() => {
-              const qty = arrayGroup.get('qty')!.value ?? 0;
-              const weight = arrayGroup.get('weight')!.value ?? 0;
-
-              arrayGroup
-                .get('grossWeight')!
-                .setValue(qty * weight, { emitEvent: false });
-            });
-            frmArray.push(arrayGroup);
-          });
-          this.recalcTotals();
-        } else if (results.message == 'Invalid Token') {
-          swal.fire('Session Expierd!', 'Please Login Again.', 'info');
-          this.gs.Logout();
-        } else {
-        }
-      },
-      error: (err) => {},
-    });
-  }
+ 
 
   UpdateData(): void {
     if (this.Formgroup.invalid) {
@@ -464,7 +302,6 @@ export class GenerateApplicationComponent {
     // 1) Form -> DTO (typed)
     const fv = this.Formgroup.value;
 
-    this.recalcTotals();
     const masterRow = {
       ExportDate: fv.ExportDate,
       Shipping_Information: fv.ShippingInformation ?? '',
@@ -601,6 +438,41 @@ export class GenerateApplicationComponent {
       next: (results) => {
         if (results.status) {
           this.PIList = JSON.parse(results.data).Tables1;
+        } else if (results.msg == 'Invalid Token') {
+          swal.fire('Session Expierd!', 'Please Login Again.', 'info');
+          this.gs.Logout();
+        } else {
+        }
+      },
+      error: (err) => {},
+    });
+  }
+
+  getPIDetails(){    
+    var userId = window.localStorage.getItem('userId');
+    var PINo = this.Formgroup.value.PINo;
+
+    this.PIPreviewList.forEach((e:any)=>{
+      if(e.PINo==PINo){
+        swal.fire('info','this pi data already contain in the list','info');
+        return
+      }
+    })
+
+    var procedureName = 'usp_SC_PINo_ByMarketingConcern';
+    var ProcedureData = {
+      procedureName: procedureName,
+      parameters: {
+        PIId: PINo,
+      },
+    };
+
+    this.masterEntryService.GetInitialData(ProcedureData).subscribe({
+      next: (results) => {
+        if (results.status) {
+          JSON.parse(results.data).Tables1.forEach((e:any)=>{
+            this.PIPreviewList.push(e);
+          })
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
           this.gs.Logout();

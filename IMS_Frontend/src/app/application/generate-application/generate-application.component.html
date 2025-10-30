@@ -71,8 +71,11 @@
           [showClear]="true"
           styleClass="listBottom"
           placeholder="Please Select"
-          optionValue="PI_Master_ID"
+          optionValue="value"
           formControlName="PINo"
+          [virtualScroll]="true"
+          [virtualScrollItemSize]="30"
+          (onChange)="getPIDetails()"
         >
           <ng-template let-pino pTemplate="item">
             <div class="flex align-items-center gap-2">
@@ -80,8 +83,7 @@
             </div>
           </ng-template>
         </p-dropdown>
-      </div>
-      
+      </div>      
     </div>
 
     <h3><strong>PI Info </strong></h3>
@@ -109,21 +111,21 @@
 
       <tbody>
         <tr
-          *ngFor="let item of items.controls; let i = index"
-          [formGroupName]="i"
+          *ngFor="let item of PIPreviewList; let i = index"
         >
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{item.customer_name}}</td>
+            <td>{{item.PINo}}</td>
+            <td>{{item.Article}}</td>
+            <td>{{item.ActualArticle}}</td>
+            <td>{{item.Color}}</td>
+            <td>{{item.Width}}</td>
+            <td>{{item.Unit}}</td>
+            <td>{{item.Quantity}}</td>
+            <td>{{item.Unit_Price}}</td>
+            <td>{{item.CommissionUnit}}</td>
+            <td>{{item.PaymentTerms}}</td>
+            <td>{{item.Delivered_Quantity}}</td>
+            <td>{{item.AppliedQty}}</td>
             <td></td>
             <td></td>
         </tr>
