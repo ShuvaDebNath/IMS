@@ -69,7 +69,7 @@ export class LoginComponent implements OnInit {
   login(): void {
     this.isSubmit = true;
     if (this.LoginForm.invalid) {
-      swal.fire('Invalid Input', '', 'error');
+      swal.fire('Invalid Input', '', 'info');
       return;
     }
     this.isLoading = true;
@@ -117,7 +117,7 @@ export class LoginComponent implements OnInit {
 
       } else {
         this.isLoading = false;
-        swal.fire(res.msg, 'Wrong password', 'error');
+        swal.fire(res.msg, 'Wrong password', 'info');
 
       }
     });

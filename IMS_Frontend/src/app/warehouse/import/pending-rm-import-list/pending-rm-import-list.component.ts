@@ -260,14 +260,14 @@ export class PendingRmImportListComponent {
             swal.fire('Success', 'Received successfully', 'success');
           } else {
             swal.fire(
-              'Error',
+              'info',
               res?.message || 'Could not save requisition',
-              'error'
+              'info'
             );
           }
         },
         error: () => {
-          swal.fire('Error', 'Could not save requisition', 'error');
+          swal.fire('info', 'Could not save requisition', 'info');
         },
       });
   }
@@ -277,9 +277,9 @@ export class PendingRmImportListComponent {
     item.AccptQuantity = e.target.value;
     if (item.AccptQuantity > item.Quantity) {
       swal.fire({
-        title: 'error',
+        title: 'info',
         text: 'Receive Quantity can not be greater then export quantity!!',
-        icon: 'error',
+        icon: 'info',
         customClass: {
           popup: 'swal-on-top-of-primeng',
         },
@@ -292,9 +292,9 @@ export class PendingRmImportListComponent {
     item.AccptRoll = e.target.value;
     if (item.AccptRoll > item.RollBag_Quantity) {
       swal.fire(
-        'error',
+        'info',
         'Receive Roll/Bag Quantity can not be greater then export Roll/Bag quantity',
-        'error'
+        'info'
       );
       item.AccptRoll = item.RollBag_Quantity;
     }

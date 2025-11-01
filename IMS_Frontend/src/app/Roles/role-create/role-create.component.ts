@@ -160,7 +160,7 @@ export class RoleCreateComponent {
             swal.fire({
               title: `Faild!`,
               text: `Save Faild!`,
-              icon: 'error',
+              icon: 'info',
               timer: 5000,
             });
         }
@@ -171,7 +171,7 @@ export class RoleCreateComponent {
   updateData() {
 
     if (this.Formgroup.invalid) {
-      swal.fire('Invaild Input', 'Please check inputs', 'error');
+      swal.fire('Invaild Input', 'Please check inputs', 'info');
       return;
     }
    var role = new Roles();
@@ -211,7 +211,7 @@ export class RoleCreateComponent {
           swal.fire({
             title: `Faild!`,
             text: `Save Faild!`,
-            icon: 'error',
+            icon: 'info',
             timer: 5000,
           });
         }

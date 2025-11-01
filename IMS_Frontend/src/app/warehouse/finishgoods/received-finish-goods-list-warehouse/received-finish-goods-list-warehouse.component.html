@@ -1,7 +1,11 @@
-<div class="container">
-  <h1 class="theme-text">Received Finish Goods List</h1>
+<div class="m-2 p-2">
+  <div class="card shadow-sm">
+  <div class="card-header theme-bg">
+      <h1 >Received Finish Goods List</h1>
 
-  <p-table class="theme-bg" #dt
+  </div>
+  <div class="card-body">
+      <p-table class="theme-bg" #dt
            [value]="receivedFinishGoodsList"
            [paginator]="true"
            [rows]="10"
@@ -113,5 +117,10 @@
       </p-table>
     </div>
   </p-dialog>
+  </div>
+
+
+
+</div>
 
 </div>

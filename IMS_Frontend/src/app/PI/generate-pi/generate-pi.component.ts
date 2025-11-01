@@ -490,7 +490,7 @@ export class GeneratePiComponent implements OnInit {
         if(!res.isAuthorized){
           this.gs.Logout();
         }else{
-          Swal.fire(res.messageType, res.message, 'error');
+          Swal.fire(res.messageType, res.message, 'info');
         }
       }
     });

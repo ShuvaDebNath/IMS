@@ -126,7 +126,7 @@ export class RawMaterialStockComponent {
                swal.fire({
                  title: `Faild!`,
                  text: `Save Faild!`,
-                 icon: 'error',
+                 icon: 'info',
                  timer: 5000,
                });
            }
@@ -162,7 +162,7 @@ export class RawMaterialStockComponent {
                swal.fire({
                  title: `Faild!`,
                  text: `Save Faild!`,
-                 icon: 'error',
+                 icon: 'info',
                  timer: 5000,
                });
            }

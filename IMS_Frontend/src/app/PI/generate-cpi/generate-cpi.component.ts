@@ -345,7 +345,7 @@ datePipe = new DatePipe('en-US');
         if(!res.isAuthorized){
           this.gs.Logout();
         }else{
-          Swal.fire(res.messageType, res.message, 'error');
+          Swal.fire(res.messageType, res.message, 'info');
         }
         console.log(res);
       }
