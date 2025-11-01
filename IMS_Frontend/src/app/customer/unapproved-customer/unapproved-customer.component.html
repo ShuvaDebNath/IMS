@@ -1,5 +1,11 @@
-<div class="container">
-  <h1 class="theme-text">Unapproved Customers List</h1>
+<div class="m-t p-2">
+
+  <div class="card">
+    <div class="card-header theme-bg">
+
+        <h1 class="">Unapproved Customers List</h1>
+
+    </div>
 
   <form
     [formGroup]="dateForm"
@@ -58,7 +64,7 @@
     <div class="col-md-2">
       <button
         type="submit"
-        class="btn btn-sm theme-btn w-100"
+        class="btn theme-btn w-100"
         [disabled]="dateForm.invalid"
       >
         <i class="pi pi-download me-1"></i> Load
@@ -215,4 +221,6 @@
       </div>
     </p-dialog>
   </div>
+</div>
+
 </div>
