@@ -22,9 +22,9 @@ export class SampleRequestFormComponent {
   companyId!: string;
   menu: any;
   ArticleList: any;
-  ColorList:any;
-  WidthList:any;
-  UnitList:any;
+  ColorList: any;
+  WidthList: any;
+  UnitList: any;
   CustomerList: any;
   SRId = '';
   RequestStatus: any = [
@@ -117,7 +117,7 @@ export class SampleRequestFormComponent {
           this.ColorList = JSON.parse(results.data).Tables3;
           this.WidthList = JSON.parse(results.data).Tables4;
           this.UnitList = JSON.parse(results.data).Tables5;
-          
+
           if (this.isEdit) {
             this.GetSRById();
           }
@@ -156,6 +156,8 @@ export class SampleRequestFormComponent {
     var userId = window.localStorage.getItem('userId');
 
     var sr = new SampleRequest();
+    console.log(this.Formgroup.value.RequestDate);
+
     sr.RequestDate = this.Formgroup.value.RequestDate;
     //sr. = this.Formgroup.value.PINo;
     sr.CustomerId = this.Formgroup.value.CustomerName;
@@ -219,7 +221,13 @@ export class SampleRequestFormComponent {
     )?.name;
 
     var sr = new SampleRequest();
-    sr.RequestDate = this.Formgroup.value.RequestDate;
+
+    const d = new Date(this.Formgroup.value.RequestDate);
+    const month = ('0' + (d.getMonth() + 1)).slice(-2);
+    const day = ('0' + d.getDate()).slice(-2);
+    const year = d.getFullYear();
+
+    sr.RequestDate = `${month}/${day}/${year}`;
     sr.CustomerId = this.Formgroup.value.CustomerName;
     sr.CustomerContactInfo = this.Formgroup.value.Customer_Contact_Info;
     sr.ProductDescription = this.Formgroup.value.Product_Description;

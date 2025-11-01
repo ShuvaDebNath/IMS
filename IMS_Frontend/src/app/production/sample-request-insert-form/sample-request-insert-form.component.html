@@ -86,25 +86,31 @@
                 <td class="p-1">
                   <p-dropdown
                     [options]="ArticleList"
-                    optionLabel="Article_No"
+                    optionLabel="ItemCode"
                     [filter]="true"
-                    filterBy="Article_No"
+                    filterBy="ItemCode"
                     [showClear]="true"
                     placeholder="Select"
                     optionValue="Item_ID"
                     formControlName="ArticleNo"
-                     appendTo="body"
+                    appendTo="body"
                     [virtualScroll]="true"
                     [virtualScrollItemSize]="30"
                     styleClass="custom-dropdown wide-dropdown"
-                  ></p-dropdown>
+                  >
+                  <ng-template let-ArticleNo pTemplate="item">
+                      <div class="flex align-items-center gap-2">
+                        <div>{{ ArticleNo.ItemCode }}</div>
+                      </div>
+                    </ng-template>
+                </p-dropdown>
                 </td>
                 <!-- ARTICLE -->
                 <td class="p-1">
                   <p-dropdown
                     [style]="{ width: '100%' }"
                     class="p-0"
-                    [options]="ColorList"
+                    [options]="ColorList "
                     optionLabel="Color"
                     [filter]="true"
                     filterBy="Color"

@@ -356,4 +356,62 @@ export class AllReportComponent {
     }
     return false;
   }
+
+  receiveSample(e: any, status: any) {
+        let param = new MasterEntryModel();
+        param.tableName = 'tbl_SampleRequestForm';
+        param.whereParams = { Id: e.Id };
+        var message = '';
+        if (status == 'To Client') {
+          param.queryParams = {
+            ClientHandoverDate: new Date(),
+            ClinetHandoverBy: this.userId,
+            HandoverStatus: status,
+          };
+          message = 'Sample handover to client Successfully!';
+        }
+        else if(status=='Received'){
+          param.queryParams = {
+            ReceiveDate: new Date(),
+            ReceiveBy: this.userId,
+            HandoverStatus: 'Received',
+          };
+          
+          message = 'Sample received Successfully!';
+        }
+        else if(status==''){
+          param.queryParams = {
+            ClientHandoverDate: null,
+            ClinetHandoverBy: null,
+            HandoverStatus: status,
+          };
+          
+          message = 'Sample handover to reverted Successfully!';
+        }
+    
+        this.masterEntryService
+          .UpdateData(param.queryParams, param.whereParams, param.tableName)
+          .subscribe({
+            next: (results: any) => {
+              if (results.status) {
+                swal
+                  .fire({
+                    title: `${results.message}!`,
+                    text: message,
+                    icon: 'success',
+                    timer: 5000,
+                  })
+                  .then((result) => {
+                    this.Search();
+                  });
+                this.Search();
+              } else if (results.message == 'Invalid Token') {
+                swal.fire('Session Expierd!', 'Please Login Again.', 'info');
+                this.gs.Logout();
+              } else {
+              }
+            },
+            error: (err: any) => {},
+          });
+      }
 }
