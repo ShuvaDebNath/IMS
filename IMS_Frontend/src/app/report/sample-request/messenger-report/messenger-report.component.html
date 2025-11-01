@@ -124,7 +124,7 @@
               <button
                 *ngIf="updatePermissions"
                 class="btn theme-btn-view"
-                [disabled]="table.HandoverStatus=='Received' || table.HandoverStatus=='To Client'"
+                [disabled]="table.HandoverStatus=='Received' || table.HandoverStatus=='To Client' || table.HandoverStatus==''"
                 title="Receive"
                 (click)="handoverSample(table,'Received')"
               >
