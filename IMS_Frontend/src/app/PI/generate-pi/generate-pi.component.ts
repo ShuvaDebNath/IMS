@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GetDataModel } from 'src/app/models/GetDataModel';
+import { DoubleMasterEntryService } from 'src/app/services/doubleEntry/doubleEntryService.service';
 import { GlobalServiceService } from 'src/app/services/Global-service.service';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 import Swal from 'sweetalert2';
@@ -39,14 +40,21 @@ export class GeneratePiComponent implements OnInit {
   ForceMajeureList: any|[];
   ArbitrationList: any|[];
   PINo!:string;
+  // temporary PI passed from another tab (via localStorage)
+  private tempPI?: string | null;
+
+  // keep a snapshot of original master/details when loading for edit so we can compute audit logs
+  private originalMaster: any = null;
+  private originalDetails: any[] = [];
 
   Formgroup!: FormGroup;
   isSubmit!: boolean;
   SetDDL:boolean=true;
-  GTQTY: any=0;
-  GTAMNT: any=0;
+  GrandTotalQty: any=0;
+  GrandTotalAmount: any=0;
 
   constructor( private service:MasterEntryService,
+    private des: DoubleMasterEntryService,
     private gs: GlobalServiceService,
     private fb: FormBuilder
   ) {}
@@ -57,8 +65,119 @@ export class GeneratePiComponent implements OnInit {
     this.GetInitialData();
     this.BuyerToggle(false);
     this.RegisterFormControlsChangeEvent();    
-    this.GTQTY=0;
-    this.GTAMNT=0;
+    this.GrandTotalQty=0;
+    this.GrandTotalAmount=0;
+    // If another tab passed a PI_No via localStorage, consume and store it for later
+    const incomingPi = this.tryConsumeTempPI();
+    if (incomingPi) {
+      this.tempPI = incomingPi;
+      // set early if form exists (GenerateFrom will also initialize the form)
+      try { if (this.Formgroup) { this.Formgroup.controls['PINo'].setValue(this.tempPI); } } catch (e) {}
+    }
+  }
+
+  /**
+   * Load full PI data (master + details) for editing using provided identifier.
+   * The procedure name used is 'usp_ProformaInvoice_GetDataById' but we send multiple
+   * possible params so backend can pick whichever it supports (PI_Master_ID, PINo, PI_No).
+   */
+  loadPIForEdit(piIdentifier: string) {
+    try {
+      const model = new GetDataModel();
+      model.procedureName = 'usp_ProformaInvoice_GetDataById';
+      model.parameters = {
+        PI_Master_ID: Number(piIdentifier) 
+      };
+
+      this.service.GetInitialData(model).subscribe((res: any) => {
+        if (res.status) {
+          const ds = JSON.parse(res.data);
+          console.log(ds);
+
+          if (ds.Tables1[0].ExpireDate) {
+  const parts = ds.Tables1[0].ExpireDate.split('/');
+  const formattedDate = new Date(+parts[2], +parts[1] - 1, +parts[0]); // dd/mm/yyyy → Date
+  ds.Tables1[0].ExpireDate = formattedDate;
+}
+          
+          // Try to find master record
+          let master: any = null;
+          if (ds.Tables1 && ds.Tables1.length > 0) master = ds.Tables1[0];
+          if (!master && ds.Tables2 && ds.Tables2.length > 0) master = ds.Tables2[0];
+
+          // store original snapshot for audit diff later
+          try {
+            this.originalMaster = master ? JSON.parse(JSON.stringify(master)) : null;
+          } catch (e) { this.originalMaster = master; }
+
+          if (master) {
+            // set PINo and other master form controls if present
+            this.PINo = master.PINo || master.PINO || master.PI_No || this.PINo;
+            try {
+              // patch known fields into the form
+              const keys = Object.keys(master);
+              for (const k of keys) {
+                if ((this.Formgroup.controls as any)[k] !== undefined) {
+                  (this.Formgroup.controls as any)[k].setValue(master[k]);
+                }
+              }
+            } catch (e) {}
+          }
+
+          // Details table: try Tables2, Tables1 (if it's the details), or Tables3
+          let details = ds.Tables2 || ds.Tables1 || ds.Tables3 || [];
+          // If master was taken from Tables1, details likely in Tables2
+          if (ds.Tables1 && master === ds.Tables1[0] && ds.Tables2) details = ds.Tables2;
+
+          // populate ItemArray form with details
+          try {
+            // keep original details snapshot for audit
+            try { this.originalDetails = Array.isArray(details) ? JSON.parse(JSON.stringify(details)) : []; } catch (e) { this.originalDetails = details || []; }
+            const con = this.Formgroup.get('ItemArray') as FormArray;
+            // clear existing
+            while (con.length) con.removeAt(0);
+            if (Array.isArray(details) && details.length > 0) {
+              for (const d of details) {
+                const row = this.InitRow();
+                Object.keys(d).forEach((k) => {
+                  if ((row.controls as any)[k] !== undefined) {
+                    (row.controls as any)[k].setValue(d[k]);
+                  }
+                });
+                con.push(row);
+              }
+            } else {
+              // ensure at least one row
+              con.push(this.InitRow());
+            }
+            // Recalculate grand totals after populating the ItemArray so GTQTY/GTAMNT reflect loaded data
+            try { this.calculatetotalGrandTotal(); } catch (tt) { /* ignore */ }
+          } catch (e) {}
+
+        } else {
+          if (res.msg === 'Invalid Token') this.gs.Logout();
+        }
+      });
+    } catch (err) {
+      console.error('loadPIForEdit error', err);
+    }
+  }
+
+  private tryConsumeTempPI() {
+    try {
+      const raw = localStorage.getItem('IMS_temp_open_pi');
+      if (!raw) return null;
+      const data = JSON.parse(raw);
+      if (data && data.PI_No && (Date.now() - (data.ts || 0) < 5000)) {      
+        localStorage.removeItem('IMS_temp_open_pi');
+        return data.PI_No;
+      }     
+      localStorage.removeItem('IMS_temp_open_pi');
+      return null;
+    } catch (e) {
+      try { localStorage.removeItem('IMS_temp_open_pi'); } catch (_) {}
+      return null;
+    }
   }
 
   RegisterFormControlsChangeEvent(){
@@ -199,11 +318,11 @@ export class GeneratePiComponent implements OnInit {
   }
 
   calculatetotalGrandTotal() {
-    this.GTQTY=0;this.GTAMNT=0;
+    this.GrandTotalQty=0;this.GrandTotalAmount=0;
     const itemArray = this.Formgroup.get('ItemArray') as FormArray;
     itemArray.controls.forEach(control => {
-      this.GTQTY+=control.value.Quantity;
-      this.GTAMNT+=control.value.Total_Amount;
+      this.GrandTotalQty+=control.value.Quantity;
+      this.GrandTotalAmount+=control.value.Total_Amount;
     });
   }
 
@@ -273,8 +392,19 @@ export class GeneratePiComponent implements OnInit {
 
         this.PINo=DataSet.Tables30[0].PINO;
 
+        // If a temp PI was passed from another tab, prefer it over server PINo
+        if (this.tempPI) {
+          this.PINo = this.tempPI;
+        }
+
         if (this.SetDDL){
           this.SetDDLDefaultValue();
+        }
+
+        // If we have a temp PI (from another tab), load its full data for edit
+        if (this.tempPI) {
+          // attempt to load by PINo or by id depending on value
+          this.loadPIForEdit(this.tempPI);
         }
 
       } else {
@@ -336,6 +466,12 @@ export class GeneratePiComponent implements OnInit {
       }
     });
 
+    // build audit logs for insert
+    try {
+      const audit = this.createAuditForInsert(model, details);
+      (model as any).AuditLog = JSON.stringify(audit);
+    } catch (e) { }
+
     this.service.SaveDataMasterDetails(details,
       "tbl_pi_detail",
       model,
@@ -359,5 +495,160 @@ export class GeneratePiComponent implements OnInit {
       }
     });
 
+  }
+
+  /**
+   * Create audit entries for an insert (new PI).
+   * Each master field and each detail column will produce an Insert event row.
+   */
+  private createAuditForInsert(masterObj: any, detailsArr: any[]): any[] {
+    const userId = this.gs.getSessionData('userId');
+    const now = new Date().toISOString();
+    const logs: any[] = [];
+
+    try {
+      Object.keys(masterObj || {}).forEach((k) => {
+        logs.push({
+          EventType: 'Insert',
+          Date: now,
+          UserId: userId,
+          ColumnName: `Master.${k}`,
+          OriginalValue: '',
+          NewValue: masterObj[k] == null ? '' : String(masterObj[k])
+        });
+      });
+
+      (detailsArr || []).forEach((row: any, idx: number) => {
+        Object.keys(row || {}).forEach((k) => {
+          logs.push({
+            EventType: 'Insert',
+            Date: now,
+            UserId: userId,
+            ColumnName: `Detail[${idx}].${k}`,
+            OriginalValue: '',
+            NewValue: row[k] == null ? '' : String(row[k])
+          });
+        });
+      });
+    } catch (e) {
+      // swallow, best-effort
+    }
+
+    return logs;
+  }
+
+  // Determine whether the form is editing an existing PI (true) or creating a new one (false)
+  isEditMode(): boolean {
+    try {
+      if (!this.Formgroup) return false;
+      const id = (this.Formgroup.controls as any)['PI_Master_ID']?.value;
+      return !!(id && id !== '' && id !== 0) || !!this.tempPI;
+    } catch (e) {
+      return !!this.tempPI;
+    }
+  }
+
+  // Update behaves similarly to Save but asks for user confirmation and is used when editing
+  Update():void{
+    // basic guard
+    if (!this.Formgroup) return;
+
+    Swal.fire({
+      title: 'Confirm Update',
+      text: 'Are you sure you want to update this Proforma Invoice?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, update it!',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let model= {
+          PI_Master_ID: this.Formgroup.controls['PI_Master_ID'].value,
+          PINo: this.Formgroup.controls['PINo'].value,
+          Consignee_Initial: this.Formgroup.controls['Consignee_Initial'].value,
+          Date: this.Formgroup.controls['Date'].value,
+          Beneficiary_Account_ID: this.Formgroup.controls['Beneficiary_Account_ID'].value,
+          Beneficiary_Bank_ID: this.Formgroup.controls['Beneficiary_Bank_ID'].value,
+          Country_Of_Orgin_ID: this.Formgroup.controls['Country_Of_Orgin_ID'].value,
+          Packing_ID: this.Formgroup.controls['Packing_ID'].value,
+          Loading_Mode_ID: this.Formgroup.controls['Loading_Mode_ID'].value,
+          Payment_Term_ID: this.Formgroup.controls['Payment_Term_ID'].value,
+          Consignee: this.Formgroup.controls['Consignee'].value,
+          Contact_Person: this.Formgroup.controls['Contact_Person'].value,
+          Buyer_Name: this.Formgroup.controls['Buyer_Name'].value,
+          Delivery_Address: this.Formgroup.controls['Delivery_Address'].value,
+          Style: this.Formgroup.controls['Style'].value,
+          Delivery_Condition_ID: this.Formgroup.controls['Delivery_Condition_ID'].value,
+          Shipment_Condition_ID: this.Formgroup.controls['Shipment_Condition_ID'].value,
+          Price_Term_ID: this.Formgroup.controls['Price_Term_ID'].value,
+          Good_Description: this.Formgroup.controls['Good_Description'].value,
+          Documents: this.Formgroup.controls['Documents'].value,
+          Shipping_Marks: this.Formgroup.controls['Shipping_Marks'].value,
+          Loading_Port: this.Formgroup.controls['Loading_Port'].value,
+          Destination_Port: this.Formgroup.controls['Destination_Port'].value,
+          Remarks: this.Formgroup.controls['Remarks'].value,
+          Force_Majeure_ID: this.Formgroup.controls['Force_Majeure_ID'].value,
+          Arbitration_ID: this.Formgroup.controls['Arbitration_ID'].value,
+          Status: this.Formgroup.controls['Status'].value,
+          User_ID: this.gs.getSessionData('userId'),
+          Superior_ID: this.gs.getSessionData('userId'),
+          Customer_ID: this.Formgroup.controls['Customer_ID'].value,
+          IsMPI: this.Formgroup.controls['IsMPI'].value,      
+          LastUpdateDate: this.Formgroup.controls['LastUpdateDate'].value,
+          ExpireDate: this.Formgroup.controls['ExpireDate'].value,
+          Terms_of_Delivery_ID: this.Formgroup.controls['Terms_of_Delivery_ID'].value,  
+          IsBuyerMandatory: this.Formgroup.controls['IsBuyerMandatory'].value,    
+          Customer_Bank_ID: this.Formgroup.controls['Customer_Bank_ID'].value
+        };
+
+        let details=this.Formgroup.value.ItemArray;
+
+        details.forEach((element:any) => {
+          if(element.Unit_ID==2){
+            element.Quantity_In_Meter=element.Quantity;
+            element.Quantity=element.Quantity_In_Meter*1.09361;
+          }
+        });
+
+      //   this.dme.UpdateDataMasterDetails(
+      // detailRows,                         // fd  -> detailsData
+      // 'tbl_rm_requisition_details',       // tableName
+      // masterRow,                          // fdMaster -> data
+      // 'tbl_rm_requisition_master',        // tableNameMaster
+      // 'RM_Requisition_MasterID',          // primaryColumnName
+      // 'RM_Requisition_MasterID',          // ColumnNameForign
+      // '',                                 // serialType
+      // '',                                 // ColumnNameSerialNo
+      // whereParams 
+
+        // Re-use SaveDataMasterDetails service which performs insert/update based on PI_Master_ID
+
+        const whereParams = { PI_Master_ID: model.PI_Master_ID };
+
+        this.des.UpdateDataMasterDetails(
+          details,
+          "tbl_pi_detail",
+          model,
+          "tbl_pi_master",
+          "PI_Master_ID",
+          "PI_Master_ID",
+          "",
+          "",
+          whereParams
+        ).subscribe(res=>{
+          if(res.messageType=='Success' && res.status){
+            Swal.fire(res.messageType, res.message, 'success').then(()=>{
+                  this.ngOnInit();
+            });
+          }else{
+            if(!res.isAuthorized){
+              this.gs.Logout();
+            }else{
+              Swal.fire(res.messageType, res.message, 'error');
+            }
+          }
+        });
+      }
+    });
   }
 }

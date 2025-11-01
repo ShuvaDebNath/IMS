@@ -1,501 +1,432 @@
-<div class="p-2 m-2 shadow-sm">
+<div *ngIf="isLoading" class="preloader">
+  <div class="loader-wrapper">
+    <div class="circle">
+      <img class="loader-logo animation__shake" src="assets/preloader.gif" alt="IMS Logo">
+    </div>
+  </div>
+</div>
 
-<form name="PIForm" [formGroup]="Formgroup" role="form">
-  <div class="card">
-    <div class="card-header sticky-header">
-      <h3 class="card-title mb-0"><strong>Proforma Invoice</strong></h3>
-      <div class="float-right">
-        <button class="btn btn-sm theme-btn-save mr-2" (click)="Save()" [disabled]="!Formgroup.valid"><i class="fas fa-save"></i>&nbsp;Save</button>
-        <button class="btn btn-sm btn-primary" (click)="RefrashDDL()"><i class="fas fa-sync"></i>&nbsp;Refresh</button>
+<div class="card">
+  <div class="card-header sticky-header">
+    <h3 class="card-title mb-2">
+      <strong>{{PageTitle}}</strong>
+    </h3>
+    <div class="float-right">
+      <div class="btn-group" role="group" aria-label="Basic example">
+
+        <button *ngIf="ShowbtnPar" (click)="getSelectedRows('Partial Approved')" type="button"
+          class="btn btn-success mr-2"><i class="fas fa-check"></i>&nbsp;Approve Partially</button>
+        <button *ngIf="ShowbtnQar" (click)="getSelectedRows('Quartar Approved')" type="button"
+          class="btn btn-primary mr-2"><i class="fas fa-check"></i>&nbsp;Approve Quarterly</button>
+        <button *ngIf="ShowbtnFull" (click)="getSelectedRows('Full Approved')" type="button"
+          class="btn btn-warning mr-2"><i class="fas fa-check"></i>&nbsp;Approve Full</button>
+        <button *ngIf="ShowbtnRej" (click)="getSelectedRows('Rejected')" type="button" class="btn btn-danger mr-2"><i
+            class="fas fa-times"></i>&nbsp;Reject</button>
       </div>
     </div>
-    <div class="card-body">
-      <div class="row">
-        <div class="col-md-4">
-          <label class="control-label">Consignee Initial</label>
-          <input type="text" class="form-control form-control-sm" placeholder="Consignee Initial" id="coninit" name="coninit" formControlName="Consignee_Initial"/>
-        
-        </div>
-        <div class="col-md-4">
-          <label class="control-label">PI No</label>
-          <input type="text" class="form-control form-control-sm" placeholder="PI No" readOnly id="pino" name="pino" formControlName="PINo"/>
-        </div>
-        <div class="col-md-4">
-          <label class="control-label">Date</label>
-          <input type="text" autocomplete="off" [readOnly]="true"
-            formControlName="Date"
-            class="form-control form-control-sm">
-          <!-- bsDatepicker
-            placement="bottom"
-            [bsConfig]="{ isAnimated: true }" <input type="text" class="form-control form-control-sm" placeholder="Date" readOnly id="Date" name="Date" formControlName="Date"/> -->
-        </div>
-      </div>
-      <hr/>
-      <div class="row">
-        <div class="col-md-4 mb-2">
-          <label class="control-label">Shippeer</label><br/>
-          <p-dropdown 
-          [options]="ShipperList" 
-          formControlName="Beneficiary_Account_ID"
-          optionLabel="CompanyName"
-          optionValue="Beneficiary_Account_ID"
-          [filter]="true" 
-          filterBy="CompanyName" 
-          [showClear]="true" 
-          styleClass="my-dropdown"
-          panelStyleClass="my-dropdown-panel"
-          [style]="{width: '100%'}"
-          placeholder="Select a Shippeer">
-          </p-dropdown>
-        </div>
-        <div class="col-md-4 mb-2">
-          <label class="control-label">Beneficiary's Bank</label><br/>
-          <p-dropdown 
-          [options]="BenificaryBankList" 
-          formControlName="Beneficiary_Bank_ID"
-          optionLabel="BankInfo"
-          optionValue="Beneficiary_Bank_ID"
-          [filter]="true" 
-          filterBy="BankInfo" 
-          styleClass="my-dropdown"
-          panelStyleClass="my-dropdown-panel"
-          [showClear]="true" 
-          [style]="{width: '100%'}"
-          placeholder="Select a Beneficiary's Bank">
-          </p-dropdown>
-        </div>
-        <div class="col-md-4 mb-2">
-          <label class="control-label">Country of Origin</label><br/>
-          <p-dropdown 
-          [options]="CountryList" 
-          formControlName="Country_Of_Orgin_ID"
-          optionLabel="Country"
-          optionValue="Country_ID"
-          [filter]="true" 
-          filterBy="Country" 
-          [showClear]="true" 
-          [style]="{width: '100%'}"
-          placeholder="Select a Country">
-          </p-dropdown>        
-        </div>
-        <div class="col-md-4 mb-2">
-          <label class="control-label">Packing</label><br/>
-          <p-dropdown 
-          [options]="PackingList" 
-          formControlName="Packing_ID"
-          optionLabel="Mode"
-          optionValue="Packing_ID"
-          [filter]="true" 
-          filterBy="Mode" 
-          [showClear]="true" 
-          [style]="{width: '100%'}"
-          placeholder="Select a Packing">
-          </p-dropdown>         
-        </div>
-        <div class="col-md-4 mb-2">
-          <label class="control-label">Loading Mode</label><br/>
-          <p-dropdown 
-          [options]="LoadingModeList" 
-          formControlName="Loading_Mode_ID"
-          optionLabel="Details"
-          optionValue="Loading_Mode_ID"
-          [filter]="true" 
-          filterBy="Details" 
-          [showClear]="true" 
-          [style]="{width: '100%'}"
-          placeholder="Select a Loading Mode">
-          </p-dropdown>           
-        </div>
-        <div class="col-md-4 mb-2">
-          <label class="control-label">Payment Mode</label><br/>
-          <p-dropdown 
-          [options]="PaymentModeList" 
-          formControlName="Payment_Term_ID"
-          optionLabel="Mode"
-          optionValue="Payment_Term_ID"
-          [filter]="true" 
-          filterBy="Mode" 
-          [showClear]="true" 
-          styleClass="my-dropdown"
-          panelStyleClass="my-dropdown-panel"
-          [style]="{width: '100%'}"
-          placeholder="Select a Payment Mode">
-          </p-dropdown>           
-        </div>
-        <div class="col-md-4 mb-2">
-          <label class="control-label">Consignee</label><br/>
-          <p-dropdown 
-          [options]="ConsigneeList" 
-          formControlName="Customer_ID"
-          optionLabel="CustomerName"
-          optionValue="Customer_ID"
-          [filter]="true" 
-          filterBy="CustomerName" 
-          [showClear]="true" 
-          styleClass="my-dropdown"
-          panelStyleClass="my-dropdown-panel"
-          [style]="{width: '100%'}"
-          placeholder="Select a Consignee"
-          [virtualScroll]="true"
-          [itemSize]="30">
-          </p-dropdown>          
-        </div>
-        <div class="col-md-4 mb-2">
-          <label class="control-label">Contact Person</label>
-          <input type="text" class="form-control form-control-sm" id="ContactPerson" placeholder="Contact Person"  formControlName="Contact_Person"/>
-        </div>
-        <div class="col-md-4 mb-2">
-          <label class="control-label">Applicant Bank</label><br/>
-          <p-dropdown 
-          [options]="ApplicantBankList" 
-          formControlName="Customer_Bank_ID"
-          optionLabel="CustomerBankDetails"
-          optionValue="Applicant_Bank_ID"
-          [filter]="true" 
-          filterBy="CustomerBankDetails" 
-          [showClear]="true" 
-          styleClass="my-dropdown"
-          panelStyleClass="my-dropdown-panel"
-          [style]="{width: '100%'}"
-          placeholder="Select a Bank">
-          </p-dropdown>          
-        </div>
-        <div class="col-md-4 mb-2">
-          <label class="control-label">Buyer Name</label>
-          <input type="text" class="form-control form-control-sm" id="BuyerName" placeholder="Buyer Name" formControlName="Buyer_Name"/>
-        </div>
-        <div class="col-md-4 mb-2">
-          <label for="IsBuyerMandatory" class="mr-2"> Is This Buying House Order? </label>
-          <p-checkbox inputId="IsBuyerMandatory" name="IsBuyerMandatory" [binary]="true" formControlName="IsBuyerMandatory"/>
-        </div>
-        <div class="col-md-4 mb-2">
-          <label class="control-label">Buying House</label><br/>
-          <p-dropdown 
-          
-          [options]="BuyingHouseList" 
-          formControlName="Buyer_ID"
-          optionLabel="Buyer_Name"
-          optionValue="Id"
-          [filter]="true" 
-          filterBy="Buyer_Name" 
-          [showClear]="true" 
-          [style]="{width: '100%'}"
-          placeholder="Select a Buying House">
-          </p-dropdown>          
-        </div>
-        <div class="col-md-4 mb-2">
-          <label class="control-label">Delivery Address</label>
-          <textarea id="DeliveryAddress" class="form-control form-control-sm" rows="3" formControlName="Delivery_Address"></textarea>
-        </div>
-        <div class="col-md-4 mb-2">
-          <label class="control-label">Style</label>
-          <textarea id="Style" class="form-control form-control-sm" rows="3" formControlName="Style"></textarea>
-        </div>
-        <div class="col-md-4 mb-2">
-          <label class="control-label">Goods Description</label>
-          <textarea id="GoodsDescription" class="form-control form-control-sm" rows="3" formControlName="Good_Description"></textarea>
-        </div>
 
-        <div class="col-md-4 mb-2">
-          <label class="control-label">Expire Date</label>
+  </div>
+  <div class="card-body">
+    <form id="Search" [formGroup]="SearchFormgroup" forle="form">
 
-            <div class="input-group mb-3">
-            <input type="text" autocomplete="off"
-            formControlName="ExpireDate"
-            placeholder="DD/MM/YYYY"
-            class="form-control form-control-sm"
-            #dp="bsDatepicker"
-            bsDatepicker
-            placement="bottom"
-            [bsConfig]="{ isAnimated: true }">
-              <div class="input-group-append">
-                <button class="btn btn-sm btn-outline-success" type="button" (click)="dp.toggle()" [attr.aria-expanded]="dp.isOpen">
-                  <i class="far fa-calendar" aria-hidden="true"></i>
-                </button>
+      <fieldset class="border p-3">
+        <legend class="w-auto px-2">Search</legend>
+        <p-divider />
+        <div class="container-fluid">
+          <div class="row g-3 align-items-end">
+
+            <div class="col-md-2">
+              <label>PI Type</label>
+              <select formControlName="PIType" class="form-control form-control-sm">
+                <option value="" disabled selected>Select a type</option>
+                <option *ngFor="let item of PITypeList" [value]="item.value">
+                  {{ item.text }}
+                </option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label for="FromDate" class="small font-weight-bold">From Date</label>
+              <div class="input-group ">
+                <div class="input-group-prepend" (click)="dpfrom.toggle()">
+                  <span class="input-group-text theme-btn"><i class="fas fa-calendar"></i></span>
+                </div>
+                <input type="text" formControlName="FromDate" autocomplete="off" class="form-control"
+                  placeholder="DD/MM/YYYY" #dpfrom="bsDatepicker" bsDatepicker
+                  [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass: 'theme-green' }" />
               </div>
             </div>
 
+            <div class="col-md-3">
+              <label for="ToDate" class="small font-weight-bold">To Date</label>
+              <div class="input-group ">
+                <div class="input-group-prepend" (click)="dpto.toggle()">
+                  <span class="input-group-text theme-btn"><i class="fas fa-calendar"></i></span>
+                </div>
+                <input type="text" formControlName="ToDate" autocomplete="off" class="form-control"
+                  placeholder="DD/MM/YYYY" #dpto="bsDatepicker" bsDatepicker
+                  [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass: 'theme-green' }" />
+              </div>
+            </div>
+
+
+            <div class="col-md-3">
+              <label>PI No</label>
+              <input type="text" formControlName="PINo" class="form-control form-control-sm" placeholder="PI No" />
+            </div>
+
+            <div class="col-md-3">
+              <label>Shipper</label>
+              <input type="text" formControlName="Shipper" class="form-control form-control-sm" placeholder="Shipper" />
+            </div>
+
+            <div class="col-md-3">
+              <label>Consignee</label>
+              <input type="text" formControlName="Consignee" class="form-control form-control-sm"
+                placeholder="Consignee" />
+            </div>
+
+            <div class="col-md-3">
+              <label>Generated By</label>
+              <input type="text" formControlName="CreateBY" class="form-control form-control-sm"
+                placeholder="Generated By" />
+            </div>
+
+          </div>
+
+          <!-- Second Row: Buttons -->
+          <div class="row mt-3 justify-content-end">
+            <div class="col-auto">
+              <button type="button" (click)="clearField()" class="btn btn-outline-secondary btn-sm">
+                <i class="fas fa-undo"></i>&nbsp;Clear
+              </button>
+            </div>
+            <div class="col-auto">
+              <button type="button" (click)="LoadTableData()" class="btn btn-primary btn-sm">
+                <i class="fas fa-search"></i>&nbsp;Search
+              </button>
+            </div>
+          </div>
         </div>
 
-        <div class="col-md-4 mb-2">
-          <label class="control-label">Terms of Delivery</label><br/>
-          <p-dropdown 
-          [options]="TermsofDeliveryList" 
-          formControlName="Terms_of_Delivery_ID"
-          optionLabel="Details"
-          optionValue="Id"
-          [filter]="true" 
-          filterBy="Details" 
-          [showClear]="true" 
-          [style]="{width: '100%'}"
-          placeholder="Select a Terms of Delivery">
-          </p-dropdown>          
+
+      </fieldset>
+
+    </form>
+
+    <form>
+      <p-divider />
+      <p-table #table [value]="DataTable" [paginator]="true" [rows]="10" [lazy]="true" [totalRecords]="totalRecords"
+        [showCurrentPageReport]="true" [(selection)]="selectedRows" dataKey="PI_Master_ID"
+        (onLazyLoad)="ReloadTable($event)" [rowsPerPageOptions]="[10,20,50,100,totalRecords]"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th *ngIf="PiStatus!='Full Approved'" style="width: 4rem"><p-tableHeaderCheckbox /></th>
+            <th style="text-align: center;">Serial No</th>
+            <th pSortableColumn="PINo" class="text-center">PI No</th>
+            <th pSortableColumn="PIDate" class="text-center">Date</th>
+            <th pSortableColumn="BeneficiaryCompanyName" class="text-center">Shipper</th>
+            <th pSortableColumn="CustomerName" class="text-center">Consignee</th>
+            <th pSortableColumn="CreatedByUserName" class="text-center">Generated By</th>
+            <th  *ngIf="PiStatus=='ALL'" pSortableColumn="PIStatus" class="text-center">Status</th>
+            <th style="text-align: center;">Action</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row let-i="rowIndex">
+          <tr>
+            <td *ngIf="PiStatus!='Full Approved'">
+              <p-tableCheckbox [value]="row" />
+            </td>
+            <td style="text-align: center;">{{ i + 1 }}</td>
+            <td>{{ row.PINo }}</td>
+            <td>{{ row.PIDate | date:'dd-MM-yyyy'}}</td>
+            <td>{{ row.BeneficiaryCompanyName }}</td>
+            <td>{{ row.CustomerName }}</td>
+            <td>{{ row.CreatedByUserName }}</td>
+            <td *ngIf="PiStatus=='ALL'" class="text-center">
+              <span [ngClass]="{
+                'badge badge-success': row.PIStatus === 'Approved',
+                'badge badge-warning': row.PIStatus === 'Pending',
+                'badge badge-danger': row.PIStatus === 'Rejected',
+                'badge badge-info': row.PIStatus === 'Partial Approved',
+                'badge badge-primary': row.PIStatus === 'Quartar Approved',
+                'badge badge-secondary': row.PIStatus === 'Full Approved'
+              }">
+                {{ row.PIStatus }}
+              </span>
+            </td>
+            <td class="text-center align-middle">
+              <div class="btn-group" role="group">
+            
+                <button class="btn theme-btn-view btn-sm mr-1" title="View" (click)="ViewDetails(row.PI_Master_ID)">
+                  <i class="fa fa-eye"></i>
+                </button>
+            
+                <button *ngIf="ShowbtnSpecial" class="btn theme-btn-purple btn-sm mr-1" title="Special Approval"
+                  (click)="OpenSpecialApprove(row.PI_Master_ID)">
+                  <i class="fa fa-check-circle"></i>
+                </button>  
+
+                <button *ngIf="updatePermissions" class="btn theme-btn-edit btn-sm mr-1" title="Edit" type="button" (click)="OpenInNewTab(row.PI_Master_ID)">
+                  <i class="fa fa-edit"></i>
+                </button>
+            
+                <button *ngIf="deletePermissions" class="btn theme-btn-delete btn-sm" title="Delete" (click)="DeleteData(row)">
+                  <i class="fas fa-trash"></i>
+                </button>    
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="6">No data found.</td>
+          </tr>
+        </ng-template>
+
+      </p-table>
+    </form>
+  </div>
+</div>
+
+
+<p-dialog header="Details" [(visible)]="isViewDetails" [modal]="true" [closable]="true" [style]="{ width: '50rem' }"
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{width: '100vw', height: '100vh', top: '0', left: '0'}"
+  [contentStyle]="{'height':'calc(100vh - 100px)'}" [maximizable]="true" (onHide)="isViewDetails = false"
+  styleClass="wide-dialog">
+  <form>
+
+    <div class="card card-primary">
+      <div class="card-header m-0 p-2 sticky-header">
+        <div class="float-left">
+          <h5>{{PIData?.PINo}}</h5>
+          <span>{{PIData?.PIDate | date:'dd/MM/yyyy'}}</span>
+        </div>
+
+        <div class="float-right">
+          <div class="btn-group" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-outline-success bg-gradient-warning  btn-sm mr-2">PI Log</button>
+            <button type="button" class="btn btn-outline-success bg-gradient-warning btn-sm mr-2">PI Detail Log</button>
+            <button type="button" class="btn btn-outline-success bg-gradient-warning btn-sm mr-2"><i
+                class="fas fa-file-print"></i>&nbsp;Print</button>
+            <button type="button" class="btn btn-outline-success bg-gradient-warning btn-sm mr-2" 
+             (click)="OpenDeliveryDetails(PIData?.PI_Master_ID)">
+             <i class="fas fa-truck"></i>&nbsp;Delivery Detail</button>
+          </div>
         </div>
       </div>
-      <div class="table-responsive">
-        <table class="table table-sm table-bordered table-striped">
-          <thead>
-            <tr>
-              <th class="text-center align-middle sticky-table-column">
-                <button class="btn btn-xs btn-primary" (click)="Addrow()" type="button"><i class="fas fa-plus"></i></button>
-              </th>
-              <th class="text-center align-middle">Article No</th>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="row">
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Consignee Initial</strong></div>
+              <div class="col-md-8 mt-2">{{PIData?.Consignee_Initial}}</div>
+
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Shipper</strong></div>
+              <div class="col-md-8 mt-2">{{PIData?.BeneficiaryCompanyName}}</div>
+
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Beneficiary Bank</strong></div>
+              <div class="col-md-8 mt-2">{{PIData?.BeneficiaryBankName}}</div>
+
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Consignee</strong></div>
+              <div class="col-md-8 mt-2">{{PIData?.CustomerName}}</div>
+
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Applicant Bank</strong></div>
+              <div class="col-md-8 mt-2">{{PIData?.CustomerBankName}}</div>
+
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Buyer Name</strong></div>
+              <div class="col-md-8 mt-2">{{PIData?.BuyerName}}</div>
+
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Country Of Origin</strong></div>
+              <div class="col-md-8 mt-2">{{PIData?.CountryOfOriginName}}</div>
+
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Delivery Details</strong></div>
+              <div class="col-md-8 mt-2">{{PIData?.Delivery}}</div>
+
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Terms of Delivery</strong></div>
+              <div class="col-md-8 mt-2">{{PIData?.TermsOfDeliveryName}}</div>
+
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Force Majeure</strong></div>
+              <div class="col-md-8 mt-2">{{PIData?.ForceMajeureName}}</div>
+
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Loading Mode</strong></div>
+              <div class="col-md-8 mt-2">{{PIData?.LoadingModeName}}</div>
+
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Contact Person</strong></div>
+              <div class="col-md-8 mt-2">{{PIData?.Contact_Person}}</div>
+
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Packing Mode</strong></div>
+              <div class="col-md-8 mt-2">{{PIData?.PackingName}}</div>
+
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Expire Date</strong></div>
+              <div class="col-md-8 mt-2">{{PIData?.ExpireDate|date:'dd/MM/yyyy HH:mm:ss'}}</div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="row">
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Arbitration</strong></div>
+              <div class="col-md-8 mt-2">{{PIData?.ArbitrationName}}</div>
+
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Remarks</strong></div>
+              <div class="col-md-8 mt-2">{{PIData?.Remarks}}</div>
+
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Style</strong></div>
+              <div class="col-md-8 mt-2">{{PIData?.Style}}</div>
+
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Payment Terms</strong></div>
+              <div class="col-md-8 mt-2">{{PIData?.PaymentTermName}}</div>
+
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Price Term</strong></div>
+              <div class="col-md-8 mt-2">{{PIData?.PriceTermName}}</div>
+
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Partial Shipment</strong></div>
+              <div class="col-md-8 mt-2">{{PIData?.ShipmentName}}</div>
+
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Delivery Address</strong></div>
+              <div class="col-md-8 mt-2">{{PIData?.Delivery_Address}}</div>
+
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Documents</strong></div>
+              <div class="col-md-8 mt-2">{{PIData?.Documents}}</div>
+
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Goods Description</strong></div>
+              <div class="col-md-8 mt-2">{{PIData?.GoodsDescription}}</div>
+
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Shipping Marks</strong></div>
+              <div class="col-md-8 mt-2">{{PIData?.ShippingMarks}}</div>
+
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Loading Port</strong></div>
+              <div class="col-md-8 mt-2">{{PIData?.Loading_Port}}</div>
+
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Destination Port</strong></div>
+              <div class="col-md-8 mt-2">{{PIData?.Destination_Port}}</div>
+
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Created By</strong></div>
+              <div class="col-md-8 mt-2">{{PIData?.CreatedByUserName}}</div>
+
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Superior</strong></div>
+              <div class="col-md-8 mt-2">{{PIData?.SuperiorName}}</div>
+
+              <div class="col-md-4 mt-2 text-right content-middle"><strong>Status</strong></div>
+              <div class="col-md-8 mt-2"><span class="text-danger"><strong>{{PIData?.Status |
+                    uppercase}}</strong></span></div>
+            </div>
+          </div>
+        </div>
+        <p-divider />
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered  table-hover">
+
+            <tr class="bg-gradient-success">
+              <th class="text-center align-middle">Article</th>
+              <th class="text-center align-middle">A. A.</th>
               <th class="text-center align-middle">Description</th>
               <th class="text-center align-middle">Width</th>
               <th class="text-center align-middle">Color</th>
               <th class="text-center align-middle">Packaging</th>
               <th class="text-center align-middle">Qty</th>
               <th class="text-center align-middle">Unit</th>
-              <th class="text-center align-middle">Unit Price ($)</th>
-              <th class="text-center align-middle">Total Amount ($)</th>
+              <th class="text-center align-middle">Unit Price ({{PIData?.IsMPI==false?'USD':'BDT'}})</th>
+              <th class="text-center align-middle">Total Amount ({{PIData?.IsMPI==false?'USD':'BDT'}})</th>
               <th class="text-center align-middle">Prod. Cost Unit</th>
               <th class="text-center align-middle">Total Prod. Cost</th>
-              <th class="text-center align-middle">A. A.</th>
+              <th class="text-center align-middle">Delivered</th>
             </tr>
-          </thead>       
-          <tbody formArrayName="ItemArray">
-            <ng-container *ngIf="Formgroup.controls.ItemArray!=null">
-              <tr *ngFor="let itemrow of getControls(); let i = index" [formGroupName]="i">
-                <td class="sticky-table-column align-middle">                  
-                  <button class="btn btn-xs btn-danger" (click)="DeleteRow(i)" type="button"><i class="fas fa-times"></i></button>
-                </td>
-                <td class="align-middle">
-                  <input style="width: 5rem;" formControlName="Article" type="text" class="form-control form-control-sm" placeholder="Article No" id="ArticleNo" name="ArticleNo"/>
-                </td> 
-                <td class="align-middle">
-                  <p-dropdown 
-                  formControlName="Description"
-                  [options]="DescriptionList" 
-                  optionLabel="Details"
-                  optionValue="Details"
-                  [filter]="true" 
-                  filterBy="Details" 
-                  [showClear]="true" 
-                  appendTo="body"
-                  [style]="{width: '100%'}"
-                  placeholder="Select a Description">
-                  </p-dropdown>
-                </td>
-                <td class="align-middle">
-                  <p-dropdown 
-                  formControlName="Width_ID"
-                  [options]="WidthList" 
-                  optionLabel="Measurement"
-                  optionValue="Width_ID"
-                  [filter]="true" 
-                  filterBy="Measurement" 
-                  [showClear]="true" 
-                  appendTo="body"
-                  [style]="{width: '100%'}"
-                  placeholder="Select a Width">
-                  </p-dropdown>
-                </td>
-                <td class="align-middle">
-                  <p-dropdown 
-                  formControlName="Color_ID"
-                  [options]="ColorList" 
-                  optionLabel="Color"
-                  optionValue="Color_ID"
-                  [filter]="true" 
-                  filterBy="Color" 
-                  [showClear]="true" 
-                  appendTo="body"
-                  [style]="{width: '100%'}"
-                  placeholder="Select a Color">
-                  </p-dropdown>
-                </td>
-                <td class="align-middle">
-                  <p-dropdown 
-                  formControlName="Packaging_ID"
-                  [options]="PackagingList" 
-                  optionLabel="Packaging"
-                  optionValue="Packaging_ID"
-                  [filter]="true" 
-                  filterBy="Packaging" 
-                  [showClear]="true" 
-                  appendTo="body"
-                  [style]="{width: '100%'}"
-                  placeholder="Select a Packaging">
-                  </p-dropdown>
-                </td>
-                <td class="align-middle">
-                  <input style="width: 5rem;" (change)="calculateAmount(itemrow)" formControlName="Quantity" type="number" class="form-control form-control-sm" placeholder="Qty" id="Qty" name="Qty"/>
-                </td>
-                <td class="align-middle">
-                  <p-dropdown 
-                  formControlName="Unit_ID"
-                  [options]="UnitList" 
-                  optionLabel="Unit"
-                  optionValue="Unit_ID"
-                  [filter]="true" 
-                  filterBy="Unit" 
-                  [showClear]="true" 
-                  appendTo="body"
-                  [style]="{width: '100%'}"
-                  placeholder="Select a Unit">
-                  </p-dropdown>
-                </td>
-                <td class="align-middle">
-                  <input style="width: 5rem;" (change)="calculateAmount(itemrow)" formControlName="Unit_Price" type="number" class="form-control form-control-sm text-right" placeholder="Unit Price" id="Rate" name="Rate"/>
-                </td>     
-                <td class="align-middle">
-                  <input style="width: 5rem;" formControlName="Total_Amount" readonly="readOnly" type="number" class="form-control form-control-sm text-right" placeholder="Total Amount" id="Amount" name="Amount"/>
-                </td> 
-                <td class="align-middle">
-                  <input style="width: 5rem;" (change)="calculateAmount(itemrow)" formControlName="CommissionUnit" type="text" class="form-control form-control-sm text-right" placeholder="Prod. Cost Unit" id="ProdCost" name="ProdCost"/>
-                </td>   
-                <td class="align-middle">
-                  <input style="width: 5rem;" formControlName="TotalCommission" readonly="readOnly" type="text" class="form-control form-control-sm text-right" placeholder="Total Prod. Cost" id="TProdCost" name="TProdCost"/>
-                </td> 
-                <td class="align-middle">
-                  <p-dropdown 
-                  formControlName="Item_ID"
-                  [options]="AAList" 
-                  optionLabel="Article_No"
-                  optionValue="Item_ID"
-                  [filter]="true" 
-                  filterBy="Article_No" 
-                  [showClear]="true" 
-                  appendTo="body"
-                  (onChange)="SetActualArticle(itemrow)"
-                  [style]="{width: '100%'}"
-                  placeholder="Select a Article">
-                  </p-dropdown>
-                </td>             
-              </tr>
-            </ng-container>
-          </tbody>
-          <tfoot>
-            <tr>
-              <th class="sticky-table-column align-middle"></th>
-              <th class="text-center align-middle">Total</th>
-              <th class="text-center align-middle"></th>
-              <th class="text-center align-middle"></th>
-              <th class="text-center align-middle"></th>
-              <th class="text-center align-middle"></th>
-              <th class="text-center align-middle">
-                <input type="text" class="form-control form-control-sm" value="{{GTQTY}}" placeholder="Total Qty" id="GTQty" name="GTQty"/>
-              </th>
-              <th class="text-center align-middle"></th>
-              <th class="text-center align-middle"> </th>
-              <th class="text-center align-middle">  
-                <input type="text" class="form-control form-control-sm text-right" value="{{GTAMNT}}" placeholder="Total Amout" id="GTAmout" name="GTAmout"/>
-              </th>
-              <th class="text-center align-middle"></th>
-              <th class="text-center align-middle"></th>
-              <th class="text-center align-middle"></th>
+
+            <tr *ngFor="let item of PIDetails">
+              <td class="text-center align-middle">{{ item.Article }}</td>
+              <td class="text-center align-middle">{{ item.ArticleNo_from_StaticInfo }}</td>
+              <td class="text-center align-middle">{{ item.Description }}</td>
+              <td class="text-center align-middle">{{ item.Width }}</td>
+              <td class="text-center align-middle">{{ item.Color }}</td>
+              <td class="text-center align-middle">{{ item.Packaging }}</td>
+              <td class="text-center align-middle">{{ item.Quantity }}</td>
+              <td class="text-center align-middle">{{ item.Unit }}</td>
+              <td class="text-center align-middle">{{ item.Unit_Price }}</td>
+              <td class="text-center align-middle">{{PIData?.IsMPI==false?item.Total_Amount:item.Total_Amount_Tk}}</td>
+              <td class="text-center align-middle">{{ item.CommissionUnit }}</td>
+              <td class="text-center align-middle">{{ item.TotalCommission }}</td>
+              <td class="text-center align-middle">{{ item.Delivered_Quantity }}</td>
+
+
             </tr>
-          </tfoot>
-        </table>
-      </div>
 
-      <hr/>
+            <!-- Totals row -->
+            <tr *ngIf="PIDetails && PIDetails.length>0" class="table-secondary font-weight-bold">
+              <td colspan="6" class="text-right">Totals</td>
+              <td class="text-center">{{ totalsOrderQty }}</td>
+              <td></td>
+              <td></td>
+              <td class="text-right">{{ totalsAmount | number:'1.2-2' }}</td>
+              <td></td>
+              <td class="text-right">{{ totalsProdCost | number:'1.2-2' }}</td>
+              <td class="text-center">{{ totalsDeliveredQty }}</td>
+            </tr>
 
-      <div class="row">
-        <div class="col-md-4 mb-2">
-          <label class="control-label">Delivery Condition</label><br/>
-          <p-dropdown 
-          formControlName="Delivery_Condition_ID"
-          [options]="DeliveryConditionList" 
-          optionLabel="Details"
-          optionValue="Delivery_Condition_ID"
-          [filter]="true" 
-          filterBy="Details" 
-          [showClear]="true" 
-          [style]="{width: '100%'}"
-          styleClass="my-dropdown"
-          panelStyleClass="my-dropdown-panel"
-          placeholder="Select a Delivery Condition">
-          </p-dropdown>
+          </table>
         </div>
-        <div class="col-md-4 mb-2">
-          <label class="control-label">Partial Shipment</label><br/>
-          <p-dropdown 
-          formControlName="Shipment_Condition_ID"
-          [options]="PartialShipmentList" 
-          optionLabel="ShipmentConditions"
-          optionValue="Shipment_Condition_ID"
-          [filter]="true" 
-          filterBy="ShipmentConditions" 
-          [showClear]="true" 
-          [style]="{width: '100%'}"
-          styleClass="my-dropdown"
-          panelStyleClass="my-dropdown-panel"
-          placeholder="Select a Shipment">
-          </p-dropdown>
-        </div>
-        <div class="col-md-4 mb-2">
-          <label class="control-label">Price Terms</label><br/>
-          <p-dropdown 
-          formControlName="Price_Term_ID"
-          [options]="PriceTermsList" 
-          optionLabel="PriceTerm"
-          optionValue="Price_Term_ID"
-          [filter]="true" 
-          filterBy="PriceTerm" 
-          [showClear]="true" 
-          [style]="{width: '100%'}"
-          styleClass="my-dropdown"
-          panelStyleClass="my-dropdown-panel"
-          placeholder="Select a Price Terms">
-          </p-dropdown>
-        </div>
-
-        <div class="col-md-4 mb-2">
-          <label class="control-label">Documents</label>
-          <textarea id="Documents" class="form-control form-control-sm" rows="3" formControlName="Documents"></textarea>
-        </div>
-        <div class="col-md-4 mb-2">
-          <label class="control-label">Port Of Loading</label>
-          <textarea id="PortOfLoading" class="form-control form-control-sm" rows="3" formControlName="Loading_Port"></textarea>
-        </div>
-        <div class="col-md-4 mb-2">
-          <label class="control-label">Port Of Destination</label>
-          <textarea id="PortOfDestination" class="form-control form-control-sm" rows="3" formControlName="Destination_Port"></textarea>
-        </div>
-
-        <div class="col-md-4 mb-2">
-          <label class="control-label">Remarks</label>
-          <input type="text" class="form-control form-control-sm" id="Remarks" placeholder="Remarks" formControlName="Remarks"/>
-        </div>
-
-        <div class="col-md-4 mb-2">
-          <label class="control-label">Force Majeure</label><br/>
-          <p-dropdown 
-          formControlName="Force_Majeure_ID"
-          [options]="ForceMajeureList" 
-          optionLabel="Force"
-          optionValue="Force_Majeure_ID"
-          [filter]="true" 
-          filterBy="Force" 
-          [showClear]="true" 
-          [style]="{width: '100%'}"
-          styleClass="my-dropdown"
-          panelStyleClass="my-dropdown-panel"
-          placeholder="Select a Force Majeure">
-          </p-dropdown>
-        </div>
-        <div class="col-md-4 mb-2">
-          <label class="control-label">Arbitration</label><br/>
-          <p-dropdown 
-          formControlName="Arbitration_ID"
-          [options]="ArbitrationList" 
-          optionLabel="Detail"
-          optionValue="Arbitration_ID"
-          [filter]="true" 
-          filterBy="Detail" 
-          [showClear]="true" 
-          styleClass="my-dropdown"
-          panelStyleClass="my-dropdown-panel"
-          [style]="{width: '100%'}"
-          placeholder="Select a Arbitration">
-          </p-dropdown>
-        </div>      
 
       </div>
-      
-
+      <div class="card-footer m-0 p-2">
+        <div class="float-left">
+          <span><strong>{{PIData?.AmountInWord}}</strong></span>
+        </div>
+      </div>
     </div>
-  </div>
-</form>
-</div>
+
+
+
+  </form>
+</p-dialog>
+
+
+  <p-dialog header="Detail"
+            [(visible)]="isDeliveryDetailsVisible"
+            [modal]="true"
+            [closable]="true"
+            [style]="{ width: '100vw' }"
+            (onHide)="deliveryDetailsData = null">
+    <div *ngIf="deliveryDetailsData">
+      <p-table [value]="deliveryDetailsData.Items" [responsive]="true">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="text-align: center;">PI Article</th>
+            <th style="text-align: center;">Delivery Date</th>
+            <th style="text-align: center;">Challan No</th>
+            <th style="text-align: center;">Delivered Article</th>
+            <th style="text-align: center;">Ordered in Yard</th>
+            <th style="text-align: center;">Delivered in Yard</th>
+            <th style="text-align: center;">Ordered in Meter</th>
+            <th style="text-align: center;">Delivered in Meter</th>            
+            <th style="text-align: center;">Roll</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+          <tr>
+            <td style="text-align: left;">{{ item.PI_Article_No }}</td>
+            <td style="text-align: left;">{{ item.DeliveryDate }}</td>
+            <td style="text-align: left;">{{ item.Chalan_No }}</td>
+            <td style="text-align: center;">{{ item.Delivery_Article_No }}</td>
+            <td style="text-align: center;">{{ item.Ordered }}</td>
+            <td style="text-align: center;">{{ item.Delivered }}</td>
+            <td style="text-align: center;">{{ item.Orderd_In_Meter }}</td>
+            <td style="text-align: center;">{{ item.Deliverd_In_Meter }}</td>
+            <td style="text-align: center;">{{ item.Roll }}</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <tr class="font-weight-bold bg-light">
+            <td colspan="4" class="text-right">Totals</td>
+            <td class="text-center">{{ deliveryTotalsOrdered }}</td>
+            <td class="text-center">{{ deliveryTotalsDelivered }}</td>
+            <td class="text-center">{{ deliveryTotalsOrderedMeter }}</td>
+            <td class="text-center">{{ deliveryTotalsDeliveredMeter }}</td>
+            <td class="text-center">{{ deliveryTotalsRolls }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </p-dialog>
