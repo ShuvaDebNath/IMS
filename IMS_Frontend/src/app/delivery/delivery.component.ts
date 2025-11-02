@@ -1,6 +1,12 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ButtonModule } from 'primeng/button';
@@ -12,7 +18,7 @@ import { GlobalServiceService } from 'src/app/services/Global-service.service';
 import Swal from 'sweetalert2';
 import { DividerModule } from 'primeng/divider';
 import { FieldsetModule } from 'primeng/fieldset';
-import { DropdownChangeEvent, DropdownModule } from "primeng/dropdown";
+import { DropdownChangeEvent, DropdownModule } from 'primeng/dropdown';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 import { GetDataModel } from 'src/app/models/GetDataModel';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -23,13 +29,24 @@ import { Goods_Delivery_serviceService } from '../services/delivery/Goods_Delive
   selector: 'app-delivery',
   templateUrl: './delivery.component.html',
   styleUrls: ['./delivery.component.css'],
-  imports: [FormsModule, InputTextModule, InputNumberModule, ReactiveFormsModule, CommonModule, TableModule, ButtonModule, DividerModule, FieldsetModule, DropdownModule]
+  imports: [
+    FormsModule,
+    InputTextModule,
+    InputNumberModule,
+    ReactiveFormsModule,
+    CommonModule,
+    TableModule,
+    ButtonModule,
+    DividerModule,
+    FieldsetModule,
+    DropdownModule,
+  ],
 })
 export class DeliveryComponent implements OnInit {
-
-
-
-  PITypeList: any[] = [{ value: 1, text: 'LC' }, { value: 2, text: 'Cash' }];
+  PITypeList: any[] = [
+    { value: 1, text: 'LC' },
+    { value: 2, text: 'Cash' },
+  ];
   PIList: any[] = [];
   StoreLocation: any[] = [];
   PITypeID!: number;
@@ -45,7 +62,7 @@ export class DeliveryComponent implements OnInit {
     private gs: GlobalServiceService,
     private title: Title,
     private fb: FormBuilder
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.title.setTitle('Delivery');
@@ -56,7 +73,7 @@ export class DeliveryComponent implements OnInit {
     this.SearchFormgroup = this.fb.group({
       PINo: [''],
       PIId: [''],
-      PIType: ['']
+      PIType: [''],
     });
 
     this.Formgroup = this.fb.group({
@@ -67,28 +84,23 @@ export class DeliveryComponent implements OnInit {
 
       ItemArray: this.fb.array([]),
     });
-
-
   }
 
   getControls() {
     return (this.Formgroup.get('ItemArray') as FormArray).controls;
   }
 
-
   onChange($event: DropdownChangeEvent) {
-
     let model = new GetDataModel();
-    model.procedureName = "usp_Get_Delivery_Initial_Data";
+    model.procedureName = 'usp_Get_Delivery_Initial_Data';
     model.parameters = {
-      TypeId: $event.value
+      TypeId: $event.value,
     };
     this.service.GetInitialData(model).subscribe((res: any) => {
       if (res.status) {
         let DataSet = JSON.parse(res.data);
         this.PIList = DataSet.Tables1;
         this.StoreLocation = DataSet.Tables2;
-
       } else {
         if (res.msg == 'Invalid Token') {
           this.gs.Logout();
@@ -98,21 +110,28 @@ export class DeliveryComponent implements OnInit {
     });
   }
   SetMeterValue(event: any, item: any) {
-    if (event.target.value > item.controls["RestQty"].value) {
+    var deliverQty = 0;
+    let itemarray = this.Formgroup.get('ItemArray') as FormArray;
+    console.log(itemarray);
+
+    if (
+      item.controls['Delivered'].value >
+      parseFloat(this.Formgroup.controls['RestQty'].value)
+    ) {
       Swal.fire('Info', 'Deliverable Excced.', 'info');
-      item.controls["Deliverd_In_Meter"].setValue(0);
+      item.controls['Delivered'].setValue(0);
       return;
     }
-    console.log(event.target.value);
-    let unitID = item.controls["Unit_ID"].value;
+
+    let unitID = item.controls['Unit_ID'].value;
     let value = unitID == 2 ? event.target.value * 1.09361 : 0;
-    item.controls["Deliverd_In_Meter"].setValue(value);
+    //item.controls["Delivered"].setValue(value);
   }
   GetPIByPID() {
     let model = new GetDataModel();
-    model.procedureName = "usp_ProformaInvoice_DeliveryInfoByPIId";
+    model.procedureName = 'usp_ProformaInvoice_DeliveryInfoByPIId';
     model.parameters = {
-      TypeId: this.SearchFormgroup.controls["PIId"].value
+      TypeId: this.SearchFormgroup.controls['PIId'].value,
     };
     console.log(model);
     this.Formgroup.setControl('items', this.fb.array([]));
@@ -122,8 +141,14 @@ export class DeliveryComponent implements OnInit {
         let DataSet = JSON.parse(res.data);
         this.Delivers = DataSet.Tables1;
 
-        this.Formgroup.controls['PIStatus'].setValue(DataSet.Tables1[0].IsMPI == 0 ? 'LC' : 'Cash');
-        this.Formgroup.controls['RestQty'].setValue(DataSet.Tables1[0].Unit_ID == 2 ? DataSet.Tables1[0].DeliverableQty_In_Meter : DataSet.Tables1[0].DeliverableQty);
+        this.Formgroup.controls['PIStatus'].setValue(
+          DataSet.Tables1[0].IsMPI == 0 ? 'LC' : 'Cash'
+        );
+        this.Formgroup.controls['RestQty'].setValue(
+          DataSet.Tables1[0].Unit_ID == 2
+            ? DataSet.Tables1[0].DeliverableQty_In_Meter
+            : DataSet.Tables1[0].DeliverableQty
+        );
         this.Formgroup.controls['LCNo'].setValue(DataSet.Tables1[0].LC_No);
         this.Formgroup.controls['IsCash'].setValue(DataSet.Tables1[0].CR_NO);
 
@@ -132,35 +157,37 @@ export class DeliveryComponent implements OnInit {
           itemarray.removeAt(0);
         }
         DataSet.Tables1.forEach((item: any) => {
-
-          itemarray.push(this.fb.group({
-            PI_Detail_ID: [item.PI_Detail_ID],
-            Date: [new Date],
-            Ordered: [0],
-            Delivered: [0],
-            Roll: [0],
-            Remark: [''],
-            Chalan_No: [0],
-            Item_ID: [item.Item_ID],
-            Stock_Location_ID: [''],
-            Description: [item.Description],
-            Color: [item.Color],
-            Packaging: [item.Packaging],
-            Measurement: [item.Measurement],
-            ActualArticle: [item.ActualArticle],
-            UndeliveredQty: [item.Unit_ID == 2 ? item.UndeliveredQty_In_Meter : item.UndeliveredQty],
-            UnitName: [item.UnitName],
-            Unit_ID: [item.Unit_ID],
-            StockBalance: [item.Stock],
-            Stock_In_MeterBalance: [item.Stock_In_Meter],
-            RollBalance: [item.Roll],
-            BagBalance: [item.Bag],
-            Deliverd_In_Meter: [0],
-          }));
+          itemarray.push(
+            this.fb.group({
+              PI_Detail_ID: [item.PI_Detail_ID],
+              Date: [new Date()],
+              Ordered: [0],
+              Delivered: [0],
+              Roll: [0],
+              Remark: [''],
+              Chalan_No: [0],
+              Item_ID: [item.Item_ID],
+              Stock_Location_ID: [''],
+              Description: [item.Description],
+              Color: [item.Color],
+              Packaging: [item.Packaging],
+              Measurement: [item.Measurement],
+              ActualArticle: [item.ActualArticle],
+              UndeliveredQty: [
+                item.Unit_ID == 2
+                  ? item.UndeliveredQty_In_Meter
+                  : item.UndeliveredQty,
+              ],
+              UnitName: [item.UnitName],
+              Unit_ID: [item.Unit_ID],
+              StockBalance: [item.Stock],
+              Stock_In_MeterBalance: [item.Stock_In_Meter],
+              RollBalance: [item.Roll],
+              BagBalance: [item.Bag],
+              Deliverd_In_Meter: [0],
+            })
+          );
         });
-
-
-
       } else {
         if (res.msg == 'Invalid Token') {
           this.gs.Logout();
@@ -188,22 +215,22 @@ export class DeliveryComponent implements OnInit {
       return;
     }
 
-    let unAllowedList = listData.filter((x: any) => (x.Unit_ID != 2 && x.Delivered > x.StockBalance) || (x.Unit_ID == 2 && x.Deliverd_In_Meter > x.Stock_In_MeterBalance));
+    let unAllowedList = listData.filter(
+      (x: any) =>
+        (x.Unit_ID != 2 && x.Delivered > x.StockBalance) ||
+        (x.Unit_ID == 2 && x.Deliverd_In_Meter > x.Stock_In_MeterBalance)
+    );
 
     if (unAllowedList.length > 0) {
       Swal.fire('Save Fail!', 'Stock Unavailable.', 'info');
       return;
     }
 
-
-
-
-    this.deliveryService.SaveData(listData).subscribe(res => {
+    this.deliveryService.SaveData(listData).subscribe((res) => {
       if (res.messageType == 'Success' && res.status) {
         Swal.fire(res.messageType, res.message, 'success').then(() => {
           this.ngOnInit();
         });
-
       } else {
         if (!res.isAuthorized) {
           this.gs.Logout();
@@ -213,5 +240,4 @@ export class DeliveryComponent implements OnInit {
       }
     });
   }
-
 }
