@@ -4,6 +4,7 @@ using Boilerplate.Contracts.Repositories;
 using Boilerplate.Contracts.Responses;
 using Boilerplate.Contracts.Services;
 using Boilerplate.Repository.Repositories;
+using IMS.Contracts.DTOs;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -36,6 +37,24 @@ public class ReportService : IReportService
 
             };
             return await _reportRepository.SampleRequestReport(param);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+    public async Task<DataSet> ProformaInvoiceReport(int PI_Master_ID)
+    {
+        try
+        {
+            ProformaInvoiceReportParams param = new ProformaInvoiceReportParams
+            {
+                PI_Master_ID = PI_Master_ID
+
+            };
+
+            return await _reportRepository.ProformaInvoiceReport(param);
         }
         catch (Exception ex)
         {

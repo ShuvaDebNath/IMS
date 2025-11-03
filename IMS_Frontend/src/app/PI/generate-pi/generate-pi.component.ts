@@ -240,7 +240,7 @@ export class GeneratePiComponent implements OnInit {
       Superior_ID: [''],
       LC_ID: [''],
       Customer_ID: [''],
-      Currency_ID: [''],
+      Currency_ID: ['4'],
       IsMPI: [0],
       CR_ID: [''],
       LastUpdateDate: [new Date()],
@@ -261,6 +261,7 @@ export class GeneratePiComponent implements OnInit {
   InitRow() {
     return this.fb.group({
       PI_Master_ID: [''],
+      PI_Detail_ID: [''],
       Article: [''],
       Description: [''],
       Width_ID: [''],
@@ -449,6 +450,7 @@ export class GeneratePiComponent implements OnInit {
       User_ID: this.gs.getSessionData('userId'),
       Superior_ID: this.gs.getSessionData('userId'),
       Customer_ID: this.Formgroup.controls['Customer_ID'].value,
+      Currency_ID: this.Formgroup.controls['Currency_ID'].value,
       IsMPI: this.Formgroup.controls['IsMPI'].value,      
       LastUpdateDate: this.Formgroup.controls['LastUpdateDate'].value,
       ExpireDate: this.Formgroup.controls['ExpireDate'].value,
@@ -457,20 +459,22 @@ export class GeneratePiComponent implements OnInit {
       Customer_Bank_ID: this.Formgroup.controls['Customer_Bank_ID'].value
     };
 
-    let details=this.Formgroup.value.ItemArray;
+    // clone details from form value so we don't mutate the form state
+    const detailsRaw = (this.Formgroup.value && this.Formgroup.value.ItemArray) ? this.Formgroup.value.ItemArray : [];
+    let details: any[] = JSON.parse(JSON.stringify(detailsRaw));
 
-    details.forEach((element:any) => {
-      if(element.Unit_ID==2){
-        element.Quantity_In_Meter=element.Quantity;
-        element.Quantity=element.Quantity_In_Meter*1.09361;
+    // Remove PI_Detail_ID for new inserts and normalize units
+    details.forEach((element: any) => {
+      // remove detail id so backend will insert new rows (avoid sending client-side temp ids)
+      if (element && Object.prototype.hasOwnProperty.call(element, 'PI_Detail_ID')) {
+        try { delete element.PI_Detail_ID; } catch (e) { /* ignore */ }
+      }
+
+      if (element && element.Unit_ID == 2) {
+        element.Quantity_In_Meter = element.Quantity;
+        element.Quantity = element.Quantity_In_Meter * 1.09361;
       }
     });
-
-    // build audit logs for insert
-    try {
-      const audit = this.createAuditForInsert(model, details);
-      (model as any).AuditLog = JSON.stringify(audit);
-    } catch (e) { }
 
     this.service.SaveDataMasterDetails(details,
       "tbl_pi_detail",
@@ -485,7 +489,7 @@ export class GeneratePiComponent implements OnInit {
         Swal.fire(res.messageType, res.message, 'success').then(()=>{
               this.ngOnInit();
         });
-        
+    
       }else{
         if(!res.isAuthorized){
           this.gs.Logout();
@@ -497,46 +501,7 @@ export class GeneratePiComponent implements OnInit {
 
   }
 
-  /**
-   * Create audit entries for an insert (new PI).
-   * Each master field and each detail column will produce an Insert event row.
-   */
-  private createAuditForInsert(masterObj: any, detailsArr: any[]): any[] {
-    const userId = this.gs.getSessionData('userId');
-    const now = new Date().toISOString();
-    const logs: any[] = [];
-
-    try {
-      Object.keys(masterObj || {}).forEach((k) => {
-        logs.push({
-          EventType: 'Insert',
-          Date: now,
-          UserId: userId,
-          ColumnName: `Master.${k}`,
-          OriginalValue: '',
-          NewValue: masterObj[k] == null ? '' : String(masterObj[k])
-        });
-      });
-
-      (detailsArr || []).forEach((row: any, idx: number) => {
-        Object.keys(row || {}).forEach((k) => {
-          logs.push({
-            EventType: 'Insert',
-            Date: now,
-            UserId: userId,
-            ColumnName: `Detail[${idx}].${k}`,
-            OriginalValue: '',
-            NewValue: row[k] == null ? '' : String(row[k])
-          });
-        });
-      });
-    } catch (e) {
-      // swallow, best-effort
-    }
-
-    return logs;
-  }
-
+  
   // Determine whether the form is editing an existing PI (true) or creating a new one (false)
   isEditMode(): boolean {
     try {
@@ -589,7 +554,8 @@ export class GeneratePiComponent implements OnInit {
           Remarks: this.Formgroup.controls['Remarks'].value,
           Force_Majeure_ID: this.Formgroup.controls['Force_Majeure_ID'].value,
           Arbitration_ID: this.Formgroup.controls['Arbitration_ID'].value,
-          Status: this.Formgroup.controls['Status'].value,
+          // Preserve original status on update if available to avoid accidentally changing PI status
+          Status: (this.originalMaster && this.originalMaster.Status) ? this.originalMaster.Status : this.Formgroup.controls['Status'].value,
           User_ID: this.gs.getSessionData('userId'),
           Superior_ID: this.gs.getSessionData('userId'),
           Customer_ID: this.Formgroup.controls['Customer_ID'].value,
@@ -600,7 +566,7 @@ export class GeneratePiComponent implements OnInit {
           IsBuyerMandatory: this.Formgroup.controls['IsBuyerMandatory'].value,    
           Customer_Bank_ID: this.Formgroup.controls['Customer_Bank_ID'].value
         };
-
+        
         let details=this.Formgroup.value.ItemArray;
 
         details.forEach((element:any) => {
@@ -608,20 +574,7 @@ export class GeneratePiComponent implements OnInit {
             element.Quantity_In_Meter=element.Quantity;
             element.Quantity=element.Quantity_In_Meter*1.09361;
           }
-        });
-
-      //   this.dme.UpdateDataMasterDetails(
-      // detailRows,                         // fd  -> detailsData
-      // 'tbl_rm_requisition_details',       // tableName
-      // masterRow,                          // fdMaster -> data
-      // 'tbl_rm_requisition_master',        // tableNameMaster
-      // 'RM_Requisition_MasterID',          // primaryColumnName
-      // 'RM_Requisition_MasterID',          // ColumnNameForign
-      // '',                                 // serialType
-      // '',                                 // ColumnNameSerialNo
-      // whereParams 
-
-        // Re-use SaveDataMasterDetails service which performs insert/update based on PI_Master_ID
+        });        
 
         const whereParams = { PI_Master_ID: model.PI_Master_ID };
 

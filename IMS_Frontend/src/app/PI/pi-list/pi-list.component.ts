@@ -17,6 +17,7 @@ import { DropdownModule } from "primeng/dropdown";
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 import { GetDataModel } from 'src/app/models/GetDataModel';
 import { Router } from '@angular/router';
+import { ReportService } from 'src/app/services/reportService/report-service.service';
 
 @Component({
   standalone:true,
@@ -75,7 +76,8 @@ export class PiListComponent implements OnInit {
       private gs: GlobalServiceService,
       private title: Title,
       private fb: FormBuilder,
-      private router: Router,
+      private router: Router,      
+      private reportService:ReportService,
   ) { }
 
   /**
@@ -474,6 +476,15 @@ OpenSpecialApprove(Id:number){
         // fallback estimate: if unit indicates rolls or width exists, skip (unknown)
       }
     }
+  }
+
+   Print(){
+    console.log('shuva');
+    
+    var item = {
+      'PI_Master_ID': this.PIData?.PI_Master_ID,
+    }
+    this.reportService.PrintProformaInvoiceRequest(item, 'pdf','T');
   }
     
 }

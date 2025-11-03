@@ -56,6 +56,29 @@ export class ReportService {
       });
   }
 
+    PrintProformaInvoiceRequest(report: any, rptType: any, isView: any) {
+    
+    const PI_Master_ID = report.PI_Master_ID ?? '';
+
+    const url = `${this.baseUrl}${this.apiController}/ProformaInvoiceReport`;
+    const token = this.gs.getSessionData('token');
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    this.http
+      .get(url, {
+        headers,
+        params: { rptType, PI_Master_ID },
+        responseType: 'blob',
+      })
+      .subscribe((res: Blob) => {
+        const fileURL = window.URL.createObjectURL(res);
+        window.open(fileURL, '_blank');
+      });
+  }
+
   private formatDate(date: any): string {
     const d = new Date(date);
     const month = ('0' + (d.getMonth() + 1)).slice(-2);
