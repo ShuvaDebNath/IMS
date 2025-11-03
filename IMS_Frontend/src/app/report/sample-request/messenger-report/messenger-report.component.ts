@@ -86,7 +86,7 @@ export class MessengerReportComponent {
     private title: Title
   ) {}
   ngOnInit(): void {
-    var permissions = this.gs.CheckUserPermission('Messenger Report');
+    var permissions = this.gs.CheckUserPermission('Messenger Sample Report');
     this.insertPermissions = permissions.insertPermissions;
     this.updatePermissions = permissions.updatePermissions;
     this.deletePermissions = permissions.deletePermissions;
@@ -96,7 +96,7 @@ export class MessengerReportComponent {
 
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
-    this.title.setTitle('Messenger Report');
+    this.title.setTitle('Messenger Sample Report');
 
     this.SearchForm.get('fromDate')?.setValue(new Date());
     this.SearchForm.get('toDate')?.setValue(new Date());

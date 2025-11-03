@@ -6,64 +6,64 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.17813in</Width>
+              <Width>1.15313in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.81515in</Width>
+              <Width>0.79015in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.81515in</Width>
+              <Width>0.79015in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.87388in</Width>
+              <Width>0.83847in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.69015in</Width>
+              <Width>0.66515in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.57556in</Width>
+              <Width>0.55056in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.52348in</Width>
+              <Width>0.49848in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.44015in</Width>
+              <Width>0.41515in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.67973in</Width>
+              <Width>0.65473in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.63804in</Width>
+              <Width>0.61304in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.84639in</Width>
+              <Width>0.61306in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.89848in</Width>
+              <Width>0.87348in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.58598in</Width>
+              <Width>0.56098in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.51307in</Width>
+              <Width>0.48807in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.77187in</Width>
+              <Width>0.74687in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.70937in</Width>
+              <Width>0.68437in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.73018in</Width>
+              <Width>0.70518in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.59479in</Width>
+              <Width>0.56979in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.70937in</Width>
+              <Width>1.02812in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.68854in</Width>
+              <Width>1.03854in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1069,7 +1069,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Client Handover Date</Value>
+                              <Value>Client/Marketing Handover Date</Value>
                               <Style>
                                 <FontFamily>times New Roman</FontFamily>
                                 <FontSize>9pt</FontSize>
@@ -1124,7 +1124,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Clinet Handover By</Value>
+                              <Value>Client/Marketing Handover By</Value>
                               <Style>
                                 <FontFamily>times New Roman</FontFamily>
                                 <FontSize>9pt</FontSize>
@@ -1316,7 +1316,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -1928,7 +1927,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -2038,7 +2036,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -2148,7 +2145,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>

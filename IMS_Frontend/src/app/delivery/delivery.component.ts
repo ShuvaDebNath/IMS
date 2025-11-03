@@ -6,6 +6,7 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  Validators
 } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
@@ -71,16 +72,16 @@ export class DeliveryComponent implements OnInit {
 
   GenerateSearchFrom() {
     this.SearchFormgroup = this.fb.group({
-      PINo: [''],
-      PIId: [''],
-      PIType: [''],
+      PINo: ['', [Validators.required]],
+      PIId: ['', [Validators.required]],
+      PIType: ['', [Validators.required]],
     });
 
     this.Formgroup = this.fb.group({
-      PIStatus: [''],
-      RestQty: [''],
+      PIStatus: ['', [Validators.required]],
+      RestQty: ['', [Validators.required]],
       LCNo: [''],
-      IsCash: [''],
+      IsCash: ['', [Validators.required]],
 
       ItemArray: this.fb.array([]),
     });
@@ -111,11 +112,15 @@ export class DeliveryComponent implements OnInit {
   }
   SetMeterValue(event: any, item: any) {
     var deliverQty = 0;
-    let itemarray = this.Formgroup.get('ItemArray') as FormArray;
-    console.log(itemarray);
+    
+    let listData = this.Formgroup.controls['ItemArray'].value;
+    
+    listData.forEach((e:any)=>{
+      deliverQty+=e.Delivered;      
+    });
 
     if (
-      item.controls['Delivered'].value >
+      deliverQty >
       parseFloat(this.Formgroup.controls['RestQty'].value)
     ) {
       Swal.fire('Info', 'Deliverable Excced.', 'info');
@@ -156,30 +161,32 @@ export class DeliveryComponent implements OnInit {
         while (itemarray.length !== 0) {
           itemarray.removeAt(0);
         }
+        console.log(DataSet.Tables1);
+        
         DataSet.Tables1.forEach((item: any) => {
           itemarray.push(
             this.fb.group({
               PI_Detail_ID: [item.PI_Detail_ID],
               Date: [new Date()],
               Ordered: [0],
-              Delivered: [0],
-              Roll: [0],
+              Delivered: [0, [Validators.required]],
+              Roll: [0, [Validators.required]],
               Remark: [''],
               Chalan_No: [0],
-              Item_ID: [item.Item_ID],
+              Item_ID: [item.Item_ID, [Validators.required]],
               Stock_Location_ID: [''],
               Description: [item.Description],
-              Color: [item.Color],
-              Packaging: [item.Packaging],
-              Measurement: [item.Measurement],
-              ActualArticle: [item.ActualArticle],
+              Color: [item.Color, [Validators.required]],
+              Packaging: [item.Packaging, [Validators.required]],
+              Measurement: [item.Measurement, [Validators.required]],
+              ActualArticle: [item.ActualArticle, [Validators.required]],
               UndeliveredQty: [
                 item.Unit_ID == 2
                   ? item.UndeliveredQty_In_Meter
                   : item.UndeliveredQty,
               ],
               UnitName: [item.UnitName],
-              Unit_ID: [item.Unit_ID],
+              Unit_ID: [item.Unit_ID, [Validators.required]],
               StockBalance: [item.Stock],
               Stock_In_MeterBalance: [item.Stock_In_Meter],
               RollBalance: [item.Roll],
@@ -198,18 +205,28 @@ export class DeliveryComponent implements OnInit {
   }
 
   Save() {
+     if (this.Formgroup.invalid) {
+          Swal.fire(
+            'Invlid Inputs!',
+            'Form is Invalid!',
+            'info'
+          );
+          return;
+        }
     console.log(this.Formgroup.controls['ItemArray'].value);
     let listData = this.Formgroup.controls['ItemArray'].value;
     let restQty = this.Formgroup.controls['RestQty'].value;
     let sum = 0;
     listData.forEach((element: any) => {
       sum += element.Delivered;
+      console.log(element.Delivered);
+      
       if (element.Unit_ID == 2) {
         element.Deliverd_In_Meter = element.Delivered;
         element.Delivered = element.Deliverd_In_Meter * 1.09361;
       }
     });
-
+    
     if (sum > restQty) {
       Swal.fire('Save Fail!', 'Deliverable Excced.', 'info');
       return;
@@ -221,6 +238,7 @@ export class DeliveryComponent implements OnInit {
         (x.Unit_ID == 2 && x.Deliverd_In_Meter > x.Stock_In_MeterBalance)
     );
 
+    console.log(unAllowedList,listData);
     if (unAllowedList.length > 0) {
       Swal.fire('Save Fail!', 'Stock Unavailable.', 'info');
       return;

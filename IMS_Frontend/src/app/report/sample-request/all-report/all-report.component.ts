@@ -93,7 +93,7 @@ export class AllReportComponent {
     private title: Title
   ) {}
   ngOnInit(): void {
-    var permissions = this.gs.CheckUserPermission('All Report');
+    var permissions = this.gs.CheckUserPermission('Sample Request Report');
     this.insertPermissions = permissions.insertPermissions;
     this.updatePermissions = permissions.updatePermissions;
     this.deletePermissions = permissions.deletePermissions;
@@ -101,7 +101,7 @@ export class AllReportComponent {
 
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
-    this.title.setTitle('All Report');
+    this.title.setTitle('Sample Request Report');
 
     this.roleId = window.localStorage.getItem('roleId');
     console.log(this.roleId);

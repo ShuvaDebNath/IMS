@@ -60,6 +60,7 @@
 
           <div class="col-auto mt-auto mb-2">
             <button
+            [disabled]="Formgroup.invalid"
               title="Deliver"
               type="button"
               (click)="Save()"
