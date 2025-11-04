@@ -196,7 +196,7 @@
             <td class="text-center align-middle">{{
                 table.HandoverStatus == ""
                   ? "Not handovered yet"
-                  : table.HandoverStatus == "Received"?"Messenger Received":"Handovered " + table.HandoverStatus
+                  : table.HandoverStatus == "Received"?table.RequestStatus=='By Own'?"Marketing Received":"Messenger Received":"Handovered " + table.HandoverStatus
               }}</td>
             <td class="text-center align-middle">
               <button
