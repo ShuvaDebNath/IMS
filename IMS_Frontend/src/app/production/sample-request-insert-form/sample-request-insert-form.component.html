@@ -17,11 +17,14 @@
                 <th class="text-center">Contact Info</th>
                 <th class="text-center">Product Description</th>
                 <th class="text-center">Article No</th>
+                <th class="text-center">Color</th>
+                <th class="text-center">Width</th>
+                <th class="text-center">Unit</th>
                 <th class="text-center">Qty</th>
                 <th class="text-center">Shipping Address</th>
                 <th class="text-center">Status</th>
                 <th class="text-center">Remarks</th>
-                <th style="width: 50px"></th>
+                <th></th>
               </tr>
             </thead>
 
@@ -83,16 +86,99 @@
                 <td class="p-1">
                   <p-dropdown
                     [options]="ArticleList"
-                    optionLabel="Article_No"
+                    optionLabel="ItemCode"
                     [filter]="true"
-                    filterBy="Article_No"
+                    filterBy="ItemCode"
                     [showClear]="true"
                     placeholder="Select"
                     optionValue="Item_ID"
                     formControlName="ArticleNo"
-                     appendTo="body"
+                    appendTo="body"
+                    [virtualScroll]="true"
+                    [virtualScrollItemSize]="30"
                     styleClass="custom-dropdown wide-dropdown"
-                  ></p-dropdown>
+                  >
+                  <ng-template let-ArticleNo pTemplate="item">
+                      <div class="flex align-items-center gap-2">
+                        <div>{{ ArticleNo.ItemCode }}</div>
+                      </div>
+                    </ng-template>
+                </p-dropdown>
+                </td>
+                <!-- ARTICLE -->
+                <td class="p-1">
+                  <p-dropdown
+                    [style]="{ width: '100%' }"
+                    class="p-0"
+                    [options]="ColorList "
+                    optionLabel="Color"
+                    [filter]="true"
+                    filterBy="Color"
+                     appendTo="body"
+                    [showClear]="true"
+                    placeholder="Please Select"
+                    optionValue="Color_ID"
+                    formControlName="Color"
+                    styleClass="custom-dropdown wide-dropdown"
+                    [virtualScroll]="true"
+                    [virtualScrollItemSize]="30"
+                  >
+                    <ng-template let-ArticleNo pTemplate="item">
+                      <div class="flex align-items-center gap-2">
+                        <div>{{ ArticleNo.Color }}</div>
+                      </div>
+                    </ng-template>
+                  </p-dropdown>
+                </td>
+                <!-- ARTICLE -->
+                <td class="p-1">
+                  <p-dropdown
+                    [style]="{ width: '100%' }"
+                    class="p-0"
+                    [options]="WidthList"
+                    optionLabel="Measurement"
+                    [filter]="true"
+                    filterBy="Measurement"
+                    [showClear]="true"
+                     appendTo="body"
+                    placeholder="Please Select"
+                    optionValue="Width_ID"
+                    formControlName="Width"
+                    styleClass="custom-dropdown wide-dropdown"
+                    [virtualScroll]="true"
+                    [virtualScrollItemSize]="30"
+                  >
+                    <ng-template let-ArticleNo pTemplate="item">
+                      <div class="flex align-items-center gap-2">
+                        <div>{{ ArticleNo.Measurement }}</div>
+                      </div>
+                    </ng-template>
+                  </p-dropdown>
+                </td>
+                <!-- ARTICLE -->
+                <td class="p-1">
+                  <p-dropdown
+                    [style]="{ width: '100%' }"
+                    class="p-0"
+                    [options]="UnitList"
+                    optionLabel="Unit"
+                    [filter]="true"
+                    filterBy="Unit"
+                    [showClear]="true"
+                     appendTo="body"
+                    styleClass="listBottom"
+                    placeholder="Please Select"
+                    optionValue="Unit_ID"
+                    formControlName="Unit"
+                    [virtualScroll]="true"
+                    [virtualScrollItemSize]="30"
+                  >
+                    <ng-template let-ArticleNo pTemplate="item">
+                      <div class="flex align-items-center gap-2">
+                        <div>{{ ArticleNo.Unit }}</div>
+                      </div>
+                    </ng-template>
+                  </p-dropdown>
                 </td>
 
                 <!-- QTY -->

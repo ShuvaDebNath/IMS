@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <div class="m-2 p-2">
   <div class="card card-default">
     <div class="card-header theme-bg">
@@ -27,7 +28,7 @@
                 (click)="Print()"
                 class="btn btn-sm theme-btn mt-4 p-1"
               >
-                <i class="fas fa-search"></i>&nbsp;Print
+                <i class="fas fa-print"></i>&nbsp;Print
               </button>
             </div>
           </div>
@@ -46,7 +47,10 @@
           'RequestDate',
           'CustomerName',
           'CustomerContactInfo',
-          'Article',
+          'Article_No',
+          'Color',
+          'Measurement',
+          'Unit',
           'ProductDescription',
           'RequestedQuantity',
           'RequestStatus',
@@ -72,13 +76,19 @@
           <tr>
             <th class="text-center">SL</th>
             <th class="text-center">Request Date</th>
-            <th class="text-left">Customer Name</th>
+            <th class="text-center">Customer Name</th>
             <th class="text-center">Customer Contact Info</th>
-            <th class="text-center">Article</th>
+            <th class="text-center">Article No</th>
+            <th class="text-center">Color</th>
+            <th class="text-center">Width</th>
+            <th class="text-center">Measurement</th>
             <th class="text-center">Product Description</th>
-            <th class="text-center">Quantity</th>
+            <th class="text-center">Requested Quantity</th>
+            <th class="text-center">Approved Quantity</th>
             <th class="text-center">Request By</th>
             <th class="text-center">Carried By</th>
+            <th class="text-center">Handover Status</th>
+            <th class="text-center">Action</th>
           </tr>
         </ng-template>
 
@@ -90,15 +100,56 @@
             <td class="text-center align-middle">
               {{ table.CustomerContactInfo }}
             </td>
-            <td class="text-center align-middle">{{ table.Article }}</td>
+            <td class="text-center align-left">{{ table.Article_No }}</td>
+            <td class="text-center align-left">{{ table.Color }}</td>
+            <td class="text-center align-left">{{ table.Measurement }}</td>
+            <td class="text-center align-left">{{ table.Unit }}</td>
             <td class="text-center align-middle">
               {{ table.ProductDescription }}
             </td>
             <td class="text-center align-middle">
               {{ table.RequestedQuantity }}
             </td>
+            <td class="text-center align-middle">
+              {{ table.ApprovedQty }}
+            </td>
             <td class="text-center align-middle">{{ table.RequestBy }}</td>
             <td class="text-center align-middle">{{ table.RequestStatus }}</td>
+            <td class="text-center align-middle">{{
+                table.HandoverStatus == ""
+                  ? "Not handovered yet"
+                  : table.HandoverStatus == "Received"?"Messenger Received":"Handovered " + table.HandoverStatus
+              }}</td>
+            <td class="text-center align-middle">
+              <button
+                *ngIf="updatePermissions"
+                class="btn theme-btn-view"
+                [disabled]="table.HandoverStatus=='Received' || table.HandoverStatus=='To Client' || table.HandoverStatus==''"
+                title="Receive"
+                (click)="handoverSample(table,'Received')"
+              >
+                <i class="fa fa-hand"></i>
+              </button>
+              <button
+                *ngIf="updatePermissions"
+                class="btn theme-btn-view"
+                [disabled]="table.HandoverStatus!='Received'"
+                title="Handover to Client"
+                (click)="handoverSample(table,'To Client')"
+              >
+                <i class="fa fa-user"></i>
+              </button>
+              <button
+                *ngIf="updatePermissions && (roleId=='1' || roleId=='2')"
+                class="btn theme-btn-delete"
+                [disabled]="table.HandoverStatus=='To Messenger'"
+                title="Revert"
+                (click)="handoverSample(table,'Revert')"
+              >
+                <i class="fa-solid fa-rotate-left"></i>
+              </button>
+
+            </td>
           </tr>
         </ng-template>
         <!-- 'Sample Request Report' title,CONVERT(varchar, RequestDate, 105) AS RequestDate,

@@ -58,6 +58,8 @@ export class SampleRequestListComponent {
   getDataModel: GetDataModel = new GetDataModel();
   detailsData: any;
   isDetailsVisible: boolean = false;
+  roleId: any = '';
+  uId:any = '';
 
   constructor(
     private fb: FormBuilder,
@@ -73,29 +75,16 @@ export class SampleRequestListComponent {
     this.updatePermissions = permissions.updatePermissions;
     this.deletePermissions = permissions.deletePermissions;
     this.printPermissions = permissions.printPermissions;
+    this.roleId = window.localStorage.getItem('roleId');
 
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
     this.title.setTitle('Sample Request List');
 
-    // var fDate = new Date();
-    // const mm = String(fDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-    // const dd = String(fDate.getDate()).padStart(2, '0');
-    // const yyyy = fDate.getFullYear();
-
-    // const formatted = `${dd}/${mm}/${yyyy}`;
-
-    // const threeMonthsAgo = new Date();
-    // threeMonthsAgo.setMonth(fDate.getMonth() - 3);
-
-    // const mmT = String(threeMonthsAgo.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-    // const ddT = String(threeMonthsAgo.getDate()).padStart(2, '0');
-    // const yyyyT = threeMonthsAgo.getFullYear();
-
-    // const formattedT = `${ddT}/${mmT}/${yyyyT}`;
-
-    // this.SearchForm.get('fromDate')?.setValue(formattedT);
-    // this.SearchForm.get('toDate')?.setValue(formatted);
+    this.SearchForm.get('fromDate')?.setValue(new Date());
+    this.SearchForm.get('toDate')?.setValue(new Date());
+    
+    this.uId = window.localStorage.getItem('userId');
   }
   initForm(): void {
     this.SearchForm = this.fb.group({
@@ -109,7 +98,6 @@ export class SampleRequestListComponent {
           return;
         }
     
-
     var fromDate = this.SearchForm.value.fromDate;
     var toDate = this.SearchForm.value.toDate;
     var userId = window.localStorage.getItem('userId');
@@ -129,6 +117,8 @@ export class SampleRequestListComponent {
           this.tableData = [];
           let tables = JSON.parse(results.data);
           this.tableData = tables.Tables1;
+          console.log(this.tableData,this.uId);
+          
           if (this.tableData.length > 0) {
             this.length = parseInt(this.tableData[0].totallen);
           } else {
@@ -209,5 +199,37 @@ export class SampleRequestListComponent {
         }
       },
     });
+  }
+
+  checkPermission(e: any) {
+    console.log(e,this.roleId);
+    
+    if (this.roleId == '50') {
+      if (e.HandoverStatus != '') {
+        swal.fire(
+          'info',
+          'Sample already handovered and cannot edit anymore',
+          'info'
+        );
+      } else {
+        if (this.updatePermissions) {
+          const url = this.router.createUrlTree(['/sample-request-edit-form'], {
+            queryParams: { SRId:e.Id },
+          });
+
+          const fullUrl = this.router.serializeUrl(url);
+          window.open(fullUrl, '_blank');
+        } 
+      }
+    } else {
+      if (this.updatePermissions) {
+        const url = this.router.createUrlTree(['/sample-request-edit-form'], {
+            queryParams: { SRId:e.Id },
+          });
+
+          const fullUrl = this.router.serializeUrl(url);
+          window.open(fullUrl, '_blank');
+      } 
+    }
   }
 }
