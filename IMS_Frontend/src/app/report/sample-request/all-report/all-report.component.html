@@ -179,7 +179,11 @@
             </td>
             <td class="text-center align-middle">{{ table.RequestBy }}</td>
             <td class="text-center align-middle">{{ table.RequestStatus }}</td>
-            <td class="text-center align-middle">{{ table.HandoverStatus==''?'Not handovered yet':'Handovered '+table.HandoverStatus }}</td>
+            <td class="text-center align-middle">{{
+                table.HandoverStatus == ""
+                  ? "Not handovered yet"
+                  : table.HandoverStatus == "Received"?"Messenger Received":"Handovered " + table.HandoverStatus
+              }}</td>
             <td class="text-center align-middle">
               <button
                 *ngIf="updatePermissions && table.RequestStatus!='By Own'"
