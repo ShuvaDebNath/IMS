@@ -124,6 +124,78 @@
                   </p-dropdown>
             </div>
             <div class="col-md-6">
+              <label>Color <span>*</span></label>
+                <p-dropdown
+                    [style]="{ width: '100%' }"
+                    class="p-0"
+                    [options]="ColorList"
+                    optionLabel="Color"
+                    [filter]="true"
+                    filterBy="Color"
+                    [showClear]="true"
+                    styleClass="listBottom"
+                    placeholder="Please Select"
+                    optionValue="Color_ID"
+                    formControlName="Color"
+                    [virtualScroll]="true"
+                    [virtualScrollItemSize]="30"
+                  >
+                    <ng-template let-ArticleNo pTemplate="item">
+                      <div class="flex align-items-center gap-2">
+                        <div>{{ ArticleNo.Color }}</div>
+                      </div>
+                    </ng-template>
+                  </p-dropdown>
+            </div>
+            <div class="col-md-6">
+              <label>Width <span>*</span></label>
+                <p-dropdown
+                    [style]="{ width: '100%' }"
+                    class="p-0"
+                    [options]="WidthList"
+                    optionLabel="Measurement"
+                    [filter]="true"
+                    filterBy="Measurement"
+                    [showClear]="true"
+                    styleClass="listBottom"
+                    placeholder="Please Select"
+                    optionValue="Width_ID"
+                    formControlName="Width"
+                    [virtualScroll]="true"
+                    [virtualScrollItemSize]="30"
+                  >
+                    <ng-template let-ArticleNo pTemplate="item">
+                      <div class="flex align-items-center gap-2">
+                        <div>{{ ArticleNo.Measurement }}</div>
+                      </div>
+                    </ng-template>
+                  </p-dropdown>
+            </div>
+            <div class="col-md-6">
+              <label>Unit <span>*</span></label>
+                <p-dropdown
+                    [style]="{ width: '100%' }"
+                    class="p-0"
+                    [options]="UnitList"
+                    optionLabel="Unit"
+                    [filter]="true"
+                    filterBy="Unit"
+                    [showClear]="true"
+                    styleClass="listBottom"
+                    placeholder="Please Select"
+                    optionValue="Unit_ID"
+                    formControlName="Unit"
+                    [virtualScroll]="true"
+                    [virtualScrollItemSize]="30"
+                  >
+                    <ng-template let-ArticleNo pTemplate="item">
+                      <div class="flex align-items-center gap-2">
+                        <div>{{ ArticleNo.Unit }}</div>
+                      </div>
+                    </ng-template>
+                  </p-dropdown>
+            </div>
+            <div class="col-md-6">
               <label>Requested Quantity <span>*</span></label>
               <input
                 autocomplete="off"
