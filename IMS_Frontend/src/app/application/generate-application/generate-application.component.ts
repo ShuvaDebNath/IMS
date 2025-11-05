@@ -459,7 +459,8 @@ export class GenerateApplicationComponent {
       }
     })
 
-    var procedureName = 'usp_SC_PINo_ByMarketingConcern';
+    
+    var procedureName = 'usp_Application_GetPIInfo';
     var ProcedureData = {
       procedureName: procedureName,
       parameters: {
@@ -469,8 +470,11 @@ export class GenerateApplicationComponent {
 
     this.masterEntryService.GetInitialData(ProcedureData).subscribe({
       next: (results) => {
+    console.log(results);
         if (results.status) {
           JSON.parse(results.data).Tables1.forEach((e:any)=>{
+            console.log(this.PIPreviewList);
+            
             this.PIPreviewList.push(e);
           })
         } else if (results.msg == 'Invalid Token') {
