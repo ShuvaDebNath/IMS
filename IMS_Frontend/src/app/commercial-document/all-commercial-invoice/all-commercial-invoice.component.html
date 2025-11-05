@@ -1,194 +1,289 @@
 <div class="p-2 m-2 shadow-sm">
   <div class="card shadow-sm">
-  <div class="card-header theme-bg">
-  
-        <h2 class="p-2">All Commercial Invoice</h2>
-   
-  </div>
-  <div class="card-body">
-    <form [formGroup]="SearchForm">
-      <div class="form-row align-items-center">
-        <div class="col-auto">
-          <label class="control-label" for="inlineFormInputGroup">From Date</label>
-          <div class="input-group mb-2">
-            <div class="input-group-sm input-group-prepend">
-              <div class="input-group-text theme-btn " (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
-            </div>
-            <input type="text" autocomplete="off" formControlName="fromDate" [bsConfig]="{
+    <div class="card-header theme-bg">
+
+      <h2 class="p-2">All Commercial Invoice</h2>
+
+    </div>
+    <div class="card-body">
+      <form [formGroup]="SearchForm">
+        <div class="form-row align-items-center">
+          <div class="col-auto">
+            <label class="control-label" for="inlineFormInputGroup">From Date</label>
+            <div class="input-group mb-2">
+              <div class="input-group-sm input-group-prepend">
+                <div class="input-group-text theme-btn " (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
+              </div>
+              <input type="text" autocomplete="off" formControlName="fromDate" [bsConfig]="{
               dateInputFormat: 'DD/MM/YYYY',
               containerClass: 'theme-bg'
-            }" class="form-control-sm form-control bg-white" id="fromdate" name="fromdate" placeholder="From Date" 
-              #dpfrom="bsDatepicker" bsDatepicker/>
-          </div>
-
-        </div>
-        <div class="col-auto">
-          <label class="control-label" for="inlineFormInputGroup">To Date</label>
-          <div class="input-group mb-2">
-            <div class="input-group-sm input-group-prepend">
-              <div class="input-group-text theme-btn" (click)="dpto.toggle()"><i class="fas fa-calendar"></i></div>
+            }" class="form-control-sm form-control bg-white" id="fromdate" name="fromdate" placeholder="From Date"
+                #dpfrom="bsDatepicker" bsDatepicker />
             </div>
-            <input type="text" autocomplete="off" formControlName="toDate" [bsConfig]="{
+
+          </div>
+          <div class="col-auto">
+            <label class="control-label" for="inlineFormInputGroup">To Date</label>
+            <div class="input-group mb-2">
+              <div class="input-group-sm input-group-prepend">
+                <div class="input-group-text theme-btn" (click)="dpto.toggle()"><i class="fas fa-calendar"></i></div>
+              </div>
+              <input type="text" autocomplete="off" formControlName="toDate" [bsConfig]="{
               dateInputFormat: 'DD/MM/YYYY',
               containerClass: 'theme-bg'
             }" class="form-control-sm form-control bg-white" id="todate" name="todate" placeholder="To Date"
-              #dpto="bsDatepicker" bsDatepicker />
+                #dpto="bsDatepicker" bsDatepicker />
+            </div>
           </div>
-        </div>
-        <div class="col-auto">
+          <div class="col-auto">
             <label for="CDNo" class="">Commercial Document No </label>
-              <div class="">
-                <div class="form-group d-inline">
-                  <input autocomplete="off" type="text"                  
-                  formControlName="cdNo"
-                  class="form-control"
+            <div class="">
+              <div class="form-group d-inline">
+                <input autocomplete="off" type="text" formControlName="cdNo" class="form-control"
                   placeholder="Commercial Document No" id="CDNo" name="CDNo" value="">
-                </div>
               </div>
-        </div>
-        <div class="col-auto">
-          <button title="Search" type="button" (click)="Search()"
-            class="btn btn-sm theme-btn mb-2 mr-2" style="margin-top: 2.3em !important;">
-            <i class="fas fa-search"></i>&nbsp;Search</button>
-        </div>
-      </div>
-    </form>
-    <hr>
-
-      <p-table #dt
-           [value]="tableData"
-           [paginator]="true"
-           [rows]="10"
-           [responsive]="true"
-           [showCurrentPageReport]="true"
-           [globalFilterFields]="['Commercial_Invoice_No','LC_No','PI_No','Date','UserName']"
-           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
-
-    <ng-template pTemplate="caption">
-      <div class="table-toolbar d-flex justify-content-end">
-        <span class="p-input-icon-left">
-          <i class="pi pi-search"></i>
-          <input pInputText type="text"
-                 (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                 placeholder="Global Search" />
-        </span>
-      </div>
-    </ng-template>
-
-    <ng-template pTemplate="header">
-      <tr>
-        <th class="">SL</th>
-        <th class="">Commercial Invoice No</th>
-        <th class="">LC No</th>
-        <th class="">PI(s)</th>
-        <th class="">Date</th>
-        <th class="">Generated By</th>
-        <th class="" *ngIf="allPersmissions">Action</th>
-      </tr>
-    </ng-template>
-
-    <ng-template pTemplate="body" let-table let-i="rowIndex">
-      <tr>
-        <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
-        <td class="text-center align-middle">{{table.Commercial_Invoice_No}}</td>
-        <td class="text-center align-middle">{{table.LC_No}}</td>
-        <td class="text-center align-middle">{{table.PI_No}}</td>
-        <td class="text-center align-middle">{{table.Date}}</td>
-        <td class="text-center align-middle">{{table.UserName}}</td>
-        <td class="text-center align-middle p-1 m-0">
-          <div class="d-flex justify-content-center gap-1">
-               <a  class="btn theme-btn-view btn-sm " target="_blank" title="View" (click)="viewDetails(table)"><i class="fa fa-eye" ></i></a> 
-            <a *ngIf="updatePermissions" class="btn theme-btn-edit " target="_blank" title="Edit" [routerLink]="['/generate-commercial-invoice']"
-              [queryParams]="{Commercial_Invoice_ID:table.Commercial_Invoice_ID}"><i class="fa fa-edit" ></i></a> 
-            <button *ngIf="deletePermissions" class="btn theme-btn-delete " title="Delete" (click)="DeleteData(table)"><i
-                class="fas fa-trash"></i></button>
-
+            </div>
           </div>
-         
-        </td>
-      </tr>
-    </ng-template>
+          <div class="col-auto">
+            <button title="Search" type="button" (click)="Search()" class="btn btn-sm theme-btn mb-2 mr-2"
+              style="margin-top: 2.3em !important;">
+              <i class="fas fa-search"></i>&nbsp;Search</button>
+          </div>
+        </div>
+      </form>
+      <hr>
 
-  </p-table>
+      <p-table #dt [value]="tableData" [paginator]="true" [rows]="10" [responsive]="true" [showCurrentPageReport]="true"
+        [globalFilterFields]="['Commercial_Invoice_No','LC_No','PI_No','Date','UserName']"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+
+        <ng-template pTemplate="caption">
+          <div class="table-toolbar d-flex justify-content-end">
+            <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                placeholder="Global Search" />
+            </span>
+          </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="text-center">SL</th>
+            <th class="text-center">Commercial Invoice No</th>
+            <th class="text-center">LC No</th>
+            <th class="text-center">PI(s)</th>
+            <th class="text-center">Date</th>
+            <th class="text-center">Generated By</th>
+            <th class="text-center" *ngIf="allPersmissions">Action</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-table let-i="rowIndex">
+          <tr>
+            <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
+            <td class="text-center align-middle">{{table.Commercial_Invoice_No}}</td>
+            <td class="text-center align-middle">{{table.LC_No}}</td>
+            <td class="text-center align-middle">{{table.PI_No}}</td>
+            <td class="text-center align-middle">{{table.Date}}</td>
+            <td class="text-center align-middle">{{table.UserName}}</td>
+            <td class="text-center align-middle p-1 m-0">
+              <div class="d-flex justify-content-center gap-1">
+                <a class="btn theme-btn-view btn-sm " target="_blank" title="View" (click)="viewDetails(table)"><i
+                    class="fa fa-eye"></i></a>
+                <a *ngIf="updatePermissions" class="btn theme-btn-edit " target="_blank" title="Edit"
+                  [routerLink]="['/generate-commercial-invoice']"
+                  [queryParams]="{Commercial_Invoice_ID:table.Commercial_Invoice_ID}"><i class="fa fa-edit"></i></a>
+                <button *ngIf="deletePermissions" class="btn theme-btn-delete " title="Delete"
+                  (click)="DeleteData(table)"><i class="fas fa-trash"></i></button>
+
+              </div>
+
+            </td>
+          </tr>
+        </ng-template>
+
+      </p-table>
 
     </div>
-    <!--/Region Mat Datatable"-->
-    <p-dialog header="Detail"
-            [(visible)]="isDetailsVisible"
-            [modal]="true"
-            [closable]="true"
-            [style]="{ width: '70vw' }"
-            (onHide)="detailsData = null">
-            <div *ngIf="detailsData">
-              <h2>{{detailsData.Commercial_Invoice_No}}</h2>
-              <p>1. Shipper/Exporter: {{ detailsData.CompanyName }}{{ detailsData.Address }}</p>
-              <p>2. Apllicant Bank: {{ detailsData.BankName }}{{ detailsData.Address }}</p>
-              <p>3. Importer's Notify Address: {{ detailsData.Consignee_Name }}</p>
-              <p>4. Port Of Loading: {{ detailsData.Loading_Port_Name }}</p>
-              <p>5. Final Destination: {{ detailsData.Destination_Port }}</p>
-              <p>6. Carrier: {{ detailsData.Sailing_On_Or_About }}</p>
-              <p>7. Sailing on or about: {{ detailsData.Sailing_On_Or_About }}</p>
-              <p>8. PI's: {{ detailsData.PINo }}</p>
-              <p>9. L/C No/Sales Contact No: {{ detailsData.Invoice_No }} Date:{{ detailsData.Issue_Date }}Export LC/SC :{{ detailsData.Export_LC_SC }}Export LC/SC Date :{{detailsData.Export_LC_SC_Date}}</p>
-              <p>10. Beneficiary Bank Details: {{ detailsData.BankName }}{{detailsData.Address}}</p>
-              <p>11. EXP No. /BE No./EP No.: L/C No.:{{ detailsData.ExpNo }} Exp: Date:{{ detailsData.Export_Date }} BE:{{ detailsData.Be_No }} Date: {{ detailsData.Be_No_Date }}EP: {{ detailsData.EP_No }}Date{{ detailsData.EP_No_Date }}</p>
-              <p>12.Terms & Conditions: Payment Terms: {{ detailsData.Mode }}
-                Price Term:{{ detailsData.PriceTerm }}</p>
-              <p>13. Others:LCA Form No: {{ detailsData.LCA_Form_No }}
-                  IRC No:{{ detailsData.IRC_No }}
-                  App. BIN/VAT:{{ detailsData.Applicant_BIN_VAT }}
-                  Bank BIN No:{{ detailsData.Bank_BIN_No }}
-                  App. TIN No:{{ detailsData.Applicant_TIN }}
-                  HS Code: {{ detailsData.HS_Code }}
-                  Freight Charge: {{ detailsData.FreightCharge }}
-                  Quantity(Rolls): {{ detailsData.Qty_Rolls }}
-                  Total Gross Weight: {{ detailsData.Total_Gross_Weight }}
-                  Total Net Weight:{{ detailsData.Total_Net_Weight }}
 
-              </p>
-              <p>Remarks.: {{ detailsData.Remarks }}</p>
-              <p-table [value]="detailsTableData" [responsive]="true">
-              <ng-template pTemplate="header">
-                <tr>
-                  <th>Article</th>
-                  <th>A. A.</th>
-                  <th>Description</th>
-                  <th>Width</th>
-                  <th>Color</th>
-                  <th>Packaging</th>
-                  <th>Qty</th>
-                  <th>Unit</th>
-                  <th>Unit Price (USD)</th>
-                  <th>Total Amount (USD)</th>
-                  <th>Comm. Unit</th>
-                  <th>Total Comm.</th>
-                  <th>Delivered</th>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="body" let-detailsTableData>
-                <tr>
-                  <td>{{ detailsTableData.Article_No }}</td>
-                  <td>{{ detailsTableData.ActualArticle }}</td>
-                  <td>{{ detailsTableData.Description }}</td>
-                  <td>{{ detailsTableData.Measurement }}</td>
-                  <td>{{ detailsTableData.Color }}</td>
-                  <td>{{ detailsTableData.Packaging }}</td>
-                  <td>{{ detailsTableData.Quantity }}</td>
-                  <td>{{ detailsTableData.Unit }}</td>
-                  <td>{{ detailsTableData.Unit_Price }}</td>
-                  <td>{{ detailsTableData.Total_Amount }}</td>
-                  <td>{{ detailsTableData.CommissionUnit }}</td>
-                  <td>{{ detailsTableData.TotalCommission }}</td>
-                  <td>{{ detailsTableData.Delivered_Quantity }}</td>
-                </tr>
-              </ng-template>
-      </p-table>
+    <p-dialog header="Details" [(visible)]="isDetailsVisible" [modal]="true" [closable]="true"
+      [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+      [style]="{ width: '100vw', height: '100vh', top: '0', left: '0' }"
+      [contentStyle]="{'height':'calc(100vh - 100px)'}" [maximizable]="true" (onHide)="detailsData = null"
+      styleClass="wide-dialog">
+      <form>
+        <div class="card card-primary" *ngIf="detailsData">
+          <div class="card-header m-0 p-2 sticky-header">
+            <div class="float-left">
+              <h5>{{detailsData?.Commercial_Invoice_No}}</h5>
+              <span>{{detailsData?.Date}}</span>
             </div>
-  </p-dialog>
 
+            <div class="float-right">
+              <div class="btn-group" role="group" aria-label="Action Buttons">
+
+                <button type="button" class="btn btn-gradient-primary btn-sm mr-1">
+                  <i class="fas fa-file-invoice"></i> Invoice
+                </button>
+
+                <button type="button" class="btn btn-gradient-success btn-sm mr-1">
+                  <i class="fas fa-box-open"></i> PL
+                </button>
+
+                <button type="button" class="btn btn-gradient-danger btn-sm mr-1">
+                  <i class="fas fa-truck"></i> DC
+                </button>
+
+                <button type="button" class="btn btn-gradient-warning btn-sm mr-1">
+                  <i class="fas fa-file-contract"></i> BOE
+                </button>
+
+                <button type="button" class="btn btn-gradient-info btn-sm mr-1">
+                  <i class="fas fa-file-signature"></i> IC
+                </button>
+
+                <button type="button" class="btn btn-gradient-secondary btn-sm mr-1">
+                  <i class="fas fa-globe"></i> Origin
+                </button>
+
+                <button type="button" class="btn btn-gradient-dark btn-sm mr-1">
+                  <i class="fas fa-building-columns"></i> Beneficiary
+                </button>
+
+
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <!-- Left column -->
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="col-md-4 mt-2 text-right content-middle"><strong>Shipper/Exporter:</strong></div>
+                  <div class="col-md-8 mt-2">{{detailsData.CompanyName }}{{ detailsData.Address}}</div>
+
+                  <div class="col-md-4 mt-2 text-right content-middle"><strong>Applicant Bank:</strong></div>
+                  <div class="col-md-8 mt-2">{{detailsData.BankName }}{{ detailsData.Address}}</div>
+
+                  <div class="col-md-4 mt-2 text-right content-middle"><strong>Importer's Notify Address:</strong></div>
+                  <div class="col-md-8 mt-2">{{detailsData?.Consignee_Name}}</div>
+
+                  <div class="col-md-4 mt-2 text-right content-middle"><strong>Port Of Loading:</strong></div>
+                  <div class="col-md-8 mt-2">{{detailsData?.Loading_Port_Name}}</div>
+
+                  <div class="col-md-4 mt-2 text-right content-middle"><strong>Final Destination:</strong></div>
+                  <div class="col-md-8 mt-2">{{detailsData?.Destination_Port}}</div>
+
+                  <div class="col-md-4 mt-2 text-right content-middle"><strong>Carrier:</strong></div>
+                  <div class="col-md-8 mt-2">{{detailsData?.Details}}</div>
+
+                  <div class="col-md-4 mt-2 text-right content-middle"><strong>Sailing on or about: </strong></div>
+                  <div class="col-md-8 mt-2">{{detailsData?.Sailing_On_Or_About}}</div>
+
+                  <div class="col-md-4 mt-2 text-right content-middle"><strong>PI's:</strong></div>
+                  <div class="col-md-8 mt-2">{{detailsData?.PINo}}</div>
+
+                  <div class="col-md-4 mt-2 text-right content-middle"><strong>L/C No/Sales Contact No:</strong></div>
+                  <div class="col-md-8 mt-2">{{detailsData.LC_No }} Date:{{ detailsData.Issue_Date}}</div>
+                </div>
+              </div>
+
+              <!-- Right column -->
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="col-md-4 mt-2 text-right content-middle"><strong>Export LC/SC :</strong></div>
+                  <div class="col-md-8 mt-2">{{detailsData.Export_LC_SC }} Export LC/SC Date
+                    :{{detailsData.Export_LC_SC_Date}}</div>
+
+                  <div class="col-md-4 mt-2 text-right content-middle"><strong>Beneficiary Bank Details:</strong></div>
+                  <div class="col-md-8 mt-2">{{detailsData.BankName }}{{detailsData.Address}}</div>
+
+                  <div class="col-md-4 mt-2 text-right content-middle"><strong>EXP No. /BE No./EP No.:</strong></div>
+                  <div class="col-md-8 mt-2">Exp: {{detailsData.ExpNo }} Date:{{ detailsData.Export_Date }} BE:{{
+                    detailsData.Be_No }} Date: {{ detailsData.Be_No_Date }} EP: {{detailsData.EP_No }} Date:{{
+                    detailsData.EP_No_Date }}</div>
+
+                  <div class="col-md-4 mt-2 text-right content-middle"><strong>Terms & Conditions:</strong></div>
+                  <div class="col-md-8 mt-2">Payment Terms: {{detailsData.Mode}} Price Term:{{ detailsData.PriceTerm }}
+                  </div>
+
+                  <div class="col-md-4 mt-2 text-right content-middle"><strong>Others:</strong></div>
+                  <div class="col-md-8 mt-2">
+                    LCA_Form_No: {{ detailsData.LCA_Form_No }}<br />
+                    IRC No: {{ detailsData.IRC_No }}<br />
+                    App. BIN/VAT: {{ detailsData.Applicant_BIN_VAT }}<br />
+                    Bank BIN No: {{ detailsData.Bank_BIN_No }}<br />
+                    App. TIN No: {{ detailsData.Applicant_TIN }}<br />
+                    HS Code: {{ detailsData.HS_Code }}<br />
+                    Freight Charge: {{ detailsData.FreightCharge }}<br />
+                    Quantity(Rolls): {{ detailsData.Qty_Rolls }}<br />
+                    Total Gross Weight: {{ detailsData.Total_Gross_Weight }}<br />
+                    Total Net Weight: {{ detailsData.Total_Net_Weight }}
+                  </div>
+
+                  <div class="col-md-4 mt-2 text-right content-middle"><strong>Remarks.:</strong></div>
+                  <div class="col-md-8 mt-2">{{detailsData.Remarks}}</div>
+                </div>
+              </div>
+            </div>
+            <p-divider />
+            <div class="table-responsive">
+              <table class="table table-striped table-bordered  table-hover">
+
+                <tr class="bg-gradient-success">
+                  <th class="text-center align-middle">Article</th>
+                  <th class="text-center align-middle">A. A.</th>
+                  <th class="text-center align-middle">Description</th>
+                  <th class="text-center align-middle">Width</th>
+                  <th class="text-center align-middle">Color</th>
+                  <th class="text-center align-middle">Packaging</th>
+                  <th class="text-center align-middle">Qty</th>
+                  <th class="text-center align-middle">Unit</th>
+                  <th class="text-center align-middle">Unit Price (USD)</th>
+                  <th class="text-center align-middle">Total Amount (USD)</th>
+                  <th class="text-center align-middle">Comm. Unit</th>
+                  <th class="text-center align-middle">Total Comm.</th>
+                  <th class="text-center align-middle">Delivered</th>
+                </tr>
+
+                <tr *ngFor="let item of detailsTableData;">
+                  <td class="text-center align-middle">{{ item.Article_No }}</td>
+                  <td class="text-center align-middle">{{ item.ActualArticle }}</td>
+                  <td class="text-center align-middle">{{ item.Description }}</td>
+                  <td class="text-center align-middle">{{ item.Measurement }}</td>
+                  <td class="text-center align-middle">{{ item.Color }}</td>
+                  <td class="text-center align-middle">{{ item.Packaging }}</td>
+                  <td class="text-center align-middle">{{ item.Quantity }}</td>
+                  <td class="text-center align-middle">{{ item.Unit }}</td>
+                  <td class="text-center align-middle">{{ item.Unit_Price }}</td>
+                  <td class="text-right align-right">{{ item.Total_Amount }}</td>
+                  <td class="text-center align-middle">{{ item.CommissionUnit }}</td>
+                  <td class="text-center align-middle">{{ item.TotalCommission }}</td>
+                  <td class="text-center align-middle">{{ item.Delivered_Quantity }}</td>
+                </tr>
+                <!-- Totals row -->
+                <tr *ngIf="detailsTableData && detailsTableData.length>0" class="table-secondary font-weight-bold">
+                  <td colspan="6" class="text-right">Totals</td>
+                  <td class="text-center">{{ detailsTotalQuantity }}</td>
+                  <td></td>
+                  <td></td>
+                  <td class="text-right">{{ detailsTotalAmount | number:'1.2-2' }}</td>
+                  <td></td>
+                  <td></td>
+                  <td class="text-center">{{ detailsTotalDelivered }}</td>
+                </tr>
+              </table>
+            </div>
+
+          </div>
+          <div class="card-footer m-0 p-2">
+            <div class="float-left">
+              <span><strong>{{detailsData?.AmountInWord}}</strong></span>
+            </div>
+          </div>
+        </div>
+      </form>
+    </p-dialog>
   </div>
-
-
 </div>
-
-

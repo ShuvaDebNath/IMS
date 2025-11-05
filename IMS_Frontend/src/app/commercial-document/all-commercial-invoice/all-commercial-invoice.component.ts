@@ -27,6 +27,10 @@ pageIndex = 1;
   length = 100;
   pageSize = 10;
   detailsTableData:any;
+  // totals for details table
+  detailsTotalQuantity: number = 0;
+  detailsTotalAmount: number = 0;
+  detailsTotalDelivered: number = 0;
     tableData!: CD[];
   pageSizeOptions: number[] = [];
   displayedColumns: string[] = [
@@ -223,8 +227,22 @@ pageIndex = 1;
           
           this.detailsData = tables.Tables1[0]; 
           this.detailsTableData = tables.Tables2;
+          // compute totals for details table
+          this.computeDetailsTotals();
         }
       }
     });
     }
+
+  computeDetailsTotals() {
+    this.detailsTotalQuantity = 0;
+    this.detailsTotalAmount = 0;
+    this.detailsTotalDelivered = 0;
+    if (!this.detailsTableData || !Array.isArray(this.detailsTableData)) return;
+    for (const row of this.detailsTableData) {
+      this.detailsTotalQuantity += Number(row.Quantity) || 0;
+      this.detailsTotalAmount += Number(row.Total_Amount) || 0;
+      this.detailsTotalDelivered += Number(row.Delivered_Quantity) || 0;
+    }
+  }
 }
