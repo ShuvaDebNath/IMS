@@ -7,4 +7,5 @@ public interface IReportRepository
 {
     Task<DataSet> SampleRequestReport(ReportsParams param);
     Task<DataSet> ProformaInvoiceReport(ProformaInvoiceReportParams param);
+    Task<DataSet> CommercialInvoiceReports(CommercialInvoiceReportParams param);
 }

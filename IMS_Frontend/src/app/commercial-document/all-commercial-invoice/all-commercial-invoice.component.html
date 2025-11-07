@@ -85,7 +85,7 @@
             <td class="text-center align-middle">{{table.Commercial_Invoice_No}}</td>
             <td class="text-center align-middle">{{table.LC_No}}</td>
             <td class="text-center align-middle">{{table.PI_No}}</td>
-            <td class="text-center align-middle">{{table.Date}}</td>
+            <td class="text-center align-middle">{{table.Date| date : "dd-MMM-yyyy"}}</td>
             <td class="text-center align-middle">{{table.UserName}}</td>
             <td class="text-center align-middle p-1 m-0">
               <div class="d-flex justify-content-center gap-1">
@@ -123,31 +123,31 @@
             <div class="float-right">
               <div class="btn-group" role="group" aria-label="Action Buttons">
 
-                <button type="button" class="btn btn-gradient-primary btn-sm mr-1">
+                <button type="button" class="btn btn-gradient-primary btn-sm mr-1" (click)="CIPrint()">
                   <i class="fas fa-file-invoice"></i> Invoice
                 </button>
 
-                <button type="button" class="btn btn-gradient-success btn-sm mr-1">
+                <button type="button" class="btn btn-gradient-success btn-sm mr-1" (click)="PLPrint()">
                   <i class="fas fa-box-open"></i> PL
                 </button>
 
-                <button type="button" class="btn btn-gradient-danger btn-sm mr-1">
+                <button type="button" class="btn btn-gradient-danger btn-sm mr-1" (click)="DCPrint()">
                   <i class="fas fa-truck"></i> DC
                 </button>
 
-                <button type="button" class="btn btn-gradient-warning btn-sm mr-1">
+                <button type="button" class="btn btn-gradient-warning btn-sm mr-1" (click)="BOEPrint()">
                   <i class="fas fa-file-contract"></i> BOE
                 </button>
 
-                <button type="button" class="btn btn-gradient-info btn-sm mr-1">
+                <button type="button" class="btn btn-gradient-info btn-sm mr-1" (click)="ICPrint()">
                   <i class="fas fa-file-signature"></i> IC
                 </button>
 
-                <button type="button" class="btn btn-gradient-secondary btn-sm mr-1">
+                <button type="button" class="btn btn-gradient-secondary btn-sm mr-1" (click)="OriginPrint()">
                   <i class="fas fa-globe"></i> Origin
                 </button>
 
-                <button type="button" class="btn btn-gradient-dark btn-sm mr-1">
+                <button type="button" class="btn btn-gradient-dark btn-sm mr-1" (click)="BeneficiaryPrint()">
                   <i class="fas fa-building-columns"></i> Beneficiary
                 </button>
 

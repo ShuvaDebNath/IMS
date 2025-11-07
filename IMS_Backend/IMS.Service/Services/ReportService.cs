@@ -61,4 +61,22 @@ public class ReportService : IReportService
             throw ex;
         }
     }
+
+    public async Task<DataSet> CommercialInvoiceReports(string commercialInvoiceNo, string reportType)
+    {
+        try
+        {
+            CommercialInvoiceReportParams param = new CommercialInvoiceReportParams
+            {
+                Commercial_Invoice_No = commercialInvoiceNo,
+                ReportType = reportType
+
+            };
+            return await _reportRepository.CommercialInvoiceReports(param);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
 }

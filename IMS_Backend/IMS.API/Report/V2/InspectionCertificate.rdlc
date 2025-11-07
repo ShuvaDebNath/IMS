@@ -176,6 +176,10 @@
           <DataField>Export_LC_SC_Date</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
+        <Field Name="Export_LC_SC">
+          <DataField>Export_LC_SC</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="HS_Code">
           <DataField>HS_Code</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -344,10 +348,6 @@
           <DataField>PINo1</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Total_Amount_PI">
-          <DataField>Total_Amount_PI</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
         <Field Name="GrandTotalAmount">
           <DataField>GrandTotalAmount</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
@@ -356,9 +356,9 @@
           <DataField>AmountInWord</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Export_LC_SC">
-          <DataField>Export_LC_SC</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
+        <Field Name="FOBCharge">
+          <DataField>FOBCharge</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
       </Fields>
       <rd:DataSetInfo>
@@ -1768,7 +1768,7 @@ Note:Certify on the invoice to the effect that the goods shipped are in accordan
             <Top>4.59944in</Top>
             <Left>0.51958in</Left>
             <Height>0.57869in</Height>
-            <Width>7.44792in</Width>
+            <Width>7.44793in</Width>
             <ZIndex>15</ZIndex>
             <Style>
               <Border>
@@ -2094,6 +2094,7 @@ F.EXPORT L/C OR S/C NO: </Value>
       </Body>
       <Width>8.30083in</Width>
       <Page>
+        <PageWidth>9.5in</PageWidth>
         <LeftMargin>0.5in</LeftMargin>
         <RightMargin>0.5in</RightMargin>
         <TopMargin>0.1in</TopMargin>
