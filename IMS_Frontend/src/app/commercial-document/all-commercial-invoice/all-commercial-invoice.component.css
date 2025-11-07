@@ -1,0 +1,61 @@
+.btn-gradient-primary {
+  background: linear-gradient(45deg, #007bff, #00a8ff);
+  color: #fff;
+  border: none;
+}
+
+.btn-gradient-success {
+  background: linear-gradient(45deg, #28a745, #4cd964);
+  color: #fff;
+  border: none;
+}
+
+.btn-gradient-danger {
+  background: linear-gradient(45deg, #dc3545, #ff5e62);
+  color: #fff;
+  border: none;
+}
+
+.btn-gradient-warning {
+  background: linear-gradient(45deg, #ffc107, #ffb347);
+  color: #212529;
+  border: none;
+}
+
+.btn-gradient-info {
+  background: linear-gradient(45deg, #17a2b8, #1abc9c);
+  color: #fff;
+  border: none;
+}
+
+.btn-gradient-secondary {
+  background: linear-gradient(45deg, #6c757d, #95a5a6);
+  color: #fff;
+  border: none;
+}
+
+.btn-gradient-dark {
+  background: linear-gradient(45deg, #343a40, #232526);
+  color: #fff;
+  border: none;
+}
+
+.btn-gradient-light {
+  background: linear-gradient(45deg, #f8f9fa, #e0e0e0);
+  color: #000;
+  border: none;
+}
+
+/* Optional hover effects */
+.btn-gradient-primary:hover,
+.btn-gradient-success:hover,
+.btn-gradient-danger:hover,
+.btn-gradient-warning:hover,
+.btn-gradient-info:hover,
+.btn-gradient-secondary:hover,
+.btn-gradient-dark:hover,
+.btn-gradient-light:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  transition: 0.2s ease;
+}

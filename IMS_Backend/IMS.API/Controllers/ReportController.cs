@@ -104,6 +104,102 @@ namespace IMS.API.Controllers
                 throw;
             }
         }
+
+        [HttpGet]
+        [Route("CommercialInvoiceReports")]
+        public async Task<IActionResult> CommercialInvoiceReports(String rptType, string commercialInvoiceNo, string reportType)
+        {
+            try
+            {
+                var currentUser = HttpContext.User;
+                var reportName = "";
+
+                string reportPath = "V2\\";
+                DataSet ds = await _reportService.CommercialInvoiceReports(commercialInvoiceNo, reportType);
+
+                if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
+                {
+
+                    return Ok(new { msg = "Data Not Found" });
+                }
+
+                if (reportType == "CI")
+                {
+                    ds.Tables[0].TableName = "dtCommercialInvoice";
+
+                    reportName = "Commercial Invoice Report";
+
+                    reportPath += "CommercialInvoice.rdlc";
+                }
+                else if (reportType == "PL")
+                {
+                    ds.Tables[0].TableName = "dtCommercialInvoice";
+
+                    reportName = "Packing List Report";
+
+                    reportPath += "PackingList.rdlc";
+                } 
+                else if (reportType == "DC")
+                {
+                    ds.Tables[0].TableName = "dtCommercialInvoice";
+
+                    reportName = "Delivery Challan Report";
+
+                    reportPath += "DeliveryChallan.rdlc";
+                }
+                else if (reportType == "BOE")
+                {
+                    ds.Tables[0].TableName = "dtCommercialInvoice";
+
+                    reportName = "Bill of Exchange Report";
+
+                    reportPath += "BillOfExchange.rdlc";
+                }
+                else if (reportType == "IC")
+                {
+                    ds.Tables[0].TableName = "dtCommercialInvoice";
+
+                    reportName = "Inspection Certificate Report";
+
+                    reportPath += "InspectionCertificate.rdlc";
+                }
+                else if (reportType == "Origin")
+                {
+                    ds.Tables[0].TableName = "dtCommercialInvoice";
+
+                    reportName = "Country of Origin Report";
+
+                    reportPath += "CertificateOfOrigin.rdlc";
+                }
+                else if (reportType == "Beneficiary")
+                {
+                    ds.Tables[0].TableName = "dtCommercialInvoice";
+
+                    reportName = "Baneficiary Certificate Report";
+
+                    reportPath += "BeneficiaryCertificate.rdlc";
+                }                   
+
+                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+
+
+                if (rptType.ToLower() == "pdf")
+                {
+                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                }
+                else
+                {
+                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+
     }
 
 }

@@ -15,6 +15,8 @@ import { LC } from 'src/app/models/LCModel';
 import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
 import { DoubleMasterEntryModel } from 'src/app/models/DoubleMasterEntryModel';
 import { CD } from 'src/app/models/CDModel';
+import Swal from 'sweetalert2';
+import { ReportService } from 'src/app/services/reportService/report-service.service';
 
 @Component({
   selector: 'app-all-commercial-invoice',
@@ -27,6 +29,10 @@ pageIndex = 1;
   length = 100;
   pageSize = 10;
   detailsTableData:any;
+  // totals for details table
+  detailsTotalQuantity: number = 0;
+  detailsTotalAmount: number = 0;
+  detailsTotalDelivered: number = 0;
     tableData!: CD[];
   pageSizeOptions: number[] = [];
   displayedColumns: string[] = [
@@ -66,7 +72,8 @@ pageIndex = 1;
     private gs: GlobalServiceService,
     private pagesComponent: PagesComponent,
     private masterEntryService: MasterEntryService,
-    private title:Title
+    private title:Title,
+    private reportService: ReportService,
   ) {
   }
   ngOnInit(): void {
@@ -223,8 +230,101 @@ pageIndex = 1;
           
           this.detailsData = tables.Tables1[0]; 
           this.detailsTableData = tables.Tables2;
+          // compute totals for details table
+          this.computeDetailsTotals();
         }
       }
     });
+    }
+
+  computeDetailsTotals() {
+    this.detailsTotalQuantity = 0;
+    this.detailsTotalAmount = 0;
+    this.detailsTotalDelivered = 0;
+    if (!this.detailsTableData || !Array.isArray(this.detailsTableData)) return;
+    for (const row of this.detailsTableData) {
+      this.detailsTotalQuantity += Number(row.Quantity) || 0;
+      this.detailsTotalAmount += Number(row.Total_Amount) || 0;
+      this.detailsTotalDelivered += Number(row.Delivered_Quantity) || 0;
+    }
+  }
+
+  CIPrint(){  
+    this.ReportViewerOptionsBySwal('CI');  
+  }
+  PLPrint(){
+    this.ReportViewerOptionsBySwal('PL');
+  }
+
+  DCPrint(){
+    this.ReportViewerOptionsBySwal('DC');
+  }
+
+  BOEPrint(){
+    this.ReportViewerOptionsBySwal('BOE');
+  }
+
+  ICPrint(){
+    this.ReportViewerOptionsBySwal('IC');
+  }
+
+  OriginPrint(){
+    this.ReportViewerOptionsBySwal('Origin');
+  }
+
+  BeneficiaryPrint(){
+    this.ReportViewerOptionsBySwal('Beneficiary');
+  }
+
+   ReportViewerOptionsBySwal(reportType?: string) {
+      var actionType = '';
+      const item: any = {
+        Commercial_Invoice_No: this.detailsData?.Commercial_Invoice_No,
+        reportType: reportType || null,
+      };
+      Swal.fire({
+        title: 'Please select what you want to do!!',
+        icon: 'info',
+        showCancelButton: false,
+        showConfirmButton: false,
+        allowOutsideClick: true,
+        // Put Swal container/popup on top of other app modals by assigning high z-index classes
+        customClass: {
+          container: 'swal-container-high',
+          popup: 'swal-popup-high',
+        },
+        html: `
+          <div style="display: flex; justify-content: center; gap: 10px;">
+            <button id="view" class="swal2-confirm swal2-styled" style="background:green">Excel</button>
+            <button id="download" class="swal2-confirm swal2-styled" style="background:red">PDF</button>
+            <button id="print" class="swal2-confirm swal2-styled" style="background:blue">Word</button>
+          </div>
+        `,
+      });
+
+      // Add event listeners for buttons after Swal opens
+      Swal.getPopup()
+        ?.querySelector('#view')
+        ?.addEventListener('click', () => {
+          this.reportService.PrintCommercialInvoiceReports(item, 'excel', true);
+          Swal.close();
+        });
+
+      Swal.getPopup()
+        ?.querySelector('#download')
+        ?.addEventListener('click', () => {
+          this.reportService.PrintCommercialInvoiceReports(item, 'pdf', true);
+          Swal.close();
+        });
+
+      Swal.getPopup()
+        ?.querySelector('#print')
+        ?.addEventListener('click', () => {
+          this.reportService.PrintCommercialInvoiceReports(item, 'word', true);
+          Swal.close();
+        });
+
+      // The caller-specific reportType is included in `item` so the report service
+      // can dispatch the correct report variant based on that flag.
     }
 }

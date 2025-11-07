@@ -62,6 +62,7 @@ export class ReportService {
 
         const blob = new Blob([res], { type: blobType });
 
+
         const fileName =
           rptType === 'pdf'
             ? 'SampleRequestReport.pdf'
@@ -103,6 +104,88 @@ export class ReportService {
       .subscribe((res: Blob) => {
         const fileURL = window.URL.createObjectURL(res);
         window.open(fileURL, '_blank');
+      });
+  }
+  
+ 
+  PrintCommercialInvoiceReports(
+    report: any,
+    rptType: 'pdf' | 'excel' | 'word',
+    isView: boolean
+  ) {
+    const commercialInvoiceNo = report.Commercial_Invoice_No ?? '';
+    const reportType = report.reportType ?? '';
+
+    const url = `${this.baseUrl}${this.apiController}/CommercialInvoiceReports`;
+    const token = this.gs.getSessionData('token');
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    this.http
+      .get(url, {
+        headers,
+        params: { rptType, commercialInvoiceNo, reportType },
+        responseType: 'blob',
+      })
+      .subscribe((res: Blob) => {
+        const blobType =
+          rptType === 'pdf'
+            ? 'application/pdf'
+            : rptType === 'excel'
+            ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+
+        const blob = new Blob([res], { type: blobType });
+
+        // Choose base filename according to requested reportType
+        const reportTypeKey = (reportType || '').toString();
+        let baseFileName = 'CommercialInvoiceReport';
+        switch (reportTypeKey) {
+          case 'CI':
+            baseFileName = 'CommercialInvoiceReport';
+            break;
+          case 'PL':
+            baseFileName = 'PackingListReport';
+            break;
+          case 'DC':
+            baseFileName = 'DeliveryChallanReport';
+            break;
+          case 'BOE':
+            baseFileName = 'BOEReport';
+            break;
+          case 'IC':
+            baseFileName = 'InsuranceCertificateReport';
+            break;
+          case 'Origin':
+            baseFileName = 'CertificateOfOriginReport';
+            break;
+          case 'Beneficiary':
+            baseFileName = 'BeneficiaryBankReport';
+            break;
+          default:
+            baseFileName = 'CommercialInvoiceReport';
+        }
+
+        const fileName =
+          rptType === 'pdf'
+            ? `${baseFileName}.pdf`
+            : rptType === 'excel'
+            ? `${baseFileName}.xlsx`
+            : `${baseFileName}.docx`;
+
+        if (isView && rptType === 'pdf') {
+          // View PDF in new tab
+          const fileURL = window.URL.createObjectURL(blob);
+          window.open(fileURL, '_blank');
+        } else {
+          // Force download
+          const link = document.createElement('a');
+          link.href = window.URL.createObjectURL(blob);
+          link.download = fileName;
+          link.click();
+        }
       });
   }
 

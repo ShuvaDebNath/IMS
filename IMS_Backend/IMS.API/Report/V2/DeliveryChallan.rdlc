@@ -169,6 +169,10 @@
           <DataField>Export_LC_SC_Date</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
+        <Field Name="Export_LC_SC">
+          <DataField>Export_LC_SC</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="HS_Code">
           <DataField>HS_Code</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -337,10 +341,6 @@
           <DataField>PINo1</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Total_Amount_PI">
-          <DataField>Total_Amount_PI</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
         <Field Name="GrandTotalAmount">
           <DataField>GrandTotalAmount</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
@@ -349,9 +349,9 @@
           <DataField>AmountInWord</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Export_LC_SC">
-          <DataField>Export_LC_SC</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
+        <Field Name="FOBCharge">
+          <DataField>FOBCharge</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
       </Fields>
       <rd:DataSetInfo>
@@ -573,7 +573,7 @@ Good Received In Good Order &amp; Condition</Value>
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=Parameters!CommercialInvoiceNo.Value</Value>
+                    <Value>=Fields!Commercial_Invoice_No.Value</Value>
                     <Style>
                       <FontSize>8pt</FontSize>
                       <FontWeight>Normal</FontWeight>
@@ -652,10 +652,11 @@ Good Received In Good Order &amp; Condition</Value>
                     </Style>
                   </TextRun>
                   <TextRun>
-                    <Value>=Parameters!Date.Value</Value>
+                    <Value>=Fields!CI_Date.Value</Value>
                     <Style>
                       <FontSize>8pt</FontSize>
                       <FontWeight>Normal</FontWeight>
+                      <Format>MMMM d, yyyy</Format>
                     </Style>
                   </TextRun>
                   <TextRun>
@@ -723,13 +724,6 @@ Good Received In Good Order &amp; Condition</Value>
             <Paragraphs>
               <Paragraph>
                 <TextRuns>
-                  <TextRun>
-                    <Value xml:space="preserve"> </Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                      <FontWeight>Normal</FontWeight>
-                    </Style>
-                  </TextRun>
                   <TextRun>
                     <Value>=Fields!BeneficiaryCompanyName.Value</Value>
                     <Style>
@@ -3376,7 +3370,7 @@ Good Received In Good Order &amp; Condition</Value>
             <Top>6.5509in</Top>
             <Left>0.10198in</Left>
             <Height>0.57869in</Height>
-            <Width>7.86768in</Width>
+            <Width>7.86769in</Width>
             <ZIndex>50</ZIndex>
             <Style>
               <Border>
@@ -3499,6 +3493,7 @@ Good Received In Good Order &amp; Condition</Value>
       </Body>
       <Width>8.42975in</Width>
       <Page>
+        <PageWidth>9.5in</PageWidth>
         <LeftMargin>0.5in</LeftMargin>
         <RightMargin>0.5in</RightMargin>
         <TopMargin>0.1in</TopMargin>
