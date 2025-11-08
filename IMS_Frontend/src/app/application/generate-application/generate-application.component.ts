@@ -66,6 +66,10 @@ export class GenerateApplicationComponent {
       text: 'Special Delivery Application',
     },
   ];
+  insertPermissions: boolean = false;
+  updatePermissions: boolean = false;
+  deletePermissions: boolean = false;
+  printPermissions: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -75,10 +79,19 @@ export class GenerateApplicationComponent {
     private activeLink: ActivatedRoute,
     private title: Title,
     private masterEntryService: MasterEntryService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.title.setTitle('Export Raw Material');
+    var permissions = this.gs.CheckUserPermission(
+      'Special Delivery Application'
+    );
+    this.insertPermissions = permissions.insertPermissions;
+    this.updatePermissions = permissions.updatePermissions;
+    this.deletePermissions = permissions.deletePermissions;
+    this.printPermissions = permissions.printPermissions;
+
+
+    this.title.setTitle('Special Delivery Application');
     this.generateForm();
     this.loadPageData();
 
@@ -99,17 +112,12 @@ export class GenerateApplicationComponent {
   generateForm() {
     this.Formgroup = this.fb.group({
       Date: ['', Validators.required],
-      FormType: ['', Validators.required],
       Customer: ['', Validators.required],
       PINo: ['', Validators.required],
       items: this.fb.array([]),
     });
   }
 
-  refreshArticles(): void {
-    if (this.reloadingArticles) return;
-    this.loadPageData();
-  }
 
   loadPageData(): void {
     var userId = window.localStorage.getItem('userId');
@@ -130,7 +138,7 @@ export class GenerateApplicationComponent {
         } else {
         }
       },
-      error: (err) => {},
+      error: (err) => { },
     });
   }
 
@@ -138,36 +146,7 @@ export class GenerateApplicationComponent {
     return this.Formgroup.get('items') as FormArray;
   }
 
-  addItem() {
-    const row = this.fb.group({
-      article: this.fb.control<string | null>(null, Validators.required),
-      description: this.fb.control<string>(''),
-      color: this.fb.control<string | null>(null, Validators.required),
-      width: this.fb.control<number | null>(null, Validators.required),
-      rollOrBag: this.fb.control<'Rolls' | 'Bags'>('Rolls'),
-      rollBagQty: this.fb.control<number>(0),
-      unitId: this.fb.control<number | null>(null),
-      qty: this.fb.control<number>(0, [Validators.required, Validators.min(1)]),
-      weight: this.fb.control<number>(0),
-      grossWeight: this.fb.control<number>(0),
-    });
 
-    row.get('qty')!.valueChanges.subscribe(() => {
-      const qty = row.get('qty')!.value ?? 0;
-      const weight = row.get('weight')!.value ?? 0;
-
-      row.get('grossWeight')!.setValue(qty * weight, { emitEvent: false });
-    });
-
-    row.get('weight')!.valueChanges.subscribe(() => {
-      const qty = row.get('qty')!.value ?? 0;
-      const weight = row.get('weight')!.value ?? 0;
-
-      row.get('grossWeight')!.setValue(qty * weight, { emitEvent: false });
-    });
-
-    this.items.push(row);
-  }
 
   removeItem(i: number) {
     this.items.removeAt(i);
@@ -186,7 +165,7 @@ export class GenerateApplicationComponent {
       );
       return;
     }
-    
+
     var userId = window.localStorage.getItem('userId');
 
     var fDate = new Date();
@@ -203,20 +182,22 @@ export class GenerateApplicationComponent {
     var totalDeliveredQuantity = 0;
     var totalAproveQty = 0;
 
-    var SuperiorId = this.PIList.filter((e:any)=>e.value == this.Formgroup.value.PINo)[0].Superior_ID;
+    var SuperiorId = this.PIList.filter((e: any) => e.value == this.Formgroup.value.PINo)[0].Superior_ID;
 
     const formArray = this.Formgroup.get('items') as FormArray;
 
     formArray.controls.forEach((group) => {
       const item = group.value;
+      console.log(item);
+      
       totalQty += Number(item.Quantity) || 0;
       totalDeliveredQuantity += Number(item.Delivered_Quantity) || 0;
-      totalAproveQty += Number(item.ApproveQty) || 0;
+      totalAproveQty += Number(item.ApprovedQty) || 0;
     });
 
     const masterRow = {
 
-      FormTypeId: this.Formgroup.value.FormType,
+      FormTypeId: 'SpecialDelivery',
       TotalQuantity: totalQty,
       TotalDeliveredQuantity: totalDeliveredQuantity,
       TotalAppliedDelQty: totalAproveQty,
@@ -225,32 +206,35 @@ export class GenerateApplicationComponent {
       UserId: userId,
       Status: 'Pending',
       FormTypeName: this.Formgroup.value.FormType,
-      CreatedDate: formatted,
+      CreatedDate: new Date(new Date().toLocaleString('en', {timeZone: 'Asia/Dhaka'})),
       PiNos: this.Formgroup.value.PINo,
     };
 
+    console.log(fv.items);
+    
+
     const detailRows = fv.items.map((i: any) => ({
-      PiNo:i.PINo,
-      ArticleNo:i.Article,
-      CustomerName:i.customer_name,
-      ApplyDeliveryQty:i.Delivered_Quantity,
-      TblPiMasterId:i.PI_Master_ID,
-      TblPiDetailId:i.PI_Detail_ID,
-      ActualArticleNo:i.ActualArticle,
-      CreatedDate:formatted,
-      CreatedById:userId,
-      Colour:i.Color,
-      Width:i.Width,
-      Unit:i.Unit,
-      Quantity:i.Quantity,
-      UnitPrice:i.Unit_Price,
-      UnitCommission:i.CommissionUnit,
-      PaymentTerms:i.PaymentTerms,
-      DeliveredQuantity:i.Delivered_Quantity,
+      PiNo: i.PINo,
+      ArticleNo: i.Article,
+      CustomerName: i.customer_name,
+      ApplyDeliveryQty: i.ApprovedQty,
+      TblPiMasterId: i.PI_Master_ID,
+      TblPiDetailId: i.PI_Detail_ID,
+      ActualArticleNo: i.ActualArticle,
+      CreatedDate: new Date(new Date().toLocaleString('en', {timeZone: 'Asia/Dhaka'})),
+      CreatedById: userId,
+      Colour: i.Color,
+      Width: i.Width,
+      Unit: i.Unit,
+      Quantity: i.Quantity,
+      UnitPrice: i.Unit_Price,
+      UnitCommission: i.CommissionUnit,
+      PaymentTerms: i.PaymentTerms,
+      DeliveredQuantity: i.Delivered_Quantity,
     }));
 
     this.doubleMasterEntryService
-      .SaveDataMasterDetailsGetId(
+      .SaveDataMasterDetails(
         detailRows, // fd (child rows)
         'tbl_po_form_detail', // tableName (child)
         masterRow, // fdMaster (master row)
@@ -264,45 +248,19 @@ export class GenerateApplicationComponent {
         next: (res: any) => {
           console.log(res);
 
-          const detailRowsForStockUpdate = fv.items.map((r: any) => ({
-            RawMaterial_ID: r?.article,
-            Stock_Out: Number(r?.qty ?? 0),
-            ExportMasterID: res,
-            Roll_Out:
-              r?.Roll_Bag === 'roll' ? Number(r?.RollBag_Quantity ?? 0) : 0,
-            Bag_Out:
-              r?.Roll_Bag === 'bag' ? Number(r?.RollBag_Quantity ?? 0) : 0,
-          }));
-          this.doubleMasterEntryService
-            .SaveData(detailRowsForStockUpdate, 'tbl_stock')
-            .subscribe({
-              next: (res) => {
-                if (res.messageType === 'Success' && res.status) {
-                  swal.fire('Success', 'Export saved successfully', 'success');
-                  // Optionally reset form / navigate
-                  this.Formgroup.reset({
-                    requisitionDate: new Date(),
-                    remarks: '',
-                  });
-                  this.items.clear();
-                  this.addItem();
-                } else {
-                  swal.fire(
-                    'Stock Update Failed',
-                    res?.message || 'Stock update failed.',
-                    'info'
-                  );
-                }
-              },
-              error: (err) => {
-                console.error(err);
-                swal.fire(
-                  'Stock Update Failed',
-                  err?.error?.message || 'Stock update failed.',
-                  'info'
-                );
-              },
+          if (res.messageType === 'Success' && res.status) {
+            swal.fire('Success', 'Application generated successfully', 'success');
+            // Optionally reset form / navigate
+            this.Formgroup.reset({
             });
+            this.items.clear();
+          } else {
+            swal.fire(
+              'Application generated Failed',
+              res?.message || 'Application generated failed.',
+              'info'
+            );
+          }
         },
         error: () => {
           swal.fire('info', 'Could not save requisition', 'info');
@@ -422,11 +380,11 @@ export class GenerateApplicationComponent {
 
   getCustomerList() {
     var userId = window.localStorage.getItem('userId');
-    var procedureName = 'usp_SC_PINo_ByMarketingConcern';
+    var procedureName = 'usp_GA_PINo_ByCustomer';
     var ProcedureData = {
       procedureName: procedureName,
       parameters: {
-        UserID: userId,
+        CustomerId: this.Formgroup.value.Customer,
       },
     };
 
@@ -440,7 +398,7 @@ export class GenerateApplicationComponent {
         } else {
         }
       },
-      error: (err) => {},
+      error: (err) => { },
     });
   }
 
@@ -487,7 +445,7 @@ export class GenerateApplicationComponent {
                 PaymentTerms: [item.PaymentTerms],
                 Delivered_Quantity: [item.Delivered_Quantity],
                 ApprovedQty: [null, [Validators.required, Validators.min(1)]],
-                Remarks: ['', [Validators.required, Validators.minLength(3)]],
+                Remarks: [''],
                 PI_Detail_ID: [item.PI_Detail_ID],
                 PI_Master_ID: [item.PI_Master_ID],
               })
@@ -499,7 +457,7 @@ export class GenerateApplicationComponent {
         } else {
         }
       },
-      error: (err) => {},
+      error: (err) => { },
     });
   }
 

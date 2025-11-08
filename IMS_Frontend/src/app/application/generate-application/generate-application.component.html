@@ -1,5 +1,5 @@
 <div class="container shadow-sm p-3 mb-5 bg-white rounded">
-  <h1 class="theme-text">Export Raw Material Form</h1>
+  <h1 class="theme-text">Special Delivery  Application</h1>
 
   <br />
   <form [formGroup]="Formgroup">
@@ -9,18 +9,6 @@
       <div class="col-md-6">
         <label class="form-label">Date</label>
         <input type="date" class="form-control" formControlName="Date" />
-      </div>
-      <div class="col-md-6">
-        <label>Form Type <span>*</span></label>
-        <p-dropdown [style]="{ width: '100%' }" class="p-0" [options]="FormType" optionLabel="text" [filter]="true"
-          filterBy="text" [showClear]="true" styleClass="listBottom" placeholder="Please Select" optionValue="value"
-          formControlName="FormType">
-          <ng-template let-FormType pTemplate="item">
-            <div class="flex align-items-center gap-2">
-              <div>{{ FormType.text }}</div>
-            </div>
-          </ng-template>
-        </p-dropdown>
       </div>
     </div>
     <div class="row mb-3">
