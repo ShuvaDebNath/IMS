@@ -51,7 +51,7 @@ export class GenerateApplicationComponent {
   ExportMasterID: any = '';
   CustomerList: any[] = [];
   PIList: any[] = [];
-  PIPreviewList:any[] = [];
+  PIPreviewList: any[] = [];
   FormType: any[] = [
     {
       value: '0',
@@ -75,12 +75,11 @@ export class GenerateApplicationComponent {
     private activeLink: ActivatedRoute,
     private title: Title,
     private masterEntryService: MasterEntryService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.title.setTitle('Export Raw Material');
     this.generateForm();
-    this.addItem();
     this.loadPageData();
 
     let has = this.activeLink.snapshot.queryParamMap.has('ExportMasterID');
@@ -113,12 +112,12 @@ export class GenerateApplicationComponent {
   }
 
   loadPageData(): void {
-    
+
     var userId = window.localStorage.getItem('userId');
     var ProcedureData = {
       procedureName: '[usp_Application_GetInitialData]',
       parameters: {
-        userID:userId
+        userID: userId
       },
     };
 
@@ -132,7 +131,7 @@ export class GenerateApplicationComponent {
         } else {
         }
       },
-      error: (err) => {},
+      error: (err) => { },
     });
   }
 
@@ -176,7 +175,7 @@ export class GenerateApplicationComponent {
   }
 
   // totals (bind to UI + send to API)
-  
+
 
   saveData(): void {
     console.log(this.Formgroup);
@@ -284,7 +283,7 @@ export class GenerateApplicationComponent {
       });
   }
 
- 
+
 
   UpdateData(): void {
     if (this.Formgroup.invalid) {
@@ -396,35 +395,8 @@ export class GenerateApplicationComponent {
       });
   }
 
-  RMOptionChange(item: any) {
-    console.log(item);
 
-    var ProcedureData = {
-      procedureName: '[usp_RawMaterialDetails]',
-      parameters: {
-        RawMaterial_ID: item.value.article,
-      },
-    };
-
-    this.getDataService.GetInitialData(ProcedureData).subscribe({
-      next: (results) => {
-        if (results.status) {
-          var rmDetails = JSON.parse(results.data).Tables1;
-          item.controls.color.setValue(rmDetails[0].ColorId);
-          item.controls.unitId.setValue(rmDetails[0].UnitId);
-          item.controls.width.setValue(rmDetails[0].WidthId);
-          item.controls.weight.setValue(rmDetails[0].Weight);
-        } else if (results.msg == 'Invalid Token') {
-          swal.fire('Session Expierd!', 'Please Login Again.', 'info');
-          this.gs.Logout();
-        } else {
-        }
-      },
-      error: (err) => {},
-    });
-  }
-
-  getCustomerList() {    
+  getCustomerList() {
     var userId = window.localStorage.getItem('userId');
     var procedureName = 'usp_SC_PINo_ByMarketingConcern';
     var ProcedureData = {
@@ -444,22 +416,22 @@ export class GenerateApplicationComponent {
         } else {
         }
       },
-      error: (err) => {},
+      error: (err) => { },
     });
   }
 
-  getPIDetails(){    
+  getPIDetails() {
     var userId = window.localStorage.getItem('userId');
     var PINo = this.Formgroup.value.PINo;
 
-    this.PIPreviewList.forEach((e:any)=>{
-      if(e.PINo==PINo){
-        swal.fire('info','this pi data already contain in the list','info');
+    this.PIPreviewList.forEach((e: any) => {
+      if (e.PINo == PINo) {
+        swal.fire('info', 'this pi data already contain in the list', 'info');
         return
       }
     })
 
-    
+
     var procedureName = 'usp_Application_GetPIInfo';
     var ProcedureData = {
       procedureName: procedureName,
@@ -470,12 +442,27 @@ export class GenerateApplicationComponent {
 
     this.masterEntryService.GetInitialData(ProcedureData).subscribe({
       next: (results) => {
-    console.log(results);
+        console.log(results);
         if (results.status) {
-          JSON.parse(results.data).Tables1.forEach((e:any)=>{
-            console.log(this.PIPreviewList);
+          const formArray = this.Formgroup.get('items') as FormArray;
+          JSON.parse(results.data).Tables1.forEach((item: any) => {
             
-            this.PIPreviewList.push(e);
+            formArray.push(this.fb.group({
+              customer_name: [item.customer_name],
+              PINo: [item.PINo],
+              Article: [item.Article],
+              ActualArticle: [item.ActualArticle],
+              Color: [item.Color],
+              Width: [item.Width],
+              Unit: [item.Unit],
+              Quantity: [item.Quantity],
+              Unit_Price: [item.Unit_Price],
+              CommissionUnit: [item.CommissionUnit],
+              PaymentTerms: [item.PaymentTerms],
+              Delivered_Quantity: [item.Delivered_Quantity],
+              ApprovedQty: [null, [Validators.required, Validators.min(1)]],
+              Remarks: ['', [Validators.required, Validators.minLength(3)]]
+            }));
           })
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
@@ -483,7 +470,7 @@ export class GenerateApplicationComponent {
         } else {
         }
       },
-      error: (err) => {},
+      error: (err) => { },
     });
   }
 }

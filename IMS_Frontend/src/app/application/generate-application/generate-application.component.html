@@ -12,19 +12,9 @@
       </div>
       <div class="col-md-6">
         <label>Form Type <span>*</span></label>
-        <p-dropdown
-          [style]="{ width: '100%' }"
-          class="p-0"
-          [options]="FormType"
-          optionLabel="text"
-          [filter]="true"
-          filterBy="text"
-          [showClear]="true"
-          styleClass="listBottom"
-          placeholder="Please Select"
-          optionValue="value"
-          formControlName="FormType"
-        >
+        <p-dropdown [style]="{ width: '100%' }" class="p-0" [options]="FormType" optionLabel="text" [filter]="true"
+          filterBy="text" [showClear]="true" styleClass="listBottom" placeholder="Please Select" optionValue="value"
+          formControlName="FormType">
           <ng-template let-FormType pTemplate="item">
             <div class="flex align-items-center gap-2">
               <div>{{ FormType.text }}</div>
@@ -36,22 +26,10 @@
     <div class="row mb-3">
       <div class="col-md-6">
         <label>Customer Name <span>*</span></label>
-        <p-dropdown
-          [style]="{ width: '100%' }"
-          class="p-0"
-          [options]="CustomerList"
-          optionLabel="CustomerName"
-          [filter]="true"
-          filterBy="CustomerName"
-          [showClear]="true"
-          styleClass="listBottom"
-          placeholder="Please Select"
-          optionValue="Customer_ID"
-          formControlName="Customer"
-          [virtualScroll]="true"
-          [virtualScrollItemSize]="30"
-          (onChange)="getCustomerList()"
-        >
+        <p-dropdown [style]="{ width: '100%' }" class="p-0" [options]="CustomerList" optionLabel="CustomerName"
+          [filter]="true" filterBy="CustomerName" [showClear]="true" styleClass="listBottom" placeholder="Please Select"
+          optionValue="Customer_ID" formControlName="Customer" [virtualScroll]="true" [virtualScrollItemSize]="30"
+          (onChange)="getCustomerList()">
           <ng-template let-Customer pTemplate="item">
             <div class="flex align-items-center gap-2">
               <div>{{ Customer.CustomerName }}</div>
@@ -61,29 +39,16 @@
       </div>
       <div class="col-md-6">
         <label>PI No <span>*</span></label>
-        <p-dropdown
-          [style]="{ width: '100%' }"
-          class="p-0"
-          [options]="PIList"
-          optionLabel="label"
-          [filter]="true"
-          filterBy="label"
-          [showClear]="true"
-          styleClass="listBottom"
-          placeholder="Please Select"
-          optionValue="value"
-          formControlName="PINo"
-          [virtualScroll]="true"
-          [virtualScrollItemSize]="30"
-          (onChange)="getPIDetails()"
-        >
+        <p-dropdown [style]="{ width: '100%' }" class="p-0" [options]="PIList" optionLabel="label" [filter]="true"
+          filterBy="label" [showClear]="true" styleClass="listBottom" placeholder="Please Select" optionValue="value"
+          formControlName="PINo" [virtualScroll]="true" [virtualScrollItemSize]="30" (onChange)="getPIDetails()">
           <ng-template let-pino pTemplate="item">
             <div class="flex align-items-center gap-2">
               <div>{{ pino.label }}</div>
             </div>
           </ng-template>
         </p-dropdown>
-      </div>      
+      </div>
     </div>
 
     <h3><strong>PI Info </strong></h3>
@@ -109,218 +74,53 @@
         </tr>
       </thead>
 
-      <tbody>
-        <tr
-          *ngFor="let item of PIPreviewList; let i = index"
-        >
-            <td>{{item.customer_name}}</td>
-            <td>{{item.PINo}}</td>
-            <td>{{item.Article}}</td>
-            <td>{{item.ActualArticle}}</td>
-            <td>{{item.Color}}</td>
-            <td>{{item.Width}}</td>
-            <td>{{item.Unit}}</td>
-            <td>{{item.Quantity}}</td>
-            <td>{{item.Unit_Price}}</td>
-            <td>{{item.CommissionUnit}}</td>
-            <td>{{item.PaymentTerms}}</td>
-            <td>{{item.Delivered_Quantity}}</td>
-            <td><input type="number"/></td>
-            <td></td>
-            <td></td>
+      <tbody formArrayName="items" *ngIf="items && items.length > 0">
+        <tr *ngFor="let group of items.controls; let i = index" [formGroupName]="i">
+          <td>{{group.value.customer_name}}</td>
+          <td>{{group.value.PINo}}</td>
+          <td>{{group.value.Article}}</td>
+          <td>{{group.value.ActualArticle}}</td>
+          <td>{{group.value.Color}}</td>
+          <td>{{group.value.Width}}</td>
+          <td>{{group.value.Unit}}</td>
+          <td>{{group.value.Quantity}}</td>
+          <td>{{group.value.Unit_Price}}</td>
+          <td>{{group.value.CommissionUnit}}</td>
+          <td>{{group.value.PaymentTerms}}</td>
+          <td>{{group.value.Delivered_Quantity}}</td>
+
+          <td>
+            <input type="number" formControlName="ApprovedQty" />
+          </td>
+
+          <td>
+            <input type="text" formControlName="Remarks" />
+
+          </td>
+          <td class="text-center">
+            <button type="button" class="btn btn-sm btn-danger px-2 py-1" (click)="removeItem(i)">×</button>
+          </td>
         </tr>
       </tbody>
 
-      <!-- <tbody formArrayName="items">
-        <tr
-          *ngFor="let item of items.controls; let i = index"
-          [formGroupName]="i"
-        >
-          <td>
-            <div class="form-group">
-              <p-dropdown
-                class="p-0 rm-dd"
-                [style]="{ width: '100px !important' }"
-                [panelStyle]="{ width: '100%' }"
-                [options]="RawMaterialList"
-                (onChange)="RMOptionChange(item)"
-                optionLabel="Article_No"
-                optionValue="RawMaterial_ID"
-                [filter]="true"
-                filterBy="Article_No"
-                [showClear]="true"
-                placeholder="Please Select"
-                formControlName="article"
-              >
-                <ng-template let-article pTemplate="item">
-                  <div class="flex align-items-center gap-2">
-                    <div>{{ article.Article_No }}</div>
-                  </div>
-                </ng-template>
-              </p-dropdown>
-            </div>
-          </td>
-
-          <td class="col-description">
-            <input class="form-control"
-                [style]="{ width: '100px !important' }" formControlName="description" />
-          </td>
-          <td>
-            <div class="form-group" >
-              <p-dropdown
-                class="p-0 rm-dd"
-                [options]="ColorList"
-                optionLabel="Color"
-                optionValue="Color_ID"
-                [filter]="true"
-                filterBy="Color"
-                [showClear]="true"
-                placeholder="Please Select"
-                formControlName="color"
-                [readonly]="true"
-              >
-                <ng-template let-color pTemplate="item">
-                  <div class="flex align-items-center gap-2">
-                    <div>{{ color.Color }}</div>
-                  </div>
-                </ng-template>
-              </p-dropdown>
-            </div>
-          </td>
-          <td>
-            <div class="form-group">
-              <p-dropdown
-                class="p-0 rm-dd"
-                [style]="{ width: '100px !important' }"
-                [panelStyle]="{ width: '100%' }"
-                [options]="WidthList"
-                optionLabel="Measurement"
-                optionValue="Width_ID"
-                [filter]="true"
-                filterBy="Measurement"
-                [showClear]="true"
-                placeholder="Please Select"
-                formControlName="width"
-                [readonly]="true"
-              >
-                <ng-template let-width pTemplate="item">
-                  <div class="flex align-items-center gap-2">
-                    <div>{{ width.Measurement }}</div>
-                  </div>
-                </ng-template>
-              </p-dropdown>
-            </div>
-          </td>
-          <td>
-            <select class="form-control"
-                
-                [style]="{ width: '100px !important' }" formControlName="rollOrBag">
-              <option value="roll">Rolls</option>
-              <option value="bag">Bags</option>
-            </select>
-          </td>
-          <td>
-            <input
-              type="number"
-              class="form-control"
-                [style]="{ width: '80px !important' }"
-              formControlName="rollBagQty"
-              style="text-align: center"
-            />
-          </td>
-
-          <td>
-            <div class="form-group">
-              <p-dropdown
-                class="p-0 rm-dd"
-                [style]="{ width: '100px !important' }"
-                [panelStyle]="{ width: '100%' }"
-                [options]="UnitList"
-                optionLabel="Unit"
-                optionValue="Unit_ID"
-                [filter]="true"
-                filterBy="Unit"
-                [showClear]="true"
-                placeholder="Please Select"
-                formControlName="unitId"
-                [readonly]="true"
-              >
-                <ng-template let-Unit pTemplate="item">
-                  <div class="flex align-items-center gap-2">
-                    <div>{{ Unit.Unit }}</div>
-                  </div>
-                </ng-template>
-              </p-dropdown>
-            </div>
-          </td>
-          <td>
-            <input
-              type="number"
-                [style]="{ width: '100px !important' }"
-              class="form-control"
-              formControlName="qty"
-              style="text-align: center"
-            />
-          </td>
-          <td>
-            <input
-              type="number"
-                [style]="{ width: '80px !important' }"
-              class="form-control"
-              formControlName="weight"
-              style="text-align: center"
-            />
-          </td>
-          <td>
-            <input
-              type="number"
-                [style]="{ width: '80px !important' }"
-              class="form-control"
-              formControlName="grossWeight"
-              style="text-align: center"
-              readonly
-            />
-          </td>
-
-          <td>
-            <button
-              type="button"
-              class="btn btn-sm btn-danger"
-              (click)="removeItem(i)"
-            >
-              ×
-            </button>
-          </td>
-        </tr>
-      </tbody> -->
 
     </table>
 
     <div class="d-flex justify-content-end gap-2 mt-3">
-      <button type="button" class="btn btn-outline-success" (click)="addItem()">
+      <!-- <button type="button" class="btn btn-outline-success" (click)="addItem()">
         <i class="bi bi-plus-circle me-1"></i> Add Row
-      </button>
+      </button> -->
 
-      <button
-        type="submit"
-        (click)="saveData()"
-         [ngClass]="{
+      <button type="submit" (click)="saveData()" [ngClass]="{
         'theme-btn-disable': Formgroup.invalid
-      }" class="btn theme-btn btn-rounded" [disabled]="Formgroup.invalid"
-      *ngIf="!isEdit"
-      >
-      
+      }" class="btn theme-btn btn-rounded" [disabled]="Formgroup.invalid" *ngIf="!isEdit">
+
         <i class="bi bi-save me-1"></i> Save
       </button>
-      <button
-        type="submit"
-        (click)="UpdateData()"
-         [ngClass]="{
+      <button type="submit" (click)="UpdateData()" [ngClass]="{
         'theme-btn-disable': Formgroup.invalid
-      }" class="btn theme-btn btn-rounded" [disabled]="Formgroup.invalid" 
-        *ngIf="isEdit"
-      >
-      
+      }" class="btn theme-btn btn-rounded" [disabled]="Formgroup.invalid" *ngIf="isEdit">
+
         <i class="bi bi-save me-1"></i> Save
       </button>
     </div>
