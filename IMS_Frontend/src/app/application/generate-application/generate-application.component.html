@@ -90,7 +90,7 @@
           <td>{{group.value.Delivered_Quantity}}</td>
 
           <td>
-            <input type="number" formControlName="ApprovedQty" />
+            <input type="number" formControlName="ApprovedQty" (keyup)="approveQtyChange(group)"/>
           </td>
 
           <td>

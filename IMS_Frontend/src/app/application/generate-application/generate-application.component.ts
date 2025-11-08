@@ -75,7 +75,7 @@ export class GenerateApplicationComponent {
     private activeLink: ActivatedRoute,
     private title: Title,
     private masterEntryService: MasterEntryService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.title.setTitle('Export Raw Material');
@@ -112,12 +112,11 @@ export class GenerateApplicationComponent {
   }
 
   loadPageData(): void {
-
     var userId = window.localStorage.getItem('userId');
     var ProcedureData = {
       procedureName: '[usp_Application_GetInitialData]',
       parameters: {
-        userID: userId
+        userID: userId,
       },
     };
 
@@ -131,7 +130,7 @@ export class GenerateApplicationComponent {
         } else {
         }
       },
-      error: (err) => { },
+      error: (err) => {},
     });
   }
 
@@ -176,7 +175,6 @@ export class GenerateApplicationComponent {
 
   // totals (bind to UI + send to API)
 
-
   saveData(): void {
     console.log(this.Formgroup);
 
@@ -188,50 +186,79 @@ export class GenerateApplicationComponent {
       );
       return;
     }
+    
+    var userId = window.localStorage.getItem('userId');
+
+    var fDate = new Date();
+    const mm = String(fDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const dd = String(fDate.getDate()).padStart(2, '0');
+    const yyyy = fDate.getFullYear();
+
+    const formatted = `${mm}/${dd}/${yyyy}`;
 
     // 1) Form -> DTO (typed)
     const fv = this.Formgroup.value;
 
+    var totalQty = 0;
+    var totalDeliveredQuantity = 0;
+    var totalAproveQty = 0;
+
+    var SuperiorId = this.PIList.filter((e:any)=>e.value == this.Formgroup.value.PINo)[0].Superior_ID;
+
+    const formArray = this.Formgroup.get('items') as FormArray;
+
+    formArray.controls.forEach((group) => {
+      const item = group.value;
+      totalQty += Number(item.Quantity) || 0;
+      totalDeliveredQuantity += Number(item.Delivered_Quantity) || 0;
+      totalAproveQty += Number(item.ApproveQty) || 0;
+    });
+
     const masterRow = {
-      ExportNumber: 'Export - ',
-      ExportDate: fv.ExportDate,
-      Shipping_Information: fv.ShippingInformation ?? '',
-      Loading_Port_ID: fv.Loading_Port,
-      Destination_Port_ID: fv.Destination_Port,
-      Net_Weight: 0,
-      Sent_By: window.localStorage.getItem('userId'),
-      Total_Qty: 0,
+
+      FormTypeId: this.Formgroup.value.FormType,
+      TotalQuantity: totalQty,
+      TotalDeliveredQuantity: totalDeliveredQuantity,
+      TotalAppliedDelQty: totalAproveQty,
+      Date: this.Formgroup.value.Date,
+      SuperiorId: SuperiorId,
+      UserId: userId,
       Status: 'Pending',
-      Note: fv.remarks,
-      Total_Roll: 0,
-      Total_Bag: 0,
+      FormTypeName: this.Formgroup.value.FormType,
+      CreatedDate: formatted,
+      PiNos: this.Formgroup.value.PINo,
     };
+
     const detailRows = fv.items.map((i: any) => ({
-      RawMaterial_ID: i.article,
-      Quantity: i.qty,
-      Article_No: i.article,
-      Description: i.description,
-      Color_ID: i.color,
-      Width_ID: i.width,
-      Roll_Bag: i.rollOrBag === 'roll' ? 'roll' : 'bag',
-      Unit: i.unitId,
-      Weight: i.weight,
-      Gross_Weight: i.grossWeight,
-      RollBag_Quantity: i.rollBagQty,
-      Unit_ID: i.unitId ?? null,
-      ExportMasterID: null,
+      PiNo:i.PINo,
+      ArticleNo:i.Article,
+      CustomerName:i.customer_name,
+      ApplyDeliveryQty:i.Delivered_Quantity,
+      TblPiMasterId:i.PI_Master_ID,
+      TblPiDetailId:i.PI_Detail_ID,
+      ActualArticleNo:i.ActualArticle,
+      CreatedDate:formatted,
+      CreatedById:userId,
+      Colour:i.Color,
+      Width:i.Width,
+      Unit:i.Unit,
+      Quantity:i.Quantity,
+      UnitPrice:i.Unit_Price,
+      UnitCommission:i.CommissionUnit,
+      PaymentTerms:i.PaymentTerms,
+      DeliveredQuantity:i.Delivered_Quantity,
     }));
 
     this.doubleMasterEntryService
       .SaveDataMasterDetailsGetId(
         detailRows, // fd (child rows)
-        'tbl_export_details', // tableName (child)
+        'tbl_po_form_detail', // tableName (child)
         masterRow, // fdMaster (master row)
-        'tbl_export_master', // tableNameMaster (master)
-        'ExportMasterID', // columnNamePrimary (PK)
-        'ExportMasterID', // columnNameForign (FK in child)
-        'Export', // serialType (your code uses it)
-        'Export' // columnNameSerialNo (series name)
+        'tbl_po_form_master', // tableNameMaster (master)
+        'Id', // columnNamePrimary (PK)
+        'TblPoFormMasterId', // columnNameForign (FK in child)
+        'Application', // serialType (your code uses it)
+        'Application' // columnNameSerialNo (series name)
       )
       .subscribe({
         next: (res: any) => {
@@ -282,8 +309,6 @@ export class GenerateApplicationComponent {
         },
       });
   }
-
-
 
   UpdateData(): void {
     if (this.Formgroup.invalid) {
@@ -395,7 +420,6 @@ export class GenerateApplicationComponent {
       });
   }
 
-
   getCustomerList() {
     var userId = window.localStorage.getItem('userId');
     var procedureName = 'usp_SC_PINo_ByMarketingConcern';
@@ -416,7 +440,7 @@ export class GenerateApplicationComponent {
         } else {
         }
       },
-      error: (err) => { },
+      error: (err) => {},
     });
   }
 
@@ -427,10 +451,9 @@ export class GenerateApplicationComponent {
     this.PIPreviewList.forEach((e: any) => {
       if (e.PINo == PINo) {
         swal.fire('info', 'this pi data already contain in the list', 'info');
-        return
+        return;
       }
-    })
-
+    });
 
     var procedureName = 'usp_Application_GetPIInfo';
     var ProcedureData = {
@@ -445,32 +468,46 @@ export class GenerateApplicationComponent {
         console.log(results);
         if (results.status) {
           const formArray = this.Formgroup.get('items') as FormArray;
+          formArray.clear();
           JSON.parse(results.data).Tables1.forEach((item: any) => {
-            
-            formArray.push(this.fb.group({
-              customer_name: [item.customer_name],
-              PINo: [item.PINo],
-              Article: [item.Article],
-              ActualArticle: [item.ActualArticle],
-              Color: [item.Color],
-              Width: [item.Width],
-              Unit: [item.Unit],
-              Quantity: [item.Quantity],
-              Unit_Price: [item.Unit_Price],
-              CommissionUnit: [item.CommissionUnit],
-              PaymentTerms: [item.PaymentTerms],
-              Delivered_Quantity: [item.Delivered_Quantity],
-              ApprovedQty: [null, [Validators.required, Validators.min(1)]],
-              Remarks: ['', [Validators.required, Validators.minLength(3)]]
-            }));
-          })
+            formArray.push(
+              this.fb.group({
+                customer_name: [item.customer_name],
+                PINo: [item.PINo],
+                PIMasterId: [item.PINo],
+                PIDetailsId: [item.PINo],
+                Article: [item.Article],
+                ActualArticle: [item.ActualArticle],
+                Color: [item.Color],
+                Width: [item.Width],
+                Unit: [item.Unit],
+                Quantity: [item.Quantity],
+                Unit_Price: [item.Unit_Price],
+                CommissionUnit: [item.CommissionUnit],
+                PaymentTerms: [item.PaymentTerms],
+                Delivered_Quantity: [item.Delivered_Quantity],
+                ApprovedQty: [null, [Validators.required, Validators.min(1)]],
+                Remarks: ['', [Validators.required, Validators.minLength(3)]],
+                PI_Detail_ID: [item.PI_Detail_ID],
+                PI_Master_ID: [item.PI_Master_ID],
+              })
+            );
+          });
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
           this.gs.Logout();
         } else {
         }
       },
-      error: (err) => { },
+      error: (err) => {},
     });
+  }
+
+  approveQtyChange(item: any) {
+    if (item.value.Quantity < item.value.ApprovedQty) {
+      console.log(item);
+      item.value.ApprovedQty = 0;
+      swal.fire('info', 'Approve Qty can not be greater then Pi Qty', 'info');
+    }
   }
 }
