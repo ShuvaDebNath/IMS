@@ -48,7 +48,7 @@ export class GenerateApplicationComponent {
   WidthList: any[] = [];
   ColorList: any[] = [];
   UnitList: any[] = [];
-  ExportMasterID: any = '';
+  Id: any = '';
   CustomerList: any[] = [];
   PIList: any[] = [];
   PIPreviewList: any[] = [];
@@ -95,11 +95,12 @@ export class GenerateApplicationComponent {
     this.generateForm();
     this.loadPageData();
 
-    let has = this.activeLink.snapshot.queryParamMap.has('ExportMasterID');
+    let has = this.activeLink.snapshot.queryParamMap.has('Id');
     if (has) {
-      this.ExportMasterID =
-        this.activeLink.snapshot.queryParams['ExportMasterID'];
+      this.Id =
+        this.activeLink.snapshot.queryParams['Id'];
       this.isEdit = true;
+      this.getEditData();
     } else {
       this.isEdit = false;
     }
@@ -205,7 +206,7 @@ export class GenerateApplicationComponent {
       SuperiorId: SuperiorId,
       UserId: userId,
       Status: 'Pending',
-      FormTypeName: this.Formgroup.value.FormType,
+      FormTypeName: 'Special Delivery',
       CreatedDate: new Date(new Date().toLocaleString('en', {timeZone: 'Asia/Dhaka'})),
       PiNos: this.Formgroup.value.PINo,
     };
@@ -278,56 +279,82 @@ export class GenerateApplicationComponent {
       return;
     }
 
-    const sentByStr = localStorage.getItem('userId');
-    const sentBy = sentByStr ? Number(sentByStr) : null;
+    var userId = window.localStorage.getItem('userId');
+
+    var fDate = new Date();
+    const mm = String(fDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const dd = String(fDate.getDate()).padStart(2, '0');
+    const yyyy = fDate.getFullYear();
+
+    const formatted = `${mm}/${dd}/${yyyy}`;
 
     // 1) Form -> DTO (typed)
     const fv = this.Formgroup.value;
 
-    const masterRow = {
-      ExportDate: fv.ExportDate,
-      Shipping_Information: fv.ShippingInformation ?? '',
-      Loading_Port_ID: fv.Loading_Port,
-      Destination_Port_ID: fv.Destination_Port,
-      Net_Weight: 0,
-      Sent_By: window.localStorage.getItem('userId'),
-      Total_Qty: 0,
-      Status: 'Pending',
-      Note: fv.remarks,
-      Total_Roll: 0,
-      Total_Bag: 0,
-    };
-    console.log(fv);
-    const detailRows = fv.items.map((i: any) => ({
-      RawMaterial_ID: i.article,
-      Quantity: i.qty,
-      Article_No: i.article,
-      Description: i.description,
-      Color_ID: i.color,
-      Width_ID: i.width,
-      Roll_Bag: i.rollOrBag === 'roll' ? 'roll' : 'bag',
-      Unit: i.unitId,
-      Weight: i.weight,
-      Gross_Weight: i.grossWeight,
-      RollBag_Quantity: i.rollBagQty,
-      Unit_ID: i.unitId ?? null,
-      ExportMasterID: null,
-    }));
+    var totalQty = 0;
+    var totalDeliveredQuantity = 0;
+    var totalAproveQty = 0;
 
+    var SuperiorId = this.PIList.filter((e: any) => e.value == this.Formgroup.value.PINo)[0].Superior_ID;
+
+    const formArray = this.Formgroup.get('items') as FormArray;
+
+    formArray.controls.forEach((group) => {
+      const item = group.value;
+      console.log(item);
+      
+      totalQty += Number(item.Quantity) || 0;
+      totalDeliveredQuantity += Number(item.Delivered_Quantity) || 0;
+      totalAproveQty += Number(item.ApprovedQty) || 0;
+    });
+
+    const masterRow = {
+
+      FormTypeId: 'SpecialDelivery',
+      TotalQuantity: totalQty,
+      TotalDeliveredQuantity: totalDeliveredQuantity,
+      TotalAppliedDelQty: totalAproveQty,
+      Date: this.Formgroup.value.Date,
+      SuperiorId: SuperiorId,
+      UserId: userId,
+      FormTypeName: 'Special Delivery',
+      CreatedDate: new Date(new Date().toLocaleString('en', {timeZone: 'Asia/Dhaka'})),
+      PiNos: this.Formgroup.value.PINo,
+    };
+
+    const detailRows = fv.items.map((i: any) => ({
+      PiNo: i.PINo,
+      ArticleNo: i.Article,
+      CustomerId: i.customer_name,
+      ApplyDeliveryQty: i.ApprovedQty,
+      TblPiMasterId: i.PI_Master_ID,
+      TblPiDetailId: i.PI_Detail_ID,
+      ActualArticleNo: i.ActualArticle,
+      CreatedDate: new Date(new Date().toLocaleString('en', {timeZone: 'Asia/Dhaka'})),
+      CreatedById: userId,
+      Colour: i.Color,
+      Width: i.Width,
+      Unit: i.Unit,
+      Quantity: i.Quantity,
+      UnitPrice: i.Unit_Price,
+      UnitCommission: i.CommissionUnit,
+      PaymentTerms: i.PaymentTerms,
+      DeliveredQuantity: i.Delivered_Quantity,
+    }));
     var whereParam = {
-      ExportMasterID: this.ExportMasterID,
+      Id: this.Id,
     };
 
     this.doubleMasterEntryService
       .UpdateDataMasterDetails(
         detailRows, // fd (child rows)
-        'tbl_export_details', // tableName (child)
+        'tbl_po_form_detail', // tableName (child)
         masterRow, // fdMaster (master row)
-        'tbl_export_master', // tableNameMaster (master)
-        'ExportMasterID', // columnNamePrimary (PK)
-        'ExportMasterID', // columnNameForign (FK in child)
-        'Export', // serialType (your code uses it)
-        'Export', // columnNameSerialNo (series name)
+        'tbl_po_form_master', // tableNameMaster (master)
+        'Id', // columnNamePrimary (PK)
+        'TblPoFormMasterId', // columnNameForign (FK in child)
+        'Application', // serialType (your code uses it)
+        'Application',// columnNameSerialNo (series name)
         whereParam
       )
       .subscribe({
@@ -335,7 +362,7 @@ export class GenerateApplicationComponent {
           const detailRowsForStockUpdate = fv.items.map((r: any) => ({
             RawMaterial_ID: r?.article,
             Stock_Out: Number(r?.qty ?? 0),
-            ExportMasterID: this.ExportMasterID,
+            Id: this.Id,
             Roll_Out:
               r?.Roll_Bag === 'roll' ? Number(r?.RollBag_Quantity ?? 0) : 0,
             Bag_Out:
@@ -467,5 +494,65 @@ export class GenerateApplicationComponent {
       item.value.ApprovedQty = 0;
       swal.fire('info', 'Approve Qty can not be greater then Pi Qty', 'info');
     }
+  }
+
+
+  
+  getEditData() {
+    var userId = window.localStorage.getItem('userId');
+
+
+    var procedureName = 'usp_Application_GetDataById';
+    var ProcedureData = {
+      procedureName: procedureName,
+      parameters: {
+        Id: this.Id,
+      },
+    };
+
+    this.masterEntryService.GetInitialData(ProcedureData).subscribe({
+      next: (results) => {
+        console.log(results);
+        if (results.status) {
+          const formArray = this.Formgroup.get('items') as FormArray;
+          formArray.clear();
+          this.Formgroup.controls['Date'].setValue(
+            new Date(JSON.parse(results.data).Tables1[0].Date)
+          );
+          this.Formgroup.controls['Customer'].setValue(
+            new Date(JSON.parse(results.data).Tables1[0].Customer_ID)
+          );
+          this.Formgroup.controls['PINo'].setValue(
+            new Date(JSON.parse(results.data).Tables1[0].TblPiMasterId)
+          );
+          JSON.parse(results.data).Tables1.forEach((item: any) => {
+            formArray.push(
+              this.fb.group({
+                customer_name: [item.customer_name],
+                PINo: [item.PiNo],
+                Article: [item.ArticleNo],
+                ActualArticle: [item.ActualArticleNo],
+                Color: [item.Colour],
+                Width: [item.Width],
+                Unit: [item.Unit],
+                Quantity: [item.Quantity],
+                Unit_Price: [item.UnitPrice],
+                CommissionUnit: [item.UnitCommission],
+                PaymentTerms: [item.PaymentTerms],
+                Delivered_Quantity: [item.DeliveredQuantity],
+                Remarks: [''],
+                ApprovedQty:[item.ApplyDeliveryQty, [Validators.required, Validators.min(1)]],
+                
+              })
+            );
+          });
+        } else if (results.msg == 'Invalid Token') {
+          swal.fire('Session Expierd!', 'Please Login Again.', 'info');
+          this.gs.Logout();
+        } else {
+        }
+      },
+      error: (err) => { },
+    });
   }
 }

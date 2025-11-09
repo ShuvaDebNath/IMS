@@ -110,7 +110,6 @@ export class AllApplicationComponent {
     this.SearchForm.get('fromDate')?.setValue(formattedT);
     this.SearchForm.get('toDate')?.setValue(formatted);
 
-    this.Search();
   }
   initForm(): void {
     this.SearchForm = this.fb.group({
@@ -171,10 +170,12 @@ export class AllApplicationComponent {
   }
 
   DeleteData(item: any) {
+    console.log(item);
+    
     swal
       .fire({
         title: 'Wait!',
-        html: `<span>Once you delete, you won't be able to revert this!<br> <b>[${item.LC_No}]</b></span>`,
+        html: `<span>Once you delete, you won't be able to revert this!<br> <b>[${item.POno}]</b></span>`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -184,9 +185,9 @@ export class AllApplicationComponent {
       .then((result) => {
         if (result.isConfirmed == true) {
           let param = new GetDataModel();
-          param.procedureName = 'usp_LC_Delete';
+          param.procedureName = 'usp_Application_Delete';
           param.parameters = {
-            LC_ID: item.LC_ID,
+            Id: item.Id,
           };
 
           this.masterEntryService.GetInitialData(param).subscribe({
