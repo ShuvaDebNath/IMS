@@ -216,7 +216,7 @@ export class GenerateApplicationComponent {
     const detailRows = fv.items.map((i: any) => ({
       PiNo: i.PINo,
       ArticleNo: i.Article,
-      CustomerName: i.customer_name,
+      CustomerId: i.customer_name,
       ApplyDeliveryQty: i.ApprovedQty,
       TblPiMasterId: i.PI_Master_ID,
       TblPiDetailId: i.PI_Detail_ID,
@@ -380,7 +380,7 @@ export class GenerateApplicationComponent {
 
   getCustomerList() {
     var userId = window.localStorage.getItem('userId');
-    var procedureName = 'usp_GA_PINo_ByCustomer';
+    var procedureName = 'usp_Application_PINo_ByCustomer';
     var ProcedureData = {
       procedureName: procedureName,
       parameters: {

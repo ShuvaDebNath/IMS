@@ -15,14 +15,13 @@ import { LC } from 'src/app/models/LCModel';
 import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
 import { DoubleMasterEntryModel } from 'src/app/models/DoubleMasterEntryModel';
 
-
 @Component({
   selector: 'app-all-application',
   templateUrl: './all-application.component.html',
-  styleUrls: ['./all-application.component.css']
+  styleUrls: ['./all-application.component.css'],
 })
 export class AllApplicationComponent {
-pageIndex = 1;
+  pageIndex = 1;
   searchText = '';
   length = 100;
   pageSize = 10;
@@ -58,6 +57,20 @@ pageIndex = 1;
   getDataModel: GetDataModel = new GetDataModel();
   detailsData: any;
   isDetailsVisible: boolean = false;
+  FormType: any[] = [
+    {
+      value: '0',
+      text: '--Select Form Type--',
+    },
+    {
+      value: 'PI Amendment Application',
+      text: 'PI Amendment Application',
+    },
+    {
+      value: 'Special Delivery Application',
+      text: 'Special Delivery Application',
+    },
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -68,14 +81,11 @@ pageIndex = 1;
     private title: Title
   ) {}
   ngOnInit(): void {
-    var permissions = this.gs.CheckUserPermission(
-      'All Application'
-    );
+    var permissions = this.gs.CheckUserPermission('All Application');
     this.insertPermissions = permissions.insertPermissions;
     this.updatePermissions = permissions.updatePermissions;
     this.deletePermissions = permissions.deletePermissions;
     this.printPermissions = permissions.printPermissions;
-
 
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
@@ -106,7 +116,7 @@ pageIndex = 1;
     this.SearchForm = this.fb.group({
       fromDate: ['', [Validators.required]],
       toDate: ['', [Validators.required]],
-      lcNo: [''],
+      applicationType: [''],
     });
   }
   Search() {
@@ -134,11 +144,11 @@ pageIndex = 1;
     }
 
     let param = new GetDataModel();
-    param.procedureName = '[usp_LC_List]';
+    param.procedureName = '[usp_Application_List]';
     param.parameters = {
       FromDate: fromDate,
       ToDate: toDate,
-      LCNo: this.SearchForm.value.lcNo,
+      ApplicationType: this.SearchForm.value.applicationType,
       PageIndex: this.pageIndex,
       PageSize: this.pageSize,
     };
