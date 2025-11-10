@@ -2,6 +2,7 @@
 using Boilerplate.Contracts;
 using Boilerplate.Contracts.Repositories;
 using Boilerplate.Contracts.Services;
+using IMS.Contracts.DTOs;
 using IMS.Contracts.Repositories;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -53,6 +54,31 @@ namespace Boilerplate.Repository.Repositories
             {
                 throw ex;
             }
+        }
+
+        public async Task<DataSet> CommercialInvoiceReports(CommercialInvoiceReportParams param)
+        {
+            try
+            {
+                var parametars = new
+                {
+                    param.Commercial_Invoice_No
+                };
+
+                string query = @"exec [usp_CommercialInvoice_Report] @Commercial_Invoice_No";
+                var ds = await GetDataInDataSetAsync(query, parametars);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public Task<DataSet> ProformaInvoiceReport(ProformaInvoiceReportParams param)
+        {
+            throw new NotImplementedException();
         }
     }
 }

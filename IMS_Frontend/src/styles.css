@@ -478,3 +478,14 @@ input[type=number] {
   border-right: 1px solid green; /* ডান পাশে border */
   border-left: 1px solid green;  /* চাইলে বাম পাশেও border দিতে পারেন */
 }
+
+/* Ensure SweetAlert2 popups appear above app modals/dialogs */
+.swal-container-high {
+  z-index: 2147483647 !important; /* very high to beat other overlays */
+}
+.swal-popup-high {
+  z-index: 2147483648 !important;
+}
+.swal-container-high .swal2-backdrop {
+  z-index: 2147483646 !important;
+}
