@@ -89,8 +89,9 @@ export class SampleRequestFormComponent {
       RequestDate: ['', [Validators.required]],
       CustomerName: ['', [Validators.required]],
       Customer_Contact_Info: [''],
-      Product_Description: [''],
+      Product_Description: ['', [Validators.required]],
       ArticleNo: ['', [Validators.required]],
+      SampleArticleNo: ['', [Validators.required]],
       Color: ['', [Validators.required]],
       Width: ['', [Validators.required]],
       Unit: ['', [Validators.required]],
@@ -241,6 +242,7 @@ export class SampleRequestFormComponent {
     sr.ColorId = this.Formgroup.value.Color;
     sr.WidthId = this.Formgroup.value.Width;
     sr.UnitId = this.Formgroup.value.Unit;
+    sr.SampleArticleNo = this.Formgroup.value.SampleArticleNo;
 
     var whereParam = {
       Id: this.SRId,
@@ -279,8 +281,6 @@ export class SampleRequestFormComponent {
   }
 
   GetSRById() {
-    console.log(this.SRId);
-
     var ProcedureData = {
       procedureName: '[usp_SampleRequest_GetDataById]',
       parameters: {
@@ -291,6 +291,7 @@ export class SampleRequestFormComponent {
       next: (results) => {
         if (results.status) {
           var tableData = JSON.parse(results.data).Tables1;
+          console.log(tableData);          
 
           tableData.forEach((e: any) => {
             var RequestDate = new Date(e.RequestDate);
@@ -301,7 +302,7 @@ export class SampleRequestFormComponent {
               e.CustomerContactInfo
             );
             this.Formgroup.controls.Product_Description.setValue(
-              e.ProductDescription
+              parseInt(e.ProductDescription)
             );
             this.Formgroup.controls.ArticleNo.setValue(e.ItemId);
             this.Formgroup.controls.Color.setValue(e.ColorId);
@@ -315,6 +316,7 @@ export class SampleRequestFormComponent {
             );
             this.Formgroup.controls.RequestStatus.setValue(e.RequestStatus);
             this.Formgroup.controls.Remarks.setValue(e.Remarks);
+            this.Formgroup.controls.SampleArticleNo.setValue(e.SampleArticleNo);
           });
         } else if (results.message == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
@@ -326,13 +328,12 @@ export class SampleRequestFormComponent {
     });
   }
 
-  CustomerDetails(item: any) {
-      console.log(item);
+  CustomerDetails() {
       
       var ProcedureData = {
         procedureName: '[usp_SampleRequest_CustomerList]',
         parameters: {
-          CustomerId: item.CustomerId,
+          CustomerId: this.Formgroup.value.CustomerName,
         },
       };
   
@@ -340,8 +341,8 @@ export class SampleRequestFormComponent {
         next: (results) => {
           if (results.status) {
             var CustomerDetails = JSON.parse(results.data).Tables1;
-            item.Customer_Contact_Info = CustomerDetails[0].Contact_Name;
-            item.Shipping_Address = CustomerDetails[0].Customer_Address;
+            this.Formgroup.controls.RequestDate.setValue(CustomerDetails[0].Contact_Name);
+            this.Formgroup.controls.RequestDate.setValue(CustomerDetails[0].Customer_Address);
             console.log(results);
           } else if (results.msg == 'Invalid Token') {
             swal.fire('Session Expierd!', 'Please Login Again.', 'info');
