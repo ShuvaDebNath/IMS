@@ -26,6 +26,7 @@ export class SampleRequestFormComponent {
   WidthList: any;
   UnitList: any;
   CustomerList: any;
+  DescList:any;
   SRId = '';
   RequestStatus: any = [
     {
@@ -117,6 +118,7 @@ export class SampleRequestFormComponent {
           this.ColorList = JSON.parse(results.data).Tables3;
           this.WidthList = JSON.parse(results.data).Tables4;
           this.UnitList = JSON.parse(results.data).Tables5;
+          this.DescList = JSON.parse(results.data).Tables6;
 
           if (this.isEdit) {
             this.GetSRById();
@@ -323,4 +325,31 @@ export class SampleRequestFormComponent {
       error: (err) => {},
     });
   }
+
+  CustomerDetails(item: any) {
+      console.log(item);
+      
+      var ProcedureData = {
+        procedureName: '[usp_SampleRequest_CustomerList]',
+        parameters: {
+          CustomerId: item.CustomerId,
+        },
+      };
+  
+      this.masterEntyService.GetInitialData(ProcedureData).subscribe({
+        next: (results) => {
+          if (results.status) {
+            var CustomerDetails = JSON.parse(results.data).Tables1;
+            item.Customer_Contact_Info = CustomerDetails[0].Contact_Name;
+            item.Shipping_Address = CustomerDetails[0].Customer_Address;
+            console.log(results);
+          } else if (results.msg == 'Invalid Token') {
+            swal.fire('Session Expierd!', 'Please Login Again.', 'info');
+            this.gs.Logout();
+          } else {
+          }
+        },
+        error: (err) => {},
+      });
+    }
 }
