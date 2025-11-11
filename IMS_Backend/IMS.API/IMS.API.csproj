@@ -80,7 +80,7 @@
 
   <ItemGroup>
     <Reference Include="RDLCSimplified">
-      <HintPath>..\..\..\RDLCSimplified.dll</HintPath>
+      <HintPath>D:\RDLCSimplified.dll</HintPath>
     </Reference>
   </ItemGroup>
 

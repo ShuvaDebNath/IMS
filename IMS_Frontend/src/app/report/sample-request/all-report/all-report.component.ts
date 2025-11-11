@@ -49,7 +49,7 @@ export class AllReportComponent {
   fromDate: any;
   toDate: any;
   LCNo: string = '';
-  errorMessage:string = '';
+  errorMessage: string = '';
   errorShow = false;
   RequestStatus: any = [
     {
@@ -105,7 +105,7 @@ export class AllReportComponent {
 
     this.roleId = window.localStorage.getItem('roleId');
     console.log(this.roleId);
-    
+
     this.userId = window.localStorage.getItem('userId');
 
     this.SearchForm.get('fromDate')?.setValue(new Date());
@@ -208,18 +208,29 @@ export class AllReportComponent {
   }
 
   ApproveQtyModal() {
-    this.ApprovedQty = 0
+    this.ApprovedQty = 0;
     this.isApproveQty = true;
   }
 
   handoverSample() {
     console.log(this.ApprovedQty);
-    if (this.ApprovedQty == 0 || this.ApprovedQty==null) {
+    if (this.ApprovedQty == 0 || this.ApprovedQty == null) {
       this.errorShow = true;
-      this.errorMessage = "Approved qty can not be 0 or empty";
+      this.errorMessage = 'Approved qty can not be 0 or empty';
     } else {
-      
-    this.isApproveQty = false;
+      const bdTimeString = new Date().toLocaleString('en-US', {
+        timeZone: 'Asia/Dhaka',
+      });
+
+      // Convert that local time string back to a Date object
+      const nowUtc = new Date();
+      const bdOffsetMs = 6 * 60 * 60 * 1000;
+      const bdLocal = new Date(nowUtc.getTime() + bdOffsetMs);
+      const sqlDate = bdLocal.toISOString().slice(0, 19).replace('T', ' ');
+
+      console.log(sqlDate.toString());
+
+      this.isApproveQty = false;
       var e = this.sampleData;
       var status = this.sampleStatus;
       let param = new MasterEntryModel();
@@ -228,7 +239,7 @@ export class AllReportComponent {
       var message = '';
       if (status == 'To Messenger') {
         param.queryParams = {
-          MessengerHandoverDate: new Date(),
+          MessengerHandoverDate: sqlDate,
           MessengerHandoverBy: this.userId,
           HandoverStatus: status,
           ApprovedQty: this.ApprovedQty,
@@ -236,16 +247,16 @@ export class AllReportComponent {
         message = 'Sample handover to messenger Successfully!';
       } else if (status == 'To Client') {
         param.queryParams = {
-          ClientHandoverDate: new Date(),
+          ClientHandoverDate: sqlDate,
           ClinetHandoverBy: this.userId,
           HandoverStatus: status,
           ApprovedQty: this.ApprovedQty,
         };
 
         message = 'Sample handover to client Successfully!';
-      }else if (status == 'To Marketing') {
+      } else if (status == 'To Marketing') {
         param.queryParams = {
-          ClientHandoverDate: new Date(),
+          ClientHandoverDate: sqlDate,
           ClinetHandoverBy: this.userId,
           HandoverStatus: status,
           ApprovedQty: this.ApprovedQty,
@@ -291,8 +302,7 @@ export class AllReportComponent {
   }
 
   InputSampleQty(e: any, status: any) {
-    
-    this.ApprovedQty = 0
+    this.ApprovedQty = 0;
     let param = new MasterEntryModel();
     param.tableName = 'tbl_SampleRequestForm';
     param.whereParams = { Id: e.Id };
@@ -340,8 +350,9 @@ export class AllReportComponent {
 
   checkQty() {
     if (this.ApprovedQty > this.sampleData.RequestedQuantity) {
-      this.errorShow = true;      
-      this.errorMessage = "Approved qty can not be greater then Requested Quantity";
+      this.errorShow = true;
+      this.errorMessage =
+        'Approved qty can not be greater then Requested Quantity';
       this.ApprovedQty = 0;
       return;
     } else {
@@ -349,69 +360,76 @@ export class AllReportComponent {
     }
   }
 
-  checkDisable(table:any){
-    if(table.HandoverStatus != '' && this.roleId!=1 && this.roleId!=2 && this.roleId!=51){
-    console.log(table);
-      return true
+  checkDisable(table: any) {
+    if (
+      table.HandoverStatus != '' &&
+      this.roleId != 1 &&
+      this.roleId != 2 &&
+      this.roleId != 51
+    ) {
+      console.log(table);
+      return true;
     }
     return false;
   }
 
   receiveSample(e: any, status: any) {
-        let param = new MasterEntryModel();
-        param.tableName = 'tbl_SampleRequestForm';
-        param.whereParams = { Id: e.Id };
-        var message = '';
-        if (status == 'To Client') {
-          param.queryParams = {
-            ClientHandoverDate: new Date(),
-            ClinetHandoverBy: this.userId,
-            HandoverStatus: status,
-          };
-          message = 'Sample handover to client Successfully!';
-        }
-        else if(status=='Received'){
-          param.queryParams = {
-            ReceiveDate: new Date(),
-            ReceiveBy: this.userId,
-            HandoverStatus: 'Received',
-          };
-          
-          message = 'Sample received Successfully!';
-        }
-        else if(status==''){
-          param.queryParams = {
-            ClientHandoverDate: null,
-            ClinetHandoverBy: null,
-            HandoverStatus: status,
-          };
-          
-          message = 'Sample handover to reverted Successfully!';
-        }
-    
-        this.masterEntryService
-          .UpdateData(param.queryParams, param.whereParams, param.tableName)
-          .subscribe({
-            next: (results: any) => {
-              if (results.status) {
-                swal
-                  .fire({
-                    title: `${results.message}!`,
-                    text: message,
-                    icon: 'success',
-                    timer: 5000,
-                  })
-                  .then((result) => {
-                    this.Search();
-                  });
+    const nowUtc = new Date();
+      const bdOffsetMs = 6 * 60 * 60 * 1000;
+      const bdLocal = new Date(nowUtc.getTime() + bdOffsetMs);
+      const sqlDate = bdLocal.toISOString().slice(0, 19).replace('T', ' ');
+    let param = new MasterEntryModel();
+    param.tableName = 'tbl_SampleRequestForm';
+    param.whereParams = { Id: e.Id };
+    var message = '';
+    if (status == 'To Client') {
+      param.queryParams = {
+        ClientHandoverDate: sqlDate,
+        ClinetHandoverBy: this.userId,
+        HandoverStatus: status,
+      };
+      message = 'Sample handover to client Successfully!';
+    } else if (status == 'Received') {
+      param.queryParams = {
+        ReceiveDate: sqlDate,
+        ReceiveBy: this.userId,
+        HandoverStatus: 'Received',
+      };
+
+      message = 'Sample received Successfully!';
+    } else if (status == '') {
+      param.queryParams = {
+        ClientHandoverDate: null,
+        ClinetHandoverBy: null,
+        HandoverStatus: status,
+      };
+
+      message = 'Sample handover to reverted Successfully!';
+    }
+
+    this.masterEntryService
+      .UpdateData(param.queryParams, param.whereParams, param.tableName)
+      .subscribe({
+        next: (results: any) => {
+          if (results.status) {
+            swal
+              .fire({
+                title: `${results.message}!`,
+                text: message,
+                icon: 'success',
+                timer: 5000,
+              })
+              .then((result) => {
                 this.Search();
-              } else if (results.message == 'Invalid Token') {
-                swal.fire('Session Expierd!', 'Please Login Again.', 'info');
-                this.gs.Logout();
-              } else {
-              }
-            },
-            error: (err: any) => {},
-          });
-      }
+              });
+            this.Search();
+          } else if (results.message == 'Invalid Token') {
+            swal.fire('Session Expierd!', 'Please Login Again.', 'info');
+            this.gs.Logout();
+          } else {
+          }
+        },
+        error: (err: any) => {},
+      });
+  }
 }
