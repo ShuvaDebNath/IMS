@@ -187,13 +187,17 @@ export class MessengerReportComponent {
   }
 
   handoverSample(e: any, status: any) {
+     const nowUtc = new Date();
+      const bdOffsetMs = 6 * 60 * 60 * 1000;
+      const bdLocal = new Date(nowUtc.getTime() + bdOffsetMs);
+      const sqlDate = bdLocal.toISOString().slice(0, 19).replace('T', ' ');
       let param = new MasterEntryModel();
       param.tableName = 'tbl_SampleRequestForm';
       param.whereParams = { Id: e.Id };
       var message = '';
       if (status == 'To Client') {
         param.queryParams = {
-          ClientHandoverDate: new Date(),
+          ClientHandoverDate: sqlDate,
           ClinetHandoverBy: this.userId,
           HandoverStatus: status,
         };
@@ -201,7 +205,7 @@ export class MessengerReportComponent {
       }
       else if(status=='Received'){
         param.queryParams = {
-          ReceiveDate: new Date(),
+          ReceiveDate: sqlDate,
           ReceiveBy: this.userId,
           HandoverStatus: 'Received',
         };
