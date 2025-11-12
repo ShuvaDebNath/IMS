@@ -95,5 +95,25 @@ namespace Boilerplate.Repository.Repositories
                 throw ex;
             }
         }
+        public async Task<DataSet> DeliveryChallanReport(DeliveryChallanReportParams param)
+        {
+            try
+            {
+                var parametars = new
+                {
+                    param.ChallanNo
+                };
+
+                string query = @"exec [usp_GetDeliveryChallanInfoByChallanNo] @ChallanNo";
+                var ds = await GetDataInDataSetAsync(query, parametars);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }

@@ -1,0 +1,49 @@
+/* Delivery component specific styles */
+
+/* Keep header controls on a single row; allow horizontal scroll on small viewports */
+.delivery-header-row {
+	display: flex; /* row already sets this, ensure flex */
+	/* allow wrapping on very narrow viewports but aim to keep a single row by using smaller inputs */
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+}
+
+.delivery-header-row .col-auto {
+	flex: 0 0 auto; /* prevent flex growing/shrinking */
+}
+
+/* Re-usable min-width helpers */
+.min-w-140 {
+	min-width: 80px; /* reduced to avoid horizontal overflow */
+}
+.min-w-220 {
+	min-width: 160px; /* reduced for Cash Status */
+}
+
+/* Ensure PrimeNG p-inputNumber host element respects the min-width class */
+p-inputNumber.min-w-140,
+p-inputNumber.min-w-220 {
+	display: inline-block;
+}
+
+/* Small visual tweak: align labels a bit tighter */
+.delivery-header-row label {
+	margin-right: 6px;
+	font-weight: 600;
+}
+
+/* Optional: ensure inputs inside the header have consistent height */
+.delivery-header-row input[pInputText],
+.delivery-header-row .p-inputnumber {
+	height: 34px;
+	padding: 6px 10px;
+}
+
+/* On very small screens keep wrapping behavior */
+@media (max-width: 420px) {
+	.delivery-header-row {
+		flex-direction: column;
+		align-items: stretch;
+	}
+}
