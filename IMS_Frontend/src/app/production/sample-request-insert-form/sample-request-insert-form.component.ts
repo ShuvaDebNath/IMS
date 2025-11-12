@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  QueryList,
+  ViewChildren,
+} from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -31,7 +37,11 @@ export class SampleRequestInsertFormComponent {
   companyId!: string;
   menu: any;
   ArticleList: any;
+  ColorList: any;
+  WidthList: any;
+  UnitList: any;
   CustomerList: any;
+  DescList: any;
   SRId = '';
   RequestStatus: any = [
     {
@@ -108,6 +118,13 @@ export class SampleRequestInsertFormComponent {
       Customer_Contact_Info: this.fb.control<string>(''),
       Product_Description: this.fb.control<string>(''),
       ArticleNo: this.fb.control<string | null>(null, Validators.required),
+      Sample_Article_No: this.fb.control<string | null>(
+        null,
+        Validators.required
+      ),
+      Color: this.fb.control<string | null>(null, Validators.required),
+      Width: this.fb.control<string | null>(null, Validators.required),
+      Unit: this.fb.control<string | null>(null, Validators.required),
       Requested_Quantity: this.fb.control<number | null>(
         null,
         Validators.required
@@ -138,18 +155,23 @@ export class SampleRequestInsertFormComponent {
         if (results.status) {
           this.CustomerList = JSON.parse(results.data).Tables1;
           this.ArticleList = JSON.parse(results.data).Tables2;
-          console.log(results);
+          this.ColorList = JSON.parse(results.data).Tables3;
+          this.WidthList = JSON.parse(results.data).Tables4;
+          this.UnitList = JSON.parse(results.data).Tables5;
+          this.DescList = JSON.parse(results.data).Tables6;
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
           this.gs.Logout();
         } else {
         }
       },
-      error: (err) => { },
+      error: (err) => {},
     });
   }
 
   saveData() {
+    console.log(this.Formgroup);
+    
     if (this.Formgroup.invalid) {
       swal.fire(
         'Invlid Inputs!',
@@ -182,6 +204,7 @@ export class SampleRequestInsertFormComponent {
       sr.ShippingAddress = fv.items[index].Shipping_Address;
       sr.RequestStatus = fv.items[index].RequestStatus;
       sr.Remarks = fv.items[index].Remarks;
+      sr.SampleArticleNo = fv.items[index].Sample_Article_No;
       sr.RequesterId = userId == null ? '0' : userId;
 
       multipleRows.push(sr);
@@ -217,5 +240,29 @@ export class SampleRequestInsertFormComponent {
           }
         }
       });
+  }
+
+  CustomerDetails(item: any) {
+    var ProcedureData = {
+      procedureName: '[usp_SampleRequest_CustomerList]',
+      parameters: {
+        CustomerId: item.controls.CustomerName.value,
+      },
+    };
+
+    this.masterEntyService.GetInitialData(ProcedureData).subscribe({
+      next: (results) => {
+        if (results.status) {
+          var CustomerDetails = JSON.parse(results.data).Tables1;
+          item.controls.Customer_Contact_Info.setValue(CustomerDetails[0].Contact_Name);
+          item.controls.Shipping_Address.setValue(CustomerDetails[0].Customer_Address);
+        } else if (results.msg == 'Invalid Token') {
+          swal.fire('Session Expierd!', 'Please Login Again.', 'info');
+          this.gs.Logout();
+        } else {
+        }
+      },
+      error: (err) => {},
+    });
   }
 }

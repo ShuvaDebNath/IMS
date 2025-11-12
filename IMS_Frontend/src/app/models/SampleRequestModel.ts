@@ -10,5 +10,6 @@ export class SampleRequest {
   ShippingAddress!: string;
   RequestStatus!: string;
   Remarks!: string;
+  SampleArticleNo!:string;
 }
 

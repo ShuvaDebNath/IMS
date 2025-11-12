@@ -23,6 +23,7 @@ export class SampleRequestFormComponent {
   menu: any;
   ArticleList: any;
   CustomerList: any;
+  DescList:any;
   SRId = '';
   RequestStatus: any = [
     {
@@ -85,8 +86,12 @@ export class SampleRequestFormComponent {
       RequestDate: ['', [Validators.required]],
       CustomerName: ['', [Validators.required]],
       Customer_Contact_Info: [''],
-      Product_Description: [''],
+      Product_Description: ['', [Validators.required]],
       ArticleNo: ['', [Validators.required]],
+      SampleArticleNo: ['', [Validators.required]],
+      Color: ['', [Validators.required]],
+      Width: ['', [Validators.required]],
+      Unit: ['', [Validators.required]],
       Requested_Quantity: ['', [Validators.required]],
       Shipping_Address: [''],
       RequestStatus: ['', [Validators.required]],
@@ -108,8 +113,10 @@ export class SampleRequestFormComponent {
         if (results.status) {
           this.CustomerList = JSON.parse(results.data).Tables1;
           this.ArticleList = JSON.parse(results.data).Tables2;
-          console.log(this.CustomerList);
-          
+          this.ColorList = JSON.parse(results.data).Tables3;
+          this.WidthList = JSON.parse(results.data).Tables4;
+          this.UnitList = JSON.parse(results.data).Tables5;
+          this.DescList = JSON.parse(results.data).Tables6;
           if (this.isEdit) {
             this.GetSRById();
           }
@@ -216,6 +223,10 @@ export class SampleRequestFormComponent {
     sr.ShippingAddress = this.Formgroup.value.Shipping_Address;
     sr.RequestStatus = this.Formgroup.value.RequestStatus;
     sr.Remarks = this.Formgroup.value.Remarks;
+    sr.ColorId = this.Formgroup.value.Color;
+    sr.WidthId = this.Formgroup.value.Width;
+    sr.UnitId = this.Formgroup.value.Unit;
+    sr.SampleArticleNo = this.Formgroup.value.SampleArticleNo;
 
     var whereParam = {
       Id: this.SRId,
@@ -254,8 +265,6 @@ export class SampleRequestFormComponent {
   }
 
   GetSRById() {
-    console.log(this.SRId);
-
     var ProcedureData = {
       procedureName: '[usp_SampleRequest_GetDataById]',
       parameters: {
@@ -266,6 +275,7 @@ export class SampleRequestFormComponent {
       next: (results) => {
         if (results.status) {
           var tableData = JSON.parse(results.data).Tables1;
+          console.log(tableData);          
 
           tableData.forEach((e: any) => {
             var RequestDate = new Date(e.RequestDate);
@@ -276,7 +286,7 @@ export class SampleRequestFormComponent {
               e.CustomerContactInfo
             );
             this.Formgroup.controls.Product_Description.setValue(
-              e.ProductDescription
+              parseInt(e.ProductDescription)
             );
             this.Formgroup.controls.ArticleNo.setValue(e.ItemId);
             this.Formgroup.controls.Requested_Quantity.setValue(
@@ -287,6 +297,7 @@ export class SampleRequestFormComponent {
             );
             this.Formgroup.controls.RequestStatus.setValue(e.RequestStatus);
             this.Formgroup.controls.Remarks.setValue(e.Remarks);
+            this.Formgroup.controls.SampleArticleNo.setValue(e.SampleArticleNo);
           });
         } else if (results.message == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
@@ -297,4 +308,30 @@ export class SampleRequestFormComponent {
       error: (err) => {},
     });
   }
+
+  CustomerDetails() {
+      
+      var ProcedureData = {
+        procedureName: '[usp_SampleRequest_CustomerList]',
+        parameters: {
+          CustomerId: this.Formgroup.value.CustomerName,
+        },
+      };
+  
+      this.masterEntyService.GetInitialData(ProcedureData).subscribe({
+        next: (results) => {
+          if (results.status) {
+            var CustomerDetails = JSON.parse(results.data).Tables1;
+            this.Formgroup.controls.RequestDate.setValue(CustomerDetails[0].Contact_Name);
+            this.Formgroup.controls.RequestDate.setValue(CustomerDetails[0].Customer_Address);
+            console.log(results);
+          } else if (results.msg == 'Invalid Token') {
+            swal.fire('Session Expierd!', 'Please Login Again.', 'info');
+            this.gs.Logout();
+          } else {
+          }
+        },
+        error: (err) => {},
+      });
+    }
 }
