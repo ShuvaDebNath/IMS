@@ -75,25 +75,27 @@
 
     <p-divider />
     <form [formGroup]="Formgroup" role="form">
-      <div class="row">
+      <div class="row delivery-header-row">
+        <input type="hidden" pInputText formControlName="PIStatus" class="min-w-140" />
+
         <div class="col-auto">
-          <label class="mr-2">PI Status</label>
-          <input type="text" pInputText formControlName="PIStatus" />
+          <label class="mr-1">Challan No</label>
+          <input type="text" pInputText formControlName="Chalan_No" class="min-w-140" />
         </div>
 
         <div class="col-auto">
-          <label class="mr-2">Deliverable</label>
-          <p-inputNumber formControlName="RestQty" />
+          <label class="mr-1">Deliverable</label>
+          <p-inputNumber formControlName="RestQty" class="min-w-140"></p-inputNumber>
         </div>
 
         <div class="col-auto">
           <label class="mr-2">LC No</label>
-          <input type="text" pInputText formControlName="LCNo" />
+          <input type="text" pInputText formControlName="LCNo" class="min-w-140" />
         </div>
 
         <div class="col-auto">
           <label class="mr-2">Cash Status</label>
-          <input type="text" pInputText formControlName="IsCash" />
+          <input type="text" pInputText formControlName="IsCash" class="min-w-220" />
         </div>
       </div>
 
@@ -110,6 +112,8 @@
               <th>Packaging</th>
               <th>Width</th>
               <th>Actual Article No.</th>
+              <th>Stock</th>
+              <th>Roll</th>
               <th>Undelivered Quantity</th>
               <th>Unit</th>
               <th>Deliver Quantity</th>
@@ -129,6 +133,8 @@
               <td>{{ item.value.Packaging }}</td>
               <td>{{ item.value.Measurement }}</td>
               <td>{{ item.value.ActualArticle }}</td>
+              <td>{{ item.value.Stock }}</td>
+              <td>{{ item.value.RollBalance }}</td>
               <td>{{ item.value.UndeliveredQty }}</td>
               <td>{{ item.value.UnitName }}</td>
               <td>

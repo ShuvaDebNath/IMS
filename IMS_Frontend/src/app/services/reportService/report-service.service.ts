@@ -189,6 +189,29 @@ export class ReportService {
       });
   }
 
+   PrintDeliveryChallanReport(report: any, rptType: any, isView: any) {
+    
+    const challanNo = report.Chalan_No ?? '';
+
+    const url = `${this.baseUrl}${this.apiController}/DeliveryChallanReport`;
+    const token = this.gs.getSessionData('token');
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    this.http
+      .get(url, {
+        headers,
+        params: { rptType, challanNo },
+        responseType: 'blob',
+      })
+      .subscribe((res: Blob) => {
+        const fileURL = window.URL.createObjectURL(res);
+        window.open(fileURL, '_blank');
+      });
+  }
+
   private formatDate(date: any): string {
     const d = new Date(date);
     const month = ('0' + (d.getMonth() + 1)).slice(-2);
