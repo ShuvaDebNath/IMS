@@ -221,6 +221,7 @@ export class GenerateApplicationComponent {
       ApplyDeliveryQty: i.ApprovedQty,
       TblPiMasterId: i.PI_Master_ID,
       TblPiDetailId: i.PI_Detail_ID,
+      TblPoFormMasterId:'',
       ActualArticleNo: i.ActualArticle,
       CreatedDate: new Date(new Date().toLocaleString('en', {timeZone: 'Asia/Dhaka'})),
       CreatedById: userId,

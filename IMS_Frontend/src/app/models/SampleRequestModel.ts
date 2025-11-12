@@ -6,10 +6,12 @@ export class SampleRequest {
   CustomerContactInfo!: string;
   ProductDescription!: string;
   ItemId!: string;
+  ColorId!: string;
+  WidthId!: string;
+  UnitId!: string;
   RequestedQuantity!: string;
   ShippingAddress!: string;
   RequestStatus!: string;
   Remarks!: string;
   SampleArticleNo!:string;
 }
-

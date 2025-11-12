@@ -28,7 +28,7 @@
                 <th class="text-center">Shipping Address</th>
                 <th class="text-center">Status</th>
                 <th class="text-center">Remarks</th>
-                <th style="width: 50px"></th>
+                <th></th>
               </tr>
             </thead>
 
@@ -110,16 +110,13 @@
                 <td class="p-1">
                   <p-dropdown
                     [options]="ArticleList"
-                    optionLabel="Article_No"
+                    optionLabel="ItemCode"
                     [filter]="true"
-                    filterBy="Article_No"
+                    filterBy="ItemCode"
                     [showClear]="true"
                     placeholder="Select"
                     optionValue="Item_ID"
                     formControlName="ArticleNo"
-                     appendTo="body"
-                    styleClass="custom-dropdown wide-dropdown"
-                  ></p-dropdown>
                     appendTo="body"
                     [virtualScroll]="true"
                     [virtualScrollItemSize]="30"

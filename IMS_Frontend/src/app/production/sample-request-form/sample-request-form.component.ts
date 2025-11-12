@@ -22,6 +22,9 @@ export class SampleRequestFormComponent {
   companyId!: string;
   menu: any;
   ArticleList: any;
+  ColorList: any;
+  WidthList: any;
+  UnitList: any;
   CustomerList: any;
   DescList:any;
   SRId = '';
@@ -117,6 +120,7 @@ export class SampleRequestFormComponent {
           this.WidthList = JSON.parse(results.data).Tables4;
           this.UnitList = JSON.parse(results.data).Tables5;
           this.DescList = JSON.parse(results.data).Tables6;
+
           if (this.isEdit) {
             this.GetSRById();
           }
@@ -155,6 +159,8 @@ export class SampleRequestFormComponent {
     var userId = window.localStorage.getItem('userId');
 
     var sr = new SampleRequest();
+    console.log(this.Formgroup.value.RequestDate);
+
     sr.RequestDate = this.Formgroup.value.RequestDate;
     //sr. = this.Formgroup.value.PINo;
     sr.CustomerId = this.Formgroup.value.CustomerName;
@@ -166,6 +172,10 @@ export class SampleRequestFormComponent {
     sr.RequestStatus = this.Formgroup.value.RequestStatus;
     sr.Remarks = this.Formgroup.value.Remarks;
     sr.RequesterId = userId == null ? '0' : userId;
+    sr.ItemId = this.Formgroup.value.ArticleNo;
+    sr.ColorId = this.Formgroup.value.Color;
+    sr.WidthId = this.Formgroup.value.Width;
+    sr.UnitId = this.Formgroup.value.Unit;
 
     this.masterEntyService
       .SaveSingleData(sr, 'tbl_SampleRequestForm')
@@ -214,7 +224,13 @@ export class SampleRequestFormComponent {
     )?.name;
 
     var sr = new SampleRequest();
-    sr.RequestDate = this.Formgroup.value.RequestDate;
+
+    const d = new Date(this.Formgroup.value.RequestDate);
+    const month = ('0' + (d.getMonth() + 1)).slice(-2);
+    const day = ('0' + d.getDate()).slice(-2);
+    const year = d.getFullYear();
+
+    sr.RequestDate = `${month}/${day}/${year}`;
     sr.CustomerId = this.Formgroup.value.CustomerName;
     sr.CustomerContactInfo = this.Formgroup.value.Customer_Contact_Info;
     sr.ProductDescription = this.Formgroup.value.Product_Description;
@@ -289,6 +305,9 @@ export class SampleRequestFormComponent {
               parseInt(e.ProductDescription)
             );
             this.Formgroup.controls.ArticleNo.setValue(e.ItemId);
+            this.Formgroup.controls.Color.setValue(e.ColorId);
+            this.Formgroup.controls.Width.setValue(e.WidthId);
+            this.Formgroup.controls.Unit.setValue(e.UnitId);
             this.Formgroup.controls.Requested_Quantity.setValue(
               e.RequestedQuantity
             );

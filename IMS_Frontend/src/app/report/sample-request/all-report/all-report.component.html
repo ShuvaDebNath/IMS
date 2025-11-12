@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <div class="m-2 p-2">
   <div class="card card-default">
     <div class="card-header theme-bg">
@@ -105,7 +106,7 @@
                 (click)="Print()"
                 class="btn btn-sm theme-btn mt-4 p-1"
               >
-                <i class="fas fa-search"></i>&nbsp;Print
+                <i class="fas fa-print"></i>&nbsp;Print
               </button>
             </div>
           </div>
@@ -124,7 +125,10 @@
           'RequestDate',
           'CustomerName',
           'CustomerContactInfo',
-          'Article',
+          'Article_No',
+          'Color',
+          'Measurement',
+          'Unit',
           'ProductDescription',
           'RequestedQuantity',
           'RequestStatus',
@@ -150,13 +154,17 @@
           <tr>
             <th class="text-center">SL</th>
             <th class="text-center">Request Date</th>
-            <th class="text-left">Customer Name</th>
+            <th class="text-center">Customer Name</th>
             <th class="text-center">Customer Contact Info</th>
-            <th class="text-center">Article</th>
+            <th class="text-center">Article No</th>
+            <th class="text-center">Color</th>
+            <th class="text-center">Width</th>
+            <th class="text-center">Measurement</th>
             <th class="text-center">Product Description</th>
-            <th class="text-center">Quantity</th>
+            <th class="text-center">Requested Quantity</th>
+            <th class="text-center">Approved Quantity</th>
+            <th class="text-center">Request By</th>
             <th class="text-center">Carried By</th>
-            <th class="text-center">Request Status</th>
             <th class="text-center">Handover Status</th>
             <th class="text-center">Action</th>
           </tr>
@@ -170,49 +178,64 @@
             <td class="text-center align-middle">
               {{ table.CustomerContactInfo }}
             </td>
-            <td class="text-center align-left">{{ table.Article }}</td>
+            <td class="text-center align-left">{{ table.Article_No }}</td>
+            <td class="text-center align-left">{{ table.Color }}</td>
+            <td class="text-center align-left">{{ table.Measurement }}</td>
+            <td class="text-center align-left">{{ table.Unit }}</td>
             <td class="text-center align-middle">
               {{ table.ProductDescription }}
             </td>
             <td class="text-center align-middle">
               {{ table.RequestedQuantity }}
             </td>
+            <td class="text-center align-middle">
+              {{ table.ApprovedQty }}
+            </td>
             <td class="text-center align-middle">{{ table.RequestBy }}</td>
             <td class="text-center align-middle">{{ table.RequestStatus }}</td>
             <td class="text-center align-middle">{{
                 table.HandoverStatus == ""
                   ? "Not handovered yet"
-                  : table.HandoverStatus == "Received"?"Messenger Received":"Handovered " + table.HandoverStatus
+                  : table.HandoverStatus == "Received"?table.RequestStatus=='By Own'?"Marketing Received":"Messenger Received":"Handovered " + table.HandoverStatus
               }}</td>
             <td class="text-center align-middle">
               <button
-                *ngIf="updatePermissions && table.RequestStatus!='By Own'"
+                *ngIf="updatePermissions && table.RequestStatus != 'By Own'"
                 class="btn theme-btn-view"
-                [disabled]="table.HandoverStatus!='' "
+                [disabled]="table.HandoverStatus != '' || (roleId!=1 && roleId!=2 && roleId!=51)"
                 title="Handover to Messenger"
-                (click)="handoverSample(table,'To Messenger')"
+                (click)="InputSampleQty(table, 'To Messenger')"
               >
-                Handover to Messenger
+                <i class="fa fa-envelope"></i>
               </button>
               <button
-                *ngIf="updatePermissions && table.RequestStatus=='By Own'"
+                *ngIf="updatePermissions && table.RequestStatus == 'By Own'"
                 class="btn theme-btn-view"
-                [disabled]="table.HandoverStatus=='To Client' "
-                title="Handover to Client"
-                (click)="handoverSample(table,'To Client')"
+                [disabled]="table.HandoverStatus != '' || (roleId!=1 && roleId!=2 && roleId!=51)"
+                title="Handover to Marketing"
+                (click)="InputSampleQty(table, 'To Marketing')"
               >
-                Handover to Client
+                <i class="fa fa-user"></i>
               </button>
               <button
-                *ngIf="updatePermissions && (roleId=='1' || roleId=='2')"
-                class="btn theme-btn-delete"
-                [disabled]="table.HandoverStatus==''"
-                title="Revert"
-                (click)="handoverSample(table,'')"
+                *ngIf="updatePermissions && table.RequestStatus == 'By Own' && roleId==table.Role_id"
+                class="btn theme-btn-view"
+                [disabled]="table.HandoverStatus != 'To Marketing'"
+                title="Receive"
+                (click)="receiveSample(table,'Received')"
               >
-                Revert
+                <i class="fa fa-hand"></i>
               </button>
-
+              <button
+                *ngIf="updatePermissions  && roleId==1 && roleId==2 && roleId==51"
+                class="btn theme-btn-delete"
+                [disabled]="table.HandoverStatus == ''"
+                title="Revert"
+                (click)="InputSampleQty(table, '')"
+              >
+                <i class="fa fa-calendar"></i>
+              </button>
+              
             </td>
           </tr>
         </ng-template>
@@ -249,6 +272,40 @@
         <p>Shipping Address: {{ detailsData.ShippingAddress }}</p>
         <p>Carried By: {{ detailsData.RequestStatus }}</p>
         <p>Remarks: {{ detailsData.Remarks }}</p>
+      </div>
+    </p-dialog>
+
+    <p-dialog
+      header="Detail"
+      [(visible)]="isApproveQty"
+      [modal]="true"
+      [closable]="true"
+      [style]="{ width: '50vw' }"
+    >
+      <div>
+        <div class="row">
+          <div class="col-md-6">
+            <label>Approved Qty</label>
+            <input
+              type="number"
+              class="form-control form-control-lg text-center"
+              placeholder="Qty"
+              [(ngModel)]="ApprovedQty"
+              (keyup)="checkQty()"
+            />
+            <label style="color: red;" *ngIf="errorShow">{{errorMessage}}</label>
+          </div>
+          <div class="d-flex justify-content-end gap-2 mt-3">
+
+            <button
+              type="submit"
+              (click)="handoverSample()"
+              class="btn theme-btn btn-sm"
+            >
+              <i class="bi bi-save me-1"></i> Handover
+            </button>
+          </div>
+        </div>
       </div>
     </p-dialog>
   </div>

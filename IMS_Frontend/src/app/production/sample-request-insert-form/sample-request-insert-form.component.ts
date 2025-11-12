@@ -159,6 +159,7 @@ export class SampleRequestInsertFormComponent {
           this.WidthList = JSON.parse(results.data).Tables4;
           this.UnitList = JSON.parse(results.data).Tables5;
           this.DescList = JSON.parse(results.data).Tables6;
+          console.log(results);
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
           this.gs.Logout();
@@ -200,6 +201,9 @@ export class SampleRequestInsertFormComponent {
       sr.CustomerContactInfo = fv.items[index].Customer_Contact_Info;
       sr.ProductDescription = fv.items[index].Product_Description;
       sr.ItemId = fv.items[index].ArticleNo;
+      sr.ColorId = fv.items[index].Color;
+      sr.WidthId = fv.items[index].Width;
+      sr.UnitId = fv.items[index].Unit;
       sr.RequestedQuantity = fv.items[index].Requested_Quantity;
       sr.ShippingAddress = fv.items[index].Shipping_Address;
       sr.RequestStatus = fv.items[index].RequestStatus;
