@@ -1,5 +1,5 @@
 <div class="container shadow-sm p-3 mb-5 bg-white rounded">
-  <h1 class="theme-text">Special Delivery  Application</h1>
+  <h1 class="theme-text">Special Delivery Application</h1>
 
   <br />
   <form [formGroup]="Formgroup">
@@ -8,16 +8,34 @@
       <!-- Export Date -->
       <div class="col-md-6">
         <label class="form-label">Date</label>
-        <input type="date" class="form-control" formControlName="Date" />
+        <input
+          #dateInput
+          type="date"
+          formControlName="Date"
+          class="form-control form-control-lg"
+          placeholder="Date"
+        />
       </div>
     </div>
     <div class="row mb-3">
       <div class="col-md-6">
         <label>Customer Name <span>*</span></label>
-        <p-dropdown [style]="{ width: '100%' }" class="p-0" [options]="CustomerList" optionLabel="CustomerName"
-          [filter]="true" filterBy="CustomerName" [showClear]="true" styleClass="listBottom" placeholder="Please Select"
-          optionValue="Customer_ID" formControlName="Customer" [virtualScroll]="true" [virtualScrollItemSize]="30"
-          (onChange)="getCustomerList()">
+        <p-dropdown
+          [style]="{ width: '100%' }"
+          class="p-0"
+          [options]="CustomerList"
+          optionLabel="CustomerName"
+          [filter]="true"
+          filterBy="CustomerName"
+          [showClear]="true"
+          styleClass="listBottom"
+          placeholder="Please Select"
+          optionValue="Customer_ID"
+          formControlName="Customer"
+          [virtualScroll]="true"
+          [virtualScrollItemSize]="30"
+          (onChange)="getCustomerList()"
+        >
           <ng-template let-Customer pTemplate="item">
             <div class="flex align-items-center gap-2">
               <div>{{ Customer.CustomerName }}</div>
@@ -27,9 +45,22 @@
       </div>
       <div class="col-md-6">
         <label>PI No <span>*</span></label>
-        <p-dropdown [style]="{ width: '100%' }" class="p-0" [options]="PIList" optionLabel="label" [filter]="true"
-          filterBy="label" [showClear]="true" styleClass="listBottom" placeholder="Please Select" optionValue="value"
-          formControlName="PINo" [virtualScroll]="true" [virtualScrollItemSize]="30" (onChange)="getPIDetails()">
+        <p-dropdown
+          [style]="{ width: '100%' }"
+          class="p-0"
+          [options]="PIList"
+          optionLabel="label"
+          [filter]="true"
+          filterBy="label"
+          [showClear]="true"
+          styleClass="listBottom"
+          placeholder="Please Select"
+          optionValue="value"
+          formControlName="PINo"
+          [virtualScroll]="true"
+          [virtualScrollItemSize]="30"
+          (onChange)="getPIDetails()"
+        >
           <ng-template let-pino pTemplate="item">
             <div class="flex align-items-center gap-2">
               <div>{{ pino.label }}</div>
@@ -63,35 +94,45 @@
       </thead>
 
       <tbody formArrayName="items" *ngIf="items && items.length > 0">
-        <tr *ngFor="let group of items.controls; let i = index" [formGroupName]="i">
-          <td>{{group.value.customer_name}}</td>
-          <td>{{group.value.PINo}}</td>
-          <td>{{group.value.Article}}</td>
-          <td>{{group.value.ActualArticle}}</td>
-          <td>{{group.value.Color}}</td>
-          <td>{{group.value.Width}}</td>
-          <td>{{group.value.Unit}}</td>
-          <td>{{group.value.Quantity}}</td>
-          <td>{{group.value.Unit_Price}}</td>
-          <td>{{group.value.CommissionUnit}}</td>
-          <td>{{group.value.PaymentTerms}}</td>
-          <td>{{group.value.Delivered_Quantity}}</td>
+        <tr
+          *ngFor="let group of items.controls; let i = index"
+          [formGroupName]="i"
+        >
+          <td>{{ group.value.customer_name }}</td>
+          <td>{{ group.value.PINo }}</td>
+          <td>{{ group.value.Article }}</td>
+          <td>{{ group.value.ActualArticle }}</td>
+          <td>{{ group.value.Color }}</td>
+          <td>{{ group.value.Width }}</td>
+          <td>{{ group.value.Unit }}</td>
+          <td>{{ group.value.Quantity }}</td>
+          <td>{{ group.value.Unit_Price }}</td>
+          <td>{{ group.value.CommissionUnit }}</td>
+          <td>{{ group.value.PaymentTerms }}</td>
+          <td>{{ group.value.Delivered_Quantity }}</td>
 
           <td>
-            <input type="number" formControlName="ApprovedQty" (keyup)="approveQtyChange(group)"/>
+            <input
+              type="number"
+              formControlName="ApprovedQty"
+              (keyup)="approveQtyChange(group)"
+            />
           </td>
 
           <td>
             <input type="text" formControlName="Remarks" />
-
           </td>
           <td class="text-center">
-            <button type="button" class="btn btn-sm btn-danger px-2 py-1" (click)="removeItem(i)">×</button>
+            <button
+              type="button"
+              class="btn btn-sm btn-danger px-2 py-1"
+              (click)="removeItem(i)"
+            >
+              ×
+            </button>
           </td>
         </tr>
       </tbody>
-
-
     </table>
 
     <div class="d-flex justify-content-end gap-2 mt-3">
@@ -99,16 +140,28 @@
         <i class="bi bi-plus-circle me-1"></i> Add Row
       </button> -->
 
-      <button type="submit" (click)="saveData()" [ngClass]="{
-        'theme-btn-disable': Formgroup.invalid
-      }" class="btn theme-btn btn-rounded" [disabled]="Formgroup.invalid" *ngIf="!isEdit">
-
+      <button
+        type="submit"
+        (click)="saveData()"
+        [ngClass]="{
+          'theme-btn-disable': Formgroup.invalid
+        }"
+        class="btn theme-btn btn-rounded"
+        [disabled]="Formgroup.invalid"
+        *ngIf="!isEdit"
+      >
         <i class="bi bi-save me-1"></i> Save
       </button>
-      <button type="submit" (click)="UpdateData()" [ngClass]="{
-        'theme-btn-disable': Formgroup.invalid
-      }" class="btn theme-btn btn-rounded" [disabled]="Formgroup.invalid" *ngIf="isEdit">
-
+      <button
+        type="submit"
+        (click)="UpdateData()"
+        [ngClass]="{
+          'theme-btn-disable': Formgroup.invalid
+        }"
+        class="btn theme-btn btn-rounded"
+        [disabled]="Formgroup.invalid"
+        *ngIf="isEdit"
+      >
         <i class="bi bi-save me-1"></i> Update
       </button>
     </div>

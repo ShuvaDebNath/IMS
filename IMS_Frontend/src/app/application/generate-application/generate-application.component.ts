@@ -79,7 +79,7 @@ export class GenerateApplicationComponent {
     private activeLink: ActivatedRoute,
     private title: Title,
     private masterEntryService: MasterEntryService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     var permissions = this.gs.CheckUserPermission(
@@ -90,15 +90,13 @@ export class GenerateApplicationComponent {
     this.deletePermissions = permissions.deletePermissions;
     this.printPermissions = permissions.printPermissions;
 
-
     this.title.setTitle('Special Delivery Application');
     this.generateForm();
     this.loadPageData();
 
     let has = this.activeLink.snapshot.queryParamMap.has('Id');
     if (has) {
-      this.Id =
-        this.activeLink.snapshot.queryParams['Id'];
+      this.Id = this.activeLink.snapshot.queryParams['Id'];
       this.isEdit = true;
       this.getEditData();
     } else {
@@ -119,7 +117,6 @@ export class GenerateApplicationComponent {
     });
   }
 
-
   loadPageData(): void {
     var userId = window.localStorage.getItem('userId');
     var ProcedureData = {
@@ -139,15 +136,13 @@ export class GenerateApplicationComponent {
         } else {
         }
       },
-      error: (err) => { },
+      error: (err) => {},
     });
   }
 
   get items(): FormArray {
     return this.Formgroup.get('items') as FormArray;
   }
-
-
 
   removeItem(i: number) {
     this.items.removeAt(i);
@@ -183,21 +178,22 @@ export class GenerateApplicationComponent {
     var totalDeliveredQuantity = 0;
     var totalAproveQty = 0;
 
-    var SuperiorId = this.PIList.filter((e: any) => e.value == this.Formgroup.value.PINo)[0].Superior_ID;
+    var SuperiorId = this.PIList.filter(
+      (e: any) => e.value == this.Formgroup.value.PINo
+    )[0].Superior_ID;
 
     const formArray = this.Formgroup.get('items') as FormArray;
 
     formArray.controls.forEach((group) => {
       const item = group.value;
       console.log(item);
-      
+
       totalQty += Number(item.Quantity) || 0;
       totalDeliveredQuantity += Number(item.Delivered_Quantity) || 0;
       totalAproveQty += Number(item.ApprovedQty) || 0;
     });
 
     const masterRow = {
-
       FormTypeId: 'SpecialDelivery',
       TotalQuantity: totalQty,
       TotalDeliveredQuantity: totalDeliveredQuantity,
@@ -207,23 +203,26 @@ export class GenerateApplicationComponent {
       UserId: userId,
       Status: 'Pending',
       FormTypeName: 'Special Delivery',
-      CreatedDate: new Date(new Date().toLocaleString('en', {timeZone: 'Asia/Dhaka'})),
+      CreatedDate: new Date(
+        new Date().toLocaleString('en', { timeZone: 'Asia/Dhaka' })
+      ),
       PiNos: this.Formgroup.value.PINo,
     };
 
     console.log(fv.items);
-    
 
     const detailRows = fv.items.map((i: any) => ({
       PiNo: i.PINo,
       ArticleNo: i.Article,
-      CustomerId: i.customer_name,
+      CustomerId: fv.Customer,
       ApplyDeliveryQty: i.ApprovedQty,
       TblPiMasterId: i.PI_Master_ID,
       TblPiDetailId: i.PI_Detail_ID,
-      TblPoFormMasterId:'',
+      TblPoFormMasterId: '',
       ActualArticleNo: i.ActualArticle,
-      CreatedDate: new Date(new Date().toLocaleString('en', {timeZone: 'Asia/Dhaka'})),
+      CreatedDate: new Date(
+        new Date().toLocaleString('en', { timeZone: 'Asia/Dhaka' })
+      ),
       CreatedById: userId,
       Colour: i.Color,
       Width: i.Width,
@@ -251,10 +250,13 @@ export class GenerateApplicationComponent {
           console.log(res);
 
           if (res.messageType === 'Success' && res.status) {
-            swal.fire('Success', 'Application generated successfully', 'success');
+            swal.fire(
+              'Success',
+              'Application generated successfully',
+              'success'
+            );
             // Optionally reset form / navigate
-            this.Formgroup.reset({
-            });
+            this.Formgroup.reset({});
             this.items.clear();
           } else {
             swal.fire(
@@ -296,21 +298,22 @@ export class GenerateApplicationComponent {
     var totalDeliveredQuantity = 0;
     var totalAproveQty = 0;
 
-    var SuperiorId = this.PIList.filter((e: any) => e.value == this.Formgroup.value.PINo)[0].Superior_ID;
+    var SuperiorId = this.PIList.filter(
+      (e: any) => e.value == this.Formgroup.value.PINo
+    )[0].Superior_ID;
 
     const formArray = this.Formgroup.get('items') as FormArray;
 
     formArray.controls.forEach((group) => {
       const item = group.value;
       console.log(item);
-      
+
       totalQty += Number(item.Quantity) || 0;
       totalDeliveredQuantity += Number(item.Delivered_Quantity) || 0;
       totalAproveQty += Number(item.ApprovedQty) || 0;
     });
 
     const masterRow = {
-
       FormTypeId: 'SpecialDelivery',
       TotalQuantity: totalQty,
       TotalDeliveredQuantity: totalDeliveredQuantity,
@@ -318,20 +321,28 @@ export class GenerateApplicationComponent {
       Date: this.Formgroup.value.Date,
       SuperiorId: SuperiorId,
       UserId: userId,
+      Status: 'Pending',
       FormTypeName: 'Special Delivery',
-      CreatedDate: new Date(new Date().toLocaleString('en', {timeZone: 'Asia/Dhaka'})),
+      CreatedDate: new Date(
+        new Date().toLocaleString('en', { timeZone: 'Asia/Dhaka' })
+      ),
       PiNos: this.Formgroup.value.PINo,
     };
+
+    console.log(fv.items);
 
     const detailRows = fv.items.map((i: any) => ({
       PiNo: i.PINo,
       ArticleNo: i.Article,
-      CustomerId: i.customer_name,
+      CustomerId: fv.Customer,
       ApplyDeliveryQty: i.ApprovedQty,
       TblPiMasterId: i.PI_Master_ID,
       TblPiDetailId: i.PI_Detail_ID,
+      TblPoFormMasterId: '',
       ActualArticleNo: i.ActualArticle,
-      CreatedDate: new Date(new Date().toLocaleString('en', {timeZone: 'Asia/Dhaka'})),
+      CreatedDate: new Date(
+        new Date().toLocaleString('en', { timeZone: 'Asia/Dhaka' })
+      ),
       CreatedById: userId,
       Colour: i.Color,
       Width: i.Width,
@@ -355,53 +366,19 @@ export class GenerateApplicationComponent {
         'Id', // columnNamePrimary (PK)
         'TblPoFormMasterId', // columnNameForign (FK in child)
         'Application', // serialType (your code uses it)
-        'Application',// columnNameSerialNo (series name)
+        'Application', // columnNameSerialNo (series name)
         whereParam
       )
       .subscribe({
         next: (res: any) => {
-          const detailRowsForStockUpdate = fv.items.map((r: any) => ({
-            RawMaterial_ID: r?.article,
-            Stock_Out: Number(r?.qty ?? 0),
-            Id: this.Id,
-            Roll_Out:
-              r?.Roll_Bag === 'roll' ? Number(r?.RollBag_Quantity ?? 0) : 0,
-            Bag_Out:
-              r?.Roll_Bag === 'bag' ? Number(r?.RollBag_Quantity ?? 0) : 0,
-          }));
-
-          detailRowsForStockUpdate.forEach((e: any) => {
-            this.masterEntryService
-              .UpdateData(e, whereParam, 'tbl_stock')
-              .subscribe({
-                next: (res) => {
-                  if (res.messageType === 'Success' && res.status) {
-                    swal.fire(
-                      'Success',
-                      'Export Update successfully',
-                      'success'
-                    );
-                  } else {
-                    swal.fire(
-                      'Stock Update Failed',
-                      res?.message || 'Stock update failed.',
-                      'info'
-                    );
-                  }
-                },
-                error: (err) => {
-                  console.error(err);
-                  swal.fire(
-                    'Stock Update Failed',
-                    err?.error?.message || 'Stock update failed.',
-                    'info'
-                  );
-                },
-              });
-          });
+          if (res.messageType === 'Success' && res.status) {
+            swal.fire('Success', 'Application Update successfully', 'success');
+          } else {
+            swal.fire('info', 'Could not save Application', 'info');
+          }
         },
         error: () => {
-          swal.fire('info', 'Could not save requisition', 'info');
+          swal.fire('info', 'Could not save Application', 'info');
         },
       });
   }
@@ -426,7 +403,7 @@ export class GenerateApplicationComponent {
         } else {
         }
       },
-      error: (err) => { },
+      error: (err) => {},
     });
   }
 
@@ -485,7 +462,7 @@ export class GenerateApplicationComponent {
         } else {
         }
       },
-      error: (err) => { },
+      error: (err) => {},
     });
   }
 
@@ -497,11 +474,8 @@ export class GenerateApplicationComponent {
     }
   }
 
-
-  
   getEditData() {
     var userId = window.localStorage.getItem('userId');
-
 
     var procedureName = 'usp_Application_GetDataById';
     var ProcedureData = {
@@ -513,18 +487,23 @@ export class GenerateApplicationComponent {
 
     this.masterEntryService.GetInitialData(ProcedureData).subscribe({
       next: (results) => {
-        console.log(results);
+        console.log(JSON.parse(results.data).Tables1);
         if (results.status) {
           const formArray = this.Formgroup.get('items') as FormArray;
           formArray.clear();
+          const input = JSON.parse(results.data).Tables1[0].Date;
+          const formatted = new Date(input).toISOString();
+          console.log(formatted);
+
           this.Formgroup.controls['Date'].setValue(
-            new Date(JSON.parse(results.data).Tables1[0].Date)
+            JSON.parse(results.data).Tables1[0].Date
           );
           this.Formgroup.controls['Customer'].setValue(
-            new Date(JSON.parse(results.data).Tables1[0].Customer_ID)
+            JSON.parse(results.data).Tables1[0].Customer_ID
           );
+          this.getCustomerList();
           this.Formgroup.controls['PINo'].setValue(
-            new Date(JSON.parse(results.data).Tables1[0].TblPiMasterId)
+            JSON.parse(results.data).Tables1[0].TblPiMasterId
           );
           JSON.parse(results.data).Tables1.forEach((item: any) => {
             formArray.push(
@@ -542,8 +521,10 @@ export class GenerateApplicationComponent {
                 PaymentTerms: [item.PaymentTerms],
                 Delivered_Quantity: [item.DeliveredQuantity],
                 Remarks: [''],
-                ApprovedQty:[item.ApplyDeliveryQty, [Validators.required, Validators.min(1)]],
-                
+                ApprovedQty: [
+                  item.ApplyDeliveryQty,
+                  [Validators.required, Validators.min(1)],
+                ],
               })
             );
           });
@@ -553,7 +534,7 @@ export class GenerateApplicationComponent {
         } else {
         }
       },
-      error: (err) => { },
+      error: (err) => {},
     });
   }
 }
