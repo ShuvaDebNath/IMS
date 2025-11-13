@@ -116,6 +116,7 @@ import { AllReportComponent } from '../report/sample-request/all-report/all-repo
 import { MessengerReportComponent } from '../report/sample-request/messenger-report/messenger-report.component';
 import { AllApplicationComponent } from '../application/all-application/all-application.component';
 import { GenerateApplicationComponent } from '../application/generate-application/generate-application.component';
+import { ApproveApplicationComponent } from '../application/approve-application/approve-application.component';
 
 
 
@@ -208,6 +209,7 @@ const CustomSelectOptions: INgxSelectOptions = {
     MessengerReportComponent,
     AllApplicationComponent,
     GenerateApplicationComponent,
+    ApproveApplicationComponent
   ],
   imports: [
     CommonModule,
@@ -419,6 +421,7 @@ const CustomSelectOptions: INgxSelectOptions = {
           { path: 'messsenger-report', component: MessengerReportComponent },
           { path: 'all-application', component: AllApplicationComponent },
           { path: 'generate-application', component: GenerateApplicationComponent },
+          { path: 'approve-application', component: ApproveApplicationComponent },
         ],
       },
 

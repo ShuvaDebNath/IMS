@@ -52,6 +52,7 @@ import { AllReportComponent } from './report/sample-request/all-report/all-repor
 import { MessengerReportComponent } from './report/sample-request/messenger-report/messenger-report.component';
 import { AllApplicationComponent } from './application/all-application/all-application.component';
 import { GenerateApplicationComponent } from './application/generate-application/generate-application.component';
+import { ApproveApplicationComponent } from './application/approve-application/approve-application.component';
 
 
 

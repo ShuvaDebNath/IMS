@@ -202,7 +202,13 @@
             <td class="text-center align-middle">{{ table.UserName }}</td>
             <td class="text-center align-middle p-1 m-0">
               <div class="d-flex justify-content-center gap-1">
-                <a class="btn theme-btn-view" target="_blank" title="View"
+                <a
+                  *ngIf="updatePermissions"
+                  class="btn theme-btn-edit"
+                  target="_blank"
+                  title="Vide Details"
+                  [routerLink]="['/approve-application']"
+                  [queryParams]="{ Id: table.Id }"
                   ><i class="fa fa-eye"></i
                 ></a>
 
