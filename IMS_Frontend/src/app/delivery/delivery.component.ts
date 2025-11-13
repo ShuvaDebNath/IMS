@@ -325,23 +325,26 @@ export class DeliveryComponent implements OnInit {
         Swal.getPopup()
           ?.querySelector('#view')
           ?.addEventListener('click', () => {
-            this.reportService.PrintDeliveryChallanReport(item, 'excel', true);
-            Swal.close();
-          });
+              // Close the selection Swal first so the report-service loader Swal isn't immediately closed.
+              Swal.close();
+              this.reportService.PrintDeliveryChallanReport(item, 'excel', true);
+            });
   
         Swal.getPopup()
           ?.querySelector('#download')
           ?.addEventListener('click', () => {
-            this.reportService.PrintDeliveryChallanReport(item, 'pdf', true);
-            Swal.close();
-          });
+              // Close selection modal first, then trigger report. This prevents the
+              // selection's Swal.close() from closing the loader Swal opened by the report service.
+              Swal.close();
+              this.reportService.PrintDeliveryChallanReport(item, 'pdf', true);
+            });
   
         Swal.getPopup()
           ?.querySelector('#print')
           ?.addEventListener('click', () => {
-            this.reportService.PrintDeliveryChallanReport(item, 'word', true);
-            Swal.close();
-          });
+              Swal.close();
+              this.reportService.PrintDeliveryChallanReport(item, 'word', true);
+            });
   
         // The caller-specific reportType is included in `item` so the report service
         // can dispatch the correct report variant based on that flag.
