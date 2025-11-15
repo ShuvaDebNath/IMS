@@ -9,6 +9,7 @@ import { GetDataService } from '../services/getData/getDataService.service';
 import { ReportService } from '../services/reportService/report-service.service';
 import Swal from 'sweetalert2';
 import { DividerModule } from 'primeng/divider';
+import { MasterEntryService } from '../services/masterEntry/masterEntry.service';
 
 @Component({
   standalone: true,
@@ -18,6 +19,20 @@ import { DividerModule } from 'primeng/divider';
   imports: [CommonModule, ReactiveFormsModule, FormsModule, TableModule,DividerModule, DialogModule, ButtonModule],
 })
 export class ChallanComponent implements OnInit {
+    // For date edit modal
+    editDateMessageText: string = '';
+    editDateMessageType: 'success' | 'error' | 'info' | 'warning' | '' = '';
+    editDateConfirmVisible: boolean = false;
+    editDateConfirmText: string = '';
+    clearEditDateMessage(): void {
+      this.editDateMessageText = '';
+      this.editDateMessageType = '';
+    }
+
+    private setEditDateMessage(msg: string, type: 'success' | 'error' | 'info' | 'warning') {
+      this.editDateMessageText = msg;
+      this.editDateMessageType = type;
+    }
   searchForm!: FormGroup;
   showTable = false;
   tableData: any[] = [];
@@ -29,7 +44,8 @@ export class ChallanComponent implements OnInit {
   datePipe = new DatePipe('en-US');
 
   constructor(private fb: FormBuilder, private gs: GlobalServiceService,private getDataService: GetDataService,
-              private reportService: ReportService) {}
+              private reportService: ReportService,
+            private masterEntryService : MasterEntryService) {}
 
   isChallanDetailsVisible = false;
   challanDetails: any = null; 
@@ -40,6 +56,10 @@ export class ChallanComponent implements OnInit {
   isEditChallanVisible = false;
   editOldChallan: string = '';
   editNewChallan: string = '';
+  editChallanMessageText: string = '';
+  editChallanMessageType: 'success' | 'error' | 'info' | 'warning' | '' = '';
+  editConfirmVisible: boolean = false;
+  editConfirmText: string = '';
 
   isEditingDate: boolean = false;
   editDate: string = ''; 
@@ -88,11 +108,6 @@ export class ChallanComponent implements OnInit {
             ToDate : toDate || '',
           },
       };
-
-      console.log(procedureData);
-      
-
-    // show loader while searching
     Swal.fire({
       title: 'Searching...',
       allowOutsideClick: false,
@@ -104,7 +119,6 @@ export class ChallanComponent implements OnInit {
 
     this.getDataService.GetInitialData(procedureData).subscribe({
       next: (results) => {
-        // close loader first
         Swal.close();
         if (results.status) {
           this.tableData = JSON.parse(results.data).Tables1;
@@ -115,7 +129,6 @@ export class ChallanComponent implements OnInit {
           this.gs.Logout();
           this.showTable = false;
         } else {
-          // no data found or other error
           this.showTable = false;
         }
       },
@@ -175,90 +188,141 @@ export class ChallanComponent implements OnInit {
   openEditChallanModal(oldChallan: string) {
     this.editOldChallan = oldChallan || '';
     this.editNewChallan = '';
+    this.clearEditChallanMessage();
+    this.editConfirmVisible = false;
+    this.editConfirmText = '';
     this.isEditChallanVisible = true;
+  }
+
+  clearEditChallanMessage(): void {
+    this.editChallanMessageText = '';
+    this.editChallanMessageType = '';
+  }
+
+  private setEditChallanMessage(msg: string, type: 'success' | 'error' | 'info' | 'warning') {
+    this.editChallanMessageText = msg;
+    this.editChallanMessageType = type;
   }
 
   saveEditChallan() {
     if (!this.editNewChallan) {
-      Swal.fire('Validation', 'Please enter new Challan No', 'warning');
+      this.setEditChallanMessage('Please enter new Challan No', 'warning');
       return;
     }
+    this.clearEditChallanMessage();
 
-    Swal.fire({
-      title: 'Confirm',
-      text: `Change challan no from ${this.editOldChallan} to ${this.editNewChallan}?`,
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, change it'
-    }).then(result => {
-      if (result.isConfirmed) {
-        // First check whether the new challan no already exists
-        const checkProc = {
-          procedureName: 'usp_ChallanNoExistOrNot',
-          parameters: { Chalan_No: this.editNewChallan }
-        };
+    this.editConfirmText = `Change challan no from ${this.editOldChallan} to ${this.editNewChallan}?`;
+    this.editConfirmVisible = true;
+  }
 
-        this.getDataService.GetInitialData(checkProc).subscribe({
-          next: (checkRes:any) => {
-            if (checkRes.status) {
-              // attempt to parse response and derive result defensively
-              let exists = false;
-              try {
-                const ds = JSON.parse(checkRes.data || '{}');
-                if (ds.Tables1 && ds.Tables1.length > 0) {
-                  const firstRow = ds.Tables1[0];
-                  const firstVal = firstRow[Object.keys(firstRow)[0]];
-                  if (typeof firstVal === 'string' && firstVal.toLowerCase().includes('exist')) {
-                    exists = firstVal.toLowerCase().includes('exist');
-                  }
-                } else if (typeof checkRes.data === 'string') {
-                  // fallback: raw string contains 'Exists'
-                  exists = checkRes.data.toLowerCase().includes('exist');
-                }
-              } catch (e) {
-                // if parse fails, fallback to checking raw string
-                exists = (checkRes.data || '').toString().toLowerCase().includes('exist');
-              }
 
-              if (exists) {
-                Swal.fire('Info', 'Challan no already exist.', 'info');
-                return;
-              }
+  performSaveEditChallanConfirmed(): void {
+   
+    this.editConfirmVisible = false;
+    this.editConfirmText = '';
 
-              // proceed to update since it doesn't exist
-              const procedureData = {
-                procedureName: 'usp_UpdateDeliveryChallanNo',
-                parameters: {
-                  OldChalanNo: this.editOldChallan,
-                  NewChalanNo: this.editNewChallan
-                }
-              };
+  
+    const checkProc = {
+      procedureName: 'usp_ChallanNoExistOrNot',
+      parameters: { Chalan_No: this.editNewChallan }
+    };
 
-              this.getDataService.GetInitialData(procedureData).subscribe({
-                next: (res:any) => {
-                  if (res.status) {
-                    Swal.fire('Success', 'Challan number updated', 'success');
-                    this.isEditChallanVisible = false;
-                    this.openChallanDetails(this.editNewChallan);
-                  } else {
-                    Swal.fire('Error', res.msg || 'Failed to update challan', 'error');
-                  }
-                },
-                error: () => Swal.fire('Error', 'Failed to update challan', 'error')
-              });
-            } else {
-              if (checkRes.msg === 'Invalid Token') {
-                Swal.fire('Session Expired!', 'Please Login Again.', 'info');
-                this.gs.Logout();
+    this.getDataService.GetInitialData(checkProc).subscribe({
+      next: (checkRes:any) => {
+        if (checkRes.status) {
+         
+          let exists = false;
+          try {
+            const ds = JSON.parse(checkRes.data || '{}');
+            if (ds.Tables1 && ds.Tables1.length > 0) {
+              const firstRow = ds.Tables1[0];
+              const firstValRaw = firstRow[Object.keys(firstRow)[0]];
+              const firstVal = (firstValRaw ?? '').toString().trim().toLowerCase();
+            
+              if (firstVal === 'exists' || firstVal === 'exist' || firstVal === 'true' || firstVal === '1') {
+                exists = true;
+              } else if (firstVal === 'not exists' || firstVal === 'not exist' || firstVal === 'notexists' || firstVal === 'false' || firstVal === '0') {
+                exists = false;
               } else {
-                Swal.fire('Error', checkRes.msg || 'Failed to validate challan', 'error');
+               
+                if (firstVal.includes('not') && firstVal.includes('exist')) {
+                  exists = false;
+                } else if (firstVal.includes('exist')) {
+                  exists = true;
+                }
+              }
+            } else if (typeof checkRes.data === 'string') {
+              const raw = (checkRes.data || '').toString().trim().toLowerCase();
+              if (raw === 'exists' || raw === 'exist' || raw === 'true' || raw === '1') {
+                exists = true;
+              } else if (raw === 'not exists' || raw === 'not exist' || raw === 'false' || raw === '0') {
+                exists = false;
+              } else {
+                if (raw.includes('not') && raw.includes('exist')) exists = false;
+                else if (raw.includes('exist')) exists = true;
               }
             }
-          },
-          error: () => {
-            Swal.fire('Error', 'Failed to validate challan', 'error');
+          } catch (e) {
+           
+            const raw = (checkRes.data || '').toString().trim().toLowerCase();
+            if (raw === 'exists' || raw === 'exist' || raw === 'true' || raw === '1') {
+              exists = true;
+            } else if (raw === 'not exists' || raw === 'not exist' || raw === 'false' || raw === '0') {
+              exists = false;
+            } else {
+              if (raw.includes('not') && raw.includes('exist')) exists = false;
+              else if (raw.includes('exist')) exists = true;
+            }
           }
-        });
+
+          if (exists) {           
+            this.setEditChallanMessage('Challan no already exist.', 'info');
+            return;
+          }
+
+          const updateParams = { Chalan_No: this.editNewChallan };
+          const updateCondition = { Chalan_No: this.editOldChallan };
+          const updateTable = 'tbl_pi_ledger';
+          this.masterEntryService.UpdateData(updateParams, updateCondition, updateTable).subscribe({
+            next: (res: any) => {
+              let updateSuccess = false;
+              if (res.status) {
+                updateSuccess = true;
+              } else {
+              
+                const msg = (res.msg || '').toString().toLowerCase();
+                const data = (res.data || '').toString().toLowerCase();
+                if (msg.includes('success') || msg.includes('updated') || msg.includes('done') || msg.includes('changed')) {
+                  updateSuccess = true;
+                } else if (data.includes('success') || data.includes('updated') || data.includes('done') || data.includes('changed')) {
+                  updateSuccess = true;
+                }
+              }
+              if (updateSuccess) {
+                this.setEditChallanMessage('Challan number updated', 'success');
+                setTimeout(() => {
+                  this.isEditChallanVisible = false;
+                  this.openChallanDetails(this.editNewChallan);
+                  this.onSearch();
+                  this.clearEditChallanMessage();
+                }, 1200);
+              } else {
+                this.setEditChallanMessage(res.msg || 'Failed to update challan', 'error');
+              }
+            },
+            error: () => this.setEditChallanMessage('Failed to update challan', 'error')
+          });
+        } else {
+          if (checkRes.msg === 'Invalid Token') {
+            Swal.fire('Session Expired!', 'Please Login Again.', 'info');
+            this.gs.Logout();
+          } else {
+            Swal.fire('Error', checkRes.msg || 'Failed to validate challan', 'error');
+          }
+        }
+      },
+      error: () => {
+        Swal.fire('Error', 'Failed to validate challan', 'error');
       }
     });
   }
@@ -267,7 +331,7 @@ export class ChallanComponent implements OnInit {
     toggleEditDate(): void {
       this.isEditingDate = !this.isEditingDate;
       if (this.isEditingDate && this.challanDetails && this.challanDetails.master) {
-        // prefer ISO yyyy-MM-dd if available
+       
         const raw = this.challanDetails.master?.Date || this.challanDetails.master?.PIDate || this.challanDetails.master?.DeliveryDate;
         if (raw) {
           const d = new Date(raw);
@@ -280,101 +344,144 @@ export class ChallanComponent implements OnInit {
             this.editDate = '';
           }
         }
+        this.clearEditDateMessage();
+        this.editDateConfirmVisible = false;
+        this.editDateConfirmText = '';
       }
     }
 
     saveDateChange(): void {
       if (!this.editDate) {
-        Swal.fire('Validation', 'Please select a date', 'warning');
+        this.setEditDateMessage('Please select a date', 'warning');
         return;
       }
-      const old = this.challanDetails?.master?.Chalan_No || this.challanDetails?.master?.ChallanNo;
+      const old = this.challanDetails?.master?.Chalan_No;
       if (!old) {
-        Swal.fire('Error', 'Original challan number missing', 'error');
+        this.setEditDateMessage('Original challan number missing', 'error');
         return;
       }
 
-      const procedureData = {
-        procedureName: 'usp_UpdateDeliveryChallanDate',
-        parameters: {
-          Chalan_No: old,
-          NewDate: this.editDate
-        }
-      };
+     
+      this.clearEditDateMessage();
+     
+      this.editDateConfirmText = `Change challan date from ${this.challanDetails.master?.Date} to ${this.editDate}?`;
+      this.editDateConfirmVisible = true;
+    }
 
-      this.getDataService.GetInitialData(procedureData).subscribe({
-        next: (res:any) => {
+    performSaveDateChangeConfirmed(): void {
+      this.editDateConfirmVisible = false;
+      this.editDateConfirmText = '';
+
+      let dateWithTime = this.editDate;
+      if (/^\d{4}-\d{2}-\d{2}$/.test(this.editDate)) {
+        const now = new Date();
+        const hh = String(now.getHours()).padStart(2, '0');
+        const min = String(now.getMinutes()).padStart(2, '0');
+        const sec = String(now.getSeconds()).padStart(2, '0');
+        dateWithTime = `${this.editDate}T${hh}:${min}:${sec}`;
+      }
+      const updateParams = { Date: dateWithTime };
+      const updateCondition = { Chalan_No: this.challanDetails?.master?.Chalan_No };
+      const updateTable = 'tbl_pi_ledger';
+      this.masterEntryService.UpdateData(updateParams, updateCondition, updateTable).subscribe({
+        next: (res: any) => {
+          let updateSuccess = false;
           if (res.status) {
-            Swal.fire('Success', 'Date updated', 'success');
+            updateSuccess = true;
+          } else {
+            const msg = (res.msg || '').toString().toLowerCase();
+            const data = (res.data || '').toString().toLowerCase();
+            if (msg.includes('success') || msg.includes('updated') || msg.includes('done') || msg.includes('changed')) {
+              updateSuccess = true;
+            } else if (data.includes('success') || data.includes('updated') || data.includes('done') || data.includes('changed')) {
+              updateSuccess = true;
+            }
+          }
+          if (updateSuccess) {
+            this.setEditDateMessage('Date updated', 'success');
             if (this.challanDetails && this.challanDetails.master) {
               this.challanDetails.master.Date = this.editDate;
             }
-            this.isEditingDate = false;
+            setTimeout(() => {
+              this.isEditingDate = false;
+              this.clearEditDateMessage();
+              this.onSearch();
+            }, 1200);
           } else if (res.msg === 'Invalid Token') {
-            Swal.fire('Session Expired!', 'Please Login Again.', 'info');
+            this.setEditDateMessage('Session Expired! Please Login Again.', 'info');
             this.gs.Logout();
           } else {
-            Swal.fire('Error', res.msg || 'Failed to update date', 'error');
+            this.setEditDateMessage(res.msg || 'Failed to update date', 'error');
           }
         },
-        error: () => Swal.fire('Error', 'Failed to update date', 'error')
+        error: () => this.setEditDateMessage('Failed to update date', 'error')
       });
-    }
+  }
 
-   
-    deleteChallan(): void {
-      const challanNo = this.challanDetails?.master?.Chalan_No || this.challanDetails?.master?.ChallanNo;
-    if (!challanNo) { Swal.fire('Error', 'Challan no missing', 'error'); return; }
-
-      Swal.fire({
-        title: 'Delete Challan?',
-        text: `Are you sure you want to delete challan ${challanNo}?`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, delete'
-      }).then((r) => {
-        if (r.isConfirmed) {
-          const proc = { procedureName: 'usp_DeleteDeliveryChallan', parameters: { Chalan_No: challanNo } };
-          this.getDataService.GetInitialData(proc).subscribe({
-            next: (res:any) => {
-              if (res.status) {
-                Swal.fire('Deleted', 'Challan deleted', 'success');
-                this.isChallanDetailsVisible = false;
-                this.tableData = this.tableData.filter(t => (t.Chalan_No||t.challanNo||t.ChalanNo) !== challanNo);
-              } else {
-                Swal.fire('Error', res.msg || 'Failed to delete challan', 'error');
-              }
-            }, error: () => Swal.fire('Error', 'Failed to delete challan', 'error')
-          });
-        }
-      });
+  deleteChallan(): void {
+    const challanNo = this.challanDetails?.master?.Chalan_No || this.challanDetails?.master?.ChallanNo;
+    if (!challanNo) {
+      Swal.fire('Error', 'Challan no missing', 'error');
+      return;
     }
+    Swal.fire({
+      title: 'Delete Challan?',
+      text: `Are you sure you want to delete challan ${challanNo}?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete'
+    }).then((r) => {
+      if (r.isConfirmed) {
+       
+        const model: any = {
+          tableName: 'tbl_pi_ledger',
+          whereParams: { Chalan_No: challanNo }
+        };
+        this.masterEntryService.DeleteData(model).subscribe({
+          next: (res: any) => {
+            if (res.status) {
+              Swal.fire('Deleted', 'Challan deleted', 'success');
+              this.isChallanDetailsVisible = false;
+              this.tableData = this.tableData.filter(t => (t.Chalan_No||t.challanNo||t.ChalanNo) !== challanNo);
+            } else {
+              Swal.fire('Error', res.msg || 'Failed to delete challan', 'error');
+            }
+          },
+          error: () => Swal.fire('Error', 'Failed to delete challan', 'error')
+        });
+      }
+    });
+  }
 
-    printChallan(challanNo?: string): void {
-      const no = challanNo || this.challanDetails?.master?.Chalan_No || this.challanDetails?.master?.ChallanNo;
-      if (!no) { Swal.fire('Error', 'Challan no missing', 'error'); return; }
-      const payload = { Chalan_No: no };
-      this.reportService.PrintDeliveryChallanReport(payload, 'pdf', true);
+  printChallan(challanNo?: string): void {
+    const no = challanNo || this.challanDetails?.master?.Chalan_No || this.challanDetails?.master?.ChallanNo;
+    if (!no) {
+      Swal.fire('Error', 'Challan no missing', 'error');
+      return;
     }
+    const payload = { Chalan_No: no };
+    this.reportService.PrintDeliveryChallanReport(payload, 'pdf', true);
+  }
 
-    
-    onChallanClick(challanNo: string): void {
-      if (!challanNo) return;
-      Swal.fire({
-        title: 'Choose action',
-        text: `Challan: ${challanNo}`,
-        showDenyButton: true,
-        showCancelButton: true,
-        confirmButtonText: 'Print',
-        denyButtonText: 'Edit',
-      }).then(result => {
-        if (result.isConfirmed) {
-          this.printChallan(challanNo);
-        } else if (result.isDenied) {
-          this.openChallanDetails(challanNo);
-        }
-      });
+  onChallanClick(challanNo: string): void {
+    if (!challanNo) {
+      return;
     }
+    Swal.fire({
+      title: 'Choose action',
+      text: `Challan: ${challanNo}`,
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: 'Print',
+      denyButtonText: 'Edit',
+    }).then(result => {
+      if (result.isConfirmed) {
+        this.printChallan(challanNo);
+      } else if (result.isDenied) {
+        this.openChallanDetails(challanNo);
+      }
+    });
+  }
 
   clear() {
     this.searchForm.reset();

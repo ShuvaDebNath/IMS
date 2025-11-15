@@ -100,6 +100,25 @@
             <button *ngIf="updatePermissions" type="button" class="btn btn-sm theme-btn" style="margin-left:8px;padding:4px 8px;" (click)="toggleEditDate()">Change</button>
           </ng-container>
           <ng-container *ngIf="isEditingDate">
+            <div *ngIf="editDateMessageText" class="mb-2">
+              <div [ngClass]="{
+                    'alert alert-success': editDateMessageType === 'success',
+                    'alert alert-danger': editDateMessageType === 'error',
+                    'alert alert-warning': editDateMessageType === 'warning',
+                    'alert alert-info': editDateMessageType === 'info'
+                  }">
+                {{ editDateMessageText }}
+              </div>
+            </div>
+            <div *ngIf="editDateConfirmVisible" class="mb-3">
+              <div class="card p-2" style="background:#fafafa;border:1px solid #e0e0e0;">
+                <div style="margin-bottom:8px;font-weight:600;">{{ editDateConfirmText }}</div>
+                <div class="d-flex">
+                  <button class="btn theme-btn" (click)="performSaveDateChangeConfirmed()" style="margin-right:8px;">Yes, change it</button>
+                  <button class="btn btn-secondary" (click)="editDateConfirmVisible=false" style="color:#fff;">Cancel</button>
+                </div>
+              </div>
+            </div>
             <input type="date" [(ngModel)]="editDate" class="form-control d-inline-block" style="width:140px;display:inline-block;margin-left:8px;" />
             <button type="button" class="btn btn-sm theme-btn" style="margin-left:8px;padding:4px 8px;" (click)="saveDateChange()">Save</button>
             <button type="button" class="btn btn-sm btn-secondary" style="margin-left:8px;color:#fff;padding:4px 8px;" (click)="toggleEditDate()">Cancel</button>
@@ -162,6 +181,26 @@
 <!-- Edit Challan No Dialog -->
 <p-dialog header="Edit Challan No" [(visible)]="isEditChallanVisible" [modal]="true" [closable]="true" [style]="{ width: '30vw' }" (onHide)="isEditChallanVisible=false">
   <div class="p-3">
+    <div *ngIf="editChallanMessageText" class="mb-2">
+      <div [ngClass]="{
+            'alert alert-success': editChallanMessageType === 'success',
+            'alert alert-danger': editChallanMessageType === 'error',
+            'alert alert-warning': editChallanMessageType === 'warning',
+            'alert alert-info': editChallanMessageType === 'info'
+          }">
+        {{ editChallanMessageText }}
+      </div>
+    </div>
+    <!-- Inline confirmation area shown above inputs -->
+    <div *ngIf="editConfirmVisible" class="mb-3">
+      <div class="card p-2" style="background:#fafafa;border:1px solid #e0e0e0;">
+        <div style="margin-bottom:8px;font-weight:600;">{{ editConfirmText }}</div>
+        <div class="d-flex">
+          <button class="btn theme-btn" (click)="performSaveEditChallanConfirmed()" style="margin-right:8px;">Yes, change it</button>
+          <button class="btn btn-secondary" (click)="editConfirmVisible=false" style="color:#fff;">Cancel</button>
+        </div>
+      </div>
+    </div>
     <div class="form-group">
       <label>Old Challan No</label>
       <input type="text" class="form-control" [value]="editOldChallan" readonly />
