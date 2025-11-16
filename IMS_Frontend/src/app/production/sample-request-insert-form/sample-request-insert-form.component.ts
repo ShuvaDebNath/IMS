@@ -115,8 +115,8 @@ export class SampleRequestInsertFormComponent {
     const row = this.fb.group({
       RequestDate: this.fb.control<string | null>(null, Validators.required),
       CustomerName: this.fb.control<string | null>(null, Validators.required),
-      Customer_Contact_Info: this.fb.control<string>(''),
-      Product_Description: this.fb.control<string>(''),
+      Customer_Contact_Info: this.fb.control<string>('', Validators.required),
+      Product_Description: this.fb.control<string>('', Validators.required),
       ArticleNo: this.fb.control<string | null>(null, Validators.required),
       Sample_Article_No: this.fb.control<string | null>(
         null,
@@ -129,7 +129,7 @@ export class SampleRequestInsertFormComponent {
         null,
         Validators.required
       ),
-      Shipping_Address: this.fb.control<string>(''),
+      Shipping_Address: this.fb.control<string>('', Validators.required),
       RequestStatus: this.fb.control<string | null>(null, Validators.required),
       Remarks: this.fb.control<string>(''),
     });
