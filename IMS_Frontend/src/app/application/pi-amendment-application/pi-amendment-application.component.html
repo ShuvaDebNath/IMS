@@ -1,0 +1,312 @@
+<div class="container shadow-sm p-3 mb-5 bg-white rounded">
+  <h1 class="theme-text">Special Delivery Application</h1>
+
+  <br />
+  <form [formGroup]="Formgroup">
+    <!-- Header fields -->
+    <div class="row mb-3">
+      <!-- Export Date -->
+      <div class="col-md-6">
+        <label class="form-label">Date</label>
+        <input
+          #dateInput
+          type="date"
+          formControlName="Date"
+          class="form-control form-control-lg"
+          placeholder="Date"
+        />
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label>Customer Name <span>*</span></label>
+        <p-dropdown
+          [style]="{ width: '100%' }"
+          class="p-0"
+          [options]="CustomerList"
+          optionLabel="CustomerName"
+          [filter]="true"
+          filterBy="CustomerName"
+          [showClear]="true"
+          styleClass="listBottom"
+          placeholder="Please Select"
+          optionValue="Customer_ID"
+          formControlName="Customer"
+          [virtualScroll]="true"
+          [virtualScrollItemSize]="30"
+          (onChange)="getCustomerList()"
+        >
+          <ng-template let-Customer pTemplate="item">
+            <div class="flex align-items-center gap-2">
+              <div>{{ Customer.CustomerName }}</div>
+            </div>
+          </ng-template>
+        </p-dropdown>
+      </div>
+      <div class="col-md-6">
+        <label>PI No <span>*</span></label>
+        <p-dropdown
+          [style]="{ width: '100%' }"
+          class="p-0"
+          [options]="PIList"
+          optionLabel="label"
+          [filter]="true"
+          filterBy="label"
+          [showClear]="true"
+          styleClass="listBottom"
+          placeholder="Please Select"
+          optionValue="value"
+          formControlName="PINo"
+          [virtualScroll]="true"
+          [virtualScrollItemSize]="30"
+          (onChange)="getPIDetails()"
+        >
+          <ng-template let-pino pTemplate="item">
+            <div class="flex align-items-center gap-2">
+              <div>{{ pino.label }}</div>
+            </div>
+          </ng-template>
+        </p-dropdown>
+      </div>
+    </div>
+
+    <h3><strong>PI Info </strong></h3>
+    <!-- Items table -->
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th style="text-align: center">Customer</th>
+          <th style="text-align: center">PI No</th>
+          <th style="text-align: center">Article</th>
+          <th style="text-align: center">A. Article</th>
+          <th style="text-align: center">Color</th>
+          <th style="text-align: center">Width</th>
+          <th style="text-align: center">Unit</th>
+          <th style="text-align: center">Qty</th>
+          <th style="text-align: center">U. Price</th>
+          <th style="text-align: center">U. Comm</th>
+          <th style="text-align: center">Payment Terms</th>
+          <th style="text-align: center">Delivey Qty</th>
+          <th style="text-align: center">Action</th>
+        </tr>
+      </thead>
+
+      <tbody formArrayName="items" *ngIf="items && items.length > 0">
+        <tr
+          *ngFor="let group of items.controls; let i = index"
+          [formGroupName]="i"
+        >
+          <td>{{ group.value.customer_name }}</td>
+          <td>{{ group.value.PINo }}</td>
+          <td>{{ group.value.Article }}</td>
+          <td>{{ group.value.ActualArticle }}</td>
+          <td>{{ group.value.Color }}</td>
+          <td>{{ group.value.Width }}</td>
+          <td>{{ group.value.Unit }}</td>
+          <td>{{ group.value.Quantity }}</td>
+          <td>{{ group.value.Unit_Price }}</td>
+          <td>{{ group.value.CommissionUnit }}</td>
+          <td>{{ group.value.PaymentTerms }}</td>
+          <td>{{ group.value.Delivered_Quantity }}</td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-sm btn-success px-2 py-1"
+              (click)="CopyItem(group.value)"
+            >
+              Copy
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3><strong>Revise Info </strong></h3>
+    <!-- Items table -->
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th style="text-align: center">Customer</th>
+          <th style="text-align: center">PI No</th>
+          <th style="text-align: center">Article</th>
+          <th style="text-align: center">A. Article</th>
+          <th style="text-align: center">Color</th>
+          <th style="text-align: center">Width</th>
+          <th style="text-align: center">Unit</th>
+          <th style="text-align: center">Qty</th>
+          <th style="text-align: center">U. Price</th>
+          <th style="text-align: center">U. Comm</th>
+          <th style="text-align: center">Payment Terms</th>
+          <th style="text-align: center">Delivey Qty</th>
+          <th style="text-align: center">Action</th>
+        </tr>
+      </thead>
+
+      <tbody formArrayName="itemsRevise" *ngIf="items && items.length > 0">
+        <tr
+          *ngFor="let item of ReviseDetails; let i = index"
+          [formGroupName]="i"
+        >
+          <td>{{ item.customer_name }}</td>
+          <td>{{ item.PINo }}</td>
+          <td class="align-middle">
+            <input
+              style="width: 5rem"
+              formControlName="Article"
+              type="text"
+              class="form-control form-control-sm"
+              placeholder="Article No"
+              id="ArticleNo"
+              name="ArticleNo"
+            />
+          </td>
+          <td class="align-middle">
+            <p-dropdown
+              formControlName="Item_ID"
+              [options]="AAList"
+              optionLabel="Article_No"
+              optionValue="Item_ID"
+              [filter]="true"
+              filterBy="Article_No"
+              [showClear]="true"
+              appendTo="body"
+              (onChange)="SetActualArticle(itemrow)"
+              [style]="{ width: '100%' }"
+              placeholder="Select a Article"
+            >
+            </p-dropdown>
+          </td>
+          <td class="align-middle">
+            <p-dropdown
+              formControlName="Color_ID"
+              [options]="ColorList"
+              optionLabel="Color"
+              optionValue="Color_ID"
+              [filter]="true"
+              filterBy="Color"
+              [showClear]="true"
+              appendTo="body"
+              [style]="{ width: '100%' }"
+              placeholder="Select a Color"
+            >
+            </p-dropdown>
+          </td>
+          <td class="align-middle">
+            <p-dropdown
+              formControlName="Width_ID"
+              [options]="WidthList"
+              optionLabel="Measurement"
+              optionValue="Width_ID"
+              [filter]="true"
+              filterBy="Measurement"
+              [showClear]="true"
+              appendTo="body"
+              [style]="{ width: '100%' }"
+              placeholder="Select a Width"
+            >
+            </p-dropdown>
+          </td>
+          <td class="align-middle">
+            <p-dropdown
+              formControlName="Unit_ID"
+              [options]="UnitList"
+              optionLabel="Unit"
+              optionValue="Unit_ID"
+              [filter]="true"
+              filterBy="Unit"
+              [showClear]="true"
+              appendTo="body"
+              [style]="{ width: '100%' }"
+              placeholder="Select a Unit"
+            >
+            </p-dropdown>
+          </td>
+          <td class="align-middle">
+            <input
+              style="width: 5rem"
+              (change)="calculateAmount(itemrow)"
+              formControlName="Quantity"
+              type="number"
+              class="form-control form-control-sm"
+              placeholder="Qty"
+              id="Qty"
+              name="Qty"
+            />
+          </td>
+          <td class="align-middle">
+            <input
+              style="width: 5rem"
+              (change)="calculateAmount(itemrow)"
+              formControlName="Unit_Price"
+              type="number"
+              class="form-control form-control-sm text-right"
+              placeholder="Unit Price"
+              id="Rate"
+              name="Rate"
+            />
+          </td>
+          <td class="align-middle">
+            <input
+              style="width: 5rem"
+              (change)="calculateAmount(itemrow)"
+              formControlName="CommissionUnit"
+              type="text"
+              class="form-control form-control-sm text-right"
+              placeholder="Prod. Cost Unit"
+              id="ProdCost"
+              name="ProdCost"
+            />
+          </td>
+          <td class="align-middle">
+            <p-dropdown
+              formControlName="Unit_ID"
+              [options]="UnitList"
+              optionLabel="Unit"
+              optionValue="Unit_ID"
+              [filter]="true"
+              filterBy="Unit"
+              [showClear]="true"
+              appendTo="body"
+              [style]="{ width: '100%' }"
+              placeholder="Select a Unit"
+            >
+            </p-dropdown>
+          </td>
+          <td>{{ item.Delivered_Quantity }}</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="d-flex justify-content-end gap-2 mt-3">
+      <!-- <button type="button" class="btn btn-outline-success" (click)="addItem()">
+        <i class="bi bi-plus-circle me-1"></i> Add Row
+      </button> -->
+
+      <button
+        type="submit"
+        (click)="saveData()"
+        [ngClass]="{
+          'theme-btn-disable': Formgroup.invalid
+        }"
+        class="btn theme-btn btn-rounded"
+        [disabled]="Formgroup.invalid"
+        *ngIf="!isEdit"
+      >
+        <i class="bi bi-save me-1"></i> Save
+      </button>
+      <button
+        type="submit"
+        (click)="UpdateData()"
+        [ngClass]="{
+          'theme-btn-disable': Formgroup.invalid
+        }"
+        class="btn theme-btn btn-rounded"
+        [disabled]="Formgroup.invalid"
+        *ngIf="isEdit"
+      >
+        <i class="bi bi-save me-1"></i> Update
+      </button>
+    </div>
+  </form>
+</div>

@@ -117,6 +117,7 @@ import { MessengerReportComponent } from '../report/sample-request/messenger-rep
 import { AllApplicationComponent } from '../application/all-application/all-application.component';
 import { GenerateApplicationComponent } from '../application/generate-application/generate-application.component';
 import { ApproveApplicationComponent } from '../application/approve-application/approve-application.component';
+import { PiAmendmentApplicationComponent } from '../application/pi-amendment-application/pi-amendment-application.component';
 
 
 
@@ -209,7 +210,8 @@ const CustomSelectOptions: INgxSelectOptions = {
     MessengerReportComponent,
     AllApplicationComponent,
     GenerateApplicationComponent,
-    ApproveApplicationComponent
+    ApproveApplicationComponent,
+    PiAmendmentApplicationComponent
   ],
   imports: [
     CommonModule,
@@ -422,6 +424,7 @@ const CustomSelectOptions: INgxSelectOptions = {
           { path: 'all-application', component: AllApplicationComponent },
           { path: 'generate-application', component: GenerateApplicationComponent },
           { path: 'approve-application', component: ApproveApplicationComponent },
+          { path: 'pi-amendment-application', component: PiAmendmentApplicationComponent },
         ],
       },
 
