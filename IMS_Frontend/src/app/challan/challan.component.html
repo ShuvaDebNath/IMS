@@ -131,15 +131,16 @@
     <p-table [value]="challanDetails.details" responsiveLayout="scroll">
       <ng-template pTemplate="header">
         <tr>
-          <th>Item</th>
-          <th>Article</th>
-          <th>Color</th>
-          <th>Width</th>
-          <th>Packaging</th>
-          <th>Roll/Box/Pcs</th>
-          <th>Quantity</th>
-          <th>Unit</th>
-          <th>Remark</th>
+          <th style="text-align: center;">Item</th>
+          <th style="text-align: center;">Article</th>
+          <th style="text-align: center;">Color</th>
+          <th style="text-align: center;">Width</th>
+          <th style="text-align: center;">Packaging</th>
+          <th style="text-align: center;">Roll/Box/Pcs</th>
+          <th style="text-align: center;">Quantity</th>
+          <th style="text-align: center;">Unit</th>
+          <th style="text-align: center;">Remark</th>
+          <th style="text-align: center;">Generate QR Code</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-row>
@@ -153,6 +154,11 @@
           <td style="text-align:center">{{ row.Delivered }}</td>
           <td>{{ row.Unit }}</td>
           <td>{{ row.Remark }}</td>
+          <td style="text-align:center;">
+              <button pButton icon="pi pi-qrcode" label="Generate" class="p-button-sm p-button-primary"
+                (click)="generateQrCodes(row)">
+              </button>
+          </td>
         </tr>
       </ng-template>
       <ng-template pTemplate="footer">
