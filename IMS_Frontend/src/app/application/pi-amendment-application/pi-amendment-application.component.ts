@@ -44,10 +44,27 @@ export class PiAmendmentApplicationComponent {
     reloadingArticles = false;
     LoadingPortList: any[] = [];
     DestinationPortList: any[] = [];
-    RawMaterialList: any[] = [];
-    WidthList: any[] = [];
-    ColorList: any[] = [];
-    UnitList: any[] = [];
+    RawMaterialList: any[] = [];ShipperList: any|[];
+  BenificaryBankList: any|[];
+  CountryList: any|[];
+  PackingList: any|[];
+  LoadingModeList: any|[];
+  PaymentModeList: any|[];
+  ConsigneeList: any|[];
+  ApplicantBankList: any|[];
+  BuyingHouseList: any|[];
+  TermsofDeliveryList: any|[];
+  DescriptionList: any|[];
+  WidthList: any|[];
+  ColorList: any|[];
+  PackagingList: any|[];
+  UnitList: any|[];
+  AAList: any|[];
+  DeliveryConditionList: any|[];
+  PartialShipmentList: any|[];
+  PriceTermsList: any|[];
+  ForceMajeureList: any|[];
+  ArbitrationList: any|[];
     Id: any = '';
     CustomerList: any[] = [];
     PIList: any[] = [];
@@ -130,28 +147,13 @@ export class PiAmendmentApplicationComponent {
       this.getDataService.GetInitialData(ProcedureData).subscribe({
         next: (results) => {
           if (results.status) {
+            var DataSet = JSON.parse(results.data);
             this.CustomerList = JSON.parse(results.data).Tables1;
-            this.ShipperList=DataSet.Tables1;
-            this.BenificaryBankList=DataSet.Tables2;
-            this.CountryList=DataSet.Tables3;
-            this.PackingList=DataSet.Tables4;
-            this.LoadingModeList=DataSet.Tables5;
+            this.AAList=DataSet.Tables2;
+            this.ColorList=DataSet.Tables3;
+            this.WidthList=DataSet.Tables4;
+            this.UnitList=DataSet.Tables5;
             this.PaymentModeList=DataSet.Tables6;
-            this.ConsigneeList=DataSet.Tables7;
-            this.ApplicantBankList=DataSet.Tables8;
-            this.BuyingHouseList=DataSet.Tables9;
-            this.TermsofDeliveryList=DataSet.Tables10;
-            this.DescriptionList=DataSet.Tables11;
-            this.WidthList=DataSet.Tables12;
-            this.ColorList=DataSet.Tables13;
-            this.PackagingList=DataSet.Tables14;
-            this.UnitList=DataSet.Tables15;
-            this.AAList=DataSet.Tables28;
-            this.DeliveryConditionList=DataSet.Tables17;
-            this.PartialShipmentList=DataSet.Tables18;
-            this.PriceTermsList=DataSet.Tables19;
-            this.ForceMajeureList=DataSet.Tables20;
-            this.ArbitrationList=DataSet.Tables21;
           } else if (results.msg == 'Invalid Token') {
             swal.fire('Session Expierd!', 'Please Login Again.', 'info');
             this.gs.Logout();
