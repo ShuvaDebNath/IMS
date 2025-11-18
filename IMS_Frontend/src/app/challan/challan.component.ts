@@ -10,7 +10,7 @@ import { ReportService } from '../services/reportService/report-service.service'
 import Swal from 'sweetalert2';
 import { DividerModule } from 'primeng/divider';
 import { MasterEntryService } from '../services/masterEntry/masterEntry.service';
-
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   standalone: true,
   selector: 'app-challan',
@@ -43,9 +43,12 @@ export class ChallanComponent implements OnInit {
   printPermissions: any;
   datePipe = new DatePipe('en-US');
 
-  constructor(private fb: FormBuilder, private gs: GlobalServiceService,private getDataService: GetDataService,
-              private reportService: ReportService,
-            private masterEntryService : MasterEntryService) {}
+  constructor(private fb: FormBuilder,
+    private gs: GlobalServiceService,
+    private getDataService: GetDataService,
+    private reportService: ReportService,
+    private masterEntryService: MasterEntryService,
+    private router: Router) { }
 
   isChallanDetailsVisible = false;
   challanDetails: any = null; 
@@ -69,13 +72,13 @@ export class ChallanComponent implements OnInit {
     this.PageTitle = 'Challan'
     var permissions = this.gs.CheckUserPermission(this.PageTitle);
       this.insertPermissions = permissions.insertPermissions;
-      this.updatePermissions = true; //permissions.updatePermissions;
-      this.deletePermissions = true; //permissions.deletePermissions;
-      this.printPermissions = true; //permissions.printPermissions;
+      this.updatePermissions = permissions.updatePermissions;
+      this.deletePermissions = permissions.deletePermissions;
+      this.printPermissions = permissions.printPermissions;
     console.log(permissions);
     
       if (!this.printPermissions) {
-        //window.location.href = 'dashboard';
+        window.location.href = 'dashboard';
       }
 
     this.searchForm = this.fb.group({
@@ -487,5 +490,83 @@ export class ChallanComponent implements OnInit {
     this.searchForm.reset();
     this.showTable = false;
     this.tableData = [];
+  }
+
+  generateQrCodes(item: any): void {    
+
+    // Generate QR codes and display in a new window, 8 per row
+    const challanNo = this.challanDetails?.master?.Chalan_No;
+    const challanDate = this.challanDetails?.master?.Date;
+    const itemId = item?.Article || item?.Article_No || item?.Description || '';
+    const width = item?.Color || '';
+    const color = item?.Width || '';
+    const rollCount = Number(item?.Roll || item?.Rolls || item?.RollValue || item?.RollBoxPcs || 0);
+    const totalRoll = rollCount; // Assuming totalRoll is equivalent to rollCount
+
+    // Use CDN for QRCode generation
+    const qrLibUrl = 'https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js';
+    let html = `<html><head><title>QR Codes</title>
+      <style>
+        body { font-family: Arial, sans-serif; }
+        .qr-row { display: flex; justify-content: flex-start; margin-bottom: 24px; }
+        .qr-block { text-align: center; margin: 8px; }
+        .qr-label { margin-top: 8px; font-size: 15px; }
+      </style>
+      <script src='${qrLibUrl}'></script>
+    </head><body>`;
+    html += `<h2 style='text-align:center;'>QR Codes for Challan ${challanNo}</h2>`;
+    html += `<div id='qr-container'></div>`;
+    html += `<script>
+      function makeQR(data, size) {
+        var qr = new QRious({ value: data, size: size });
+        return qr.toDataURL();
+      }
+      function renderQRCodes() {
+        var container = document.getElementById('qr-container');
+        var rollCount = ${rollCount};
+        var challanNo = '${challanNo}';
+        var challanDate = '${challanDate}';
+        var itemId = '${itemId}';
+        var width = '${width}';
+        var color = '${color}';
+        var totalRoll = '${totalRoll}';
+        var perRow = 8;
+        for (var i = 1; i <= rollCount; i++) {
+          if ((i-1) % perRow === 0) {
+            var rowDiv = document.createElement('div');
+            rowDiv.className = 'qr-row';
+            container.appendChild(rowDiv);
+          }
+          var qrData = ("Challan: " + challanNo + "\\n" +
+              "Date: " + challanDate + "\\n" +
+              "Article: " + itemId + "\\n" +
+              "Width: " + width + "\\n" +
+              "Color: " + color + "\\n" +
+              "Roll: " + i);
+              
+          var qrImg = document.createElement('img');
+          qrImg.src = makeQR(qrData, 140);
+          qrImg.width = 140;
+          qrImg.height = 140;
+          var block = document.createElement('div');
+          block.className = 'qr-block';
+          var label = document.createElement('div');
+          label.className = 'qr-label';
+              label.innerHTML = challanNo + '<br>Roll ' + i + ' of ' + totalRoll;
+          block.appendChild(qrImg);
+          block.appendChild(label);
+          container.lastChild.appendChild(block);
+        }
+      }
+      window.onload = function() { renderQRCodes(); };
+    </script>`;
+    html += `</body></html>`;
+    var win = window.open('', '_blank');
+    if (win) {
+      win.document.write(html);
+      win.document.close();
+    } else {
+      alert('Unable to open new window. Please allow popups for this site.');
+    }
   }
 }
