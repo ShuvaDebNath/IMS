@@ -156,7 +156,8 @@ export class GlobalServiceService {
 
     // Load menu data
     const menuData = window.localStorage.getItem('UserMenuWithPermission');
-
+    console.log(menuData);
+    
     if (!menuData) {
       this.Logout();
       return permissions;
@@ -184,9 +185,17 @@ export class GlobalServiceService {
             menuItem.Children = [];
           }
         }
+        //console.log(menuItem);
 
         // Match target menu name
         if (menuItem.SubMenuName === menuName) {
+          // if (typeof menuItem.ButtonName=='string') {
+          //   var arr = JSON.parse(menuItem.ButtonName);
+          // }
+          // else if (typeof menuItem.ButtonName === 'object' && menuItem.ButtonName !== null) {
+
+          // }
+
           if (menuItem.ButtonName) {
             buttonPermissions.push(menuItem.ButtonName);
           }
@@ -205,6 +214,17 @@ export class GlobalServiceService {
         // console.log(menuItem.Children,Array.isArray(menuItem.Children));
         // Go deeper recursively
         if (menuItem.Children && Array.isArray(menuItem.Children)) {
+          if (menuItem.Children.length == 0) {
+            if (menuItem.SubMenuName == menuName) {
+              if (typeof menuItem.ButtonName == 'string') {
+                var arr = JSON.parse(menuItem.ButtonName);
+                for(var item of arr){   
+                  buttonPermissions.push(item.ButtonName);                  
+                }
+                continue
+              }
+            }
+          }
           findMenuRecursively(menuItem.Children);
         }
       }
