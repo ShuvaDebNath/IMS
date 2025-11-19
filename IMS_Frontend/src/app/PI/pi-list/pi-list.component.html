@@ -427,3 +427,38 @@
       </p-table>
     </div>
   </p-dialog>
+
+  <p-dialog header="Special Approval" [(visible)]="isSpecialApprovalVisible" [modal]="true" [closable]="true" [style]="{ width: '500px' }">
+  <div class="special-approval-modal">
+    <div class="row mb-3">
+      <div class="col-5 text-right font-weight-bold">Client Name:</div>
+      <div class="col-7">{{ PIData?.CustomerName }}</div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-5 text-right font-weight-bold">PI Number:</div>
+      <div class="col-7">{{ PIData?.PINo}}</div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-5 text-right font-weight-bold">Max Deliverable % (In Percentage):</div>
+      <div class="col-7">
+        <input type="number" class="form-control" [(ngModel)]="specialApprovalMaxDeliverable" min="0" max="100" step="0.01"
+          (change)="validateSpecialApprovalPercentage()" />
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-5 text-right font-weight-bold">PI Status:</div>
+      <div class="col-7"><input type="text" class="form-control" [value]="PIData?.Status || 'Partial Approved'" readonly /></div>
+    </div>
+    <div class="special-approval-actions">
+  <button class="btn menu-btn" (click)="isSpecialApprovalVisible=false">
+    <i class="fas fa-times"></i> Close
+  </button>
+
+  <button class="btn menu-btn" 
+          [disabled]="!specialApprovalSaveEnabled" 
+          (click)="saveSpecialApproval()">
+    <i class="fas fa-check"></i> Save
+  </button>
+</div>
+  </div>
+</p-dialog>
