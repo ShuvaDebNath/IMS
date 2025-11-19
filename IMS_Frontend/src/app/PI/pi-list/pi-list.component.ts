@@ -43,7 +43,7 @@ export class PiListComponent implements OnInit {
   first: any=1;
   rows: any=10;
   totalRecords!: number;
-  isViewDetails: boolean=false;
+  isViewDetails: boolean=false;  
   PageTitle: any;
 
   ShowbtnPar:boolean=false;
@@ -69,6 +69,10 @@ export class PiListComponent implements OnInit {
   deliveryTotalsOrderedMeter: number = 0;
   deliveryTotalsDeliveredMeter: number = 0;
   deliveryTotalsRolls: number = 0;
+
+  specialApprovalMaxDeliverable: number = 0;
+  isSpecialApprovalVisible: boolean = false;
+  specialApprovalSaveEnabled: boolean = false;
 
 
   constructor( private service:MasterEntryService,
@@ -244,10 +248,12 @@ export class PiListComponent implements OnInit {
     this.LoadTableData();
   }
 OpenSpecialApprove(Id:number){
-  Swal.fire('Not yet worked!', Id+'', 'info');
+  this.isSpecialApprovalVisible = true;
+  this.specialApprovalMaxDeliverable = 0; // Reset percentage for each row
+  this.specialApprovalSaveEnabled = false; // Reset save button state
+  this.ViewDetails(Id, true);
 }
-  ViewDetails(Id:number){
-
+  ViewDetails(Id:number, fromSpecialApprove: boolean = false){
     const procedureData = {
         procedureName: 'usp_ProformaInvoice_GetDataById',
         parameters: {
@@ -255,23 +261,23 @@ OpenSpecialApprove(Id:number){
         }
       };
    
-    this.isViewDetails=true;
-        this.getDataService.GetInitialData(procedureData).subscribe({
-        next: (results) => {
-          if (results.status) {
-            this.PIDetails = JSON.parse(results.data).Tables1;
-            this.PIData = this.PIDetails[0];
-            console.clear();
-            console.log(this.PIData);
-            // compute totals for details
-            this.computePidTotals();
-          } else if (results.msg == 'Invalid Token') {
-            Swal.fire('Session Expired!', 'Please Login Again.', 'info');
-            this.gs.Logout();
-          }
-        },
-        error: (err) => { },
-      });
+    this.isViewDetails = !fromSpecialApprove;
+    this.getDataService.GetInitialData(procedureData).subscribe({
+      next: (results) => {
+        if (results.status) {
+          this.PIDetails = JSON.parse(results.data).Tables1;
+          this.PIData = this.PIDetails[0];
+          console.clear();
+          console.log(this.PIData);
+          // compute totals for details
+          this.computePidTotals();
+        } else if (results.msg == 'Invalid Token') {
+          Swal.fire('Session Expired!', 'Please Login Again.', 'info');
+          this.gs.Logout();
+        }
+      },
+      error: (err) => { },
+    });
   }
 
   LoadTableData(): void {
@@ -485,6 +491,81 @@ OpenSpecialApprove(Id:number){
       'PI_Master_ID': this.PIData?.PI_Master_ID,
     }
     this.reportService.PrintProformaInvoiceRequest(item, 'pdf','T');
+  }
+  saveSpecialApproval() {
+    const status = this.PIData?.Status || 'Partial Approved';
+    const percent = this.specialApprovalMaxDeliverable;
+    let valid = false;
+    let min = 0, max = 0;
+    if (status === 'Partial Approved') {
+      min = 21; max = 49;
+      valid = percent >= min && percent <= max;
+    } else if (status === 'Quartar Approved') {
+      min = 51; max = 99;
+      valid = percent >= min && percent <= max;
+    } else {
+      valid = true;
+    }
+    if (!valid) {
+      let msg = '';
+      if (status === 'Partial Approved') {
+        msg = 'For Partial Approved, please enter a percentage between 21 and 49.';
+      } else if (status === 'Quartar Approved') {
+        msg = 'For Quartar Approved, please enter a percentage between 51 and 99.';
+      } else {
+        msg = 'Invalid percentage.';
+      }
+      Swal.fire('Invalid Percentage', msg, 'error');
+      return;
+    }
+    // Simulate API call for saving
+    var convertActualPercent = percent / 100;
+
+     const updateParams = { CustomMaxDeliveryPercentage: convertActualPercent };
+     const updateCondition = { PI_Master_ID: this.PIData?.PI_Master_ID };
+     const updateTable = 'tbl_pi_master';
+
+    this.service.UpdateData(updateParams, updateCondition, updateTable).subscribe({
+      next: (res: any) => {
+        if (res.status) {
+          Swal.fire('Success', 'Special approval saved successfully.', 'success');
+          this.isSpecialApprovalVisible = false;
+        } else {
+          Swal.fire('Failed', 'Failed to save special approval.', 'error');
+        }
+      },
+      error: () => {
+        Swal.fire('Failed', 'Failed to save special approval.', 'error');
+      }
+    });
+  }
+  validateSpecialApprovalPercentage() {
+    const status = this.PIData?.Status || 'Partial Approved';
+    const percent = this.specialApprovalMaxDeliverable;
+    let valid = false;
+    let min = 0, max = 0;
+    if (status === 'Partial Approved') {
+      min = 21; max = 49;
+      valid = percent >= min && percent <= max;
+    } else if (status === 'Quartar Approved') {
+      min = 51; max = 99;
+      valid = percent >= min && percent <= max;
+    } else {
+      valid = true;
+    }
+    this.specialApprovalSaveEnabled = valid;
+    if (!valid) {
+      let msg = '';
+      if (status === 'Partial Approved') {
+        msg = 'For Partial Approved, please enter a percentage between 21 and 49.';
+      } else if (status === 'Quartar Approved') {
+        msg = 'For Quartar Approved, please enter a percentage between 51 and 99.';
+      } else {
+        msg = 'Invalid percentage.';
+      }
+      Swal.fire('Invalid Percentage', msg, 'warning');
+      this.specialApprovalMaxDeliverable = 0;
+    }
   }
     
 }
