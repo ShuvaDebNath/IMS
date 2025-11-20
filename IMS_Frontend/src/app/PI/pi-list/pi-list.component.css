@@ -87,4 +87,30 @@ select.form-control-sm {
   background-color: #1f5e3c;
 }
 
+.special-approval-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;         /* small spacing between buttons */
+  margin-top: 20px;
+}
+
+/* Make both buttons same “menu color” */
+.menu-btn {
+  background-color: #6a1a3f;  /* change to your MENU color */
+  color: white;
+  padding: 6px 16px;
+  border-radius: 6px;
+  border: none;
+}
+
+.menu-btn:disabled {
+  opacity: 0.6;
+}
+
+/* Hover effect */
+.menu-btn:hover:not(:disabled) {
+  background-color: #5a1433; /* darker shade of menu color */
+}
+
+
 
