@@ -72,7 +72,8 @@
 
     <h3><strong>PI Info </strong></h3>
     <!-- Items table -->
-    <table class="table table-bordered">
+    <div style="overflow-x:auto; width:100%;">
+      <table class="table table-bordered" style="min-width:900px;">
       <thead>
         <tr>
           <th style="text-align: center">Customer</th>
@@ -119,11 +120,18 @@
           </td>
         </tr>
       </tbody>
-    </table>
+      </table>
+    </div>
 
     <h3><strong>Revise Info </strong></h3>
+    <div class="d-flex justify-content-end mb-2">
+      <button type="button" class="btn btn-outline-success btn-sm" (click)="addReviseRow()" [disabled]="!items || items.length === 0">
+        <i class="bi bi-plus-circle me-1"></i> Add Row
+      </button>
+    </div>
     <!-- Items table -->
-    <table class="table table-bordered">
+    <div style="overflow-x:auto; width:100%;">
+      <table class="table table-bordered" style="min-width:1100px;">
       <thead>
         <tr>
           <th style="text-align: center">Customer</th>
@@ -137,7 +145,7 @@
           <th style="text-align: center">U. Price</th>
           <th style="text-align: center">U. Comm</th>
           <th style="text-align: center">Payment Terms</th>
-          <th style="text-align: center">Delivey Qty</th>
+          <th style="text-align: center">Remarks</th>
           <th style="text-align: center">Action</th>
         </tr>
       </thead>
@@ -159,6 +167,7 @@
               id="ArticleNo"
               name="ArticleNo"
             />
+            <div *ngIf="Formgroup.get(['itemsRevise', i, 'Article'])?.invalid && Formgroup.get(['itemsRevise', i, 'Article'])?.touched" class="text-danger small">Article is required</div>
           </td>
           <td class="align-middle">
             <p-dropdown
@@ -170,11 +179,12 @@
               filterBy="Article_No"
               [showClear]="true"
               appendTo="body"
-              (onChange)="SetActualArticle(itemrow)"
+              (onChange)="SetActualArticle(item)"
               [style]="{ width: '100%' }"
               placeholder="Select a Article"
             >
             </p-dropdown>
+            <div *ngIf="Formgroup.get(['itemsRevise', i, 'Item_ID'])?.invalid && Formgroup.get(['itemsRevise', i, 'Item_ID'])?.touched" class="text-danger small">A. Article required</div>
           </td>
           <td class="align-middle">
             <p-dropdown
@@ -190,6 +200,7 @@
               placeholder="Select a Color"
             >
             </p-dropdown>
+            <div *ngIf="Formgroup.get(['itemsRevise', i, 'Color_ID'])?.invalid && Formgroup.get(['itemsRevise', i, 'Color_ID'])?.touched" class="text-danger small">Color required</div>
           </td>
           <td class="align-middle">
             <p-dropdown
@@ -205,6 +216,7 @@
               placeholder="Select a Width"
             >
             </p-dropdown>
+            <div *ngIf="Formgroup.get(['itemsRevise', i, 'Width_ID'])?.invalid && Formgroup.get(['itemsRevise', i, 'Width_ID'])?.touched" class="text-danger small">Width required</div>
           </td>
           <td class="align-middle">
             <p-dropdown
@@ -220,11 +232,12 @@
               placeholder="Select a Unit"
             >
             </p-dropdown>
+            <div *ngIf="Formgroup.get(['itemsRevise', i, 'Unit_ID'])?.invalid && Formgroup.get(['itemsRevise', i, 'Unit_ID'])?.touched" class="text-danger small">Unit required</div>
           </td>
           <td class="align-middle">
             <input
               style="width: 5rem"
-              (change)="calculateAmount(itemrow)"
+              (change)="calculateAmount(item)"
               formControlName="Quantity"
               type="number"
               class="form-control form-control-sm"
@@ -232,11 +245,12 @@
               id="Qty"
               name="Qty"
             />
+              <div *ngIf="Formgroup.get(['itemsRevise', i, 'Quantity'])?.invalid && Formgroup.get(['itemsRevise', i, 'Quantity'])?.touched" class="text-danger small">Qty required (min 1)</div>
           </td>
           <td class="align-middle">
             <input
               style="width: 5rem"
-              (change)="calculateAmount(itemrow)"
+              (change)="calculateAmount(item)"
               formControlName="Unit_Price"
               type="number"
               class="form-control form-control-sm text-right"
@@ -244,11 +258,12 @@
               id="Rate"
               name="Rate"
             />
+              <div *ngIf="Formgroup.get(['itemsRevise', i, 'Unit_Price'])?.invalid && Formgroup.get(['itemsRevise', i, 'Unit_Price'])?.touched" class="text-danger small">Unit price required</div>
           </td>
           <td class="align-middle">
             <input
               style="width: 5rem"
-              (change)="calculateAmount(itemrow)"
+              (change)="calculateAmount(item)"
               formControlName="CommissionUnit"
               type="text"
               class="form-control form-control-sm text-right"
@@ -259,24 +274,36 @@
           </td>
           <td class="align-middle">
             <p-dropdown
-              formControlName="Unit_ID"
-              [options]="UnitList"
-              optionLabel="Unit"
-              optionValue="Unit_ID"
+              formControlName="PaymentTerms"
+              [options]="PaymentModeList"
+              optionLabel="Mode"
+              optionValue="Payment_Term_ID"
               [filter]="true"
-              filterBy="Unit"
+              filterBy="Mode"
               [showClear]="true"
               appendTo="body"
               [style]="{ width: '100%' }"
-              placeholder="Select a Unit"
+              placeholder="Select Payment Term"
             >
             </p-dropdown>
+            <div *ngIf="Formgroup.get(['itemsRevise', i, 'Mode'])?.invalid && Formgroup.get(['itemsRevise', i, 'Mode'])?.touched" class="text-danger small">Payment Terms required</div>
           </td>
-          <td>{{ item.Delivered_Quantity }}</td>
-          <td></td>
+          <td>
+            <input type="text" formControlName="Remarks" class="form-control form-control-sm" />
+          </td>
+          <td class="text-center">
+            <button
+              type="button"
+              class="btn btn-sm btn-danger px-2 py-1"
+              (click)="removeRevise(i)"
+            >
+              ×
+            </button>
+          </td>
         </tr>
       </tbody>
-    </table>
+      </table>
+    </div>
 
     <div class="d-flex justify-content-end gap-2 mt-3">
       <!-- <button type="button" class="btn btn-outline-success" (click)="addItem()">

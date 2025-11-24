@@ -132,6 +132,7 @@ export class PiAmendmentApplicationComponent {
         Customer: ['', Validators.required],
         PINo: ['', Validators.required],
         items: this.fb.array([]),
+        itemsRevise: this.fb.array([]),
       });
     }
   
@@ -168,6 +169,10 @@ export class PiAmendmentApplicationComponent {
   
     get items(): FormArray {
       return this.Formgroup.get('items') as FormArray;
+    }
+
+    get itemsRevise(): FormArray {
+      return this.Formgroup.get('itemsRevise') as FormArray;
     }
   
     removeItem(i: number) {
@@ -467,13 +472,18 @@ export class PiAmendmentApplicationComponent {
                   PIDetailsId: [item.PINo],
                   Article: [item.Article],
                   ActualArticle: [item.ActualArticle],
+                  ActualArticleId:[item.Item_ID],
                   Color: [item.Color],
+                  ColorId: [item.Color_ID],
                   Width: [item.Width],
+                  WidthId: [item.Width_ID],
                   Unit: [item.Unit],
+                  UnitId: [item.Unit_ID],
                   Quantity: [item.Quantity],
                   Unit_Price: [item.Unit_Price],
                   CommissionUnit: [item.CommissionUnit],
                   PaymentTerms: [item.PaymentTerms],
+                  PaymentTermsId: [item.Payment_Term_ID],
                   Delivered_Quantity: [item.Delivered_Quantity],
                   ApprovedQty: [null, [Validators.required, Validators.min(1)]],
                   Remarks: [''],
@@ -565,6 +575,125 @@ export class PiAmendmentApplicationComponent {
     }
 
     CopyItem(item:any){
+      try{
+        // build a revise group (with validators) and push it
+        const grp = this.buildReviseGroup({
+          customer_name: item.customer_name,
+          PINo: item.PINo,
+          Article: item.Article,
+          Item_ID: item.ActualArticleId,
+          Color_ID: item.ColorId,
+          Width_ID: item.WidthId,
+          Unit_ID: item.UnitId,
+          Quantity: item.Quantity,
+          Unit_Price: item.Unit_Price,
+          CommissionUnit: item.CommissionUnit,
+          Delivered_Quantity: item.Delivered_Quantity,
+          PI_Detail_ID: item.PI_Detail_ID,
+          PI_Master_ID: item.PI_Master_ID,
+          ActualArticle: item.ActualArticle,
+          // prefer payment term id if available
+          PaymentTerms: item.PaymentTermsId ?? item.Payment_Term_ID ?? item.PaymentTerms ?? null
+        });
 
+        this.itemsRevise.push(grp);
+
+        // add a display entry to ReviseDetails used by the template
+        this.ReviseDetails.push({
+          customer_name: item.customer_name || '',
+          PINo: item.PINo || '',
+          Article: item.Article || '',
+          ActualArticle: item.ActualArticle || '',
+          Color: item.Color || '',
+          Width: item.Width || '',
+          Unit: item.Unit || '',
+          Quantity: item.Quantity || 0,
+          Unit_Price: item.Unit_Price || 0,
+          CommissionUnit: item.CommissionUnit || '',
+          PaymentTerms: item.PaymentTerms || '',
+          Delivered_Quantity: item.Delivered_Quantity || 0,
+          PI_Detail_ID: item.PI_Detail_ID || null,
+          PI_Master_ID: item.PI_Master_ID || null,
+        });
+      }catch(err){
+        console.error('CopyItem error', err);
+      }
+    }
+
+    /**
+     * Build a FormGroup for revise rows with validators.
+     * If data provided, populate values; otherwise leave empty.
+     */
+    buildReviseGroup(data?: any): FormGroup {
+      return this.fb.group({
+        customer_name: [data?.customer_name || ''],
+        PINo: [data?.PINo || ''],
+        Article: [data?.Article || '', Validators.required],
+        // dropdowns are required per user's request
+        Item_ID: [data?.Item_ID ?? null, Validators.required],
+        Color_ID: [data?.Color_ID ?? null, Validators.required],
+        Width_ID: [data?.Width_ID ?? null, Validators.required],
+        Unit_ID: [data?.Unit_ID ?? null, Validators.required],
+        Quantity: [data?.Quantity ?? 0, [Validators.required, Validators.min(1)]],
+        Unit_Price: [data?.Unit_Price ?? 0, [Validators.required, Validators.min(0)]],
+        CommissionUnit: [data?.CommissionUnit || ''],
+        Remarks: [data?.Remarks || ''],
+        Delivered_Quantity: [data?.Delivered_Quantity ?? 0],
+        PI_Detail_ID: [data?.PI_Detail_ID ?? null],
+        PI_Master_ID: [data?.PI_Master_ID ?? null],
+        ActualArticle: [data?.ActualArticle || ''],
+        // PaymentTerms stores the selected payment term id (required)
+        PaymentTerms: [data?.PaymentTerms ?? data?.PaymentTermsId ?? null, Validators.required]
+      });
+    }
+
+    addReviseRow(){
+      // only allow adding if there's at least one item in PI Info
+      if (!this.items || this.items.length === 0) return;
+
+      // copy customer and PI from the first row of the items FormArray
+      const first = (this.items.at(0) as FormGroup).value;
+      const customerName = first.customer_name || '';
+      const pinLabel = first.PINo || '';
+
+      const grp = this.buildReviseGroup({
+        customer_name: customerName,
+        PINo: pinLabel
+      });
+
+      this.itemsRevise.push(grp);
+      this.ReviseDetails.push({
+        customer_name: customerName,
+        PINo: pinLabel,
+        Article: '',
+        ActualArticle: '',
+        Color: '',
+        Width: '',
+        Unit: '',
+        Quantity: 0,
+        Unit_Price: 0,
+        CommissionUnit: '',
+        PaymentTerms: '',
+        Delivered_Quantity: 0,
+        PI_Detail_ID: null,
+        PI_Master_ID: null,
+      });
+    }
+
+    calculateAmount(item:any){
+      // placeholder: keep existing behavior or wire-up calculations if needed
+    }
+
+    SetActualArticle(item:any){
+      // placeholder for onChange of AAList dropdown
+    }
+
+    removeRevise(i: number){
+      if(this.itemsRevise && this.itemsRevise.length > i){
+        this.itemsRevise.removeAt(i);
+      }
+      if(this.ReviseDetails && this.ReviseDetails.length > i){
+        this.ReviseDetails.splice(i,1);
+      }
     }
 }
