@@ -221,7 +221,6 @@ export class PiAmendmentApplicationComponent {
   
         totalQty += Number(item.Quantity) || 0;
         totalDeliveredQuantity += Number(item.Delivered_Quantity) || 0;
-        totalAproveQty += Number(item.ApprovedQty) || 0;
       });
   
       const masterRow = {
@@ -246,7 +245,6 @@ export class PiAmendmentApplicationComponent {
         PiNo: i.PINo,
         ArticleNo: i.Article,
         CustomerId: fv.Customer,
-        ApplyDeliveryQty: i.ApprovedQty,
         TblPiMasterId: i.PI_Master_ID,
         TblPiDetailId: i.PI_Detail_ID,
         TblPoFormMasterId: '',
@@ -263,6 +261,7 @@ export class PiAmendmentApplicationComponent {
         UnitCommission: i.CommissionUnit,
         PaymentTerms: i.PaymentTerms,
         DeliveredQuantity: i.Delivered_Quantity,
+        ApplyDeliveryQty:0
       }));
   
       this.doubleMasterEntryService
@@ -341,7 +340,6 @@ export class PiAmendmentApplicationComponent {
   
         totalQty += Number(item.Quantity) || 0;
         totalDeliveredQuantity += Number(item.Delivered_Quantity) || 0;
-        totalAproveQty += Number(item.ApprovedQty) || 0;
       });
   
       const masterRow = {
@@ -366,7 +364,6 @@ export class PiAmendmentApplicationComponent {
         PiNo: i.PINo,
         ArticleNo: i.Article,
         CustomerId: fv.Customer,
-        ApplyDeliveryQty: i.ApprovedQty,
         TblPiMasterId: i.PI_Master_ID,
         TblPiDetailId: i.PI_Detail_ID,
         TblPoFormMasterId: '',
@@ -485,7 +482,6 @@ export class PiAmendmentApplicationComponent {
                   PaymentTerms: [item.PaymentTerms],
                   PaymentTermsId: [item.Payment_Term_ID],
                   Delivered_Quantity: [item.Delivered_Quantity],
-                  ApprovedQty: [null, [Validators.required, Validators.min(1)]],
                   Remarks: [''],
                   PI_Detail_ID: [item.PI_Detail_ID],
                   PI_Master_ID: [item.PI_Master_ID],
@@ -501,15 +497,7 @@ export class PiAmendmentApplicationComponent {
         error: (err) => {},
       });
     }
-  
-    approveQtyChange(item: any) {
-      if (item.value.Quantity < item.value.ApprovedQty) {
-        console.log(item);
-        item.value.ApprovedQty = 0;
-        swal.fire('info', 'Approve Qty can not be greater then Pi Qty', 'info');
-      }
-    }
-  
+    
     getEditData() {
       var userId = window.localStorage.getItem('userId');
   
@@ -557,10 +545,6 @@ export class PiAmendmentApplicationComponent {
                   PaymentTerms: [item.PaymentTerms],
                   Delivered_Quantity: [item.DeliveredQuantity],
                   Remarks: [''],
-                  ApprovedQty: [
-                    item.ApplyDeliveryQty,
-                    [Validators.required, Validators.min(1)],
-                  ],
                 })
               );
             });
