@@ -44,6 +44,9 @@ export class ApproveApplicationComponent {
   deletePermissions: boolean = false;
   printPermissions: boolean = false;
 
+  ApplicationType:any = '';
+  reviseData: any = [];
+
   constructor(
     private fb: FormBuilder,
     private doubleMasterEntryService: DoubleMasterEntryService,
@@ -82,12 +85,21 @@ export class ApproveApplicationComponent {
         console.log(JSON.parse(results.data).Tables1);
         if (results.status) {
           this.tableData = JSON.parse(results.data).Tables1;
-          console.log(this.tableData);
-
-          this.status = this.tableData[0].Status;
-          this.PoNo = this.tableData[0].POno;
-          this.AppDate = this.tableData[0].Date;
-          this.FormType = this.tableData[0].FormTypeName;
+          
+          if(this.tableData[0].AppType=="PI Amendment Application"){
+            this.status = this.tableData[0].Status;
+            this.PoNo = this.tableData[0].POno;
+            this.AppDate = this.tableData[0].Date;
+            this.FormType = this.tableData[0].AppType;
+            this.reviseData = JSON.parse(results.data).Tables2;
+          }
+          else if(this.tableData[0].AppType=="Special Delivery Application"){
+            this.status = this.tableData[0].Status;
+            this.PoNo = this.tableData[0].POno;
+            this.AppDate = this.tableData[0].Date;
+            this.FormType = this.tableData[0].FormTypeName;
+          }
+          
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
           this.gs.Logout();

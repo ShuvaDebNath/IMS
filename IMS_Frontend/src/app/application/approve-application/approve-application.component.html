@@ -1,5 +1,5 @@
 <div class="container shadow-sm p-3 mb-5 bg-white rounded">
-  <h1 class="theme-text">Special Delivery Application</h1>
+  <h1 class="theme-text">{{FormType}} Application</h1>
 
   <br />
   <!-- Header fields -->
@@ -70,6 +70,49 @@
 
     <tbody *ngIf="tableData && tableData.length > 0">
       <tr *ngFor="let group of tableData; let i = index">
+        <td>{{ group.customer_name }}</td>
+        <td>{{ group.PiNo }}</td>
+        <td>{{ group.ArticleNo }}</td>
+        <td>{{ group.ActualArticleNo }}</td>
+        <td>{{ group.Colour }}</td>
+        <td>{{ group.Width }}</td>
+        <td>{{ group.Unit }}</td>
+        <td>{{ group.Quantity }}</td>
+        <td>{{ group.UnitPrice }}</td>
+        <td>{{ group.UnitCommission }}</td>
+        <td>{{ group.PaymentTerms }}</td>
+        <td>{{ group.DeliveredQuantity }}</td>
+        <td>{{ group.ApplyDeliveryQty }}</td>
+        <td>{{ group.Comment }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <h3><strong>PI Revise Info </strong></h3>
+  <!-- Items table -->
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th style="text-align: center">Customer</th>
+        <th style="text-align: center">PI No</th>
+        <th style="text-align: center">Article</th>
+        <th style="text-align: center">A. Article</th>
+        <th style="text-align: center">Color</th>
+        <th style="text-align: center">Width</th>
+        <th style="text-align: center">Unit</th>
+        <th style="text-align: center">Qty</th>
+        <th style="text-align: center">U. Price</th>
+        <th style="text-align: center">U. Comm</th>
+        <th style="text-align: center">Payment Terms</th>
+        <th style="text-align: center">Delivey Qty</th>
+        <th style="text-align: center">Applied Qty</th>
+        <th style="text-align: center">Comment</th>
+      </tr>
+    </thead>
+
+    <tbody *ngIf="reviseData && reviseData.length > 0">
+      <tr *ngFor="let group of reviseData; let i = index">
         <td>{{ group.customer_name }}</td>
         <td>{{ group.PiNo }}</td>
         <td>{{ group.ArticleNo }}</td>
