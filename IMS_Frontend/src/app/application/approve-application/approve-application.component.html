@@ -1,5 +1,5 @@
 <div class="container shadow-sm p-3 mb-5 bg-white rounded">
-  <h1 class="theme-text">{{FormType}} Application</h1>
+  <h1 class="theme-text">{{FormTitle}}</h1>
 
   <br />
   <!-- Header fields -->
@@ -63,7 +63,7 @@
         <th style="text-align: center">U. Comm</th>
         <th style="text-align: center">Payment Terms</th>
         <th style="text-align: center">Delivey Qty</th>
-        <th style="text-align: center">Applied Qty</th>
+        <th style="text-align: center" *ngIf="FormType=='Special Delivery'">Applied Qty</th>
         <th style="text-align: center">Comment</th>
       </tr>
     </thead>
@@ -82,16 +82,16 @@
         <td>{{ group.UnitCommission }}</td>
         <td>{{ group.PaymentTerms }}</td>
         <td>{{ group.DeliveredQuantity }}</td>
-        <td>{{ group.ApplyDeliveryQty }}</td>
+        <td *ngIf="FormType=='Special Delivery'">{{ group.ApplyDeliveryQty }}</td>
         <td>{{ group.Comment }}</td>
       </tr>
     </tbody>
   </table>
 
 
-  <h3><strong>PI Revise Info </strong></h3>
+  <h3 *ngIf="FormType=='PI Amendment Application'"><strong>PI Revise Info </strong></h3>
   <!-- Items table -->
-  <table class="table table-bordered">
+  <table class="table table-bordered" *ngIf="FormType=='PI Amendment Application'">
     <thead>
       <tr>
         <th style="text-align: center">Customer</th>
@@ -105,8 +105,6 @@
         <th style="text-align: center">U. Price</th>
         <th style="text-align: center">U. Comm</th>
         <th style="text-align: center">Payment Terms</th>
-        <th style="text-align: center">Delivey Qty</th>
-        <th style="text-align: center">Applied Qty</th>
         <th style="text-align: center">Comment</th>
       </tr>
     </thead>
@@ -124,8 +122,6 @@
         <td>{{ group.UnitPrice }}</td>
         <td>{{ group.UnitCommission }}</td>
         <td>{{ group.PaymentTerms }}</td>
-        <td>{{ group.DeliveredQuantity }}</td>
-        <td>{{ group.ApplyDeliveryQty }}</td>
         <td>{{ group.Comment }}</td>
       </tr>
     </tbody>

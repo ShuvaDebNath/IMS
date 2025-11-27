@@ -38,6 +38,7 @@ export class ApproveApplicationComponent {
   FormType: any = '';
   PoNo: any = '';
   AppDate: any = '';
+  FormTitle : any = '';
 
   insertPermissions: boolean = false;
   updatePermissions: boolean = false;
@@ -85,19 +86,24 @@ export class ApproveApplicationComponent {
         console.log(JSON.parse(results.data).Tables1);
         if (results.status) {
           this.tableData = JSON.parse(results.data).Tables1;
+          console.log(this.tableData[0].AppType);
           
           if(this.tableData[0].AppType=="PI Amendment Application"){
             this.status = this.tableData[0].Status;
             this.PoNo = this.tableData[0].POno;
             this.AppDate = this.tableData[0].Date;
             this.FormType = this.tableData[0].AppType;
+            this.FormTitle = "PI Amendment Application";
+            console.log(this.tableData);
+            
             this.reviseData = JSON.parse(results.data).Tables2;
           }
-          else if(this.tableData[0].AppType=="Special Delivery Application"){
+          else if(this.tableData[0].AppType=="Special Delivery"){
             this.status = this.tableData[0].Status;
             this.PoNo = this.tableData[0].POno;
             this.AppDate = this.tableData[0].Date;
             this.FormType = this.tableData[0].FormTypeName;
+            this.FormTitle = "Special Delivery Application";
           }
           
         } else if (results.msg == 'Invalid Token') {
@@ -136,7 +142,22 @@ export class ApproveApplicationComponent {
       .subscribe({
         next: (results: any) => {
           if (results.status) {
-            swal
+            if(approveStatus=='Rejected'){
+              message = 'Application Rejected Successfully!';
+               swal
+              .fire({
+                title: `${results.message}!`,
+                text: message,
+                icon: 'error',
+                timer: 5000,
+              })
+              .then((result) => {
+                this.loadPageData();
+              });
+            }
+            else{
+              message = 'Application Approved Successfully!';
+               swal
               .fire({
                 title: `${results.message}!`,
                 text: message,
@@ -146,6 +167,8 @@ export class ApproveApplicationComponent {
               .then((result) => {
                 this.loadPageData();
               });
+            }
+           
             this.loadPageData();
           } else if (results.message == 'Invalid Token') {
             swal.fire('Session Expierd!', 'Please Login Again.', 'info');

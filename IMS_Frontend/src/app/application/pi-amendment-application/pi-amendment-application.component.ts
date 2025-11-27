@@ -563,39 +563,64 @@ export class PiAmendmentApplicationComponent {
         console.log(JSON.parse(results.data).Tables1);
         if (results.status) {
           const formArray = this.Formgroup.get('items') as FormArray;
+          const formArrayRevise = this.Formgroup.get('itemsRevise') as FormArray;
           formArray.clear();
           const input = JSON.parse(results.data).Tables1[0].Date;
           const formatted = new Date(input).toISOString();
           console.log(formatted);
 
           this.Formgroup.controls['Date'].setValue(
-            JSON.parse(results.data).Tables1[0].Date
+            this.toYMD(JSON.parse(results.data).Tables1[0].Date)
           );
           this.Formgroup.controls['Customer'].setValue(
             JSON.parse(results.data).Tables1[0].Customer_ID
           );
           this.getCustomerList();
           this.Formgroup.controls['PINo'].setValue(
-            JSON.parse(results.data).Tables1[0].TblPiMasterId
+            JSON.parse(results.data).Tables1[0].PI_Master_ID
           );
           JSON.parse(results.data).Tables1.forEach((item: any) => {
             formArray.push(
               this.fb.group({
                 customer_name: [item.customer_name],
-                PINo: [item.PiNo],
-                Article: [item.ArticleNo],
-                ActualArticle: [item.ActualArticleNo],
-                Color: [item.Colour],
+                PINo: [item.PINo],
+                Article: [item.Article],
+                ActualArticle: [item.ActualArticle],
+                Color: [item.Color],
                 Width: [item.Width],
                 Unit: [item.Unit],
                 Quantity: [item.Quantity],
-                Unit_Price: [item.UnitPrice],
-                CommissionUnit: [item.UnitCommission],
+                Unit_Price: [item.Unit_Price],
+                CommissionUnit: [item.CommissionUnit],
                 PaymentTerms: [item.PaymentTerms],
-                Delivered_Quantity: [item.DeliveredQuantity],
+                Delivered_Quantity: [item.Delivered_Quantity],
                 Remarks: [''],
               })
             );
+          });
+          
+          JSON.parse(results.data).Tables2.forEach((item: any) => {
+            console.log(item);
+            
+            var grp =  this.buildReviseGroup({
+                customer_name: item.customer_name || '',
+                PINo: item.PiNo || '',
+                Article: item.Article || '',
+                ActualArticle: item.ActualArticle || '',
+                Color: item.Colour || '',
+                Width: item.Width || '',
+                Unit: item.Unit || '',
+                Quantity: item.Quantity || 0,
+                Unit_Price: item.Unit_Price || 0,
+                CommissionUnit: item.CommissionUnit || '',
+                PaymentTerms: item.PaymentTerms || '',
+                Delivered_Quantity: item.Delivered_Quantity || 0,
+                PI_Detail_ID: item.TblPiDetailId || null,
+                PI_Master_ID: item.TblPiMasterId || null,
+                Remarks:item.Notes
+              })
+
+            this.itemsRevise.push(grp);
           });
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
@@ -782,5 +807,13 @@ export class PiAmendmentApplicationComponent {
 
       return out;
     });
+  }
+
+  private toYMD(d: any): string {
+    if (!d) return '';
+    const dt = new Date(d);
+    const m = String(dt.getMonth() + 1).padStart(2, '0');
+    const day = String(dt.getDate()).padStart(2, '0');
+    return `${dt.getFullYear()}-${m}-${day}`;
   }
 }

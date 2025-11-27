@@ -338,7 +338,7 @@ export class GenerateApplicationComponent {
       ApplyDeliveryQty: i.ApprovedQty,
       TblPiMasterId: i.PI_Master_ID,
       TblPiDetailId: i.PI_Detail_ID,
-      TblPoFormMasterId: '',
+      TblPoFormMasterId: this.Id,
       ActualArticleNo: i.ActualArticle,
       CreatedDate: new Date(
         new Date().toLocaleString('en', { timeZone: 'Asia/Dhaka' })
@@ -496,7 +496,7 @@ export class GenerateApplicationComponent {
           console.log(formatted);
 
           this.Formgroup.controls['Date'].setValue(
-            JSON.parse(results.data).Tables1[0].Date
+            this.toYMD(JSON.parse(results.data).Tables1[0].Date)
           );
           this.Formgroup.controls['Customer'].setValue(
             JSON.parse(results.data).Tables1[0].Customer_ID
@@ -510,6 +510,8 @@ export class GenerateApplicationComponent {
               this.fb.group({
                 customer_name: [item.customer_name],
                 PINo: [item.PiNo],
+                PI_Master_ID: item.TblPiMasterId,
+                PI_Detail_ID: item.TblPiDetailId,
                 Article: [item.ArticleNo],
                 ActualArticle: [item.ActualArticleNo],
                 Color: [item.Colour],
@@ -536,5 +538,13 @@ export class GenerateApplicationComponent {
       },
       error: (err) => {},
     });
+  }
+
+  private toYMD(d: any): string {
+    if (!d) return '';
+    const dt = new Date(d);
+    const m = String(dt.getMonth() + 1).padStart(2, '0');
+    const day = String(dt.getDate()).padStart(2, '0');
+    return `${dt.getFullYear()}-${m}-${day}`;
   }
 }

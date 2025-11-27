@@ -213,11 +213,20 @@
                 ></a>
 
                 <a
-                  *ngIf="updatePermissions"
+                  *ngIf="updatePermissions && table.FormTypeName=='Special Delivery'"
                   class="btn theme-btn-edit"
                   target="_blank"
                   title="Edit"
                   [routerLink]="['/generate-application']"
+                  [queryParams]="{ Id: table.Id }"
+                  ><i class="fa fa-edit"></i
+                ></a>
+                <a
+                  *ngIf="updatePermissions && table.FormTypeName=='PI Amendment Application'"
+                  class="btn theme-btn-edit"
+                  target="_blank"
+                  title="Edit"
+                  [routerLink]="['/pi-amendment-application']"
                   [queryParams]="{ Id: table.Id }"
                   ><i class="fa fa-edit"></i
                 ></a>
