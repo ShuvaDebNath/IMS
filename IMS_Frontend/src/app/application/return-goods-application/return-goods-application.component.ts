@@ -1,4 +1,3 @@
-// Create Page Component
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -25,14 +24,15 @@ import { Subject } from 'rxjs';
 import { DoubleMasterEntryService } from 'src/app/services/doubleEntry/doubleEntryService.service';
 import { GetDataService } from 'src/app/services/getData/getDataService.service';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
+import { warnOnce } from 'ngx-bootstrap/utils';
 
 @Component({
-  selector: 'app-generate-application',
-  templateUrl: './generate-application.component.html',
-  styleUrls: ['./generate-application.component.css'],
+  selector: 'app-return-goods-application',
+  templateUrl: './return-goods-application.component.html',
+  styleUrls: ['./return-goods-application.component.css']
 })
-export class GenerateApplicationComponent {
-  Formgroup!: FormGroup;
+export class ReturnGoodsApplicationComponent {
+Formgroup!: FormGroup;
   isEdit = false;
   exportDate: Date = new Date();
   private destroy$ = new Subject<void>();
@@ -52,6 +52,7 @@ export class GenerateApplicationComponent {
   CustomerList: any[] = [];
   PIList: any[] = [];
   PIPreviewList: any[] = [];
+  WarehouseList: any[] = []; 
   FormType: any[] = [
     {
       value: '0',
@@ -68,6 +69,14 @@ export class GenerateApplicationComponent {
     {
       value: 'Cancel PI Application',
       text: 'Cancel PI Application',
+    },
+    {
+      value: 'Exchange Goods Application',
+      text: 'Exchange Goods Application',
+    },
+    {
+      value: 'Return Goods Application',
+      text: 'Return Goods Application',
     },
   ];
   insertPermissions: boolean = false;
@@ -87,14 +96,14 @@ export class GenerateApplicationComponent {
 
   ngOnInit(): void {
     var permissions = this.gs.CheckUserPermission(
-      'Special Delivery Application'
+      'Return Goods Application'
     );
     this.insertPermissions = permissions.insertPermissions;
     this.updatePermissions = permissions.updatePermissions;
     this.deletePermissions = permissions.deletePermissions;
     this.printPermissions = permissions.printPermissions;
 
-    this.title.setTitle('Special Delivery Application');
+    this.title.setTitle('Return Goods Application');
     this.generateForm();
     this.loadPageData();
 
@@ -116,6 +125,7 @@ export class GenerateApplicationComponent {
     this.Formgroup = this.fb.group({
       Date: ['', Validators.required],
       Customer: ['', Validators.required],
+      Warehouse: ['', Validators.required],
       PINo: ['', Validators.required],
       items: this.fb.array([]),
     });
@@ -134,6 +144,7 @@ export class GenerateApplicationComponent {
       next: (results) => {
         if (results.status) {
           this.CustomerList = JSON.parse(results.data).Tables1;
+          this.WarehouseList = JSON.parse(results.data).Tables7;
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
           this.gs.Logout();
@@ -198,15 +209,16 @@ export class GenerateApplicationComponent {
     });
 
     const masterRow = {
-      FormTypeId: 'SpecialDelivery',
+      FormTypeId: 'ReturnGoods',
       TotalQuantity: totalQty,
       TotalDeliveredQuantity: totalDeliveredQuantity,
       TotalAppliedDelQty: totalAproveQty,
       Date: this.Formgroup.value.Date,
+      StockLocationId: this.Formgroup.value.Warehouse,
       SuperiorId: SuperiorId,
       UserId: userId,
       Status: 'Pending',
-      FormTypeName: 'Special Delivery',
+      FormTypeName: 'Return Goods Application',
       CreatedDate: new Date(
         new Date().toLocaleString('en', { timeZone: 'Asia/Dhaka' })
       ),
@@ -318,15 +330,16 @@ export class GenerateApplicationComponent {
     });
 
     const masterRow = {
-      FormTypeId: 'SpecialDelivery',
+      FormTypeId: 'ReturnGoods',
       TotalQuantity: totalQty,
       TotalDeliveredQuantity: totalDeliveredQuantity,
       TotalAppliedDelQty: totalAproveQty,
-      Date: this.Formgroup.value.Date,
+      Date: this.Formgroup.value.Date,      
+      StockLocationId: this.Formgroup.value.Warehouse,
       SuperiorId: SuperiorId,
       UserId: userId,
       Status: 'Pending',
-      FormTypeName: 'Special Delivery',
+      FormTypeName: 'Return Goods Application',
       CreatedDate: new Date(
         new Date().toLocaleString('en', { timeZone: 'Asia/Dhaka' })
       ),
@@ -505,12 +518,13 @@ export class GenerateApplicationComponent {
           this.Formgroup.controls['Customer'].setValue(
             JSON.parse(results.data).Tables1[0].Customer_ID
           );
+          this.Formgroup.controls['Warehouse'].setValue(
+            JSON.parse(results.data).Tables1[0].StockLocationId
+          );
           this.getCustomerList();
           this.Formgroup.controls['PINo'].setValue(
             JSON.parse(results.data).Tables1[0].TblPiMasterId
           );
-          console.log(JSON.parse(results.data).Tables1);
-          
           JSON.parse(results.data).Tables1.forEach((item: any) => {
             formArray.push(
               this.fb.group({

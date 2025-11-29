@@ -1,4 +1,3 @@
-// Create Page Component
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -27,12 +26,12 @@ import { GetDataService } from 'src/app/services/getData/getDataService.service'
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 
 @Component({
-  selector: 'app-generate-application',
-  templateUrl: './generate-application.component.html',
-  styleUrls: ['./generate-application.component.css'],
+  selector: 'app-exchange-goods-application',
+  templateUrl: './exchange-goods-application.component.html',
+  styleUrls: ['./exchange-goods-application.component.css']
 })
-export class GenerateApplicationComponent {
-  Formgroup!: FormGroup;
+export class ExchangeGoodsApplicationComponent {
+Formgroup!: FormGroup;
   isEdit = false;
   exportDate: Date = new Date();
   private destroy$ = new Subject<void>();
@@ -69,6 +68,10 @@ export class GenerateApplicationComponent {
       value: 'Cancel PI Application',
       text: 'Cancel PI Application',
     },
+    {
+      value: 'Exchange Goods Application',
+      text: 'Exchange Goods Application',
+    },
   ];
   insertPermissions: boolean = false;
   updatePermissions: boolean = false;
@@ -87,14 +90,14 @@ export class GenerateApplicationComponent {
 
   ngOnInit(): void {
     var permissions = this.gs.CheckUserPermission(
-      'Special Delivery Application'
+      'Exchange Goods Application'
     );
     this.insertPermissions = permissions.insertPermissions;
     this.updatePermissions = permissions.updatePermissions;
     this.deletePermissions = permissions.deletePermissions;
     this.printPermissions = permissions.printPermissions;
 
-    this.title.setTitle('Special Delivery Application');
+    this.title.setTitle('Exchange Goods Application');
     this.generateForm();
     this.loadPageData();
 
@@ -198,7 +201,7 @@ export class GenerateApplicationComponent {
     });
 
     const masterRow = {
-      FormTypeId: 'SpecialDelivery',
+      FormTypeId: 'ExchangeGoods',
       TotalQuantity: totalQty,
       TotalDeliveredQuantity: totalDeliveredQuantity,
       TotalAppliedDelQty: totalAproveQty,
@@ -206,7 +209,7 @@ export class GenerateApplicationComponent {
       SuperiorId: SuperiorId,
       UserId: userId,
       Status: 'Pending',
-      FormTypeName: 'Special Delivery',
+      FormTypeName: 'Exchange Goods Application',
       CreatedDate: new Date(
         new Date().toLocaleString('en', { timeZone: 'Asia/Dhaka' })
       ),
@@ -318,7 +321,7 @@ export class GenerateApplicationComponent {
     });
 
     const masterRow = {
-      FormTypeId: 'SpecialDelivery',
+      FormTypeId: 'ExchangeGoods',
       TotalQuantity: totalQty,
       TotalDeliveredQuantity: totalDeliveredQuantity,
       TotalAppliedDelQty: totalAproveQty,
@@ -326,7 +329,7 @@ export class GenerateApplicationComponent {
       SuperiorId: SuperiorId,
       UserId: userId,
       Status: 'Pending',
-      FormTypeName: 'Special Delivery',
+      FormTypeName: 'Exchange Goods Application',
       CreatedDate: new Date(
         new Date().toLocaleString('en', { timeZone: 'Asia/Dhaka' })
       ),
@@ -509,8 +512,6 @@ export class GenerateApplicationComponent {
           this.Formgroup.controls['PINo'].setValue(
             JSON.parse(results.data).Tables1[0].TblPiMasterId
           );
-          console.log(JSON.parse(results.data).Tables1);
-          
           JSON.parse(results.data).Tables1.forEach((item: any) => {
             formArray.push(
               this.fb.group({

@@ -1,4 +1,3 @@
-// Create Page Component
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -27,11 +26,11 @@ import { GetDataService } from 'src/app/services/getData/getDataService.service'
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 
 @Component({
-  selector: 'app-generate-application',
-  templateUrl: './generate-application.component.html',
-  styleUrls: ['./generate-application.component.css'],
+  selector: 'app-cancel-pi-application',
+  templateUrl: './cancel-pi-application.component.html',
+  styleUrls: ['./cancel-pi-application.component.css']
 })
-export class GenerateApplicationComponent {
+export class CancelPiApplicationComponent {
   Formgroup!: FormGroup;
   isEdit = false;
   exportDate: Date = new Date();
@@ -87,14 +86,14 @@ export class GenerateApplicationComponent {
 
   ngOnInit(): void {
     var permissions = this.gs.CheckUserPermission(
-      'Special Delivery Application'
+      'Cancel PI Application'
     );
     this.insertPermissions = permissions.insertPermissions;
     this.updatePermissions = permissions.updatePermissions;
     this.deletePermissions = permissions.deletePermissions;
     this.printPermissions = permissions.printPermissions;
 
-    this.title.setTitle('Special Delivery Application');
+    this.title.setTitle('Cancel PI Application');
     this.generateForm();
     this.loadPageData();
 
@@ -198,7 +197,7 @@ export class GenerateApplicationComponent {
     });
 
     const masterRow = {
-      FormTypeId: 'SpecialDelivery',
+      FormTypeId: 'CancelPI',
       TotalQuantity: totalQty,
       TotalDeliveredQuantity: totalDeliveredQuantity,
       TotalAppliedDelQty: totalAproveQty,
@@ -206,7 +205,7 @@ export class GenerateApplicationComponent {
       SuperiorId: SuperiorId,
       UserId: userId,
       Status: 'Pending',
-      FormTypeName: 'Special Delivery',
+      FormTypeName: 'Cancel PI Application',
       CreatedDate: new Date(
         new Date().toLocaleString('en', { timeZone: 'Asia/Dhaka' })
       ),
@@ -318,7 +317,7 @@ export class GenerateApplicationComponent {
     });
 
     const masterRow = {
-      FormTypeId: 'SpecialDelivery',
+      FormTypeId: 'CancelPI',
       TotalQuantity: totalQty,
       TotalDeliveredQuantity: totalDeliveredQuantity,
       TotalAppliedDelQty: totalAproveQty,
@@ -326,7 +325,7 @@ export class GenerateApplicationComponent {
       SuperiorId: SuperiorId,
       UserId: userId,
       Status: 'Pending',
-      FormTypeName: 'Special Delivery',
+      FormTypeName: 'Cancel PI Application',
       CreatedDate: new Date(
         new Date().toLocaleString('en', { timeZone: 'Asia/Dhaka' })
       ),
@@ -509,8 +508,6 @@ export class GenerateApplicationComponent {
           this.Formgroup.controls['PINo'].setValue(
             JSON.parse(results.data).Tables1[0].TblPiMasterId
           );
-          console.log(JSON.parse(results.data).Tables1);
-          
           JSON.parse(results.data).Tables1.forEach((item: any) => {
             formArray.push(
               this.fb.group({

@@ -70,6 +70,18 @@ export class AllApplicationComponent {
       value: 'Special Delivery Application',
       text: 'Special Delivery Application',
     },
+    {
+      value: 'Cancel PI Application',
+      text: 'Cancel PI Application',
+    },
+    {
+      value: 'Exchange Goods Application',
+      text: 'Exchange Goods Application',
+    },
+    {
+      value: 'Return Goods Application',
+      text: 'Return Goods Application',
+    },
   ];
 
   constructor(

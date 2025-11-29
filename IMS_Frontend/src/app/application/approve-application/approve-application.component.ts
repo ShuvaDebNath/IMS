@@ -47,6 +47,7 @@ export class ApproveApplicationComponent {
 
   ApplicationType:any = '';
   reviseData: any = [];
+  StockLocation: any = '';
 
   constructor(
     private fb: FormBuilder,
@@ -104,6 +105,28 @@ export class ApproveApplicationComponent {
             this.AppDate = this.tableData[0].Date;
             this.FormType = this.tableData[0].FormTypeName;
             this.FormTitle = "Special Delivery Application";
+          }
+          else if(this.tableData[0].AppType=="Cancel PI Application"){
+            this.status = this.tableData[0].Status;
+            this.PoNo = this.tableData[0].POno;
+            this.AppDate = this.tableData[0].Date;
+            this.FormType = this.tableData[0].FormTypeName;
+            this.FormTitle = "Cancel PI Application";
+          }
+          else if(this.tableData[0].AppType=="Exchange Goods Application"){
+            this.status = this.tableData[0].Status;
+            this.PoNo = this.tableData[0].POno;
+            this.AppDate = this.tableData[0].Date;
+            this.FormType = this.tableData[0].FormTypeName;
+            this.FormTitle = "Exchange Goods Application";
+          }
+          else if(this.tableData[0].AppType=="Return Goods Application"){
+            this.status = this.tableData[0].Status;
+            this.PoNo = this.tableData[0].POno;
+            this.AppDate = this.tableData[0].Date;
+            this.FormType = this.tableData[0].FormTypeName;
+            this.StockLocation = this.tableData[0].Stock_Location_Name;
+            this.FormTitle = "Return Goods Application";
           }
           
         } else if (results.msg == 'Invalid Token') {

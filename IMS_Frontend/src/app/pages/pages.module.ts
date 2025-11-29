@@ -118,6 +118,9 @@ import { AllApplicationComponent } from '../application/all-application/all-appl
 import { GenerateApplicationComponent } from '../application/generate-application/generate-application.component';
 import { ApproveApplicationComponent } from '../application/approve-application/approve-application.component';
 import { PiAmendmentApplicationComponent } from '../application/pi-amendment-application/pi-amendment-application.component';
+import { CancelPiApplicationComponent } from '../application/cancel-pi-application/cancel-pi-application.component';
+import { ExchangeGoodsApplicationComponent } from '../application/exchange-goods-application/exchange-goods-application.component';
+import { ReturnGoodsApplicationComponent } from '../application/return-goods-application/return-goods-application.component';
 
 
 
@@ -211,7 +214,10 @@ const CustomSelectOptions: INgxSelectOptions = {
     AllApplicationComponent,
     GenerateApplicationComponent,
     ApproveApplicationComponent,
-    PiAmendmentApplicationComponent
+    PiAmendmentApplicationComponent,
+    CancelPiApplicationComponent,
+    ExchangeGoodsApplicationComponent,
+    ReturnGoodsApplicationComponent
   ],
   imports: [
     CommonModule,
@@ -425,6 +431,9 @@ const CustomSelectOptions: INgxSelectOptions = {
           { path: 'generate-application', component: GenerateApplicationComponent },
           { path: 'approve-application', component: ApproveApplicationComponent },
           { path: 'pi-amendment-application', component: PiAmendmentApplicationComponent },
+          { path: 'cancel-pi-application', component: CancelPiApplicationComponent },
+          { path: 'exchange-goods-application', component: ExchangeGoodsApplicationComponent },
+          { path: 'return-goods-application', component: ReturnGoodsApplicationComponent },
         ],
       },
 
