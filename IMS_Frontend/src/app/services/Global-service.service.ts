@@ -152,13 +152,14 @@ public GetSessionUser() {
     printPermissions: false,
   };
 
-  // Load menu data
-  const menuData = window.localStorage.getItem('UserMenuWithPermission');
-
-  if (!menuData) {
-    this.Logout();
-    return permissions;
-  }
+    // Load menu data
+    const menuData = window.localStorage.getItem('UserMenuWithPermission');
+    console.log(menuData);
+    
+    if (!menuData) {
+      this.Logout();
+      return permissions;
+    }
 
   let menuJson: MenuItem[] = [];
   try {
@@ -181,24 +182,47 @@ public GetSessionUser() {
         } catch {
           menuItem.Children = [];
         }
-      }
-      
-      // Match target menu name
-      if (menuItem.SubMenuName === menuName) {
-        
-        if (menuItem.ButtonName) {
-          buttonPermissions.push(menuItem.ButtonName);
-        }
-        
-        //console.log(menuItem,menuItem.ButtonName,Array.isArray(menuItem.ButtonName));
-        if (menuItem.ButtonName && Array.isArray(menuItem.ButtonName)) {
-          for (const btn of menuItem.ButtonName) {
-            //console.log(btn,btn.ButtonName);
-            
-            if (btn && btn.ButtonName) {
-              buttonPermissions.push(btn.ButtonName);
+        //console.log(menuItem);
+
+        // Match target menu name
+        if (menuItem.SubMenuName === menuName) {
+          // if (typeof menuItem.ButtonName=='string') {
+          //   var arr = JSON.parse(menuItem.ButtonName);
+          // }
+          // else if (typeof menuItem.ButtonName === 'object' && menuItem.ButtonName !== null) {
+
+          // }
+
+          if (menuItem.ButtonName) {
+            buttonPermissions.push(menuItem.ButtonName);
+          }
+
+          //console.log(menuItem,menuItem.ButtonName,Array.isArray(menuItem.ButtonName));
+          if (menuItem.ButtonName && Array.isArray(menuItem.ButtonName)) {
+            for (const btn of menuItem.ButtonName) {
+              //console.log(btn,btn.ButtonName);
+
+              if (btn && btn.ButtonName) {
+                buttonPermissions.push(btn.ButtonName);
+              }
             }
           }
+        }
+        // console.log(menuItem.Children,Array.isArray(menuItem.Children));
+        // Go deeper recursively
+        if (menuItem.Children && Array.isArray(menuItem.Children)) {
+          if (menuItem.Children.length == 0) {
+            if (menuItem.SubMenuName == menuName) {
+              if (typeof menuItem.ButtonName == 'string') {
+                var arr = JSON.parse(menuItem.ButtonName);
+                for(var item of arr){   
+                  buttonPermissions.push(item.ButtonName);                  
+                }
+                continue
+              }
+            }
+          }
+          findMenuRecursively(menuItem.Children);
         }
       }
       // console.log(menuItem.Children,Array.isArray(menuItem.Children));

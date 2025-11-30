@@ -11,5 +11,5 @@ public interface IReportService
 
     public Task<DataSet> ProformaInvoiceReport(int PI_Master_ID);
     public Task<DataSet> CommercialInvoiceReports(string commercialInvoiceNo, string reportType);
-
+    public Task<DataSet> DeliveryChallanReport(string challanNo);
 }

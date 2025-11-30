@@ -6,6 +6,7 @@ import { GlobalServiceService } from '../../services/Global-service.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { GlobalClass } from 'src/app/shared/global-class';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root',
@@ -185,6 +186,64 @@ export class ReportService {
           link.click();
         }
       });
+  }
+
+   PrintDeliveryChallanReport(report: any, rptType: any, isView: any) {
+    
+    const challanNo = report.Chalan_No ?? '';
+
+    const url = `${this.baseUrl}${this.apiController}/DeliveryChallanReport`;
+    const token = this.gs.getSessionData('token');
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    Swal.fire({
+      title: 'Generating report...',
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      didOpen: () => {
+        // show spinner
+        Swal.showLoading();
+        // Ensure the Swal popup appears above PrimeNG dialogs by raising z-index
+        try {
+          const container = Swal.getContainer();
+          if (container && container.style) {
+            container.style.zIndex = '2147483647';
+          }
+          const popup = Swal.getPopup();
+          if (popup && popup.style) {
+            popup.style.zIndex = '2147483648';
+          }
+        } catch (e) {
+          // ignore if DOM APIs are not available for some reason
+        }
+      },
+    });
+
+    this.http
+      .get(url, {
+        headers,
+        params: { rptType, challanNo },
+        responseType: 'blob',
+      })
+      .subscribe(
+        (res: Blob) => {
+          try {
+            Swal.close();
+            const fileURL = window.URL.createObjectURL(res);
+            window.open(fileURL, '_blank');
+          } catch (err) {
+            Swal.close();
+            Swal.fire('Error', 'Unable to open report.', 'error');
+          }
+        },
+        (err) => {
+          Swal.close();
+          Swal.fire('Error', 'Failed to generate report.', 'error');
+        }
+      );
   }
 
   private formatDate(date: any): string {

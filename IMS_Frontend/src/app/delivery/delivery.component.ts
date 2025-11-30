@@ -17,6 +17,7 @@ import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.ser
 import { GetDataModel } from 'src/app/models/GetDataModel';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { Goods_Delivery_serviceService } from '../services/delivery/Goods_Delivery_service.service';
+import { ReportService } from '../services/reportService/report-service.service';
 
 @Component({
   standalone:true,
@@ -44,8 +45,9 @@ export class DeliveryComponent implements OnInit {
     private getDataService: GetDataService,
     private gs: GlobalServiceService,
     private title: Title,
-    private fb: FormBuilder
-  ) { }
+    private fb: FormBuilder,
+    private reportService: ReportService,
+  ) {}
 
   ngOnInit() {
     this.title.setTitle('Delivery');
@@ -60,14 +62,11 @@ export class DeliveryComponent implements OnInit {
     });
 
     this.Formgroup = this.fb.group({
-      PIStatus:[''],
-      RestQty:[''],
-      LCNo:[''],
-      IsCash:[''],
-
-      ItemArray:this.fb.array([]),
-    });    
-
+      PIStatus: ['', [Validators.required]],
+      RestQty: ['', [Validators.required]],
+      Chalan_No: [''],
+      LCNo: [''],
+      IsCash: ['', [Validators.required]],
 
   }
 
@@ -104,56 +103,100 @@ export class DeliveryComponent implements OnInit {
     item.controls["Deliverd_In_Meter"].setValue(value);
   }
   GetPIByPID() {
-    let model=new GetDataModel();
-      model.procedureName="usp_ProformaInvoice_DeliveryInfoByPIId";
-      model.parameters={
-        TypeId:this.SearchFormgroup.controls["PIId"].value
-      };
-      console.log(model);
-      this.Formgroup.setControl('items', this.fb.array([]));
+    let model = new GetDataModel();
+    model.procedureName = 'usp_ProformaInvoice_DeliveryInfoByPIId';
+    model.parameters = {
+      TypeId: this.SearchFormgroup.controls['PIId'].value,
+    };
+    console.log(model);
+    this.Formgroup.setControl('items', this.fb.array([]));
 
-      this.service.GetInitialData(model).subscribe((res:any) => {
-        if (res.status) {  
-          let DataSet = JSON.parse(res.data);
-          this.Delivers=DataSet.Tables1;
-          
-          this.Formgroup.controls['PIStatus'].setValue(DataSet.Tables1[0].IsMPI==0?'LC':'Cash');
-          this.Formgroup.controls['RestQty'].setValue(DataSet.Tables1[0].Unit_ID==2 ? DataSet.Tables1[0].DeliverableQty_In_Meter : DataSet.Tables1[0].DeliverableQty);
-          this.Formgroup.controls['LCNo'].setValue(DataSet.Tables1[0].LC_No);
-          this.Formgroup.controls['IsCash'].setValue(DataSet.Tables1[0].CR_NO);
+    this.service.GetInitialData(model).subscribe((res: any) => {
+      if (res.status) {
+        let DataSet = JSON.parse(res.data);
+        this.Delivers = DataSet.Tables1;
 
-          let itemarray=this.Formgroup.get('ItemArray') as FormArray;
-          
-          DataSet.Tables1.forEach((item:any)=>{
-           
-            itemarray.push(this.fb.group({ 
+        this.Formgroup.controls['PIStatus'].setValue(
+          DataSet.Tables1[0].IsMPI == 0 ? 'LC' : 'Cash'
+        );
+        this.Formgroup.controls['RestQty'].setValue(
+          DataSet.Tables1[0].Unit_ID == 2
+            ? DataSet.Tables1[0].DeliverableQty_In_Meter
+            : DataSet.Tables1[0].DeliverableQty
+        );
+        this.Formgroup.controls['LCNo'].setValue(DataSet.Tables1[0].LC_No);
+        this.Formgroup.controls['IsCash'].setValue(DataSet.Tables1[0].CR_NO);
+
+        // Set Chalan_No from the dataset (may come in Tables2 or Tables1 depending on stored proc)
+        const chalanFromTables2 =
+          DataSet.Tables2 && DataSet.Tables2.length > 0
+            ? DataSet.Tables2[0].Chalan_No
+            : null;
+        const chalanFromTables1 =
+          DataSet.Tables1 && DataSet.Tables1.length > 0
+            ? DataSet.Tables1[0].Chalan_No
+            : null;
+
+        const chalanValue = chalanFromTables2 ?? chalanFromTables1 ?? '';
+        if (this.Formgroup.controls['Chalan_No']) {
+          this.Formgroup.controls['Chalan_No'].setValue(chalanValue);
+        }
+
+        // If nothing is deliverable, inform the user and stop further processing
+        const currentRest = Number(
+          this.Formgroup.controls['RestQty'].value ?? 0
+        );
+        if (!currentRest || currentRest === 0) {
+          Swal.fire('Info', 'No deliverable quantity available.', 'info');
+          // ensure ItemArray is empty
+          const clearArray = this.Formgroup.get('ItemArray') as FormArray;
+          while (clearArray && clearArray.length !== 0) {
+            clearArray.removeAt(0);
+          }
+          return;
+        }
+
+        let itemarray = this.Formgroup.get('ItemArray') as FormArray;
+        while (itemarray.length !== 0) {
+          itemarray.removeAt(0);
+        }
+        console.log(DataSet);
+        
+        DataSet.Tables1.forEach((item: any) => {
+          itemarray.push(
+            this.fb.group({
               PI_Detail_ID: [item.PI_Detail_ID],
               Date: [new Date],
               Ordered: [0],
               Delivered: [0], 
               Roll: [0],
               Remark: [''],
-              Chalan_No: [0],
-              Item_ID: [item.Item_ID],
+              Chalan_No: [DataSet.Tables2[0].Chalan_No ?? 0],
+              Item_ID: [item.Item_ID, [Validators.required]],
               Stock_Location_ID: [''],
-              Description:[item.Description],
-              Color:[item.Color],
-              Packaging:[item.Packaging],
-              Measurement:[item.Measurement],
-              ActualArticle:[item.ActualArticle],
-              UndeliveredQty:[item.Unit_ID==2?item.UndeliveredQty_In_Meter: item.UndeliveredQty],
-              UnitName:[item.UnitName],
-              Unit_ID:[item.Unit_ID],
-              StockBalance:[item.Stock],
-              Stock_In_MeterBalance:[item.Stock_In_Meter],
-              RollBalance:[item.Roll],
-              BagBalance:[item.Bag],
-              Deliverd_In_Meter:[0],
-            }));
-          });
-          
-          
-  
+              Description: [item.Description],
+              Color: [item.Color, [Validators.required]],
+              Packaging: [item.Packaging, [Validators.required]],
+              Measurement: [item.Measurement, [Validators.required]],
+              ActualArticle: [item.ActualArticle, [Validators.required]],
+              UndeliveredQty: [
+                item.Unit_ID == 2
+                  ? item.UndeliveredQty_In_Meter
+                  : item.UndeliveredQty,
+              ],
+              UnitName: [item.UnitName],
+              Unit_ID: [item.Unit_ID, [Validators.required]],
+              Stock: [item.Stock],
+              Stock_In_Meter: [item.Stock_In_Meter],
+              RollBalance: [item.Roll],
+              Bag: [item.Bag],
+              Deliverd_In_Meter: [0],
+            })
+          );
+        });
+      } else {
+        if (res.msg == 'Invalid Token') {
+          this.gs.Logout();
         } else {
           if (res.msg == 'Invalid Token') {
             this.gs.Logout();
@@ -188,13 +231,12 @@ export class DeliveryComponent implements OnInit {
       return;
     }
 
- 
-
-     
-    this.deliveryService.SaveData(listData).subscribe(res=>{
-      if(res.messageType=='Success' && res.status){
-        Swal.fire(res.messageType, res.message, 'success').then(()=>{
-              this.ngOnInit();
+    this.deliveryService.SaveData(listData).subscribe((res) => {
+        if (res.messageType == 'Success' && res.status) {
+        Swal.fire(res.messageType, res.message, 'success').then(() => {
+          // After successful save, prompt user to view/download the Delivery Challan report
+          this.ReportViewerOptionsBySwal();
+          this.ngOnInit();
         });
         
       }else{
@@ -207,4 +249,60 @@ export class DeliveryComponent implements OnInit {
     });
   }
 
+   ReportViewerOptionsBySwal(reportType?: string) {
+        var actionType = '';
+        const item: any = {
+          Chalan_No:
+            (this.Formgroup && this.Formgroup.controls['Chalan_No']
+              ? this.Formgroup.controls['Chalan_No'].value
+              : '') || ''
+        };
+        Swal.fire({
+          title: 'Please select what you want to do!!',
+          icon: 'info',
+          showCancelButton: false,
+          showConfirmButton: false,
+          allowOutsideClick: true,
+          // Put Swal container/popup on top of other app modals by assigning high z-index classes
+          customClass: {
+            container: 'swal-container-high',
+            popup: 'swal-popup-high',
+          },
+          html: `
+            <div style="display: flex; justify-content: center; gap: 10px;">
+              <button id="view" class="swal2-confirm swal2-styled" style="background:green">Excel</button>
+              <button id="download" class="swal2-confirm swal2-styled" style="background:red">PDF</button>
+              <button id="print" class="swal2-confirm swal2-styled" style="background:blue">Word</button>
+            </div>
+          `,
+        });
+  
+        // Add event listeners for buttons after Swal opens
+        Swal.getPopup()
+          ?.querySelector('#view')
+          ?.addEventListener('click', () => {
+              // Close the selection Swal first so the report-service loader Swal isn't immediately closed.
+              Swal.close();
+              this.reportService.PrintDeliveryChallanReport(item, 'excel', true);
+            });
+  
+        Swal.getPopup()
+          ?.querySelector('#download')
+          ?.addEventListener('click', () => {
+              // Close selection modal first, then trigger report. This prevents the
+              // selection's Swal.close() from closing the loader Swal opened by the report service.
+              Swal.close();
+              this.reportService.PrintDeliveryChallanReport(item, 'pdf', true);
+            });
+  
+        Swal.getPopup()
+          ?.querySelector('#print')
+          ?.addEventListener('click', () => {
+              Swal.close();
+              this.reportService.PrintDeliveryChallanReport(item, 'word', true);
+            });
+  
+        // The caller-specific reportType is included in `item` so the report service
+        // can dispatch the correct report variant based on that flag.
+      }
 }
