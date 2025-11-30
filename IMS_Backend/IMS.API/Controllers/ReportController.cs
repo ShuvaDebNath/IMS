@@ -3,7 +3,10 @@ using Boilerplate.Contracts;
 using Boilerplate.Contracts.Services;
 using Boilerplate.Service.Services;
 using Microsoft.AspNetCore.Mvc;
+using QRCoder;
 using System.Data;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace IMS.API.Controllers
 {
@@ -199,6 +202,68 @@ namespace IMS.API.Controllers
                 throw;
             }
         }
+
+        [HttpGet]
+        [Route("DeliveryChallanReport")]
+        public async Task<IActionResult> DeliveryChallanReport(String rptType, string challanNo)
+        {
+            try
+            {
+                var currentUser = HttpContext.User;
+
+                string reportPath = "V2\\";
+                DataSet ds = await _reportService.DeliveryChallanReport(challanNo);
+
+                if (ds == null || ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
+                    return Ok(new { msg = "Data Not Found" });
+
+                ds.Tables[0].TableName = "DCInfos";
+
+                // Ensure column exists and is byte[]
+                if (!ds.Tables[0].Columns.Contains("QRCode"))
+                    ds.Tables[0].Columns.Add("QRCode", typeof(byte[]));
+
+                foreach (DataRow row in ds.Tables[0].Rows)
+                {
+                    string qrText = row["QRCodeText"]?.ToString()?.Trim() ?? "";
+                    row["QRCode"] = GenerateQrCode(qrText);
+                }
+
+                reportPath += "Chalan.rdlc";
+                string reportName = "DeliveryChallan";
+
+                var renderedReport = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+
+                if (rptType.ToLower() == "pdf")
+                {
+                    return File(renderedReport, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                }
+                else
+                {
+                    return File(renderedReport, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        private byte[] GenerateQrCode(string qrText)
+        {
+            if (string.IsNullOrWhiteSpace(qrText))
+                return Array.Empty<byte>(); // Prevent null issues
+
+            using var qrGenerator = new QRCodeGenerator();
+            using var qrData = qrGenerator.CreateQrCode(qrText, QRCodeGenerator.ECCLevel.Q);
+            using var qrCode = new QRCode(qrData);
+            using var bitmap = qrCode.GetGraphic(20);
+            using var stream = new MemoryStream();
+            bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+            return stream.ToArray();
+        }
+
 
 
     }

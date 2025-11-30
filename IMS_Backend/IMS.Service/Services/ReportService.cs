@@ -79,4 +79,22 @@ public class ReportService : IReportService
             throw ex;
         }
     }
+
+    public async Task<DataSet> DeliveryChallanReport(string challanNo)
+    {
+        try
+        {
+            DeliveryChallanReportParams param = new DeliveryChallanReportParams
+            {
+                ChallanNo = challanNo
+
+            };
+
+            return await _reportRepository.DeliveryChallanReport(param);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
 }

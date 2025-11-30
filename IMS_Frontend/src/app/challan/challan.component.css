@@ -1,0 +1,87 @@
+.challan-card {
+  padding: 18px;
+}
+.title {
+  margin: 0 0 12px 0;
+}
+.search-form .row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+}
+.search-form .col {
+  flex: 1 1 0;
+  min-width: 220px;
+}
+.input-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 6px;
+}
+.input-row input[type="text"],
+.input-row input[type="date"] {
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 100%;
+}
+/* fieldset search styling to match requested design */
+.search-fieldset {
+  border: 1px solid #e6e6e6;
+  padding: 18px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  background: #fff;
+}
+.search-fieldset legend {
+  padding: 0 10px;
+  font-weight: 600;
+  color: #333;
+  width: auto;
+  margin-left: 8px;
+}
+.search-form .form-group {
+  padding: 6px 8px;
+}
+.search-form .form-control {
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 100%;
+}
+.search-form .col-md-2, .search-form .col-md-3, .search-form .col-md-4 {
+  display: block;
+}
+.search-form .btn { padding: 8px 14px; }
+.btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.btn.secondary {
+  background: #6c757d;
+}
+.col-actions {
+  display: flex;
+  align-items: center;
+}
+.table-panel {
+  margin-top: 18px;
+}
+.challan-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.challan-table th,
+.challan-table td {
+  border: 1px solid #e6e6e6;
+  padding: 8px 10px;
+}
+.challan-table thead th {
+  background: #fafafa;
+  font-weight: 600;
+}

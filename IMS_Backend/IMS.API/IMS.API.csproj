@@ -18,10 +18,46 @@
 
   <ItemGroup>
     <None Remove="Report\SampleRequestReport\rptSampleRequestReport.rdlc" />
+    <None Remove="Report\V2\BeneficiaryCertificate.rdlc" />
+    <None Remove="Report\V2\BillOfExchange.rdlc" />
+    <None Remove="Report\V2\CertificateOfOrigin.rdlc" />
+    <None Remove="Report\V2\Chalan.rdlc" />
+    <None Remove="Report\V2\CommercialInvoice.rdlc" />
+    <None Remove="Report\V2\DeliveryChallan.rdlc" />
+    <None Remove="Report\V2\InspectionCertificate.rdlc" />
+    <None Remove="Report\V2\PackingList.rdlc" />
+    <None Remove="Report\V2\PI.rdlc" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Report\SampleRequestReport\rptSampleRequestReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\BeneficiaryCertificate.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\BillOfExchange.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\CertificateOfOrigin.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\Chalan.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\CommercialInvoice.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\DeliveryChallan.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\InspectionCertificate.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\PackingList.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\PI.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -32,6 +68,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
+    <PackageReference Include="QRCoder" Version="1.7.0" />
     <PackageReference Include="ReportViewerCore.NETCore" Version="15.1.26" />
     <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
@@ -48,7 +85,7 @@
 
   <ItemGroup>
     <Reference Include="RDLCSimplified">
-      <HintPath>D:\RDLCSimplified.dll</HintPath>
+      <HintPath>C:\Users\Asus\Downloads\RDLCSimplified.dll</HintPath>
     </Reference>
   </ItemGroup>
 

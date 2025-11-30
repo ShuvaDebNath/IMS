@@ -121,6 +121,7 @@ import { PiAmendmentApplicationComponent } from '../application/pi-amendment-app
 import { CancelPiApplicationComponent } from '../application/cancel-pi-application/cancel-pi-application.component';
 import { ExchangeGoodsApplicationComponent } from '../application/exchange-goods-application/exchange-goods-application.component';
 import { ReturnGoodsApplicationComponent } from '../application/return-goods-application/return-goods-application.component';
+import { ChallanComponent } from '../challan/challan.component';
 
 
 
@@ -296,6 +297,10 @@ const CustomSelectOptions: INgxSelectOptions = {
           {
             path: 'issued-rm-requisition-list-warehouse',
             component: IssuedRMRequisitionListWarehouseComponent,
+          },
+          {
+            path: 'Challan',
+            component: ChallanComponent,
           },
           { path: 'raw-material-stock', component: RawMaterialStockComponent },
           { path: 'finish-goods-stock', component: FinishGoodsInfoWithStockComponent },

@@ -15,6 +15,49 @@ import Swal from 'sweetalert2';
 })
 export class GeneratePiComponent implements OnInit {
   datePipe = new DatePipe('en-US');
+  DataTable!:any[];
+  PIData!:any;
+  PIDetails!:any[];
+  // Totals for PI details table
+  totalsOrderQty: number = 0;
+  totalsDeliveredQty: number = 0;
+  totalsAmount: number = 0;
+  totalsProdCost: number = 0;
+  totalsRolls: number = 0;
+  PITypeList:any[]=[{value:1,text:'LC'},{value:2,text:'Cash'}];
+  first: any=1;
+  rows: any=10;
+  totalRecords!: number;
+  isViewDetails: boolean=false;  
+  PageTitle: any;
+
+  ShowbtnPar:boolean=false;
+  ShowbtnQar:boolean=false;
+  ShowbtnFull:boolean=false;
+  ShowbtnRej:boolean=false;
+  ShowbtnSpecial:boolean=false;
+
+  SearchFormgroup!: FormGroup;
+  selectedRows: any[] = []; 
+
+  insertPermissions: boolean = true;
+  updatePermissions: boolean = true;
+  deletePermissions: boolean = true;
+  printPermissions: boolean = true;
+  allPermissions: boolean = true;
+
+   isDeliveryDetailsVisible = false;
+   deliveryDetailsData: any = null;
+  // Delivery totals
+  deliveryTotalsOrdered: number = 0;
+  deliveryTotalsDelivered: number = 0;
+  deliveryTotalsOrderedMeter: number = 0;
+  deliveryTotalsDeliveredMeter: number = 0;
+  deliveryTotalsRolls: number = 0;
+
+  specialApprovalMaxDeliverable: number = 0;
+  isSpecialApprovalVisible: boolean = false;
+  specialApprovalSaveEnabled: boolean = false;
 
 
   ShipperList: any|[];
@@ -197,13 +240,36 @@ export class GeneratePiComponent implements OnInit {
     itemrow.controls["TotalCommission"].setValue(qty*proCostUnti);
     this.calculatetotalGrandTotal();
   }
-
-  calculatetotalGrandTotal() {
-    this.GTQTY=0;this.GTAMNT=0;
-    const itemArray = this.Formgroup.get('ItemArray') as FormArray;
-    itemArray.controls.forEach(control => {
-      this.GTQTY+=control.value.Quantity;
-      this.GTAMNT+=control.value.Total_Amount;
+OpenSpecialApprove(Id:number){
+  this.isSpecialApprovalVisible = true;
+  this.specialApprovalMaxDeliverable = 0; // Reset percentage for each row
+  this.specialApprovalSaveEnabled = false; // Reset save button state
+  this.ViewDetails(Id, true);
+}
+  ViewDetails(Id:number, fromSpecialApprove: boolean = false){
+    const procedureData = {
+        procedureName: 'usp_ProformaInvoice_GetDataById',
+        parameters: {
+          PI_Master_ID :Id
+        }
+      };
+   
+    this.isViewDetails = !fromSpecialApprove;
+    this.getDataService.GetInitialData(procedureData).subscribe({
+      next: (results) => {
+        if (results.status) {
+          this.PIDetails = JSON.parse(results.data).Tables1;
+          this.PIData = this.PIDetails[0];
+          console.clear();
+          console.log(this.PIData);
+          // compute totals for details
+          this.computePidTotals();
+        } else if (results.msg == 'Invalid Token') {
+          Swal.fire('Session Expired!', 'Please Login Again.', 'info');
+          this.gs.Logout();
+        }
+      },
+      error: (err) => { },
     });
   }
 
@@ -360,4 +426,80 @@ export class GeneratePiComponent implements OnInit {
     });
 
   }
+  saveSpecialApproval() {
+    const status = this.PIData?.Status || 'Partial Approved';
+    const percent = this.specialApprovalMaxDeliverable;
+    let valid = false;
+    let min = 0, max = 0;
+    if (status === 'Partial Approved') {
+      min = 21; max = 49;
+      valid = percent >= min && percent <= max;
+    } else if (status === 'Quartar Approved') {
+      min = 51; max = 99;
+      valid = percent >= min && percent <= max;
+    } else {
+      valid = true;
+    }
+    if (!valid) {
+      let msg = '';
+      if (status === 'Partial Approved') {
+        msg = 'For Partial Approved, please enter a percentage between 21 and 49.';
+      } else if (status === 'Quartar Approved') {
+        msg = 'For Quartar Approved, please enter a percentage between 51 and 99.';
+      } else {
+        msg = 'Invalid percentage.';
+      }
+      Swal.fire('Invalid Percentage', msg, 'error');
+      return;
+    }
+    // Simulate API call for saving
+    var convertActualPercent = percent / 100;
+
+     const updateParams = { CustomMaxDeliveryPercentage: convertActualPercent };
+     const updateCondition = { PI_Master_ID: this.PIData?.PI_Master_ID };
+     const updateTable = 'tbl_pi_master';
+
+    this.service.UpdateData(updateParams, updateCondition, updateTable).subscribe({
+      next: (res: any) => {
+        if (res.status) {
+          Swal.fire('Success', 'Special approval saved successfully.', 'success');
+          this.isSpecialApprovalVisible = false;
+        } else {
+          Swal.fire('Failed', 'Failed to save special approval.', 'error');
+        }
+      },
+      error: () => {
+        Swal.fire('Failed', 'Failed to save special approval.', 'error');
+      }
+    });
+  }
+  validateSpecialApprovalPercentage() {
+    const status = this.PIData?.Status || 'Partial Approved';
+    const percent = this.specialApprovalMaxDeliverable;
+    let valid = false;
+    let min = 0, max = 0;
+    if (status === 'Partial Approved') {
+      min = 21; max = 49;
+      valid = percent >= min && percent <= max;
+    } else if (status === 'Quartar Approved') {
+      min = 51; max = 99;
+      valid = percent >= min && percent <= max;
+    } else {
+      valid = true;
+    }
+    this.specialApprovalSaveEnabled = valid;
+    if (!valid) {
+      let msg = '';
+      if (status === 'Partial Approved') {
+        msg = 'For Partial Approved, please enter a percentage between 21 and 49.';
+      } else if (status === 'Quartar Approved') {
+        msg = 'For Quartar Approved, please enter a percentage between 51 and 99.';
+      } else {
+        msg = 'Invalid percentage.';
+      }
+      Swal.fire('Invalid Percentage', msg, 'warning');
+      this.specialApprovalMaxDeliverable = 0;
+    }
+  }
+    
 }
