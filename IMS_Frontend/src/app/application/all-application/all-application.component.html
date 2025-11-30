@@ -230,6 +230,33 @@
                   [queryParams]="{ Id: table.Id }"
                   ><i class="fa fa-edit"></i
                 ></a>
+                <a
+                  *ngIf="updatePermissions && table.FormTypeName=='Cancel PI Application'"
+                  class="btn theme-btn-edit"
+                  target="_blank"
+                  title="Edit"
+                  [routerLink]="['/cancel-pi-application']"
+                  [queryParams]="{ Id: table.Id }"
+                  ><i class="fa fa-edit"></i
+                ></a>
+                <a
+                  *ngIf="updatePermissions && table.FormTypeName=='Exchange Goods Application'"
+                  class="btn theme-btn-edit"
+                  target="_blank"
+                  title="Edit"
+                  [routerLink]="['/exchange-goods-application']"
+                  [queryParams]="{ Id: table.Id }"
+                  ><i class="fa fa-edit"></i
+                ></a>
+                <a
+                  *ngIf="updatePermissions && table.FormTypeName=='Return Goods Application'"
+                  class="btn theme-btn-edit"
+                  target="_blank"
+                  title="Edit"
+                  [routerLink]="['/return-goods-application']"
+                  [queryParams]="{ Id: table.Id }"
+                  ><i class="fa fa-edit"></i
+                ></a>
 
                 <button
                   *ngIf="deletePermissions"

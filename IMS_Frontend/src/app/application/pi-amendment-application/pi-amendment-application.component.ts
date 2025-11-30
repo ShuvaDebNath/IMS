@@ -101,15 +101,13 @@ export class PiAmendmentApplicationComponent {
   ) {}
 
   ngOnInit(): void {
-    var permissions = this.gs.CheckUserPermission(
-      'Special Delivery Application'
-    );
+    var permissions = this.gs.CheckUserPermission('PI Amendment Application');
     this.insertPermissions = permissions.insertPermissions;
     this.updatePermissions = permissions.updatePermissions;
     this.deletePermissions = permissions.deletePermissions;
     this.printPermissions = permissions.printPermissions;
 
-    this.title.setTitle('Special Delivery Application');
+    this.title.setTitle('PI Amendment Application');
     this.generateForm();
     this.loadPageData();
 
@@ -247,7 +245,7 @@ export class PiAmendmentApplicationComponent {
       TblPiMasterId: i.PI_Master_ID,
       TblPiDetailId: i.PI_Detail_ID,
       TblPoFormMasterId: '',
-      ActualArticleNo: i.ActualArticle,
+      ActualArticleNo: i.Item_ID,
       CreatedDate: new Date(
         new Date().toLocaleString('en', { timeZone: 'Asia/Dhaka' })
       ),
@@ -278,7 +276,7 @@ export class PiAmendmentApplicationComponent {
         next: (res: any) => {
           console.log(res);
           console.log(res);
-//Id, CustomerName, PiNo, PiArticle, ActualArticle, Colour, Width, Unit, Quantity, UnitPrice, CMS, PaymentTerms, Note, TblPoFormMasterId, CreatedDate, CreatedById, UpdatedDate, UpdatedById
+          //Id, CustomerName, PiNo, PiArticle, ActualArticle, Colour, Width, Unit, Quantity, UnitPrice, CMS, PaymentTerms, Note, TblPoFormMasterId, CreatedDate, CreatedById, UpdatedDate, UpdatedById
 
           const detailRows = fv.itemsRevise.map((i: any) => ({
             CustomerName: fv.customer_name,
@@ -304,11 +302,13 @@ export class PiAmendmentApplicationComponent {
             .subscribe({
               next: (res) => {
                 if (res.messageType === 'Success' && res.status) {
-                  swal.fire('Success', 'Application generated successfully', 'success');
+                  swal.fire(
+                    'Success',
+                    'Application generated successfully',
+                    'success'
+                  );
                   // Optionally reset form / navigate
-                  this.Formgroup.reset({
-                    
-                  });
+                  this.Formgroup.reset({});
                   this.items.clear();
                 } else {
                   swal.fire(
@@ -352,6 +352,8 @@ export class PiAmendmentApplicationComponent {
   }
 
   UpdateData(): void {
+    console.log(this.Formgroup);
+
     if (this.Formgroup.invalid) {
       swal.fire(
         'Validation Error',
@@ -392,7 +394,7 @@ export class PiAmendmentApplicationComponent {
     });
 
     const masterRow = {
-      FormTypeId: 'SpecialDelivery',
+      FormTypeId: 'PIAmendment',
       TotalQuantity: totalQty,
       TotalDeliveredQuantity: totalDeliveredQuantity,
       TotalAppliedDelQty: totalAproveQty,
@@ -400,35 +402,36 @@ export class PiAmendmentApplicationComponent {
       SuperiorId: SuperiorId,
       UserId: userId,
       Status: 'Pending',
-      FormTypeName: 'Special Delivery',
-      CreatedDate: new Date(
+      FormTypeName: 'PI Amendment Application',
+      UpdatedDate: new Date(
         new Date().toLocaleString('en', { timeZone: 'Asia/Dhaka' })
       ),
       PiNos: this.Formgroup.value.PINo,
     };
 
-    console.log(fv.items);
+    console.log(fv.itemsRevise);
 
-    const detailRows = fv.items.map((i: any) => ({
+    const detailRows = fv.itemsRevise.map((i: any) => ({
       PiNo: i.PINo,
       ArticleNo: i.Article,
       CustomerId: fv.Customer,
       TblPiMasterId: i.PI_Master_ID,
       TblPiDetailId: i.PI_Detail_ID,
       TblPoFormMasterId: '',
-      ActualArticleNo: i.ActualArticle,
-      CreatedDate: new Date(
+      ActualArticleNo: i.Item_ID,
+      UpdatedDate: new Date(
         new Date().toLocaleString('en', { timeZone: 'Asia/Dhaka' })
       ),
-      CreatedById: userId,
-      Colour: i.Color,
-      Width: i.Width,
-      Unit: i.Unit,
+      UpdatedById: userId,
+      Colour: i.Color_ID,
+      Width: i.Width_ID,
+      Unit: i.Unit_ID,
       Quantity: i.Quantity,
       UnitPrice: i.Unit_Price,
       UnitCommission: i.CommissionUnit,
       PaymentTerms: i.PaymentTerms,
       DeliveredQuantity: i.Delivered_Quantity,
+      ApplyDeliveryQty: 0,
     }));
     var whereParam = {
       Id: this.Id,
@@ -448,11 +451,102 @@ export class PiAmendmentApplicationComponent {
       )
       .subscribe({
         next: (res: any) => {
-          if (res.messageType === 'Success' && res.status) {
-            swal.fire('Success', 'Application Update successfully', 'success');
-          } else {
-            swal.fire('info', 'Could not save Application', 'info');
-          }
+          fv.itemsRevise.map((e: any) => {
+            const detailRows = {
+              CustomerName: fv.customer_name,
+              PiNo: e.PINo,
+              PiArticle: e.Article,
+              ActualArticle: e.Item_ID,
+              TblPoFormMasterId: this.Id,
+              UpdatedDate: new Date(
+                new Date().toLocaleString('en', { timeZone: 'Asia/Dhaka' })
+              ),
+              UpdatedById: userId,
+              Colour: e.Color_ID,
+              Width: e.Width_ID,
+              Unit: e.Unit_ID,
+              Quantity: e.Quantity,
+              UnitPrice: e.Unit_Price,
+              CMS: e.CommissionUnit,
+              PaymentTerms: e.PaymentTerms,
+              Note: e.Remarks,
+            };
+            console.log(e.ReviseID);
+            
+            if (e.ReviseID == '' || e.ReviseID == null) {
+              this.masterEntryService
+                .SaveSingleData(detailRows, 'tbl_po_form_pi_revise_detail')
+                .subscribe({
+                  next: (res) => {
+                    console.log(res);
+                    
+                    if (res.messageType === 'Success' && res.status) {
+                      swal.fire(
+                        'Success',
+                        'Application generated successfully',
+                        'success'
+                      );
+                      // Optionally reset form / navigate
+                      this.Formgroup.reset({});
+                      this.items.clear();
+                    } else {
+                      swal.fire(
+                        'Application generation Failed',
+                        res?.message || 'Application generation failed.',
+                        'info'
+                      );
+                    }
+                  },
+                  error: (err) => {
+                    console.error(err);
+                    swal.fire(
+                      'Application generation Failed',
+                      err?.error?.message || 'Application generation failed.',
+                      'info'
+                    );
+                  },
+                });
+            } else {
+              var whereParamPIINDiv = {
+                Id: e.ReviseID,
+              };
+              console.log(whereParamPIINDiv);
+
+              this.masterEntryService
+                .UpdateData(
+                  detailRows,
+                  whereParamPIINDiv,
+                  'tbl_po_form_pi_revise_detail'
+                )
+                .subscribe({
+                  next: (res) => {
+                    console.log(res);
+
+                    if (res.messageType === 'Success' && res.status) {
+                      swal.fire(
+                        'Success',
+                        'Application Update successfully',
+                        'success'
+                      );
+                    } else {
+                      swal.fire(
+                        'Application Update Failed',
+                        res?.message || 'Stock update failed.',
+                        'info'
+                      );
+                    }
+                  },
+                  error: (err) => {
+                    console.error(err);
+                    swal.fire(
+                      'Application Update Failed',
+                      err?.error?.message || 'Application update failed.',
+                      'info'
+                    );
+                  },
+                });
+            }
+          });
         },
         error: () => {
           swal.fire('info', 'Could not save Application', 'info');
@@ -563,8 +657,11 @@ export class PiAmendmentApplicationComponent {
         console.log(JSON.parse(results.data).Tables1);
         if (results.status) {
           const formArray = this.Formgroup.get('items') as FormArray;
-          const formArrayRevise = this.Formgroup.get('itemsRevise') as FormArray;
+          const formArrayRevise = this.Formgroup.get(
+            'itemsRevise'
+          ) as FormArray;
           formArray.clear();
+          formArrayRevise.clear();
           const input = JSON.parse(results.data).Tables1[0].Date;
           const formatted = new Date(input).toISOString();
           console.log(formatted);
@@ -584,43 +681,76 @@ export class PiAmendmentApplicationComponent {
               this.fb.group({
                 customer_name: [item.customer_name],
                 PINo: [item.PINo],
+                PIMasterId: [item.PINo],
+                PIDetailsId: [item.PINo],
                 Article: [item.Article],
                 ActualArticle: [item.ActualArticle],
+                ActualArticleId: [item.Item_ID],
                 Color: [item.Color],
+                ColorId: [item.Color_ID],
                 Width: [item.Width],
+                WidthId: [item.Width_ID],
                 Unit: [item.Unit],
+                UnitId: [item.Unit_ID],
                 Quantity: [item.Quantity],
                 Unit_Price: [item.Unit_Price],
                 CommissionUnit: [item.CommissionUnit],
                 PaymentTerms: [item.PaymentTerms],
+                PaymentTermsId: [item.Payment_Term_ID],
                 Delivered_Quantity: [item.Delivered_Quantity],
                 Remarks: [''],
+                PI_Detail_ID: [item.PI_Detail_ID],
+                PI_Master_ID: [item.PI_Master_ID],
               })
             );
           });
-          
+
           JSON.parse(results.data).Tables2.forEach((item: any) => {
             console.log(item);
-            
-            var grp =  this.buildReviseGroup({
-                customer_name: item.customer_name || '',
-                PINo: item.PiNo || '',
-                Article: item.Article || '',
-                ActualArticle: item.ActualArticle || '',
-                Color: item.Colour || '',
-                Width: item.Width || '',
-                Unit: item.Unit || '',
-                Quantity: item.Quantity || 0,
-                Unit_Price: item.Unit_Price || 0,
-                CommissionUnit: item.CommissionUnit || '',
-                PaymentTerms: item.PaymentTerms || '',
-                Delivered_Quantity: item.Delivered_Quantity || 0,
-                PI_Detail_ID: item.TblPiDetailId || null,
-                PI_Master_ID: item.TblPiMasterId || null,
-                Remarks:item.Notes
-              })
+
+            const grp = this.buildReviseGroup({
+              customer_name: item.customer_name,
+              PINo: item.PINo,
+              Article: item.ArticleNo,
+              Item_ID: item.ActualArticleNo,
+              ArticleNo: item.ActualArticleNo,
+              Color_ID: item.Colour,
+              Width_ID: item.Width,
+              Unit_ID: item.Unit,
+              Quantity: item.Quantity,
+              Unit_Price: item.Unit_Price,
+              CommissionUnit: item.CommissionUnit,
+              Delivered_Quantity: item.Delivered_Quantity,
+              PI_Detail_ID: item.PI_Detail_ID,
+              PI_Master_ID: item.PI_Master_ID,
+              TblPiMasterId: item.PI_Master_ID,
+              TblPiDetailId: item.PI_Detail_ID,
+              PaymentTerms: item.PaymentTerms,
+              ReviseID: item.ReviseID,
+            });
 
             this.itemsRevise.push(grp);
+
+            this.ReviseDetails.push({
+              customer_name: item.customer_name || '',
+              PINo: item.PINo || '',
+              Article: item.ArticleNo || '',
+              ArticleNo: item.ActualArticleNo,
+              Item_ID: item.ActualArticleNo || '',
+              Color_ID: item.Colour || '',
+              Width: item.Width || '',
+              Unit: item.Unit || '',
+              Quantity: item.Quantity || 0,
+              Unit_Price: item.Unit_Price || 0,
+              CommissionUnit: item.CommissionUnit || '',
+              PaymentTerms: item.PaymentTerms || '',
+              Delivered_Quantity: item.Delivered_Quantity || 0,
+              PI_Detail_ID: item.PI_Detail_ID || null,
+              PI_Master_ID: item.PI_Master_ID || null,
+              TblPiMasterId: item.PI_Master_ID,
+              TblPiDetailId: item.PI_Detail_ID,
+              ReviseID: item.ReviseID,
+            });
           });
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
@@ -633,6 +763,8 @@ export class PiAmendmentApplicationComponent {
   }
 
   CopyItem(item: any) {
+    console.log(item);
+
     try {
       // build a revise group (with validators) and push it
       const grp = this.buildReviseGroup({
@@ -657,6 +789,7 @@ export class PiAmendmentApplicationComponent {
           item.PaymentTerms ??
           null,
       });
+      console.log(grp);
 
       this.itemsRevise.push(grp);
 
@@ -677,6 +810,8 @@ export class PiAmendmentApplicationComponent {
         PI_Detail_ID: item.PI_Detail_ID || null,
         PI_Master_ID: item.PI_Master_ID || null,
       });
+
+      console.log(this.ReviseDetails);
     } catch (err) {
       console.error('CopyItem error', err);
     }
@@ -712,6 +847,7 @@ export class PiAmendmentApplicationComponent {
         data?.PaymentTerms ?? data?.PaymentTermsId ?? null,
         Validators.required,
       ],
+      ReviseID: [data?.ReviseID ?? ''],
     });
   }
 
@@ -772,7 +908,12 @@ export class PiAmendmentApplicationComponent {
       const out: any = { ...r };
 
       // Helper to try resolve ids by matching label or id
-      const resolve = (list: any[] | undefined, idKey: string, labelKey: string, value: any) => {
+      const resolve = (
+        list: any[] | undefined,
+        idKey: string,
+        labelKey: string,
+        value: any
+      ) => {
         if (value == null || list == null) return value;
         // numeric or already id => return as-is (attempt numeric cast)
         if (typeof value === 'number') return value;
@@ -780,29 +921,67 @@ export class PiAmendmentApplicationComponent {
         let found = list.find((x: any) => String(x[idKey]) === String(value));
         if (found) return found[idKey];
         // try to match by label
-        found = list.find((x: any) => String(x[labelKey]).trim().toLowerCase() === String(value).trim().toLowerCase());
+        found = list.find(
+          (x: any) =>
+            String(x[labelKey]).trim().toLowerCase() ===
+            String(value).trim().toLowerCase()
+        );
         if (found) return found[idKey];
         return value; // unresolved
       };
 
       // Item_ID from AAList (Item_ID/Article_No)
-      out.Item_ID = resolve(this.AAList, 'Item_ID', 'Article_No', out.Item_ID ?? out.ActualArticle ?? out.Article);
+      out.Item_ID = resolve(
+        this.AAList,
+        'Item_ID',
+        'Article_No',
+        out.Item_ID ?? out.ActualArticle ?? out.Article
+      );
 
       // Color_ID from ColorList (Color_ID/Color)
-      out.Color_ID = resolve(this.ColorList, 'Color_ID', 'Color', out.Color_ID ?? out.Color);
+      out.Color_ID = resolve(
+        this.ColorList,
+        'Color_ID',
+        'Color',
+        out.Color_ID ?? out.Color
+      );
 
       // Width_ID from WidthList (Width_ID/Measurement)
-      out.Width_ID = resolve(this.WidthList, 'Width_ID', 'Measurement', out.Width_ID ?? out.Width);
+      out.Width_ID = resolve(
+        this.WidthList,
+        'Width_ID',
+        'Measurement',
+        out.Width_ID ?? out.Width
+      );
 
       // Unit_ID from UnitList (Unit_ID/Unit)
-      out.Unit_ID = resolve(this.UnitList, 'Unit_ID', 'Unit', out.Unit_ID ?? out.Unit);
+      out.Unit_ID = resolve(
+        this.UnitList,
+        'Unit_ID',
+        'Unit',
+        out.Unit_ID ?? out.Unit
+      );
 
       // PaymentTerms to Payment_Term_ID
-      out.PaymentTerms = resolve(this.PaymentModeList, 'Payment_Term_ID', 'PaymentTerms', out.PaymentTerms ?? out.PaymentTermsId);
+      out.PaymentTerms = resolve(
+        this.PaymentModeList,
+        'Payment_Term_ID',
+        'PaymentTerms',
+        out.PaymentTerms ?? out.PaymentTermsId
+      );
 
       // If any unresolved values remain, log a warning to help debugging
-      if (typeof out.Item_ID === 'string' || typeof out.Color_ID === 'string' || typeof out.Width_ID === 'string' || typeof out.Unit_ID === 'string') {
-        console.warn('normalizeReviseItems: could not fully resolve IDs for row', idx, out);
+      if (
+        typeof out.Item_ID === 'string' ||
+        typeof out.Color_ID === 'string' ||
+        typeof out.Width_ID === 'string' ||
+        typeof out.Unit_ID === 'string'
+      ) {
+        console.warn(
+          'normalizeReviseItems: could not fully resolve IDs for row',
+          idx,
+          out
+        );
       }
 
       return out;
