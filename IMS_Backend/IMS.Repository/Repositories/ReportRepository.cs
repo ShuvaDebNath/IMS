@@ -45,27 +45,7 @@ namespace Boilerplate.Repository.Repositories
                     param.Id
                 };
 
-                string query = @"exec [usp_SampleRequest_Messenger_Report] @fromDate,@toDate,@requestStatus,@Id";
-                var ds = await GetDataInDataSetAsync(query, parametars);
-
-                return ds;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public async Task<DataSet> ProformaInvoiceReport(ProformaInvoiceReportParams param)
-        {
-            try
-            {
-                var parametars = new
-                {
-                    param.PI_Master_ID
-                };
-
-                string query = @"exec [usp_ProformaInvoice_GetDataById] @PI_Master_ID";
+                string query = @"exec [usp_SampleRequest_Report] @fromDate,@toDate,@requestStatus,@Id";
                 var ds = await GetDataInDataSetAsync(query, parametars);
 
                 return ds;

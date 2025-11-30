@@ -65,6 +65,7 @@ namespace IMS.API.Controllers
             }
         }
 
+
         [HttpGet]
         [Route("ProformaInvoiceReport")]
         public async Task<IActionResult> ProformaInvoiceReport(String rptType, int PI_Master_ID)

@@ -461,7 +461,7 @@ namespace Boilerplate.Repository.Repositories
                 await cmd.Transaction.CommitAsync();
                 rowAffect = newPrimaryKey;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 await cmd.Transaction.RollbackAsync();
                 throw;

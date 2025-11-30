@@ -30,15 +30,13 @@ export class ReportService {
     }),
   };
 
-  PrintSampleRequest(
-    report: any,
-    rptType: 'pdf' | 'excel' | 'word',
-    isView: boolean
-  ) {
+  PrintSampleRequest(report: any, rptType: any, isView: any) {
+    console.log(report);
+    
     const requestStatus = report.requestStatus ?? '';
     const fromDate = report.fromDate ? this.formatDate(report.fromDate) : '';
     const toDate = report.toDate ? this.formatDate(report.toDate) : '';
-    const UserID = report.UserID ?? '';
+    const UserID = report.UserID ? report.UserID : '';
 
     const url = `${this.baseUrl}${this.apiController}/SampleRequestReport`;
     const token = this.gs.getSessionData('token');

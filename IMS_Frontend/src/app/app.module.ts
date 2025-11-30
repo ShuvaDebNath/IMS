@@ -19,6 +19,11 @@ import { NgxSelectModule, INgxSelectOptions } from 'ngx-select-ex';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { DatePipe } from '@angular/common';
 import { MatPaginatorModule } from "@angular/material/paginator";
+import { CancelPiApplicationComponent } from './application/cancel-pi-application/cancel-pi-application.component';
+import { ExchangeGoodsApplicationComponent } from './application/exchange-goods-application/exchange-goods-application.component';
+import { ReturnGoodsApplicationComponent } from './application/return-goods-application/return-goods-application.component';
+
+
 
 const CustomSelectOptions: INgxSelectOptions = {
   keepSelectedItems: false,
