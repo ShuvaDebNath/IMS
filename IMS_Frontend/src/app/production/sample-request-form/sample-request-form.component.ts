@@ -88,7 +88,7 @@ export class SampleRequestFormComponent {
     this.Formgroup = this.fb.group({
       RequestDate: ['', [Validators.required]],
       CustomerName: ['', [Validators.required]],
-      Customer_Contact_Info: [''],
+      Customer_Contact_Info: ['', Validators.required],
       Product_Description: ['', [Validators.required]],
       ArticleNo: ['', [Validators.required]],
       SampleArticleNo: ['', [Validators.required]],
@@ -96,7 +96,7 @@ export class SampleRequestFormComponent {
       Width: ['', [Validators.required]],
       Unit: ['', [Validators.required]],
       Requested_Quantity: ['', [Validators.required]],
-      Shipping_Address: [''],
+      Shipping_Address: ['', Validators.required],
       RequestStatus: ['', [Validators.required]],
       Remarks: [''],
     });

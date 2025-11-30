@@ -1,5 +1,116 @@
-card-body::after, .card-footer::after, .card-header::after {
-    display: none;
-    clear: both;
-    content: "";
+.form-row {
+  row-gap: 0.5rem;
 }
+
+.form-control-sm {
+  height: 35px !important;
+  font-size: 14px;
+}
+
+label {
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+button.btn {
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+select.form-control-sm {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.loader-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%!important;
+  background: #fff;
+}
+
+.preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.25);
+  z-index: 9999;
+}
+
+.preloader .loader-wrapper {
+  background: transparent;
+  height: auto;
+  width: auto;
+}
+
+.preloader .circle {
+  background: #ffffff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader-logo {
+  width: 72px;
+  height: 72px;
+}
+
+.animation__shake {
+  animation: shake 1.2s infinite linear;
+}
+
+@keyframes shake {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}
+
+.theme-btn-purple {
+  background-color: #21743b;  /* similar tone as your eye button */
+  color: white;
+}
+.theme-btn-purple:hover {
+  background-color: #1f5e3c;
+}
+
+.special-approval-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;         /* small spacing between buttons */
+  margin-top: 20px;
+}
+
+/* Make both buttons same “menu color” */
+.menu-btn {
+  background-color: #6a1a3f;  /* change to your MENU color */
+  color: white;
+  padding: 6px 16px;
+  border-radius: 6px;
+  border: none;
+}
+
+.menu-btn:disabled {
+  opacity: 0.6;
+}
+
+/* Hover effect */
+.menu-btn:hover:not(:disabled) {
+  background-color: #5a1433; /* darker shade of menu color */
+}
+
+
+
