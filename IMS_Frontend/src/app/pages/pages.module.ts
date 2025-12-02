@@ -115,6 +115,10 @@ import { SampleRequestListComponent } from '../production/sample-request-list/sa
 import { AllReportComponent } from '../report/sample-request/all-report/all-report.component';
 import { MessengerReportComponent } from '../report/sample-request/messenger-report/messenger-report.component';
 import { ChallanComponent } from '../challan/challan.component';
+import { AllTaskReportComponent } from '../task-report/all-task-report/all-task-report.component';
+import { AllTaskDetailsReportComponent } from '../task-report/all-task-details-report/all-task-details-report.component';
+import { GenerateTaskReportComponent } from '../task-report/generate-task-report/generate-task-report.component';
+import { CalendarModule } from 'primeng/calendar';
 
 
 
@@ -205,6 +209,9 @@ const CustomSelectOptions: INgxSelectOptions = {
     SampleRequestListComponent,
     AllReportComponent,
     MessengerReportComponent,
+    AllTaskDetailsReportComponent,
+    AllTaskReportComponent,
+    GenerateTaskReportComponent,
   ],
   imports: [
     CommonModule,
@@ -234,6 +241,7 @@ const CustomSelectOptions: INgxSelectOptions = {
     MultiSelectModule,
     TableModule,
     DialogModule,
+    CalendarModule,
     UiSwitchModule.forRoot({
       size: 'small',
       color: 'rgb(0, 189, 99)',
@@ -418,6 +426,9 @@ const CustomSelectOptions: INgxSelectOptions = {
           { path: 'sample-request-list', component: SampleRequestListComponent },
           { path: 'all-report', component: AllReportComponent },
           { path: 'messsenger-report', component: MessengerReportComponent },
+          { path: 'all-task-report', component: AllTaskReportComponent },
+          { path: 'all-task-report-details', component: AllTaskDetailsReportComponent },
+          { path: 'generate-task-report', component: GenerateTaskReportComponent },
         ],
       },
 
