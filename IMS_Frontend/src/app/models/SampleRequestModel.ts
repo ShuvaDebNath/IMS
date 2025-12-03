@@ -15,4 +15,3 @@ export class SampleRequest {
   Remarks!: string;
   SampleArticleNo!:string;
 }
-

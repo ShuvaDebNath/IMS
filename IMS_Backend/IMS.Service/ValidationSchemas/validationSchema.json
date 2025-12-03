@@ -97,6 +97,13 @@
         }
       }
     },
+    "tbl_po_form_pi_revise_detail": {
+      "QueryParams": {
+        "[ActualArticle]": {
+          "Required": true
+        }
+      }
+    },
     "tbl_stock": {
       "QueryParams": {
         "[RawMaterial_ID]": {

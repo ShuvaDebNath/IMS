@@ -74,12 +74,12 @@
 
       <ng-template pTemplate="header">
         <tr>
-          <th class="">SL</th>
-          <th class="">Export No</th>
-          <th class="">Date</th>
-          <th class="">Total Qty</th>
-          <th class="">Status</th>
-          <th class="" *ngIf="allPersmissions">Action</th>
+          <th class="bg-gradient-success">SL</th>
+          <th class="bg-gradient-success">Export No</th>
+          <th class="bg-gradient-success">Date</th>
+          <th class="bg-gradient-success">Total Qty</th>
+          <th class="bg-gradient-success">Status</th>
+          <th class="bg-gradient-success" *ngIf="allPersmissions">Action</th>
         </tr>
       </ng-template>
 
@@ -92,7 +92,7 @@
           <td class="text-center align-middle">{{ table.Status }}</td>
           <td class="text-center align-middle p-0 m-0">
             <a
-              class="btn theme-btn-view"
+              class="btn bg-gradient-cyan btn-xs mr-2"
               target="_blank"
               title="View Details"
               (click)="viewDetails(table)"
@@ -100,7 +100,7 @@
             >
 
             <button
-              class="btn theme-btn-view"
+              class="btn bg-gradient-danger btn-xs"
               title="Receive"
               (click)="ReceiveExport(table)"
             >

@@ -114,6 +114,13 @@ import { SampleRequestInsertFormComponent } from '../production/sample-request-i
 import { SampleRequestListComponent } from '../production/sample-request-list/sample-request-list.component';
 import { AllReportComponent } from '../report/sample-request/all-report/all-report.component';
 import { MessengerReportComponent } from '../report/sample-request/messenger-report/messenger-report.component';
+import { AllApplicationComponent } from '../application/all-application/all-application.component';
+import { GenerateApplicationComponent } from '../application/generate-application/generate-application.component';
+import { ApproveApplicationComponent } from '../application/approve-application/approve-application.component';
+import { PiAmendmentApplicationComponent } from '../application/pi-amendment-application/pi-amendment-application.component';
+import { CancelPiApplicationComponent } from '../application/cancel-pi-application/cancel-pi-application.component';
+import { ExchangeGoodsApplicationComponent } from '../application/exchange-goods-application/exchange-goods-application.component';
+import { ReturnGoodsApplicationComponent } from '../application/return-goods-application/return-goods-application.component';
 import { ChallanComponent } from '../challan/challan.component';
 import { AllTaskReportComponent } from '../task-report/all-task-report/all-task-report.component';
 import { AllTaskDetailsReportComponent } from '../task-report/all-task-details-report/all-task-details-report.component';
@@ -147,8 +154,8 @@ const CustomSelectOptions: INgxSelectOptions = {
     AllCommercialInvoiceComponent,
     GeneratePiComponent,
     LandingPageComponent,
-    // DeliveredPiComponent,
-    // AllPiComponent,
+    DeliveredPiComponent,
+    AllPiComponent,
     AllCashReceiveComponent,
     GenerateCashReceiveComponent,
     CashReceiveDetailsComponent,
@@ -212,6 +219,13 @@ const CustomSelectOptions: INgxSelectOptions = {
     AllTaskDetailsReportComponent,
     AllTaskReportComponent,
     GenerateTaskReportComponent,
+    AllApplicationComponent,
+    GenerateApplicationComponent,
+    ApproveApplicationComponent,
+    PiAmendmentApplicationComponent,
+    CancelPiApplicationComponent,
+    ExchangeGoodsApplicationComponent,
+    ReturnGoodsApplicationComponent
   ],
   imports: [
     CommonModule,
@@ -429,6 +443,13 @@ const CustomSelectOptions: INgxSelectOptions = {
           { path: 'all-task-report', component: AllTaskReportComponent },
           { path: 'all-task-details-report', component: AllTaskDetailsReportComponent },
           { path: 'generate-task-report', component: GenerateTaskReportComponent },
+          { path: 'all-application', component: AllApplicationComponent },
+          { path: 'generate-application', component: GenerateApplicationComponent },
+          { path: 'approve-application', component: ApproveApplicationComponent },
+          { path: 'pi-amendment-application', component: PiAmendmentApplicationComponent },
+          { path: 'cancel-pi-application', component: CancelPiApplicationComponent },
+          { path: 'exchange-goods-application', component: ExchangeGoodsApplicationComponent },
+          { path: 'return-goods-application', component: ReturnGoodsApplicationComponent },
         ],
       },
 

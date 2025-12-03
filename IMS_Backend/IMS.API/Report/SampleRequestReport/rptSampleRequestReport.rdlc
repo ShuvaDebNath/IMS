@@ -1999,7 +1999,7 @@
                               <Style>
                                 <FontFamily>times New Roman</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <Format>dddd, MMMM d, yyyy h:mm:ss tt</Format>
+                                <Format>MMMM d</Format>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -2089,7 +2089,6 @@
                               <Style>
                                 <FontFamily>times New Roman</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <Format>dddd, MMMM d, yyyy h:mm:ss tt</Format>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -2198,7 +2197,6 @@
                               <Style>
                                 <FontFamily>times New Roman</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <Format>dddd, MMMM d, yyyy h:mm:ss tt</Format>
                               </Style>
                             </TextRun>
                           </TextRuns>

@@ -67,6 +67,15 @@ export class AllLcComponent {
     private title: Title
   ) {}
   ngOnInit(): void {
+    
+    var permissions = this.gs.CheckUserPermission(
+      'All LC'
+    );
+    this.insertPermissions = permissions.insertPermissions;
+    this.updatePermissions = permissions.updatePermissions;
+    this.deletePermissions = permissions.deletePermissions;
+    this.printPermissions = permissions.printPermissions;
+
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
     this.title.setTitle('All LC');
