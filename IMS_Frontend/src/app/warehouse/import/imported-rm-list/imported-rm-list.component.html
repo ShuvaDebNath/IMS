@@ -1,12 +1,14 @@
 
-<div class="m-t p-2">
-  <div class="card shadow-sm">
+<div class="card card-default">
   <div
-    class="card-header theme-bg"
+    class="content-heading"
+    style="border-bottom: 1px solid rgba(0, 0, 0, 0.125) !important"
   >
-
-        <h2 class="">Receive Export</h2>
-    
+    <div class="row">
+      <div class="col-6">
+        <h2 class="p-2">Receive Export</h2>
+      </div>
+    </div>
   </div>
   <div class="card-body">
     <form
@@ -74,11 +76,11 @@
 
       <ng-template pTemplate="header">
         <tr>
-          <th class="">SL</th>
-          <th class="">Export No</th>
-          <th class="">Date</th>
-          <th class="">Status</th>
-          <th class="" *ngIf="allPersmissions">Action</th>
+          <th class="bg-gradient-success">SL</th>
+          <th class="bg-gradient-success">Export No</th>
+          <th class="bg-gradient-success">Date</th>
+          <th class="bg-gradient-success">Status</th>
+          <th class="bg-gradient-success" *ngIf="allPersmissions">Action</th>
         </tr>
       </ng-template>
 
@@ -90,7 +92,7 @@
           <td class="text-center align-middle">{{ table.Status }}</td>
           <td class="text-center align-middle p-0 m-0">
             <a
-              class="btn theme-btn-view"
+              class="btn bg-gradient-cyan btn-xs mr-2"
               target="_blank"
               title="View Details"
               (click)="viewDetails(table)"
@@ -98,7 +100,7 @@
             >
 
             <button
-              class="btn theme-btn-view"
+              class="btn bg-gradient-danger btn-xs"
               title="Mail"
             >
               <i class="fas fa-eye"></i>Send Mail To Supplier
@@ -243,6 +245,3 @@
     </div>
   </p-dialog> -->
 </div>
-
-</div>
-

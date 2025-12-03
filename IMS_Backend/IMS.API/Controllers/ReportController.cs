@@ -65,6 +65,7 @@ namespace IMS.API.Controllers
             }
         }
 
+
         [HttpGet]
         [Route("TaskDetailsReport")]
         public async Task<IActionResult> TaskDetailsReport(String rptType, string fromDate = "", string toDate = "")

@@ -2,12 +2,10 @@
 
 <form name="PIForm" [formGroup]="Formgroup" role="form">
   <div class="card">
-    <div class="theme-bg sticky-header card-header  align-items-center justify-content-between">
+    <div class="theme-bg sticky-header d-flex align-items-center justify-content-between">
       <h1 class=" ">Proforma Invoice</h1>
       <div class="float-right">
-        <!-- Show Save when creating, Update when editing -->
-        <button *ngIf="!isEditMode()" class="btn btn-sm btn-pi-save mr-2" (click)="Save()" [disabled]="!Formgroup.valid"><i class="fas fa-save"></i>&nbsp;Save</button>
-        <button *ngIf="isEditMode()" class="btn btn-sm btn-pi-save mr-2" (click)="Update()" [disabled]="!Formgroup.valid"><i class="fas fa-edit"></i>&nbsp;Update</button>
+        <button class="btn btn-sm btn-pi-save mr-2" (click)="Save()" [disabled]="!Formgroup.valid"><i class="fas fa-save"></i>&nbsp;Save</button>
         <button class="btn btn-sm btn-pi-refresh" (click)="RefrashDDL()"><i class="fas fa-sync"></i>&nbsp;Refresh</button>
       </div>
     </div>
@@ -376,12 +374,12 @@
               <th class="text-center align-middle"></th>
               <th class="text-center align-middle"></th>
               <th class="text-center align-middle">
-                <input type="text" class="form-control form-control-sm" value="{{GrandTotalQty}}" placeholder="Total Qty" id="GrandTotalQty" name="GrandTotalQty"/>
+                <input type="text" class="form-control form-control-sm" value="{{GTQTY}}" placeholder="Total Qty" id="GTQty" name="GTQty"/>
               </th>
               <th class="text-center align-middle"></th>
               <th class="text-center align-middle"> </th>
               <th class="text-center align-middle">  
-                <input type="text" class="form-control form-control-sm text-right" value="{{GrandTotalAmount}}" placeholder="Total Amount" id="GrandTotalAmount" name="GrandTotalAmount"/>
+                <input type="text" class="form-control form-control-sm text-right" value="{{GTAMNT}}" placeholder="Total Amout" id="GTAmout" name="GTAmout"/>
               </th>
               <th class="text-center align-middle"></th>
               <th class="text-center align-middle"></th>
