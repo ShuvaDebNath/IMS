@@ -107,6 +107,32 @@ export class ReportService {
         window.open(fileURL, '_blank');
       });
   }
+
+  PrintCustomerList(report: any, rptType: any, isView: any) {
+    
+    const Superior_Id = report.Superior_Id ?? '';
+    const Customer_Id = report.Customer_Id ?? '';
+    const Status = report.Status ?? '';
+    const UserID = report.UserID ?? '';
+
+    const url = `${this.baseUrl}${this.apiController}/CustomerReport`;
+    const token = this.gs.getSessionData('token');
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    this.http
+      .get(url, {
+        headers,
+        params: { 'rptType':'PDF', 'Superior_Id':Superior_Id, 'Customer_Id':Customer_Id, 'Status':Status, 'UserID':UserID },
+        responseType: 'blob',
+      })
+      .subscribe((res: Blob) => {
+        const fileURL = window.URL.createObjectURL(res);
+        window.open(fileURL, '_blank');
+      });
+  }
   
  
   PrintCommercialInvoiceReports(
