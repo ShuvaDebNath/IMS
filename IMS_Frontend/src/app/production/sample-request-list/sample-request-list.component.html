@@ -48,11 +48,7 @@
       <hr>
 
       <p-table #dt [value]="tableData" [paginator]="true" [rows]="10" [responsive]="true" [showCurrentPageReport]="true"
-        [globalFilterFields]="['RequestDate','CustomerName',
-          'Article_No',
-          'Color',
-          'Measurement',
-          'Unit','RequestedQuantity','RequestStatus','RequestBy']"
+        [globalFilterFields]="['RequestDate','CustomerName','Article','Color','RequestedQuantity','RequestStatus','RequestBy']"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
 
         <ng-template pTemplate="caption">
@@ -69,13 +65,9 @@
           <tr>
             <th class="text-center">SL</th>
             <th class="text-center">Request Date</th>
-            <th class="text-center">Customer Name</th>
-            <th class="text-center">Article No</th>
-            <th class="text-center">Color</th>
-            <th class="text-center">Width</th>
-            <th class="text-center">Measurement</th>
-            <th class="text-center">Requested Quantity</th>
-            <th class="text-center">Approved Quantity</th>
+            <th class="text-left">Customer Name</th>
+            <th class="text-center">Article</th>
+            <th class="text-center">Quantity</th>
             <th class="text-center">Request By</th>
             <th class="text-center">Carried By</th>
             <th class="text-center">Handover Status</th>
@@ -88,14 +80,8 @@
             <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
             <td class="text-center align-middle">{{table.RequestDate}}</td>
             <td class="text-left align-left">{{table.CustomerName}}</td>
-            <td class="text-center align-left">{{ table.Article_No }}</td>
-            <td class="text-center align-left">{{ table.Color }}</td>
-            <td class="text-center align-left">{{ table.Measurement }}</td>
-            <td class="text-center align-left">{{ table.Unit }}</td>
+            <td class="text-center align-middle">{{table.Article}}</td>
             <td class="text-center align-middle">{{table.RequestedQuantity}}</td>
-            <td class="text-center align-middle">
-              {{ table.ApprovedQty }}
-            </td>
             <td class="text-center align-middle">{{table.RequestBy}}</td>
             <td class="text-center align-middle">{{table.RequestStatus}}</td>
             <td class="text-center align-middle">{{
@@ -108,7 +94,7 @@
                 <a class="btn theme-btn-view " target="_blank" title="View" (click)="viewDetails(table)"><i
                     class="fa fa-eye"></i></a>
 
-                <a *ngIf="updatePermissions && (roleId==1 || roleId==2 || table.RequesterId==uId)" (click)="checkPermission(table)" class="btn theme-btn-edit" target="_blank" title="Edit"><i class="fa fa-edit"></i></a>
+                <a *ngIf="updatePermissions" (click)="checkPermission(table)" class="btn theme-btn-edit" target="_blank" title="Edit"><i class="fa fa-edit"></i></a>
 
                 <button *ngIf="deletePermissions" class="btn theme-btn-delete " title="Delete"
                   (click)="DeleteData(table)"><i class="fas fa-trash"></i></button>
@@ -138,8 +124,6 @@
         <p>Remarks: {{ detailsData.Remarks }}</p>
       </div>
     </p-dialog>
-
-
 
   </div>
 </div>

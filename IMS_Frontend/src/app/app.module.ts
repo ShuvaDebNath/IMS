@@ -22,6 +22,11 @@ import { MatPaginatorModule } from "@angular/material/paginator";
 import { GenerateTaskReportComponent } from './task-report/generate-task-report/generate-task-report.component';
 import { AllTaskReportComponent } from './task-report/all-task-report/all-task-report.component';
 import { AllTaskDetailsReportComponent } from './task-report/all-task-details-report/all-task-details-report.component';
+import { CancelPiApplicationComponent } from './application/cancel-pi-application/cancel-pi-application.component';
+import { ExchangeGoodsApplicationComponent } from './application/exchange-goods-application/exchange-goods-application.component';
+import { ReturnGoodsApplicationComponent } from './application/return-goods-application/return-goods-application.component';
+
+
 
 const CustomSelectOptions: INgxSelectOptions = {
   keepSelectedItems: false,

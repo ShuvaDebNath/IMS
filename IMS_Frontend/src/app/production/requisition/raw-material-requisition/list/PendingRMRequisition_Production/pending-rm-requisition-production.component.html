@@ -49,16 +49,17 @@
         <td class="text-center">{{ requisition.Total_Roll }}</td>
         <td class="text-center">{{ requisition.Status }}</td>
 
-        <td class="d-flex gap-1 justify-content-center">
+        <td class="d-flex gap-2 justify-content-center">
           <button class="btn theme-btn-edit btn-sm d-inline-flex align-items-center" (click)="onEdit(requisition)" title="Edit" aria-label="Edit">
-            <i class="pi pi-pencil "></i>
+            <i class="pi pi-pencil me-1"></i>
           </button>
           <button class="btn theme-btn-delete btn-sm d-inline-flex align-items-center" (click)="onDelete(requisition)" title="Delete" aria-label="Delete">
-            <i class="pi pi-trash "></i>
+            <i class="pi pi-trash me-1"></i>
           </button>
+          <!-- ✅ call the handler that opens the dialog -->
           <button class="btn theme-btn-view btn-sm text-white d-inline-flex align-items-center"
                   (click)="onDetails(requisition)" title="Details" aria-label="Details">
-            <i class="pi pi-eye"></i>
+            <i class="pi pi-eye me-1"></i>
           </button>
         </td>
       </tr>
