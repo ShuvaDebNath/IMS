@@ -66,6 +66,49 @@ namespace IMS.API.Controllers
         }
 
         [HttpGet]
+        [Route("TaskDetailsReport")]
+        public async Task<IActionResult> TaskDetailsReport(String rptType, string fromDate = "", string toDate = "")
+        {
+            try
+            {
+                var currentUser = HttpContext.User;
+
+                string reportPath = "TaskReport\\";
+                DataSet ds = await _reportService.TaskDetailsReport(fromDate, toDate);
+
+                if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
+                {
+
+                    return Ok(new { msg = "Data Not Found" });
+                }
+
+                ds.Tables[0].TableName = "TaskDetails";
+
+                var reportName = "Task Details Report";
+
+                reportPath += "rptTaskDetailsReport.rdlc";
+
+
+                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+
+
+                if (rptType.ToLower() == "pdf")
+                {
+                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                }
+                else
+                {
+                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
         [Route("ProformaInvoiceReport")]
         public async Task<IActionResult> ProformaInvoiceReport(String rptType, int PI_Master_ID)
         {

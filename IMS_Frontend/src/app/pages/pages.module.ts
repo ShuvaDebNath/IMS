@@ -427,7 +427,7 @@ const CustomSelectOptions: INgxSelectOptions = {
           { path: 'all-report', component: AllReportComponent },
           { path: 'messsenger-report', component: MessengerReportComponent },
           { path: 'all-task-report', component: AllTaskReportComponent },
-          { path: 'all-task-report-details', component: AllTaskDetailsReportComponent },
+          { path: 'all-task-details-report', component: AllTaskDetailsReportComponent },
           { path: 'generate-task-report', component: GenerateTaskReportComponent },
         ],
       },

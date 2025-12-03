@@ -2,7 +2,7 @@
 
 namespace IMS.Contracts.DTOs;
 
-public class TaskReportParams
+public class ProformaInvoiceReportParams
 {
     public int PI_Master_ID { get; set; }
 }
