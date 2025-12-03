@@ -122,6 +122,8 @@ import { CancelPiApplicationComponent } from '../application/cancel-pi-applicati
 import { ExchangeGoodsApplicationComponent } from '../application/exchange-goods-application/exchange-goods-application.component';
 import { ReturnGoodsApplicationComponent } from '../application/return-goods-application/return-goods-application.component';
 import { ChallanComponent } from '../challan/challan.component';
+import { UserListComponent } from '../user/user-list/user-list.component';
+import { UserCreateComponent } from '../user/user-create/user-create.component';
 
 
 
@@ -218,7 +220,9 @@ const CustomSelectOptions: INgxSelectOptions = {
     PiAmendmentApplicationComponent,
     CancelPiApplicationComponent,
     ExchangeGoodsApplicationComponent,
-    ReturnGoodsApplicationComponent
+    ReturnGoodsApplicationComponent,
+    UserListComponent,
+    UserCreateComponent,
   ],
   imports: [
     CommonModule,
@@ -439,6 +443,8 @@ const CustomSelectOptions: INgxSelectOptions = {
           { path: 'cancel-pi-application', component: CancelPiApplicationComponent },
           { path: 'exchange-goods-application', component: ExchangeGoodsApplicationComponent },
           { path: 'return-goods-application', component: ReturnGoodsApplicationComponent },
+          { path: 'user-list', component: UserListComponent },
+          { path: 'user-create', component: UserCreateComponent },
         ],
       },
 

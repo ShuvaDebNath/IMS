@@ -1,54 +1,77 @@
 <div class="card">
-<div class="card-header">
-  <h3 class="card-title mb-0">
-        <strong>Delivery</strong>
-      </h3>
-</div>
-<div class="card-body">
-  <form [formGroup]="SearchFormgroup">
-  <fieldset class="border p-3">
-    <legend class="w-auto px-2">Search</legend>
-    <div class="row">
-      <div class="col-auto">
-        <label>PI Type</label>        
-        <p-dropdown
-          formControlName="PIType"
-          (onChange)="onChange($event)"
-          [options]="PITypeList"  
-          [showClear]="true"
-          optionLabel="text" 
-          optionValue="value" 
-          [style]="{width: '100%'}"
-          placeholder="Select a type" 
-        />
-      </div>
+  <div class="card-header">
+    <h3 class="card-title mb-0">
+      <strong>Delivery</strong>
+    </h3>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="SearchFormgroup">
+      <fieldset class="border p-3">
+        <legend class="w-auto px-2">Search</legend>
+        <div class="row">
+          <div class="col-auto">
+            <label>PI Type</label>
+            <p-dropdown
+              formControlName="PIType"
+              (onChange)="onChange($event)"
+              [options]="PITypeList"
+              [showClear]="true"
+              optionLabel="text"
+              optionValue="value"
+              [style]="{ width: '100%' }"
+              placeholder="Select a type"
+            />
+          </div>
 
-      <div class="col-auto">
-        <label>PI No</label>        
-        <p-dropdown
-          formControlName="PIId"
-          [options]="PIList"  
-          [showClear]="true"
-          optionLabel="PINo" 
-          optionValue="PI_Master_ID" 
-          [filter]="true"
-          [editable]="true" 
-          [style]="{width: '100%'}"
-          placeholder="Select a type" 
-        />
-      </div>
-      
-      <div class="col-auto mt-auto mb-2">
-        <button title="Search" type="button" (click)="GetPIByPID()"
-        class="btn btn-sm btn-outline-primary bg-gradient-primary">
-        <i class="fas fa-search"></i>&nbsp;Search</button>
-      </div>
-      
-      <div class="col-auto mt-auto mb-2">
-        <button title="Search" type="button" (click)="Save()"
-        class="btn btn-sm btn-outline-success bg-gradient-success">
-        <i class="fas fa-check"></i>&nbsp;Deliver</button>
-      </div>
+          <div class="col-auto">
+            <label>PI No</label>
+            <p-dropdown
+              [style]="{ width: '100%' }"
+              class="p-0"
+              [options]="PIList"
+              optionLabel="PINo"
+              [filter]="true"
+              filterBy="PINo"
+              [showClear]="true"
+              styleClass="listBottom"
+              placeholder="Please Select"
+              optionValue="PI_Master_ID"
+              formControlName="PIId"
+              appendTo="body"
+            >
+              <ng-template let-PIList pTemplate="item">
+                <div class="flex align-items-center gap-2">
+                  <div>{{ PIList.PINo }}</div>
+                </div>
+              </ng-template>
+            </p-dropdown>
+          </div>
+
+          <div class="col-auto mt-auto mb-2">
+            <button
+              title="Search"
+              type="button"
+              (click)="GetPIByPID()"
+              class="btn btn-sm btn-outline-primary bg-gradient-primary"
+            >
+              <i class="fas fa-search"></i>&nbsp;Search
+            </button>
+          </div>
+
+          <div class="col-auto mt-auto mb-2">
+            <button
+            [disabled]="Formgroup.invalid"
+              title="Deliver"
+              type="button"
+              (click)="Save()"
+              class="btn btn-sm btn-outline-success bg-gradient-success"
+            >
+              <i class="fas fa-check"></i>&nbsp;Deliver
+            </button>
+          </div>
+        </div>
+      </fieldset>
+    </form>
 
     <p-divider />
     <form [formGroup]="Formgroup" role="form">
@@ -161,69 +184,7 @@
           </ng-template>
         </p-table>
       </div>
-    </div>
-
-    <div class="mt-2">
-      
-
-      
-      <p-table [value]="getControls()" [tableStyle]="{ 'min-width': '100rem' }" styleClass="p-datatable-gridlines p-datatable-striped" >
-        <ng-template pTemplate="header">
-          <tr>
-            <th>Description</th>
-            <th>Color</th>
-            <th>Packaging</th>
-            <th>Width</th>
-            <th>Actual Article No.</th>
-            <th>Undelivered Quantity</th>
-            <th>Unit</th>
-            <th>Deliver Quantity</th>
-            <th>Roll/BOX/PCS</th>
-            <th>Remark</th>
-            <th>Stock Location</th>
-          </tr>
-        </ng-template>
-        <ng-template *ngIf="Formgroup.controls.ItemArray!=null" pTemplate="body" let-item>
-          <tr [formGroup]="item">
-            <td>{{ item.value.Description }}</td>
-            <td>{{ item.value.Color }}</td>
-            <td>{{ item.value.Packaging }}</td>
-            <td>{{ item.value.Measurement }}</td>
-            <td>{{ item.value.ActualArticle }}</td>
-            <td>{{ item.value.UndeliveredQty }}</td>
-            <td>{{ item.value.UnitName }}</td>
-            <td>
-              <p-inputNumber placeholder="Deliver Quantity" formControlName="Delivered" (change)="SetMeterValue($event,item)" />
-            </td>
-            <td>
-              <p-inputNumber placeholder="Roll/BOX/PCS" formControlName="Roll"/>
-            </td>
-            <td>
-              <input type="text" pInputText  placeholder="Remark" formControlName="Remark"/>
-            </td>
-            <td>
-
-              <p-dropdown
-                formControlName="Stock_Location_ID"
-                [options]="StoreLocation"  
-                [showClear]="true"
-                optionLabel="Stock_Location_Name" 
-                optionValue="Stock_Location_ID" 
-                [filter]="true"
-                [editable]="true" 
-                [style]="{width: '100%'}"
-                placeholder="Select a Warehouse" 
-              />
-            </td> 
-          </tr>
-        </ng-template>
-      </p-table>
-      
-    </div>
-
-  </form>
-
-</div>
-<div class="card-footer"></div>
-
+    </form>
+  </div>
+  <div class="card-footer"></div>
 </div>

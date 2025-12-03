@@ -1,0 +1,211 @@
+<div class="row d-flex justify-content-center">
+  <div class="m-2 p-2 shadow">
+    <div class="card ">
+      <div
+        class="card-header theme-bg text-white"
+      >
+        <h2 class="p-2 font-weight-bold">
+          {{!isEdit?'Add':'Edit'}}&nbsp;Create User
+        </h2>
+      </div>
+      <div class="card-body">
+        <form name="newForm" [formGroup]="Formgroup" role="form">
+          <label>LC</label>
+          <div class="row">
+            <div class="col-md-6">
+              <label for="User_Name" class="">User Name</label>
+              <div class="">
+                <div class="form-group d-inline">
+                  <input
+                    autocomplete="off"
+                    type="text"
+                    formControlName="User_Name"
+                    class="form-control"
+                    placeholder="User Name"
+                    id="User_Name"
+                    name="User_Name"
+                    value=""
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label for="Password" class="">Password</label>
+              <div class="">
+                <div class="form-group d-inline">
+                  <input
+                    autocomplete="off"
+                    type="text"
+                    formControlName="Password"
+                    class="form-control"
+                    placeholder="Password"
+                    id="Password"
+                    name="Password"
+                    value=""
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label>Role <span>*</span></label>
+              <p-dropdown
+                [style]="{'width':'100%'}"
+                class="p-0"
+                [options]="RoleList"
+                optionLabel="Role_Name"
+                [filter]="true"
+                filterBy="Role_Name"
+                [showClear]="true"
+                styleClass="listBottom"
+                placeholder="Please Select"
+                optionValue="Role_Id"
+                formControlName="Role"
+              >
+                <ng-template let-Role pTemplate="item">
+                  <div class="flex align-items-center gap-2">
+                    <div>{{ Role.Role_Name }}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+            </div>
+            <div class="col-md-6">
+              <label for="Superior" class="">Superior</label>
+              <p-dropdown
+                [style]="{'width':'100%'}"
+                class="p-0"
+                [options]="SuperiorList"
+                optionLabel="UserName"
+                [filter]="true"
+                filterBy="UserName"
+                [showClear]="true"
+                styleClass="listBottom"
+                placeholder="Please Select"
+                optionValue="User_ID"
+                formControlName="Superior"
+              >
+                <ng-template let-User pTemplate="item">
+                  <div class="flex align-items-center gap-2">
+                    <div>{{ User.UserName }}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+            </div>
+            
+            <div class="col-md-6">
+              <label for="Email" class="">Email</label>
+              <div class="">
+                <div class="form-group d-inline">
+                  <input
+                    autocomplete="off"
+                    type="text"
+                    formControlName="Email"
+                    class="form-control"
+                    placeholder="Email"
+                    id="Email"
+                    name="Email"
+                    value=""
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label for="Consignee_Name" class="">Is Supplier</label>
+              <p-dropdown
+                [style]="{'width':'100%'}"
+                class="p-0"
+                [options]="IsSupplierList"
+                optionLabel="label"
+                [filter]="true"
+                filterBy="label"
+                [showClear]="true"
+                styleClass="listBottom"
+                placeholder="Please Select"
+                optionValue="value"
+                formControlName="IsSupplier"
+              >
+                <ng-template let-IsSupplier pTemplate="item">
+                  <div class="flex align-items-center gap-2">
+                    <div>{{ IsSupplier.label }}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+            </div>
+            
+            <div class="col-md-6" *ngIf="Formgroup.get('IsSupplier')?.value">
+              <label for="SupplierList" class="">Supplier List</label>
+              <p-dropdown
+                [style]="{'width':'100%'}"
+                class="p-0"
+                [options]="SupplierList"
+                optionLabel="Sup_Name"
+                [filter]="true"
+                filterBy="Sup_Name"
+                [showClear]="true"
+                styleClass="listBottom"
+                placeholder="Please Select"
+                optionValue="Supplier_ID"
+                formControlName="Supplier"
+              >
+                <ng-template let-supp pTemplate="item">
+                  <div class="flex align-items-center gap-2">
+                    <div>{{ supp.Sup_Name }}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+            </div>
+
+             <div class="col-md-6">
+              <label for="Consignee_Name" class="">Is Authorized</label>
+              <p-dropdown
+                [style]="{'width':'100%'}"
+                class="p-0"
+                [options]="IsSupplierList"
+                optionLabel="label"
+                [filter]="true"
+                filterBy="label"
+                [showClear]="true"
+                styleClass="listBottom"
+                placeholder="Please Select"
+                optionValue="value"
+                formControlName="IsAuthorized"
+              >
+                <ng-template let-IsSupplier pTemplate="item">
+                  <div class="flex align-items-center gap-2">
+                    <div>{{ IsSupplier.label }}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+            </div>
+          </div>
+        </form>
+        <div class="flexbox mt-5">
+          <button
+            [routerLink]="['/user-list']"
+            class="btn btn-w-xl text-white theme-btn-cancel"
+            type="button"
+          >
+            Cancel
+          </button>
+          <button
+            class="btn btn-w-xl text-white theme-btn px-5 float-right"
+            type="button"
+            (click)="saveData()"
+            [disabled]="Formgroup.invalid"
+            [hidden]="isEdit"
+          >
+            Save
+          </button>
+          <button
+            [hidden]="!isEdit"
+            class="btn btn-w-xl text-white theme-btn-edit px-5 float-right"
+            type="button"
+            (click)="updateData()"
+            [disabled]="Formgroup.invalid"
+          >
+            Update
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
