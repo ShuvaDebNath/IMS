@@ -122,6 +122,10 @@ import { CancelPiApplicationComponent } from '../application/cancel-pi-applicati
 import { ExchangeGoodsApplicationComponent } from '../application/exchange-goods-application/exchange-goods-application.component';
 import { ReturnGoodsApplicationComponent } from '../application/return-goods-application/return-goods-application.component';
 import { ChallanComponent } from '../challan/challan.component';
+import { AllTaskReportComponent } from '../task-report/all-task-report/all-task-report.component';
+import { AllTaskDetailsReportComponent } from '../task-report/all-task-details-report/all-task-details-report.component';
+import { GenerateTaskReportComponent } from '../task-report/generate-task-report/generate-task-report.component';
+import { CalendarModule } from 'primeng/calendar';
 
 
 
@@ -212,6 +216,9 @@ const CustomSelectOptions: INgxSelectOptions = {
     SampleRequestListComponent,
     AllReportComponent,
     MessengerReportComponent,
+    AllTaskDetailsReportComponent,
+    AllTaskReportComponent,
+    GenerateTaskReportComponent,
     AllApplicationComponent,
     GenerateApplicationComponent,
     ApproveApplicationComponent,
@@ -248,6 +255,7 @@ const CustomSelectOptions: INgxSelectOptions = {
     MultiSelectModule,
     TableModule,
     DialogModule,
+    CalendarModule,
     UiSwitchModule.forRoot({
       size: 'small',
       color: 'rgb(0, 189, 99)',
@@ -432,6 +440,9 @@ const CustomSelectOptions: INgxSelectOptions = {
           { path: 'sample-request-list', component: SampleRequestListComponent },
           { path: 'all-report', component: AllReportComponent },
           { path: 'messsenger-report', component: MessengerReportComponent },
+          { path: 'all-task-report', component: AllTaskReportComponent },
+          { path: 'all-task-details-report', component: AllTaskDetailsReportComponent },
+          { path: 'generate-task-report', component: GenerateTaskReportComponent },
           { path: 'all-application', component: AllApplicationComponent },
           { path: 'generate-application', component: GenerateApplicationComponent },
           { path: 'approve-application', component: ApproveApplicationComponent },

@@ -61,7 +61,6 @@ export class ReportService {
 
         const blob = new Blob([res], { type: blobType });
 
-
         const fileName =
           rptType === 'pdf'
             ? 'SampleRequestReport.pdf'
@@ -83,8 +82,34 @@ export class ReportService {
       });
   }
 
-    PrintProformaInvoiceRequest(report: any, rptType: any, isView: any) {
-    
+  PrintTaskDetails(
+    report: any,
+    rptType: 'pdf' | 'excel' | 'word',
+    isView: boolean
+  ) {
+    const fromDate = report.fromDate ? this.formatDate(report.fromDate) : '';
+    const toDate = report.toDate ? this.formatDate(report.toDate) : '';
+
+    const url = `${this.baseUrl}${this.apiController}/TaskDetailsReport`;
+    const token = this.gs.getSessionData('token');
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    this.http
+      .get(url, {
+        headers,
+        params: { rptType, fromDate, toDate },
+        responseType: 'blob',
+      })
+      .subscribe((res: Blob) => {
+        const fileURL = window.URL.createObjectURL(res);
+        window.open(fileURL, '_blank');
+      });
+  }
+
+  PrintProformaInvoiceRequest(report: any, rptType: any, isView: any) {
     const PI_Master_ID = report.PI_Master_ID ?? '';
 
     const url = `${this.baseUrl}${this.apiController}/ProformaInvoiceReport`;
@@ -105,8 +130,7 @@ export class ReportService {
         window.open(fileURL, '_blank');
       });
   }
-  
- 
+
   PrintCommercialInvoiceReports(
     report: any,
     rptType: 'pdf' | 'excel' | 'word',
@@ -188,8 +212,7 @@ export class ReportService {
       });
   }
 
-   PrintDeliveryChallanReport(report: any, rptType: any, isView: any) {
-    
+  PrintDeliveryChallanReport(report: any, rptType: any, isView: any) {
     const challanNo = report.Chalan_No ?? '';
 
     const url = `${this.baseUrl}${this.apiController}/DeliveryChallanReport`;

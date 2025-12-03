@@ -65,6 +65,7 @@
   <ItemGroup>
     <PackageReference Include="AspNetCore.Reporting" Version="2.1.0" />
     <PackageReference Include="DotNetEnv" Version="3.1.1" />
+    <PackageReference Include="MailKit" Version="4.14.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
@@ -85,7 +86,7 @@
 
   <ItemGroup>
     <Reference Include="RDLCSimplified">
-      <HintPath>C:\Users\Asus\Downloads\RDLCSimplified.dll</HintPath>
+      <HintPath>D:\RDLCSimplified.dll</HintPath>
     </Reference>
   </ItemGroup>
 
