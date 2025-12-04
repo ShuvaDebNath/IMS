@@ -62,6 +62,26 @@ public class ReportService : IReportService
         }
     }
 
+
+    public async Task<DataSet> TaskDetailsReport(string fromDate, string toDate)
+    {
+        try
+        {
+            ReportsParams param = new ReportsParams
+            {
+                fromDate = fromDate,
+                toDate = toDate
+
+            };
+
+            return await _reportRepository.TaskDetailsReport(param);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
     public async Task<DataSet> CommercialInvoiceReports(string commercialInvoiceNo, string reportType)
     {
         try

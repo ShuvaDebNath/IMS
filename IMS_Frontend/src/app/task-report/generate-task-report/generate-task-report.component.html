@@ -1,0 +1,157 @@
+<div class="container shadow-sm p-3 mb-5 bg-white rounded">
+  <h1 class="theme-text">Generate Task Report Form</h1>
+
+  <br />
+  <form [formGroup]="taskForm">
+    <!-- Header fields -->
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">To</label>
+        <input
+          autocomplete="off"
+          type="text"
+          formControlName="ToMail"
+          class="form-control"
+          placeholder="To Mail"
+          id="toMail"
+          name="toMail"
+          value=""
+        />
+        <div *ngIf="taskForm.get('ToMail')?.invalid && (taskForm.get('ToMail')?.touched || taskForm.get('ToMail')?.dirty)" class="text-danger small mt-1">
+          <div *ngIf="taskForm.get('ToMail')?.hasError('required')">To email is required</div>
+          <div *ngIf="taskForm.get('ToMail')?.hasError('email')">Please enter a valid email address</div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">CC</label>
+        <input
+          autocomplete="off"
+          type="text"
+          formControlName="CcMail"
+          class="form-control"
+          placeholder="cc Mail"
+          id="ccMail"
+          name="ccMail"
+          value="lilya@sunshineinterlining.com"
+        />
+        <div *ngIf="taskForm.get('CcMail')?.invalid && (taskForm.get('CcMail')?.touched || taskForm.get('CcMail')?.dirty)" class="text-danger small mt-1">
+          <div *ngIf="taskForm.get('CcMail')?.hasError('required')">Cc email is required</div>
+          <div *ngIf="taskForm.get('CcMail')?.hasError('email')">Please enter a valid email address</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Items table -->
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th style="text-align: center">Customer Name</th>
+          <th style="text-align: center">In Time</th>
+          <th style="text-align: center">Out Time</th>
+          <th style="text-align: center">Discussion</th>
+          <th style="width: 60px"></th>
+        </tr>
+      </thead>
+
+      <tbody formArrayName="items">
+        <tr
+          *ngFor="let item of items.controls; let i = index"
+          [formGroupName]="i"
+        >
+          <td>
+            <div class="form-group">
+              <p-dropdown
+                class="p-0 rm-dd"
+                [panelStyle]="{ width: '300px' }"
+                [options]="CustomerList"
+                optionLabel="CustomerName"
+                optionValue="Customer_ID"
+                [filter]="true"
+                filterBy="CustomerName"
+                [showClear]="true"
+                placeholder="Please Select"
+                formControlName="CustomerName"
+                [virtualScroll]="true"
+                [virtualScrollItemSize]="30"
+              >
+                <ng-template let-article pTemplate="item">
+                  <div class="flex align-items-center gap-2">
+                    <div>{{ article.CustomerName }}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+            </div>
+          </td>
+
+          <td class="col-description">
+            
+            <p-calendar
+              inputId="calendar-24h"
+              formControlName="InTime"
+              [showTime]="true"
+              [hourFormat]="'24'"
+            />
+          </td>
+
+          <td class="col-description">            
+            <p-calendar
+              inputId="calendar-24h"
+              formControlName="OutTime"
+              [showTime]="true"
+              [hourFormat]="'24'"
+            />
+            <div *ngIf="item.get('OutTime')?.hasError('required') && item.get('OutTime')?.touched" class="text-danger small">Out Time is required</div>
+            <div *ngIf="item.get('OutTime')?.hasError('outBeforeIn') && item.get('OutTime')?.touched" class="text-danger small">Out Time cannot be earlier than In Time</div>
+          </td>
+          <td class="col-description">
+            <textarea
+              class="form-control form-control-sm"
+              formControlName="discussion"
+              required="true"
+            ></textarea>
+          </td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-sm btn-danger"
+              (click)="removeItem(i)"
+            >
+              ×
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="d-flex justify-content-end gap-2 mt-3">
+      <button type="button" class="btn btn-outline-success" (click)="addItem()">
+        <i class="bi bi-plus-circle me-1"></i> Add Row
+      </button>
+
+      <button
+        type="submit"
+        (click)="saveData()"
+        [ngClass]="{
+          'theme-btn-disable': taskForm.invalid
+        }"
+        class="btn theme-btn btn-rounded"
+        [disabled]="taskForm.invalid"
+        *ngIf="!isEdit"
+      >
+        <i class="bi bi-save me-1"></i> Save
+      </button>
+      <button
+        type="submit"
+        (click)="UpdateData()"
+        [ngClass]="{
+          'theme-btn-disable': taskForm.invalid
+        }"
+        class="btn theme-btn btn-rounded"
+        [disabled]="taskForm.invalid"
+        *ngIf="isEdit"
+      >
+        <i class="bi bi-save me-1"></i> Save
+      </button>
+    </div>
+  </form>
+</div>
