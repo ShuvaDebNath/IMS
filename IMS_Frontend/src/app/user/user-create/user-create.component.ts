@@ -57,21 +57,24 @@ export class UserCreateComponent {
     }
   
     ngOnInit() {
-      var permissions = this.gs.CheckUserPermission("Generate LC");
-      this.insertPermissions = permissions.insertPermissions;
-      this.updatePermissions = permissions.updatePermissions;
-      this.deletePermissions = permissions.deletePermissions;
-      this.printPermissions = permissions.printPermissions;
+      // var permissions = this.gs.CheckUserPermission("User");
+      // console.log(permissions);
+      
+      // this.insertPermissions = permissions.insertPermissions;
+      // this.updatePermissions = permissions.updatePermissions;
+      // this.deletePermissions = permissions.deletePermissions;
+      // this.printPermissions = permissions.printPermissions;
   
-      if (!this.insertPermissions) {
-        window.location.href = 'User';
-      }
-      if (!this.updatePermissions && this.isEdit) {
-        window.location.href = 'User';
-      }
+      // if (!this.insertPermissions) {
+      //  // window.location.href = 'dashboard';
+      // }
+      // if (!this.updatePermissions && this.isEdit) {
+      //   //window.location.href = 'dashboard';
+      // }
   
       this.title.setTitle('User Create');
       this.GenerateFrom();
+      this.setupSupplierValidator();
       this.getInitialData();
   
       if (this.isEdit) {
@@ -80,16 +83,44 @@ export class UserCreateComponent {
     }
   
     GenerateFrom() {
+      const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+      const passwordValidators = this.isEdit 
+        ? []
+        : [Validators.required, Validators.pattern(passwordPattern)];
+      
       this.Formgroup = this.fb.group({
         UserName: ['', [Validators.required]],
-        Password: [[], [Validators.required]],
+        Password: ['', passwordValidators],
         Role: ['', [Validators.required]],
         Superior: ['', [Validators.required]],
-        Supplier: ['', [Validators.required]],
+        Supplier: [''],
         IsSupplier: ['', [Validators.required]],
         IsAuthorized: ['', [Validators.required]],
-        Email: ['', [Validators.required]],
+        Email: ['', [Validators.required, Validators.email]],
       });
+    }
+
+    setupSupplierValidator() {
+      const isSupplierControl = this.Formgroup.get('IsSupplier');
+      const supplierControl = this.Formgroup.get('Supplier');
+      if (!isSupplierControl || !supplierControl) return;
+
+      const applyValidators = (val: any) => {
+        const truthy = val === true || val === 'True' || val === 1 || val === '1' || val === 'true';
+        if (truthy) {
+          supplierControl.setValidators([Validators.required]);
+        } else {
+          supplierControl.clearValidators();
+          supplierControl.setValue('');
+        }
+        supplierControl.updateValueAndValidity({ onlySelf: true });
+      };
+
+      // apply initial state
+      applyValidators(isSupplierControl.value);
+
+      // react to changes
+      isSupplierControl.valueChanges.subscribe((v) => applyValidators(v));
     }
   
     getInitialData() {
@@ -103,6 +134,7 @@ export class UserCreateComponent {
           if (results.status) {
             this.SuperiorList = JSON.parse(results.data).Tables1;
             this.RoleList = JSON.parse(results.data).Tables2;
+            this.SupplierList = JSON.parse(results.data).Tables3;
           } else if (results.msg == 'Invalid Token') {
             swal.fire('Session Expierd!', 'Please Login Again.', 'info');
             this.gs.Logout();
@@ -115,10 +147,13 @@ export class UserCreateComponent {
   
     
     saveData() {
+
+      console.log(this.Formgroup);
+      
       if (this.Formgroup.invalid) {
         swal.fire(
           'Invlid Inputs!',
-          'Form is Invalid! Please select Role.',
+          'Form is Invalid! ',
           'info'
         );
         return;
@@ -131,20 +166,23 @@ export class UserCreateComponent {
   
       const formatted = `${mm}/${dd}/${yyyy}`;
 
-      var user = {
+      const isSupplierTruthy = this.Formgroup.value.IsSupplier === true || this.Formgroup.value.IsSupplier === 'True';
+      var user: any = {
         UserName: this.Formgroup.value.UserName,
         Password: this.Formgroup.value.Password,
         Role_id: this.Formgroup.value.Role,
         Superior_ID: this.Formgroup.value.Superior,
-        Supplier: this.Formgroup.value.Supplier,
-        IsSupplier: this.Formgroup.value.IsSupplier=='True' ? 1 : 0,
-        IsAuthorized: this.Formgroup.value.IsAuthorized=='True' ? 1 : 0,
+        IsSupplier: isSupplierTruthy ? true : false,
+        IsAuthorized: this.Formgroup.value.IsAuthorized=='True' ? true : false,
         Email: this.Formgroup.value.Email
+      }
+      if (isSupplierTruthy && this.Formgroup.value.Supplier) {
+        user.Supplier_ID = this.Formgroup.value.Supplier;
       }
       
   
       this.masterEntyService
-        .SaveSingleData(
+        .SaveUserData(
           user,
           'tbl_users'
         )
@@ -218,138 +256,64 @@ export class UserCreateComponent {
     }
   
     updateData() {
-      // if (this.Formgroup.invalid) {
-      //   swal.fire(
-      //     'Invlid Inputs!',
-      //     'Form is Invalid! Please select Role.',
-      //     'info'
-      //   );
-      //   return;
-      // }
+      console.log(this.Formgroup);
+      
+      if (this.Formgroup.invalid) {
+        swal.fire(
+          'Invlid Inputs!',
+          'Form is Invalid!',
+          'info'
+        );
+        return;
+      }
   
-      // var fDate = new Date();
-      // const mm = String(fDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-      // const dd = String(fDate.getDate()).padStart(2, '0');
-      // const yyyy = fDate.getFullYear();
-  
-      // const formatted = `${mm}/${dd}/${yyyy}`;
-  
-      // var lc = new LC();
-      // lc.User_ID = this.Formgroup.value.Marketing_Concern;
-      // //lc. = this.Formgroup.value.PINo;
-      // lc.Beneficiary_Bank_ID = this.Formgroup.value.BenificiaryAccounts;
-      // lc.Consignee_Name = this.Formgroup.value.Consignee_Name;
-      // lc.LC_No = this.Formgroup.value.LCNo;
-      // lc.LC_Value = this.Formgroup.value.LCValue;
-      // if (
-      //   this.Formgroup.value.LCReceivingDateByDraft != undefined &&
-      //   this.Formgroup.value.LCReceivingDateByDraft != ''
-      // ) {
-      //   lc.LC_Receiving_Date_By_Bank =
-      //     this.Formgroup.value.LCReceivingDateByDraft;
-      // }
-      // if (
-      //   this.Formgroup.value.LCReceivingDateByDraft != undefined &&
-      //   this.Formgroup.value.LCReceivingDateByDraft != ''
-      // ) {
-      //   lc.LC_Receiving_Date_By_Mail =
-      //     this.Formgroup.value.LCReceivingDateByDraft;
-      // }
-      // if (
-      //   this.Formgroup.value.IssueDate != undefined &&
-      //   this.Formgroup.value.IssueDate != ''
-      // ) {
-      //   lc.Issue_Date = this.Formgroup.value.IssueDate;
-      // }
-      // if (
-      //   this.Formgroup.value.ExpiryDate != undefined &&
-      //   this.Formgroup.value.ExpiryDate != ''
-      // ) {
-      //   lc.Expiry_Date = this.Formgroup.value.ExpiryDate;
-      // }
-      // if (
-      //   this.Formgroup.value.MaturityDate != undefined &&
-      //   this.Formgroup.value.MaturityDate != ''
-      // ) {
-      //   lc.Maturity_Date = this.Formgroup.value.MaturityDate;
-      // }
-      // if (
-      //   this.Formgroup.value.DocPresBankDate != undefined &&
-      //   this.Formgroup.value.DocPresBankDate != ''
-      // ) {
-      //   lc.Presentation_To_Bank_Date = this.Formgroup.value.DocPresBankDate;
-      // }
-      // if (
-      //   this.Formgroup.value.IPDocSendingDate != undefined &&
-      //   this.Formgroup.value.IPDocSendingDate != ''
-      // ) {
-      //   lc.IP_Document_Sending_Date = this.Formgroup.value.IPDocSendingDate;
-      // }
-      // if (
-      //   this.Formgroup.value.IPDocReceivingDate != undefined &&
-      //   this.Formgroup.value.IPDocReceivingDate != ''
-      // ) {
-      //   lc.IP_Document_Receiving_Date = this.Formgroup.value.IPDocReceivingDate;
-      // }
-      // if (
-      //   this.Formgroup.value.FDDRecDate != undefined &&
-      //   this.Formgroup.value.FDDRecDate != ''
-      // ) {
-      //   lc.FddTtReceiveDate = this.Formgroup.value.FDDRecDate;
-      // }
-      // if (
-      //   this.Formgroup.value.ActualPaymentRecDate != undefined &&
-      //   this.Formgroup.value.ActualPaymentRecDate != ''
-      // ) {
-      //   lc.Actual_Payment_Receiving_Date =
-      //     this.Formgroup.value.DocPrActualPaymentRecDateesBankDate;
-      // }
-      // if (
-      //   this.Formgroup.value.ExportLCSCDate != undefined &&
-      //   this.Formgroup.value.ExportLCSCDate != ''
-      // ) {
-      //   lc.Export_LC_SC_Date = this.Formgroup.value.ExportLCSCDate;
-      // }
-  
-      // lc.Customer_Bank = this.Formgroup.value.CustomerBankName;
-      // lc.Invoice_No = this.Formgroup.value.InvoiceNoWitDate;
-      // lc.Payment_Term_ID = this.Formgroup.value.PaymentTermsLC;
-      // lc.Export_LC_SC = this.Formgroup.value.ExportLCSC;
-      // lc.LCA_Form_No = this.Formgroup.value.LCAFormNo;
-      // lc.Applicant_TIN = this.Formgroup.value.ApplicantTIN;
-      // lc.Applicant_BIN_VAT = this.Formgroup.value.ApplicantBINVAT;
-      // lc.HS_Code = this.Formgroup.value.HSCode;
-      // lc.Bank_BIN_No = this.Formgroup.value.BankBINNo;
-      // lc.Remarks = this.Formgroup.value.Remarks;
-      // lc.IRC_No = this.Formgroup.value.IRCNo;
-      // lc.System_Created_Date = formatted;
-      // lc.PI_No = this.Formgroup.value.PINo.join(',');
+      const isSupplierTruthy = this.Formgroup.value.IsSupplier === true || this.Formgroup.value.IsSupplier === 'True';
+      var user: any = {
+        UserName: this.Formgroup.value.UserName,
+        Role_id: this.Formgroup.value.Role,
+        Superior_ID: this.Formgroup.value.Superior,
+        IsSupplier: isSupplierTruthy ? true : false,
+        IsAuthorized: this.Formgroup.value.IsAuthorized=='True' ? true : false,
+        Email: this.Formgroup.value.Email,
+        User_ID: this.Id
+      }
+      if (isSupplierTruthy && this.Formgroup.value.Supplier) {
+        user.Supplier_ID = this.Formgroup.value.Supplier;
+      }
       
   
-      // var condition = {
-      //   'LC_ID':this.LCId
-      // }
-  
-      // this.masterEntyService.UpdateData(lc,condition,'tbl_lc').subscribe({
-      //   next: (results) => {
-      //     if (results.status) {
-      //       swal
-      //         .fire({
-      //           title: `${results.message}!`,
-      //           text: `Update Successfully!`,
-      //           icon: 'success',
-      //           timer: 5000,
-      //         })
-      //         .then((result) => {
-      //           this.ngOnInit();
-      //         });
-      //     } else if (results.message == 'Invalid Token') {
-      //       swal.fire('Session Expierd!', 'Please Login Again.', 'info');
-      //       this.gs.Logout();
-      //     } else {
-      //     }
-      //   },
-      //   error: (err) => {},
-      // });
+      this.masterEntyService
+        .EditUserData(
+          user,
+          'tbl_users'
+        )
+        .subscribe((res: any) => {
+          if (res.status) {
+            swal
+              .fire({
+                title: `${res.message}!`,
+                text: `Save Successfully!`,
+                icon: 'success',
+                timer: 5000,
+              })
+              .then((result) => {
+                this.ngOnInit();
+              });
+          } else {
+            if (res.message == 'Data already exist') {
+              swal.fire('Data already exist', '', 'warning');
+            } else if (res.message == 'Invalid Token') {
+              swal.fire('Session Expierd!', 'Please Login Again.', 'info');
+              this.gs.Logout();
+            } else {
+              swal.fire({
+                title: `Faild!`,
+                text: `Save Faild!`,
+                icon: 'info',
+                timer: 5000,
+              });
+            }
+          }
+        });
     }
 }

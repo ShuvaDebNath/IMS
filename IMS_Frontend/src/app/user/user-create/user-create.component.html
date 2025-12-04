@@ -5,12 +5,11 @@
         class="card-header theme-bg text-white"
       >
         <h2 class="p-2 font-weight-bold">
-          {{!isEdit?'Add':'Edit'}}&nbsp;Create User
+          {{!isEdit?'Create':'Edit'}}&nbsp; User
         </h2>
       </div>
       <div class="card-body">
         <form name="newForm" [formGroup]="Formgroup" role="form">
-          <label>LC</label>
           <div class="row">
             <div class="col-md-6">
               <label for="User_Name" class="">User Name</label>
@@ -19,7 +18,7 @@
                   <input
                     autocomplete="off"
                     type="text"
-                    formControlName="User_Name"
+                    formControlName="UserName"
                     class="form-control"
                     placeholder="User Name"
                     id="User_Name"
@@ -29,13 +28,13 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6" *ngIf="!isEdit">
               <label for="Password" class="">Password</label>
               <div class="">
                 <div class="form-group d-inline">
                   <input
                     autocomplete="off"
-                    type="text"
+                    type="password"
                     formControlName="Password"
                     class="form-control"
                     placeholder="Password"
@@ -43,6 +42,10 @@
                     name="Password"
                     value=""
                   />
+                  <div *ngIf="Formgroup.get('Password')?.touched && Formgroup.get('Password')?.invalid" class="text-danger mt-1">
+                    <div *ngIf="Formgroup.get('Password')?.errors?.['required']">Password is required.</div>
+                    <div *ngIf="Formgroup.get('Password')?.errors?.['pattern']">Password must be at least 8 characters and include 1 uppercase, 1 lowercase and 1 number.</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -105,6 +108,10 @@
                     name="Email"
                     value=""
                   />
+                </div>
+                <div *ngIf="Formgroup.get('Email')?.touched && Formgroup.get('Email')?.invalid" class="text-danger mt-1">
+                  <div *ngIf="Formgroup.get('Email')?.errors?.['required']">Email is required.</div>
+                  <div *ngIf="Formgroup.get('Email')?.errors?.['email']">Enter a valid email address.</div>
                 </div>
               </div>
             </div>
@@ -190,17 +197,16 @@
             class="btn btn-w-xl text-white theme-btn px-5 float-right"
             type="button"
             (click)="saveData()"
-            [disabled]="Formgroup.invalid"
             [hidden]="isEdit"
+            [disabled]="Formgroup.invalid"
           >
             Save
           </button>
           <button
             [hidden]="!isEdit"
-            class="btn btn-w-xl text-white theme-btn-edit px-5 float-right"
+            class="btn btn-w-xl text-white theme-btn px-5 float-right"
             type="button"
             (click)="updateData()"
-            [disabled]="Formgroup.invalid"
           >
             Update
           </button>

@@ -8,9 +8,9 @@ public interface IUserService
     Task<bool> ActiveInactive(string userId, bool isActive);
     Task<bool> ResetPassword(string passwordhash, string userId);
     Task<DataSet> GetUserBasicData();
-    Task<bool> SaveUser(UserMenuAssign data,string currentUserEmail);
+    Task<bool> SaveUser(UserCreate data,string UserName);
     Task<bool> DeleteUser(string userId);
-    Task<bool> EditUser(UserMenuAssign data, string currentUserEmail);
+    Task<bool> EditUser(UserCreate data, string UserName);
     Task<(DataTable userName, List<MenuPerssion> selectedMenu)> GetUserEditData(string userId);
     Task<bool> CheckPassword(string passwordhash);
 }
