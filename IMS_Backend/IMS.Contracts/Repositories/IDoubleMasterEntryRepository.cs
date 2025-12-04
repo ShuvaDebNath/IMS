@@ -8,4 +8,5 @@ public interface IDoubleMasterEntryRepository
 
     public Task<int> SaveDataWithIdentity(DoubleMasterEntryModel model, string AuthUserName);
     public Task<int> UpdateDataWithIdentity(DoubleMasterEntryModel model, string AuthUserName);
+    public Task<int> SendMail(DoubleMasterEntryModel model, string AuthUserName);
 }

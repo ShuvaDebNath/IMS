@@ -56,6 +56,28 @@ namespace Boilerplate.Repository.Repositories
             }
         }
 
+
+        public async Task<DataSet> TaskDetailsReport(ReportsParams param)
+        {
+            try
+            {
+                var parametars = new
+                {
+                    param.fromDate,
+                    param.toDate,
+                };
+
+                string query = @"exec [usp_Task_Details_Report] @fromDate,@toDate";
+                var ds = await GetDataInDataSetAsync(query, parametars);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task<DataSet> CommercialInvoiceReports(CommercialInvoiceReportParams param)
         {
             try

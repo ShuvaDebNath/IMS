@@ -39,6 +39,29 @@ public class DoubleMasterEntryService : IDoubleMasterEntryService
         }
     }
 
+    public async Task<Messages> SendMail(DoubleMasterEntryModel model, string authUserName)
+    {
+        try
+        {
+
+            int rowAffect = await _doubleMasterEntryRepository.SendMail(model, authUserName);
+            if(rowAffect > 0)
+            {
+                return await SaveDataGateway(model, authUserName);
+            }
+            else
+            {
+                return MessageType.SaveError(null);
+            }
+        }
+        catch (Exception ex)
+        {
+            string innserMsg = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+            _logger.LogInformation($"Sourc: {ex.Source};\t Stack Trace: {ex.StackTrace};\t Message: {ex.Message};\t Inner Exception: {innserMsg};\n", "");
+            throw;
+        }
+    }
+
     public async Task<Messages> SaveData(DoubleMasterEntryModel model, string authUserName)
     {
         try
@@ -200,7 +223,7 @@ public class DoubleMasterEntryService : IDoubleMasterEntryService
     {
         try
         {
-            int rowAffect = await _doubleMasterEntryRepository.SaveListData(model, authUserName);
+            int rowAffect = await _doubleMasterEntryRepository.SaveData(model, authUserName);
             if (rowAffect > 0)
             {
                 _logger.LogInformation($"Data Save Success!");

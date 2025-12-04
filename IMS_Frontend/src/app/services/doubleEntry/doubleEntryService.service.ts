@@ -132,6 +132,40 @@ export class DoubleMasterEntryService {
       );
   }
 
+    public MailThenInsert
+        (fd: any, tableName: any,fdMaster:any,tableNameMaster: any,primaryColumnName: any,ColumnNameForign: any,serialType:any,ColumnNameSerialNo:any) {
+    let model: DoubleMasterEntryModel=new DoubleMasterEntryModel();
+
+    model.tableNameMaster = tableNameMaster;
+    model.tableNameChild=tableName;
+
+    model.columnNamePrimary = primaryColumnName;
+    model.columnNameForign = ColumnNameForign;
+    model.columnNameSerialNo = ColumnNameSerialNo;
+    model.serialType = serialType;
+    model.isFlag = null;
+    model.detailsData=fd;
+    model.data  =fdMaster;
+    model.whereParams = null;
+
+    return this.http
+      .post<ResponseModel>(
+        this.baseUrlApi + this.postApiController + '/MailThenInsert',
+        model,
+        {
+          headers: new HttpHeaders({
+            Authorization: 'Bearer ' + this.token,
+            'Content-Type': 'application/json',
+          }),
+        }
+      )
+      .pipe(
+        map((Response) => {
+          return Response;
+        })
+      );
+  }
+
 
   public SaveDataMasterDetailsList(fd: any, tableName: any,fdMaster:any,tableNameMaster: any,primaryColumnName: any,ColumnNameForign: any,serialType:any,ColumnNameSerialNo:any) {
    
