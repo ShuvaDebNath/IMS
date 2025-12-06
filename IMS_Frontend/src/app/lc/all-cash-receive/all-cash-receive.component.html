@@ -1,123 +1,206 @@
 <div class="m-2 p-2 shadow-sm">
-  <div class="card ">
-  <div class="card-header theme-bg" style="">
-    
-        <h2 class="p-2">All Cash Receive</h2>
-    
-  </div>
-  <div class="card-body">
-    <form [formGroup]="SearchForm">
-      <div class="form-row align-items-center">
-        <div class="col-auto">
-          <label class="control-label" for="inlineFormInputGroup">From Date</label>
-          <div class="input-group mb-2">
-            <div class="input-group-sm  input-group-prepend">
-              <div class="input-group-text theme-btn" (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
-            </div>
-            <input type="text" autocomplete="off" formControlName="fromDate" [bsConfig]="{
-              dateInputFormat: 'DD/MM/YYYY',
-              containerClass: 'theme-bg'
-            }" class="form-control-sm form-control bg-white" id="fromdate" name="fromdate" placeholder="From Date" 
-              #dpfrom="bsDatepicker" bsDatepicker/>
-          </div>
-
-        </div>
-        <div class="col-auto">
-          <label class="control-label" for="inlineFormInputGroup">To Date</label>
-          <div class="input-group mb-2">
-            <div class="input-group-sm  input-group-prepend">
-              <div class="input-group-text theme-btn" (click)="dpto.toggle()"><i class="fas fa-calendar"></i></div>
-            </div>
-            <input type="text" autocomplete="off" formControlName="toDate" [bsConfig]="{
-              dateInputFormat: 'DD/MM/YYYY',
-              containerClass: 'theme-btn'
-            }" class="form-control-sm form-control bg-white" id="todate" name="todate" placeholder="To Date"
-              #dpto="bsDatepicker" bsDatepicker />
-          </div>
-        </div>
-        <div class="col-auto">
-          <button title="Search" type="button" (click)="Search()"
-            class="btn btn-sm theme-btn mb-2 mr-2" style="margin-top: 2.3em !important;">
-            <i class="fas fa-search"></i>&nbsp;Search</button>
-        </div>
-      </div>
-    </form>
-    <hr>
-
-      <p-table #dt
-           [value]="tableData"
-           [paginator]="true"
-           [rows]="10"
-           [responsive]="true"
-           [showCurrentPageReport]="true"
-           [globalFilterFields]="['PI_No','Consignee_Name','PI_Value','Issue_Date','Total_Receive_Amount','Last_Receive_Date','Balance','System_Created_Date','Remarks','Payment_Terms']"
-           
-           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
-
-    <ng-template pTemplate="caption">
-      <div class="table-toolbar d-flex justify-content-end">
-        <span class="p-input-icon-left">
-          <i class="pi pi-search"></i>
-          <input pInputText type="text"
-                 (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                 placeholder="Global Search" />
-        </span>
-      </div>
-    </ng-template>
-
-    <ng-template pTemplate="header">
-      <tr>
-        <th class="">SL</th>
-        <th class="">PI No</th>
-        <th class="">Consignee Name</th>
-        <th class="">PI Value</th>
-        <th class="">Issue Date</th>
-        <th class="">Total Receive Amount</th>
-        <th class="">Last Receive Date</th>
-        <th class="">Balance</th>
-        <th class="">Created Date</th>
-        <th class="">Remarks</th>
-        <th class="">Payment Terms</th>
-        <th class="" *ngIf="allPersmissions">Action</th>
-      </tr>
-    </ng-template>
-
-    <ng-template pTemplate="body" let-table let-i="rowIndex">
-      <tr>
-        <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
-        <td class="text-center align-middle">{{table.PI_No}}</td>
-        <td class="text-center align-middle">{{table.Consignee_Name}}</td>
-        <td class="text-center align-middle">{{table.PI_Value}}</td>
-        <td class="text-center align-middle">{{table.Issue_Date}}</td>
-        <td class="text-center align-middle">{{table.Total_Receive_Amount}}</td>
-        <td class="text-center align-middle">{{table.Last_Receive_Date}}</td>
-        <td class="text-center align-middle">{{table.Balance}}</td>
-        <td class="text-center align-middle">{{table.System_Created_Date}}</td>
-        <td class="text-center align-middle">{{table.Remarks}}</td>
-        <td class="text-center align-middle">{{table.Payment_Terms}}</td>
-        <td class="text-center align-middle p-1 m-0">
-          <div class="d-flex gap-1">
-             <a *ngIf="updatePermissions && table.Balance!=0" class="btn theme-btn-add btn-sm mr-2" target="_blank" title="Add Receive Amount" [routerLink]="['/cash-receive-update']"
-              [queryParams]="{CR_Id:table.CR_ID}"><i class="fa fa-plus" ></i></a> 
-            <a class="btn theme-btn-view btn-sm mr-2" target="_blank" title="View Details" [routerLink]="['/cash-receive-details']"
-              [queryParams]="{CR_Id:table.CR_ID}"><i class="fa fa-eye" ></i></a> 
-            <a *ngIf="updatePermissions" class="btn theme-btn-edit btn-sm mr-2" target="_blank" title="Edit" [routerLink]="['/generate-cash-receive']"
-              [queryParams]="{CR_Id:table.CR_ID}"><i class="fa fa-edit" ></i></a> 
-            <button *ngIf="deletePermissions" class="btn theme-btn-delete btn-sm" title="Delete" (click)="DeleteData(table)"><i
-                class="fas fa-trash"></i></button>
-
-          </div>
-           
-        </td>
-      </tr>
-    </ng-template>
-
-  </p-table>
-
+  <div class="card">
+    <div class="card-header theme-bg" style="">
+      <h2 class="p-2">All Cash Receive</h2>
     </div>
-    
+    <div class="card-body">
+      <form [formGroup]="SearchForm">
+        <div class="form-row align-items-center">
+          <div class="col-3">
+            <label class="control-label" for="inlineFormInputGroup"
+              >From Date</label
+            >
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <div
+                  class="input-group-text theme-btn"
+                  (click)="dpfrom.toggle()"
+                >
+                  <i class="fas fa-calendar"></i>
+                </div>
+              </div>
+              <input
+                type="text"
+                autocomplete="off"
+                formControlName="fromDate"
+                [bsConfig]="{
+                  dateInputFormat: 'DD/MM/YYYY',
+                  containerClass: 'theme-green'
+                }"
+                class="form-control bg-white"
+                id="fromDate"
+                name="fromDate"
+                placeholder="From Date"
+                #dpfrom="bsDatepicker"
+                bsDatepicker
+              />
+            </div>
+          </div>
+          <div class="col-3">
+            <label class="control-label" for="inlineFormInputGroup"
+              >To Date</label
+            >
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <div class="input-group-text theme-btn" (click)="dpto.toggle()">
+                  <i class="fas fa-calendar"></i>
+                </div>
+              </div>
+              <input
+                type="text"
+                autocomplete="off"
+                formControlName="toDate"
+                [bsConfig]="{
+                  dateInputFormat: 'DD/MM/YYYY',
+                  containerClass: 'theme-green'
+                }"
+                class="form-control bg-white"
+                id="todate"
+                name="todate"
+                placeholder="To Date"
+                #dpto="bsDatepicker"
+                bsDatepicker
+              />
+            </div>
+          </div>
+          <div class="col-auto">
+            <button
+              title="Search"
+              type="button"
+              (click)="Search()"
+              class="btn btn-sm theme-btn mb-2 mr-2"
+              style="margin-top: 2.3em !important"
+            >
+              <i class="fas fa-search"></i>&nbsp;Search
+            </button>
+          </div>
+        </div>
+      </form>
+      <hr />
 
+      <div class="row mb-3">
+        <div class="col-md-12">
+          <button
+            class="btn theme-btn px-4 py-2"
+            (click)="printCashReceive()"
+            title="Export Cash Receive list to Excel, Word, or PDF"
+          >
+            <i class="fas fa-download"></i>&nbsp; Export
+          </button>
+        </div>
+      </div>
+      <p-table
+        #dt
+        [value]="tableData"
+        [paginator]="true"
+        [rows]="10"
+        [responsive]="true"
+        [showCurrentPageReport]="true"
+        [globalFilterFields]="[
+          'PI_No',
+          'Consignee_Name',
+          'PI_Value',
+          'Issue_Date',
+          'Total_Receive_Amount',
+          'Last_Receive_Date',
+          'Balance',
+          'System_Created_Date',
+          'Remarks',
+          'Payment_Terms'
+        ]"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      >
+        <ng-template pTemplate="caption">
+          <div class="table-toolbar d-flex justify-content-end">
+            <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                placeholder="Global Search"
+              />
+            </span>
+          </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="">SL</th>
+            <th class="">PI No</th>
+            <th class="">Consignee Name</th>
+            <th class="">PI Value</th>
+            <th class="">Issue Date</th>
+            <th class="">Total Receive Amount</th>
+            <th class="">Last Receive Date</th>
+            <th class="">Balance</th>
+            <th class="">Created Date</th>
+            <th class="">Remarks</th>
+            <th class="">Payment Terms</th>
+            <th class="" *ngIf="allPersmissions">Action</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-table let-i="rowIndex">
+          <tr>
+            <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
+            <td class="text-center align-middle">{{ table.PI_No }}</td>
+            <td class="text-center align-middle">{{ table.Consignee_Name }}</td>
+            <td class="text-center align-middle">{{ table.PI_Value }}</td>
+            <td class="text-center align-middle">{{ table.Issue_Date }}</td>
+            <td class="text-center align-middle">
+              {{ table.Total_Receive_Amount }}
+            </td>
+            <td class="text-center align-middle">
+              {{ table.Last_Receive_Date }}
+            </td>
+            <td class="text-center align-middle">{{ table.Balance }}</td>
+            <td class="text-center align-middle">
+              {{ table.System_Created_Date }}
+            </td>
+            <td class="text-center align-middle">{{ table.Remarks }}</td>
+            <td class="text-center align-middle">{{ table.Payment_Terms }}</td>
+            <td class="text-center align-middle p-1 m-0">
+              <div class="d-flex gap-1">
+                <a
+                  *ngIf="updatePermissions && table.Balance != 0"
+                  class="btn theme-btn-add btn-sm mr-2"
+                  target="_blank"
+                  title="Add Receive Amount"
+                  [routerLink]="['/cash-receive-update']"
+                  [queryParams]="{ CR_Id: table.CR_ID }"
+                  ><i class="fa fa-plus"></i
+                ></a>
+                <a
+                  class="btn theme-btn-view btn-sm mr-2"
+                  target="_blank"
+                  title="View Details"
+                  [routerLink]="['/cash-receive-details']"
+                  [queryParams]="{ CR_Id: table.CR_ID }"
+                  ><i class="fa fa-eye"></i
+                ></a>
+                <a
+                  *ngIf="updatePermissions"
+                  class="btn theme-btn-edit btn-sm mr-2"
+                  target="_blank"
+                  title="Edit"
+                  [routerLink]="['/generate-cash-receive']"
+                  [queryParams]="{ CR_Id: table.CR_ID }"
+                  ><i class="fa fa-edit"></i
+                ></a>
+                <button
+                  *ngIf="deletePermissions"
+                  class="btn theme-btn-delete btn-sm"
+                  title="Delete"
+                  (click)="DeleteData(table)"
+                >
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
   </div>
-
 </div>
-

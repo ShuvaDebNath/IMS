@@ -10,4 +10,9 @@ public interface IReportRepository
     Task<DataSet> TaskDetailsReport(ReportsParams param);
     Task<DataSet> CommercialInvoiceReports(CommercialInvoiceReportParams param);
     Task<DataSet> DeliveryChallanReport(DeliveryChallanReportParams param);
+    Task<DataSet> ApplicationReport(ApplicaitonParams param);
+    Task<DataSet> LCReport(LCParams param);
+    Task<DataSet> CashReceiveReport(LCParams param);
+    Task<DataSet> PIAmendmentReport(string id);
+    Task<DataSet> PIOtherReport(string id);
 }

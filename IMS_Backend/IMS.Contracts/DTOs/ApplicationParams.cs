@@ -4,13 +4,10 @@ using System.Text;
 
 namespace AccountingBackEnd.DAL.DTOs
 {
-    public class ReportsParams
+    public class ApplicaitonParams
     {
         public string fromDate { get; set; }
         public string toDate { get; set; }
-        public string requestStatus { get; set; }
-        public string Id { get; set; }
-        public string companyId { get; set; }
         public string applicationType { get; set; }
     }
 }

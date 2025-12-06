@@ -30,7 +30,7 @@ namespace IMS.API.Controllers
             {
                 var currentUser = HttpContext.User;
 
-                string reportPath = "SampleRequestReport\\";
+                string reportPath = "V2\\SampleRequestReport\\";
                 DataSet ds = await _reportService.SampleRequestReport(fromDate, toDate, requestStatus, UserID);
 
                 if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
@@ -74,7 +74,7 @@ namespace IMS.API.Controllers
             {
                 var currentUser = HttpContext.User;
 
-                string reportPath = "TaskReport\\";
+                string reportPath = "V2\\TaskReport\\";
                 DataSet ds = await _reportService.TaskDetailsReport(fromDate, toDate);
 
                 if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
@@ -305,6 +305,219 @@ namespace IMS.API.Controllers
             using var stream = new MemoryStream();
             bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
             return stream.ToArray();
+        }
+
+        [HttpGet]
+        [Route("ApplicationReport")]
+        public async Task<IActionResult> ApplicationReport(String rptType, string fromDate,string toDate,string appType="")
+        {
+            try
+            {
+                var currentUser = HttpContext.User;
+
+                string reportPath = "V2\\ApplicationReport\\";
+                DataSet ds = await _reportService.ApplicationReport(fromDate, toDate, appType);
+
+                if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
+                {
+
+                    return Ok(new { msg = "Data Not Found" });
+                }
+
+                ds.Tables[0].TableName = "ApplicationReport";
+
+                var reportName = "Application Report";
+
+                reportPath += "rptApplicationReport.rdlc";
+
+
+                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+
+
+                if (rptType.ToLower() == "pdf")
+                {
+                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                }
+                else
+                {
+                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("LCReport")]
+        public async Task<IActionResult> LCReport(String rptType, string fromDate, string toDate, string LCNo = "")
+        {
+            try
+            {
+                var currentUser = HttpContext.User;
+
+                string reportPath = "V2\\LCReport\\";
+                DataSet ds = await _reportService.LCReport(fromDate, toDate, LCNo);
+
+                if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
+                {
+
+                    return Ok(new { msg = "Data Not Found" });
+                }
+
+                ds.Tables[0].TableName = "LCReport";
+
+                var reportName = "LC Report";
+
+                reportPath += "rptLCReport.rdlc";
+
+
+                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+
+
+                if (rptType.ToLower() == "pdf")
+                {
+                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                }
+                else
+                {
+                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("CashReceiveReport")]
+        public async Task<IActionResult> CashReceiveReport(String rptType, string fromDate, string toDate)
+        {
+            try
+            {
+                var currentUser = HttpContext.User;
+
+                string reportPath = "V2\\CashReceiveReport\\";
+                DataSet ds = await _reportService.CashReceiveReport(fromDate, toDate);
+
+                if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
+                {
+
+                    return Ok(new { msg = "Data Not Found" });
+                }
+
+                ds.Tables[0].TableName = "CashReceiveReport";
+
+                var reportName = "Cash Receive Report";
+
+                reportPath += "rptCashReceiveReport.rdlc";
+
+
+                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+
+
+                if (rptType.ToLower() == "pdf")
+                {
+                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                }
+                else
+                {
+                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("PIAmendMentReport")]
+        public async Task<IActionResult> PIAmendMentReport(String rptType, string id)
+        {
+            try
+            {
+                var currentUser = HttpContext.User;
+
+                string reportPath = "V2\\ApplicationReport\\";
+                DataSet ds = await _reportService.PIAmendmentReport(id);
+
+                if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
+                {
+
+                    return Ok(new { msg = "Data Not Found" });
+                }
+
+
+                var reportName = "PI Amendment Application Report";
+
+                reportPath += "rptApplicationPIAmendmentReport.rdlc";
+
+
+                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+
+
+                if (rptType.ToLower() == "pdf")
+                {
+                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                }
+                else
+                {
+                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+
+        [HttpGet]
+        [Route("PIOtherReport")]
+        public async Task<IActionResult> PIOtherReport(String rptType, string id)
+        {
+            try
+            {
+                var currentUser = HttpContext.User;
+
+                string reportPath = "V2\\ApplicationReport\\";
+                DataSet ds = await _reportService.PIOtherReport(id);
+
+                if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
+                {
+
+                    return Ok(new { msg = "Data Not Found" });
+                }
+
+                var reportName = "PI Other Application Report";
+
+                reportPath += "rptApplicationOtherReport.rdlc";
+
+
+                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+
+
+                if (rptType.ToLower() == "pdf")
+                {
+                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                }
+                else
+                {
+                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
 

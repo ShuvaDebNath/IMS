@@ -25,6 +25,7 @@ import { DoubleMasterEntryService } from 'src/app/services/doubleEntry/doubleEnt
 import { GetDataService } from 'src/app/services/getData/getDataService.service';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
+import { ReportService } from 'src/app/services/reportService/report-service.service';
 
 @Component({
   selector: 'app-approve-application',
@@ -56,7 +57,8 @@ export class ApproveApplicationComponent {
     private gs: GlobalServiceService,
     private activeLink: ActivatedRoute,
     private title: Title,
-    private masterEntryService: MasterEntryService
+    private masterEntryService: MasterEntryService,
+    private reportService: ReportService
   ) {}
 
   ngOnInit(): void {
@@ -202,4 +204,71 @@ export class ApproveApplicationComponent {
         error: (err: any) => {},
       });
   }
+
+  printApplication() {
+      swal.fire({
+        title: 'What you want to do?',
+        icon: 'question',
+        html: `
+          <div style="display: flex; gap: 10px; justify-content: center;">
+            <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
+              <i class="fa fa-file-excel"></i> Excel
+            </button>
+            <button id="wordBtn" class="btn btn-info" style="padding: 8px 16px;">
+              <i class="fa fa-file-word"></i> Word
+            </button>
+            <button id="pdfBtn" class="btn btn-danger" style="padding: 8px 16px;">
+              <i class="fa fa-file-pdf"></i> PDF
+            </button>
+          </div>
+        `,
+        showConfirmButton: false,
+        didOpen: () => {
+          const excelBtn = document.getElementById('excelBtn');
+          const wordBtn = document.getElementById('wordBtn');
+          const pdfBtn = document.getElementById('pdfBtn');
+  
+          var item = {
+            id: this.Id
+          };
+          console.log(this.Id);
+          
+          excelBtn?.addEventListener('click', () => {
+            swal.close();
+            console.log('User selected: Excel format');
+            if(this.FormType=='PI Amendment Application'){
+              this.reportService.PrintPIAmendmentApplicationReport(item, 'excel', 'F');
+            }
+            else{              
+              this.reportService.PrintOtherApplicationReport(item, 'excel', 'F');
+            }
+            swal.fire({ title: 'Exporting', text: 'Exporting to Excel...', icon: 'success', timer: 2000, showConfirmButton: false });
+          });
+  
+          wordBtn?.addEventListener('click', () => {
+            swal.close();
+            console.log('User selected: Word format');
+            if(this.FormType=='PI Amendment Application'){
+              this.reportService.PrintPIAmendmentApplicationReport(item, 'word', 'F');
+            }
+            else{              
+              this.reportService.PrintOtherApplicationReport(item, 'word', 'F');
+            }
+            swal.fire({ title: 'Exporting', text: 'Exporting to Word...', icon: 'success', timer: 2000, showConfirmButton: false });
+          });
+  
+          pdfBtn?.addEventListener('click', () => {
+            swal.close();
+            
+            if(this.FormType=='PI Amendment Application'){
+              this.reportService.PrintPIAmendmentApplicationReport(item, 'pdf', 'F');
+            }
+            else{              
+              this.reportService.PrintOtherApplicationReport(item, 'pdf', 'F');
+            }
+            swal.fire({ title: 'Exporting', text: 'Exporting to PDF...', icon: 'success', timer: 2000, showConfirmButton: false });
+          });
+        },
+      });
+    }
 }

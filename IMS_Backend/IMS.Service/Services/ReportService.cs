@@ -117,4 +117,84 @@ public class ReportService : IReportService
             throw ex;
         }
     }
+
+    public async Task<DataSet> ApplicationReport(string fromDate, string toDate, string applicaitonType)
+    {
+        try
+        {
+            ApplicaitonParams param = new ApplicaitonParams
+            {
+                fromDate = fromDate,
+                toDate = toDate,
+                applicationType = applicaitonType,
+
+            };
+            return await _reportRepository.ApplicationReport(param);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+    public async Task<DataSet> LCReport(string fromDate, string toDate, string LCNo)
+    {
+        try
+        {
+            LCParams param = new LCParams
+            {
+                fromDate = fromDate,
+                toDate = toDate,
+                LCNo = LCNo,
+
+            };
+            return await _reportRepository.LCReport(param);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+    public async Task<DataSet> CashReceiveReport(string fromDate, string toDate)
+    {
+        try
+        {
+            LCParams param = new LCParams
+            {
+                fromDate = fromDate,
+                toDate = toDate,
+
+            };
+            return await _reportRepository.CashReceiveReport(param);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+    public async Task<DataSet> PIAmendmentReport(string id)
+    {
+        try
+        {
+            
+            return await _reportRepository.PIAmendmentReport(id);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+    public async Task<DataSet> PIOtherReport(string id)
+    {
+        try
+        {
+
+            return await _reportRepository.PIOtherReport(id);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
 }

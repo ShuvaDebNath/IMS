@@ -117,5 +117,145 @@ namespace Boilerplate.Repository.Repositories
             }
         }
 
+        public async Task<DataSet> ProformaInvoiceReport(ProformaInvoiceReportParams param)
+        {
+            try
+            {
+                var parametars = new
+                {
+                    param.PI_Master_ID
+                };
+
+                string query = @"exec [usp_ProformaInvoice_GetDataById] @PI_Master_ID";
+                var ds = await GetDataInDataSetAsync(query, parametars);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<DataSet> ApplicationReport(ApplicaitonParams param)
+        {
+            try
+            {
+                var parametars = new
+                {
+                    param.fromDate,
+                    param.toDate,
+                    param.applicationType
+                };
+
+                string query = @"exec [usp_Application_Report] @fromDate,@toDate,@applicationType";
+                var ds = await GetDataInDataSetAsync(query, parametars);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<DataSet> LCReport(LCParams param)
+        {
+            try
+            {
+                var parametars = new
+                {
+                    param.fromDate,
+                    param.toDate,
+                    param.LCNo
+                };
+
+                string query = @"exec [usp_LC_Report] @fromDate,@toDate,@LCNo";
+                var ds = await GetDataInDataSetAsync(query, parametars);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<DataSet> CashReceiveReport(LCParams param)
+        {
+            try
+            {
+                var parametars = new
+                {
+                    param.fromDate,
+                    param.toDate,
+                };
+
+                string query = @"exec [usp_CashReceive_Report] @fromDate,@toDate";
+                var ds = await GetDataInDataSetAsync(query, parametars);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<DataSet> PIAmendmentReport(string id)
+        {
+            try
+            {
+                var parametars = new
+                {
+                    id
+                };
+
+                var piAmendmentDataset = new DataSet();
+
+                string query = @"exec [usp_Application_PIInfo_PIAmendementReport] @id";
+                var dt = await GetDataInDataTableAsync(query, parametars);
+                dt.TableName = "PIAmendmentReport";
+
+                piAmendmentDataset.Tables.Add(dt.Copy());
+
+                query = @"exec [usp_Application_PIReviseInfo_PIAmendementReport] @id";
+
+                var dt2 = await GetDataInDataTableAsync(query, parametars);
+                dt2.TableName = "PIAmendmentReviseReport";
+
+                piAmendmentDataset.Tables.Add(dt2.Copy());
+
+                return piAmendmentDataset;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<DataSet> PIOtherReport(string id)
+        {
+            try
+            {
+                var parametars = new
+                {
+                    id
+                };
+
+                var piAmendmentDataset = new DataSet();
+
+                string query = @"exec [usp_Application_PIReviseInfo_PIAmendementReport] @id";
+
+                var dt2 = await GetDataInDataTableAsync(query, parametars);
+                dt2.TableName = "PIAmendmentReviseReport";
+
+                piAmendmentDataset.Tables.Add(dt2.Copy());
+
+                return piAmendmentDataset;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }
