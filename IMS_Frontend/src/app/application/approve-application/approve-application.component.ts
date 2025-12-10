@@ -242,7 +242,6 @@ export class ApproveApplicationComponent {
             else{              
               this.reportService.PrintOtherApplicationReport(item, 'excel', 'F');
             }
-            swal.fire({ title: 'Exporting', text: 'Exporting to Excel...', icon: 'success', timer: 2000, showConfirmButton: false });
           });
   
           wordBtn?.addEventListener('click', () => {
@@ -254,7 +253,6 @@ export class ApproveApplicationComponent {
             else{              
               this.reportService.PrintOtherApplicationReport(item, 'word', 'F');
             }
-            swal.fire({ title: 'Exporting', text: 'Exporting to Word...', icon: 'success', timer: 2000, showConfirmButton: false });
           });
   
           pdfBtn?.addEventListener('click', () => {
@@ -266,7 +264,6 @@ export class ApproveApplicationComponent {
             else{              
               this.reportService.PrintOtherApplicationReport(item, 'pdf', 'F');
             }
-            swal.fire({ title: 'Exporting', text: 'Exporting to PDF...', icon: 'success', timer: 2000, showConfirmButton: false });
           });
         },
       });

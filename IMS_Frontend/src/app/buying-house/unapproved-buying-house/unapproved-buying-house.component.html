@@ -95,6 +95,17 @@
       
     </div>
   </form>
+  <div class="row mb-3" *ngIf="tableVisible">
+    <div class="col-md-12">
+      <button
+        class="btn theme-btn px-4 py-2"
+        (click)="printDialog()"
+        title="Export Cash Receive list to Excel, Word, or PDF"
+      >
+        <i class="fas fa-download"></i>&nbsp; Export
+      </button>
+    </div>
+  </div>
   <div class="shadow-sm p-2">
     
     <p-table

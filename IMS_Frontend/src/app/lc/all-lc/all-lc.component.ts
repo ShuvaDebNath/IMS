@@ -276,21 +276,18 @@ export class AllLcComponent {
             swal.close();
             console.log('User selected: Excel format');
             this.reportService.PrintLCReport(item, 'excel', 'F');
-            swal.fire({ title: 'Exporting', text: 'Exporting to Excel...', icon: 'success', timer: 2000, showConfirmButton: false });
           });
   
           wordBtn?.addEventListener('click', () => {
             swal.close();
             console.log('User selected: Word format');
             this.reportService.PrintLCReport(item, 'word', 'F');
-            swal.fire({ title: 'Exporting', text: 'Exporting to Word...', icon: 'success', timer: 2000, showConfirmButton: false });
           });
   
           pdfBtn?.addEventListener('click', () => {
             swal.close();
             console.log('User selected: PDF format');
             this.reportService.PrintLCReport(item, 'pdf', 'T');
-            swal.fire({ title: 'Exporting', text: 'Exporting to PDF...', icon: 'success', timer: 2000, showConfirmButton: false });
           });
         },
       });

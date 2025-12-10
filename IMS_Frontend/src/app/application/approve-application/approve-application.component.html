@@ -22,30 +22,21 @@
       <label class="form-label">Form Type : {{ FormType }}</label>
     </div>
     <div class="col-md-12">
-      <label class="form-label" *ngIf="FormType == 'Return Goods Application'"
-        >Warehouse : {{ StockLocation }}</label
-      >
-      <label
-        class="form-label"
-        style="color: orange"
-        *ngIf="status == 'Pending'"
-        >Status : {{ status }}</label
-      >
-      <label
-        class="form-label"
-        style="color: cyan"
-        *ngIf="status == 'Team Lead Approved'"
-        >Status : {{ status }}</label
-      >
-      <label
-        class="form-label"
-        style="color: green"
-        *ngIf="status == 'Approved'"
-        >Status : {{ status }}</label
-      >
-      <label class="form-label" style="color: red" *ngIf="status == 'Rejected'"
-        >Status : {{ status }}</label
-      >
+      <div *ngIf="FormType == 'Return Goods Application'">
+        <label class="form-label">Warehouse : {{ StockLocation }}</label>
+      </div>
+      <div *ngIf="status == 'Pending'">
+        <label class="form-label" style="color: orange">Status : {{ status }}</label>
+      </div>
+      <div *ngIf="status == 'Team Lead Approved'">
+        <label class="form-label" style="color: cyan">Status : {{ status }}</label>
+      </div>
+      <div *ngIf="status == 'Approved'">
+        <label class="form-label" style="color: green">Status : {{ status }}</label>
+      </div>
+      <div *ngIf="status == 'Rejected'">
+        <label class="form-label" style="color: red">Status : {{ status }}</label>
+      </div>
     </div>
   </div>
   <div class="row mb-3" *ngIf="tableData != null">

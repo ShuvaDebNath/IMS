@@ -15,19 +15,21 @@ import { DoubleMasterEntryModel } from 'src/app/models/DoubleMasterEntryModel';
 import { CG } from 'src/app/models/cg';
 import { GlobalServiceService } from 'src/app/services/Global-service.service';
 import { DoubleMasterEntryService } from 'src/app/services/doubleEntry/doubleEntryService.service';
+import { ReportService } from 'src/app/services/reportService/report-service.service';
 
 @Component({
   selector: 'app-imported-rm-list',
   templateUrl: './imported-rm-list.component.html',
-  styleUrls: ['./imported-rm-list.component.css']
+  styleUrls: ['./imported-rm-list.component.css'],
 })
 export class ImportedRmListComponent {
-pageIndex = 1;
+  pageIndex = 1;
   searchText = '';
   length = 100;
   pageSize = 10;
   tableData!: CG[];
   SelectedExportMasterId = '0';
+  exportId: any = '';
   pageSizeOptions: number[] = [];
   displayedColumns: string[] = [
     'Sl',
@@ -73,7 +75,8 @@ pageIndex = 1;
     private masterEntryService: MasterEntryService,
     private activeLink: ActivatedRoute,
     private title: Title,
-    private doubleMasterEntryService: DoubleMasterEntryService
+    private doubleMasterEntryService: DoubleMasterEntryService,
+    private reportService: ReportService
   ) {}
   ngOnInit(): void {
     var permissions = this.gs.CheckUserPermission('Imported RM List');
@@ -133,6 +136,7 @@ pageIndex = 1;
 
   viewDetails(table: any) {
     this.isDetailsVisible = true;
+    this.exportId = table.ExportMasterID;
     let param = new GetDataModel();
     param.procedureName = '[usp_ExportRM_Details]';
     param.parameters = {
@@ -155,5 +159,47 @@ pageIndex = 1;
     });
   }
 
-  
+  printDialog() {
+    swal.fire({
+      title: 'What you want to do?',
+      icon: 'question',
+      html: `<div style="display: flex; gap: 10px; justify-content: center;">
+                              <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
+                                <i class="fa fa-file-excel"></i> Excel
+                              </button>
+                              <button id="wordBtn" class="btn btn-info" style="padding: 8px 16px;">
+                                <i class="fa fa-file-word"></i> Word
+                              </button>
+                              <button id="pdfBtn" class="btn btn-danger" style="padding: 8px 16px;">
+                                <i class="fa fa-file-pdf"></i> PDF
+                              </button>
+                            </div>
+                          `,
+      showConfirmButton: false,
+      didOpen: () => {
+        const excelBtn = document.getElementById('excelBtn');
+        const wordBtn = document.getElementById('wordBtn');
+        const pdfBtn = document.getElementById('pdfBtn');
+
+        var item = {
+          id: this.exportId,
+        };
+
+        excelBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintExportReceiveReport(item, 'excel', 'F');
+        });
+
+        wordBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintExportReceiveReport(item, 'word', 'F');
+        });
+
+        pdfBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintExportReceiveReport(item, 'pdf', 'F');
+        });
+      },
+    });
+  }
 }

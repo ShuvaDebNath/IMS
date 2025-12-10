@@ -9,6 +9,7 @@ import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DoubleMasterEntryService } from 'src/app/services/doubleEntry/doubleEntryService.service';
+import { ReportService } from 'src/app/services/reportService/report-service.service';
 
 @Component({
   selector: 'app-rm-issue-report',
@@ -22,12 +23,14 @@ export class RmIssueReportComponent {
   detailsData_for_Accept: any = null;
   isDetailsVisible_for_Issue = false;
   tableName: any;
+  Id:any='';
 
   constructor(
     private getDataService: GetDataService,
     private gs: GlobalServiceService,
     private dme: DoubleMasterEntryService,
-    private title: Title
+    private title: Title,
+    private reportService: ReportService
   ) {}
 
   ngOnInit(): void {
@@ -68,7 +71,7 @@ export class RmIssueReportComponent {
       procedureName: 'usp_RawmaterialSend_GetDataById',
       parameters: { RM_Send_MasterID: row.RM_Send_MasterID },
     };
-
+    this.Id =  row.RM_Send_MasterID 
     this.getDataService.GetInitialData(procedureData).subscribe({
       next: (results) => {
         if (results.status) {
@@ -262,4 +265,60 @@ export class RmIssueReportComponent {
       `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`
     );
   }
+
+  printDialog() {
+      swal.fire({
+        title: 'What you want to do?',
+        icon: 'question',
+        html: `<div style="display: flex; gap: 10px; justify-content: center;">
+                                               <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
+                                                 <i class="fa fa-file-excel"></i> Excel
+                                               </button>
+                                               <button id="wordBtn" class="btn btn-info" style="padding: 8px 16px;">
+                                                 <i class="fa fa-file-word"></i> Word
+                                               </button>
+                                               <button id="pdfBtn" class="btn btn-danger" style="padding: 8px 16px;">
+                                                 <i class="fa fa-file-pdf"></i> PDF
+                                               </button>
+                                             </div>
+                                           `,
+        showConfirmButton: false,
+        didOpen: () => {
+          const excelBtn = document.getElementById('excelBtn');
+          const wordBtn = document.getElementById('wordBtn');
+          const pdfBtn = document.getElementById('pdfBtn');
+  
+          var item = {
+            id: this.Id,
+          };
+  
+          excelBtn?.addEventListener('click', () => {
+            swal.close();
+            this.reportService.PrintRMIssueInvoice(
+              item,
+              'excel',
+              'F'
+            );
+          });
+  
+          wordBtn?.addEventListener('click', () => {
+            swal.close();
+            this.reportService.PrintRMIssueInvoice(
+              item,
+              'word',
+              'F'
+            );
+          });
+  
+          pdfBtn?.addEventListener('click', () => {
+            swal.close();
+            this.reportService.PrintRMIssueInvoice(
+              item,
+              'pdf',
+              'F'
+            );
+          });
+        },
+      });
+    }
 }

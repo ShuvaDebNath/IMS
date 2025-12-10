@@ -79,6 +79,18 @@
             [closable]="true"
             [style]="{ width: '70vw' }"
             (onHide)="detailsData = null">
+    <hr>
+      <div class="row mb-3" *ngIf="isDetailsVisible">
+        <div class="col-md-12">
+          <button
+            class="btn theme-btn px-4 py-2"
+            (click)="printDialog()"
+            title="Export LC list to Excel, Word, or PDF"
+          >
+            <i class="fas fa-download"></i>&nbsp; Export
+          </button>
+        </div>
+      </div>
     <div *ngIf="detailsData">
       <h2>RMRequisition - {{ detailsData.RequisitionNumber }}</h2>
       <p>Date: {{ detailsData.RequisitionDate | date:'dd-MMM-yyyy' }}</p>

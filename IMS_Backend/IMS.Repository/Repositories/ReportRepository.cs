@@ -1,5 +1,6 @@
 ﻿using AccountingBackEnd.DAL.DTOs;
 using Boilerplate.Contracts;
+using Boilerplate.Contracts.Enum;
 using Boilerplate.Contracts.Repositories;
 using Boilerplate.Contracts.Services;
 using IMS.Contracts.DTOs;
@@ -13,6 +14,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -250,6 +252,229 @@ namespace Boilerplate.Repository.Repositories
                 piAmendmentDataset.Tables.Add(dt2.Copy());
 
                 return piAmendmentDataset;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<DataSet> SalesContractReport(String id)
+        {
+            try
+            {
+                var parametars = new
+                {
+                    id
+                };
+
+                string query = @"exec [usp_SC_Report] @id";
+                var ds = await GetDataInDataSetAsync(query, parametars);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        public async Task<DataSet> CustomerReport(CustomerParams param)
+        {
+            try
+            {
+                var parametars = new
+                {
+                    param.Superior_Id,
+                    param.Customer_Id,
+                    param.Status,
+                    param.SentBy,
+                };
+
+                string query = @"exec [usp_Customer_Report] @Superior_Id,@Customer_Id,@Status,@SentBy";
+                var ds = await GetDataInDataSetAsync(query, parametars);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        public async Task<DataSet> BuyerReport(BuyerParams param)
+        {
+            try
+            {
+                var parametars = new
+                {   
+                    param.FromDate,
+                    param.ToDate,
+                    param.Superior_Id,
+                    param.Customer_Id,
+                    param.Status,
+                    param.SentBy,
+                };
+
+                string query = @"exec [usp_Buyer_Report] @FromDate,@ToDate,@Superior_Id,@Customer_Id,@Status,@SentBy";
+                var ds = await GetDataInDataSetAsync(query, parametars);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<DataSet> TaskReport(String id)
+        {
+            try
+            {
+                var parametars = new
+                {
+                    id
+                };
+
+                string query = @"exec [usp_Task_Report] @id";
+                var ds = await GetDataInDataSetAsync(query, parametars);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<DataSet> ExportReport(String id)
+        {
+            try
+            {
+                var parametars = new
+                {
+                    id
+                };
+
+                string query = @"exec [usp_ExportRM_Details_Report] @id";
+                var ds = await GetDataInDataSetAsync(query, parametars);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<DataSet> RawMaterialIssueInvoiceReport(String id)
+        {
+            try
+            {
+                var parametars = new
+                {
+                    id
+                };
+
+                string query = @"exec [usp_Rawmaterial_Issue_Details_Report] @id";
+                var ds = await GetDataInDataSetAsync(query, parametars);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<DataSet> RMStockReport()
+        {
+            try
+            {
+                var parametars = new
+                {
+                };
+
+                string query = @"exec [usp_RawmaterialInfos_With_Stock_report]";
+                var ds = await GetDataInDataSetAsync(query, parametars);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<DataSet> FinishGoodSentReport(String id)
+        {
+            try
+            {
+                var parametars = new
+                {
+                    id
+                };
+
+                string query = @"exec [usp_FinishGood_Sent_Report] @id";
+                var ds = await GetDataInDataSetAsync(query, parametars);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<DataSet> FGStockReport()
+        {
+            try
+            {
+                var parametars = new
+                {
+                };
+
+                string query = @"exec [usp_Finishgoodsinfos_with_Stock_Report]";
+                var ds = await GetDataInDataSetAsync(query, parametars);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<DataSet> FGSendAndReceiveReport(FGSentReceiveParams param)
+        {
+            try
+            {
+                var parametars = new
+                {
+                    param.InvoiceNo,
+                    param.fromDate,
+                    param.toDate,
+                };
+
+                string query = @"exec [usp_FinishGoods_Send_and_Receive_Print_Report] @InvoiceNo,@fromDate,@toDate";
+                var ds = await GetDataInDataSetAsync(query, parametars);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<DataSet> RMPendingDetailsReport(String id)
+        {
+            try
+            {
+                var parametars = new
+                {
+                    id
+                };
+
+                string query = @"exec [usp_Rawmaterial_GetDataById_Report] @id";
+                var ds = await GetDataInDataSetAsync(query, parametars);
+
+                return ds;
             }
             catch (Exception ex)
             {
