@@ -17,7 +17,6 @@ public interface IReportRepository
     Task<DataSet> PIAmendmentReport(string id);
     Task<DataSet> PIOtherReport(string id);
     Task<DataSet> SalesContractReport(string id);
-    Task<DataSet> CustomerReport(CustomerParams param);
     Task<DataSet> BuyerReport(BuyerParams param);
     Task<DataSet> TaskReport(string id);
     Task<DataSet> ExportReport(string id);
