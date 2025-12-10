@@ -117,5 +117,24 @@ namespace Boilerplate.Repository.Repositories
             }
         }
 
+        public async Task<DataSet> ProformaInvoiceReport(ProformaInvoiceReportParams param)
+        {
+            try
+            {
+                var parametars = new
+                {
+                    param.PI_Master_ID
+                };
+
+                string query = @"exec [usp_ProformaInvoice_GetDataById] @PI_Master_ID";
+                var ds = await GetDataInDataSetAsync(query, parametars);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
