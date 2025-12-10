@@ -1,5 +1,5 @@
 <div class="container shadow-sm p-3 mb-5 bg-white rounded">
-  <h1 class="theme-text">{{FormTitle}}</h1>
+  <h1 class="theme-text">{{ FormTitle }}</h1>
 
   <br />
   <!-- Header fields -->
@@ -22,31 +22,34 @@
       <label class="form-label">Form Type : {{ FormType }}</label>
     </div>
     <div class="col-md-12">
-      <label class="form-label" *ngIf="FormType=='Return Goods Application'">Warehouse : {{ StockLocation }}</label>
-      <label
-        class="form-label"
-        style="color: orange"
-        *ngIf="status == 'Pending'"
-        >Status : {{ status }}</label
-      >
-      <label
-        class="form-label"
-        style="color: cyan"
-        *ngIf="status == 'Team Lead Approved'"
-        >Status : {{ status }}</label
-      >
-      <label
-        class="form-label"
-        style="color: green"
-        *ngIf="status == 'Approved'"
-        >Status : {{ status }}</label
-      >
-      <label class="form-label" style="color: red" *ngIf="status == 'Rejected'"
-        >Status : {{ status }}</label
-      >
+      <div *ngIf="FormType == 'Return Goods Application'">
+        <label class="form-label">Warehouse : {{ StockLocation }}</label>
+      </div>
+      <div *ngIf="status == 'Pending'">
+        <label class="form-label" style="color: orange">Status : {{ status }}</label>
+      </div>
+      <div *ngIf="status == 'Team Lead Approved'">
+        <label class="form-label" style="color: cyan">Status : {{ status }}</label>
+      </div>
+      <div *ngIf="status == 'Approved'">
+        <label class="form-label" style="color: green">Status : {{ status }}</label>
+      </div>
+      <div *ngIf="status == 'Rejected'">
+        <label class="form-label" style="color: red">Status : {{ status }}</label>
+      </div>
     </div>
   </div>
-
+  <div class="row mb-3" *ngIf="tableData != null">
+    <div class="col-md-12">
+      <button
+        class="btn theme-btn px-4 py-2"
+        (click)="printApplication()"
+        title="Export application data to Excel, Word, or PDF"
+      >
+        <i class="fas fa-download"></i>&nbsp; Export
+      </button>
+    </div>
+  </div>
   <h3><strong>PI Info </strong></h3>
   <!-- Items table -->
   <table class="table table-bordered">
@@ -64,7 +67,9 @@
         <th style="text-align: center">U. Comm</th>
         <th style="text-align: center">Payment Terms</th>
         <th style="text-align: center">Delivey Qty</th>
-        <th style="text-align: center" *ngIf="FormType=='Special Delivery'">Applied Qty</th>
+        <th style="text-align: center" *ngIf="FormType == 'Special Delivery'">
+          Applied Qty
+        </th>
         <th style="text-align: center">Comment</th>
       </tr>
     </thead>
@@ -83,16 +88,22 @@
         <td>{{ group.UnitCommission }}</td>
         <td>{{ group.PaymentTerms }}</td>
         <td>{{ group.DeliveredQuantity }}</td>
-        <td *ngIf="FormType=='Special Delivery'">{{ group.ApplyDeliveryQty }}</td>
+        <td *ngIf="FormType == 'Special Delivery'">
+          {{ group.ApplyDeliveryQty }}
+        </td>
         <td>{{ group.Comment }}</td>
       </tr>
     </tbody>
   </table>
 
-
-  <h3 *ngIf="FormType=='PI Amendment Application'"><strong>PI Revise Info </strong></h3>
+  <h3 *ngIf="FormType == 'PI Amendment Application'">
+    <strong>PI Revise Info </strong>
+  </h3>
   <!-- Items table -->
-  <table class="table table-bordered" *ngIf="FormType=='PI Amendment Application'">
+  <table
+    class="table table-bordered"
+    *ngIf="FormType == 'PI Amendment Application'"
+  >
     <thead>
       <tr>
         <th style="text-align: center">Customer</th>

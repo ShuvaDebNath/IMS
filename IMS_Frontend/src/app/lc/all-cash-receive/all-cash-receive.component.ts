@@ -14,6 +14,7 @@ import { GetDataModel } from 'src/app/models/GetDataModel';
 import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
 import { DoubleMasterEntryModel } from 'src/app/models/DoubleMasterEntryModel';
 import { CG } from 'src/app/models/cg';
+import { ReportService } from 'src/app/services/reportService/report-service.service';
 
 @Component({
   selector: 'app-all-cash-receive',
@@ -40,14 +41,14 @@ export class AllCashReceiveComponent {
     'Action',
   ];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  isEdit:any;
+  isEdit: any;
   page = new Page();
   rows: any;
   SearchForm!: FormGroup;
   fromDate: any;
   toDate: any;
   LCNo: string = '';
-  CR_Id:any;
+  CR_Id: any;
 
   showPaginator = false;
   insertPermissions: boolean = true;
@@ -66,11 +67,11 @@ export class AllCashReceiveComponent {
     private pagesComponent: PagesComponent,
     private masterEntryService: MasterEntryService,
     private activeLink: ActivatedRoute,
-    private title: Title
+    private title: Title,
+    private reportService: ReportService
   ) {}
   ngOnInit(): void {
-
-    var permissions = this.gs.CheckUserPermission("All Cash Receive");
+    var permissions = this.gs.CheckUserPermission('All Cash Receive');
     this.insertPermissions = permissions.insertPermissions;
     this.updatePermissions = permissions.updatePermissions;
     this.deletePermissions = permissions.deletePermissions;
@@ -79,8 +80,7 @@ export class AllCashReceiveComponent {
     if (!this.printPermissions) {
       window.location.href = 'dashboard';
     }
-    
-    
+
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
     this.title.setTitle('All Cash Receive');
@@ -113,31 +113,20 @@ export class AllCashReceiveComponent {
     });
   }
   Search() {
-    var finput = new Date();    
-    var fromDate = this.SearchForm.value.fromDate;
-    if (this.SearchForm.value.fromDate instanceof Date) {
-      finput = new Date(this.SearchForm.value.fromDate); // try converting if it's not already a Date
-      const fday = String(finput.getDate()).padStart(2, '0');
-      const fmonth = String(finput.getMonth() + 1).padStart(2, '0'); // months are 0-based
-      const fyear = finput.getFullYear();
-      
-      fromDate = `${fday}/${fmonth}/${fyear}`;
-    }    
+    const convertDateFormat = (dateStr: string): string => {
+      if (!dateStr) return '';
+      const parts = dateStr.split('/');
+      if (parts.length === 3) {
+        return `${parts[1]}/${parts[0]}/${parts[2]}`;
+      }
+      return dateStr;
+    };
+    var finput = new Date();
+    var fromDate = convertDateFormat(this.SearchForm.value.fromDate);
 
     var tinput = new Date();
-    var toDate = this.SearchForm.value.toDate;
-    if (this.SearchForm.value.toDate instanceof Date) {
-      tinput = new Date(this.SearchForm.value.toDate); // try converting if it's not already a Date
-      
-      const tday = String(tinput.getDate()).padStart(2, '0');
-      const tmonth = String(tinput.getMonth() + 1).padStart(2, '0'); // months are 0-based
-      const tyear = tinput.getFullYear();
+    var toDate = convertDateFormat(this.SearchForm.value.toDate);
 
-      toDate = `${tday}/${tmonth}/${tyear}`;
-    }
-
-    
-    
     let param = new GetDataModel();
     param.procedureName = '[usp_CashReceive_List]';
     param.parameters = {
@@ -149,7 +138,6 @@ export class AllCashReceiveComponent {
 
     this.masterEntryService.GetInitialData(param).subscribe({
       next: (results) => {
-
         if (results.status) {
           this.tableData = [];
           let tables = JSON.parse(results.data);
@@ -161,7 +149,6 @@ export class AllCashReceiveComponent {
   }
 
   DeleteData(item: any) {
-
     swal
       .fire({
         title: 'Wait!',
@@ -182,7 +169,6 @@ export class AllCashReceiveComponent {
 
           this.masterEntryService.GetInitialData(param).subscribe({
             next: (results: any) => {
-
               if (results.status) {
                 var effectedRows = JSON.parse(results.data).Tables1;
                 if (effectedRows[0].AffectedRows > 0) {
@@ -220,5 +206,65 @@ export class AllCashReceiveComponent {
   viewDetails(table: any) {
     this.isDetailsVisible = true;
     this.detailsData = table;
+  }
+
+  printCashReceive() {
+    swal.fire({
+      title: 'What you want to do?',
+      icon: 'question',
+      html: `
+            <div style="display: flex; gap: 10px; justify-content: center;">
+              <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
+                <i class="fa fa-file-excel"></i> Excel
+              </button>
+              <button id="wordBtn" class="btn btn-info" style="padding: 8px 16px;">
+                <i class="fa fa-file-word"></i> Word
+              </button>
+              <button id="pdfBtn" class="btn btn-danger" style="padding: 8px 16px;">
+                <i class="fa fa-file-pdf"></i> PDF
+              </button>
+            </div>
+          `,
+      showConfirmButton: false,
+      didOpen: () => {
+        const excelBtn = document.getElementById('excelBtn');
+        const wordBtn = document.getElementById('wordBtn');
+        const pdfBtn = document.getElementById('pdfBtn');
+
+        // Convert dates from dd/mm/yyyy to mm/dd/yyyy
+        const convertDateFormat = (dateStr: string): string => {
+          if (!dateStr) return '';
+          const parts = dateStr.split('/');
+          if (parts.length === 3) {
+            return `${parts[1]}/${parts[0]}/${parts[2]}`;
+          }
+          return dateStr;
+        };
+        console.log(this.SearchForm.value.fromDate);
+
+        var item = {
+          fromDate: convertDateFormat(this.SearchForm.value.fromDate),
+          toDate: convertDateFormat(this.SearchForm.value.toDate),
+        };
+
+        excelBtn?.addEventListener('click', () => {
+          swal.close();
+          console.log('User selected: Excel format');
+          this.reportService.PrintCashReceiveReport(item, 'excel', 'F');
+        });
+
+        wordBtn?.addEventListener('click', () => {
+          swal.close();
+          console.log('User selected: Word format');
+          this.reportService.PrintCashReceiveReport(item, 'word', 'F');
+        });
+
+        pdfBtn?.addEventListener('click', () => {
+          swal.close();
+          console.log('User selected: PDF format');
+          this.reportService.PrintCashReceiveReport(item, 'pdf', 'T');
+        });
+      },
+    });
   }
 }
