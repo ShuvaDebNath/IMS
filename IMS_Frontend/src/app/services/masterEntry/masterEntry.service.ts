@@ -19,6 +19,7 @@ export class MasterEntryService {
   readonly baseUrl = GlobalConfig.BASE_URL_REPORT;
   readonly postApiController: string="DoubleMasterEntry";
   readonly postApiMasterEntryController: string="MasterEntry";
+  readonly userController: string="User";
   token:any;
   readonly getapiController = 'GetData';
 
@@ -91,6 +92,7 @@ export class MasterEntryService {
       );
   }
 
+
   public SaveSingleData(fd: any, tableName: any) {
     let model: MasterEntryModel=new MasterEntryModel();
     model.tableName=tableName;
@@ -100,6 +102,54 @@ export class MasterEntryService {
       .post<ResponseModel>(
         this.baseUrlApi + this.postApiMasterEntryController + '/Insert',
         model,
+        {
+          headers: new HttpHeaders({
+            Authorization: 'Bearer ' + this.token,
+            'Content-Type': 'application/json',
+          }),
+        }
+      )
+      .pipe(
+        map((Response) => {
+          return Response;
+        })
+      );
+  }
+
+  public SaveUserData(fd: any, tableName: any) {
+    let model: MasterEntryModel=new MasterEntryModel();
+    model.tableName=tableName;
+    model.queryParams=fd;
+    console.log(fd);
+    
+    return this.http
+      .post<ResponseModel>(
+        this.baseUrlApi + this.userController + '/SaveUser',
+        fd,
+        {
+          headers: new HttpHeaders({
+            Authorization: 'Bearer ' + this.token,
+            'Content-Type': 'application/json',
+          }),
+        }
+      )
+      .pipe(
+        map((Response) => {
+          return Response;
+        })
+      );
+  }
+
+  public EditUserData(fd: any, tableName: any) {
+    let model: MasterEntryModel=new MasterEntryModel();
+    model.tableName=tableName;
+    model.queryParams=fd;
+    console.log(fd);
+    
+    return this.http
+      .post<ResponseModel>(
+        this.baseUrlApi + this.userController + '/EditUser',
+        fd,
         {
           headers: new HttpHeaders({
             Authorization: 'Bearer ' + this.token,

@@ -86,17 +86,22 @@ namespace Boilerplate.Repository.Repositories
             return dt;
         }
 
-        public async Task<bool> SaveUser(AspNetUserDto asp, UserControlDto tbluser, List<PagewiseActionDto> pagewiseActions)
+        public async Task<bool> SaveUser(UserCreate asp,String AuthUserName)
         {
-            string queryAspNetUsers = @"insert into AspNetUsers
-            (Id, Email, EmailConfirmed, PasswordHash, UserName,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnabled,AccessFailedCount,PasswordPin)
+            string queryAspNetUsers = @"insert into tbl_users
+            (UserName
+           ,Password
+           ,Role_id
+           ,Superior_ID
+           ,IsAuthorized
+           ,IsSupplier
+           ,Supplier_ID
+           ,Email
+           ,MakeBy
+           ,MakeDate
+           ,InsertTime)
             values 
-            (@Id, @Email, @EmailConfirmed, @PasswordHash, @UserName,0,0,0,0,@PasswordPin)";
-
-            string querytblUserControl = @"insert into tblUserControl
-            (UserId,Id,FullName,UserTypeId,MenuId,MakeBy,MakeDate,isActive,DashboardPreview)
-            values
-            (@UserId,@Id,@FullName,@UserTypeId,@MenuId,@MakeBy,@MakeDate,@isActive,@DashboardPreview)";
+            (@UserName, @Password, @Role_id, @Superior_ID, @IsAuthorized,@IsSupplier,@Supplier_ID,@Email,'"+ AuthUserName + "',getdate(),getdate())";
 
             using (SqlConnection con = new SqlConnection(_connectionStringUserDB))
             {
@@ -105,14 +110,9 @@ namespace Boilerplate.Repository.Repositories
                 {
                     try
                     {
-                        var rowAffectAspNetUsers = await ExecuteAsync(query: queryAspNetUsers, con: con, trn: trn, selector: asp);
+                        var rowAffectAspNetUsers = await ExecuteAsync(query: queryAspNetUsers,  selector: asp);
                         if (!(rowAffectAspNetUsers > 0)) throw new Exception();
-
-                        var rowAffectblUserControl = await ExecuteAsync(query: querytblUserControl, con: con, trn: trn, selector: tbluser);
-                        if (!(rowAffectblUserControl > 0)) throw new Exception();
-
-                        var rowAffect = await SavetblPagewiseActions(pagewiseActions, con, trn);
-                        if (!(rowAffect > 0)) throw new Exception();
+                       
 
                         trn.Commit();
                         con.Close();
@@ -129,12 +129,9 @@ namespace Boilerplate.Repository.Repositories
             }
         }
         
-        public async Task<bool> EditUser(string menu, UserCreate model, List<PagewiseActionDto> pagewiseActions)
+        public async Task<bool> EditUser( UserCreate model,string UserName)
         {
-            string querytblUserControl = @"update tblUserControl set MenuId=@menu,DashboardPreview=@DashboardPreview where UserId=@UserId";
-
-            string querytblPagewiseAction = @"delete from tblPagewiseAction
-                where UserId = @UserId";
+            string querytblUserControl = @"update tbl_users set UserName=@UserName,Role_id=@Role_id,Superior_ID=@Superior_ID,IsAuthorized=@IsAuthorized,IsSupplier=@IsSupplier,Supplier_ID=@Supplier_ID,Email=@Email,UpdateBy='"+UserName+ "',UpdateDate=getdate() where User_ID=@User_ID";
 
             using (SqlConnection con = new SqlConnection(_connectionStringUserDB))
             {
@@ -143,14 +140,9 @@ namespace Boilerplate.Repository.Repositories
                 {
                     try
                     {
-                        var rowAffecttblUserControl = await ExecuteAsync(query: querytblUserControl, con: con, trn: trn, selector: new { menu = menu, DashboardPreview = model.DashboardPreview, UserId = model.UserId });
+                        var rowAffecttblUserControl = await ExecuteAsync(query: querytblUserControl,  selector: model);
                         if (!(rowAffecttblUserControl > 0)) throw new Exception();
 
-                        var rowAffecttblPagewiseAction = await ExecuteAsync(query: querytblPagewiseAction, con: con, trn: trn, selector: new { UserId = model.UserId });
-                        if (!(rowAffecttblPagewiseAction > 0)) throw new Exception();
-
-                        var rowAffect = await SavetblPagewiseActions(pagewiseActions, con, trn);
-                        if (!(rowAffect > 0)) throw new Exception();
 
                         trn.Commit();
                         con.Close();
@@ -169,19 +161,8 @@ namespace Boilerplate.Repository.Repositories
 
         public async Task<bool> DeleteUser(string userId)
         {
-            string query = @"delete from tblPagewiseAction
-                where UserId = @UserId
-
-                declare  @Id varchar(128)
-                select @Id = Id
-                from tblUserControl
-                where UserId = @UserId
-
-                delete from tblUserControl
-                where UserId = @UserId
-
-                delete from AspNetUsers
-                where Id = @Id";
+            string query = @"delete from tbl_Users
+                where User_ID =@UserId";          
 
 
             using (SqlConnection con = new SqlConnection(_connectionStringUserDB))
@@ -258,5 +239,6 @@ namespace Boilerplate.Repository.Repositories
                 throw ex;
             }
         }
+
     }
 }
