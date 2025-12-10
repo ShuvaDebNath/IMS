@@ -1,26 +1,35 @@
-<div class="m-2 p-2">
-  <div class="card shadow-sm">
-    <div class="card-header theme-bg">
-        <h1 class="">Pending Finish Goods Sent List</h1>
+<div class="container">
+  <h1 class="theme-text">Pending Finish Goods Sent List</h1>
 
-    </div>
-    <div class="card-body">
-       <p-table class="theme-bg" #dt
-           [value]="pendingFinishGoodsSentList"
-           [paginator]="true"
-           [rows]="10"
-           [responsive]="true"
-           [showCurrentPageReport]="true"
-           [globalFilterFields]="['ExportNumber','Export_Date','Total_Qty','Total_Bag','Total_Roll','Net_Weight','Status']"
-           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
-
+  <p-table
+    class="theme-bg"
+    #dt
+    [value]="pendingFinishGoodsSentList"
+    [paginator]="true"
+    [rows]="10"
+    [responsive]="true"
+    [showCurrentPageReport]="true"
+    [globalFilterFields]="[
+      'ExportNumber',
+      'Export_Date',
+      'Total_Qty',
+      'Total_Bag',
+      'Total_Roll',
+      'Net_Weight',
+      'Status'
+    ]"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+  >
     <ng-template pTemplate="caption">
       <div class="table-toolbar">
         <span class="p-input-icon-left">
           <i class="pi pi-search"></i>
-          <input pInputText type="text"
-                 (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                 placeholder="Global Search" />
+          <input
+            pInputText
+            type="text"
+            (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+            placeholder="Global Search"
+          />
         </span>
       </div>
     </ng-template>
@@ -51,11 +60,20 @@
         <td class="text-center">{{ finishGoodsSent.Status }}</td>
 
         <td class="d-flex gap-2 justify-content-center">
-          <button class="btn theme-btn-edit  d-inline-flex align-items-center" (click)="onReceive(finishGoodsSent)" title="Edit" aria-label="Edit">
+          <button
+            class="btn theme-btn-edit btn-sm d-inline-flex align-items-center"
+            (click)="onReceive(finishGoodsSent)"
+            title="Edit"
+            aria-label="Edit"
+          >
             <i class="pi pi-pencil me-1"></i>
           </button>
-          <button class="btn theme-btn-view  text-white d-inline-flex align-items-center"
-                  (click)="onDetails(finishGoodsSent)" title="Details" aria-label="Details">
+          <button
+            class="btn theme-btn-view btn-sm text-white d-inline-flex align-items-center"
+            (click)="onDetails(finishGoodsSent)"
+            title="Details"
+            aria-label="Details"
+          >
             <i class="pi pi-eye me-1"></i>
           </button>
         </td>
@@ -64,18 +82,34 @@
 
     <ng-template pTemplate="footer">
       <tr>
-        <td colspan="8">Total Pending FG Sent List: {{ pendingFinishGoodsSentList.length }}</td>
+        <td colspan="8">
+          Total Pending FG Sent List: {{ pendingFinishGoodsSentList.length }}
+        </td>
       </tr>
     </ng-template>
   </p-table>
 
   <!-- Details dialog -->
-  <p-dialog header="Detail"
-            [(visible)]="isDetailsVisible"
-            [modal]="true"
-            [closable]="true"
-            [style]="{ width: '70vw' }"
-            (onHide)="detailsData = null">
+  <p-dialog
+    header="Detail"
+    [(visible)]="isDetailsVisible"
+    [modal]="true"
+    [closable]="true"
+    [style]="{ width: '70vw' }"
+    (onHide)="detailsData = null"
+  >
+    <ng-template pTemplate="header">
+      <div class="d-flex justify-content-between align-items-center w-100">
+        <span>Detail</span>
+        <button
+          class="btn theme-btn btn-sm"
+          title="Print"
+          (click)="printDialog()"
+        >
+          <i class="fa fa-print"></i>&nbsp; Print
+        </button>
+      </div>
+    </ng-template>
     <div *ngIf="detailsData">
       <h2>Export No - {{ detailsData.ExportNumber }}</h2>
       <p>Date: {{ detailsData.Export_Date }}</p>
@@ -87,34 +121,36 @@
       <p-table [value]="detailsData.Items" [responsive]="true">
         <ng-template pTemplate="header">
           <tr>
-            <th style="text-align: center;">Article</th>
-            <th style="text-align: center;">Description</th>
-            <th style="text-align: center;">UoM</th>
-            <th style="text-align: center;">Quantity</th>
-            <th style="text-align: center;">Roll/Bag/KG/Piece</th>
-            <th style="text-align: center;">Gross Weight</th>
+            <th style="text-align: center">Article</th>
+            <th style="text-align: center">Description</th>
+            <th style="text-align: center">UoM</th>
+            <th style="text-align: center">Quantity</th>
+            <th style="text-align: center">Roll/Bag/KG/Piece</th>
+            <th style="text-align: center">Gross Weight</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-item>
           <tr>
-            <td style="text-align: left;">{{ item.Article_No }}</td>
-            <td style="text-align: left;">{{ item.DetailsNote }}</td>
-            <td style="text-align: center;">{{ item.Roll_Bag }}</td>
-            <td style="text-align: center;">{{ item.Quantity }}</td>
-            <td style="text-align: center;">{{ item.Sent_RollBag_Quantity }}</td>
-            <td style="text-align: center;">{{ item.Gross_Weight }}</td>
+            <td style="text-align: left">{{ item.Article_No }}</td>
+            <td style="text-align: left">{{ item.DetailsNote }}</td>
+            <td style="text-align: center">{{ item.Roll_Bag }}</td>
+            <td style="text-align: center">{{ item.Quantity }}</td>
+            <td style="text-align: center">{{ item.Sent_RollBag_Quantity }}</td>
+            <td style="text-align: center">{{ item.Gross_Weight }}</td>
           </tr>
         </ng-template>
       </p-table>
     </div>
   </p-dialog>
 
-  <p-dialog header="Detail"
-             [(visible)]="isDetailsVisible_for_Receive" 
-            [modal]="true"
-            [closable]="true"
-            [style]="{ width: '100vw' }"
-            (onHide)="detailsData = null">
+  <p-dialog
+    header="Detail"
+    [(visible)]="isDetailsVisible_for_Receive"
+    [modal]="true"
+    [closable]="true"
+    [style]="{ width: '100vw' }"
+    (onHide)="detailsData = null"
+  >
     <div *ngIf="detailsData">
       <h2>Export No - {{ detailsData.ExportNumber }}</h2>
       <p>Date: {{ detailsData.Export_Date }}</p>
@@ -126,12 +162,12 @@
       <p-table [value]="detailsData.Items" [responsive]="true">
         <ng-template pTemplate="header">
           <tr>
-            <th style="text-align: center;">Article</th>
-            <th style="text-align: center;">Description</th>
-            <th style="text-align: center;">UoM</th>
-            <th style="text-align: center;">Quantity</th>
-            <th style="text-align: center;">Roll/Bag/KG/Piece</th>
-            <th style="text-align: center;">Gross Weight</th>
+            <th style="text-align: center">Article</th>
+            <th style="text-align: center">Description</th>
+            <th style="text-align: center">UoM</th>
+            <th style="text-align: center">Quantity</th>
+            <th style="text-align: center">Roll/Bag/KG/Piece</th>
+            <th style="text-align: center">Gross Weight</th>
             <th class="text-center">Accepted Qty</th>
             <th class="text-center">Accepted Roll</th>
             <th class="text-center">Note</th>
@@ -140,50 +176,70 @@
         </ng-template>
         <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
           <tr>
-            <td style="text-align: left;">{{ item.Article_No }}</td>
-            <td style="text-align: left;">{{ item.DetailsNote }}</td>
-            <td style="text-align: center;">{{ item.Roll_Bag }}</td>
-            <td style="text-align: center;">{{ item.Quantity }}</td>
-            <td style="text-align: center;">{{ item.Sent_RollBag_Quantity }}</td>
-            <td style="text-align: center;">{{ item.Gross_Weight }}</td>
+            <td style="text-align: left">{{ item.Article_No }}</td>
+            <td style="text-align: left">{{ item.DetailsNote }}</td>
+            <td style="text-align: center">{{ item.Roll_Bag }}</td>
+            <td style="text-align: center">{{ item.Quantity }}</td>
+            <td style="text-align: center">{{ item.Sent_RollBag_Quantity }}</td>
+            <td style="text-align: center">{{ item.Gross_Weight }}</td>
 
             <!-- Accepted Quantity -->
-            <td style="width:120px">
-              <input type="number" class="form-control form-control-sm text-end danger-input"
-                [(ngModel)]="item.AcceptedQuantity" name="accRoll{{ rowIndex }}" />
+            <td style="width: 120px">
+              <input
+                type="number"
+                class="form-control form-control-sm text-end danger-input"
+                [(ngModel)]="item.AcceptedQuantity"
+                name="accRoll{{ rowIndex }}"
+              />
             </td>
 
             <!-- Accepted RollBag_Qty -->
-            <td style="width:120px">
-              <input type="number" class="form-control form-control-sm text-end danger-input"
-                [(ngModel)]="item.AcceptedRollBag_Qty" name="accRoll{{ rowIndex }}" />
+            <td style="width: 120px">
+              <input
+                type="number"
+                class="form-control form-control-sm text-end danger-input"
+                [(ngModel)]="item.AcceptedRollBag_Qty"
+                name="accRoll{{ rowIndex }}"
+              />
             </td>
 
             <!-- Note as textarea -->
-            <td style="min-width:220px">
-              <textarea class="form-control form-control-sm" rows="2" [(ngModel)]="item.Note" name="note{{ rowIndex }}"
-                placeholder="Type note…">
+            <td style="min-width: 220px">
+              <textarea
+                class="form-control form-control-sm"
+                rows="2"
+                [(ngModel)]="item.Note"
+                name="note{{ rowIndex }}"
+                placeholder="Type note…"
+              >
               </textarea>
             </td>
 
-            <td style="min-width:150px">
-              <select class="form-select" [(ngModel)]="item.Stock_Location_ID" name="Stock_Location_ID">
-                            <option *ngFor="let loc of StockLocationItems" [value]="loc.Stock_Location_ID">{{ loc.Stock_Location_Name }}</option>
-                        </select>
-
+            <td style="min-width: 150px">
+              <select
+                class="form-select"
+                [(ngModel)]="item.Stock_Location_ID"
+                name="Stock_Location_ID"
+              >
+                <option
+                  *ngFor="let loc of StockLocationItems"
+                  [value]="loc.Stock_Location_ID"
+                >
+                  {{ loc.Stock_Location_Name }}
+                </option>
+              </select>
+            </td>
           </tr>
         </ng-template>
       </p-table>
-       <div class="d-flex justify-content-between mt-3">
-        <button class="btn theme-btn-view" (click)="onReceiveFromWarehouse(detailsData)">Receive</button>
-
+      <div class="d-flex justify-content-between mt-3">
+        <button
+          class="btn btn-primary"
+          (click)="onReceiveFromWarehouse(detailsData)"
+        >
+          Receive
+        </button>
       </div>
     </div>
   </p-dialog>
-    </div>
-
-
-
 </div>
-</div>
-

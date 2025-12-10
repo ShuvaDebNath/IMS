@@ -1,0 +1,165 @@
+<div class="container shadow-sm p-3 mb-5 bg-white rounded">
+  <h1 class="theme-text">{{ FormTitle }}</h1>
+
+  <br />
+  <!-- Header fields -->
+  <div class="row mb-3">
+    <!-- Export Date -->
+    <div class="col-md-12">
+      <label class="form-label" style="font-size: 20px">{{ PoNo }}</label>
+    </div>
+    <div class="col-md-12">
+      <label
+        class="form-label"
+        style="font-size: 15px; color: cornflowerblue"
+        >{{ AppDate }}</label
+      >
+    </div>
+  </div>
+  <div class="row mb-3">
+    <!-- Export Date -->
+    <div class="col-md-12">
+      <label class="form-label">Form Type : {{ FormType }}</label>
+    </div>
+    <div class="col-md-12">
+      <div *ngIf="FormType == 'Return Goods Application'">
+        <label class="form-label">Warehouse : {{ StockLocation }}</label>
+      </div>
+      <div *ngIf="status == 'Pending'">
+        <label class="form-label" style="color: orange">Status : {{ status }}</label>
+      </div>
+      <div *ngIf="status == 'Team Lead Approved'">
+        <label class="form-label" style="color: cyan">Status : {{ status }}</label>
+      </div>
+      <div *ngIf="status == 'Approved'">
+        <label class="form-label" style="color: green">Status : {{ status }}</label>
+      </div>
+      <div *ngIf="status == 'Rejected'">
+        <label class="form-label" style="color: red">Status : {{ status }}</label>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-3" *ngIf="tableData != null">
+    <div class="col-md-12">
+      <button
+        class="btn theme-btn px-4 py-2"
+        (click)="printApplication()"
+        title="Export application data to Excel, Word, or PDF"
+      >
+        <i class="fas fa-download"></i>&nbsp; Export
+      </button>
+    </div>
+  </div>
+  <h3><strong>PI Info </strong></h3>
+  <!-- Items table -->
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th style="text-align: center">Customer</th>
+        <th style="text-align: center">PI No</th>
+        <th style="text-align: center">Article</th>
+        <th style="text-align: center">A. Article</th>
+        <th style="text-align: center">Color</th>
+        <th style="text-align: center">Width</th>
+        <th style="text-align: center">Unit</th>
+        <th style="text-align: center">Qty</th>
+        <th style="text-align: center">U. Price</th>
+        <th style="text-align: center">U. Comm</th>
+        <th style="text-align: center">Payment Terms</th>
+        <th style="text-align: center">Delivey Qty</th>
+        <th style="text-align: center" *ngIf="FormType == 'Special Delivery'">
+          Applied Qty
+        </th>
+        <th style="text-align: center">Comment</th>
+      </tr>
+    </thead>
+
+    <tbody *ngIf="tableData && tableData.length > 0">
+      <tr *ngFor="let group of tableData; let i = index">
+        <td>{{ group.customer_name }}</td>
+        <td>{{ group.PiNo }}</td>
+        <td>{{ group.ArticleNo }}</td>
+        <td>{{ group.ActualArticleNo }}</td>
+        <td>{{ group.Colour }}</td>
+        <td>{{ group.Width }}</td>
+        <td>{{ group.Unit }}</td>
+        <td>{{ group.Quantity }}</td>
+        <td>{{ group.UnitPrice }}</td>
+        <td>{{ group.UnitCommission }}</td>
+        <td>{{ group.PaymentTerms }}</td>
+        <td>{{ group.DeliveredQuantity }}</td>
+        <td *ngIf="FormType == 'Special Delivery'">
+          {{ group.ApplyDeliveryQty }}
+        </td>
+        <td>{{ group.Comment }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 *ngIf="FormType == 'PI Amendment Application'">
+    <strong>PI Revise Info </strong>
+  </h3>
+  <!-- Items table -->
+  <table
+    class="table table-bordered"
+    *ngIf="FormType == 'PI Amendment Application'"
+  >
+    <thead>
+      <tr>
+        <th style="text-align: center">Customer</th>
+        <th style="text-align: center">PI No</th>
+        <th style="text-align: center">Article</th>
+        <th style="text-align: center">A. Article</th>
+        <th style="text-align: center">Color</th>
+        <th style="text-align: center">Width</th>
+        <th style="text-align: center">Unit</th>
+        <th style="text-align: center">Qty</th>
+        <th style="text-align: center">U. Price</th>
+        <th style="text-align: center">U. Comm</th>
+        <th style="text-align: center">Payment Terms</th>
+        <th style="text-align: center">Comment</th>
+      </tr>
+    </thead>
+
+    <tbody *ngIf="reviseData && reviseData.length > 0">
+      <tr *ngFor="let group of reviseData; let i = index">
+        <td>{{ group.customer_name }}</td>
+        <td>{{ group.PiNo }}</td>
+        <td>{{ group.ArticleNo }}</td>
+        <td>{{ group.ActualArticleNo }}</td>
+        <td>{{ group.Colour }}</td>
+        <td>{{ group.Width }}</td>
+        <td>{{ group.Unit }}</td>
+        <td>{{ group.Quantity }}</td>
+        <td>{{ group.UnitPrice }}</td>
+        <td>{{ group.UnitCommission }}</td>
+        <td>{{ group.PaymentTerms }}</td>
+        <td>{{ group.Comment }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="d-flex justify-content-end gap-2 mt-3">
+    <!-- <button type="button" class="btn btn-outline-success" (click)="addItem()">
+        <i class="bi bi-plus-circle me-1"></i> Add Row
+      </button> -->
+
+    <button
+      *ngIf="status != 'Approved' && status != 'Rejected'"
+      type="submit"
+      (click)="ApproveData('Approve')"
+      class="btn theme-btn btn-rounded"
+    >
+      Approve
+    </button>
+
+    <button
+      *ngIf="status != 'Approved' && status != 'Rejected'"
+      type="submit"
+      (click)="ApproveData('Reject')"
+      class="btn theme-btn btn-rounded"
+    >
+      Reject
+    </button>
+  </div>
+</div>

@@ -12,14 +12,15 @@ import {
 } from '@angular/forms';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
+import { ReportService } from 'src/app/services/reportService/report-service.service';
 
 @Component({
   selector: 'app-unapproved-customer',
   templateUrl: './unapproved-customer.component.html',
-  styleUrls: ['./unapproved-customer.component.css']
+  styleUrls: ['./unapproved-customer.component.css'],
 })
 export class UnapprovedCustomerComponent {
-allCustomers: any[] = [];
+  allCustomers: any[] = [];
   detailsData: any = null;
   isDetailsVisible = false;
   CustomerList: any;
@@ -38,7 +39,8 @@ allCustomers: any[] = [];
     private title: Title,
     private dme: DoubleMasterEntryService,
     private fb: FormBuilder,
-    private ms: MasterEntryService
+    private ms: MasterEntryService,
+    private reportService: ReportService
   ) {}
 
   ngOnInit(): void {
@@ -63,7 +65,7 @@ allCustomers: any[] = [];
     var ProcedureData = {
       procedureName: '[usp_Customer_GetInitialData]',
       parameters: {
-        'User_Id':userId
+        User_Id: userId,
       },
     };
 
@@ -71,8 +73,8 @@ allCustomers: any[] = [];
       next: (results) => {
         if (results.status) {
           this.CustomerList = JSON.parse(results.data).Tables2;
-          if(JSON.parse(results.data).Tables3!=undefined)
-          this.SuperiorList = JSON.parse(results.data).Tables3;
+          if (JSON.parse(results.data).Tables3 != undefined)
+            this.SuperiorList = JSON.parse(results.data).Tables3;
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
           this.gs.Logout();
@@ -104,9 +106,8 @@ allCustomers: any[] = [];
     const sentByStr = localStorage.getItem('userId');
     const sentBy = sentByStr ? Number(sentByStr) : null;
     var userId = window.localStorage.getItem('userId');
-    
-    if(SuperioId==undefined || SuperioId=='')
-      SuperioId = userId
+
+    if (SuperioId == undefined || SuperioId == '') SuperioId = userId;
 
     const procedureData = {
       procedureName: 'usp_Customer_GetCustomerData',
@@ -120,7 +121,7 @@ allCustomers: any[] = [];
 
     this.getDataService.GetInitialData(procedureData).subscribe({
       next: (results) => {
-    console.log(results,procedureData);
+        console.log(results, procedureData);
         if (results.status) {
           this.allCustomers = JSON.parse(results.data).Tables1;
 
@@ -142,9 +143,11 @@ allCustomers: any[] = [];
 
     this.getDataService.GetInitialData(procedureData).subscribe({
       next: (results) => {
-      parameters: { Customer_Id: row.Customer_ID }
-        console.log(results,row);
-        
+        parameters: {
+          Customer_Id: row.Customer_ID;
+        }
+        console.log(results, row);
+
         if (results.status) {
           this.detailsData = JSON.parse(results.data).Tables1[0];
           this.isDetailsVisible = true; // open dialog
@@ -185,37 +188,31 @@ allCustomers: any[] = [];
       .then((res) => {
         if (!res.isConfirmed) return;
 
-        const tableName = 'tbl_Customer'; 
+        const tableName = 'tbl_Customer';
         const whereParams = { Customer_Id: row?.Customer_ID };
 
         var masterEntryModel = new MasterEntryModel();
         masterEntryModel.tableName = tableName;
         masterEntryModel.whereParams = whereParams;
 
-        this.ms
-          .DeleteData(masterEntryModel)
-          .subscribe({
-            next: () => {
-              swal.fire(
-                'Deleted!',
-                'Customer deleted successfully.',
-                'success'
-              );
-              this.loadAllCustomers(); // refresh the table
-            },
-            error: (err) => {
-              console.error(err);
-              swal.fire(
-                'Delete Failed',
-                err?.error?.message || 'Something went wrong.',
-                'info'
-              );
-            },
-          });
+        this.ms.DeleteData(masterEntryModel).subscribe({
+          next: () => {
+            swal.fire('Deleted!', 'Customer deleted successfully.', 'success');
+            this.loadAllCustomers(); // refresh the table
+          },
+          error: (err) => {
+            console.error(err);
+            swal.fire(
+              'Delete Failed',
+              err?.error?.message || 'Something went wrong.',
+              'info'
+            );
+          },
+        });
       });
   }
 
-  approeReq(row: any){
+  approeReq(row: any) {
     const id = String(row?.Customer_ID ?? '');
     if (!id) {
       swal.fire('Missing Id', 'Customer Id not found.', 'info');
@@ -235,36 +232,82 @@ allCustomers: any[] = [];
       .then((res) => {
         if (!res.isConfirmed) return;
 
-        const tableName = 'tbl_Customer'; 
+        const tableName = 'tbl_Customer';
         const whereParams = { Customer_Id: row?.Customer_ID };
         const updateParams = { Status: 'Approved' };
 
-        this.ms
-          .UpdateData(updateParams,whereParams,tableName)
-          .subscribe({
-            next: () => {
-              swal.fire(
-                'Approved!',
-                'Customer Approved.',
-                'success'
-              );
-              this.loadAllCustomers(); // refresh the table
-            },
-            error: (err) => {
-              console.error(err);
-              swal.fire(
-                'Approve Failed',
-                err?.error?.message || 'Something went wrong.',
-                'info'
-              );
-            },
-          });
+        this.ms.UpdateData(updateParams, whereParams, tableName).subscribe({
+          next: () => {
+            swal.fire('Approved!', 'Customer Approved.', 'success');
+            this.loadAllCustomers(); // refresh the table
+          },
+          error: (err) => {
+            console.error(err);
+            swal.fire(
+              'Approve Failed',
+              err?.error?.message || 'Something went wrong.',
+              'info'
+            );
+          },
+        });
       });
   }
 
-  getCustomerList(){
+  getCustomerList() {
     var SuperioId = this.dateForm.value.SuperioId;
-    this.CustomerList = this.CustomerList.filter((e:any)=>e.Superior_ID == SuperioId);
-    
+    this.CustomerList = this.CustomerList.filter(
+      (e: any) => e.Superior_ID == SuperioId
+    );
+  }
+
+  printDialog() {
+    swal.fire({
+      title: 'What you want to do?',
+      icon: 'question',
+      html: `
+              <div style="display: flex; gap: 10px; justify-content: center;">
+                <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
+                  <i class="fa fa-file-excel"></i> Excel
+                </button>
+                <button id="wordBtn" class="btn btn-info" style="padding: 8px 16px;">
+                  <i class="fa fa-file-word"></i> Word
+                </button>
+                <button id="pdfBtn" class="btn btn-danger" style="padding: 8px 16px;">
+                  <i class="fa fa-file-pdf"></i> PDF
+                </button>
+              </div>
+            `,
+      showConfirmButton: false,
+      didOpen: () => {
+        const excelBtn = document.getElementById('excelBtn');
+        const wordBtn = document.getElementById('wordBtn');
+        const pdfBtn = document.getElementById('pdfBtn');
+
+        const sentByStr = localStorage.getItem('userId');
+        const sentBy = sentByStr ? Number(sentByStr) : null;
+        var { fromDate, toDate, CustomerId, SuperioId } = this.dateForm.value;
+        var item = {
+          Superior_Id: SuperioId,
+          Customer_Id: CustomerId,
+          Status: 'Unapproved',
+          User: sentBy,
+        };
+
+        excelBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintCustomerReport(item, 'excel', 'F');
+        });
+
+        wordBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintCustomerReport(item, 'word', 'F');
+        });
+
+        pdfBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintCustomerReport(item, 'pdf', 'F');
+        });
+      },
+    });
   }
 }

@@ -36,9 +36,6 @@ public UserLogin(fd:any){
   data.Supplier_ID  = "";
   data.IsAuthorized = true;
   data.IsSupplier = true;
-
- 
-
   
 var test = this.baseUrl+this.apiController+'/Login';
 

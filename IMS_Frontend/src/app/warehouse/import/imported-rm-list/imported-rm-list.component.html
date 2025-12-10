@@ -1,12 +1,13 @@
-
-<div class="m-t p-2">
-  <div class="card shadow-sm">
+<div class="card card-default">
   <div
-    class="card-header theme-bg"
+    class="content-heading"
+    style="border-bottom: 1px solid rgba(0, 0, 0, 0.125) !important"
   >
-
-        <h2 class="">Receive Export</h2>
-    
+    <div class="row">
+      <div class="col-6">
+        <h2 class="p-2">Receive Export</h2>
+      </div>
+    </div>
   </div>
   <div class="card-body">
     <form
@@ -51,11 +52,7 @@
       [rows]="10"
       [responsive]="true"
       [showCurrentPageReport]="true"
-      [globalFilterFields]="[
-        'ExportNumber',
-        'Received_Date',
-        'Status'
-      ]"
+      [globalFilterFields]="['ExportNumber', 'Received_Date', 'Status']"
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     >
       <ng-template pTemplate="caption">
@@ -74,11 +71,11 @@
 
       <ng-template pTemplate="header">
         <tr>
-          <th class="">SL</th>
-          <th class="">Export No</th>
-          <th class="">Date</th>
-          <th class="">Status</th>
-          <th class="" *ngIf="allPersmissions">Action</th>
+          <th class="bg-gradient-success">SL</th>
+          <th class="bg-gradient-success">Export No</th>
+          <th class="bg-gradient-success">Date</th>
+          <th class="bg-gradient-success">Status</th>
+          <th class="bg-gradient-success" *ngIf="allPersmissions">Action</th>
         </tr>
       </ng-template>
 
@@ -90,17 +87,14 @@
           <td class="text-center align-middle">{{ table.Status }}</td>
           <td class="text-center align-middle p-0 m-0">
             <a
-              class="btn theme-btn-view"
+              class="btn bg-gradient-cyan btn-xs mr-2"
               target="_blank"
               title="View Details"
               (click)="viewDetails(table)"
               ><i class="fa fa-eye"></i>Details</a
             >
 
-            <button
-              class="btn theme-btn-view"
-              title="Mail"
-            >
+            <button class="btn bg-gradient-danger btn-xs" title="Mail">
               <i class="fas fa-eye"></i>Send Mail To Supplier
             </button>
           </td>
@@ -116,6 +110,18 @@
     [style]="{ width: '70vw' }"
     (onHide)="detailsData = null"
   >
+    <ng-template pTemplate="header">
+      <div class="d-flex justify-content-between align-items-center w-100">
+        <span>Detail</span>
+        <button
+          class="btn theme-btn btn-sm"
+          title="Print"
+          (click)="printDialog()"
+        >
+          <i class="fa fa-print"></i>&nbsp; Print
+        </button>
+      </div>
+    </ng-template>
     <div *ngIf="detailsData">
       <h2>{{ detailsData.ExportNumber }}</h2>
       <h5>{{ detailsData.ExportDate }}</h5>
@@ -243,6 +249,3 @@
     </div>
   </p-dialog> -->
 </div>
-
-</div>
-

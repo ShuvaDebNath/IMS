@@ -15,14 +15,15 @@ import { DoubleMasterEntryModel } from 'src/app/models/DoubleMasterEntryModel';
 import { CG } from 'src/app/models/cg';
 import { GlobalServiceService } from 'src/app/services/Global-service.service';
 import { GetDataService } from 'src/app/services/getData/getDataService.service';
+import { ReportService } from 'src/app/services/reportService/report-service.service';
 
 @Component({
   selector: 'app-all-rm-export-report',
   templateUrl: './all-rm-export-report.component.html',
-  styleUrls: ['./all-rm-export-report.component.css']
+  styleUrls: ['./all-rm-export-report.component.css'],
 })
 export class AllRmExportReportComponent {
-pageIndex = 1;
+  pageIndex = 1;
   searchText = '';
   length = 100;
   pageSize = 10;
@@ -41,17 +42,16 @@ pageIndex = 1;
     'Action',
   ];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  isEdit:any;
+  isEdit: any;
   page = new Page();
   rows: any;
   SearchForm!: FormGroup;
   fromDate: any;
   toDate: any;
   LCNo: string = '';
-  CR_Id:any;
-  tableVisible:boolean = false;
-  detailsTableData:any;
-
+  CR_Id: any;
+  tableVisible: boolean = false;
+  detailsTableData: any;
 
   showPaginator = false;
   insertPermissions: boolean = true;
@@ -62,8 +62,9 @@ pageIndex = 1;
   getDataModel: GetDataModel = new GetDataModel();
   detailsData: any;
   isDetailsVisible: boolean = false;
+  exportId: any;
 
-  ExportNoList:any = [];
+  ExportNoList: any = [];
 
   constructor(
     private fb: FormBuilder,
@@ -73,11 +74,13 @@ pageIndex = 1;
     private masterEntryService: MasterEntryService,
     private activeLink: ActivatedRoute,
     private title: Title,
-    private getDataService:GetDataService
+    private getDataService: GetDataService,
+    private reportService: ReportService
   ) {}
   ngOnInit(): void {
-
-    var permissions = this.gs.CheckUserPermission("On the Way Raw Material List");
+    var permissions = this.gs.CheckUserPermission(
+      'On the Way Raw Material List'
+    );
     this.insertPermissions = permissions.insertPermissions;
     this.updatePermissions = permissions.updatePermissions;
     this.deletePermissions = permissions.deletePermissions;
@@ -87,7 +90,7 @@ pageIndex = 1;
       window.location.href = 'dashboard';
     }
     this.loadPageData();
-    
+
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
     this.title.setTitle('On the Way Raw Material List');
@@ -96,24 +99,24 @@ pageIndex = 1;
   }
 
   loadPageData(): void {
-      var ProcedureData = {
-        procedureName: '[usp_ExportRM_Report_GetInitialData]',
-        parameters: {},
-      };
-  
-      this.getDataService.GetInitialData(ProcedureData).subscribe({
-        next: (results) => {
-          if (results.status) {
-            this.ExportNoList = JSON.parse(results.data).Tables1;
-          } else if (results.msg == 'Invalid Token') {
-            swal.fire('Session Expierd!', 'Please Login Again.', 'info');
-            this.gs.Logout();
-          } else {
-          }
-        },
-        error: (err) => {},
-      });
-    }
+    var ProcedureData = {
+      procedureName: '[usp_ExportRM_Report_GetInitialData]',
+      parameters: {},
+    };
+
+    this.getDataService.GetInitialData(ProcedureData).subscribe({
+      next: (results) => {
+        if (results.status) {
+          this.ExportNoList = JSON.parse(results.data).Tables1;
+        } else if (results.msg == 'Invalid Token') {
+          swal.fire('Session Expierd!', 'Please Login Again.', 'info');
+          this.gs.Logout();
+        } else {
+        }
+      },
+      error: (err) => {},
+    });
+  }
 
   initForm(): void {
     this.SearchForm = this.fb.group({
@@ -122,16 +125,16 @@ pageIndex = 1;
       exportNo: [''],
     });
   }
-  Search() {    
+  Search() {
     var fromDate = this.SearchForm.value.fromDate;
-    var toDate = this.SearchForm.value.toDate;    
-    var ExportNo = this.SearchForm.value.exportNo;    
-    
+    var toDate = this.SearchForm.value.toDate;
+    var ExportNo = this.SearchForm.value.exportNo;
+
     let param = new GetDataModel();
     param.procedureName = '[usp_ExportRM_Report]';
     param.parameters = {
       FromDate: fromDate,
-      ToDate: toDate,      
+      ToDate: toDate,
       ExportNo: ExportNo,
       PageIndex: this.pageIndex,
       PageSize: this.pageSize,
@@ -139,7 +142,6 @@ pageIndex = 1;
 
     this.masterEntryService.GetInitialData(param).subscribe({
       next: (results) => {
-
         if (results.status) {
           this.tableData = [];
           this.tableVisible = true;
@@ -153,7 +155,7 @@ pageIndex = 1;
 
   DeleteData(item: any) {
     console.log(item);
-    
+
     swal
       .fire({
         title: 'Wait!',
@@ -174,7 +176,6 @@ pageIndex = 1;
 
           this.masterEntryService.GetInitialData(param).subscribe({
             next: (results: any) => {
-
               if (results.status) {
                 var effectedRows = JSON.parse(results.data).Tables1;
                 if (effectedRows[0].AffectedRows > 0) {
@@ -209,25 +210,69 @@ pageIndex = 1;
     this.Search();
   }
 
-  viewDetails(table:any){
-      this.isDetailsVisible = true;
-      
-      let param = new GetDataModel();
-      param.procedureName = '[usp_ExportRM_Details]';
-      param.parameters = {
-        ExportMasterID: table.ExportMasterID,     
-      };
+  viewDetails(table: any) {
+    this.isDetailsVisible = true;
+    this.exportId = table.ExportMasterID;
+    let param = new GetDataModel();
+    param.procedureName = '[usp_ExportRM_Details]';
+    param.parameters = {
+      ExportMasterID: table.ExportMasterID,
+    };
 
     this.masterEntryService.GetInitialData(param).subscribe({
       next: (results) => {
-        
         if (results.status) {
           let tables = JSON.parse(results.data);
-          
-          this.detailsData = tables.Tables1[0]; 
+
+          this.detailsData = tables.Tables1[0];
           this.detailsTableData = tables.Tables2;
         }
-      }
+      },
     });
-    }
+  }
+
+  printDialog() {
+    swal.fire({
+      title: 'What you want to do?',
+      icon: 'question',
+      html: `
+                        <div style="display: flex; gap: 10px; justify-content: center;">
+                          <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
+                            <i class="fa fa-file-excel"></i> Excel
+                          </button>
+                          <button id="wordBtn" class="btn btn-info" style="padding: 8px 16px;">
+                            <i class="fa fa-file-word"></i> Word
+                          </button>
+                          <button id="pdfBtn" class="btn btn-danger" style="padding: 8px 16px;">
+                            <i class="fa fa-file-pdf"></i> PDF
+                          </button>
+                        </div>
+                      `,
+      showConfirmButton: false,
+      didOpen: () => {
+        const excelBtn = document.getElementById('excelBtn');
+        const wordBtn = document.getElementById('wordBtn');
+        const pdfBtn = document.getElementById('pdfBtn');
+
+        var item = {
+          id: this.exportId,
+        };
+
+        excelBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintExportReport(item, 'excel', 'F');
+        });
+
+        wordBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintExportReport(item, 'word', 'F');
+        });
+
+        pdfBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintExportReport(item, 'pdf', 'F');
+        });
+      },
+    });
+  }
 }

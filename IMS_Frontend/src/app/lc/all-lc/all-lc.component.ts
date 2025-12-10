@@ -14,6 +14,7 @@ import { GetDataModel } from 'src/app/models/GetDataModel';
 import { LC } from 'src/app/models/LCModel';
 import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
 import { DoubleMasterEntryModel } from 'src/app/models/DoubleMasterEntryModel';
+import { ReportService } from 'src/app/services/reportService/report-service.service';
 
 @Component({
   selector: 'app-all-lc',
@@ -64,9 +65,19 @@ export class AllLcComponent {
     private gs: GlobalServiceService,
     private pagesComponent: PagesComponent,
     private masterEntryService: MasterEntryService,
-    private title: Title
+    private title: Title,
+    private reportService: ReportService,
   ) {}
   ngOnInit(): void {
+    
+    var permissions = this.gs.CheckUserPermission(
+      'All LC'
+    );
+    this.insertPermissions = permissions.insertPermissions;
+    this.updatePermissions = permissions.updatePermissions;
+    this.deletePermissions = permissions.deletePermissions;
+    this.printPermissions = permissions.printPermissions;
+
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
     this.title.setTitle('All LC');
@@ -100,6 +111,16 @@ export class AllLcComponent {
     });
   }
   Search() {
+    // Convert dates from dd/mm/yyyy to mm/dd/yyyy
+    const convertDateFormat = (dateStr: string): string => {
+      if (!dateStr) return '';
+      const parts = dateStr.split('/');
+      if (parts.length === 3) {
+        return `${parts[1]}/${parts[0]}/${parts[2]}`;
+      }
+      return dateStr;
+    };
+
     var finput = new Date();
     var fromDate = this.SearchForm.value.fromDate;
     if (this.SearchForm.value.fromDate instanceof Date) {
@@ -110,6 +131,7 @@ export class AllLcComponent {
 
       fromDate = `${fday}/${fmonth}/${fyear}`;
     }
+    fromDate = convertDateFormat(fromDate);
 
     var tinput = new Date();
     var toDate = this.SearchForm.value.toDate;
@@ -122,6 +144,7 @@ export class AllLcComponent {
 
       toDate = `${tday}/${tmonth}/${tyear}`;
     }
+    toDate = convertDateFormat(toDate);
 
     let param = new GetDataModel();
     param.procedureName = '[usp_LC_List]';
@@ -209,4 +232,64 @@ export class AllLcComponent {
     this.isDetailsVisible = true;
     this.detailsData = table;
   }
+
+  printLC() {
+      swal.fire({
+        title: 'What you want to do?',
+        icon: 'question',
+        html: `
+          <div style="display: flex; gap: 10px; justify-content: center;">
+            <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
+              <i class="fa fa-file-excel"></i> Excel
+            </button>
+            <button id="wordBtn" class="btn btn-info" style="padding: 8px 16px;">
+              <i class="fa fa-file-word"></i> Word
+            </button>
+            <button id="pdfBtn" class="btn btn-danger" style="padding: 8px 16px;">
+              <i class="fa fa-file-pdf"></i> PDF
+            </button>
+          </div>
+        `,
+        showConfirmButton: false,
+        didOpen: () => {
+          const excelBtn = document.getElementById('excelBtn');
+          const wordBtn = document.getElementById('wordBtn');
+          const pdfBtn = document.getElementById('pdfBtn');
+  
+          // Convert dates from dd/mm/yyyy to mm/dd/yyyy
+          const convertDateFormat = (dateStr: string): string => {
+            if (!dateStr) return '';
+            const parts = dateStr.split('/');
+            if (parts.length === 3) {
+              return `${parts[1]}/${parts[0]}/${parts[2]}`;
+            }
+            return dateStr;
+          };
+  
+          var item = {
+            fromDate: convertDateFormat(this.SearchForm.value.fromDate),
+            toDate: convertDateFormat(this.SearchForm.value.toDate),
+            requestStatus: this.SearchForm.value.applicationType
+          };
+  
+          excelBtn?.addEventListener('click', () => {
+            swal.close();
+            console.log('User selected: Excel format');
+            this.reportService.PrintLCReport(item, 'excel', 'F');
+          });
+  
+          wordBtn?.addEventListener('click', () => {
+            swal.close();
+            console.log('User selected: Word format');
+            this.reportService.PrintLCReport(item, 'word', 'F');
+          });
+  
+          pdfBtn?.addEventListener('click', () => {
+            swal.close();
+            console.log('User selected: PDF format');
+            this.reportService.PrintLCReport(item, 'pdf', 'T');
+          });
+        },
+      });
+    }
 }

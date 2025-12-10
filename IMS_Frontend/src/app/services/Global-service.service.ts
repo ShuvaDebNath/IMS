@@ -136,17 +136,14 @@ export class GlobalServiceService {
   }
 
   public CheckUserPermission(menuName: string) {
-    // Define shape of your menu structure
     type Button = { ButtonName: string };
 
     interface MenuItem {
       SubMenuName?: string;
-      ButtonName?: string;
-      Buttons?: Button[];
+      ButtonName?: string | Button[] | Button;
       Children?: MenuItem[] | string;
     }
 
-    // Permission object
     const permissions = {
       insertPermissions: false,
       updatePermissions: false,
@@ -154,7 +151,7 @@ export class GlobalServiceService {
       printPermissions: false,
     };
 
-    // Load menu data
+    // Load menu from local storage
     const menuData = window.localStorage.getItem('UserMenuWithPermission');
 
     if (!menuData) {
@@ -165,92 +162,92 @@ export class GlobalServiceService {
     let menuJson: MenuItem[] = [];
     try {
       menuJson = JSON.parse(menuData);
-    } catch (err) {
-      console.error('Invalid menu JSON:', err);
+    } catch {
       this.Logout();
       return permissions;
     }
 
     const buttonPermissions: string[] = [];
 
-    // Recursive function to search all levels
-    const findMenuRecursively = (menus: MenuItem[]) => {
-      for (const menuItem of menus) {
-        // Parse Children if it's a string
-        if (typeof menuItem.Children === 'string') {
-          try {
-            menuItem.Children = JSON.parse(menuItem.Children) as MenuItem[];
-          } catch {
-            menuItem.Children = [];
-          }
+    // -----------------------------
+    // 🔥 Safe JSON parser helper
+    // -----------------------------
+    const safeParse = (value: any) => {
+      if (typeof value === 'string') {
+        try {
+          return JSON.parse(value);
+        } catch {
+          return null;
         }
+      }
+      return value;
+    };
 
-        // Match target menu name
-        if (menuItem.SubMenuName === menuName) {
-          // if (typeof menuItem.ButtonName=='string') {
-          //   var arr = JSON.parse(menuItem.ButtonName);
-          // }
-          // else if (typeof menuItem.ButtonName === 'object' && menuItem.ButtonName !== null) {
+    // -----------------------------
+    // 🔥 Recursive Menu Finder
+    // -----------------------------
+    const findMenuRecursively = (menus: MenuItem[]) => {
+      for (const item of menus) {
+        // Normalize Children (may be string or array)
+        item.Children = safeParse(item.Children) || [];
 
-          // }
+        // 🔥 MATCH MENU
+        if (item.SubMenuName === menuName) {
+          const btnData = safeParse(item.ButtonName);
 
-          if (menuItem.ButtonName) {
-            buttonPermissions.push(menuItem.ButtonName);
+          // CASE 1: ButtonName = string (single name)
+          if (typeof btnData === 'string') {
+            buttonPermissions.push(btnData);
           }
 
-          //console.log(menuItem,menuItem.ButtonName,Array.isArray(menuItem.ButtonName));
-          if (menuItem.ButtonName && Array.isArray(menuItem.ButtonName)) {
-            for (const btn of menuItem.ButtonName) {
-              //console.log(btn,btn.ButtonName);
-
-              if (btn && btn.ButtonName) {
+          // CASE 2: ButtonName = array (your real-case scenario)
+          else if (Array.isArray(btnData)) {
+            for (const btn of btnData) {
+              if (btn?.ButtonName) {
                 buttonPermissions.push(btn.ButtonName);
               }
             }
           }
-        }
-        // console.log(menuItem.Children,Array.isArray(menuItem.Children));
-        // Go deeper recursively
-        if (menuItem.Children && Array.isArray(menuItem.Children)) {
-          if (menuItem.Children.length == 0) {
-            if (menuItem.SubMenuName == menuName) {
-              if (typeof menuItem.ButtonName == 'string') {
-                var arr = JSON.parse(menuItem.ButtonName);
-                for(var item of arr){   
-                  buttonPermissions.push(item.ButtonName);                  
-                }
-                continue
-              }
+
+          // CASE 3: ButtonName = object
+          else if (btnData && typeof btnData === 'object') {
+            if (btnData.ButtonName) {
+              buttonPermissions.push(btnData.ButtonName);
             }
           }
-          findMenuRecursively(menuItem.Children);
+        }
+
+        // Recurse into children
+        if (Array.isArray(item.Children)) {
+          findMenuRecursively(item.Children);
         }
       }
     };
 
-    // Start recursion
+    // Start recursive search
     findMenuRecursively(menuJson);
 
-    // If not found, redirect to dashboard
+    // No permission found
     if (buttonPermissions.length === 0) {
-      window.location.href = 'dashboard';
       return permissions;
     }
 
-    // Assign permissions
-    for (const btnName of buttonPermissions) {
-      switch (btnName) {
-        case 'Delete':
-          permissions.deletePermissions = true;
-          break;
-        case 'View':
-          permissions.printPermissions = true;
-          break;
+    // -----------------------------
+    // 🔥 Assign final permissions
+    // -----------------------------
+    for (const btn of buttonPermissions) {
+      switch (btn) {
         case 'Insert':
           permissions.insertPermissions = true;
           break;
         case 'Update':
           permissions.updatePermissions = true;
+          break;
+        case 'Delete':
+          permissions.deletePermissions = true;
+          break;
+        case 'View':
+          permissions.printPermissions = true;
           break;
       }
     }

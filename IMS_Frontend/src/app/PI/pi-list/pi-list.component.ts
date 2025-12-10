@@ -323,6 +323,7 @@ OpenSpecialApprove(Id:number){
 
     getRole = this.gs.getSessionData('roleId');
     var userID = this.gs.getSessionData('userId');
+
       const procedureData = {
         procedureName: 'usp_ProformaInvoice_GetDataDataTable',
         parameters: {
@@ -340,6 +341,8 @@ OpenSpecialApprove(Id:number){
           PageSize    : this.rows
         }
       };
+
+     console.log(procedureData);
      
       this.getDataService.GetInitialData(procedureData).subscribe({
         next: (results) => {
@@ -347,6 +350,7 @@ OpenSpecialApprove(Id:number){
             this.DataTable = JSON.parse(results.data).Tables1;
             this.totalRecords=this.DataTable[0]?.TotalCount;  
             this.isLoading = false;
+             console.log(this.DataTable);
 
           } else if (results.msg == 'Invalid Token') {
             Swal.fire('Session Expired!', 'Please Login Again.', 'info');

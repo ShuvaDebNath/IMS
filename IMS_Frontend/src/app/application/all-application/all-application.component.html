@@ -1,0 +1,290 @@
+<div class="m-2 p-2">
+  <div class="card card-default">
+    <div class="card-header theme-bg">
+      <div class="row">
+        <h2 class="">All Application</h2>
+      </div>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="SearchForm">
+        <div class="row align-items-center">
+          <div class="col-3">
+            <label class="control-label" for="inlineFormInputGroup"
+              >From Date</label
+            >
+            <div class="input-group">
+              <div class="input-group-sm input-group-prepend">
+                <div
+                  class="input-group-text theme-btn"
+                  (click)="dpfrom.toggle()"
+                >
+                  <i class="fas fa-calendar"></i>
+                </div>
+              </div>
+              <input
+                type="text"
+                autocomplete="off"
+                formControlName="fromDate"
+                [bsConfig]="{
+                  dateInputFormat: 'DD/MM/YYYY',
+                  containerClass: 'theme-bg'
+                }"
+                class="form-control bg-white"
+                id="fromdate"
+                name="fromdate"
+                placeholder="From Date"
+                #dpfrom="bsDatepicker"
+                bsDatepicker
+              />
+            </div>
+          </div>
+          <div class="col-3">
+            <label class="control-label" for="inlineFormInputGroup"
+              >To Date</label
+            >
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <div class="input-group-text theme-btn" (click)="dpto.toggle()">
+                  <i class="fas fa-calendar"></i>
+                </div>
+              </div>
+              <input
+                type="text"
+                autocomplete="off"
+                formControlName="toDate"
+                [bsConfig]="{
+                  dateInputFormat: 'DD/MM/YYYY',
+                  containerClass: 'theme-green'
+                }"
+                class="form-control bg-white"
+                id="todate"
+                name="todate"
+                placeholder="To Date"
+                #dpto="bsDatepicker"
+                bsDatepicker
+              />
+            </div>
+          </div>
+          <div class="col-3">
+            <label class="control-label" for="inlineFormInputGroup"
+              >Application Type</label
+            >
+            <p-dropdown
+              [style]="{ width: '100%' }"
+              class="p-0"
+              [options]="FormType"
+              optionLabel="text"
+              [filter]="true"
+              filterBy="text"
+              [showClear]="true"
+              styleClass="listBottom"
+              placeholder="Please Select"
+              optionValue="value"
+              formControlName="applicationType"
+            >
+              <ng-template let-FormType pTemplate="item">
+                <div class="flex align-items-center gap-2">
+                  <div>{{ FormType.text }}</div>
+                </div>
+              </ng-template>
+            </p-dropdown>
+          </div>
+          <div class="col-3">
+            <button
+              title="Search"
+              type="button"
+              (click)="Search()"
+              class="btn btn-sm theme-btn mt-4 p-1"
+            >
+              <i class="fas fa-search"></i>&nbsp;Search
+            </button>
+          </div>
+        </div>
+      </form>
+      <hr />
+      <div class="row mb-3" *ngIf="tableData!=null">
+        <div class="col-md-12">
+          <button 
+            class="btn theme-btn px-4 py-2" 
+            (click)="printApplication()"
+            title="Export application data to Excel, Word, or PDF"
+          >
+            <i class="fas fa-download"></i>&nbsp; Export
+          </button>
+        </div>
+      </div>
+      <p-table
+        #dt
+        [value]="tableData"
+        [paginator]="true"
+        [rows]="10"
+        [responsive]="true"
+        [showCurrentPageReport]="true"
+        [globalFilterFields]="[
+          'POno',
+          'CustomerName',
+          'FormTypeName',
+          'Date',
+          'PiNo',
+          'ArticleNo',
+          'ActualArticleNo',
+          'Colour',
+          'Width',
+          'Unit',
+          'Quantity',
+          'UnitPrice',
+          'UnitCommission',
+          'PaymentTerms',
+          'DeliveredQuantity',
+          'ApplyDeliveryQty',
+          'Warehouse',
+          'Comments',
+          'UserName',
+          'Status'
+        ]"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      >
+        <ng-template pTemplate="caption">
+          <div class="table-toolbar">
+            <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                placeholder="Global Search"
+              />
+            </span>
+          </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="">SL</th>
+            <th class="">AP No</th>
+            <th class="">Customer</th>
+            <th class="">Form Type</th>
+            <th class="">Date</th>
+            <th class="">PI No</th>
+            <th class="">Article</th>
+            <th class="">A. Article</th>
+            <th class="">Color</th>
+            <th class="">Width</th>
+            <th class="">Unit</th>
+            <th class="">Quantity</th>
+            <th class="">U. Price</th>
+            <th class="">U. Com.</th>
+            <th class="">Payment Terms</th>
+            <th class="">Delivered Qty</th>
+            <th class="">Applied Qty.</th>
+            <th class="">Warehouse</th>
+            <th class="">Comment</th>
+            <th class="">Status</th>
+            <th class="">Generated By</th>
+            <th class="" *ngIf="allPersmissions">Action</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-table let-i="rowIndex">
+          <tr>
+            <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
+            <td class="text-center align-middle">{{ table.POno }}</td>
+            <td class="text-center align-middle">{{ table.CustomerName }}</td>
+            <td class="text-center align-middle">{{ table.FormTypeName }}</td>
+            <td class="text-center align-middle">{{ table.Date }}</td>
+            <td class="text-center align-middle">{{ table.PiNo }}</td>
+            <td class="text-center align-middle">{{ table.ArticleNo }}</td>
+            <td class="text-center align-middle">
+              {{ table.ActualArticleNo }}
+            </td>
+            <td class="text-center align-middle">{{ table.Colour }}</td>
+            <td class="text-center align-middle">{{ table.Width }}</td>
+            <td class="text-center align-middle">{{ table.Unit }}</td>
+            <td class="text-center align-middle">{{ table.Quantity }}</td>
+            <td class="text-center align-middle">{{ table.UnitPrice }}</td>
+            <td class="text-center align-middle">{{ table.UnitCommission }}</td>
+            <td class="text-center align-middle">{{ table.PaymentTerms }}</td>
+            <td class="text-center align-middle">
+              {{ table.DeliveredQuantity }}
+            </td>
+            <td class="text-center align-middle">
+              {{ table.ApplyDeliveryQty }}
+            </td>
+            <td class="text-center align-middle">{{ table.Warehouse }}</td>
+            <td class="text-center align-middle">{{ table.Comments }}</td>
+            <td class="text-center align-middle">{{ table.Status }}</td>
+            <td class="text-center align-middle">{{ table.UserName }}</td>
+            <td class="text-center align-middle p-1 m-0">
+              <div class="d-flex justify-content-center gap-1">
+                <a
+                  *ngIf="updatePermissions"
+                  class="btn theme-btn-edit"
+                  target="_blank"
+                  title="Vide Details"
+                  [routerLink]="['/approve-application']"
+                  [queryParams]="{ Id: table.Id }"
+                  ><i class="fa fa-eye"></i
+                ></a>
+
+                <a
+                  *ngIf="updatePermissions && table.FormTypeName=='Special Delivery'"
+                  class="btn theme-btn-edit"
+                  target="_blank"
+                  title="Edit"
+                  [routerLink]="['/generate-application']"
+                  [queryParams]="{ Id: table.Id }"
+                  ><i class="fa fa-edit"></i
+                ></a>
+                <a
+                  *ngIf="updatePermissions && table.FormTypeName=='PI Amendment Application'"
+                  class="btn theme-btn-edit"
+                  target="_blank"
+                  title="Edit"
+                  [routerLink]="['/pi-amendment-application']"
+                  [queryParams]="{ Id: table.Id }"
+                  ><i class="fa fa-edit"></i
+                ></a>
+                <a
+                  *ngIf="updatePermissions && table.FormTypeName=='Cancel PI Application'"
+                  class="btn theme-btn-edit"
+                  target="_blank"
+                  title="Edit"
+                  [routerLink]="['/cancel-pi-application']"
+                  [queryParams]="{ Id: table.Id }"
+                  ><i class="fa fa-edit"></i
+                ></a>
+                <a
+                  *ngIf="updatePermissions && table.FormTypeName=='Exchange Goods Application'"
+                  class="btn theme-btn-edit"
+                  target="_blank"
+                  title="Edit"
+                  [routerLink]="['/exchange-goods-application']"
+                  [queryParams]="{ Id: table.Id }"
+                  ><i class="fa fa-edit"></i
+                ></a>
+                <a
+                  *ngIf="updatePermissions && table.FormTypeName=='Return Goods Application'"
+                  class="btn theme-btn-edit"
+                  target="_blank"
+                  title="Edit"
+                  [routerLink]="['/return-goods-application']"
+                  [queryParams]="{ Id: table.Id }"
+                  ><i class="fa fa-edit"></i
+                ></a>
+
+                <button
+                  *ngIf="deletePermissions"
+                  class="btn theme-btn-delete"
+                  title="Delete"
+                  (click)="DeleteData(table)"
+                >
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

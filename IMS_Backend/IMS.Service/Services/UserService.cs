@@ -71,175 +71,23 @@ namespace Boilerplate.Service.Services
             return result;
         }
 
-        public async Task<bool> SaveUser(UserMenuAssign data, string currentUserEmail)
+        public async Task<bool> SaveUser(UserCreate data, string UserName)
         {
-            UserCreate model = data.Data;
-            List<MenuPerssion> details = data.DetailsData;
 
-            #region menu configure code
-            string menu = "";
-            foreach (MenuPerssion d in details)
-            {
-                if (d.selected == true)
-                {
-                    menu += d.MenuId + ",";
-                }
-            }
-            menu = menu.Substring(0, (menu.Length - 1));
-            #endregion
-
-            int AutoId = 0;
-
-            var dt = await _createUserRepository.GetUserAutoId();
-            AutoId = Convert.ToInt32(dt.Rows[0]["AutoId"].ToString());
-
-            string AutoIdGen = ""; string Email = "";
-            string fullname = "";
-            AutoIdGen = model.FirstName + "-0" + AutoId;
-            Email = AutoIdGen + "@gmail.com";
-            fullname = model.FirstName + " " + model.LastName;
-
-            var UserId = Guid.NewGuid().ToString();
-
-            model.Password = "Maliha00";
+            string password  = data.Password;
 
 
-            Random rnd = new Random();
-            int pin = rnd.Next(1000, 9999);
+            var passwordHash = HelperExtention.Hash(password);
+            data.Password = passwordHash;
 
-
-            AspNetUserDto asp = new AspNetUserDto
-            {
-                Id = UserId,
-                Email = Email,
-                EmailConfirmed = true,
-                PasswordHash = HelperExtention.Hash(model.Password),
-                UserName = AutoIdGen,
-                PasswordPin = pin.ToString("0000"),
-            };
-
-            UserControlDto tbluser = new UserControlDto
-            {
-                UserId = Guid.NewGuid().ToString(),
-                Id = asp.Id,
-                FullName = fullname,
-                UserTypeId = model.UserTypeId,
-                MenuId = menu,
-                MakeBy = currentUserEmail,
-                MakeDate = DateTime.Now,
-                isActive = true,
-                DashboardPreview = model.DashboardPreview,
-
-            };
-
-            var pagewiseAction = new List<PagewiseActionDto>();
-
-            foreach (MenuPerssion d in details)
-            {
-                string menuPermission = "";
-                PagewiseActionDto obj = new PagewiseActionDto();
-
-                if (d.selected == true && d.ysnParent == false)
-                {
-                    obj.ActionID = Guid.NewGuid().ToString();
-                    obj.UserId = tbluser.UserId;
-                    obj.MenuId = d.MenuId;
-
-                    if (d.insert == true)
-                    {
-                        menuPermission += 1 + ",";
-                    }
-
-                    if (d.update == true)
-                    {
-                        menuPermission += 2 + ",";
-                    }
-
-                    if (d.delete == true)
-                    {
-                        menuPermission += 3 + ",";
-                    }
-
-                    if (d.approve == true)
-                    {
-                        menuPermission += 4 + ",";
-                    }
-
-                    if (menuPermission == null || menuPermission == "")
-                        menuPermission = "";
-                    else
-                        menuPermission = menuPermission.Substring(0, (menuPermission.Length - 1));
-
-                    obj.ActionPermission = menuPermission;
-                    pagewiseAction.Add(obj);
-                }
-            }
-
-            var result = await _createUserRepository.SaveUser(asp, tbluser, pagewiseAction);
+            var result = await _createUserRepository.SaveUser(data, UserName);
             return result;
         }
 
-        public async Task<bool> EditUser(UserMenuAssign data, string currentUserEmail)
+        public async Task<bool> EditUser(UserCreate model, string AuthUserName)
         {
-            UserCreate model = data.Data;
-            List<MenuPerssion> details = data.DetailsData;
 
-            #region menu configure code
-            string menu = "";
-            foreach (MenuPerssion d in details)
-            {
-                if (d.selected == true)
-                {
-                    menu += d.MenuId + ",";
-                }
-            }
-            menu = menu.Substring(0, (menu.Length - 1));
-            #endregion
-
-            var pagewiseAction = new List<PagewiseActionDto>();
-
-            foreach (MenuPerssion d in details)
-            {
-                string menuPermission = "";
-                PagewiseActionDto obj = new PagewiseActionDto();
-
-                if (d.selected == true && d.ysnParent == false)
-                {
-                    obj.ActionID = Guid.NewGuid().ToString();
-                    obj.UserId = model.UserId;
-                    obj.MenuId = d.MenuId;
-
-                    if (d.insert == true)
-                    {
-                        menuPermission += 1 + ",";
-                    }
-
-                    if (d.update == true)
-                    {
-                        menuPermission += 2 + ",";
-                    }
-
-                    if (d.delete == true)
-                    {
-                        menuPermission += 3 + ",";
-                    }
-
-                    if (d.approve == true)
-                    {
-                        menuPermission += 4 + ",";
-                    }
-
-                    if (menuPermission == null || menuPermission == "")
-                        menuPermission = "";
-                    else
-                        menuPermission = menuPermission.Substring(0, (menuPermission.Length - 1));
-
-                    obj.ActionPermission = menuPermission;
-                    pagewiseAction.Add(obj);
-                }
-            }
-
-            var result = await _createUserRepository.EditUser(menu, model, pagewiseAction);
+            var result = await _createUserRepository.EditUser( model, AuthUserName);
             return result;
         }
 

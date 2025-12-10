@@ -11,10 +11,14 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using MailKit.Net.Smtp;
+using MimeKit;
+using System.Security.Policy;
 
 namespace Boilerplate.Repository.Repositories
 {
@@ -23,11 +27,17 @@ namespace Boilerplate.Repository.Repositories
         private SqlConnection conn;
         private SqlCommand cmd;
         private readonly IDoubleMasterEntryPostInsertActionFactory _postInsertActionFactory;
+        private string hostMail = "";
+        private string appPass = "";
+        private string host = "";
         public DoubleMasterEntryRepository(
             IConfiguration configuration,
             IDoubleMasterEntryPostInsertActionFactory postInsertActionFactory) : base(configuration)
         {
             _postInsertActionFactory = postInsertActionFactory;
+            hostMail = configuration["Smtp:User"];
+            appPass = configuration["Smtp:Pass"];
+            host = configuration["Smtp:Host"];
         }
 
         public async Task<int> DeleteData(DoubleMasterEntryModel model)
@@ -90,6 +100,42 @@ namespace Boilerplate.Repository.Repositories
             return rowAffect > 0 ? 1 : 0;
         }
 
+        public async Task<int> SendMail(DoubleMasterEntryModel model, string authUserName)
+        {
+            try
+            {
+
+                var email = new MimeMessage();
+                var data = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(model.Data.ToString());
+                dynamic mainJSON = Newtonsoft.Json.JsonConvert.DeserializeObject(model.Data.ToString());
+                email.To.Add(MailboxAddress.Parse(mainJSON.Mail_TO.Value));
+
+                email.From.Add(MailboxAddress.Parse(hostMail));
+                email.Cc.Add(MailboxAddress.Parse(mainJSON.Mail_CC.Value));
+                email.Subject = mainJSON.Subject.Value;
+
+                var messageBody = mainJSON.MailBody.Value;
+
+
+                email.Body = new TextPart("html")
+                {
+                    Text = messageBody
+                };
+
+                using var client = new MailKit.Net.Smtp.SmtpClient();
+                client.Connect(host, 587, MailKit.Security.SecureSocketOptions.StartTls);
+                client.Authenticate(hostMail, appPass);  // app password
+                var status = client.Send(email);
+                client.Disconnect(true);
+
+                return 1;
+            }
+            catch(Exception ex)
+            {
+                return 0;
+            }
+            
+        }
         public async Task<int> SaveData(DoubleMasterEntryModel model, string authUserName)
         {
             int rowAffect = 0;
@@ -311,8 +357,8 @@ namespace Boilerplate.Repository.Repositories
             string? childTablename = model.TableNameChild;
 
             string? strdata = Convert.ToString(model.DetailsData);
-            var details = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(strdata);
 
+            var details = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(strdata);
 
             foreach (var citem in (IEnumerable<dynamic>)details)
             {
@@ -461,7 +507,7 @@ namespace Boilerplate.Repository.Repositories
                 await cmd.Transaction.CommitAsync();
                 rowAffect = newPrimaryKey;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 await cmd.Transaction.RollbackAsync();
                 throw;

@@ -10,6 +10,7 @@ import { GlobalServiceService } from 'src/app/services/Global-service.service';
 import { Title } from '@angular/platform-browser';
 import { ButtonModule } from 'primeng/button';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
+import { ReportService } from 'src/app/services/reportService/report-service.service';
 
 @Component({
   standalone: true,
@@ -45,7 +46,8 @@ export class RawMaterialStockComponent {
     private getDataService: GetDataService,
     private masterEntyService: MasterEntryService,
     private gs: GlobalServiceService,
-    private title: Title
+    private title: Title,
+    private reportService:ReportService
   ) {}
 
   ngOnInit(): void {
@@ -169,4 +171,55 @@ export class RawMaterialStockComponent {
          }
        });
   }
+
+  PrintStock() {
+        swal.fire({
+          title: 'What you want to do?',
+          icon: 'question',
+          html: `
+            <div style="display: flex; gap: 10px; justify-content: center;">
+              <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
+                <i class="fa fa-file-excel"></i> Excel
+              </button>
+              <button id="wordBtn" class="btn btn-info" style="padding: 8px 16px;">
+                <i class="fa fa-file-word"></i> Word
+              </button>
+              <button id="pdfBtn" class="btn btn-danger" style="padding: 8px 16px;">
+                <i class="fa fa-file-pdf"></i> PDF
+              </button>
+            </div>
+          `,
+          showConfirmButton: false,
+          didOpen: () => {
+            const excelBtn = document.getElementById('excelBtn');
+            const wordBtn = document.getElementById('wordBtn');
+            const pdfBtn = document.getElementById('pdfBtn');
+    
+            // Convert dates from dd/mm/yyyy to mm/dd/yyyy
+           
+    
+            var item = {
+              
+            };
+    
+            excelBtn?.addEventListener('click', () => {
+              swal.close();
+              console.log('User selected: Excel format');
+              this.reportService.PrintRMStock(item, 'excel', 'F');
+            });
+    
+            wordBtn?.addEventListener('click', () => {
+              swal.close();
+              console.log('User selected: Word format');
+              this.reportService.PrintRMStock(item, 'word', 'F');
+            });
+    
+            pdfBtn?.addEventListener('click', () => {
+              swal.close();
+              console.log('User selected: PDF format');
+              this.reportService.PrintRMStock(item, 'pdf', 'T');
+            });
+          },
+        });
+      }
 }

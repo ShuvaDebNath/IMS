@@ -62,6 +62,26 @@ public class ReportService : IReportService
         }
     }
 
+
+    public async Task<DataSet> TaskDetailsReport(string fromDate, string toDate)
+    {
+        try
+        {
+            ReportsParams param = new ReportsParams
+            {
+                fromDate = fromDate,
+                toDate = toDate
+
+            };
+
+            return await _reportRepository.TaskDetailsReport(param);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
     public async Task<DataSet> CommercialInvoiceReports(string commercialInvoiceNo, string reportType)
     {
         try
@@ -91,6 +111,241 @@ public class ReportService : IReportService
             };
 
             return await _reportRepository.DeliveryChallanReport(param);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+    public async Task<DataSet> ApplicationReport(string fromDate, string toDate, string applicaitonType)
+    {
+        try
+        {
+            ApplicaitonParams param = new ApplicaitonParams
+            {
+                fromDate = fromDate,
+                toDate = toDate,
+                applicationType = applicaitonType,
+
+            };
+            return await _reportRepository.ApplicationReport(param);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+    public async Task<DataSet> LCReport(string fromDate, string toDate, string LCNo)
+    {
+        try
+        {
+            LCParams param = new LCParams
+            {
+                fromDate = fromDate,
+                toDate = toDate,
+                LCNo = LCNo,
+
+            };
+            return await _reportRepository.LCReport(param);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+    public async Task<DataSet> CashReceiveReport(string fromDate, string toDate)
+    {
+        try
+        {
+            LCParams param = new LCParams
+            {
+                fromDate = fromDate,
+                toDate = toDate,
+
+            };
+            return await _reportRepository.CashReceiveReport(param);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+    public async Task<DataSet> PIAmendmentReport(string id)
+    {
+        try
+        {
+            
+            return await _reportRepository.PIAmendmentReport(id);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+    public async Task<DataSet> PIOtherReport(string id)
+    {
+        try
+        {
+
+            return await _reportRepository.PIOtherReport(id);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+    public async Task<DataSet> SalesContractReport(string id)
+    {
+        try
+        {
+
+            return await _reportRepository.SalesContractReport(id);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+    public async Task<DataSet> CustomerReport(string Superior_Id, string Customer_Id, string Status, string SentBy)
+    {
+        try
+        {
+            CustomerParams param = new CustomerParams
+            {
+                Superior_Id = Superior_Id,
+                Customer_Id = Customer_Id,
+                Status = Status,
+                SentBy = SentBy,
+
+            };
+            return await _reportRepository.CustomerReport(param);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+    public async Task<DataSet> BuyerReport(string fromDate, string toDate, string Superior_Id, string Customer_Id, string Status, string SentBy)
+    {
+        try
+        {
+            BuyerParams param = new BuyerParams
+            {
+                FromDate = fromDate,
+                ToDate = toDate,
+                Superior_Id = Superior_Id,
+                Customer_Id = Customer_Id,
+                Status = Status,
+                SentBy = SentBy,
+
+            };
+            return await _reportRepository.BuyerReport(param);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+    public async Task<DataSet> TaskReport(string id)
+    {
+        try
+        {
+
+            return await _reportRepository.TaskReport(id);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+    public async Task<DataSet> ExportReport(string id)
+    {
+        try
+        {
+
+            return await _reportRepository.ExportReport(id);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+    public async Task<DataSet> RawMaterialIssueInvoiceReport(string id)
+    {
+        try
+        {
+
+            return await _reportRepository.RawMaterialIssueInvoiceReport(id);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+    public async Task<DataSet> RMStockReport()
+    {
+        try
+        {
+
+            return await _reportRepository.RMStockReport();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+    public async Task<DataSet> FinishGoodSentReport(string id)
+    {
+        try
+        {
+
+            return await _reportRepository.FinishGoodSentReport(id);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+    public async Task<DataSet> FGStockReport()
+    {
+        try
+        {
+
+            return await _reportRepository.FGStockReport();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+    public async Task<DataSet> FGSendAndReceiveReport(string InvoiceNo, string fromDate, string toDate)
+    {
+        try
+        {
+            FGSentReceiveParams param = new FGSentReceiveParams
+            {
+                InvoiceNo = InvoiceNo,
+                fromDate = fromDate,
+                toDate = toDate,
+
+            };
+            return await _reportRepository.FGSendAndReceiveReport(param);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+    public async Task<DataSet> RMPendingDetailsReport(string id)
+    {
+        try
+        {
+
+            return await _reportRepository.RMPendingDetailsReport(id);
         }
         catch (Exception ex)
         {

@@ -15,6 +15,7 @@ import { LC } from 'src/app/models/LCModel';
 import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
 import { DoubleMasterEntryModel } from 'src/app/models/DoubleMasterEntryModel';
 import Swal from 'sweetalert2';
+import { ReportService } from 'src/app/services/reportService/report-service.service';
 
 @Component({
   selector: 'app-sample-request-list',
@@ -59,7 +60,6 @@ export class SampleRequestListComponent {
   detailsData: any;
   isDetailsVisible: boolean = false;
   roleId: any = '';
-  uId:any = '';
 
   constructor(
     private fb: FormBuilder,
@@ -67,7 +67,8 @@ export class SampleRequestListComponent {
     private gs: GlobalServiceService,
     private pagesComponent: PagesComponent,
     private masterEntryService: MasterEntryService,
-    private title: Title
+    private title: Title,
+    private reportService: ReportService
   ) {}
   ngOnInit(): void {
     var permissions = this.gs.CheckUserPermission('Sample Request List');
@@ -75,16 +76,31 @@ export class SampleRequestListComponent {
     this.updatePermissions = permissions.updatePermissions;
     this.deletePermissions = permissions.deletePermissions;
     this.printPermissions = permissions.printPermissions;
-    this.roleId = window.localStorage.getItem('roleId');
 
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
     this.title.setTitle('Sample Request List');
 
-    this.SearchForm.get('fromDate')?.setValue(new Date());
-    this.SearchForm.get('toDate')?.setValue(new Date());
-    
-    this.uId = window.localStorage.getItem('userId');
+    this.roleId = window.localStorage.getItem('roleId');
+
+    // var fDate = new Date();
+    // const mm = String(fDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    // const dd = String(fDate.getDate()).padStart(2, '0');
+    // const yyyy = fDate.getFullYear();
+
+    // const formatted = `${dd}/${mm}/${yyyy}`;
+
+    // const threeMonthsAgo = new Date();
+    // threeMonthsAgo.setMonth(fDate.getMonth() - 3);
+
+    // const mmT = String(threeMonthsAgo.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    // const ddT = String(threeMonthsAgo.getDate()).padStart(2, '0');
+    // const yyyyT = threeMonthsAgo.getFullYear();
+
+    // const formattedT = `${ddT}/${mmT}/${yyyyT}`;
+
+    // this.SearchForm.get('fromDate')?.setValue(formattedT);
+    // this.SearchForm.get('toDate')?.setValue(formatted);
   }
   initForm(): void {
     this.SearchForm = this.fb.group({
@@ -98,6 +114,7 @@ export class SampleRequestListComponent {
           return;
         }
     
+
     var fromDate = this.SearchForm.value.fromDate;
     var toDate = this.SearchForm.value.toDate;
     var userId = window.localStorage.getItem('userId');
@@ -108,7 +125,7 @@ export class SampleRequestListComponent {
       ToDate: toDate,
       PageIndex: this.pageIndex,
       PageSize: this.pageSize,
-      UserId:userId
+      UserId: userId,
     };
 
     this.masterEntryService.GetInitialData(param).subscribe({
@@ -117,8 +134,6 @@ export class SampleRequestListComponent {
           this.tableData = [];
           let tables = JSON.parse(results.data);
           this.tableData = tables.Tables1;
-          console.log(this.tableData,this.uId);
-          
           if (this.tableData.length > 0) {
             this.length = parseInt(this.tableData[0].totallen);
           } else {
@@ -160,14 +175,13 @@ export class SampleRequestListComponent {
                   .then((result) => {
                      this.Search()
                   });
-               
               } else if (results.message == 'Invalid Token') {
                 swal.fire('Session Expierd!', 'Please Login Again.', 'info');
                 this.gs.Logout();
               } else {
               }
             },
-            error: (err:any) => {},
+            error: (err: any) => {},
           });
         }
       });
@@ -232,4 +246,56 @@ export class SampleRequestListComponent {
       } 
     }
   }
+
+  Print() {
+      var userId = window.localStorage.getItem('userId');
+      var item = {
+        fromDate: this.SearchForm.value.fromDate,
+        toDate: this.SearchForm.value.toDate,
+        requestStatus: this.SearchForm.value.status,
+        UserID: userId,
+      };
+  
+      var actionType = '';
+      Swal.fire({
+        title: 'Please select what you want to do!!',
+        icon: 'info',
+        showCancelButton: false,
+        showConfirmButton: false,
+        allowOutsideClick: true,
+        customClass: {
+          popup: 'swal-back', // use class name without dot
+        },
+        html: `
+        <div style="display: flex; justify-content: center; gap: 10px;">
+          <button id="view" class="swal2-confirm swal2-styled" style="background:green">Excel</button>
+          <button id="download" class="swal2-confirm swal2-styled" style="background:red">PDF</button>
+          <button id="print" class="swal2-confirm swal2-styled" style="background:blue">Word</button>
+        </div>
+      `,
+      });
+  
+      // Add event listeners for buttons after Swal opens
+      Swal.getPopup()
+        ?.querySelector('#view')
+        ?.addEventListener('click', () => {
+          this.reportService.PrintSampleRequest(item, 'excel', true);
+          Swal.close();
+        });
+  
+      Swal.getPopup()
+        ?.querySelector('#download')
+        ?.addEventListener('click', () => {
+          this.reportService.PrintSampleRequest(item, 'pdf', true);
+          Swal.close();
+        });
+  
+      Swal.getPopup()
+        ?.querySelector('#print')
+        ?.addEventListener('click', () => {
+          this.reportService.PrintSampleRequest(item, 'word', true);
+          Swal.close();
+        });
+    }
+
 }
