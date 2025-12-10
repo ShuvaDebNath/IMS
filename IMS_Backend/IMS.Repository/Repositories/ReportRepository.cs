@@ -61,6 +61,26 @@ namespace Boilerplate.Repository.Repositories
 
 
         public async Task<DataSet> TaskDetailsReport(ReportsParams param)
+        {
+            try
+            {
+                var parametars = new
+                {
+                    param.fromDate,
+                    param.toDate,
+                };
+
+                string query = @"exec [usp_Task_Details_Report] @fromDate,@toDate";
+                var ds = await GetDataInDataSetAsync(query, parametars);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
 
         public async Task<DataSet> CustomerReport(CustomerParams param)
         {
@@ -75,27 +95,6 @@ namespace Boilerplate.Repository.Repositories
                 };
 
                 string query = @"exec [usp_Customer_GetCustomerData] @Superior_Id,@Customer_Id,@Status,@SentBy";
-                var ds = await GetDataInDataSetAsync(query, parametars);
-
-                return ds;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public async Task<DataSet> ProformaInvoiceReport(ProformaInvoiceReportParams param)
-        {
-            try
-            {
-                var parametars = new
-                {
-                    param.fromDate,
-                    param.toDate,
-                };
-
-                string query = @"exec [usp_Task_Details_Report] @fromDate,@toDate";
                 var ds = await GetDataInDataSetAsync(query, parametars);
 
                 return ds;
@@ -295,30 +294,6 @@ namespace Boilerplate.Repository.Repositories
                 };
 
                 string query = @"exec [usp_SC_Report] @id";
-                var ds = await GetDataInDataSetAsync(query, parametars);
-
-                return ds;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-
-        public async Task<DataSet> CustomerReport(CustomerParams param)
-        {
-            try
-            {
-                var parametars = new
-                {
-                    param.Superior_Id,
-                    param.Customer_Id,
-                    param.Status,
-                    param.SentBy,
-                };
-
-                string query = @"exec [usp_Customer_Report] @Superior_Id,@Customer_Id,@Status,@SentBy";
                 var ds = await GetDataInDataSetAsync(query, parametars);
 
                 return ds;
