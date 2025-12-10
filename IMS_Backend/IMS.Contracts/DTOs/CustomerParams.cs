@@ -1,5 +1,7 @@
+
 ﻿using Boilerplate.Contracts.Enum;
 using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 

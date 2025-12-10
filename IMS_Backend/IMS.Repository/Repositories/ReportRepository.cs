@@ -59,7 +59,33 @@ namespace Boilerplate.Repository.Repositories
         }
 
 
+
         public async Task<DataSet> TaskDetailsReport(ReportsParams param)
+
+        public async Task<DataSet> CustomerReport(CustomerParams param)
+        {
+            try
+            {
+                var parametars = new
+                {
+                    param.Superior_Id,
+                    param.Customer_Id,
+                    param.Status,
+                    param.SentBy
+                };
+
+                string query = @"exec [usp_Customer_GetCustomerData] @Superior_Id,@Customer_Id,@Status,@SentBy";
+                var ds = await GetDataInDataSetAsync(query, parametars);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<DataSet> ProformaInvoiceReport(ProformaInvoiceReportParams param)
         {
             try
             {

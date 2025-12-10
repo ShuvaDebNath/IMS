@@ -111,6 +111,49 @@ namespace IMS.API.Controllers
         }
 
         [HttpGet]
+        [Route("CustomerReport")]
+        public async Task<IActionResult> CustomerReport(String rptType, string Superior_Id = "", string Customer_Id = "", string Status = "", string SentBy = "")
+        {
+            try
+            {
+                var currentUser = HttpContext.User;
+
+                string reportPath = "CustomerReport\\";
+                DataSet ds = await _reportService.CustomerReport(Superior_Id, Customer_Id, Status, SentBy);
+
+                if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
+                {
+
+                    return Ok(new { msg = "Data Not Found" });
+                }
+
+                ds.Tables[0].TableName = "CustomerReport";
+
+                var reportName = "Customer Report";
+
+                reportPath += "rptCustomerReport.rdlc";
+
+
+                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+
+
+                if (rptType.ToLower() == "pdf")
+                {
+                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                }
+                else
+                {
+                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
         [Route("ProformaInvoiceReport")]
         public async Task<IActionResult> ProformaInvoiceReport(String rptType, int PI_Master_ID, bool IsMPI)
         {
