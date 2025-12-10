@@ -156,8 +156,7 @@ export class GlobalServiceService {
 
     // Load menu data
     const menuData = window.localStorage.getItem('UserMenuWithPermission');
-    console.log(menuData);
-    
+
     if (!menuData) {
       this.Logout();
       return permissions;
@@ -185,7 +184,6 @@ export class GlobalServiceService {
             menuItem.Children = [];
           }
         }
-        //console.log(menuItem);
 
         // Match target menu name
         if (menuItem.SubMenuName === menuName) {

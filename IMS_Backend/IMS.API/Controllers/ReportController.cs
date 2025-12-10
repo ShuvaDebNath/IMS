@@ -67,7 +67,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("ProformaInvoiceReport")]
-        public async Task<IActionResult> ProformaInvoiceReport(String rptType, int PI_Master_ID)
+        public async Task<IActionResult> ProformaInvoiceReport(String rptType, int PI_Master_ID, bool IsMPI)
         {
             try
             {
@@ -86,7 +86,10 @@ namespace IMS.API.Controllers
 
                 var reportName = "Proforma Invoice Report";
 
-                reportPath += "PI.rdlc";
+                if (IsMPI == true)
+                    reportPath += "CashPI.rdlc";
+                else
+                    reportPath += "PI.rdlc";
 
 
                 var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);

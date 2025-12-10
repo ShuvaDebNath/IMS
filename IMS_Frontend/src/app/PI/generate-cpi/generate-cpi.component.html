@@ -3,11 +3,13 @@
     <div class="card-header sticky-header">
       <h3 class="card-title mb-0"><strong>Proforma Invoice</strong></h3>
       <div class="float-right">
-        <button class="btn btn-sm btn-success mr-2" (click)="Save()" [disabled]="!Formgroup.valid"><i class="fas fa-save"></i>&nbsp;Save</button>
+        <button class="btn btn-sm btn-success mr-2" (click)="Save()" [disabled]="!Formgroup.valid"><i
+            class="fas fa-save"></i>&nbsp;Save</button>
         <button class="btn btn-sm btn-primary" (click)="RefrashDDL()"><i class="fas fa-sync"></i>&nbsp;Refresh</button>
       </div>
     </div>
     <div class="card-body">
+      <!-- Consignee Initial -->
       <div class="row">
         <div class="col-md-4">
           <label class="control-label">Consignee Initial</label>
@@ -28,128 +30,78 @@
             [bsConfig]="{ isAnimated: true }" <input type="text" class="form-control form-control-sm" placeholder="Date" readOnly id="Date" name="Date" formControlName="Date"/> -->
         </div>
       </div>
-      <hr/>
+      <hr />
       <div class="row">
         <div class="col-md-4 mb-2">
-          <label class="control-label">Shippeer</label><br/>
-          <p-dropdown 
-          [options]="ShipperList" 
-          formControlName="Beneficiary_Account_ID"
-          optionLabel="CompanyName"
-          optionValue="Beneficiary_Account_ID"
-          [filter]="true" 
-          filterBy="CompanyName" 
-          [showClear]="true" 
-          styleClass="my-dropdown"
-          panelStyleClass="my-dropdown-panel"
-          [style]="{width: '100%'}"
-          placeholder="Select a Shippeer">
+          <label class="control-label">Shippeer</label><br />
+          <p-dropdown [options]="ShipperList" formControlName="Beneficiary_Account_ID" optionLabel="CompanyName"
+            optionValue="Beneficiary_Account_ID" [filter]="true" filterBy="CompanyName" [showClear]="true"
+            styleClass="my-dropdown" panelStyleClass="my-dropdown-panel" [style]="{width: '100%'}"
+            placeholder="Select a Shippeer">
           </p-dropdown>
         </div>
         <div class="col-md-4 mb-2">
-          <label class="control-label">Beneficiary's Bank</label><br/>
-          <p-dropdown 
-          [options]="BenificaryBankList" 
-          formControlName="Beneficiary_Bank_ID"
-          optionLabel="BankInfo"
-          optionValue="Beneficiary_Bank_ID"
-          [filter]="true" 
-          filterBy="BankInfo" 
-          styleClass="my-dropdown"
-          panelStyleClass="my-dropdown-panel"
-          [showClear]="true" 
-          [style]="{width: '100%'}"
-          placeholder="Select a Beneficiary's Bank">
+          <label class="control-label">Beneficiary's Bank</label><br />
+          <p-dropdown [options]="BenificaryBankList" formControlName="Beneficiary_Bank_ID" optionLabel="BankInfo"
+            optionValue="Beneficiary_Bank_ID" [filter]="true" filterBy="BankInfo" styleClass="my-dropdown"
+            panelStyleClass="my-dropdown-panel" [showClear]="true" [style]="{width: '100%'}"
+            placeholder="Select a Beneficiary's Bank">
           </p-dropdown>
         </div>
         <div class="col-md-4 mb-2">
-          <label class="control-label">Country of Origin</label><br/>
-          <p-dropdown 
-          [options]="CountryList" 
-          formControlName="Country_Of_Orgin_ID"
-          optionLabel="Country"
-          optionValue="Country_ID"
-          [filter]="true" 
-          filterBy="Country" 
-          [showClear]="true" 
-          [style]="{width: '100%'}"
-          placeholder="Select a Country">
-          </p-dropdown>        
+          <label class="control-label">Country of Origin</label><br />
+          <p-dropdown [options]="CountryList" formControlName="Country_Of_Orgin_ID" optionLabel="Country"
+            optionValue="Country_ID" [filter]="true" filterBy="Country" [showClear]="true" [style]="{width: '100%'}"
+            placeholder="Select a Country">
+          </p-dropdown>
         </div>
         <div class="col-md-4 mb-2">
-          <label class="control-label">Packing</label><br/>
-          <p-dropdown 
-          [options]="PackingList" 
-          formControlName="Packing_ID"
-          optionLabel="Mode"
-          optionValue="Packing_ID"
-          [filter]="true" 
-          filterBy="Mode" 
-          [showClear]="true" 
-          [style]="{width: '100%'}"
-          placeholder="Select a Packing">
-          </p-dropdown>         
+          <label class="control-label">Packing</label><br />
+          <p-dropdown [options]="PackingList" formControlName="Packing_ID" optionLabel="Mode" optionValue="Packing_ID"
+            [filter]="true" filterBy="Mode" [showClear]="true" [style]="{width: '100%'}" placeholder="Select a Packing">
+          </p-dropdown>
         </div>
         <div class="col-md-4 mb-2">
-          <label class="control-label">Loading Mode</label><br/>
-          <p-dropdown 
-          [options]="LoadingModeList" 
-          formControlName="Loading_Mode_ID"
-          optionLabel="Details"
-          optionValue="Loading_Mode_ID"
-          [filter]="true" 
-          filterBy="Details" 
-          [showClear]="true" 
-          [style]="{width: '100%'}"
-          placeholder="Select a Loading Mode">
-          </p-dropdown>           
+          <label class="control-label">Loading Mode</label><br />
+          <p-dropdown [options]="LoadingModeList" formControlName="Loading_Mode_ID" optionLabel="Details"
+            optionValue="Loading_Mode_ID" [filter]="true" filterBy="Details" [showClear]="true"
+            [style]="{width: '100%'}" placeholder="Select a Loading Mode">
+          </p-dropdown>
         </div>
         <div class="col-md-4 mb-2">
-          <label class="control-label">Payment Mode</label><br/>
-          <p-dropdown 
-          [options]="PaymentModeList" 
-          formControlName="Payment_Term_ID"
-          optionLabel="Mode"
-          optionValue="Payment_Term_ID"
-          [filter]="true" 
-          filterBy="Mode" 
-          [showClear]="true" 
-          styleClass="my-dropdown"
-          panelStyleClass="my-dropdown-panel"
-          [style]="{width: '100%'}"
-          placeholder="Select a Payment Mode">
-          </p-dropdown>           
+          <label class="control-label">Payment Mode</label><br />
+          <p-dropdown [options]="PaymentModeList" formControlName="Payment_Term_ID" optionLabel="Mode"
+            optionValue="Payment_Term_ID" [filter]="true" filterBy="Mode" [showClear]="true" styleClass="my-dropdown"
+            panelStyleClass="my-dropdown-panel" [style]="{width: '100%'}" placeholder="Select a Payment Mode">
+          </p-dropdown>
         </div>
         <div class="col-md-4 mb-2">
-          <label class="control-label">Consignee</label><br/>
-          <p-dropdown 
-          [options]="ConsigneeList" 
-          formControlName="Customer_ID"
-          optionLabel="CustomerName"
-          optionValue="Customer_ID"
-          [filter]="true" 
-          filterBy="CustomerName" 
-          [showClear]="true" 
-          styleClass="my-dropdown"
-          panelStyleClass="my-dropdown-panel"
-          [style]="{width: '100%'}"
-          placeholder="Select a Consignee">
-          </p-dropdown>          
+          <label class="control-label">Consignee</label><br />
+          <p-dropdown [options]="ConsigneeList" formControlName="Customer_ID" optionLabel="CustomerName"
+            optionValue="Customer_ID" [filter]="true" filterBy="CustomerName" [showClear]="true"
+            styleClass="my-dropdown" panelStyleClass="my-dropdown-panel" [style]="{width: '100%'}"
+            placeholder="Select a Consignee">
+            [virtualScroll]="true"
+            [itemSize]="30">
+          </p-dropdown>
         </div>
         <div class="col-md-4 mb-2">
           <label class="control-label">Contact Person</label>
-          <input type="text" class="form-control form-control-sm" id="ContactPerson" placeholder="Contact Person"  formControlName="Contact_Person"/>
+          <input type="text" class="form-control form-control-sm" id="ContactPerson" placeholder="Contact Person"
+            formControlName="Contact_Person" />
         </div>
 
         <div class="col-md-4 mb-2">
           <label class="control-label">Buyer Name</label>
-          <input type="text" class="form-control form-control-sm" id="BuyerName" placeholder="Buyer Name" formControlName="Buyer_Name"/>
+          <input type="text" class="form-control form-control-sm" id="BuyerName" placeholder="Buyer Name"
+            formControlName="Buyer_Name" />
         </div>
-      
-       
+
+
         <div class="col-md-4 mb-2">
           <label class="control-label">Delivery Address</label>
-          <textarea id="DeliveryAddress" class="form-control form-control-sm" rows="3" formControlName="Delivery_Address"></textarea>
+          <textarea id="DeliveryAddress" class="form-control form-control-sm" rows="3"
+            formControlName="Delivery_Address"></textarea>
         </div>
         <div class="col-md-4 mb-2">
           <label class="control-label">Style</label>
@@ -157,23 +109,17 @@
         </div>
         <div class="col-md-4 mb-2">
           <label class="control-label">Goods Description</label>
-          <textarea id="GoodsDescription" class="form-control form-control-sm" rows="3" formControlName="Good_Description"></textarea>
+          <textarea id="GoodsDescription" class="form-control form-control-sm" rows="3"
+            formControlName="Good_Description"></textarea>
         </div>
 
 
         <div class="col-md-4 mb-2">
-          <label class="control-label">Currency</label><br/>
-          <p-dropdown 
-          [options]="CurrencyList" 
-          formControlName="Currency_ID"
-          optionLabel="CurrencyCode"
-          optionValue="Currency_ID"
-          [filter]="true" 
-          filterBy="Details" 
-          [showClear]="true" 
-          [style]="{width: '100%'}"
-          placeholder="Select a Terms of Delivery">
-          </p-dropdown>          
+          <label class="control-label">Currency</label><br />
+          <p-dropdown [options]="CurrencyList" formControlName="Currency_ID" optionLabel="CurrencyCode"
+            optionValue="Currency_ID" [filter]="true" filterBy="Details" [showClear]="true" [style]="{width: '100%'}"
+            placeholder="Select a Terms of Delivery">
+          </p-dropdown>
         </div>
         <div class="col-md-4 mb-2 mt-auto">
           <label class="control-label">Exchange Rate: {{this.ExchangeRate==1?'':this.ExchangeRate}}</label>
@@ -184,7 +130,8 @@
           <thead>
             <tr>
               <th class="text-center align-middle sticky-table-column">
-                <button class="btn btn-xs btn-primary" (click)="Addrow()" type="button"><i class="fas fa-plus"></i></button>
+                <button class="btn btn-xs btn-primary" (click)="Addrow()" type="button"><i
+                    class="fas fa-plus"></i></button>
               </th>
               <th class="text-center align-middle">Article No</th>
               <th class="text-center align-middle">Description</th>
@@ -199,116 +146,78 @@
               <th class="text-center align-middle">Total Prod. Cost</th>
               <th class="text-center align-middle">A. A.</th>
             </tr>
-          </thead>       
+          </thead>
           <tbody formArrayName="ItemArray">
             <ng-container *ngIf="Formgroup.controls.ItemArray!=null">
               <tr *ngFor="let itemrow of getControls(); let i = index" [formGroupName]="i">
-                <td class="sticky-table-column align-middle">                  
-                  <button class="btn btn-xs btn-danger" (click)="DeleteRow(i)" type="button"><i class="fas fa-times"></i></button>
+                <td class="sticky-table-column align-middle">
+                  <button class="btn btn-xs btn-danger" (click)="DeleteRow(i)" type="button"><i
+                      class="fas fa-times"></i></button>
                 </td>
                 <td class="align-middle">
-                  <input style="width: 5rem;" formControlName="Article" type="text" class="form-control form-control-sm" placeholder="Article No" id="ArticleNo" name="ArticleNo"/>
-                </td> 
+                  <input style="width: 5rem;" formControlName="Article" type="text" class="form-control form-control-sm"
+                    placeholder="Article No" id="ArticleNo" name="ArticleNo" />
+                </td>
                 <td class="align-middle">
-                  <p-dropdown 
-                  formControlName="Description"
-                  [options]="DescriptionList" 
-                  optionLabel="Details"
-                  optionValue="Details"
-                  [filter]="true" 
-                  filterBy="Details" 
-                  [showClear]="true" 
-                  appendTo="body"
-                  [style]="{width: '100%'}"
-                  placeholder="Select a Description">
+                  <p-dropdown formControlName="Description" [options]="DescriptionList" optionLabel="Details"
+                    optionValue="Details" [filter]="true" filterBy="Details" [showClear]="true" appendTo="body"
+                    [style]="{width: '100%'}" placeholder="Select a Description">
                   </p-dropdown>
                 </td>
                 <td class="align-middle">
-                  <p-dropdown 
-                  formControlName="Width_ID"
-                  [options]="WidthList" 
-                  optionLabel="Measurement"
-                  optionValue="Width_ID"
-                  [filter]="true" 
-                  filterBy="Measurement" 
-                  [showClear]="true" 
-                  appendTo="body"
-                  [style]="{width: '100%'}"
-                  placeholder="Select a Width">
+                  <p-dropdown formControlName="Width_ID" [options]="WidthList" optionLabel="Measurement"
+                    optionValue="Width_ID" [filter]="true" filterBy="Measurement" [showClear]="true" appendTo="body"
+                    [style]="{width: '100%'}" placeholder="Select a Width">
                   </p-dropdown>
                 </td>
                 <td class="align-middle">
-                  <p-dropdown 
-                  formControlName="Color_ID"
-                  [options]="ColorList" 
-                  optionLabel="Color"
-                  optionValue="Color_ID"
-                  [filter]="true" 
-                  filterBy="Color" 
-                  [showClear]="true" 
-                  appendTo="body"
-                  [style]="{width: '100%'}"
-                  placeholder="Select a Color">
+                  <p-dropdown formControlName="Color_ID" [options]="ColorList" optionLabel="Color"
+                    optionValue="Color_ID" [filter]="true" filterBy="Color" [showClear]="true" appendTo="body"
+                    [style]="{width: '100%'}" placeholder="Select a Color">
                   </p-dropdown>
                 </td>
                 <td class="align-middle">
-                  <p-dropdown 
-                  formControlName="Packaging_ID"
-                  [options]="PackagingList" 
-                  optionLabel="Packaging"
-                  optionValue="Packaging_ID"
-                  [filter]="true" 
-                  filterBy="Packaging" 
-                  [showClear]="true" 
-                  appendTo="body"
-                  [style]="{width: '100%'}"
-                  placeholder="Select a Packaging">
+                  <p-dropdown formControlName="Packaging_ID" [options]="PackagingList" optionLabel="Packaging"
+                    optionValue="Packaging_ID" [filter]="true" filterBy="Packaging" [showClear]="true" appendTo="body"
+                    [style]="{width: '100%'}" placeholder="Select a Packaging">
                   </p-dropdown>
                 </td>
                 <td class="align-middle">
-                  <input style="width: 5rem;" (change)="calculateAmount(itemrow)" formControlName="Quantity" type="number" class="form-control form-control-sm" placeholder="Qty" id="Qty" name="Qty"/>
+                  <input style="width: 5rem;" (change)="calculateAmount(itemrow)" formControlName="Quantity"
+                    type="number" class="form-control form-control-sm" placeholder="Qty" id="Qty" name="Qty" />
                 </td>
                 <td class="align-middle">
-                  <p-dropdown 
-                  formControlName="Unit_ID"
-                  [options]="UnitList" 
-                  optionLabel="Unit"
-                  optionValue="Unit_ID"
-                  [filter]="true" 
-                  filterBy="Unit" 
-                  [showClear]="true" 
-                  appendTo="body"
-                  [style]="{width: '100%'}"
-                  placeholder="Select a Unit">
+                  <p-dropdown formControlName="Unit_ID" [options]="UnitList" optionLabel="Unit" optionValue="Unit_ID"
+                    [filter]="true" filterBy="Unit" [showClear]="true" appendTo="body" [style]="{width: '100%'}"
+                    placeholder="Select a Unit">
                   </p-dropdown>
                 </td>
                 <td class="align-middle">
-                  <input style="width: 5rem;" (change)="calculateAmount(itemrow)" formControlName="Unit_Price" type="number" class="form-control form-control-sm text-right" placeholder="Unit Price" id="Rate" name="Rate"/>
-                </td>     
+                  <input style="width: 5rem;" (change)="calculateAmount(itemrow)" formControlName="Unit_Price"
+                    type="number" class="form-control form-control-sm text-right" placeholder="Unit Price" id="Rate"
+                    name="Rate" />
+                </td>
                 <td class="align-middle">
-                  <input style="width: 5rem;" formControlName="Total_Amount_Tk" readonly="readOnly" type="number" class="form-control form-control-sm text-right" placeholder="Total Amount" id="Amount" name="Amount"/>
-                </td> 
+                  <input style="width: 5rem;" formControlName="Total_Amount_Tk" readonly="readOnly" type="number"
+                    class="form-control form-control-sm text-right" placeholder="Total Amount" id="Amount"
+                    name="Amount" />
+                </td>
                 <td class="align-middle">
-                  <input style="width: 5rem;" (change)="calculateAmount(itemrow)" formControlName="CommissionUnit" type="text" class="form-control form-control-sm text-right" placeholder="Prod. Cost Unit" id="ProdCost" name="ProdCost"/>
-                </td>   
+                  <input style="width: 5rem;" (change)="calculateAmount(itemrow)" formControlName="CommissionUnit"
+                    type="text" class="form-control form-control-sm text-right" placeholder="Prod. Cost Unit"
+                    id="ProdCost" name="ProdCost" />
+                </td>
                 <td class="align-middle">
-                  <input style="width: 5rem;" formControlName="TotalCommission" readonly="readOnly" type="text" class="form-control form-control-sm text-right" placeholder="Total Prod. Cost" id="TProdCost" name="TProdCost"/>
-                </td> 
+                  <input style="width: 5rem;" formControlName="TotalCommission" readonly="readOnly" type="text"
+                    class="form-control form-control-sm text-right" placeholder="Total Prod. Cost" id="TProdCost"
+                    name="TProdCost" />
+                </td>
                 <td class="align-middle">
-                  <p-dropdown 
-                  formControlName="Item_ID"
-                  [options]="AAList" 
-                  optionLabel="Article_No"
-                  optionValue="Item_ID"
-                  [filter]="true" 
-                  filterBy="Article_No" 
-                  [showClear]="true" 
-                  appendTo="body"
-                  (onChange)="SetActualArticle(itemrow)"
-                  [style]="{width: '100%'}"
-                  placeholder="Select a Article">
+                  <p-dropdown formControlName="Item_ID" [options]="AAList" optionLabel="Article_No"
+                    optionValue="Item_ID" [filter]="true" filterBy="Article_No" [showClear]="true" appendTo="body"
+                    (onChange)="SetActualArticle(itemrow)" [style]="{width: '100%'}" placeholder="Select a Article">
                   </p-dropdown>
-                </td>             
+                </td>
               </tr>
             </ng-container>
           </tbody>
@@ -321,12 +230,14 @@
               <th class="text-center align-middle"></th>
               <th class="text-center align-middle"></th>
               <th class="text-center align-middle">
-                <input type="text" class="form-control form-control-sm" value="{{GTQTY}}" placeholder="Total Qty" id="GTQty" name="GTQty"/>
+                <input type="text" class="form-control form-control-sm" value="{{GTQTY}}" placeholder="Total Qty"
+                  id="GTQty" name="GTQty" />
               </th>
               <th class="text-center align-middle"></th>
               <th class="text-center align-middle"> </th>
-              <th class="text-center align-middle">  
-                <input type="text" class="form-control form-control-sm text-right" value="{{GTAMNT}}" placeholder="Total Amout" id="GTAmout" name="GTAmout"/>
+              <th class="text-center align-middle">
+                <input type="text" class="form-control form-control-sm text-right" value="{{GTAMNT}}"
+                  placeholder="Total Amout" id="GTAmout" name="GTAmout" />
               </th>
               <th class="text-center align-middle"></th>
               <th class="text-center align-middle"></th>
@@ -336,55 +247,31 @@
         </table>
       </div>
 
-      <hr/>
+      <hr />
 
       <div class="row">
         <div class="col-md-4 mb-2">
-          <label class="control-label">Delivery Condition</label><br/>
-          <p-dropdown 
-          formControlName="Delivery_Condition_ID"
-          [options]="DeliveryConditionList" 
-          optionLabel="Details"
-          optionValue="Delivery_Condition_ID"
-          [filter]="true" 
-          filterBy="Details" 
-          [showClear]="true" 
-          [style]="{width: '100%'}"
-          styleClass="my-dropdown"
-          panelStyleClass="my-dropdown-panel"
-          placeholder="Select a Delivery Condition">
+          <label class="control-label">Delivery Condition</label><br />
+          <p-dropdown formControlName="Delivery_Condition_ID" [options]="DeliveryConditionList" optionLabel="Details"
+            optionValue="Delivery_Condition_ID" [filter]="true" filterBy="Details" [showClear]="true"
+            [style]="{width: '100%'}" styleClass="my-dropdown" panelStyleClass="my-dropdown-panel"
+            placeholder="Select a Delivery Condition">
           </p-dropdown>
         </div>
         <div class="col-md-4 mb-2">
-          <label class="control-label">Partial Shipment</label><br/>
-          <p-dropdown 
-          formControlName="Shipment_Condition_ID"
-          [options]="PartialShipmentList" 
-          optionLabel="ShipmentConditions"
-          optionValue="Shipment_Condition_ID"
-          [filter]="true" 
-          filterBy="ShipmentConditions" 
-          [showClear]="true" 
-          [style]="{width: '100%'}"
-          styleClass="my-dropdown"
-          panelStyleClass="my-dropdown-panel"
-          placeholder="Select a Shipment">
+          <label class="control-label">Partial Shipment</label><br />
+          <p-dropdown formControlName="Shipment_Condition_ID" [options]="PartialShipmentList"
+            optionLabel="ShipmentConditions" optionValue="Shipment_Condition_ID" [filter]="true"
+            filterBy="ShipmentConditions" [showClear]="true" [style]="{width: '100%'}" styleClass="my-dropdown"
+            panelStyleClass="my-dropdown-panel" placeholder="Select a Shipment">
           </p-dropdown>
         </div>
         <div class="col-md-4 mb-2">
-          <label class="control-label">Price Terms</label><br/>
-          <p-dropdown 
-          formControlName="Price_Term_ID"
-          [options]="PriceTermsList" 
-          optionLabel="PriceTerm"
-          optionValue="Price_Term_ID"
-          [filter]="true" 
-          filterBy="PriceTerm" 
-          [showClear]="true" 
-          [style]="{width: '100%'}"
-          styleClass="my-dropdown"
-          panelStyleClass="my-dropdown-panel"
-          placeholder="Select a Price Terms">
+          <label class="control-label">Price Terms</label><br />
+          <p-dropdown formControlName="Price_Term_ID" [options]="PriceTermsList" optionLabel="PriceTerm"
+            optionValue="Price_Term_ID" [filter]="true" filterBy="PriceTerm" [showClear]="true"
+            [style]="{width: '100%'}" styleClass="my-dropdown" panelStyleClass="my-dropdown-panel"
+            placeholder="Select a Price Terms">
           </p-dropdown>
         </div>
 
@@ -394,53 +281,38 @@
         </div>
         <div class="col-md-4 mb-2">
           <label class="control-label">Port Of Loading</label>
-          <textarea id="PortOfLoading" class="form-control form-control-sm" rows="3" formControlName="Loading_Port"></textarea>
+          <textarea id="PortOfLoading" class="form-control form-control-sm" rows="3"
+            formControlName="Loading_Port"></textarea>
         </div>
         <div class="col-md-4 mb-2">
           <label class="control-label">Port Of Destination</label>
-          <textarea id="PortOfDestination" class="form-control form-control-sm" rows="3" formControlName="Destination_Port"></textarea>
+          <textarea id="PortOfDestination" class="form-control form-control-sm" rows="3"
+            formControlName="Destination_Port"></textarea>
         </div>
 
         <div class="col-md-4 mb-2">
           <label class="control-label">Remarks</label>
-          <input type="text" class="form-control form-control-sm" id="Remarks" placeholder="Remarks" formControlName="Remarks"/>
+          <input type="text" class="form-control form-control-sm" id="Remarks" placeholder="Remarks"
+            formControlName="Remarks" />
         </div>
 
         <div class="col-md-4 mb-2">
-          <label class="control-label">Force Majeure</label><br/>
-          <p-dropdown 
-          formControlName="Force_Majeure_ID"
-          [options]="ForceMajeureList" 
-          optionLabel="Force"
-          optionValue="Force_Majeure_ID"
-          [filter]="true" 
-          filterBy="Force" 
-          [showClear]="true" 
-          [style]="{width: '100%'}"
-          styleClass="my-dropdown"
-          panelStyleClass="my-dropdown-panel"
-          placeholder="Select a Force Majeure">
+          <label class="control-label">Force Majeure</label><br />
+          <p-dropdown formControlName="Force_Majeure_ID" [options]="ForceMajeureList" optionLabel="Force"
+            optionValue="Force_Majeure_ID" [filter]="true" filterBy="Force" [showClear]="true" [style]="{width: '100%'}"
+            styleClass="my-dropdown" panelStyleClass="my-dropdown-panel" placeholder="Select a Force Majeure">
           </p-dropdown>
         </div>
         <div class="col-md-4 mb-2">
-          <label class="control-label">Arbitration</label><br/>
-          <p-dropdown 
-          formControlName="Arbitration_ID"
-          [options]="ArbitrationList" 
-          optionLabel="Detail"
-          optionValue="Arbitration_ID"
-          [filter]="true" 
-          filterBy="Detail" 
-          [showClear]="true" 
-          styleClass="my-dropdown"
-          panelStyleClass="my-dropdown-panel"
-          [style]="{width: '100%'}"
-          placeholder="Select a Arbitration">
+          <label class="control-label">Arbitration</label><br />
+          <p-dropdown formControlName="Arbitration_ID" [options]="ArbitrationList" optionLabel="Detail"
+            optionValue="Arbitration_ID" [filter]="true" filterBy="Detail" [showClear]="true" styleClass="my-dropdown"
+            panelStyleClass="my-dropdown-panel" [style]="{width: '100%'}" placeholder="Select a Arbitration">
           </p-dropdown>
-        </div>      
+        </div>
 
       </div>
-      
+
 
     </div>
   </div>

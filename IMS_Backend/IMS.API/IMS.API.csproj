@@ -57,6 +57,9 @@
     <Content Include="Report\V2\PackingList.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Report\V2\CashPI.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Report\V2\PI.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

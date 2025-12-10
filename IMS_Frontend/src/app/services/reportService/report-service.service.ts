@@ -88,6 +88,7 @@ export class ReportService {
     PrintProformaInvoiceRequest(report: any, rptType: any, isView: any) {
     
     const PI_Master_ID = report.PI_Master_ID ?? '';
+    const IsMPI = report.IsMPI ?? '';
 
     const url = `${this.baseUrl}${this.apiController}/ProformaInvoiceReport`;
     const token = this.gs.getSessionData('token');
@@ -99,7 +100,7 @@ export class ReportService {
     this.http
       .get(url, {
         headers,
-        params: { rptType, PI_Master_ID },
+        params: { rptType, PI_Master_ID, IsMPI },
         responseType: 'blob',
       })
       .subscribe((res: Blob) => {

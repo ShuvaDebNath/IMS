@@ -48,8 +48,6 @@ export class HeaderComponent implements OnInit {
           this.menu.forEach((e:any)=>{
             e.Children = JSON.parse(e.Children);
           })
-          
-    console.log(this.menu);
     }
  
   Logout() {
