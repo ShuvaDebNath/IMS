@@ -19,7 +19,6 @@ public interface IReportService
     public Task<DataSet> PIAmendmentReport(string id);
     public Task<DataSet> PIOtherReport(string id);
     public Task<DataSet> SalesContractReport(string id);
-    public Task<DataSet> CustomerReport(string Superior_Id, string Customer_Id, string Status, string SentBy);
     public Task<DataSet> BuyerReport(string fromDate, string toDate, string Superior_Id, string Customer_Id, string Status, string SentBy);
     public Task<DataSet> TaskReport(string id);
     public Task<DataSet> ExportReport(string id);
