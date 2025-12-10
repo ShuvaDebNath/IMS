@@ -170,6 +170,8 @@ import { GoodsDescListComponent } from '../master-entry/Goods-Desc/goods-desc-li
 import { GoodsDescCreateComponent } from '../master-entry/Goods-Desc/goods-desc-create/goods-desc-create.component';
 import { InterliningDescCreateComponent } from '../master-entry/Interlining-Desc/interlining-desc-create/interlining-desc-create.component';
 import { InterliningDescListComponent } from '../master-entry/Interlining-Desc/interlining-desc-list/interlining-desc-list.component';
+import { CurrencyCreateComponent } from '../MasterEntry/Currency/currency-create/currency-create.component';
+import { CurrencyListComponent } from '../MasterEntry/Currency/currency-list/currency-list.component';
 
 
 
@@ -314,6 +316,8 @@ const CustomSelectOptions: INgxSelectOptions = {
     GoodsDescCreateComponent,
     InterliningDescCreateComponent,
     InterliningDescListComponent,
+    CurrencyCreateComponent,
+    CurrencyListComponent,
   ],
   imports: [
     CommonModule,
@@ -538,6 +542,8 @@ const CustomSelectOptions: INgxSelectOptions = {
           { path: 'cancel-pi-application', component: CancelPiApplicationComponent },
           { path: 'exchange-goods-application', component: ExchangeGoodsApplicationComponent },
           { path: 'return-goods-application', component: ReturnGoodsApplicationComponent },
+          { path: 'currency-create', component: CurrencyCreateComponent },
+          { path: 'currency-list', component: CurrencyListComponent },
         ],
       },
 

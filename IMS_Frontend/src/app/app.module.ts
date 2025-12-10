@@ -55,6 +55,7 @@ import { RawMaterialListComponent } from './master-entry/Raw-Material/raw-materi
 import { RawMaterialCreateComponent } from './master-entry/Raw-Material/raw-material-create/raw-material-create.component';
 import { MaterialListComponent } from './master-entry/Material/material-list/material-list.component';
 import { MaterialCreateComponent } from './master-entry/Material/material-create/material-create.component';
+import { CurrencyListComponent } from './MasterEntry/Currency/currency-list/currency-list.component';
 
 
 

@@ -238,7 +238,7 @@ public GetSessionUser() {
 
   // If not found, redirect to dashboard
   if (buttonPermissions.length === 0) {
-    window.location.href = 'dashboard';
+    //window.location.href = 'dashboard';
     return permissions;
   }
 
