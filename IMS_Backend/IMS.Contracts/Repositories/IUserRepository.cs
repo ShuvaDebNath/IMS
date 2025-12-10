@@ -9,9 +9,9 @@ public interface IUserRepository
     Task<bool> ResetPassword(string passwordhash, string userId);
     Task<bool> CheckPassword(string passwordhash);
     Task<DataSet> GetUserBasicData();
-    Task<bool> SaveUser(AspNetUserDto asp, UserControlDto tbluser, List<PagewiseActionDto> pagewiseActions);
+    Task<bool> SaveUser(UserCreate user,string UserName);
     Task<bool> DeleteUser(string userId);
-    Task<bool> EditUser(string menu, UserCreate model, List<PagewiseActionDto> pagewiseActions);
+    Task<bool> EditUser(UserCreate user, string UserName);
     Task<DataSet> GetUserEditData(string userId);
     Task<DataTable> GetUserAutoId();
     Task<DataTable> GetButtonActionByActionPermission(string actionPermission);
