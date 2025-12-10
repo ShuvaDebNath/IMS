@@ -18,25 +18,59 @@
 
   <ItemGroup>
     <None Remove="Report\SampleRequestReport\rptSampleRequestReport.rdlc" />
+    <None Remove="Report\V2\ApplicationReport\rptApplicationOtherReport.rdlc" />
+    <None Remove="Report\V2\ApplicationReport\rptApplicationPIAmendmentReport.rdlc" />
+    <None Remove="Report\V2\ApplicationReport\rptApplicationReport.rdlc" />
     <None Remove="Report\V2\BeneficiaryCertificate.rdlc" />
     <None Remove="Report\V2\BillOfExchange.rdlc" />
+    <None Remove="Report\V2\BuyerReport\rptBuyerReport.rdlc" />
+    <None Remove="Report\V2\CashReceiveReport\rptCashReceiveReport.rdlc" />
     <None Remove="Report\V2\CertificateOfOrigin.rdlc" />
     <None Remove="Report\V2\Chalan.rdlc" />
     <None Remove="Report\V2\CommercialInvoice.rdlc" />
+    <None Remove="Report\V2\CustomerReport\rptCustomerReport.rdlc" />
     <None Remove="Report\V2\DeliveryChallan.rdlc" />
+    <None Remove="Report\V2\ExportReport\rptExportDetailsReport.rdlc" />
+    <None Remove="Report\V2\ExportReport\rptExportReceiveReport.rdlc" />
+    <None Remove="Report\V2\FinishGood\rptFinishGoodReceiveAndSentReport.rdlc" />
+    <None Remove="Report\V2\FinishGood\rptFinishGoodReceiveReport.rdlc" />
+    <None Remove="Report\V2\FinishGood\rptFinishGoodSentReport.rdlc" />
+    <None Remove="Report\V2\FinishGood\rptFinishGoodStockReport.rdlc" />
     <None Remove="Report\V2\InspectionCertificate.rdlc" />
+    <None Remove="Report\V2\LCReport\rptLCReport.rdlc" />
     <None Remove="Report\V2\PackingList.rdlc" />
     <None Remove="Report\V2\PI.rdlc" />
+    <None Remove="Report\V2\RawMaterial\rptRawMaterialIssueInvoiceReport.rdlc" />
+    <None Remove="Report\V2\RawMaterial\rptRMReceivePendingDetailsReport.rdlc" />
+    <None Remove="Report\V2\RawMaterial\rptRMStockReport.rdlc" />
+    <None Remove="Report\V2\SalesContract\rptSalesContract.rdlc" />
+    <None Remove="Report\V2\SampleRequestReport\rptSampleRequestReport.rdlc" />
+    <None Remove="Report\V2\TaskDetails\rptTaskDetailsReport.rdlc" />
+    <None Remove="Report\V2\TaskReport\rptSampleRequestReport.rdlc" />
+    <None Remove="Report\V2\TaskReport\rptTaskDetailsReport.rdlc" />
+    <None Remove="Report\V2\TaskReport\rptTaskReport.rdlc" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Report\SampleRequestReport\rptSampleRequestReport.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Report\V2\ApplicationReport\rptApplicationOtherReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\ApplicationReport\rptApplicationPIAmendmentReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\ApplicationReport\rptApplicationReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Report\V2\BeneficiaryCertificate.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Report\V2\BillOfExchange.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\CashReceiveReport\rptCashReceiveReport.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Report\V2\CertificateOfOrigin.rdlc">
@@ -48,16 +82,76 @@
     <Content Include="Report\V2\CommercialInvoice.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Report\V2\CustomerReport\rptCustomerReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Report\V2\DeliveryChallan.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\ExportReport\rptExportDetailsReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\ExportReport\rptExportReceiveReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\FinishGood\rptFinishGoodReceiveAndSentReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\FinishGood\rptFinishGoodReceiveReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\FinishGood\rptFinishGoodSentReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\FinishGood\rptFinishGoodStockReport.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Report\V2\InspectionCertificate.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Report\V2\LCReport\rptLCReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Report\V2\PackingList.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Report\V2\CashPI.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Report\V2\PI.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\RawMaterial\rptRawMaterialIssueInvoiceReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\RawMaterial\rptRMReceivePendingDetailsReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\RawMaterial\rptRMStockReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\SalesContract\rptSalesContract.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\SampleRequestReport\rptSampleRequestReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\TaskDetails\rptTaskDetailsReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\TaskReport\rptSampleRequestReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\TaskReport\rptTaskDetailsReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\TaskReport\rptTaskReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Report\V2\BuyerReport\rptBuyerReport.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

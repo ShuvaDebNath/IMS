@@ -429,35 +429,37 @@
             [style]="{ width: '100vw' }"
             (onHide)="deliveryDetailsData = null">
     <div *ngIf="deliveryDetailsData">
-      <p-table [value]="deliveryDetailsData.Items" [responsive]="true">
-        <ng-template pTemplate="header">
-          <tr>
-            <th style="text-align: center;">PI Article</th>
-            <th style="text-align: center;">Delivery Date</th>
-            <th style="text-align: center;">Challan No</th>
-            <th style="text-align: center;">Delivered Article</th>
-            <th style="text-align: center;">Ordered in Yard</th>
-            <th style="text-align: center;">Delivered in Yard</th>
-            <th style="text-align: center;">Ordered in Meter</th>
-            <th style="text-align: center;">Delivered in Meter</th>            
-            <th style="text-align: center;">Roll</th>
+      <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+          <tr class="bg-gradient-success">
+            <th class="text-center align-middle">PI Article</th>
+            <th class="text-center align-middle">Delivery Date</th>
+            <th class="text-center align-middle">Challan No</th>
+            <th class="text-center align-middle">Delivered Article</th>
+            <th class="text-center align-middle">Ordered in Yard</th>
+            <th class="text-center align-middle">Delivered in Yard</th>
+            <th class="text-center align-middle">Ordered in Meter</th>
+            <th class="text-center align-middle">Delivered in Meter</th>
+            <th class="text-center align-middle">Roll</th>
           </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-item>
-          <tr>
-            <td style="text-align: left;">{{ item.PI_Article_No }}</td>
-            <td style="text-align: left;">{{ item.DeliveryDate }}</td>
-            <td style="text-align: left;">{{ item.Chalan_No }}</td>
-            <td style="text-align: center;">{{ item.Delivery_Article_No }}</td>
-            <td style="text-align: center;">{{ item.Ordered }}</td>
-            <td style="text-align: center;">{{ item.Delivered }}</td>
-            <td style="text-align: center;">{{ item.Orderd_In_Meter }}</td>
-            <td style="text-align: center;">{{ item.Deliverd_In_Meter }}</td>
-            <td style="text-align: center;">{{ item.Roll }}</td>
+          <tr *ngFor="let item of deliveryDetailsData.Items">
+            <td class="text-left align-middle">{{ item.PI_Article_No }}</td>
+            <td class="text-left align-middle">{{ item.DeliveryDate }}</td>
+            <td class="text-center align-middle">
+              <ng-container *ngIf="item.Chalan_No != 0; else noLink">
+                <a href="#" (click)="$event.preventDefault(); printChallan(item.Chalan_No)">{{ item.Chalan_No }}</a>
+              </ng-container>
+              <ng-template #noLink>{{ item.Chalan_No }}</ng-template>
+            </td>
+            <td class="text-center align-middle">{{ item.Delivery_Article_No }}</td>
+            <td class="text-center align-middle">{{ item.Ordered }}</td>
+            <td class="text-center align-middle">{{ item.Delivered }}</td>
+            <td class="text-center align-middle">{{ item.Orderd_In_Meter }}</td>
+            <td class="text-center align-middle">{{ item.Deliverd_In_Meter }}</td>
+            <td class="text-center align-middle">{{ item.Rolls }}</td>
           </tr>
-        </ng-template>
-        <ng-template pTemplate="footer">
-          <tr class="font-weight-bold bg-light">
+          <!-- Totals row -->
+          <tr class="table-secondary font-weight-bold">
             <td colspan="4" class="text-right">Totals</td>
             <td class="text-center">{{ deliveryTotalsOrdered }}</td>
             <td class="text-center">{{ deliveryTotalsDelivered }}</td>
@@ -465,8 +467,8 @@
             <td class="text-center">{{ deliveryTotalsDeliveredMeter }}</td>
             <td class="text-center">{{ deliveryTotalsRolls }}</td>
           </tr>
-        </ng-template>
-      </p-table>
+        </table>
+      </div>
     </div>
   </p-dialog>
 

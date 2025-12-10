@@ -44,6 +44,26 @@ public class ReportService : IReportService
         }
     }
 
+    public async Task<DataSet> CustomerReport(string Superior_Id, string Customer_Id, string Status, string SentBy)
+    {
+        try
+        {
+            CustomerParams param = new CustomerParams
+            {
+                Superior_Id = Superior_Id,
+                Customer_Id = Customer_Id,
+                Status = Status,
+                SentBy = SentBy,
+
+            };
+            return await _reportRepository.CustomerReport(param);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
     public async Task<DataSet> ProformaInvoiceReport(int PI_Master_ID)
     {
         try

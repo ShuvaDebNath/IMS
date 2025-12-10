@@ -37,6 +37,7 @@ datePipe = new DatePipe('en-US');
   ForceMajeureList: any|[];
   ArbitrationList: any|[];
   PINo!:string;
+  PageTitle: any;
 
   Formgroup!: FormGroup;
   isSubmit!: boolean;
@@ -51,6 +52,7 @@ datePipe = new DatePipe('en-US');
   ) {}
 
   ngOnInit(): void {
+    this.PageTitle = 'Generate Cash PI'
     this.SetDDL=true;
     this.GenerateFrom(); 
     this.GetInitialData();
@@ -262,7 +264,7 @@ datePipe = new DatePipe('en-US');
         this.ColorList=DataSet.Tables13;
         this.PackagingList=DataSet.Tables14;
         this.UnitList=DataSet.Tables15;
-        this.AAList=DataSet.Tables16;
+        this.AAList=DataSet.Tables28;
         this.DeliveryConditionList=DataSet.Tables17;
         this.PartialShipmentList=DataSet.Tables18;
         this.PriceTermsList=DataSet.Tables19;
@@ -287,6 +289,93 @@ datePipe = new DatePipe('en-US');
 
 
   Save():void{
+        
+        const requiredFields = [
+          { key: 'Consignee_Initial', label: 'Consignee Initial' },
+          { key: 'PINo', label: 'PI No' },
+          { key: 'Date', label: 'Date' },
+          { key: 'Beneficiary_Account_ID', label: 'Shippeer' },
+          { key: 'Beneficiary_Bank_ID', label: "Beneficiary's Bank" },
+          { key: 'Country_Of_Orgin_ID', label: 'Country of Origin' },
+          { key: 'Packing_ID', label: 'Packing' },
+          { key: 'Loading_Mode_ID', label: 'Loading Mode' },
+          { key: 'Payment_Term_ID', label: 'Payment Mode' },
+          { key: 'Customer_ID', label: 'Consignee' },
+          { key: 'Contact_Person', label: 'Contact Person' },
+          { key: 'Buyer_Name', label: 'Buyer Name' },
+          { key: 'Delivery_Address', label: 'Delivery Address' },
+          { key: 'Style', label: 'Style' },
+          { key: 'Good_Description', label: 'Goods Description' },
+          { key: 'Currency_ID', label: 'Currency' },
+          { key: 'Delivery_Condition_ID', label: 'Delivery Condition' },
+          { key: 'Shipment_Condition_ID', label: 'Partial Shipment' },
+          { key: 'Price_Term_ID', label: 'Price Terms' },
+          { key: 'Documents', label: 'Documents' },
+          { key: 'Loading_Port', label: 'Port Of Loading' },
+          { key: 'Destination_Port', label: 'Port Of Destination' },
+          { key: 'Force_Majeure_ID', label: 'Force Majeure' },
+          { key: 'Arbitration_ID', label: 'Arbitration' }
+        ];
+
+        let missingFields: string[] = [];
+        requiredFields.forEach(field => {
+          const value = this.Formgroup.controls[field.key]?.value;
+          if (value === null || value === undefined || value === '' || value === 0) {
+            missingFields.push(field.label);
+          }
+        });
+
+        const itemArray = this.Formgroup.get('ItemArray') as FormArray;
+        if (!itemArray || itemArray.length === 0) {
+          missingFields.push('At least one Item Row');
+        } else {
+          itemArray.controls.forEach((row, idx) => {
+            const itemRequired = [
+              { key: 'Article', label: 'Article No' },
+              { key: 'Description', label: 'Description' },
+              { key: 'Width_ID', label: 'Width' },
+              { key: 'Color_ID', label: 'Color' },
+              { key: 'Packaging_ID', label: 'Packaging' },
+              { key: 'Quantity', label: 'Qty' },
+              { key: 'Unit_ID', label: 'Unit' },
+              { key: 'Unit_Price', label: 'Unit Price' },
+              { key: 'CommissionUnit', label: 'Prod. Cost Unit' },
+              { key: 'Item_ID', label: 'A. A.' }
+            ];
+            itemRequired.forEach(col => {
+              const val = row.get(col.key)?.value;
+              if (val === null || val === undefined || val === '' || val === 0) {
+                missingFields.push(`Row ${idx + 1}: ${col.label}`);
+              }
+            });
+          });
+        }
+
+        if (missingFields.length > 0) {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Validation Error',
+            html: 'Please fill the following fields:<br><ul style="text-align:left">' + missingFields.map(f => `<li>${f}</li>`).join('') + '</ul>'
+          });
+          return;
+        }
+
+    const consigneeValue = this.Formgroup.controls['Customer_ID'].value;
+    const consignee = this.ConsigneeList && this.ConsigneeList.length > 0
+      ? this.ConsigneeList.find((x: any) => x.Customer_ID == consigneeValue || x.Consignee == consigneeValue)
+      : null;
+    const roleId = this.gs.getSessionData('roleId');
+    const userId = this.gs.getSessionData('userId');
+    if (consignee) {
+      if (roleId == 1 || roleId == 2 || roleId == 12) {
+        this.Formgroup.controls['User_ID']?.setValue(consignee.Created_By);
+      } else {
+        this.Formgroup.controls['User_ID']?.setValue(userId);
+      }
+      this.Formgroup.controls['Superior_ID']?.setValue(consignee.Superior_ID);
+    }
+   
+
     let model= {
       PI_Master_ID: this.Formgroup.controls['PI_Master_ID'].value,
       PINo: this.Formgroup.controls['PINo'].value,
@@ -315,16 +404,15 @@ datePipe = new DatePipe('en-US');
       Force_Majeure_ID: this.Formgroup.controls['Force_Majeure_ID'].value,
       Arbitration_ID: this.Formgroup.controls['Arbitration_ID'].value,
       Status: this.Formgroup.controls['Status'].value,
-      User_ID: this.gs.getSessionData('userId'),
-      Superior_ID: this.gs.getSessionData('userId'),
+      User_ID: this.Formgroup.controls['User_ID'].value,
+      Superior_ID: this.Formgroup.controls['Superior_ID'].value,
       Customer_ID: this.Formgroup.controls['Customer_ID'].value,
       IsMPI: this.Formgroup.controls['IsMPI'].value,      
       LastUpdateDate: this.Formgroup.controls['LastUpdateDate'].value,
       Currency_ID: this.Formgroup.controls['Currency_ID'].value
     };
-
     
-    // model.PINo=`${model.Consignee_Initial}-${this.datePipe.transform(model.Date, 'yyyyMMdd')}`;
+    model.PINo=`${model.Consignee_Initial}-${this.datePipe.transform(model.Date, 'yyyyMMdd')}`;
 
     this.service.SaveDataMasterDetails(this.Formgroup.value.ItemArray,
       "tbl_pi_detail",

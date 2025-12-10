@@ -272,8 +272,6 @@ OpenSpecialApprove(Id:number){
           this.PIDetails = JSON.parse(results.data).Tables1;
           this.PIData = this.PIDetails[0];
           console.clear();
-          console.log(this.PIData);
-          // compute totals for details
           this.computePidTotals();
         } else if (results.msg == 'Invalid Token') {
           Swal.fire('Session Expired!', 'Please Login Again.', 'info');
@@ -325,9 +323,6 @@ OpenSpecialApprove(Id:number){
 
     getRole = this.gs.getSessionData('roleId');
     var userID = this.gs.getSessionData('userId');
-
-    console.log(getRole);
-    
 
       const procedureData = {
         procedureName: 'usp_ProformaInvoice_GetDataDataTable',
@@ -477,8 +472,6 @@ OpenSpecialApprove(Id:number){
             Items: items,
           };
 
-          console.log(items);
-          // compute delivery totals
           this.computeDeliveryTotals(items);
 
           this.isDeliveryDetailsVisible = true;
@@ -535,7 +528,6 @@ OpenSpecialApprove(Id:number){
       'PI_Master_ID': this.PIData?.PI_Master_ID,
       "IsMPI": this.PIData?.IsMPI 
     }
-    console.log(item);
     
     this.reportService.PrintProformaInvoiceRequest(item, 'pdf','T');
   }
@@ -614,5 +606,15 @@ OpenSpecialApprove(Id:number){
       this.specialApprovalMaxDeliverable = 0;
     }
   }
+
+  printChallan(challanNo?: string): void {
+      const no = challanNo ;
+      if (!no) {
+        Swal.fire('Error', 'Challan no missing', 'error');
+        return;
+      }
+      const payload = { Chalan_No: no };
+      this.reportService.PrintDeliveryChallanReport(payload, 'pdf', true);
+    }
     
 }
