@@ -33,6 +33,7 @@ export class PiListComponent implements OnInit {
   DataTable!:any[];
   PIData!:any;
   PIDetails!:any[];
+  UserList: any[] = [];
   // Totals for PI details table
   totalsOrderQty: number = 0;
   totalsDeliveredQty: number = 0;
@@ -129,7 +130,8 @@ export class PiListComponent implements OnInit {
       ToDate: [''],
       Shipper: [''],
       Consignee: [''],
-      CreateBY: [''],
+      // CreateBY: [''],
+      User_ID: [''],
       PIType: [''],
       PageNumber: [''],
       PageSize : ['']
@@ -238,6 +240,8 @@ export class PiListComponent implements OnInit {
       }
     }
     this.title.setTitle(this.PageTitle);
+    this.GetInitialData();
+    //this.LoadTableData('');
     // this.LoadTableData();
     this.GenerateSearchFrom();
   }
@@ -245,7 +249,7 @@ export class PiListComponent implements OnInit {
     this.first = event.first;
     this.rows = event.rows;
     this.first=(this.first/this.rows)+1;
-    this.LoadTableData();
+    this.LoadTableData('');
   }
 OpenSpecialApprove(Id:number){
   this.isSpecialApprovalVisible = true;
@@ -280,14 +284,51 @@ OpenSpecialApprove(Id:number){
     });
   }
 
-  LoadTableData(): void {
+
+  GetInitialData(): void {
+    
+      const procedureData = {
+        procedureName: 'usp_GetUserInfo_With_Superior',
+        parameters: {
+          UserId :this.gs.getSessionData('userId'),
+        }
+      };
+     
+      this.getDataService.GetInitialData(procedureData).subscribe({
+        next: (results) => {
+          if (results.status) {
+            this.UserList = JSON.parse(results.data).Tables1;
+
+            if (this.UserList.length === 1) {
+              this.SearchFormgroup.controls['User_ID'].setValue(this.UserList[0].User_ID);
+            }
+
+          } else if (results.msg == 'Invalid Token') {
+            Swal.fire('Session Expired!', 'Please Login Again.', 'info');
+            this.gs.Logout();
+            this.isLoading = false;
+          }
+        },
+        error: (err) => { this.isLoading = false; },
+      });
+    }
+
+  LoadTableData(type:any=''): void {
     this.SearchFormgroup.controls['PageNumber'].setValue(this.first);
     this.SearchFormgroup.controls['PageSize'].setValue(this.rows);
     let permas=this.SearchFormgroup.value;
 
     this.DataTable=[];
     this.isLoading = true;
+
+    var getRole = ''
+
+    getRole = this.gs.getSessionData('roleId');
+    var userID = this.gs.getSessionData('userId');
+
+    console.log(getRole);
     
+
       const procedureData = {
         procedureName: 'usp_ProformaInvoice_GetDataDataTable',
         parameters: {
@@ -296,20 +337,25 @@ OpenSpecialApprove(Id:number){
           ToDate :permas.ToDate? this.datePipe.transform(permas.ToDate, 'yyyy-MM-dd') :'',
           Shipper :permas.Shipper?permas.Shipper:'',
           Consignee :permas.Consignee?permas.Consignee:'',
-          CreateBY :permas.CreateBY?permas.CreateBY:'',
+          CreateBY : getRole == '1' || getRole == '2' ? 
+                    (permas.User_ID?permas.User_ID:'') : 
+                    (permas.User_ID?permas.User_ID:userID),
           PIType :permas.PIType?permas.PIType:null,
           PI_Status   : this.PiStatus,
           PageNumber   : this.first,
           PageSize    : this.rows
         }
       };
+
+     console.log(procedureData);
      
       this.getDataService.GetInitialData(procedureData).subscribe({
         next: (results) => {
           if (results.status) {
             this.DataTable = JSON.parse(results.data).Tables1;
-            this.totalRecords=this.DataTable[0]?.TotalCount;      
+            this.totalRecords=this.DataTable[0]?.TotalCount;  
             this.isLoading = false;
+             console.log(this.DataTable);
 
           } else if (results.msg == 'Invalid Token') {
             Swal.fire('Session Expired!', 'Please Login Again.', 'info');
@@ -485,11 +531,12 @@ OpenSpecialApprove(Id:number){
   }
 
    Print(){
-    console.log('shuva');
-    
     var item = {
       'PI_Master_ID': this.PIData?.PI_Master_ID,
+      "IsMPI": this.PIData?.IsMPI 
     }
+    console.log(item);
+    
     this.reportService.PrintProformaInvoiceRequest(item, 'pdf','T');
   }
   saveSpecialApproval() {
