@@ -113,6 +113,13 @@
           "Required": true
         }
       }
+    },
+    "tbl_currency": {
+      "QueryParams": {
+        "[Name]": {
+          "Required": true
+        }
+      }
     }
   }
 }

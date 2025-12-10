@@ -1,5 +1,5 @@
 <div class="container">
-  <h1 class="theme-text">ALL Customers List</h1>
+  <h1 class="theme-text">ALL Currency List</h1>
 
   <div class="col-md-2">
     <div class="d-flex align-items-center">
@@ -7,7 +7,7 @@
         *ngIf="insertPermissions"
         class="btn theme-btn"
         style="color: white"
-        routerLink="/generate-customers"
+        routerLink="/currency-create"
         target="_blank"
       >
         <i class="fas fa-plus"></i>&nbsp;Create New
@@ -18,7 +18,7 @@
     <p-table
       *ngIf="tableVisible"
       #dt
-      [value]="allCustomers"
+      [value]="allCurrency"
       [paginator]="true"
       [rows]="10"
       [responsive]="true"
@@ -48,41 +48,36 @@
       <ng-template pTemplate="header">
         <tr>
           <th class="text-center">Serial No</th>
-          <th class="text-center">Customer Name</th>
-          <th class="text-center">Contact Person</th>
-          <th class="text-center">Customer Address</th>
-          <th class="text-center">Designation</th>
-          <th class="text-center">Group Head</th>
-          <th class="text-center">Phone Number</th>
-          <th class="text-center">E-mail Address</th>
+          <th class="text-center">ISO No</th>
+          <th class="text-center">Currency Name</th>
+          <th class="text-center">Exchange Rate</th>
+          <th class="text-center">Is Available</th>
           <th class="text-center">Action</th>
         </tr>
       </ng-template>
 
-      <ng-template pTemplate="body" let-CustomersLIst let-i="rowIndex">
+      <ng-template pTemplate="body" let-CurrencyLIst let-i="rowIndex">
         <tr>
           <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
-          <td class="text-start">{{ CustomersLIst.Company_Name }}</td>
-          <td class="text-start">{{ CustomersLIst.Contact_Name }}</td>
-          <td class="text-start">{{ CustomersLIst.Customer_Address }}</td>
-          <td class="text-start">{{ CustomersLIst.Contact_Title }}</td>
-          <td class="text-start">{{ CustomersLIst.UserName }}</td>
-          <td class="text-start">{{ CustomersLIst.Phone_No }}</td>
-          <td class="text-start">{{ CustomersLIst.Email }}</td>
+          <td class="text-start">{{ CurrencyLIst.CurrencyCode }}</td>
+          <td class="text-start">{{ CurrencyLIst.Name }}</td>
+          <td class="text-start">{{ CurrencyLIst.ExchangeRate }}</td>
+          <td class="text-start" style="color: green;" *ngIf="CurrencyLIst.IsAvailable==1">True</td>
+          <td class="text-start" style="color:red;" *ngIf="CurrencyLIst.IsAvailable==0">False</td>
           <td class="d-flex gap-2 justify-content-center">
             <a
               *ngIf="updatePermissions"
               class="btn bg-gradient-cyan btn-xs mr-2"
               target="_blank"
               title="Edit"
-              [routerLink]="['/generate-customers']"
-              [queryParams]="{ Customer_Id: CustomersLIst.Customer_ID }"
+              [routerLink]="['/currency-create']"
+              [queryParams]="{ Currency_ID: CurrencyLIst.Currency_ID }"
               ><i class="fa fa-edit"></i
             ></a>
             <button
               *ngIf="deletePermissions"
               class="btn btn-danger btn-sm d-inline-flex align-items-center"
-              (click)="onDelete(CustomersLIst)"
+              (click)="onDelete(CurrencyLIst)"
               title="Delete"
               aria-label="Delete"
             >

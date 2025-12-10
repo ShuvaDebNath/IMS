@@ -25,7 +25,7 @@ export class CurrencyListComponent {
   CustomerList: any;
   dateForm!: FormGroup;
   tableVisible = false;
-  SuperiorList: any;
+  allCurrency: any;
 
   insertPermissions: boolean = false;
   updatePermissions: boolean = false;
@@ -52,68 +52,14 @@ export class CurrencyListComponent {
       window.location.href = 'dashboard';
     }
     this.title.setTitle('All Customer List');
-    this.getInitialData();
-    this.dateForm = this.fb.group({
-      CustomerId: [''],
-      SuperioId: [''],
-    });
+    this.loadAllCurrency();
   }
-  getInitialData() {
-    var userId = window.localStorage.getItem('userId');
-    var ProcedureData = {
-      procedureName: '[usp_Customer_GetInitialData]',
-      parameters: {
-        User_Id: userId,
-      },
-    };
-
-    this.getDataService.GetInitialData(ProcedureData).subscribe({
-      next: (results) => {
-        if (results.status) {
-          this.CustomerList = JSON.parse(results.data).Tables2;
-          if (JSON.parse(results.data).Tables3 != undefined)
-            this.SuperiorList = JSON.parse(results.data).Tables3;
-        } else if (results.msg == 'Invalid Token') {
-          swal.fire('Session Expierd!', 'Please Login Again.', 'info');
-          this.gs.Logout();
-        } else {
-        }
-      },
-      error: (err) => {},
-    });
-  }
-  loadAllCustomers(): void {
-    if (this.dateForm.invalid) {
-      swal.fire(
-        'Validation Error!',
-        'Please select both From Date and To Date.',
-        'warning'
-      );
-      return;
-    }
-    var { fromDate, toDate, CustomerId, SuperioId } = this.dateForm.value;
-    if (new Date(fromDate) > new Date(toDate)) {
-      swal.fire(
-        'Validation Error!',
-        'From Date cannot be later than To Date.',
-        'warning'
-      );
-      return;
-    }
-
-    const sentByStr = localStorage.getItem('userId');
-    const sentBy = sentByStr ? Number(sentByStr) : null;
-    var userId = window.localStorage.getItem('userId');
-
-    if (SuperioId == undefined || SuperioId == '') SuperioId = userId;
+  
+  loadAllCurrency(): void {
 
     const procedureData = {
-      procedureName: 'usp_Customer_GetCustomerData',
+      procedureName: 'usp_Currency_List',
       parameters: {
-        Superior_Id: SuperioId,
-        Customer_Id: CustomerId,
-        Status: 'All',
-        UserID: sentBy,
       },
     };
 
@@ -121,7 +67,7 @@ export class CurrencyListComponent {
       next: (results) => {
         console.log(results, procedureData);
         if (results.status) {
-          this.allCustomers = JSON.parse(results.data).Tables1;
+          this.allCurrency = JSON.parse(results.data).Tables1;
 
           this.tableVisible = true;
         } else if (results.msg === 'Invalid Token') {
@@ -133,50 +79,18 @@ export class CurrencyListComponent {
     });
   }
 
-  onDetails(row: any): void {
-    const procedureData = {
-      procedureName: 'usp_Customer_GetDataById',
-      parameters: { Customer_Id: row.Customer_ID },
-    };
-
-    this.getDataService.GetInitialData(procedureData).subscribe({
-      next: (results) => {
-        parameters: {
-          Customer_Id: row.Customer_ID;
-        }
-        console.log(results, row);
-
-        if (results.status) {
-          this.detailsData = JSON.parse(results.data).Tables1[0];
-          this.isDetailsVisible = true; // open dialog
-        } else if (results.msg === 'Invalid Token') {
-          swal.fire('Session Expired!', 'Please Login Again.', 'info');
-          this.gs.Logout();
-        } else {
-          swal.fire('Error!', 'Failed to load details.', 'info');
-        }
-      },
-      error: () =>
-        swal.fire(
-          'Error!',
-          'An error occurred while fetching details.',
-          'info'
-        ),
-    });
-  }
-
   onDelete(row: any) {
-    const id = String(row?.Customer_ID ?? '');
+    const id = String(row?.Currency_ID ?? '');
 
     if (!id) {
-      swal.fire('Missing Id', 'Customer Id not found.', 'info');
+      swal.fire('Missing Id', 'Currency Id not found.', 'info');
       return;
     }
 
     swal
       .fire({
         title: 'Are you sure?',
-        text: `Delete customer ${row?.Company_Name || ''}?`,
+        text: `Delete Currency ${row?.Name || ''}?`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Yes, delete',
@@ -186,8 +100,8 @@ export class CurrencyListComponent {
       .then((res) => {
         if (!res.isConfirmed) return;
 
-        const tableName = 'tbl_Customer';
-        const whereParams = { Customer_Id: row?.Customer_ID };
+        const tableName = 'tbl_currency';
+        const whereParams = { Currency_ID: row?.Currency_ID };
 
         var masterEntryModel = new MasterEntryModel();
         masterEntryModel.tableName = tableName;
@@ -195,8 +109,8 @@ export class CurrencyListComponent {
 
         this.ms.DeleteData(masterEntryModel).subscribe({
           next: () => {
-            swal.fire('Deleted!', 'Customer deleted successfully.', 'success');
-            this.loadAllCustomers(); // refresh the table
+            swal.fire('Deleted!', 'Currency deleted successfully.', 'success');
+            this.loadAllCurrency(); // refresh the table
           },
           error: (err) => {
             console.error(err);
@@ -210,10 +124,4 @@ export class CurrencyListComponent {
       });
   }
 
-  getCustomerList() {
-    var SuperioId = this.dateForm.value.SuperioId;
-    this.CustomerList = this.CustomerList.filter(
-      (e: any) => e.Superior_ID == SuperioId
-    );
-  }
 }

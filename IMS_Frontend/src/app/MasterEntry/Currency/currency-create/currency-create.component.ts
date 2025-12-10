@@ -94,6 +94,8 @@ export class CurrencyCreateComponent {
   }
 
   saveData() {
+    console.log(this.Formgroup);
+    
     if (this.Formgroup.invalid) {
       swal.fire(
         'Invlid Inputs!',

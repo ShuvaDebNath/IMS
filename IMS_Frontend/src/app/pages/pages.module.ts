@@ -544,6 +544,8 @@ const CustomSelectOptions: INgxSelectOptions = {
           { path: 'return-goods-application', component: ReturnGoodsApplicationComponent },
           { path: 'currency-create', component: CurrencyCreateComponent },
           { path: 'currency-list', component: CurrencyListComponent },
+          { path: 'payment-terms-create', component: PaymentTermsCreateComponent },
+          { path: 'payment-terms-list', component: PaymentTermsListComponent },
         ],
       },
 
