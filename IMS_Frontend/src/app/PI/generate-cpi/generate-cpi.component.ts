@@ -372,7 +372,7 @@ datePipe = new DatePipe('en-US');
       } else {
         this.Formgroup.controls['User_ID']?.setValue(userId);
       }
-      this.Formgroup.controls['Superior_ID']?.setValue(consignee.Superior_ID);
+      this.Formgroup.controls['Superior_ID']?.setValue(consignee.Superior_ID)
     }
    
 
