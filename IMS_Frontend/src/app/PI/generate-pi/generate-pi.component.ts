@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GetDataModel } from 'src/app/models/GetDataModel';
+import { DoubleMasterEntryService } from 'src/app/services/doubleEntry/doubleEntryService.service';
 import { GlobalServiceService } from 'src/app/services/Global-service.service';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 import Swal from 'sweetalert2';
@@ -13,29 +14,6 @@ import Swal from 'sweetalert2';
 })
 export class GeneratePiComponent implements OnInit {
   datePipe = new DatePipe('en-US');
-  ShipperList: any|[];
-  BenificaryBankList: any|[];
-  CountryList: any|[];
-  PackingList: any|[];
-  LoadingModeList: any|[];
-  PaymentModeList: any|[];
-  ConsigneeList: any|[];
-  ApplicantBankList: any|[];
-  BuyingHouseList: any|[];
-  TermsofDeliveryList: any|[];
-  DescriptionList: any|[];
-  WidthList: any|[];
-  ColorList: any|[];
-  PackagingList: any|[];
-  UnitList: any|[];
-  AAList: any|[];
-  DeliveryConditionList: any|[];
-  PartialShipmentList: any|[];
-  PriceTermsList: any|[];
-  ForceMajeureList: any|[];
-  ArbitrationList: any|[];
-  PINo!:string;
-  PageTitle: any;
   ShipperList: any | [];
   BenificaryBankList: any | [];
   CountryList: any | [];
@@ -58,6 +36,7 @@ export class GeneratePiComponent implements OnInit {
   ForceMajeureList: any | [];
   ArbitrationList: any | [];
   PINo!: string;
+  PageTitle: any;
   // temporary PI passed from another tab (via localStorage)
   private tempPI?: string | null;
 
@@ -67,12 +46,9 @@ export class GeneratePiComponent implements OnInit {
 
   Formgroup!: FormGroup;
   isSubmit!: boolean;
-  SetDDL:boolean=true;
-  GTQTY: any=0;
-  GTAMNT: any=0;
-
-  constructor( private service:MasterEntryService,
   SetDDL: boolean = true;
+  GTQTY: any = 0;
+  GTAMNT: any = 0;
   GrandTotalQty: any = 0;
   GrandTotalAmount: any = 0;
 
@@ -81,17 +57,12 @@ export class GeneratePiComponent implements OnInit {
     private des: DoubleMasterEntryService,
     private gs: GlobalServiceService,
     private fb: FormBuilder
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.PageTitle = 'Generate LC PI'
-    this.SetDDL=true;
-    this.GenerateFrom(); 
-    this.GetInitialData();
-    this.BuyerToggle(false);
-    this.RegisterFormControlsChangeEvent();    
-    this.GTQTY=0;
-    this.GTAMNT=0;
+    this.GTQTY = 0;
+    this.GTAMNT = 0;
     this.SetDDL = true;
     this.GenerateFrom();
     this.GetInitialData();
@@ -108,7 +79,7 @@ export class GeneratePiComponent implements OnInit {
         if (this.Formgroup) {
           this.Formgroup.controls['PINo'].setValue(this.tempPI);
         }
-      } catch (e) {}
+      } catch (e) { }
     }
   }
 
@@ -162,7 +133,7 @@ export class GeneratePiComponent implements OnInit {
                   (this.Formgroup.controls as any)[k].setValue(master[k]);
                 }
               }
-            } catch (e) {}
+            } catch (e) { }
           }
 
           // Details table: try Tables2, Tables1 (if it's the details), or Tables3
@@ -204,7 +175,7 @@ export class GeneratePiComponent implements OnInit {
             } catch (tt) {
               /* ignore */
             }
-          } catch (e) {}
+          } catch (e) { }
         } else {
           if (res.msg === 'Invalid Token') this.gs.Logout();
         }
@@ -228,7 +199,7 @@ export class GeneratePiComponent implements OnInit {
     } catch (e) {
       try {
         localStorage.removeItem('IMS_temp_open_pi');
-      } catch (_) {}
+      } catch (_) { }
       return null;
     }
   }
@@ -390,15 +361,14 @@ export class GeneratePiComponent implements OnInit {
   }
 
   calculatetotalGrandTotal() {
-    this.GTQTY=0;this.GTAMNT=0;
-    const itemArray = this.Formgroup.get('ItemArray') as FormArray;
-    itemArray.controls.forEach(control => {
-      this.GTQTY+=control.value.Quantity;
-      this.GTAMNT+=control.value.Total_Amount;
+    this.GTQTY = 0;
+    this.GTAMNT = 0;
     this.GrandTotalQty = 0;
     this.GrandTotalAmount = 0;
     const itemArray = this.Formgroup.get('ItemArray') as FormArray;
-    itemArray.controls.forEach((control) => {
+    itemArray.controls.forEach(control => {
+      this.GTQTY += control.value.Quantity;
+      this.GTAMNT += control.value.Total_Amount;
       this.GrandTotalQty += control.value.Quantity;
       this.GrandTotalAmount += control.value.Total_Amount;
     });
@@ -489,102 +459,99 @@ export class GeneratePiComponent implements OnInit {
     });
   }
 
-  Save():void{
+  Save(): void {
 
     const requiredFields = [
-              { key: 'Consignee_Initial', label: 'Consignee Initial' },
-              { key: 'PINo', label: 'PI No' },
-              { key: 'Date', label: 'Date' },
-              { key: 'Beneficiary_Account_ID', label: 'Shippeer' },
-              { key: 'Beneficiary_Bank_ID', label: "Beneficiary's Bank" },
-              { key: 'Country_Of_Orgin_ID', label: 'Country of Origin' },
-              { key: 'Packing_ID', label: 'Packing' },
-              { key: 'Loading_Mode_ID', label: 'Loading Mode' },
-              { key: 'Payment_Term_ID', label: 'Payment Mode' },
-              { key: 'Customer_ID', label: 'Consignee' },
-              { key: 'Contact_Person', label: 'Contact Person' },
-              { key: 'Buyer_Name', label: 'Buyer Name' },
-              { key: 'Delivery_Address', label: 'Delivery Address' },
-              { key: 'Style', label: 'Style' },
-              { key: 'Good_Description', label: 'Goods Description' },
-              { key: 'Currency_ID', label: 'Currency' },
-              { key: 'Delivery_Condition_ID', label: 'Delivery Condition' },
-              { key: 'Shipment_Condition_ID', label: 'Partial Shipment' },
-              { key: 'Price_Term_ID', label: 'Price Terms' },
-              { key: 'Documents', label: 'Documents' },
-              { key: 'Loading_Port', label: 'Port Of Loading' },
-              { key: 'Destination_Port', label: 'Port Of Destination' },
-              { key: 'Force_Majeure_ID', label: 'Force Majeure' },
-              { key: 'Arbitration_ID', label: 'Arbitration' }
-            ];
-    
-            let missingFields: string[] = [];
-            requiredFields.forEach(field => {
-              const value = this.Formgroup.controls[field.key]?.value;
-              if (value === null || value === undefined || value === '' || value === 0) {
-                missingFields.push(field.label);
-              }
-            });
-    
-            const itemArray = this.Formgroup.get('ItemArray') as FormArray;
-            if (!itemArray || itemArray.length === 0) {
-              missingFields.push('At least one Item Row');
-            } else {
-              itemArray.controls.forEach((row, idx) => {
-                const itemRequired = [
-                  { key: 'Article', label: 'Article No' },
-                  { key: 'Description', label: 'Description' },
-                  { key: 'Width_ID', label: 'Width' },
-                  { key: 'Color_ID', label: 'Color' },
-                  { key: 'Packaging_ID', label: 'Packaging' },
-                  { key: 'Quantity', label: 'Qty' },
-                  { key: 'Unit_ID', label: 'Unit' },
-                  { key: 'Unit_Price', label: 'Unit Price' },
-                  { key: 'CommissionUnit', label: 'Prod. Cost Unit' },
-                  { key: 'Item_ID', label: 'A. A.' }
-                ];
-                itemRequired.forEach(col => {
-                  const val = row.get(col.key)?.value;
-                  if (val === null || val === undefined || val === '' || val === 0) {
-                    missingFields.push(`Row ${idx + 1}: ${col.label}`);
-                  }
-                });
-              });
-            }
-    
-            if (missingFields.length > 0) {
-              Swal.fire({
-                icon: 'warning',
-                title: 'Validation Error',
-                html: 'Please fill the following fields:<br><ul style="text-align:left">' + missingFields.map(f => `<li>${f}</li>`).join('') + '</ul>'
-              });
-              return;
-            }
-    
-        const consigneeValue = this.Formgroup.controls['Customer_ID'].value;
-        const consignee = this.ConsigneeList && this.ConsigneeList.length > 0
-          ? this.ConsigneeList.find((x: any) => x.Customer_ID == consigneeValue || x.Consignee == consigneeValue)
-          : null;
-        const roleId = this.gs.getSessionData('roleId');
-        const userId = this.gs.getSessionData('userId');
-        if (consignee) {
-          if (roleId == 1 || roleId == 2 || roleId == 12) {
-            this.Formgroup.controls['User_ID']?.setValue(consignee.Created_By);
-          } else {
-            this.Formgroup.controls['User_ID']?.setValue(userId);
+      { key: 'Consignee_Initial', label: 'Consignee Initial' },
+      { key: 'PINo', label: 'PI No' },
+      { key: 'Date', label: 'Date' },
+      { key: 'Beneficiary_Account_ID', label: 'Shippeer' },
+      { key: 'Beneficiary_Bank_ID', label: "Beneficiary's Bank" },
+      { key: 'Country_Of_Orgin_ID', label: 'Country of Origin' },
+      { key: 'Packing_ID', label: 'Packing' },
+      { key: 'Loading_Mode_ID', label: 'Loading Mode' },
+      { key: 'Payment_Term_ID', label: 'Payment Mode' },
+      { key: 'Customer_ID', label: 'Consignee' },
+      { key: 'Contact_Person', label: 'Contact Person' },
+      { key: 'Buyer_Name', label: 'Buyer Name' },
+      { key: 'Delivery_Address', label: 'Delivery Address' },
+      { key: 'Style', label: 'Style' },
+      { key: 'Good_Description', label: 'Goods Description' },
+      { key: 'Currency_ID', label: 'Currency' },
+      { key: 'Delivery_Condition_ID', label: 'Delivery Condition' },
+      { key: 'Shipment_Condition_ID', label: 'Partial Shipment' },
+      { key: 'Price_Term_ID', label: 'Price Terms' },
+      { key: 'Documents', label: 'Documents' },
+      { key: 'Loading_Port', label: 'Port Of Loading' },
+      { key: 'Destination_Port', label: 'Port Of Destination' },
+      { key: 'Force_Majeure_ID', label: 'Force Majeure' },
+      { key: 'Arbitration_ID', label: 'Arbitration' }
+    ];
+
+    let missingFields: string[] = [];
+    requiredFields.forEach(field => {
+      const value = this.Formgroup.controls[field.key]?.value;
+      if (value === null || value === undefined || value === '' || value === 0) {
+        missingFields.push(field.label);
+      }
+    });
+
+    const itemArray = this.Formgroup.get('ItemArray') as FormArray;
+    if (!itemArray || itemArray.length === 0) {
+      missingFields.push('At least one Item Row');
+    } else {
+      itemArray.controls.forEach((row, idx) => {
+        const itemRequired = [
+          { key: 'Article', label: 'Article No' },
+          { key: 'Description', label: 'Description' },
+          { key: 'Width_ID', label: 'Width' },
+          { key: 'Color_ID', label: 'Color' },
+          { key: 'Packaging_ID', label: 'Packaging' },
+          { key: 'Quantity', label: 'Qty' },
+          { key: 'Unit_ID', label: 'Unit' },
+          { key: 'Unit_Price', label: 'Unit Price' },
+          { key: 'CommissionUnit', label: 'Prod. Cost Unit' },
+          { key: 'Item_ID', label: 'A. A.' }
+        ];
+        itemRequired.forEach(col => {
+          const val = row.get(col.key)?.value;
+          if (val === null || val === undefined || val === '' || val === 0) {
+            missingFields.push(`Row ${idx + 1}: ${col.label}`);
           }
-          this.Formgroup.controls['Superior_ID']?.setValue(consignee.Superior_ID);
-        }
+        });
+      });
+    }
 
+    if (missingFields.length > 0) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Validation Error',
+        html: 'Please fill the following fields:<br><ul style="text-align:left">' + missingFields.map(f => `<li>${f}</li>`).join('') + '</ul>'
+      });
+      return;
+    }
 
-  Save(): void {
+    const consigneeValue = this.Formgroup.controls['Customer_ID'].value;
+    const consignee = this.ConsigneeList && this.ConsigneeList.length > 0
+      ? this.ConsigneeList.find((x: any) => x.Customer_ID == consigneeValue || x.Consignee == consigneeValue)
+      : null;
+    const roleId = this.gs.getSessionData('roleId');
+    const userId = this.gs.getSessionData('userId');
+    if (consignee) {
+      if (roleId == 1 || roleId == 2 || roleId == 12) {
+        this.Formgroup.controls['User_ID']?.setValue(consignee.Created_By);
+      } else {
+        this.Formgroup.controls['User_ID']?.setValue(userId);
+      }
+      this.Formgroup.controls['Superior_ID']?.setValue(consignee.Superior_ID);
+    }
+
     let model = {
       PI_Master_ID: this.Formgroup.controls['PI_Master_ID'].value,
       PINo: this.Formgroup.controls['PINo'].value,
       Consignee_Initial: this.Formgroup.controls['Consignee_Initial'].value,
       Date: this.Formgroup.controls['Date'].value,
-      Beneficiary_Account_ID:
-        this.Formgroup.controls['Beneficiary_Account_ID'].value,
+      Beneficiary_Account_ID: this.Formgroup.controls['Beneficiary_Account_ID'].value,
       Beneficiary_Bank_ID: this.Formgroup.controls['Beneficiary_Bank_ID'].value,
       Country_Of_Orgin_ID: this.Formgroup.controls['Country_Of_Orgin_ID'].value,
       Packing_ID: this.Formgroup.controls['Packing_ID'].value,
@@ -620,44 +587,15 @@ export class GeneratePiComponent implements OnInit {
       IsBuyerMandatory: this.Formgroup.controls['IsBuyerMandatory'].value,
       Customer_Bank_ID: this.Formgroup.controls['Customer_Bank_ID'].value,
     };
-    let details=this.Formgroup.value.ItemArray;
-
-    details.forEach((element:any) => {
-      if(element.Unit_ID==2){
-        element.Quantity_In_Meter=element.Quantity;
-        element.Quantity=element.Quantity_In_Meter*1.09361;
-      }
-    });
-
-    this.service.SaveDataMasterDetails(details,
-      "tbl_pi_detail",
-      model,
-      "tbl_pi_master",
-      "PI_Master_ID",
-      "PI_Master_ID",
-      "tbl_pi_master",
-      "PI_Master_ID"
-    ).subscribe(res=>{
-      if(res.messageType=='Success' && res.status){
-        Swal.fire(res.messageType, res.message, 'success').then(()=>{
-              this.ngOnInit();
-        });
-        
-      }else{
-        if(!res.isAuthorized){
-          this.gs.Logout();
-        }else{
-          Swal.fire(res.messageType, res.message, 'info');
-    // clone details from form value so we don't mutate the form state
+    // let details=this.Formgroup.value.ItemArray;
     const detailsRaw =
       this.Formgroup.value && this.Formgroup.value.ItemArray
         ? this.Formgroup.value.ItemArray
         : [];
     let details: any[] = JSON.parse(JSON.stringify(detailsRaw));
 
-    // Remove PI_Detail_ID for new inserts and normalize units
     details.forEach((element: any) => {
-      // remove detail id so backend will insert new rows (avoid sending client-side temp ids)
+
       if (
         element &&
         Object.prototype.hasOwnProperty.call(element, 'PI_Detail_ID')
@@ -669,38 +607,38 @@ export class GeneratePiComponent implements OnInit {
         }
       }
 
-      if (element && element.Unit_ID == 2) {
+
+      if (element.Unit_ID == 2) {
         element.Quantity_In_Meter = element.Quantity;
         element.Quantity = element.Quantity_In_Meter * 1.09361;
       }
     });
 
-    this.service
-      .SaveDataMasterDetails(
-        details,
-        'tbl_pi_detail',
-        model,
-        'tbl_pi_master',
-        'PI_Master_ID',
-        'PI_Master_ID',
-        'tbl_pi_master',
-        'PI_Master_ID'
-      )
-      .subscribe((res) => {
-        if (res.messageType == 'Success' && res.status) {
-          Swal.fire(res.messageType, res.message, 'success').then(() => {
-            this.ngOnInit();
-          });
+    this.service.SaveDataMasterDetails(details,
+      "tbl_pi_detail",
+      model,
+      "tbl_pi_master",
+      "PI_Master_ID",
+      "PI_Master_ID",
+      "tbl_pi_master",
+      "PI_Master_ID"
+    ).subscribe(res => {
+      if (res.messageType == 'Success' && res.status) {
+        Swal.fire(res.messageType, res.message, 'success').then(() => {
+          this.ngOnInit();
+        });
+
+      } else {
+        if (!res.isAuthorized) {
+          this.gs.Logout();
         } else {
-          if (!res.isAuthorized) {
-            this.gs.Logout();
-          } else {
-            Swal.fire(res.messageType, res.message, 'info');
-          }
+          Swal.fire(res.messageType, res.message, 'info');
         }
-      });
+      }
+    });
   }
-  
+
+
   // Determine whether the form is editing an existing PI (true) or creating a new one (false)
   isEditMode(): boolean {
     try {
@@ -711,6 +649,9 @@ export class GeneratePiComponent implements OnInit {
       return !!this.tempPI;
     }
   }
+
+
+
 
   // Update behaves similarly to Save but asks for user confirmation and is used when editing
   Update(): void {
@@ -815,3 +756,4 @@ export class GeneratePiComponent implements OnInit {
     });
   }
 }
+
