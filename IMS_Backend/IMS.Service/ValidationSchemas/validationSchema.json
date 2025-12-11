@@ -114,9 +114,23 @@
         }
       }
     },
-    "tbl_currency": {
+    "tbl_payment_terms": {
       "QueryParams": {
         "[Name]": {
+          "Required": true
+        }
+      }
+    },
+    "tbl_item": {
+      "Article_No": {
+        "[Mode]": {
+          "Required": true
+        }
+      }
+    },
+    "tbl_raw_material": {
+      "Article_No": {
+        "[Mode]": {
           "Required": true
         }
       }

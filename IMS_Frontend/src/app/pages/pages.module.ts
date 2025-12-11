@@ -546,6 +546,10 @@ const CustomSelectOptions: INgxSelectOptions = {
           { path: 'currency-list', component: CurrencyListComponent },
           { path: 'payment-terms-create', component: PaymentTermsCreateComponent },
           { path: 'payment-terms-list', component: PaymentTermsListComponent },
+          { path: 'finish-goods-create', component: FinishedGoodsCreateComponent },
+          { path: 'finish-goods-list', component: FinishedGoodsListComponent },
+          { path: 'raw-material-create', component: RawMaterialCreateComponent },
+          { path: 'raw-material-list', component: RawMaterialListComponent },
         ],
       },
 
