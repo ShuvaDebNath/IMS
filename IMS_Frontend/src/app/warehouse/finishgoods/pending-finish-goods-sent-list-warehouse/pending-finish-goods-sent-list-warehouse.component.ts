@@ -11,6 +11,7 @@ import { GetDataService } from 'src/app/services/getData/getDataService.service'
 import { DoubleMasterEntryService } from 'src/app/services/doubleEntry/doubleEntryService.service';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
+import { ReportService } from 'src/app/services/reportService/report-service.service';
 
 @Component({
   standalone: true,
@@ -25,13 +26,15 @@ export class PendingFinishGoodsSentListWarehouseComponent implements OnInit {
   detailsData: any = null;
   isDetailsVisible = false;
   isDetailsVisible_for_Receive = false;
+  Id: any = '';
 
   constructor(
     private getDataService: GetDataService,
     private gs: GlobalServiceService,
     private title: Title,
     private router: Router,
-    private dme: DoubleMasterEntryService
+    private dme: DoubleMasterEntryService,
+    private reportService: ReportService
   ) {}
 
   ngOnInit(): void {
@@ -65,6 +68,7 @@ export class PendingFinishGoodsSentListWarehouseComponent implements OnInit {
   
 
   onDetails(row: any): void {
+    this.Id = row.ExportMasterID;
     const procedureData = {
       procedureName: 'usp_FinishGoods_Send_and_Receive_GetDataById',
       parameters: { ExportMasterID: row.ExportMasterID }
@@ -241,4 +245,48 @@ export class PendingFinishGoodsSentListWarehouseComponent implements OnInit {
         return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} `
             + `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
     }
+
+    printDialog() {
+        swal.fire({
+          title: 'What you want to do?',
+          icon: 'question',
+          html: `<div style="display: flex; gap: 10px; justify-content: center;">
+                                  <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
+                                    <i class="fa fa-file-excel"></i> Excel
+                                  </button>
+                                  <button id="wordBtn" class="btn btn-info" style="padding: 8px 16px;">
+                                    <i class="fa fa-file-word"></i> Word
+                                  </button>
+                                  <button id="pdfBtn" class="btn btn-danger" style="padding: 8px 16px;">
+                                    <i class="fa fa-file-pdf"></i> PDF
+                                  </button>
+                                </div>
+                              `,
+          showConfirmButton: false,
+          didOpen: () => {
+            const excelBtn = document.getElementById('excelBtn');
+            const wordBtn = document.getElementById('wordBtn');
+            const pdfBtn = document.getElementById('pdfBtn');
+    
+            var item = {
+              id: this.Id,
+            };
+    
+            excelBtn?.addEventListener('click', () => {
+              swal.close();
+              this.reportService.PrintFinishGoodSentReport(item, 'excel', 'F');
+            });
+    
+            wordBtn?.addEventListener('click', () => {
+              swal.close();
+              this.reportService.PrintFinishGoodSentReport(item, 'word', 'F');
+            });
+    
+            pdfBtn?.addEventListener('click', () => {
+              swal.close();
+              this.reportService.PrintFinishGoodSentReport(item, 'pdf', 'F');
+            });
+          },
+        });
+      }
 }

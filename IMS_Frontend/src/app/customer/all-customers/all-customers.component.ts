@@ -12,6 +12,7 @@ import {
 } from '@angular/forms';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
+import { ReportService } from 'src/app/services/reportService/report-service.service';
 
 @Component({
   selector: 'app-all-customers',
@@ -38,7 +39,8 @@ export class AllCustomersComponent {
     private title: Title,
     private dme: DoubleMasterEntryService,
     private fb: FormBuilder,
-    private ms: MasterEntryService
+    private ms: MasterEntryService,
+    private reportService: ReportService
   ) {}
 
   ngOnInit(): void {
@@ -220,5 +222,35 @@ export class AllCustomersComponent {
     var SuperioId = this.dateForm.value.SuperioId;
     this.CustomerList = this.CustomerList.filter((e:any)=>e.Superior_ID == SuperioId);
     
+  }
+
+  printCustomerReport() {
+    var { fromDate, toDate, CustomerId, SuperioId } = this.dateForm.value;
+    
+
+    const sentByStr = localStorage.getItem('userId');
+    const sentBy = sentByStr ? Number(sentByStr) : null;
+    var userId = window.localStorage.getItem('userId');
+    
+    if(SuperioId==undefined || SuperioId=='')
+      SuperioId = userId
+
+    const procedureData = {
+      procedureName: 'usp_Customer_GetCustomerData',
+      parameters: {
+        Superior_Id: SuperioId,
+        Customer_Id: CustomerId,
+        Status: 'All',
+        UserID: sentBy,
+      },
+    };
+
+    var item = {
+      'Superior_Id': SuperioId,
+      'Customer_Id': CustomerId,
+      'Status': 'All',
+      'UserID': sentBy,
+    }
+    this.reportService.PrintCustomerList(item, 'pdf','T');
   }
 }

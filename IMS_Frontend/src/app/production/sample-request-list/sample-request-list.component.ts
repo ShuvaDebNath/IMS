@@ -15,6 +15,7 @@ import { LC } from 'src/app/models/LCModel';
 import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
 import { DoubleMasterEntryModel } from 'src/app/models/DoubleMasterEntryModel';
 import Swal from 'sweetalert2';
+import { ReportService } from 'src/app/services/reportService/report-service.service';
 
 @Component({
   selector: 'app-sample-request-list',
@@ -66,7 +67,8 @@ export class SampleRequestListComponent {
     private gs: GlobalServiceService,
     private pagesComponent: PagesComponent,
     private masterEntryService: MasterEntryService,
-    private title: Title
+    private title: Title,
+    private reportService: ReportService
   ) {}
   ngOnInit(): void {
     var permissions = this.gs.CheckUserPermission('Sample Request List');
@@ -244,5 +246,56 @@ export class SampleRequestListComponent {
       } 
     }
   }
+
+  Print() {
+      var userId = window.localStorage.getItem('userId');
+      var item = {
+        fromDate: this.SearchForm.value.fromDate,
+        toDate: this.SearchForm.value.toDate,
+        requestStatus: this.SearchForm.value.status,
+        UserID: userId,
+      };
+  
+      var actionType = '';
+      Swal.fire({
+        title: 'Please select what you want to do!!',
+        icon: 'info',
+        showCancelButton: false,
+        showConfirmButton: false,
+        allowOutsideClick: true,
+        customClass: {
+          popup: 'swal-back', // use class name without dot
+        },
+        html: `
+        <div style="display: flex; justify-content: center; gap: 10px;">
+          <button id="view" class="swal2-confirm swal2-styled" style="background:green">Excel</button>
+          <button id="download" class="swal2-confirm swal2-styled" style="background:red">PDF</button>
+          <button id="print" class="swal2-confirm swal2-styled" style="background:blue">Word</button>
+        </div>
+      `,
+      });
+  
+      // Add event listeners for buttons after Swal opens
+      Swal.getPopup()
+        ?.querySelector('#view')
+        ?.addEventListener('click', () => {
+          this.reportService.PrintSampleRequest(item, 'excel', true);
+          Swal.close();
+        });
+  
+      Swal.getPopup()
+        ?.querySelector('#download')
+        ?.addEventListener('click', () => {
+          this.reportService.PrintSampleRequest(item, 'pdf', true);
+          Swal.close();
+        });
+  
+      Swal.getPopup()
+        ?.querySelector('#print')
+        ?.addEventListener('click', () => {
+          this.reportService.PrintSampleRequest(item, 'word', true);
+          Swal.close();
+        });
+    }
 
 }

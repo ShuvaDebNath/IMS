@@ -14,6 +14,7 @@ import { GetDataModel } from 'src/app/models/GetDataModel';
 import { LC } from 'src/app/models/LCModel';
 import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
 import { DoubleMasterEntryModel } from 'src/app/models/DoubleMasterEntryModel';
+import { ReportService } from 'src/app/services/reportService/report-service.service';
 
 @Component({
   selector: 'app-all-application',
@@ -90,7 +91,8 @@ export class AllApplicationComponent {
     private gs: GlobalServiceService,
     private pagesComponent: PagesComponent,
     private masterEntryService: MasterEntryService,
-    private title: Title
+    private title: Title,
+    private reportService: ReportService
   ) {}
   ngOnInit(): void {
     var permissions = this.gs.CheckUserPermission('All Application');
@@ -102,7 +104,6 @@ export class AllApplicationComponent {
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
     this.title.setTitle('All Application');
-
   }
   initForm(): void {
     this.SearchForm = this.fb.group({
@@ -113,7 +114,7 @@ export class AllApplicationComponent {
   }
   Search() {
     var finput = new Date();
-    var fromDate = this.SearchForm.value.fromDate;    
+    var fromDate = this.SearchForm.value.fromDate;
     var toDate = this.SearchForm.value.toDate;
 
     let param = new GetDataModel();
@@ -145,7 +146,7 @@ export class AllApplicationComponent {
 
   DeleteData(item: any) {
     console.log(item);
-    
+
     swal
       .fire({
         title: 'Wait!',
@@ -198,5 +199,55 @@ export class AllApplicationComponent {
     this.pageIndex = e.pageIndex + 1;
     this.pageSize = e.pageSize;
     this.Search();
+  }
+
+  printApplication() {
+    swal.fire({
+      title: 'What you want to do?',
+      icon: 'question',
+      html: `
+        <div style="display: flex; gap: 10px; justify-content: center;">
+          <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
+            <i class="fa fa-file-excel"></i> Excel
+          </button>
+          <button id="wordBtn" class="btn btn-info" style="padding: 8px 16px;">
+            <i class="fa fa-file-word"></i> Word
+          </button>
+          <button id="pdfBtn" class="btn btn-danger" style="padding: 8px 16px;">
+            <i class="fa fa-file-pdf"></i> PDF
+          </button>
+        </div>
+      `,
+      showConfirmButton: false,
+      didOpen: () => {
+        const excelBtn = document.getElementById('excelBtn');
+        const wordBtn = document.getElementById('wordBtn');
+        const pdfBtn = document.getElementById('pdfBtn');
+
+        var item = {
+          fromDate: this.SearchForm.value.fromDate,
+          toDate: this.SearchForm.value.toDate,
+          requestStatus: this.SearchForm.value.applicationType
+        };
+
+        excelBtn?.addEventListener('click', () => {
+          swal.close();
+          console.log('User selected: Excel format');
+          this.reportService.PrintApplicationReport(item, 'excel', 'F');
+        });
+
+        wordBtn?.addEventListener('click', () => {
+          swal.close();
+          console.log('User selected: Word format');
+          this.reportService.PrintApplicationReport(item, 'word', 'F');
+        });
+
+        pdfBtn?.addEventListener('click', () => {
+          swal.close();
+          console.log('User selected: PDF format');
+          this.reportService.PrintApplicationReport(item, 'pdf', 'T');
+        });
+      },
+    });
   }
 }

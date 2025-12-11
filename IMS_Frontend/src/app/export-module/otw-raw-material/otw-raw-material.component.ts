@@ -14,6 +14,7 @@ import { GetDataModel } from 'src/app/models/GetDataModel';
 import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
 import { DoubleMasterEntryModel } from 'src/app/models/DoubleMasterEntryModel';
 import { CG } from 'src/app/models/cg';
+import { ReportService } from 'src/app/services/reportService/report-service.service';
 
 @Component({
   selector: 'app-otw-raw-material',
@@ -60,6 +61,7 @@ export class OtwRawMaterialComponent {
   getDataModel: GetDataModel = new GetDataModel();
   detailsData: any;
   isDetailsVisible: boolean = false;
+  exportId: any;
 
   constructor(
     private fb: FormBuilder,
@@ -68,7 +70,8 @@ export class OtwRawMaterialComponent {
     private pagesComponent: PagesComponent,
     private masterEntryService: MasterEntryService,
     private activeLink: ActivatedRoute,
-    private title: Title
+    private title: Title,
+    private reportService: ReportService
   ) {}
   ngOnInit(): void {
     var permissions = this.gs.CheckUserPermission(
@@ -180,7 +183,7 @@ export class OtwRawMaterialComponent {
 
   viewDetails(table: any) {
     this.isDetailsVisible = true;
-
+    this.exportId = table.ExportMasterID;
     let param = new GetDataModel();
     param.procedureName = '[usp_ExportRM_Details]';
     param.parameters = {
@@ -198,4 +201,49 @@ export class OtwRawMaterialComponent {
       },
     });
   }
+
+   printDialog() {
+      swal.fire({
+        title: 'What you want to do?',
+        icon: 'question',
+        html: `
+                          <div style="display: flex; gap: 10px; justify-content: center;">
+                            <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
+                              <i class="fa fa-file-excel"></i> Excel
+                            </button>
+                            <button id="wordBtn" class="btn btn-info" style="padding: 8px 16px;">
+                              <i class="fa fa-file-word"></i> Word
+                            </button>
+                            <button id="pdfBtn" class="btn btn-danger" style="padding: 8px 16px;">
+                              <i class="fa fa-file-pdf"></i> PDF
+                            </button>
+                          </div>
+                        `,
+        showConfirmButton: false,
+        didOpen: () => {
+          const excelBtn = document.getElementById('excelBtn');
+          const wordBtn = document.getElementById('wordBtn');
+          const pdfBtn = document.getElementById('pdfBtn');
+  
+          var item = {
+            id: this.exportId,
+          };
+  
+          excelBtn?.addEventListener('click', () => {
+            swal.close();
+            this.reportService.PrintExportReport(item, 'excel', 'F');
+          });
+  
+          wordBtn?.addEventListener('click', () => {
+            swal.close();
+            this.reportService.PrintExportReport(item, 'word', 'F');
+          });
+  
+          pdfBtn?.addEventListener('click', () => {
+            swal.close();
+            this.reportService.PrintExportReport(item, 'pdf', 'F');
+          });
+        },
+      });
+    }
 }

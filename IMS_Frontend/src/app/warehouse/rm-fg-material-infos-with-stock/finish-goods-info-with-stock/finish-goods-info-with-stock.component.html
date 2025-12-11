@@ -5,6 +5,18 @@
 <h2 >Finish Goods Info with Stock</h2>
 
     </div>
+    <hr />
+    <div class="row mb-3">
+      <div class="col-md-12">
+        <button
+          class="btn theme-btn px-4 py-2"
+          (click)="PrintStock()"
+          title="Export LC list to Excel, Word, or PDF"
+        >
+          <i class="fas fa-download"></i>&nbsp; Export
+        </button>
+      </div>
+    </div>
     <div class="card-body">
           <p-table #table [value]="finishGoodsItemsWithStock" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
         [rowsPerPageOptions]="[10,20,50]" [globalFilterFields]="['Article_No','Color','Measurement','Unit','Packaging','GSM','Weight','StockQuantity','RollQuantity','Stock_Location_Name']"
