@@ -141,16 +141,23 @@ export class DeliveryComponent implements OnInit {
     model.parameters = {
       TypeId: this.SearchFormgroup.controls['PIId'].value,
     };
-    console.log(model);
+    
     this.Formgroup.setControl('items', this.fb.array([]));
 
     this.service.GetInitialData(model).subscribe((res: any) => {
       if (res.status) {
-        let DataSet = JSON.parse(res.data);
+        let DataSet = JSON.parse(res.data);   
+        
+        if (DataSet.Tables1[0].IsMPI == 1 && DataSet.Tables1[0].CR_NO == 'Not Received') {
+          Swal.fire('Info', 'Cash Receipt Not Received Yet. Please talk with the finance department.', 'info');
+          return;
+        }
+        
         this.Delivers = DataSet.Tables1;
 
         this.Formgroup.controls['PIStatus'].setValue(
           DataSet.Tables1[0].IsMPI == 0 ? 'LC' : 'Cash'
+
         );
         this.Formgroup.controls['RestQty'].setValue(
           DataSet.Tables1[0].Unit_ID == 2
@@ -159,8 +166,7 @@ export class DeliveryComponent implements OnInit {
         );
         this.Formgroup.controls['LCNo'].setValue(DataSet.Tables1[0].LC_No);
         this.Formgroup.controls['IsCash'].setValue(DataSet.Tables1[0].CR_NO);
-
-        // Set Chalan_No from the dataset (may come in Tables2 or Tables1 depending on stored proc)
+        
         const chalanFromTables2 =
           DataSet.Tables2 && DataSet.Tables2.length > 0
             ? DataSet.Tables2[0].Chalan_No
