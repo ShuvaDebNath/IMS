@@ -94,10 +94,10 @@ namespace Boilerplate.API.Controllers
         }
 
         [HttpPost(nameof(SaveUser))]
-        public async Task<IActionResult> SaveUser([FromBody] UserMenuAssign data)
+        public async Task<IActionResult> SaveUser([FromBody] UserCreate data)
         {
             
-            var isSuccess = await _createUserService.SaveUser(data, AuthEmail);
+            var isSuccess = await _createUserService.SaveUser(data, AuthUserName);
 
             if (isSuccess)
             {
@@ -108,10 +108,10 @@ namespace Boilerplate.API.Controllers
         }
 
         [HttpPost(nameof(EditUser))]
-        public async Task<IActionResult> EditUser([FromBody] UserMenuAssign data)
+        public async Task<IActionResult> EditUser([FromBody] UserCreate data)
         {
 
-            var isSuccess = await _createUserService.EditUser(data, AuthEmail);
+            var isSuccess = await _createUserService.EditUser(data, AuthUserName);
 
             if (isSuccess)
             {

@@ -180,6 +180,11 @@
             <h5>{{ detailsData?.PIs }}</h5>
             <span>{{ detailsData?.CreatedDate | date : "dd/MM/yyyy HH:mm:ss" }}</span>
           </div>
+          <div class="float-right">
+            <button class="btn theme-btn btn-sm" title="Print" (click)="printDialog()">
+              <i class="fa fa-print"></i>&nbsp; Print
+            </button>
+          </div>
         </div>
         <div class="card-body">
           <div class="row">

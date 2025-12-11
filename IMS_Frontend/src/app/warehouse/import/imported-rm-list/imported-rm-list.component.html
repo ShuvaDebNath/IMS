@@ -1,4 +1,3 @@
-
 <div class="card card-default">
   <div
     class="content-heading"
@@ -53,11 +52,7 @@
       [rows]="10"
       [responsive]="true"
       [showCurrentPageReport]="true"
-      [globalFilterFields]="[
-        'ExportNumber',
-        'Received_Date',
-        'Status'
-      ]"
+      [globalFilterFields]="['ExportNumber', 'Received_Date', 'Status']"
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     >
       <ng-template pTemplate="caption">
@@ -99,10 +94,7 @@
               ><i class="fa fa-eye"></i>Details</a
             >
 
-            <button
-              class="btn bg-gradient-danger btn-xs"
-              title="Mail"
-            >
+            <button class="btn bg-gradient-danger btn-xs" title="Mail">
               <i class="fas fa-eye"></i>Send Mail To Supplier
             </button>
           </td>
@@ -118,6 +110,18 @@
     [style]="{ width: '70vw' }"
     (onHide)="detailsData = null"
   >
+    <ng-template pTemplate="header">
+      <div class="d-flex justify-content-between align-items-center w-100">
+        <span>Detail</span>
+        <button
+          class="btn theme-btn btn-sm"
+          title="Print"
+          (click)="printDialog()"
+        >
+          <i class="fa fa-print"></i>&nbsp; Print
+        </button>
+      </div>
+    </ng-template>
     <div *ngIf="detailsData">
       <h2>{{ detailsData.ExportNumber }}</h2>
       <h5>{{ detailsData.ExportDate }}</h5>

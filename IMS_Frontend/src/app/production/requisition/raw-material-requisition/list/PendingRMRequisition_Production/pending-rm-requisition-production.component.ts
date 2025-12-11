@@ -9,6 +9,7 @@ import { GlobalServiceService } from 'src/app/services/Global-service.service';
 import { Router } from '@angular/router';
 import { GetDataService } from 'src/app/services/getData/getDataService.service';
 import { DoubleMasterEntryService } from 'src/app/services/doubleEntry/doubleEntryService.service';
+import { ReportService } from 'src/app/services/reportService/report-service.service';
 
 @Component({
   standalone: true,
@@ -21,13 +22,15 @@ export class PendingRMRequisitionProductionComponent implements OnInit {
   pendingRequisitions: any[] = [];
   detailsData: any = null;
   isDetailsVisible = false;
+  Id: any = '';
 
   constructor(
     private getDataService: GetDataService,
     private gs: GlobalServiceService,
     private title: Title,
     private router: Router,
-    private dme: DoubleMasterEntryService
+    private dme: DoubleMasterEntryService,
+    private reportService: ReportService
   ) {}
 
   ngOnInit(): void {
@@ -41,7 +44,7 @@ export class PendingRMRequisitionProductionComponent implements OnInit {
 
     const procedureData = {
       procedureName: 'usp_RawMaterial_GetRequisitionData',
-      parameters: { FromDate: '', ToDate: '', Status: 'Pending', User: sentBy }
+      parameters: { FromDate: '', ToDate: '', Status: 'Pending', User: sentBy },
     };
 
     this.getDataService.GetInitialData(procedureData).subscribe({
@@ -53,75 +56,94 @@ export class PendingRMRequisitionProductionComponent implements OnInit {
           this.gs.Logout();
         }
       },
-      error: () => {}
+      error: () => {},
     });
   }
 
-  onEdit(row: any)   { 
-    window.open(this.router.serializeUrl(this.router.createUrlTree(['pending-rm-requisition','edit', row.RM_Requisition_MasterID])), '_blank');
+  onEdit(row: any) {
+    window.open(
+      this.router.serializeUrl(
+        this.router.createUrlTree([
+          'pending-rm-requisition',
+          'edit',
+          row.RM_Requisition_MasterID,
+        ])
+      ),
+      '_blank'
+    );
   }
 
-  onDelete(row: any) { 
-
-     const id = String(row?.RM_Requisition_MasterID ?? '');
+  onDelete(row: any) {
+    const id = String(row?.RM_Requisition_MasterID ?? '');
 
     if (!id) {
       swal.fire('Missing Id', 'RM_Requisition_MasterID not found.', 'info');
       return;
     }
 
-    swal.fire({
-      title: 'Are you sure?',
-      text: `Delete requisition ${row?.RequisitionNumber || ''}?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, delete',
-      cancelButtonText: 'Cancel',
-      reverseButtons: true
-    }).then(res => {
-      if (!res.isConfirmed) return;
+    swal
+      .fire({
+        title: 'Are you sure?',
+        text: `Delete requisition ${row?.RequisitionNumber || ''}?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete',
+        cancelButtonText: 'Cancel',
+        reverseButtons: true,
+      })
+      .then((res) => {
+        if (!res.isConfirmed) return;
 
-    const fd: any[] = [];                              // detailsData -> empty for delete
-    const tableName = 'tbl_rm_requisition_details';    // child table
-    const fdMaster: any = {};                          // data -> empty for delete
-    const tableNameMaster = 'tbl_rm_requisition_master';
-    const primaryColumnName = 'RM_Requisition_MasterID';
-    const columnNameForign  = 'RM_Requisition_MasterID';
-    const serialType = '';
-    const columnNameSerialNo = '';
-    const whereParams = { RM_Requisition_MasterID: id };
+        const fd: any[] = []; // detailsData -> empty for delete
+        const tableName = 'tbl_rm_requisition_details'; // child table
+        const fdMaster: any = {}; // data -> empty for delete
+        const tableNameMaster = 'tbl_rm_requisition_master';
+        const primaryColumnName = 'RM_Requisition_MasterID';
+        const columnNameForign = 'RM_Requisition_MasterID';
+        const serialType = '';
+        const columnNameSerialNo = '';
+        const whereParams = { RM_Requisition_MasterID: id };
 
-    this.dme.DeleteDataMasterDetails(
-      fd,
-      tableName,
-      fdMaster,
-      tableNameMaster,
-      primaryColumnName,
-      columnNameForign,
-      serialType,
-      columnNameSerialNo,
-      whereParams
-    ).subscribe({
-        next: () => {
-          swal.fire('Deleted!', 'Requisition deleted successfully.', 'success');
-          this.loadPendingRequisitions(); // refresh the table
-        },
-        error: (err) => {
-          console.error(err);
-          swal.fire('Delete Failed', err?.error?.message || 'Something went wrong.', 'info');
-        }
+        this.dme
+          .DeleteDataMasterDetails(
+            fd,
+            tableName,
+            fdMaster,
+            tableNameMaster,
+            primaryColumnName,
+            columnNameForign,
+            serialType,
+            columnNameSerialNo,
+            whereParams
+          )
+          .subscribe({
+            next: () => {
+              swal.fire(
+                'Deleted!',
+                'Requisition deleted successfully.',
+                'success'
+              );
+              this.loadPendingRequisitions(); // refresh the table
+            },
+            error: (err) => {
+              console.error(err);
+              swal.fire(
+                'Delete Failed',
+                err?.error?.message || 'Something went wrong.',
+                'info'
+              );
+            },
+          });
       });
-    });
-  
-   }
+  }
 
   // ✅ Opens the dialog and loads detail rows
   onDetails(row: any): void {
     const procedureData = {
       procedureName: 'usp_Rawmaterial_GetDataById',
-      parameters: { RM_Requisition_MasterID: row.RM_Requisition_MasterID }
+      parameters: { RM_Requisition_MasterID: row.RM_Requisition_MasterID },
     };
-
+    this.Id = row.RM_Requisition_MasterID;
     this.getDataService.GetInitialData(procedureData).subscribe({
       next: (results) => {
         if (results.status) {
@@ -133,9 +155,9 @@ export class PendingRMRequisitionProductionComponent implements OnInit {
             TotalQty: row.Total_Qty,
             TotalBag: row.Total_bag,
             TotalRoll: row.Total_Roll,
-            Items: items
+            Items: items,
           };
-          this.isDetailsVisible = true;   // open dialog
+          this.isDetailsVisible = true; // open dialog
         } else if (results.msg === 'Invalid Token') {
           swal.fire('Session Expired!', 'Please Login Again.', 'info');
           this.gs.Logout();
@@ -143,7 +165,56 @@ export class PendingRMRequisitionProductionComponent implements OnInit {
           swal.fire('Error!', 'Failed to load details.', 'info');
         }
       },
-      error: () => swal.fire('Error!', 'An error occurred while fetching details.', 'info')
+      error: () =>
+        swal.fire(
+          'Error!',
+          'An error occurred while fetching details.',
+          'info'
+        ),
+    });
+  }
+  printDialog() {
+    
+    swal.fire({
+      title: 'What you want to do?',
+      icon: 'question',
+      html: `<div style="display: flex; gap: 10px; justify-content: center;">
+                                      <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
+                                        <i class="fa fa-file-excel"></i> Excel
+                                      </button>
+                                      <button id="wordBtn" class="btn btn-info" style="padding: 8px 16px;">
+                                        <i class="fa fa-file-word"></i> Word
+                                      </button>
+                                      <button id="pdfBtn" class="btn btn-danger" style="padding: 8px 16px;">
+                                        <i class="fa fa-file-pdf"></i> PDF
+                                      </button>
+                                    </div>
+                                  `,
+      showConfirmButton: false,
+      didOpen: () => {
+        const excelBtn = document.getElementById('excelBtn');
+        const wordBtn = document.getElementById('wordBtn');
+        const pdfBtn = document.getElementById('pdfBtn');
+
+        var item = {
+          id:this.Id
+        };
+
+        excelBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintRequisitionPendingDetilsReport(item, 'excel', 'F');
+        });
+
+        wordBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintRequisitionPendingDetilsReport(item, 'word', 'F');
+        });
+
+        pdfBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintRequisitionPendingDetilsReport(item, 'pdf', 'F');
+        });
+      },
     });
   }
 }

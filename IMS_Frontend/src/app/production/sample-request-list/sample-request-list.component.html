@@ -1,62 +1,124 @@
 <div class="m-2 p-2">
-
-
   <div class="card card-default">
     <div class="card-header theme-bg">
       <div class="row">
-
         <h2 class="">Sample Request List</h2>
-
       </div>
     </div>
     <div class="card-body">
       <form [formGroup]="SearchForm">
         <div class="row align-items-center">
           <div class="col-3">
-            <label class="control-label" for="inlineFormInputGroup">From Date</label>
-            <div class="input-group ">
+            <label class="control-label" for="inlineFormInputGroup"
+              >From Date</label
+            >
+            <div class="input-group">
               <div class="input-group-sm input-group-prepend">
-                <div class="input-group-text theme-btn" (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
+                <div
+                  class="input-group-text theme-btn"
+                  (click)="dpfrom.toggle()"
+                >
+                  <i class="fas fa-calendar"></i>
+                </div>
               </div>
-              <input type="text" autocomplete="off" formControlName="fromDate" [bsConfig]="{
-              dateInputFormat: 'DD/MM/YYYY',
-              containerClass: 'theme-bg'
-            }" class=" form-control bg-white" id="fromdate" name="fromdate" placeholder="From Date"
-                #dpfrom="bsDatepicker" bsDatepicker />
+              <input
+                type="text"
+                autocomplete="off"
+                formControlName="fromDate"
+                [bsConfig]="{
+                  dateInputFormat: 'DD/MM/YYYY',
+                  containerClass: 'theme-bg'
+                }"
+                class="form-control bg-white"
+                id="fromdate"
+                name="fromdate"
+                placeholder="From Date"
+                #dpfrom="bsDatepicker"
+                bsDatepicker
+              />
             </div>
-
           </div>
           <div class="col-3">
-            <label class="control-label" for="inlineFormInputGroup">To Date</label>
-            <div class="input-group ">
+            <label class="control-label" for="inlineFormInputGroup"
+              >To Date</label
+            >
+            <div class="input-group">
               <div class="input-group-prepend">
-                <div class="input-group-text  theme-btn" (click)="dpto.toggle()"><i class="fas fa-calendar"></i></div>
+                <div class="input-group-text theme-btn" (click)="dpto.toggle()">
+                  <i class="fas fa-calendar"></i>
+                </div>
               </div>
-              <input type="text" autocomplete="off" formControlName="toDate" [bsConfig]="{
-              dateInputFormat: 'DD/MM/YYYY',
-              containerClass: 'theme-green'
-            }" class=" form-control bg-white" id="todate" name="todate" placeholder="To Date" #dpto="bsDatepicker"
-                bsDatepicker />
+              <input
+                type="text"
+                autocomplete="off"
+                formControlName="toDate"
+                [bsConfig]="{
+                  dateInputFormat: 'DD/MM/YYYY',
+                  containerClass: 'theme-green'
+                }"
+                class="form-control bg-white"
+                id="todate"
+                name="todate"
+                placeholder="To Date"
+                #dpto="bsDatepicker"
+                bsDatepicker
+              />
             </div>
           </div>
-          <div class="col-3">
-            <button title="Search" type="button" (click)="Search()" class="btn btn-sm theme-btn mt-4 p-1 ">
-              <i class="fas fa-search"></i>&nbsp;Search</button>
+          <div class="col-3 d-flex">
+            <div style="margin-right: 10px">
+              <button
+                title="Search"
+                type="button"
+                (click)="Search()"
+                class="btn btn-sm theme-btn mt-4 p-1"
+              >
+                <i class="fas fa-search"></i>&nbsp;Search
+              </button>
+            </div>
+            <div *ngIf="tableData != undefined">
+              <button
+                title="Print"
+                type="button"
+                (click)="Print()"
+                class="btn btn-sm theme-btn mt-4 p-1"
+              >
+                <i class="fas fa-print"></i>&nbsp;Print
+              </button>
+            </div>
           </div>
         </div>
       </form>
-      <hr>
+      <hr />
 
-      <p-table #dt [value]="tableData" [paginator]="true" [rows]="10" [responsive]="true" [showCurrentPageReport]="true"
-        [globalFilterFields]="['RequestDate','CustomerName','Article','Color','RequestedQuantity','RequestStatus','RequestBy']"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
-
+      <p-table
+        #dt
+        [value]="tableData"
+        [paginator]="true"
+        [rows]="10"
+        [responsive]="true"
+        [showCurrentPageReport]="true"
+        [globalFilterFields]="[
+          'RequestDate',
+          'CustomerName',
+          'Article',
+          'Color',
+          'RequestedQuantity',
+          'RequestStatus',
+          'RequestBy'
+        ]"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      >
         <ng-template pTemplate="caption">
           <div class="table-toolbar">
             <span class="p-input-icon-left">
               <i class="pi pi-search"></i>
-              <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                placeholder="Global Search" />
+              <input
+                pInputText
+                type="text"
+                (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                placeholder="Global Search"
+              />
             </span>
           </div>
         </ng-template>
@@ -78,38 +140,65 @@
         <ng-template pTemplate="body" let-table let-i="rowIndex">
           <tr>
             <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
-            <td class="text-center align-middle">{{table.RequestDate}}</td>
-            <td class="text-left align-left">{{table.CustomerName}}</td>
-            <td class="text-center align-middle">{{table.Article}}</td>
-            <td class="text-center align-middle">{{table.RequestedQuantity}}</td>
-            <td class="text-center align-middle">{{table.RequestBy}}</td>
-            <td class="text-center align-middle">{{table.RequestStatus}}</td>
-            <td class="text-center align-middle">{{
+            <td class="text-center align-middle">{{ table.RequestDate }}</td>
+            <td class="text-left align-left">{{ table.CustomerName }}</td>
+            <td class="text-center align-middle">{{ table.Article }}</td>
+            <td class="text-center align-middle">
+              {{ table.RequestedQuantity }}
+            </td>
+            <td class="text-center align-middle">{{ table.RequestBy }}</td>
+            <td class="text-center align-middle">{{ table.RequestStatus }}</td>
+            <td class="text-center align-middle">
+              {{
                 table.HandoverStatus == ""
                   ? "Not handovered yet"
-                  : table.HandoverStatus == "Received"?"Messenger Received":"Handovered " + table.HandoverStatus
-              }}</td>
+                  : table.HandoverStatus == "Received"
+                  ? "Messenger Received"
+                  : "Handovered " + table.HandoverStatus
+              }}
+            </td>
             <td class="text-center align-middle p-1 m-0">
               <div class="d-flex justify-content-center gap-1">
-                <a class="btn theme-btn-view " target="_blank" title="View" (click)="viewDetails(table)"><i
-                    class="fa fa-eye"></i></a>
+                <a
+                  class="btn theme-btn-view"
+                  target="_blank"
+                  title="View"
+                  (click)="viewDetails(table)"
+                  ><i class="fa fa-eye"></i
+                ></a>
 
-                <a *ngIf="updatePermissions" (click)="checkPermission(table)" class="btn theme-btn-edit" target="_blank" title="Edit"><i class="fa fa-edit"></i></a>
+                <a
+                  *ngIf="updatePermissions"
+                  (click)="checkPermission(table)"
+                  class="btn theme-btn-edit"
+                  target="_blank"
+                  title="Edit"
+                  ><i class="fa fa-edit"></i
+                ></a>
 
-                <button *ngIf="deletePermissions" class="btn theme-btn-delete " title="Delete"
-                  (click)="DeleteData(table)"><i class="fas fa-trash"></i></button>
+                <button
+                  *ngIf="deletePermissions"
+                  class="btn theme-btn-delete"
+                  title="Delete"
+                  (click)="DeleteData(table)"
+                >
+                  <i class="fas fa-trash"></i>
+                </button>
               </div>
-
             </td>
           </tr>
         </ng-template>
-
       </p-table>
-
     </div>
     <!--/Region Mat Datatable"-->
-    <p-dialog header="Detail" [(visible)]="isDetailsVisible" [modal]="true" [closable]="true"
-      [style]="{ width: '70vw' }" (onHide)="detailsData = null">
+    <p-dialog
+      header="Detail"
+      [(visible)]="isDetailsVisible"
+      [modal]="true"
+      [closable]="true"
+      [style]="{ width: '70vw' }"
+      (onHide)="detailsData = null"
+    >
       <div *ngIf="detailsData">
         <p>Request Date: {{ detailsData.RequestDate }}</p>
         <p>Request By: {{ detailsData.RequestBy }}</p>
@@ -124,6 +213,5 @@
         <p>Remarks: {{ detailsData.Remarks }}</p>
       </div>
     </p-dialog>
-
   </div>
 </div>

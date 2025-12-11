@@ -131,6 +131,9 @@
     "tbl_raw_material": {
       "Article_No": {
         "[Mode]": {
+    "tbl_users": {
+      "QueryParams": {
+        "[UserName]": {
           "Required": true
         }
       }

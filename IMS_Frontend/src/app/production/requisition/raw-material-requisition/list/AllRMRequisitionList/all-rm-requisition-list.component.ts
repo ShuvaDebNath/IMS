@@ -8,29 +8,43 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { ReportService } from 'src/app/services/reportService/report-service.service';
 
 @Component({
-    standalone: true,
+  standalone: true,
   selector: 'app-all-rm-requisition-list',
   templateUrl: './all-rm-requisition-list.component.html',
   styleUrls: ['./all-rm-requisition-list.component.css'],
-    imports: [CommonModule, TableModule, InputTextModule, DialogModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    TableModule,
+    InputTextModule,
+    DialogModule,
+    ReactiveFormsModule,
+  ],
 })
 export class AllRMRequisitionListComponent {
   allRequisitions: any[] = [];
   detailsData: any = null;
   isDetailsVisible = false;
 
-  dateForm!: FormGroup; 
+  dateForm!: FormGroup;
   tableVisible = false;
+  Id:any='';
 
   constructor(
     private getDataService: GetDataService,
     private gs: GlobalServiceService,
     private title: Title,
     private dme: DoubleMasterEntryService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private reportService: ReportService
   ) {}
 
   ngOnInit(): void {
@@ -38,134 +52,211 @@ export class AllRMRequisitionListComponent {
 
     this.dateForm = this.fb.group({
       fromDate: [null, Validators.required],
-      toDate: [null, Validators.required]
+      toDate: [null, Validators.required],
     });
   }
 
   loadAllRequisitions(): void {
-
     if (this.dateForm.invalid) {
-      swal.fire('Validation Error!', 'Please select both From Date and To Date.', 'warning');
+      swal.fire(
+        'Validation Error!',
+        'Please select both From Date and To Date.',
+        'warning'
+      );
       return;
     }
     const { fromDate, toDate } = this.dateForm.value;
     if (new Date(fromDate) > new Date(toDate)) {
-      swal.fire('Validation Error!', 'From Date cannot be later than To Date.', 'warning');
+      swal.fire(
+        'Validation Error!',
+        'From Date cannot be later than To Date.',
+        'warning'
+      );
       return;
     }
 
     const sentByStr = localStorage.getItem('userId');
-        const sentBy = sentByStr ? Number(sentByStr) : null;
+    const sentBy = sentByStr ? Number(sentByStr) : null;
 
-        const procedureData = {
-            procedureName: 'usp_RawMaterial_GetRequisitionData',
-            parameters: {
-                FromDateInput: fromDate,
-                ToDateInput: toDate,
-                Status: 'All',
-                User: sentBy
-            }
-        };
+    const procedureData = {
+      procedureName: 'usp_RawMaterial_GetRequisitionData',
+      parameters: {
+        FromDateInput: fromDate,
+        ToDateInput: toDate,
+        Status: 'All',
+        User: sentBy,
+      },
+    };
     console.log(procedureData);
 
     this.getDataService.GetInitialData(procedureData).subscribe({
       next: (results) => {
         if (results.status) {
           this.allRequisitions = JSON.parse(results.data).Tables1;
-         
-          this.tableVisible = true; 
+
+          this.tableVisible = true;
         } else if (results.msg === 'Invalid Token') {
           swal.fire('Session Expired!', 'Please Login Again.', 'info');
           this.gs.Logout();
         }
       },
-      error: () => swal.fire('Error!', 'Failed to load data.', 'info')
+      error: () => swal.fire('Error!', 'Failed to load data.', 'info'),
     });
   }
 
   onDetails(row: any): void {
-      const procedureData = {
-        procedureName: 'usp_Rawmaterial_GetDataById',
-        parameters: { RM_Requisition_MasterID: row.RM_Requisition_MasterID }
-      };
-  
-      this.getDataService.GetInitialData(procedureData).subscribe({
-        next: (results) => {
-          if (results.status) {
-            const items = JSON.parse(results.data).Tables1;
-            this.detailsData = {
-              RequisitionNumber: row.RequisitionNumber,
-              RequisitionDate: row.RequisitionDate,
-              Remarks: row.Remarks,
-              TotalQty: row.Total_Qty,
-              TotalBag: row.Total_bag,
-              TotalRoll: row.Total_Roll,
-              Items: items
-            };
-            this.isDetailsVisible = true;   // open dialog
-          } else if (results.msg === 'Invalid Token') {
-            swal.fire('Session Expired!', 'Please Login Again.', 'info');
-            this.gs.Logout();
-          } else {
-            swal.fire('Error!', 'Failed to load details.', 'info');
-          }
-        },
-        error: () => swal.fire('Error!', 'An error occurred while fetching details.', 'info')
-      });
+    const procedureData = {
+      procedureName: 'usp_Rawmaterial_GetDataById',
+      parameters: { RM_Requisition_MasterID: row.RM_Requisition_MasterID },
+    };
+    this.Id = row.RM_Requisition_MasterID;
+    this.getDataService.GetInitialData(procedureData).subscribe({
+      next: (results) => {
+        if (results.status) {
+          const items = JSON.parse(results.data).Tables1;
+          this.detailsData = {
+            RequisitionNumber: row.RequisitionNumber,
+            RequisitionDate: row.RequisitionDate,
+            Remarks: row.Remarks,
+            TotalQty: row.Total_Qty,
+            TotalBag: row.Total_bag,
+            TotalRoll: row.Total_Roll,
+            Items: items,
+          };
+          this.isDetailsVisible = true; // open dialog
+        } else if (results.msg === 'Invalid Token') {
+          swal.fire('Session Expired!', 'Please Login Again.', 'info');
+          this.gs.Logout();
+        } else {
+          swal.fire('Error!', 'Failed to load details.', 'info');
+        }
+      },
+      error: () =>
+        swal.fire(
+          'Error!',
+          'An error occurred while fetching details.',
+          'info'
+        ),
+    });
+  }
+
+  onDelete(row: any) {
+    const id = String(row?.RM_Requisition_MasterID ?? '');
+
+    if (!id) {
+      swal.fire('Missing Id', 'RM_Requisition_MasterID not found.', 'info');
+      return;
     }
 
-      onDelete(row: any) { 
-    
-         const id = String(row?.RM_Requisition_MasterID ?? '');
-    
-        if (!id) {
-          swal.fire('Missing Id', 'RM_Requisition_MasterID not found.', 'info');
-          return;
-        }
-    
-        swal.fire({
-          title: 'Are you sure?',
-          text: `Delete requisition ${row?.RequisitionNumber || ''}?`,
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Yes, delete',
-          cancelButtonText: 'Cancel',
-          reverseButtons: true
-        }).then(res => {
-          if (!res.isConfirmed) return;
-    
-        const fd: any[] = [];                              // detailsData -> empty for delete
-        const tableName = 'tbl_rm_send_details';    // child table
-        const fdMaster: any = {};                          // data -> empty for delete
+    swal
+      .fire({
+        title: 'Are you sure?',
+        text: `Delete requisition ${row?.RequisitionNumber || ''}?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete',
+        cancelButtonText: 'Cancel',
+        reverseButtons: true,
+      })
+      .then((res) => {
+        if (!res.isConfirmed) return;
+
+        const fd: any[] = []; // detailsData -> empty for delete
+        const tableName = 'tbl_rm_send_details'; // child table
+        const fdMaster: any = {}; // data -> empty for delete
         const tableNameMaster = 'tbl_rm_send_master';
         const primaryColumnName = 'RM_Send_MasterID';
-        const columnNameForign  = 'RM_Send_MasterID';
+        const columnNameForign = 'RM_Send_MasterID';
         const serialType = '';
         const columnNameSerialNo = '';
         const whereParams = { RM_Send_MasterID: id };
-    
-        this.dme.DeleteDataMasterDetails(
-          fd,
-          tableName,
-          fdMaster,
-          tableNameMaster,
-          primaryColumnName,
-          columnNameForign,
-          serialType,
-          columnNameSerialNo,
-          whereParams
-        ).subscribe({
+
+        this.dme
+          .DeleteDataMasterDetails(
+            fd,
+            tableName,
+            fdMaster,
+            tableNameMaster,
+            primaryColumnName,
+            columnNameForign,
+            serialType,
+            columnNameSerialNo,
+            whereParams
+          )
+          .subscribe({
             next: () => {
-              swal.fire('Deleted!', 'Requisition deleted successfully.', 'success');
+              swal.fire(
+                'Deleted!',
+                'Requisition deleted successfully.',
+                'success'
+              );
               this.loadAllRequisitions(); // refresh the table
             },
             error: (err) => {
               console.error(err);
-              swal.fire('Delete Failed', err?.error?.message || 'Something went wrong.', 'info');
-            }
+              swal.fire(
+                'Delete Failed',
+                err?.error?.message || 'Something went wrong.',
+                'info'
+              );
+            },
           });
-        });
-      
-       }
-}
+      });
+  }
 
+  printDialog() {
+    swal.fire({
+      title: 'What you want to do?',
+      icon: 'question',
+      html: `<div style="display: flex; gap: 10px; justify-content: center;">
+                                             <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
+                                               <i class="fa fa-file-excel"></i> Excel
+                                             </button>
+                                             <button id="wordBtn" class="btn btn-info" style="padding: 8px 16px;">
+                                               <i class="fa fa-file-word"></i> Word
+                                             </button>
+                                             <button id="pdfBtn" class="btn btn-danger" style="padding: 8px 16px;">
+                                               <i class="fa fa-file-pdf"></i> PDF
+                                             </button>
+                                           </div>
+                                         `,
+      showConfirmButton: false,
+      didOpen: () => {
+        const excelBtn = document.getElementById('excelBtn');
+        const wordBtn = document.getElementById('wordBtn');
+        const pdfBtn = document.getElementById('pdfBtn');
+
+        var item = {
+          id: this.Id,
+        };
+
+        excelBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintRequisitionDetilsReport(
+            item,
+            'excel',
+            'F'
+          );
+        });
+
+        wordBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintRequisitionDetilsReport(
+            item,
+            'word',
+            'F'
+          );
+        });
+
+        pdfBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintRequisitionDetilsReport(
+            item,
+            'pdf',
+            'F'
+          );
+        });
+      },
+    });
+  }
+}

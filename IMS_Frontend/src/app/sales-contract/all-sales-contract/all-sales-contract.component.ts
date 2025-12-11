@@ -14,11 +14,12 @@ import { GetDataModel } from 'src/app/models/GetDataModel';
 import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
 import { DoubleMasterEntryModel } from 'src/app/models/DoubleMasterEntryModel';
 import { CG } from 'src/app/models/cg';
+import { ReportService } from 'src/app/services/reportService/report-service.service';
 
 @Component({
   selector: 'app-all-sales-contract',
   templateUrl: './all-sales-contract.component.html',
-  styleUrls: ['./all-sales-contract.component.css']
+  styleUrls: ['./all-sales-contract.component.css'],
 })
 export class AllSalesContractComponent {
   pageIndex = 1;
@@ -48,6 +49,7 @@ export class AllSalesContractComponent {
   toDate: any;
   LCNo: string = '';
   CR_Id: any;
+  dialogId:string='';
 
   showPaginator = false;
   insertPermissions: boolean = true;
@@ -58,7 +60,7 @@ export class AllSalesContractComponent {
   getDataModel: GetDataModel = new GetDataModel();
   detailsData: any;
   isDetailsVisible: boolean = false;
-  detailsTableData:any;
+  detailsTableData: any;
 
   constructor(
     private fb: FormBuilder,
@@ -67,11 +69,11 @@ export class AllSalesContractComponent {
     private pagesComponent: PagesComponent,
     private masterEntryService: MasterEntryService,
     private activeLink: ActivatedRoute,
-    private title: Title
-  ) { }
+    private title: Title,
+    private reportService: ReportService
+  ) {}
   ngOnInit(): void {
-
-    var permissions = this.gs.CheckUserPermission("All Sales Contract");
+    var permissions = this.gs.CheckUserPermission('All Sales Contract');
     this.insertPermissions = permissions.insertPermissions;
     this.updatePermissions = permissions.updatePermissions;
     this.deletePermissions = permissions.deletePermissions;
@@ -80,7 +82,6 @@ export class AllSalesContractComponent {
     if (!this.printPermissions) {
       window.location.href = 'dashboard';
     }
-
 
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
@@ -137,8 +138,6 @@ export class AllSalesContractComponent {
       toDate = `${tday}/${tmonth}/${tyear}`;
     }
 
-
-
     let param = new GetDataModel();
     param.procedureName = '[usp_SC_List]';
     param.parameters = {
@@ -150,7 +149,6 @@ export class AllSalesContractComponent {
 
     this.masterEntryService.GetInitialData(param).subscribe({
       next: (results) => {
-
         if (results.status) {
           this.tableData = [];
           let tables = JSON.parse(results.data);
@@ -162,56 +160,54 @@ export class AllSalesContractComponent {
   }
 
   DeleteData(item: any) {
-      
-      swal
-        .fire({
-          title: 'Wait!',
-          html: `<span>Once you delete, you won't be able to revert this!<br> <b>[${item.SalesContractNo}]</b></span>`,
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, delete it!',
-        })
-        .then((result) => {
-          if (result.isConfirmed == true) {
-            let param = new GetDataModel();
-            param.procedureName = 'usp_SC_Delete';
-            param.parameters = {
-              Id: item.Id,
-            };
-  
-            this.masterEntryService.GetInitialData(param).subscribe({
-              next: (results: any) => {
-                
-                if (results.status) {
-                  var effectedRows = JSON.parse(results.data).Tables1;
-                  if (effectedRows[0].AffectedRows > 0) {
-                    swal
-                      .fire({
-                        text: `Data Deleted Successfully !`,
-                        title: `Delete Successfully!`,
-                        icon: 'success',
-                        timer: 5000,
-                      })
-                      .then((result) => {
-                        this.ngOnInit();
-                        this.Search();
-                      });
-                  }
-  
-                  this.Search();
-                } else if (results.message == 'Invalid Token') {
-                  swal.fire('Session Expierd!', 'Please Login Again.', 'info');
-                  this.gs.Logout();
-                } else {
+    swal
+      .fire({
+        title: 'Wait!',
+        html: `<span>Once you delete, you won't be able to revert this!<br> <b>[${item.SalesContractNo}]</b></span>`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+      })
+      .then((result) => {
+        if (result.isConfirmed == true) {
+          let param = new GetDataModel();
+          param.procedureName = 'usp_SC_Delete';
+          param.parameters = {
+            Id: item.Id,
+          };
+
+          this.masterEntryService.GetInitialData(param).subscribe({
+            next: (results: any) => {
+              if (results.status) {
+                var effectedRows = JSON.parse(results.data).Tables1;
+                if (effectedRows[0].AffectedRows > 0) {
+                  swal
+                    .fire({
+                      text: `Data Deleted Successfully !`,
+                      title: `Delete Successfully!`,
+                      icon: 'success',
+                      timer: 5000,
+                    })
+                    .then((result) => {
+                      this.ngOnInit();
+                      this.Search();
+                    });
                 }
-              },
-              error: (err) => {},
-            });
-          }
-        });
-    }
+
+                this.Search();
+              } else if (results.message == 'Invalid Token') {
+                swal.fire('Session Expierd!', 'Please Login Again.', 'info');
+                this.gs.Logout();
+              } else {
+              }
+            },
+            error: (err) => {},
+          });
+        }
+      });
+  }
 
   paginatiorChange(e: any) {
     this.pageIndex = e.pageIndex + 1;
@@ -219,26 +215,81 @@ export class AllSalesContractComponent {
     this.Search();
   }
 
-  viewDetails(table:any){
-      this.isDetailsVisible = true;
-      
-      let param = new GetDataModel();
-      param.procedureName = '[usp_SC_DetailsForList]';
-      param.parameters = {
-        Id: table.Id,     
-      };
+  viewDetails(table: any) {
+    this.isDetailsVisible = true;
+    this.dialogId = table.Id;
+    let param = new GetDataModel();
+    param.procedureName = '[usp_SC_DetailsForList]';
+    param.parameters = {
+      Id: table.Id,
+    };
 
     this.masterEntryService.GetInitialData(param).subscribe({
       next: (results) => {
-        
         if (results.status) {
           let tables = JSON.parse(results.data);
-          
-          this.detailsData = tables.Tables1[0]; 
+
+          this.detailsData = tables.Tables1[0];
           this.detailsTableData = tables.Tables2;
-          
         }
-      }
+      },
+    });
+  }
+
+  printDialog() {
+    swal.fire({
+      title: 'What you want to do?',
+      icon: 'question',
+      html: `
+            <div style="display: flex; gap: 10px; justify-content: center;">
+              <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
+                <i class="fa fa-file-excel"></i> Excel
+              </button>
+              <button id="wordBtn" class="btn btn-info" style="padding: 8px 16px;">
+                <i class="fa fa-file-word"></i> Word
+              </button>
+              <button id="pdfBtn" class="btn btn-danger" style="padding: 8px 16px;">
+                <i class="fa fa-file-pdf"></i> PDF
+              </button>
+            </div>
+          `,
+      showConfirmButton: false,
+      didOpen: () => {
+        const excelBtn = document.getElementById('excelBtn');
+        const wordBtn = document.getElementById('wordBtn');
+        const pdfBtn = document.getElementById('pdfBtn');
+
+        var item = {
+          id: this.dialogId,
+        };
+
+        excelBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintSalescontractReport(
+              item,
+              'excel',
+              'F'
+            );
+        });
+
+        wordBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintSalescontractReport(
+              item,
+              'word',
+              'F'
+            );
+        });
+
+        pdfBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintSalescontractReport(
+              item,
+              'pdf',
+              'F'
+            );
+        });
+      },
     });
   }
 }

@@ -119,6 +119,18 @@
     [style]="{ width: '70vw' }"
     (onHide)="detailsData = null"
   >
+  <ng-template pTemplate="header">
+      <div class="d-flex justify-content-between align-items-center w-100">
+        <span>Detail</span>
+        <button
+          class="btn theme-btn btn-sm"
+          title="Print"
+          (click)="printDialog()"
+        >
+          <i class="fa fa-print"></i>&nbsp; Print
+        </button>
+      </div>
+    </ng-template>
     <div *ngIf="detailsData">
       <h2>{{ detailsData.ExportNumber }}</h2>
       <h5>{{ detailsData.ExportDate }}</h5>

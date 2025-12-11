@@ -101,6 +101,8 @@ export class LoginComponent implements OnInit {
               menuWithButtonPermission = JSON.parse(results.data).Tables1;
               window.localStorage.setItem('UserMenu', JSON.stringify(menu));
               window.localStorage.setItem('UserMenuWithPermission', JSON.stringify(menuWithButtonPermission));
+              console.log(JSON.stringify(menuWithButtonPermission));
+              
               this.router.navigate(['/dashboard']).then(() => {
                 window.location.reload();
               });
