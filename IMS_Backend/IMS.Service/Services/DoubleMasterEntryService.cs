@@ -223,7 +223,7 @@ public class DoubleMasterEntryService : IDoubleMasterEntryService
     {
         try
         {
-            int rowAffect = await _doubleMasterEntryRepository.SaveData(model, authUserName);
+            int rowAffect = await _doubleMasterEntryRepository.SaveListData(model, authUserName);
             if (rowAffect > 0)
             {
                 _logger.LogInformation($"Data Save Success!");

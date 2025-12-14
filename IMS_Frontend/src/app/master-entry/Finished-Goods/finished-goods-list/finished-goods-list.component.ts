@@ -19,7 +19,7 @@ import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
   styleUrls: ['./finished-goods-list.component.css']
 })
 export class FinishedGoodsListComponent {
-allCustomers: any[] = [];
+  allCustomers: any[] = [];
   detailsData: any = null;
   isDetailsVisible = false;
   CustomerList: any;
@@ -89,7 +89,7 @@ allCustomers: any[] = [];
     swal
       .fire({
         title: 'Are you sure?',
-        text: `Delete Currency ${row?.Article_No || ''}?`,
+        text: `Delete Finish Good ${row?.Article_No || ''}?`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Yes, delete',
@@ -108,7 +108,7 @@ allCustomers: any[] = [];
 
         this.ms.DeleteData(masterEntryModel).subscribe({
           next: () => {
-            swal.fire('Deleted!', 'Payment terms deleted successfully.', 'success');
+            swal.fire('Deleted!', 'Finish good deleted successfully.', 'success');
             this.loadAllFinishGoods(); // refresh the table
           },
           error: (err) => {

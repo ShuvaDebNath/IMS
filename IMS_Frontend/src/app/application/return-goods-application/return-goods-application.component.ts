@@ -122,8 +122,9 @@ Formgroup!: FormGroup;
     this.destroy$.complete();
   }
   generateForm() {
+    const today = new Date().toISOString().split('T')[0];
     this.Formgroup = this.fb.group({
-      Date: ['', Validators.required],
+      Date: [today, Validators.required],
       Customer: ['', Validators.required],
       Warehouse: ['', Validators.required],
       PINo: ['', Validators.required],
