@@ -112,8 +112,9 @@ export class CancelPiApplicationComponent {
     this.destroy$.complete();
   }
   generateForm() {
+    const today = new Date().toISOString().split('T')[0];
     this.Formgroup = this.fb.group({
-      Date: ['', Validators.required],
+      Date: [today, Validators.required],
       Customer: ['', Validators.required],
       PINo: ['', Validators.required],
       items: this.fb.array([]),
