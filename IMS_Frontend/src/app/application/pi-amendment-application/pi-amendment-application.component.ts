@@ -126,8 +126,9 @@ export class PiAmendmentApplicationComponent {
     this.destroy$.complete();
   }
   generateForm() {
+    const today = new Date().toISOString().split('T')[0];
     this.Formgroup = this.fb.group({
-      Date: ['', Validators.required],
+      Date: [today, Validators.required],
       Customer: ['', Validators.required],
       PINo: ['', Validators.required],
       items: this.fb.array([]),
@@ -654,7 +655,6 @@ export class PiAmendmentApplicationComponent {
 
     this.masterEntryService.GetInitialData(ProcedureData).subscribe({
       next: (results) => {
-        console.log(JSON.parse(results.data).Tables1);
         if (results.status) {
           const formArray = this.Formgroup.get('items') as FormArray;
           const formArrayRevise = this.Formgroup.get(

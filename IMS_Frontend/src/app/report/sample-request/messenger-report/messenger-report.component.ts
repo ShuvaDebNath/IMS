@@ -85,14 +85,15 @@ pageIndex = 1;
     private title: Title
   ) {}
   ngOnInit(): void {
-    var permissions = this.gs.CheckUserPermission('Messenger Report');
+    var permissions = this.gs.CheckUserPermission('Messenger Sample Report');
     this.insertPermissions = permissions.insertPermissions;
     this.updatePermissions = permissions.updatePermissions;
     this.deletePermissions = permissions.deletePermissions;
     this.printPermissions = permissions.printPermissions;
     this.roleId = window.localStorage.getItem('roleId');
     this.userId = window.localStorage.getItem('userId');
-
+    console.log(permissions);
+    
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
     this.title.setTitle('Messenger Report');
