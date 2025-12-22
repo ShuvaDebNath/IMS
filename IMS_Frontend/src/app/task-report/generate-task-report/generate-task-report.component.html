@@ -6,6 +6,22 @@
     <!-- Header fields -->
     <div class="row mb-3">
       <div class="col-md-6">
+        <label class="form-label">Task No</label>
+        <input
+          autocomplete="off"
+          type="text"
+          formControlName="TaskNo"
+          class="form-control"
+          placeholder="Task No"
+          id="taskNo"
+          name="taskNo"
+          value=""
+          readonly
+        />
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-6">
         <label class="form-label">To</label>
         <input
           autocomplete="off"
@@ -17,9 +33,19 @@
           name="toMail"
           value=""
         />
-        <div *ngIf="taskForm.get('ToMail')?.invalid && (taskForm.get('ToMail')?.touched || taskForm.get('ToMail')?.dirty)" class="text-danger small mt-1">
-          <div *ngIf="taskForm.get('ToMail')?.hasError('required')">To email is required</div>
-          <div *ngIf="taskForm.get('ToMail')?.hasError('email')">Please enter a valid email address</div>
+        <div
+          *ngIf="
+            taskForm.get('ToMail')?.invalid &&
+            (taskForm.get('ToMail')?.touched || taskForm.get('ToMail')?.dirty)
+          "
+          class="text-danger small mt-1"
+        >
+          <div *ngIf="taskForm.get('ToMail')?.hasError('required')">
+            To email is required
+          </div>
+          <div *ngIf="taskForm.get('ToMail')?.hasError('email')">
+            Please enter a valid email address
+          </div>
         </div>
       </div>
       <div class="col-md-6">
@@ -33,10 +59,21 @@
           id="ccMail"
           name="ccMail"
           value="lilya@sunshineinterlining.com"
+          readonly
         />
-        <div *ngIf="taskForm.get('CcMail')?.invalid && (taskForm.get('CcMail')?.touched || taskForm.get('CcMail')?.dirty)" class="text-danger small mt-1">
-          <div *ngIf="taskForm.get('CcMail')?.hasError('required')">Cc email is required</div>
-          <div *ngIf="taskForm.get('CcMail')?.hasError('email')">Please enter a valid email address</div>
+        <div
+          *ngIf="
+            taskForm.get('CcMail')?.invalid &&
+            (taskForm.get('CcMail')?.touched || taskForm.get('CcMail')?.dirty)
+          "
+          class="text-danger small mt-1"
+        >
+          <div *ngIf="taskForm.get('CcMail')?.hasError('required')">
+            Cc email is required
+          </div>
+          <div *ngIf="taskForm.get('CcMail')?.hasError('email')">
+            Please enter a valid email address
+          </div>
         </div>
       </div>
     </div>
@@ -84,7 +121,6 @@
           </td>
 
           <td class="col-description">
-            
             <p-calendar
               inputId="calendar-24h"
               formControlName="InTime"
@@ -93,15 +129,31 @@
             />
           </td>
 
-          <td class="col-description">            
+          <td class="col-description">
             <p-calendar
               inputId="calendar-24h"
               formControlName="OutTime"
               [showTime]="true"
               [hourFormat]="'24'"
             />
-            <div *ngIf="item.get('OutTime')?.hasError('required') && item.get('OutTime')?.touched" class="text-danger small">Out Time is required</div>
-            <div *ngIf="item.get('OutTime')?.hasError('outBeforeIn') && item.get('OutTime')?.touched" class="text-danger small">Out Time cannot be earlier than In Time</div>
+            <div
+              *ngIf="
+                item.get('OutTime')?.hasError('required') &&
+                item.get('OutTime')?.touched
+              "
+              class="text-danger small"
+            >
+              Out Time is required
+            </div>
+            <div
+              *ngIf="
+                item.get('OutTime')?.hasError('outBeforeIn') &&
+                item.get('OutTime')?.touched
+              "
+              class="text-danger small"
+            >
+              Out Time cannot be earlier than In Time
+            </div>
           </td>
           <td class="col-description">
             <textarea

@@ -352,6 +352,9 @@
               <div class="col-md-4 mt-2 text-right content-middle"><strong>Superior</strong></div>
               <div class="col-md-8 mt-2">{{PIData?.SuperiorName}}</div>
 
+              <div class="col-md-4 mt-2 text-right content-middle" *ngIf="PIData?.CustomMaxDeliveryPercentage!=0"><strong>Max Deliverable</strong></div>
+              <div class="col-md-8 mt-2" *ngIf="PIData?.CustomMaxDeliveryPercentage!=0">{{PIData?.CustomMaxDeliveryPercentage}}%</div>
+
               <div class="col-md-4 mt-2 text-right content-middle"><strong>Status</strong></div>
               <div class="col-md-8 mt-2"><span class="text-danger"><strong>{{PIData?.Status |
                     uppercase}}</strong></span></div>
