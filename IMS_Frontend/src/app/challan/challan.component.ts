@@ -622,13 +622,14 @@ export class ChallanComponent implements OnInit {
     let html = `<html><head><title>QR Codes</title>
       <style>
         body { font-family: Arial, sans-serif; }
-        .qr-row { margin-left:-5px;display: flex; justify-content: flex-start; margin-bottom: 24px; }
+        .qr-row { margin-left:-5px;display: flex; justify-content: flex-start; margin-bottom: 0px; }
         .qr-block5 { text-align: center; margin: 8px; }
         .qr-block1 { text-align: center; margin: 8px;margin-left:-6px; }
         .qr-block2 { text-align: center; margin: 8px;margin-left:-4px; }
         .qr-block3 { text-align: center; margin: 8px;margin-left:-3px; }
         .qr-block4 { text-align: center; margin: 8px;margin-left:-2px; }
-        .qr-label { margin-top: -10px; font-size: 15px; }
+        .qr-label { margin-top: 0px; font-size: 15px; }
+        .qr-challan-date{margin-bottom: 10px; }
       </style>
       <script src='${qrLibUrl}'></script>
     </head><body>`;
@@ -649,7 +650,11 @@ export class ChallanComponent implements OnInit {
         var color = '${color}';
         var totalRoll = '${totalRoll}';
         var perRow = 5;
+        var countClass = 0;
         for (var i = 1; i <= rollCount; i++) {
+        countClass++;
+        if(countClass>5)
+        countClass = 1;
           if ((i-1) % perRow === 0) {
             var rowDiv = document.createElement('div');
             rowDiv.className = 'qr-row';
@@ -668,12 +673,17 @@ qrImg.width = 166.2;
 qrImg.height = 166.2;
 
 var block = document.createElement('div');
-block.className = 'qr-block' + (i > 5 ? i - 5 : i);
+block.className = 'qr-block' + countClass;
 
 // 🔹 Add challan number
 var challan = document.createElement('div');
 challan.className = 'qr-challan';
 challan.innerHTML = challanNo; // make sure challanNo variable exists
+
+// 🔹 Add challan Date
+var challanDate = document.createElement('div');
+challanDate.className = 'qr-challan-date';
+challanDate.innerHTML = 'Date'; // make sure challanDate variable exists
 
 // Existing label
 var label = document.createElement('div');
@@ -681,8 +691,9 @@ label.className = 'qr-label';
 label.innerHTML = 'Roll ' + i + ' of ' + totalRoll;
 
 // Append in correct order
-block.appendChild(challan);   // top
-block.appendChild(qrImg);     // middle
+block.appendChild(qrImg);     // top
+block.appendChild(challan);   // middle
+//block.appendChild(challanDate);   // middle
 block.appendChild(label);     // bottom
 
 container.lastChild.appendChild(block);

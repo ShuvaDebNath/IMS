@@ -353,10 +353,14 @@
           <DataField>FOBCharge</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
+        <Field Name="PIConcat">
+          <DataField>PIConcat</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>DataSet1</rd:DataSetName>
-        <rd:SchemaPath>E:\Maliha Projects\ReportProject\ReportDesign\TDS\DataSet1.xsd</rd:SchemaPath>
+        <rd:SchemaPath>F:\Project\ReportProject\ReportDesign\TDS\DataSet1.xsd</rd:SchemaPath>
         <rd:TableName>usp_CommercialInvoice_Report</rd:TableName>
         <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
         <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
@@ -372,108 +376,34 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>1.31984in</Width>
+                  <Width>1.18968in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.84298in</Width>
+                  <Width>1.54727in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.91933in</Width>
+                  <Width>0.87704in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.27692in</Width>
+                  <Width>1.01669in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.60669in</Width>
+                  <Width>0.79639in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.74634in</Width>
+                  <Width>0.66819in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.52604in</Width>
+                  <Width>0.76841in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.39784in</Width>
-                </TablixColumn>
-                <TablixColumn>
-                  <Width>0.49806in</Width>
-                </TablixColumn>
-                <TablixColumn>
-                  <Width>0.73001in</Width>
+                  <Width>1.00036in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
                   <Height>0.19169in</Height>
                   <TablixCells>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox13">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>PI No</Value>
-                                  <Style>
-                                    <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox13</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>Solid</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox38">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Date</Value>
-                                  <Style>
-                                    <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox38</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>Solid</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
                     <TablixCell>
                       <CellContents>
                         <Textbox Name="Textbox3">
@@ -753,73 +683,6 @@
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="PINo">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!PINo.Value</Value>
-                                  <Style>
-                                    <FontSize>8pt</FontSize>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>PINo</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>Solid</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Date">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!Date.Value</Value>
-                                  <Style>
-                                    <FontSize>8pt</FontSize>
-                                    <Format>MMM d, yyyy</Format>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Date</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>Solid</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
                         <Textbox Name="Article">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -1094,7 +957,7 @@
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox25">
+                        <Textbox Name="Textbox26">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -1113,7 +976,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox25</rd:DefaultName>
+                          <rd:DefaultName>Textbox26</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -1124,11 +987,9 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <ColSpan>6</ColSpan>
+                        <ColSpan>4</ColSpan>
                       </CellContents>
                     </TablixCell>
-                    <TablixCell />
-                    <TablixCell />
                     <TablixCell />
                     <TablixCell />
                     <TablixCell />
@@ -1281,25 +1142,17 @@
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
-                <TablixMember />
-                <TablixMember />
               </TablixMembers>
             </TablixColumnHierarchy>
             <TablixRowHierarchy>
               <TablixMembers>
-                <TablixMember>
-                  <KeepWithGroup>After</KeepWithGroup>
-                </TablixMember>
-                <TablixMember>
-                  <Group Name="Details" />
-                </TablixMember>
-                <TablixMember>
-                  <KeepWithGroup>Before</KeepWithGroup>
-                </TablixMember>
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>dtCommercialInvoice</DataSetName>
-            <Top>4.14521in</Top>
+            <Top>4.57021in</Top>
             <Left>0.39939in</Left>
             <Height>0.57869in</Height>
             <Width>7.86405in</Width>
@@ -2481,7 +2334,7 @@ We certify that the quality, quantity, other particulars and unit price of the m
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox48</rd:DefaultName>
-            <Top>5.67648in</Top>
+            <Top>6.10148in</Top>
             <Left>0.38527in</Left>
             <Height>1.1875in</Height>
             <Width>7.89215in</Width>
@@ -2513,7 +2366,7 @@ We certify that the quality, quantity, other particulars and unit price of the m
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox55</rd:DefaultName>
-            <Top>4.85703in</Top>
+            <Top>5.29453in</Top>
             <Left>5.95824in</Left>
             <Height>0.25in</Height>
             <Width>1in</Width>
@@ -2545,7 +2398,7 @@ We certify that the quality, quantity, other particulars and unit price of the m
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox55</rd:DefaultName>
-            <Top>5.10703in</Top>
+            <Top>5.54453in</Top>
             <Left>5.95814in</Left>
             <Height>0.25in</Height>
             <Width>1in</Width>
@@ -2582,7 +2435,7 @@ We certify that the quality, quantity, other particulars and unit price of the m
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox55</rd:DefaultName>
-            <Top>4.85703in</Top>
+            <Top>5.29453in</Top>
             <Left>6.95824in</Left>
             <Height>0.25in</Height>
             <Width>1.31926in</Width>
@@ -2619,7 +2472,7 @@ We certify that the quality, quantity, other particulars and unit price of the m
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox55</rd:DefaultName>
-            <Top>5.10703in</Top>
+            <Top>5.54453in</Top>
             <Left>6.95824in</Left>
             <Height>0.25in</Height>
             <Width>1.31914in</Width>
@@ -2651,7 +2504,7 @@ We certify that the quality, quantity, other particulars and unit price of the m
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox60</rd:DefaultName>
-            <Top>7.00304in</Top>
+            <Top>7.62804in</Top>
             <Left>4.86763in</Left>
             <Height>0.29167in</Height>
             <Width>3.39587in</Width>
@@ -2681,7 +2534,7 @@ We certify that the quality, quantity, other particulars and unit price of the m
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox62</rd:DefaultName>
-            <Top>8.15929in</Top>
+            <Top>8.78429in</Top>
             <Left>5.51715in</Left>
             <Height>0.25in</Height>
             <Width>1in</Width>
@@ -2697,7 +2550,7 @@ We certify that the quality, quantity, other particulars and unit price of the m
             </Style>
           </Textbox>
           <Line Name="Line3">
-            <Top>8.15929in</Top>
+            <Top>8.78429in</Top>
             <Left>5.51715in</Left>
             <Height>0in</Height>
             <Width>2.41302in</Width>
@@ -2712,7 +2565,7 @@ We certify that the quality, quantity, other particulars and unit price of the m
             <Source>Embedded</Source>
             <Value>CEOsignature</Value>
             <Sizing>FitProportional</Sizing>
-            <Top>7.35027in</Top>
+            <Top>7.97527in</Top>
             <Left>5.51715in</Left>
             <Height>0.77083in</Height>
             <Width>2.29752in</Width>
@@ -2740,7 +2593,7 @@ We certify that the quality, quantity, other particulars and unit price of the m
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox1</rd:DefaultName>
-            <Top>3.92994in</Top>
+            <Top>4.32994in</Top>
             <Left>0.37136in</Left>
             <Height>0.1875in</Height>
             <Width>4.65625in</Width>
@@ -2772,7 +2625,7 @@ We certify that the quality, quantity, other particulars and unit price of the m
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox55</rd:DefaultName>
-            <Top>5.35703in</Top>
+            <Top>5.79453in</Top>
             <Left>5.95818in</Left>
             <Height>0.25in</Height>
             <Width>1in</Width>
@@ -2808,7 +2661,7 @@ We certify that the quality, quantity, other particulars and unit price of the m
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox55</rd:DefaultName>
-            <Top>5.35703in</Top>
+            <Top>5.79453in</Top>
             <Left>6.95824in</Left>
             <Height>0.25in</Height>
             <Width>1.31918in</Width>
@@ -2875,7 +2728,7 @@ We certify that the quality, quantity, other particulars and unit price of the m
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox35</rd:DefaultName>
-            <Top>4.85703in</Top>
+            <Top>5.28203in</Top>
             <Left>0.38537in</Left>
             <Height>0.75in</Height>
             <Width>5.51722in</Width>
@@ -2911,7 +2764,7 @@ We certify that the quality, quantity, other particulars and unit price of the m
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox1</rd:DefaultName>
-            <Top>8.62457in</Top>
+            <Top>9.04957in</Top>
             <Left>0.38537in</Left>
             <Height>0.18072in</Height>
             <Width>7.90616in</Width>
@@ -2991,8 +2844,72 @@ We certify that the quality, quantity, other particulars and unit price of the m
               <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
+          <Textbox Name="Textbox36">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>PI No.:   </Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>=Fields!PIConcat.Value</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value />
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value xml:space="preserve">  </Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox7</rd:DefaultName>
+            <Top>3.91098in</Top>
+            <Left>0.37136in</Left>
+            <Height>0.375in</Height>
+            <Width>7.89208in</Width>
+            <ZIndex>33</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
         </ReportItems>
-        <Height>8.85031in</Height>
+        <Height>9.28446in</Height>
         <Style>
           <Border>
             <Style>Solid</Style>
