@@ -90,7 +90,7 @@ export class AllCashReceiveComponent {
     const dd = String(fDate.getDate()).padStart(2, '0');
     const yyyy = fDate.getFullYear();
 
-    const formatted = `${dd}/${mm}/${yyyy}`;
+    const formatted = `${mm}/${dd}/${yyyy}`;
 
     const threeMonthsAgo = new Date();
     threeMonthsAgo.setMonth(fDate.getMonth() - 3);
@@ -99,7 +99,7 @@ export class AllCashReceiveComponent {
     const ddT = String(threeMonthsAgo.getDate()).padStart(2, '0');
     const yyyyT = threeMonthsAgo.getFullYear();
 
-    const formattedT = `${ddT}/${mmT}/${yyyyT}`;
+    const formattedT = `${mmT}/${ddT}/${yyyyT}`;
 
     this.SearchForm.get('fromDate')?.setValue(formattedT);
     this.SearchForm.get('toDate')?.setValue(formatted);
