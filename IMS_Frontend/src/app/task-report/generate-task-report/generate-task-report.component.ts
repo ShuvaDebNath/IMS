@@ -40,6 +40,17 @@ export class GenerateTaskReportComponent {
     { label: 'Rolls', value: 'roll' },
     { label: 'Bags', value: 'bag' },
   ];
+
+  type = [
+    { label: 'N/A', value: 'N/A' },
+    { label: 'Old', value: 'Old' },
+    { label: 'New', value: 'New' },
+  ];
+  solveList = [
+    { label: 'N/A', value: 'N/A' },
+    { label: 'Yes solved', value: 'Yes solved' },
+    { label: 'Not Solved', value: 'Not Solved' },
+  ];
   reloadingArticles = false;
   LoadingPortList: any[] = [];
   DestinationPortList: any[] = [];
@@ -51,6 +62,7 @@ export class GenerateTaskReportComponent {
   CustomerList: any[] = [];
   userId: any = '';
   superiorId: any = '';
+  BuyerList:any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -129,6 +141,7 @@ export class GenerateTaskReportComponent {
     this.getDataService.GetInitialData(ProcedureData).subscribe({
       next: (results) => {
         if (results.status) {
+          this.BuyerList = JSON.parse(results.data).Tables3;
           this.CustomerList = JSON.parse(results.data).Tables1;
           this.superiorId = JSON.parse(results.data).Tables2[0];
         } else if (results.msg == 'Invalid Token') {
@@ -148,10 +161,15 @@ export class GenerateTaskReportComponent {
   addItem() {
     const row = this.fb.group(
       {
+        Buyer_Name: this.fb.control<string | null>(null, Validators.required),
         CustomerName: this.fb.control<string | null>(null, Validators.required),
         InTime: this.fb.control<string | null>(null, Validators.required),
         OutTime: this.fb.control<string | null>(null, Validators.required),
+        Type: this.fb.control<string | null>(null, Validators.required),
         discussion: this.fb.control<string | null>(null, Validators.required),
+        PaymentIssue: this.fb.control<string | null>(null, Validators.required),
+        CommercialIssue: this.fb.control<string | null>(null, Validators.required),
+        SampleSubmit: this.fb.control<string | null>(null, Validators.required),
       },
       { validators: [this.outTimeAfterInValidator()] }
     );

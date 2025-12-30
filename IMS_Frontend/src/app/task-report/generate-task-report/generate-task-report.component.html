@@ -90,10 +90,15 @@
     <table class="table table-bordered">
       <thead>
         <tr>
+          <th style="text-align: center">Buyer Name</th>
           <th style="text-align: center">Customer Name</th>
           <th style="text-align: center">In Time</th>
           <th style="text-align: center">Out Time</th>
+          <th style="text-align: center">Type</th>
           <th style="text-align: center">Discussion</th>
+          <th style="text-align: center">Payment Issue</th>
+          <th style="text-align: center">Commercial Issue</th>
+          <th style="text-align: center">Sample Submit</th>
           <th style="width: 60px"></th>
         </tr>
       </thead>
@@ -103,6 +108,30 @@
           *ngFor="let item of items.controls; let i = index"
           [formGroupName]="i"
         >
+          <td>
+            <div class="form-group">
+              <p-dropdown
+                class="p-0 rm-dd"
+                [panelStyle]="{ width: '300px' }"
+                [options]="BuyerList"
+                optionLabel="Buyer_Name"
+                optionValue="Id"
+                [filter]="true"
+                filterBy="Buyer_Name"
+                [showClear]="true"
+                placeholder="Please Select"
+                formControlName="Buyer_Name"
+                [virtualScroll]="true"
+                [virtualScrollItemSize]="30"
+              >
+                <ng-template let-article pTemplate="item">
+                  <div class="flex align-items-center gap-2">
+                    <div>{{ article.Buyer_Name }}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+            </div>
+          </td>
           <td>
             <div class="form-group">
               <p-dropdown
@@ -163,10 +192,89 @@
               Out Time cannot be earlier than In Time
             </div>
           </td>
+          <td>
+            <div class="form-group">
+              <p-dropdown
+                class="p-0 rm-dd"
+                [panelStyle]="{ width: '300px' }"
+                [options]="type"
+                optionLabel="label"
+                optionValue="value"
+                [filter]="true"
+                filterBy="label"
+                [showClear]="true"
+                placeholder="Please Select"
+                formControlName="Type"
+                [virtualScroll]="true"
+                [virtualScrollItemSize]="30"
+              >
+                <ng-template let-article pTemplate="item">
+                  <div class="flex align-items-center gap-2">
+                    <div>{{ article.label }}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+            </div>
+          </td>
           <td class="col-description">
             <textarea
               class="form-control form-control-sm"
               formControlName="discussion"
+              required="true"
+            ></textarea>
+          </td>
+          <td>
+            <div class="form-group">
+              <p-dropdown
+                class="p-0 rm-dd"
+                [panelStyle]="{ width: '300px' }"
+                [options]="solveList"
+                optionLabel="label"
+                optionValue="value"
+                [filter]="true"
+                filterBy="label"
+                [showClear]="true"
+                placeholder="Please Select"
+                formControlName="PaymentIssue"
+                [virtualScroll]="true"
+                [virtualScrollItemSize]="30"
+              >
+                <ng-template let-article pTemplate="item">
+                  <div class="flex align-items-center gap-2">
+                    <div>{{ article.label }}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+            </div>
+          </td>
+          <td>
+            <div class="form-group">
+              <p-dropdown
+                class="p-0 rm-dd"
+                [panelStyle]="{ width: '300px' }"
+                [options]="solveList"
+                optionLabel="label"
+                optionValue="value"
+                [filter]="true"
+                filterBy="label"
+                [showClear]="true"
+                placeholder="Please Select"
+                formControlName="CommercialIssue"
+                [virtualScroll]="true"
+                [virtualScrollItemSize]="30"
+              >
+                <ng-template let-article pTemplate="item">
+                  <div class="flex align-items-center gap-2">
+                    <div>{{ article.label }}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+            </div>
+          </td>
+          <td class="col-description">
+            <textarea
+              class="form-control form-control-sm"
+              formControlName="SampleSubmit"
               required="true"
             ></textarea>
           </td>
