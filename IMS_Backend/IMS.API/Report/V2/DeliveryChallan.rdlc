@@ -353,10 +353,14 @@
           <DataField>FOBCharge</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
+        <Field Name="PIConcat">
+          <DataField>PIConcat</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>DataSet1</rd:DataSetName>
-        <rd:SchemaPath>E:\Maliha Projects\ReportProject\ReportDesign\TDS\DataSet1.xsd</rd:SchemaPath>
+        <rd:SchemaPath>F:\Project\ReportProject\ReportDesign\TDS\DataSet1.xsd</rd:SchemaPath>
         <rd:TableName>usp_CommercialInvoice_Report</rd:TableName>
         <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
         <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
@@ -428,7 +432,7 @@ Good Received In Good Order &amp; Condition</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox48</rd:DefaultName>
-            <Top>7.40664in</Top>
+            <Top>7.94414in</Top>
             <Left>0.09016in</Left>
             <Height>0.43749in</Height>
             <Width>7.89225in</Width>
@@ -460,7 +464,7 @@ Good Received In Good Order &amp; Condition</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox60</rd:DefaultName>
-            <Top>7.8719in</Top>
+            <Top>8.4094in</Top>
             <Left>4.6225in</Left>
             <Height>0.29167in</Height>
             <Width>3.39587in</Width>
@@ -492,7 +496,7 @@ Good Received In Good Order &amp; Condition</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox62</rd:DefaultName>
-            <Top>9.02815in</Top>
+            <Top>9.56565in</Top>
             <Left>5.27202in</Left>
             <Height>0.25in</Height>
             <Width>1in</Width>
@@ -508,7 +512,7 @@ Good Received In Good Order &amp; Condition</Value>
             </Style>
           </Textbox>
           <Line Name="Line3">
-            <Top>9.02815in</Top>
+            <Top>9.56565in</Top>
             <Left>5.27202in</Left>
             <Height>0in</Height>
             <Width>2.41302in</Width>
@@ -523,7 +527,7 @@ Good Received In Good Order &amp; Condition</Value>
             <Source>Embedded</Source>
             <Value>gmsignature</Value>
             <Sizing>FitProportional</Sizing>
-            <Top>8.21913in</Top>
+            <Top>8.75663in</Top>
             <Left>5.27202in</Left>
             <Height>0.77083in</Height>
             <Width>2.29752in</Width>
@@ -1726,7 +1730,7 @@ Good Received In Good Order &amp; Condition</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox35</rd:DefaultName>
-            <Top>6.30555in</Top>
+            <Top>6.83055in</Top>
             <Left>0.10198in</Left>
             <Height>0.23146in</Height>
             <Width>4.85414in</Width>
@@ -1758,7 +1762,7 @@ Good Received In Good Order &amp; Condition</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox62</rd:DefaultName>
-            <Top>9.06634in</Top>
+            <Top>9.60384in</Top>
             <Left>0.12476in</Left>
             <Height>0.25in</Height>
             <Width>2.41302in</Width>
@@ -1774,7 +1778,7 @@ Good Received In Good Order &amp; Condition</Value>
             </Style>
           </Textbox>
           <Line Name="Line4">
-            <Top>9.06634in</Top>
+            <Top>9.60384in</Top>
             <Left>0.12476in</Left>
             <Height>0in</Height>
             <Width>2.41302in</Width>
@@ -2008,7 +2012,7 @@ Good Received In Good Order &amp; Condition</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox35</rd:DefaultName>
-            <Top>7.13351in</Top>
+            <Top>7.67101in</Top>
             <Left>0.10198in</Left>
             <Height>0.23146in</Height>
             <Width>1.90622in</Width>
@@ -3367,7 +3371,7 @@ Good Received In Good Order &amp; Condition</Value>
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>dtCommercialInvoice</DataSetName>
-            <Top>6.5509in</Top>
+            <Top>7.0884in</Top>
             <Left>0.10198in</Left>
             <Height>0.57869in</Height>
             <Width>7.86769in</Width>
@@ -3399,7 +3403,7 @@ Good Received In Good Order &amp; Condition</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox1</rd:DefaultName>
-            <Top>9.38578in</Top>
+            <Top>9.92328in</Top>
             <Left>0.10198in</Left>
             <Height>0.18072in</Height>
             <Width>7.90616in</Width>
@@ -3432,7 +3436,7 @@ Good Received In Good Order &amp; Condition</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox35</rd:DefaultName>
-            <Top>7.13351in</Top>
+            <Top>7.67101in</Top>
             <Left>3.20687in</Left>
             <Height>0.23146in</Height>
             <Width>2.9568in</Width>
@@ -3466,7 +3470,7 @@ Good Received In Good Order &amp; Condition</Value>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox35</rd:DefaultName>
-            <Top>7.13351in</Top>
+            <Top>7.43351in</Top>
             <Left>6.16367in</Left>
             <Height>0.23146in</Height>
             <Width>1.80599in</Width>
@@ -3482,8 +3486,72 @@ Good Received In Good Order &amp; Condition</Value>
               <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
+          <Textbox Name="Textbox65">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>PI No.:   </Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>=Fields!PIConcat.Value</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value />
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value xml:space="preserve">  </Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox7</rd:DefaultName>
+            <Top>6.427in</Top>
+            <Left>0.26883in</Left>
+            <Height>0.375in</Height>
+            <Width>7.89208in</Width>
+            <ZIndex>54</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
         </ReportItems>
-        <Height>9.78506in</Height>
+        <Height>10.229in</Height>
         <Style>
           <Border>
             <Style>Solid</Style>

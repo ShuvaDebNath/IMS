@@ -101,6 +101,8 @@ export class SampleRequestListComponent {
 
     // this.SearchForm.get('fromDate')?.setValue(formattedT);
     // this.SearchForm.get('toDate')?.setValue(formatted);
+    this.SearchForm.get('fromDate')?.setValue(new Date().toISOString().split('T')[0]);
+    this.SearchForm.get('toDate')?.setValue(new Date().toISOString().split('T')[0]);
   }
   initForm(): void {
     this.SearchForm = this.fb.group({

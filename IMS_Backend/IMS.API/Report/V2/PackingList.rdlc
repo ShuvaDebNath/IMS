@@ -353,10 +353,14 @@
           <DataField>FOBCharge</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
+        <Field Name="PIConcat">
+          <DataField>PIConcat</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>DataSet1</rd:DataSetName>
-        <rd:SchemaPath>E:\Maliha Projects\ReportProject\ReportDesign\TDS\DataSet1.xsd</rd:SchemaPath>
+        <rd:SchemaPath>F:\Project\ReportProject\ReportDesign\TDS\DataSet1.xsd</rd:SchemaPath>
         <rd:TableName>usp_CommercialInvoice_Report</rd:TableName>
         <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
         <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
@@ -1297,7 +1301,7 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>dtCommercialInvoice</DataSetName>
-            <Top>4.10409in</Top>
+            <Top>4.36659in</Top>
             <Left>0.22365in</Left>
             <Height>0.57869in</Height>
             <Width>7.88073in</Width>
@@ -1419,7 +1423,7 @@ Certify on the Packing list to the effect that the goods shipped are in accordan
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox48</rd:DefaultName>
-            <Top>5.07515in</Top>
+            <Top>5.33765in</Top>
             <Left>0.22375in</Left>
             <Height>1.45832in</Height>
             <Width>7.89225in</Width>
@@ -1451,7 +1455,7 @@ Certify on the Packing list to the effect that the goods shipped are in accordan
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox60</rd:DefaultName>
-            <Top>6.66194in</Top>
+            <Top>6.92444in</Top>
             <Left>4.72003in</Left>
             <Height>0.29167in</Height>
             <Width>3.39587in</Width>
@@ -1481,7 +1485,7 @@ Certify on the Packing list to the effect that the goods shipped are in accordan
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox62</rd:DefaultName>
-            <Top>7.81819in</Top>
+            <Top>8.08069in</Top>
             <Left>5.36955in</Left>
             <Height>0.25in</Height>
             <Width>1in</Width>
@@ -1497,7 +1501,7 @@ Certify on the Packing list to the effect that the goods shipped are in accordan
             </Style>
           </Textbox>
           <Line Name="Line3">
-            <Top>7.81819in</Top>
+            <Top>8.08069in</Top>
             <Left>5.36955in</Left>
             <Height>0in</Height>
             <Width>2.41302in</Width>
@@ -1512,7 +1516,7 @@ Certify on the Packing list to the effect that the goods shipped are in accordan
             <Source>Embedded</Source>
             <Value>gmsignature</Value>
             <Sizing>FitProportional</Sizing>
-            <Top>7.00917in</Top>
+            <Top>7.27167in</Top>
             <Left>5.36955in</Left>
             <Height>0.77083in</Height>
             <Width>2.29752in</Width>
@@ -1542,7 +1546,7 @@ Certify on the Packing list to the effect that the goods shipped are in accordan
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox35</rd:DefaultName>
-            <Top>4.72445in</Top>
+            <Top>4.98695in</Top>
             <Left>0.22375in</Left>
             <Height>0.23146in</Height>
             <Width>1.90622in</Width>
@@ -2668,7 +2672,7 @@ Certify on the Packing list to the effect that the goods shipped are in accordan
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox1</rd:DefaultName>
-            <Top>8.215in</Top>
+            <Top>8.4775in</Top>
             <Left>0.19941in</Left>
             <Height>0.18072in</Height>
             <Width>7.90616in</Width>
@@ -2683,8 +2687,72 @@ Certify on the Packing list to the effect that the goods shipped are in accordan
               <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
+          <Textbox Name="Textbox36">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>PI No.:   </Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>=Fields!PIConcat.Value</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value />
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value xml:space="preserve">  </Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox7</rd:DefaultName>
+            <Top>3.94786in</Top>
+            <Left>0.21347in</Left>
+            <Height>0.375in</Height>
+            <Width>7.89208in</Width>
+            <ZIndex>26</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
         </ReportItems>
-        <Height>8.69405in</Height>
+        <Height>8.67697in</Height>
         <Style>
           <Border>
             <Style>Solid</Style>
