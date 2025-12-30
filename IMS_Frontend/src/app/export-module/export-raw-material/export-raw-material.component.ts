@@ -87,6 +87,7 @@ export class ExportRawMaterialComponent {
   generateForm() {
     this.exportForm = this.fb.group({
       ExportDate: ['', Validators.required],
+      ExportNo: ['', [Validators.required]],
       Loading_Port: ['', Validators.required],
       Destination_Port: ['', Validators.required],
       ShippingInformation: [''],
@@ -241,7 +242,7 @@ export class ExportRawMaterialComponent {
 
     this.recalcTotals();
     const masterRow = {
-      ExportNumber: 'Export - ',
+      ExportNumber: fv.ExportNo,
       ExportDate: fv.ExportDate,
       Shipping_Information: fv.ShippingInformation ?? '',
       Loading_Port_ID: fv.Loading_Port,
@@ -358,7 +359,7 @@ export class ExportRawMaterialComponent {
             const year = exportDate.getFullYear();
             const month = ('0' + (exportDate.getMonth() + 1)).slice(-2);
             const day = ('0' + exportDate.getDate()).slice(-2);
-
+            this.exportForm.controls.ExportNo.setValue(e.ExportNumber);
             this.exportForm.controls.ExportDate.setValue(
               `${year}-${month}-${day}`
             );
@@ -403,7 +404,6 @@ export class ExportRawMaterialComponent {
             arrayGroup.controls.qty.setValue(e.Quantity);
             arrayGroup.controls.weight.setValue(e.Weight);
             arrayGroup.controls.grossWeight.setValue(e.Gross_Weight);
-            
 
             arrayGroup.get('qty')!.valueChanges.subscribe(() => {
               const qty = arrayGroup.get('qty')!.value ?? 0;
@@ -453,6 +453,7 @@ export class ExportRawMaterialComponent {
 
     this.recalcTotals();
     const masterRow = {
+      ExportNumber: fv.ExportNo,
       ExportDate: fv.ExportDate,
       Shipping_Information: fv.ShippingInformation ?? '',
       Loading_Port_ID: fv.Loading_Port,

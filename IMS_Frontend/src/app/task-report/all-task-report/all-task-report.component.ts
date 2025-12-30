@@ -79,6 +79,8 @@ export class AllTaskReportComponent {
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
     this.title.setTitle('All Task Report');
+    this.SearchForm.get('fromDate')?.setValue(new Date().toISOString().split('T')[0]);
+    this.SearchForm.get('toDate')?.setValue(new Date().toISOString().split('T')[0]);
   }
   initForm(): void {
     this.SearchForm = this.fb.group({

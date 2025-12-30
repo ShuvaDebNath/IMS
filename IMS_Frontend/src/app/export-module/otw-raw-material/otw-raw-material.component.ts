@@ -89,6 +89,8 @@ export class OtwRawMaterialComponent {
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
     this.title.setTitle('On the Way Raw Material List');
+    this.SearchForm.get('fromDate')?.setValue(new Date().toISOString().split('T')[0]);
+    this.SearchForm.get('toDate')?.setValue(new Date().toISOString().split('T')[0]);
 
     //this.Search();
   }
