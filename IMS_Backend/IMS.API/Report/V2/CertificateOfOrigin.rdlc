@@ -353,10 +353,14 @@
           <DataField>FOBCharge</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
+        <Field Name="PIConcat">
+          <DataField>PIConcat</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>DataSet1</rd:DataSetName>
-        <rd:SchemaPath>E:\Maliha Projects\ReportProject\ReportDesign\TDS\DataSet1.xsd</rd:SchemaPath>
+        <rd:SchemaPath>F:\Project\ReportProject\ReportDesign\TDS\DataSet1.xsd</rd:SchemaPath>
         <rd:TableName>usp_CommercialInvoice_Report</rd:TableName>
         <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
         <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
@@ -417,7 +421,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox62</rd:DefaultName>
-            <Top>8.35762in</Top>
+            <Top>8.89512in</Top>
             <Left>5.3911in</Left>
             <Height>0.25in</Height>
             <Width>1in</Width>
@@ -433,7 +437,7 @@
             </Style>
           </Textbox>
           <Line Name="Line3">
-            <Top>8.35762in</Top>
+            <Top>8.89512in</Top>
             <Left>5.3911in</Left>
             <Height>0in</Height>
             <Width>2.41302in</Width>
@@ -1494,7 +1498,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox2</rd:DefaultName>
-            <Top>3.87024in</Top>
+            <Top>4.40774in</Top>
             <Left>0.29799in</Left>
             <Height>0.20833in</Height>
             <Width>1.97385in</Width>
@@ -2506,7 +2510,7 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>dtCommercialInvoice</DataSetName>
-            <Top>4.12024in</Top>
+            <Top>4.65774in</Top>
             <Left>0.20431in</Left>
             <Height>0.57869in</Height>
             <Width>7.76319in</Width>
@@ -2547,7 +2551,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox2</rd:DefaultName>
-            <Top>4.71282in</Top>
+            <Top>5.25032in</Top>
             <Left>0.20431in</Left>
             <Height>0.20833in</Height>
             <Width>2.56251in</Width>
@@ -2579,7 +2583,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox2</rd:DefaultName>
-            <Top>5.17114in</Top>
+            <Top>5.70864in</Top>
             <Left>0.2981in</Left>
             <Height>0.41666in</Height>
             <Width>1.33843in</Width>
@@ -2619,7 +2623,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox2</rd:DefaultName>
-            <Top>5.17114in</Top>
+            <Top>5.70864in</Top>
             <Left>1.63653in</Left>
             <Height>0.20833in</Height>
             <Width>3.4962in</Width>
@@ -2659,7 +2663,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox2</rd:DefaultName>
-            <Top>5.37947in</Top>
+            <Top>5.91697in</Top>
             <Left>1.63663in</Left>
             <Height>0.20833in</Height>
             <Width>3.4962in</Width>
@@ -2692,7 +2696,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox2</rd:DefaultName>
-            <Top>4.97202in</Top>
+            <Top>5.50952in</Top>
             <Left>0.2981in</Left>
             <Height>0.20833in</Height>
             <Width>4.83473in</Width>
@@ -2772,7 +2776,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox7</rd:DefaultName>
-            <Top>5.68502in</Top>
+            <Top>6.22252in</Top>
             <Left>0.2981in</Left>
             <Height>0.58333in</Height>
             <Width>2.59694in</Width>
@@ -2845,7 +2849,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox7</rd:DefaultName>
-            <Top>5.68502in</Top>
+            <Top>6.22252in</Top>
             <Left>2.89504in</Left>
             <Height>0.58333in</Height>
             <Width>2.23748in</Width>
@@ -2938,7 +2942,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox7</rd:DefaultName>
-            <Top>6.81001in</Top>
+            <Top>7.34751in</Top>
             <Left>0.29841in</Left>
             <Height>0.92708in</Height>
             <Width>2.58305in</Width>
@@ -3031,7 +3035,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox7</rd:DefaultName>
-            <Top>6.81001in</Top>
+            <Top>7.34751in</Top>
             <Left>2.90924in</Left>
             <Height>0.92708in</Height>
             <Width>2.22359in</Width>
@@ -3064,7 +3068,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox2</rd:DefaultName>
-            <Top>7.73709in</Top>
+            <Top>8.27459in</Top>
             <Left>0.29841in</Left>
             <Height>0.39583in</Height>
             <Width>4.83473in</Width>
@@ -3128,7 +3132,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox2</rd:DefaultName>
-            <Top>5.17114in</Top>
+            <Top>5.70864in</Top>
             <Left>5.40519in</Left>
             <Height>0.76041in</Height>
             <Width>2.56231in</Width>
@@ -3221,7 +3225,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox2</rd:DefaultName>
-            <Top>6.39335in</Top>
+            <Top>6.93085in</Top>
             <Left>0.2982in</Left>
             <Height>0.20833in</Height>
             <Width>1.33843in</Width>
@@ -3268,7 +3272,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox2</rd:DefaultName>
-            <Top>6.39335in</Top>
+            <Top>6.93085in</Top>
             <Left>1.63663in</Left>
             <Height>0.20833in</Height>
             <Width>3.4962in</Width>
@@ -3300,7 +3304,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox2</rd:DefaultName>
-            <Top>6.60168in</Top>
+            <Top>7.13918in</Top>
             <Left>0.2982in</Left>
             <Height>0.20833in</Height>
             <Width>1.33843in</Width>
@@ -3333,7 +3337,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox2</rd:DefaultName>
-            <Top>6.60168in</Top>
+            <Top>7.13918in</Top>
             <Left>1.63663in</Left>
             <Height>0.20833in</Height>
             <Width>3.4962in</Width>
@@ -3369,7 +3373,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox1</rd:DefaultName>
-            <Top>8.7604in</Top>
+            <Top>9.2979in</Top>
             <Left>0.20431in</Left>
             <Height>0.18072in</Height>
             <Width>7.90616in</Width>
@@ -3384,8 +3388,72 @@
               <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
+          <Textbox Name="Textbox65">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>PI No.:   </Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>=Fields!PIConcat.Value</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value />
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value xml:space="preserve">  </Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox7</rd:DefaultName>
+            <Top>3.90806in</Top>
+            <Left>0.29789in</Left>
+            <Height>0.375in</Height>
+            <Width>7.66981in</Width>
+            <ZIndex>50</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
         </ReportItems>
-        <Height>9.33989in</Height>
+        <Height>9.69112in</Height>
         <Style>
           <Border>
             <Style>Solid</Style>

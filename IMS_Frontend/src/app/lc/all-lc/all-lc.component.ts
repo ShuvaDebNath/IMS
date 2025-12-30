@@ -231,6 +231,8 @@ export class AllLcComponent {
   viewDetails(table: any) {
     this.isDetailsVisible = true;
     this.detailsData = table;
+    console.log(table);
+    
   }
 
   printLC() {

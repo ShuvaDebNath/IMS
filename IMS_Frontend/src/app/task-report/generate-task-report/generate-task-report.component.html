@@ -10,7 +10,7 @@
         <input
           autocomplete="off"
           type="text"
-          formControlName="TaskNo"
+          formControlName="ExportNo"
           class="form-control"
           placeholder="Task No"
           id="taskNo"
@@ -18,6 +18,15 @@
           value=""
           readonly
         />
+      </div>
+      <div class="col-md-6">
+        <label class="control-label">Date</label>
+
+        <input
+              type="date"
+              formControlName="Date"
+              class="form-control"
+            />
       </div>
     </div>
     <div class="row mb-3">
@@ -59,7 +68,6 @@
           id="ccMail"
           name="ccMail"
           value="lilya@sunshineinterlining.com"
-          readonly
         />
         <div
           *ngIf="

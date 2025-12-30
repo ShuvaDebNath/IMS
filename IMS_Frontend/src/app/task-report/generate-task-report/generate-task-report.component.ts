@@ -91,9 +91,10 @@ export class GenerateTaskReportComponent {
     var taskNo = yyyymmdd+'-'+userName;
 
     this.taskForm = this.fb.group({
-      TaskNo:[taskNo, [Validators.required, Validators.email]],
+      TaskNo:[taskNo, [Validators.required]],
       ToMail: ['', [Validators.required, Validators.email]],
       CcMail: ['lilya@sunshineinterlining.com', [Validators.required, Validators.email]],
+      Date: ['', [Validators.required]],
       items: this.fb.array([], { validators: [this.rowsCompleteValidator()] }),
     });
   }
@@ -239,7 +240,7 @@ export class GenerateTaskReportComponent {
       Mail_CC: fv.CcMail,
       User_ID: this.userId,
       Superior_ID: fv.superiorId,
-      Date: formatted,
+      Date: fv.Date,
       Task_Report_Code: fv.TaskNo,
       MailBody: '',
       Subject: '',
@@ -307,8 +308,8 @@ export class GenerateTaskReportComponent {
         next: (res: any) => {
           if (res.messageType === 'Success' && res.status) {
             swal.fire('Success', 'Task saved successfully', 'success');
-
             this.items.clear();
+            this.taskForm.reset();
             this.addItem();
           } else {
             swal.fire(
@@ -352,7 +353,7 @@ export class GenerateTaskReportComponent {
       Mail_CC: fv.CcMail,
       User_ID: this.userId,
       Superior_ID: fv.superiorId,
-      Date: formatted,
+      Date: fv.Date,
       Task_Report_Code:fv.TaskNo
     };
 
@@ -534,6 +535,7 @@ export class GenerateTaskReportComponent {
           this.taskForm.controls['ToMail'].setValue(data[0].Mail_TO);
           this.taskForm.controls['CcMail'].setValue(data[0].Mail_CC);
           this.taskForm.controls['TaskNo'].setValue(data[0].Task_Report_Code);
+          this.taskForm.controls['Date'].setValue(data[0].Date);
 
           JSON.parse(results.data).Tables1.forEach((item: any) => {
             formArray.push(

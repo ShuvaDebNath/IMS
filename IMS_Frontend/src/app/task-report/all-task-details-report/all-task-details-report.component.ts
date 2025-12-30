@@ -19,10 +19,10 @@ import { ReportService } from 'src/app/services/reportService/report-service.ser
 @Component({
   selector: 'app-all-task-details-report',
   templateUrl: './all-task-details-report.component.html',
-  styleUrls: ['./all-task-details-report.component.css']
+  styleUrls: ['./all-task-details-report.component.css'],
 })
 export class AllTaskDetailsReportComponent {
-pageIndex = 1;
+  pageIndex = 1;
   searchText = '';
   length = 100;
   pageSize = 10;
@@ -78,7 +78,8 @@ pageIndex = 1;
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
     this.title.setTitle('All Task Details Report');
-
+    this.SearchForm.get('fromDate')?.setValue(new Date().toISOString().split('T')[0]);
+    this.SearchForm.get('toDate')?.setValue(new Date().toISOString().split('T')[0]);
   }
   initForm(): void {
     this.SearchForm = this.fb.group({
@@ -88,7 +89,7 @@ pageIndex = 1;
   }
   Search() {
     var finput = new Date();
-    var fromDate = this.SearchForm.value.fromDate;    
+    var fromDate = this.SearchForm.value.fromDate;
     var toDate = this.SearchForm.value.toDate;
 
     let param = new GetDataModel();
@@ -101,12 +102,12 @@ pageIndex = 1;
     this.masterEntryService.GetInitialData(param).subscribe({
       next: (results) => {
         console.log(results);
-        
+
         if (results.status) {
           this.tableData = [];
           let tables = JSON.parse(results.data);
           this.tableData = tables.Tables1;
-          
+
           //  this.isPage=this.rows[0].totallen>10;
         }
       },
@@ -115,7 +116,7 @@ pageIndex = 1;
 
   PrintReport() {
     var finput = new Date();
-    var fromDate = this.SearchForm.value.fromDate;    
+    var fromDate = this.SearchForm.value.fromDate;
     var toDate = this.SearchForm.value.toDate;
 
     let param = new GetDataModel();
@@ -128,12 +129,12 @@ pageIndex = 1;
     this.masterEntryService.GetInitialData(param).subscribe({
       next: (results) => {
         console.log(results);
-        
+
         if (results.status) {
           this.tableData = [];
           let tables = JSON.parse(results.data);
           this.tableData = tables.Tables1;
-          
+
           this.reportService.PrintTaskDetails(
             { fromDate: fromDate, toDate: toDate },
             'pdf',
@@ -141,6 +142,63 @@ pageIndex = 1;
           );
           //  this.isPage=this.rows[0].totallen>10;
         }
+      },
+    });
+  }
+
+  print() {
+    swal.fire({
+      title: 'What you want to do?',
+      icon: 'question',
+      html: `
+            <div style="display: flex; gap: 10px; justify-content: center;">
+              <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
+                <i class="fa fa-file-excel"></i> Excel
+              </button>
+              <button id="wordBtn" class="btn btn-info" style="padding: 8px 16px;">
+                <i class="fa fa-file-word"></i> Word
+              </button>
+              <button id="pdfBtn" class="btn btn-danger" style="padding: 8px 16px;">
+                <i class="fa fa-file-pdf"></i> PDF
+              </button>
+            </div>
+          `,
+      showConfirmButton: false,
+      didOpen: () => {
+        const excelBtn = document.getElementById('excelBtn');
+        const wordBtn = document.getElementById('wordBtn');
+        const pdfBtn = document.getElementById('pdfBtn');
+
+        var fromDate = this.SearchForm.value.fromDate;
+        var toDate = this.SearchForm.value.toDate;
+
+        excelBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintTaskDetails(
+            { fromDate: fromDate, toDate: toDate },
+            'excel',
+            true
+          );
+        });
+
+        wordBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintTaskDetails(
+            { fromDate: fromDate, toDate: toDate },
+            'word',
+            true
+          );
+        });
+
+        pdfBtn?.addEventListener('click', () => {
+          swal.close();
+
+          this.reportService.PrintTaskDetails(
+            { fromDate: fromDate, toDate: toDate },
+            'pdf',
+            true
+          );
+        });
       },
     });
   }

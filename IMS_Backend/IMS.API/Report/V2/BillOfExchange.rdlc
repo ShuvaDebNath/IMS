@@ -353,10 +353,14 @@
           <DataField>FOBCharge</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
+        <Field Name="PIConcat">
+          <DataField>PIConcat</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>DataSet1</rd:DataSetName>
-        <rd:SchemaPath>E:\Maliha Projects\ReportProject\ReportDesign\TDS\DataSet1.xsd</rd:SchemaPath>
+        <rd:SchemaPath>F:\Project\ReportProject\ReportDesign\TDS\DataSet1.xsd</rd:SchemaPath>
         <rd:TableName>usp_CommercialInvoice_Report</rd:TableName>
         <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
         <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
@@ -619,6 +623,20 @@
                     <Value>=Fields!BankName.Value</Value>
                     <Style>
                       <FontSize>9pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value xml:space="preserve"> </Value>
+                    <Style>
+                      <FontSize>9pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>=Fields!PIConcat.Value</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
                       <FontWeight>Normal</FontWeight>
                     </Style>
                   </TextRun>
@@ -995,6 +1013,20 @@
                     <Value>=Fields!BankName.Value</Value>
                     <Style>
                       <FontSize>9pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value xml:space="preserve"> </Value>
+                    <Style>
+                      <FontSize>9pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>=Fields!PIConcat.Value</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
                       <FontWeight>Normal</FontWeight>
                     </Style>
                   </TextRun>
