@@ -118,21 +118,47 @@ export class ReportService {
       })
       .subscribe(
         (res: Blob) => {
-          if (res.size === 0) {
-            Swal.fire(
-              'No Data Found',
-              'No records found for the selected criteria.',
-              'info'
-            );
-            return;
-          }
-          const fileURL = window.URL.createObjectURL(res);
+          const blobType =
+          rptType === 'pdf'
+            ? 'application/pdf'
+            : rptType === 'excel'
+            ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+
+        const blob = new Blob([res], { type: blobType });
+
+        // Choose base filename according to requested reportType
+        const reportTypeKey = (rptType || '').toString();
+        
+        var baseFileName = 'PIReport';
+        const fileName =
+          rptType === 'pdf'
+            ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
+                  /\//g,
+                  '-'
+                )}.pdf`
+            : rptType === 'excel'
+            ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
+                  /\//g,
+                  '-'
+                )}.xlsx`
+            : `${baseFileName}_${this.formatDateDMY(new Date()).replace(
+                  /\//g,
+                  '-'
+                )}.docx`;
+
+        if (isView && rptType === 'pdf') {
+          // View PDF in new tab
+          const fileURL = window.URL.createObjectURL(blob);
           window.open(fileURL, '_blank');
-        },
-        (err) => {
-          Swal.fire('Error', 'Failed to generate report.', 'error');
+        } else {
+          // Force download
+          const link = document.createElement('a');
+          link.href = window.URL.createObjectURL(blob);
+          link.download = fileName;
+          link.click();
         }
-      );
+      });
   }
 
   PrintProformaInvoiceRequest(report: any, rptType: any, isView: any) {
