@@ -720,7 +720,7 @@ const CustomSelectOptions: INgxSelectOptions = {
     UiSwitchModule,
     MatPaginatorModule,
     A11yModule,
-    PiListComponent
+    PiListComponent,
 ],
 })
 export class PagesModule {}
