@@ -294,29 +294,7 @@
           <div class="col-md-4 mb-2">
             <label class="control-label">Expire Date</label>
 
-            <div class="input-group mb-3">
-              <input
-                type="text"
-                autocomplete="off"
-                formControlName="ExpireDate"
-                placeholder="DD/MM/YYYY"
-                class="form-control form-control-sm"
-                #dp="bsDatepicker"
-                bsDatepicker
-                placement="bottom"
-                [bsConfig]="{ isAnimated: true }"
-              />
-              <div class="input-group-append">
-                <button
-                  class="btn btn-sm theme-btn"
-                  type="button"
-                  (click)="dp.toggle()"
-                  [attr.aria-expanded]="dp.isOpen"
-                >
-                  <i class="far fa-calendar" aria-hidden="true"></i>
-                </button>
-              </div>
-            </div>
+            <input type="date" formControlName="ExpireDate" class="form-control" />
           </div>
 
           <div class="col-md-4 mb-2">

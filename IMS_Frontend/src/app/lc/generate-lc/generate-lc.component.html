@@ -1,11 +1,9 @@
 <div class="row d-flex justify-content-center">
   <div class="m-2 p-2 shadow">
-    <div class="card ">
-      <div
-        class="card-header theme-bg text-white"
-      >
+    <div class="card">
+      <div class="card-header theme-bg text-white">
         <h2 class="p-2 font-weight-bold">
-          {{!isEdit?'Add':'Edit'}}&nbsp;Create LC
+          {{ !isEdit ? "Add" : "Edit" }}&nbsp;Create LC
         </h2>
       </div>
       <div class="card-body">
@@ -15,7 +13,7 @@
             <div class="col-md-6">
               <label>Marketing Concern <span>*</span></label>
               <p-dropdown
-                [style]="{'width':'100%'}"
+                [style]="{ width: '100%' }"
                 class="p-0"
                 [options]="MarketingConcern"
                 (onChange)="getPINoByMarketingConcern()"
@@ -55,10 +53,11 @@
             <div class="col-md-6">
               <label>PIs <span>*</span></label>
               <p-multiSelect
-                [style]="{'width':'100%'}"
+                [style]="{ width: '100%' }"
                 class="p-0"
                 [options]="PINo"
-                [virtualScroll]="true" [virtualScrollItemSize]="30"
+                [virtualScroll]="true"
+                [virtualScrollItemSize]="30"
                 optionLabel="label"
                 optionValue="value"
                 [filter]="true"
@@ -78,7 +77,7 @@
             <div class="col-md-6">
               <label>Benificiary Bank <span>*</span></label>
               <p-dropdown
-                [style]="{'width':'100%'}"
+                [style]="{ width: '100%' }"
                 class="p-0"
                 [options]="BenificiaryAccounts"
                 optionLabel="BankName"
@@ -103,57 +102,22 @@
               <label class="control-label" for="inlineFormInputGroup"
                 >LC Receiving Date By Mail/Draft</label
               >
-              <div class="input-group mb-2">
-                <div class=" input-group-prepend">
-                  <div class="input-group-text theme-btn" (click)="dpfrom.toggle()">
-                    <i class="fas fa-calendar"></i>
-                  </div>
-                </div>
-                <input
-                  type="text"
-                  autocomplete="off"
-                  formControlName="LCReceivingDateByDraft"
-                  [bsConfig]="{
-                    dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-date-picker theme-bg'
-                    }"
-                  class="form-control-sm form-control bg-white"
-                  id="LCReceivingDateByDraft"
-                  name="LCReceivingDateByDraft"
-                  placeholder="From Date"
-                  #dpfrom="bsDatepicker"
-                  bsDatepicker
-                  readonly
-                />
-              </div>
+
+              <input
+                type="date"
+                formControlName="LCReceivingDateByDraft"
+                class="form-control"
+              />
             </div>
             <div class="col-md-6">
               <label class="control-label" for="inlineFormInputGroup"
                 >LC Receiving Date Original By Bank</label
               >
-              <div class="input-group mb-2">
-                <div class="input-group-sm input-group-prepend">
-                  <div class="input-group-text theme-btn" (click)="dpfrom.toggle()">
-                    <i class="fas fa-calendar"></i>
-                  </div>
-                </div>
-                <input
-                  type="text"
-                  autocomplete="off"
-                  formControlName="LCReceivingDateOrgBank"
-                  [bsConfig]="{
-                    dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-date-picker theme-bg'
-                    }"
-                  class="form-control-sm form-control bg-white"
-                  id="LCReceivingDateOrgBank"
-                  name="LCReceivingDateOrgBank"
-                  placeholder="From Date"
-                  #dpfrom="bsDatepicker"
-                  bsDatepicker
-                  readonly
-                />
-              </div>
+              <input
+                type="date"
+                formControlName="LCReceivingDateOrgBank"
+                class="form-control"
+              />
             </div>
           </div>
           <div class="row">
@@ -195,57 +159,21 @@
               <label class="control-label" for="inlineFormInputGroup"
                 >Issue Date <span>*</span></label
               >
-              <div class="input-group mb-2">
-                <div class="input-group-sm input-group-prepend">
-                  <div class="input-group-text theme-btn" (click)="dpfrom.toggle()">
-                    <i class="fas fa-calendar"></i>
-                  </div>
-                </div>
-                <input
-                  type="text"
-                  autocomplete="off"
-                  formControlName="IssueDate"
-                  [bsConfig]="{
-                    dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-date-picker theme-bg'
-                    }"
-                  class="form-control-sm form-control bg-white"
-                  id="IssueDate"
-                  name="IssueDate"
-                  placeholder="From Date"
-                  #dpfrom="bsDatepicker"
-                  bsDatepicker
-                  readonly
-                />
-              </div>
+              <input
+                type="date"
+                formControlName="IssueDate"
+                class="form-control"
+              />
             </div>
             <div class="col-md-6">
               <label class="control-label" for="inlineFormInputGroup"
                 >Expiry Date</label
               >
-              <div class="input-group mb-2">
-                <div class="input-group-sm input-group-prepend">
-                  <div class="input-group-text theme-btn" (click)="dpfrom.toggle()">
-                    <i class="fas fa-calendar"></i>
-                  </div>
-                </div>
-                <input
-                  type="text"
-                  autocomplete="off"
-                  formControlName="ExpiryDate"
-                  [bsConfig]="{
-                    dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-date-picker theme-bg'
-                    }"
-                  class="form-control-sm form-control bg-white"
-                  id="ExpiryDate"
-                  name="ExpiryDate"
-                  placeholder="From Date"
-                  #dpfrom="bsDatepicker"
-                  bsDatepicker
-                  readonly
-                />
-              </div>
+              <input
+                type="date"
+                formControlName="ExpiryDate"
+                class="form-control"
+              />
             </div>
             <div class="col-md-6">
               <label for="LCNo" class="">Customer Bank Name</label>
@@ -268,90 +196,36 @@
               <label class="control-label" for="inlineFormInputGroup"
                 >Invoice No With Date</label
               >
-              <div class="input-group mb-2">
-                <div class="input-group-sm input-group-prepend">
-                  <div class="input-group-text theme-btn" (click)="dpfrom.toggle()">
-                    <i class="fas fa-calendar"></i>
-                  </div>
-                </div>
-                <input
-                  type="text"
-                  autocomplete="off"
-                  formControlName="InvoiceNoWitDate"
-                  [bsConfig]="{
-                    dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-date-picker theme-bg'
-                    }"
-                  class="form-control-sm form-control bg-white"
-                  id="InvoiceNoWitDate"
-                  name="InvoiceNoWitDate"
-                  placeholder="From Date"
-                  #dpfrom="bsDatepicker"
-                  bsDatepicker
-                  readonly
-                />
-              </div>
+              <input
+                type="date"
+                formControlName="InvoiceNoWitDate"
+                class="form-control"
+              />
             </div>
             <div class="col-md-6">
               <label class="control-label" for="inlineFormInputGroup"
                 >IP Documents Sending Date</label
               >
-              <div class="input-group mb-2">
-                <div class="input-group-sm input-group-prepend">
-                  <div class="input-group-text theme-btn" (click)="dpfrom.toggle()">
-                    <i class="fas fa-calendar"></i>
-                  </div>
-                </div>
-                <input
-                  type="text"
-                  autocomplete="off"
-                  formControlName="IPDocSendingDate"
-                  [bsConfig]="{
-                    dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-date-picker theme-bg'
-                    }"
-                  class="form-control-sm form-control bg-white"
-                  id="IPDocSendingDate"
-                  name="IPDocSendingDate"
-                  placeholder="From Date"
-                  #dpfrom="bsDatepicker"
-                  bsDatepicker
-                  readonly
-                />
-              </div>
+              <input
+                type="date"
+                formControlName="IPDocSendingDate"
+                class="form-control"
+              />
             </div>
             <div class="col-md-6">
               <label class="control-label" for="inlineFormInputGroup"
                 >IP Documents Receiving Date</label
               >
-              <div class="input-group mb-2">
-                <div class="input-group-sm input-group-prepend">
-                  <div class="input-group-text theme-btn" (click)="dpfrom.toggle()">
-                    <i class="fas fa-calendar"></i>
-                  </div>
-                </div>
-                <input
-                  type="text"
-                  autocomplete="off"
-                  formControlName="IPDocReceivingDate"
-                  [bsConfig]="{
-                    dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-date-picker theme-bg'
-                    }"
-                  class="form-control-sm form-control bg-white"
-                  id="ExpiryDate"
-                  name="ExpiryDate"
-                  placeholder="From Date"
-                  #dpfrom="bsDatepicker"
-                  bsDatepicker
-                  readonly
-                />
-              </div>
+              <input
+                type="date"
+                formControlName="IPDocReceivingDate"
+                class="form-control"
+              />
             </div>
             <div class="col-md-6">
               <label>Payment Terms (LC) <span>*</span></label>
               <p-dropdown
-                [style]="{'width':'100%'}"
+                [style]="{ width: '100%' }"
                 class="p-0"
                 [options]="PaymentTerms"
                 optionLabel="Mode"
@@ -374,85 +248,31 @@
               <label class="control-label" for="inlineFormInputGroup"
                 >Maturity Date</label
               >
-              <div class="input-group mb-2">
-                <div class="input-group-sm input-group-prepend">
-                  <div class="input-group-text theme-btn" (click)="dpfrom.toggle()">
-                    <i class="fas fa-calendar"></i>
-                  </div>
-                </div>
-                <input
-                  type="text"
-                  autocomplete="off"
-                  formControlName="MaturityDate"
-                  [bsConfig]="{
-                    dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-date-picker theme-bg'
-                    }"
-                  class="form-control-sm form-control bg-white"
-                  id="MaturityDate"
-                  name="MaturityDate"
-                  placeholder="From Date"
-                  #dpfrom="bsDatepicker"
-                  bsDatepicker
-                  readonly
-                />
-              </div>
+              <input
+                type="date"
+                formControlName="MaturityDate"
+                class="form-control"
+              />
             </div>
             <div class="col-md-6">
               <label class="control-label" for="inlineFormInputGroup"
                 >Documents Presentation To Bank Date</label
               >
-              <div class="input-group mb-2">
-                <div class="input-group-sm input-group-prepend">
-                  <div class="input-group-text theme-btn" (click)="dpfrom.toggle()">
-                    <i class="fas fa-calendar"></i>
-                  </div>
-                </div>
-                <input
-                  type="text"
-                  autocomplete="off"
-                  formControlName="DocPresBankDate"
-                  [bsConfig]="{
-                    dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-date-picker theme-bg'
-                    }"
-                  class="form-control-sm form-control bg-white"
-                  id="DocPresBankDate"
-                  name="DocPresBankDate"
-                  placeholder="From Date"
-                  #dpfrom="bsDatepicker"
-                  bsDatepicker
-                  readonly
-                />
-              </div>
+              <input
+                type="date"
+                formControlName="DocPresBankDate"
+                class="form-control"
+              />
             </div>
             <div class="col-md-6">
               <label class="control-label" for="inlineFormInputGroup"
                 >FDD/TT Receive Date</label
               >
-              <div class="input-group mb-2">
-                <div class="input-group-sm input-group-prepend">
-                  <div class="input-group-text theme-btn" (click)="dpfrom.toggle()">
-                    <i class="fas fa-calendar"></i>
-                  </div>
-                </div>
-                <input
-                  type="text"
-                  autocomplete="off"
-                  formControlName="FDDRecDate"
-                  [bsConfig]="{
-                    dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-date-picker theme-bg'
-                    }"
-                  class="form-control-sm form-control bg-white"
-                  id="FDDRecDate"
-                  name="FDDRecDate"
-                  placeholder="From Date"
-                  #dpfrom="bsDatepicker"
-                  bsDatepicker
-                  readonly
-                />
-              </div>
+              <input
+                type="date"
+                formControlName="FDDRecDate"
+                class="form-control"
+              />
             </div>
             <div class="col-md-6">
               <label class="control-label" for="inlineFormInputGroup"
@@ -477,57 +297,21 @@
               <label class="control-label" for="inlineFormInputGroup"
                 >Actual Payment Receiving Date</label
               >
-              <div class="input-group mb-2">
-                <div class="input-group-sm input-group-prepend">
-                  <div class="input-group-text theme-btn" (click)="dpfrom.toggle()">
-                    <i class="fas fa-calendar"></i>
-                  </div>
-                </div>
-                <input
-                  type="text"
-                  autocomplete="off"
-                  formControlName="ActualPaymentRecDate"
-                  [bsConfig]="{
-                    dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-date-picker theme-bg'
-                    }"
-                  class="form-control-sm form-control bg-white"
-                  id="ActualPaymentRecDate"
-                  name="ActualPaymentRecDate"
-                  placeholder="From Date"
-                  #dpfrom="bsDatepicker"
-                  bsDatepicker
-                  readonly
-                />
-              </div>
+              <input
+                type="date"
+                formControlName="ActualPaymentRecDate"
+                class="form-control"
+              />
             </div>
             <div class="col-md-6">
               <label class="control-label" for="inlineFormInputGroup"
                 >Export LC/SC Date</label
               >
-              <div class="input-group mb-2">
-                <div class="input-group-sm input-group-prepend">
-                  <div class="input-group-text theme-btn" (click)="dpfrom.toggle()">
-                    <i class="fas fa-calendar"></i>
-                  </div>
-                </div>
-                <input
-                  type="text"
-                  autocomplete="off"
-                  formControlName="ExportLCSCDate"
-                  [bsConfig]="{
-                    dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-date-picker theme-bg'
-                    }"
-                  class="form-control-sm form-control bg-white"
-                  id="ExportLCSCDate"
-                  name="ExportLCSCDate"
-                  placeholder="From Date"
-                  #dpfrom="bsDatepicker"
-                  bsDatepicker
-                  readonly
-                />
-              </div>
+              <input
+                type="date"
+                formControlName="ExportLCSCDate"
+                class="form-control"
+              />
             </div>
             <div class="col-md-6">
               <label class="control-label" for="inlineFormInputGroup"

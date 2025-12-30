@@ -1,6 +1,6 @@
 // Create Page Component
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormBuilder, Validators, FormArray, FormGroup, ReactiveFormsModule, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
@@ -12,15 +12,17 @@ import { startWith, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { DoubleMasterEntryService } from 'src/app/services/doubleEntry/doubleEntryService.service';
 import { GetDataService } from 'src/app/services/getData/getDataService.service';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @Component({
   standalone: true,
   selector: 'app-create-page',
   templateUrl: './create-page.component.html',
   styleUrls: ['./create-page.component.css'],
-  imports: [CommonModule, ReactiveFormsModule, DropdownModule]
+  imports: [CommonModule, ReactiveFormsModule, DropdownModule,BsDatepickerModule]
 })
 export class CreatePageComponent implements OnInit {
+  datePipe = new DatePipe('en-US');
   requisitionData: any[] = [];
   rawMaterialArticles: any[] = [];
   rawMaterialArticlesBackup: any[] = []; // Backup for filtering
@@ -62,7 +64,7 @@ export class CreatePageComponent implements OnInit {
 }
   generateForm() {
     this.requisitionForm = this.fb.group({
-      requisitionDate: [new Date(), Validators.required],
+      requisitionDate:  [this.datePipe.transform(new Date(), 'dd/MM/yyyy')],
       remarks: [''],
       items: this.fb.array([], { validators: [this.rowsCompleteValidator()] })
     });

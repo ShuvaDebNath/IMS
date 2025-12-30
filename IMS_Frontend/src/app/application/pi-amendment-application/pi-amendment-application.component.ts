@@ -763,18 +763,21 @@ export class PiAmendmentApplicationComponent {
   }
 
   CopyItem(item: any) {
-    console.log(item);
+    console.log(item,this.AAList);
 
     try {
+      const articleObj = this.AAList.find((x:any) => x.Item_ID === item.ActualArticleId);
+      console.log(articleObj);
+      
       // build a revise group (with validators) and push it
       const grp = this.buildReviseGroup({
         customer_name: item.customer_name,
         PINo: item.PINo,
         Article: item.Article,
-        Item_ID: item.ActualArticleId,
-        Color_ID: item.ColorId,
-        Width_ID: item.WidthId,
-        Unit_ID: item.UnitId,
+        Item_ID: articleObj.Article_No,
+        Color_ID: item.Color,
+        Width_ID: item.Width,
+        Unit_ID: item.Unit,
         Quantity: item.Quantity,
         Unit_Price: item.Unit_Price,
         CommissionUnit: item.CommissionUnit,
@@ -784,10 +787,7 @@ export class PiAmendmentApplicationComponent {
         ActualArticle: item.ActualArticle,
         // prefer payment term id if available
         PaymentTerms:
-          item.PaymentTermsId ??
-          item.Payment_Term_ID ??
-          item.PaymentTerms ??
-          null,
+          item.PaymentTerms ,
       });
       console.log(grp);
 

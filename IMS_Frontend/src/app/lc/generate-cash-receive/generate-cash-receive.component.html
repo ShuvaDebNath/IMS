@@ -1,162 +1,267 @@
 <div class="m-2 p-2 shadow-sm">
   <div class="row d-flex justify-content-center">
-  <div class="">
-    <div class="card card-default">
-      <div class="card-header theme-bg" >
-          
-          <h2 class="">{{!isEdit?'Add':'Edit'}}&nbsp;Generate Cash Receive</h2>
-      </div>
-      <div class="card-body">
-        <form name="newForm" [formGroup]="Formgroup" role="form">
-          <div class="row">
-           
-            <div class="col-md-6">
-            <label>Marketing Concern <span>*</span></label>
-            <p-dropdown [style]="{'width':'100%'}"  class="p-0" [options]="MarketingConcern" (onChange)="getPINoByMarketingConcern()"  optionLabel="UserName" [filter]="true" filterBy="UserName" [showClear]="true" styleClass="listBottom" placeholder="Please Select" optionValue="User_ID" formControlName="Marketing_Concern" [readonly]="isEdit">
-              <ng-template let-MarketingConcern pTemplate="item">
-                      <div class="flex align-items-center gap-2">  
-                          <div>{{ MarketingConcern.UserName }}</div>
-                      </div>
+    <div class="">
+      <div class="card card-default">
+        <div class="card-header theme-bg">
+          <h2 class="">
+            {{ !isEdit ? "Add" : "Edit" }}&nbsp;Generate Cash Receive
+          </h2>
+        </div>
+        <div class="card-body">
+          <form name="newForm" [formGroup]="Formgroup" role="form">
+            <div class="row">
+              <div class="col-md-6">
+                <label>Marketing Concern <span>*</span></label>
+                <p-dropdown
+                  [style]="{ width: '100%' }"
+                  class="p-0"
+                  [options]="MarketingConcern"
+                  (onChange)="getPINoByMarketingConcern()"
+                  optionLabel="UserName"
+                  [filter]="true"
+                  filterBy="UserName"
+                  [showClear]="true"
+                  styleClass="listBottom"
+                  placeholder="Please Select"
+                  optionValue="User_ID"
+                  formControlName="Marketing_Concern"
+                  [readonly]="isEdit"
+                >
+                  <ng-template let-MarketingConcern pTemplate="item">
+                    <div class="flex align-items-center gap-2">
+                      <div>{{ MarketingConcern.UserName }}</div>
+                    </div>
                   </ng-template>
-              </p-dropdown>              
-            </div>
-            <div class="col-md-6">
+                </p-dropdown>
+              </div>
+              <div class="col-md-6">
                 <label>Benificiary Bank <span>*</span></label>
-                <p-dropdown [style]="{'width':'100%'}"  class="p-0" [options]="BenificiaryAccounts"  optionLabel="BankName" [filter]="true" filterBy="BankName" [showClear]="true" styleClass="listBottom" placeholder="Please Select" optionValue="Beneficiary_Bank_ID" formControlName="BenificiaryAccounts">
-                <ng-template let-BenificiaryAccounts pTemplate="item">
-                        <div class="flex align-items-center gap-2">  
-                            <div>{{ BenificiaryAccounts.BankName }}</div>
-                        </div>
-                    </ng-template>
-                </p-dropdown> 
-            </div>
-            <div class="col-md-6">
-                <label for="Consignee_Name" class="">Consignee Name <span>*</span></label>
-                <div class="">
-                    <div class="form-group d-inline">
-                    <input autocomplete="off" type="text"                  
-                    formControlName="Consignee_Name"
-                    class="form-control"
-                    placeholder="Consignee Name" id="Consignee_Name" name="Consignee_Name" value="" readonly>
+                <p-dropdown
+                  [style]="{ width: '100%' }"
+                  class="p-0"
+                  [options]="BenificiaryAccounts"
+                  optionLabel="BankName"
+                  [filter]="true"
+                  filterBy="BankName"
+                  [showClear]="true"
+                  styleClass="listBottom"
+                  placeholder="Please Select"
+                  optionValue="Beneficiary_Bank_ID"
+                  formControlName="BenificiaryAccounts"
+                >
+                  <ng-template let-BenificiaryAccounts pTemplate="item">
+                    <div class="flex align-items-center gap-2">
+                      <div>{{ BenificiaryAccounts.BankName }}</div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <label for="Customer_Bank" class="">Customer Bank Name <span>*</span></label>
+                  </ng-template>
+                </p-dropdown>
+              </div>
+              <div class="col-md-6">
+                <label for="Consignee_Name" class=""
+                  >Consignee Name <span>*</span></label
+                >
                 <div class="">
-                    <div class="form-group d-inline">
-                    <input autocomplete="off" type="text"                  
-                    formControlName="Customer_Bank"
-                    class="form-control"
-                    placeholder="Customer Bank Name" id="Customer_Bank" name="Customer_Bank" value="">
-                    </div>
+                  <div class="form-group d-inline">
+                    <input
+                      autocomplete="off"
+                      type="text"
+                      formControlName="Consignee_Name"
+                      class="form-control"
+                      placeholder="Consignee Name"
+                      id="Consignee_Name"
+                      name="Consignee_Name"
+                      value=""
+                      readonly
+                    />
+                  </div>
                 </div>
-            </div>
-            <div class="col-md-6" *ngIf="!isEdit">
+              </div>
+              <div class="col-md-6">
+                <label for="Customer_Bank" class=""
+                  >Customer Bank Name <span>*</span></label
+                >
+                <div class="">
+                  <div class="form-group d-inline">
+                    <input
+                      autocomplete="off"
+                      type="text"
+                      formControlName="Customer_Bank"
+                      class="form-control"
+                      placeholder="Customer Bank Name"
+                      id="Customer_Bank"
+                      name="Customer_Bank"
+                      value=""
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6" *ngIf="!isEdit">
                 <label>PIs <span>*</span></label>
-                <p-dropdown [style]="{'width':'100%'}" (onChange)="getCashReceiveInfoByPI()"  class="p-0" [options]="PIList"  optionLabel="label" [filter]="true" filterBy="label" [showClear]="true" styleClass="listBottom" placeholder="Please Select" optionValue="value" formControlName="PI">
-                <ng-template let-PI pTemplate="item">
-                        <div class="flex align-items-center gap-2">  
-                            <div>{{ PI.label }}</div>
-                        </div>
-                    </ng-template>
-                </p-dropdown> 
-            </div>
-            <div class="col-md-6" *ngIf="isEdit">
-                <label class="control-label" for="inlineFormInputGroup">PI No <span>*</span></label>
+                <p-dropdown
+                  [style]="{ width: '100%' }"
+                  (onChange)="getCashReceiveInfoByPI()"
+                  class="p-0"
+                  [options]="PIList"
+                  optionLabel="label"
+                  [filter]="true"
+                  filterBy="label"
+                  [showClear]="true"
+                  styleClass="listBottom"
+                  placeholder="Please Select"
+                  optionValue="value"
+                  formControlName="PI"
+                >
+                  <ng-template let-PI pTemplate="item">
+                    <div class="flex align-items-center gap-2">
+                      <div>{{ PI.label }}</div>
+                    </div>
+                  </ng-template>
+                </p-dropdown>
+              </div>
+              <div class="col-md-6" *ngIf="isEdit">
+                <label class="control-label" for="inlineFormInputGroup"
+                  >PI No <span>*</span></label
+                >
                 <div class="form-group d-inline">
-                    <input autocomplete="off" type="text"                  
+                  <input
+                    autocomplete="off"
+                    type="text"
                     formControlName="PINo"
                     class="form-control"
-                    placeholder="PINo" id="PINo" name="PINo" value="0" readonly>
-                    </div>
-            </div>
-            <div class="col-md-6" *ngIf="!isEdit">
-                <label class="control-label" for="inlineFormInputGroup">PI Value <span>*</span></label>
+                    placeholder="PINo"
+                    id="PINo"
+                    name="PINo"
+                    value="0"
+                    readonly
+                  />
+                </div>
+              </div>
+              <div class="col-md-6" *ngIf="!isEdit">
+                <label class="control-label" for="inlineFormInputGroup"
+                  >PI Value <span>*</span></label
+                >
                 <div class="form-group d-inline">
-                    <input autocomplete="off" type="text"                  
+                  <input
+                    autocomplete="off"
+                    type="text"
                     formControlName="PIValue"
                     class="form-control"
-                    placeholder="PIValue" id="PIValue" name="PIValue" value="0" readonly>
-                    </div>
-            </div>
-            <div class="col-md-6" *ngIf="!isEdit">
-                <label class="control-label" for="inlineFormInputGroup">Receive Amount <span>*</span></label>
+                    placeholder="PIValue"
+                    id="PIValue"
+                    name="PIValue"
+                    value="0"
+                    readonly
+                  />
+                </div>
+              </div>
+              <div class="col-md-6" *ngIf="!isEdit">
+                <label class="control-label" for="inlineFormInputGroup"
+                  >Receive Amount <span>*</span></label
+                >
                 <div class="form-group d-inline">
-                    <input autocomplete="off" type="Number"                  
+                  <input
+                    autocomplete="off"
+                    type="Number"
                     formControlName="ReceiveAmount"
                     (keyup)="checkReceiveAmount()"
                     class="form-control"
-                    placeholder="Receive Amount" id="ReceiveAmount" name="ReceiveAmount" value="" ngModel="ReceiveAmount">
-                    </div>
-            </div>
-            <div class="col-md-6" *ngIf="!isEdit">
-                <label class="control-label" for="inlineFormInputGroup">Receive Date <span>*</span></label>
-                <div class="input-group mb-2">
-                    <div class="input-group-sm input-group-prepend">
-                    <div class="input-group-text theme-btn" (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
-                    </div>
-                    <input type="text" autocomplete="off" formControlName="ReceiveDate" [bsConfig]="{
-                    dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-bg'
-                    }" class="form-control-sm form-control bg-white" id="ReceiveDate" name="ReceiveDate" placeholder="DD/MM/YYYY"
-                    #dpfrom="bsDatepicker" bsDatepicker readonly />
+                    placeholder="Receive Amount"
+                    id="ReceiveAmount"
+                    name="ReceiveAmount"
+                    value=""
+                    ngModel="ReceiveAmount"
+                  />
                 </div>
-            </div>
-            <div class="col-md-6">
-                <label class="control-label" for="inlineFormInputGroup">Issue Date <span>*</span></label>
-                <div class="input-group mb-2">
-                    <div class="input-group-sm input-group-prepend">
-                    <div class="input-group-text theme-btn" (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
-                    </div>
-                    <input type="text" autocomplete="off" formControlName="IssueDate" [bsConfig]="{
-                    dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-bg'
-                    }" class="form-control-sm form-control bg-white" id="IssueDate" name="IssueDate" placeholder="From Date"
-                    #dpfrom="bsDatepicker" bsDatepicker readonly />
-                </div>
-            </div>
-            <div class="col-md-6">
+              </div>
+              <div class="col-md-6" *ngIf="!isEdit">
+                <label class="control-label" for="inlineFormInputGroup"
+                  >Receive Date <span>*</span></label
+                >
+
+                <input
+                  type="date"
+                  formControlName="ReceiveDate"
+                  class="form-control"
+                />
+              </div>
+              <div class="col-md-6">
+                <label class="control-label" for="inlineFormInputGroup"
+                  >Issue Date <span>*</span></label
+                >
+                <input
+                  type="date"
+                  formControlName="IssueDate"
+                  class="form-control"
+                />
+              </div>
+              <div class="col-md-6">
                 <label>Payment Terms (LC) <span>*</span></label>
-                <p-dropdown [style]="{'width':'100%'}"  class="p-0" [options]="PaymentTerms"  optionLabel="Mode" [filter]="true" filterBy="Mode" [showClear]="true" styleClass="listBottom" placeholder="Please Select" optionValue="Payment_Term_ID" formControlName="PaymentTerms">
-                <ng-template let-PaymentTerms pTemplate="item">
-                        <div class="flex align-items-center gap-2">  
-                            <div>{{ PaymentTerms.Mode }}</div>
-                        </div>
-                    </ng-template>
-                </p-dropdown> 
-            </div>
-            <div class="col-md-6">
+                <p-dropdown
+                  [style]="{ width: '100%' }"
+                  class="p-0"
+                  [options]="PaymentTerms"
+                  optionLabel="Mode"
+                  [filter]="true"
+                  filterBy="Mode"
+                  [showClear]="true"
+                  styleClass="listBottom"
+                  placeholder="Please Select"
+                  optionValue="Payment_Term_ID"
+                  formControlName="PaymentTerms"
+                >
+                  <ng-template let-PaymentTerms pTemplate="item">
+                    <div class="flex align-items-center gap-2">
+                      <div>{{ PaymentTerms.Mode }}</div>
+                    </div>
+                  </ng-template>
+                </p-dropdown>
+              </div>
+              <div class="col-md-6">
                 <label for="Remarks" class="">Remarks</label>
                 <div class="">
-                    <div class="form-group d-inline">
-                    <input autocomplete="off" type="text"                  
-                    formControlName="Remarks"
-                    aria-multiline="true"
-                    class="form-control"
-                    placeholder="Remarks" id="Remarks" name="Remarks" value="">
-                    </div>
+                  <div class="form-group d-inline">
+                    <input
+                      autocomplete="off"
+                      type="text"
+                      formControlName="Remarks"
+                      aria-multiline="true"
+                      class="form-control"
+                      placeholder="Remarks"
+                      id="Remarks"
+                      name="Remarks"
+                      value=""
+                    />
+                  </div>
                 </div>
+              </div>
             </div>
-          </div>
-        </form>
-        <div class="flexbox mt-5">
-          <!-- <button [routerLink]="['/all-']" class="btn btn-w-xl text-white btn-outline-danger bg-gradient-danger" type="button"
+          </form>
+          <div class="flexbox mt-5">
+            <!-- <button [routerLink]="['/all-']" class="btn btn-w-xl text-white btn-outline-danger bg-gradient-danger" type="button"
             >
             Cancel
           </button> -->
-          <button  class="btn btn-w-xl text-white theme-btn px-5 float-right" type="button" (click)="saveData()"
-            [disabled]="Formgroup.invalid" [hidden]="isEdit">
-            Save
-          </button>
-          <button [hidden]="!isEdit" class="btn btn-w-xl text-white theme-btn-edit px-5 float-right" type="button" (click)="updateData()"
-            [disabled]="Formgroup.invalid">
-            Update
-          </button>
+            <button
+              class="btn btn-w-xl text-white theme-btn px-5 float-right"
+              type="button"
+              (click)="saveData()"
+              [disabled]="Formgroup.invalid"
+              [hidden]="isEdit"
+            >
+              Save
+            </button>
+            <button
+              [hidden]="!isEdit"
+              class="btn btn-w-xl text-white theme-btn-edit px-5 float-right"
+              type="button"
+              (click)="updateData()"
+              [disabled]="Formgroup.invalid"
+            >
+              Update
+            </button>
+          </div>
         </div>
       </div>
     </div>
-
   </div>
-</div>
 </div>
