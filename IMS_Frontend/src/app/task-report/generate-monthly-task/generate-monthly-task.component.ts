@@ -5,7 +5,6 @@ import {
   Validators,
   FormArray,
   FormGroup,
-  ReactiveFormsModule,
   AbstractControl,
   ValidationErrors,
   ValidatorFn,
@@ -15,10 +14,6 @@ import { ActivatedRoute } from '@angular/router';
 import { GlobalServiceService } from 'src/app/services/Global-service.service';
 import swal from 'sweetalert2';
 import { DropdownModule } from 'primeng/dropdown';
-import {
-  CreateRmRequisitionItem,
-  CreateRmRequisitionRequest,
-} from 'src/app/models/requisition/rmRequisition';
 import { startWith, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { DoubleMasterEntryService } from 'src/app/services/doubleEntry/doubleEntryService.service';
@@ -26,43 +21,37 @@ import { GetDataService } from 'src/app/services/getData/getDataService.service'
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 
 @Component({
-  selector: 'app-generate-task-report',
-  templateUrl: './generate-task-report.component.html',
-  styleUrls: ['./generate-task-report.component.css'],
+  selector: 'app-generate-monthly-task',
+  templateUrl: './generate-monthly-task.component.html',
+  styleUrls: ['./generate-monthly-task.component.css']
 })
-export class GenerateTaskReportComponent {
+export class GenerateMonthlyTaskComponent implements OnInit {
   taskForm!: FormGroup;
   isEdit = false;
   exportDate: Date = new Date();
   private destroy$ = new Subject<void>();
-  private unitByArticleId = new Map<number, number | null>();
-  rollOrBagOptions = [
-    { label: 'Rolls', value: 'roll' },
-    { label: 'Bags', value: 'bag' },
+
+  teamOptions = [
+    { label: '1', value: 1 },
+    { label: '2', value: 2 },
+    { label: '3', value: 3 },
+    { label: '4', value: 4 },
+    { label: '5', value: 5 },
   ];
 
-  type = [
+  orderSeasons = [
     { label: 'N/A', value: 'N/A' },
-    { label: 'Old', value: 'Old' },
-    { label: 'New', value: 'New' },
-  ];
-  solveList = [
-    { label: 'N/A', value: 'N/A' },
-    { label: 'Yes solved', value: 'Yes solved' },
-    { label: 'Not Solved', value: 'Not Solved' },
+    { label: 'Regular', value: 'Regular' },
+    { label: '1 Season', value: '1 Season' },
+    { label: '2 Season', value: '2 Season' },
+    { label: '3 Season', value: '3 Season' },
   ];
   reloadingArticles = false;
-  LoadingPortList: any[] = [];
-  DestinationPortList: any[] = [];
-  RawMaterialList: any[] = [];
-  WidthList: any[] = [];
-  ColorList: any[] = [];
-  UnitList: any[] = [];
   TaskId: any = '';
   CustomerList: any[] = [];
+  BuyerList: any[] = [];
   userId: any = '';
   superiorId: any = '';
-  BuyerList: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -73,16 +62,14 @@ export class GenerateTaskReportComponent {
     private title: Title,
     private masterEntryService: MasterEntryService
   ) {}
-
   ngOnInit(): void {
-    this.userId = window.localStorage.getItem('userId');
-    this.title.setTitle('Generate Task Report');
+    this.userId = window.localStorage.getItem('userId') || '';
+    this.title.setTitle('Generate Monthly Task Report');
     this.generateForm();
     this.addItem();
     this.loadPageData();
-    console.log(this.userId);
 
-    let has = this.activeLink.snapshot.queryParamMap.has('Id');
+    const has = this.activeLink.snapshot.queryParamMap.has('Id');
     if (has) {
       this.TaskId = this.activeLink.snapshot.queryParams['Id'];
       this.isEdit = true;
@@ -92,25 +79,13 @@ export class GenerateTaskReportComponent {
     }
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
   generateForm() {
-    var userName = window.localStorage.getItem('userName');
+    const userName = window.localStorage.getItem('userName') || '';
     const yyyymmdd = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-
-    var taskNo = yyyymmdd + '-' + userName;
-
-    console.log(taskNo);
+    const taskNo = yyyymmdd + '-' + userName;
 
     this.taskForm = this.fb.group({
       TaskNo: [taskNo, [Validators.required]],
-      ToMail: ['', [Validators.required, Validators.email]],
-      CcMail: [
-        'lilya@sunshineinterlining.com',
-        [Validators.required, Validators.email],
-      ],
       Date: ['', [Validators.required]],
       items: this.fb.array([], { validators: [this.rowsCompleteValidator()] }),
     });
@@ -122,19 +97,12 @@ export class GenerateTaskReportComponent {
       if (arr.length === 0) return { noRows: true };
 
       for (const g of arr.controls) {
-        const InTime = g.get('InTime')?.value;
-        const OutTime = g.get('OutTime')?.value;
         const CustomerName = g.get('CustomerName')?.value;
-        const Discussion = g.get('discussion')?.value;
-
-        if (!Discussion || !InTime || !OutTime || !CustomerName) {
-          return { incompleteRow: true };
-        }
+        if (!CustomerName) return { incompleteRow: true };
       }
       return null;
     };
   }
-
   loadPageData(): void {
     var ProcedureData = {
       procedureName: '[usp_Task_GetInitialData]',
@@ -146,7 +114,6 @@ export class GenerateTaskReportComponent {
     this.getDataService.GetInitialData(ProcedureData).subscribe({
       next: (results) => {
         if (results.status) {
-          this.BuyerList = JSON.parse(results.data).Tables3;
           this.CustomerList = JSON.parse(results.data).Tables1;
           this.superiorId = JSON.parse(results.data).Tables2[0];
         } else if (results.msg == 'Invalid Token') {
@@ -164,23 +131,18 @@ export class GenerateTaskReportComponent {
   }
 
   addItem() {
-    const row = this.fb.group(
-      {
-        Buyer_Name: this.fb.control<string | null>(null, Validators.required),
-        CustomerName: this.fb.control<string | null>(null, Validators.required),
-        InTime: this.fb.control<string | null>(null, Validators.required),
-        OutTime: this.fb.control<string | null>(null, Validators.required),
-        Type: this.fb.control<string | null>(null, Validators.required),
-        discussion: this.fb.control<string | null>(null, Validators.required),
-        PaymentIssue: this.fb.control<string | null>(null, Validators.required),
-        CommercialIssue: this.fb.control<string | null>(
-          null,
-          Validators.required
-        ),
-        SampleSubmit: this.fb.control<string | null>(null, Validators.required),
-      },
-      { validators: [this.outTimeAfterInValidator()] }
-    );
+    const row = this.fb.group({
+      CustomerName: this.fb.control<number | null>(null, Validators.required),
+      TeamSize: this.fb.control<number | null>(null),
+      OrderSeason: this.fb.control<string | null>('N/A'),
+      Description: this.fb.control<string | null>(null),
+      Visit1: this.fb.control<string | null>(null),
+      Visit2: this.fb.control<string | null>(null),
+      Visit3: this.fb.control<string | null>(null),
+      OrderSummary: this.fb.control<string | null>(null),
+      SampleSummary: this.fb.control<string | null>(null),
+      NewArticleSummary: this.fb.control<string | null>(null),
+    });
 
     this.items.push(row);
   }
@@ -262,78 +224,50 @@ export class GenerateTaskReportComponent {
     const fv = this.taskForm.value;
 
     const masterRow = {
-      Mail_TO: fv.ToMail,
-      Mail_CC: fv.CcMail,
       User_ID: this.userId,
       Superior_ID: fv.superiorId,
       Date: fv.Date,
       Task_Report_Code: fv.TaskNo,
-      MailBody: '',
-      Subject: '',
     };
 
-    var messegeBody =
-      'Dear Sir/Madam,<br/><br/>Hope you are doing well.<br/><br/>Please see the work report-<br/><br/>';
+    
     var index = 0;
     const detailRows = fv.items.map((i: any) => {
       index++;
-      // row can store the selected customer id in CustomerName control
-      const custId = i.CustomerName ?? i.CustomerId ?? null;
+      const custId = i.CustomerName ?? null;
       const cust = this.CustomerList?.find(
         (c: any) => String(c.Customer_ID) === String(custId)
       );
-      console.log(cust);
 
       const customerDisplay = cust ? cust.CustomerName : '';
       const Location = cust ? cust.Customer_Address : '';
       const customerPhone = cust ? cust.Phone_No : '';
       const customerContactPerson = cust ? cust.Contact_Name : '';
-      const Buyer_Name = i ? i.Buyer_Name : '';
-      const Type = i ? i.Type : '';
-      const PaymentIssue = i ? i.PaymentIssue : '';
-      const CommercialIssue = i ? i.CommercialIssue : '';
-      const SampleSubmit = i ? i.SampleSubmit : '';
-      const customerInfo = cust ? cust.Company_Info : '';
-      messegeBody += `Customer No: ${index}<br/>Location: ${Location}<br/>Merchandiser Name: ${customerContactPerson}<br/>Number: ${customerPhone}<br/>Customer Info: ${customerInfo}<br/>In Time: ${
-        i.InTime
-      }<br/>Out Time: ${i.OutTime}<br/>Discussion: ${
-        i.discussion ?? i.description ?? ''
-      }<br/><br/>`;
+
       return {
-        InTime: this.formatDateTime(i.InTime),
-        OutTime: this.formatDateTime(i.OutTime),
         Customer_ID: custId,
-        Discussion: i.discussion ?? i.description ?? '',
         Customer_name: customerDisplay,
+        TeamSize: i.TeamSize,
+        OrderSeason: i.OrderSeason,
+        Description: i.Description,
+        Visit1: i.Visit1,
+        Visit2: i.Visit2,
+        Visit3: i.Visit3,
+        OrderSummary: i.OrderSummary,
+        SampleSummary: i.SampleSummary,
+        NewArticleSummary: i.NewArticleSummary,
         Task_Report_ID: '',
-        BuyerId: Buyer_Name,
-        Type: Type,
-        PaymentIssue: PaymentIssue,
-        CommercialIssue: CommercialIssue,
-        SampleSubmit: SampleSubmit,
       };
     });
 
-    messegeBody += 'Best Regards,<br/>';
-    messegeBody += localStorage.getItem('userName') || '';
-    console.log(detailRows);
 
-    masterRow['MailBody'] = messegeBody;
-    // build Subject dynamically: Employee Daily Report - <YYYYMMDD>-<USERNAME>
-    const now = new Date();
-    const ymd = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(
-      2,
-      '0'
-    )}${String(now.getDate()).padStart(2, '0')}`;
-    const username = (localStorage.getItem('userName') || '').toString();
-    masterRow['Subject'] = `Employee Daily Report - ${ymd}-${username}`;
 
     this.doubleMasterEntryService
-      .MailThenInsert(
+      .SaveDataMasterDetails(
         detailRows, // fd (child rows)
-        'tbl_task_report_details', // tableName (child)
+        'tbl_task_monthly_report_details', // tableName (child)
         masterRow, // fdMaster (master row)
-        'tbl_task_report', // tableNameMaster (master)
+        'tbl_task_monthly_report', // tableNameMaster (master)
         'Task_Report_ID', // columnNamePrimary (PK)
         'Task_Report_ID', // columnNameForign (FK in child)
         'TR', // serialType (your code uses it)
@@ -384,8 +318,6 @@ export class GenerateTaskReportComponent {
     const fv = this.taskForm.value;
 
     const masterRow = {
-      Mail_TO: fv.ToMail,
-      Mail_CC: fv.CcMail,
       User_ID: this.userId,
       Superior_ID: fv.superiorId,
       Date: fv.Date,
@@ -413,17 +345,18 @@ export class GenerateTaskReportComponent {
       const SampleSubmit = i ? i.SampleSubmit : '';
       const customerInfo = cust ? cust.Company_Info : '';
       return {
-        InTime: this.formatDateTime(i.InTime),
-        OutTime: this.formatDateTime(i.OutTime),
         Customer_ID: custId,
-        Discussion: i.discussion ?? i.description ?? '',
         Customer_name: customerDisplay,
+        TeamSize: i.TeamSize,
+        OrderSeason: i.OrderSeason,
+        Description: i.Description,
+        Visit1: i.Visit1,
+        Visit2: i.Visit2,
+        Visit3: i.Visit3,
+        OrderSummary: i.OrderSummary,
+        SampleSummary: i.SampleSummary,
+        NewArticleSummary: i.NewArticleSummary,
         Task_Report_ID: '',
-        BuyerId: Buyer_Name,
-        Type: Type,
-        PaymentIssue: PaymentIssue,
-        CommercialIssue: CommercialIssue,
-        SampleSubmit: SampleSubmit,
       };
     });
 
@@ -444,9 +377,9 @@ export class GenerateTaskReportComponent {
     this.doubleMasterEntryService
       .UpdateDataMasterDetails(
         detailRows, // fd (child rows)
-        'tbl_task_report_details', // tableName (child)
+        'tbl_task_monthly_report_details', // tableName (child)
         masterRow, // fdMaster (master row)
-        'tbl_task_report', // tableNameMaster (master)
+        'tbl_task_monthly_report', // tableNameMaster (master)
         'Task_Report_ID', // columnNamePrimary (PK)
         'Task_Report_ID', // columnNameForign (FK in child)
         'TR', // serialType (your code uses it)
@@ -568,7 +501,7 @@ export class GenerateTaskReportComponent {
     console.log(this.TaskId);
 
     var ProcedureData = {
-      procedureName: '[usp_Task_GetDataById]',
+      procedureName: '[usp_Task_monthly_GetDataById]',
       parameters: {
         Id: this.TaskId,
       },
@@ -578,7 +511,8 @@ export class GenerateTaskReportComponent {
       next: (results) => {
         if (results.status) {
           var data = JSON.parse(results.data).Tables1;
-
+          console.log(data);
+          
           const formArray = this.taskForm.get('items') as FormArray;
           formArray.clear();
           console.log(data, new Date(data[0].Date));
@@ -591,26 +525,31 @@ export class GenerateTaskReportComponent {
             '-' +
             String(d.getDate()).padStart(2, '0');
 
-          this.taskForm.controls['ToMail'].setValue(data[0].Mail_TO);
-          this.taskForm.controls['CcMail'].setValue(data[0].Mail_CC);
           this.taskForm.controls['TaskNo'].setValue(data[0].Task_Report_Code);
           this.taskForm.controls['Date'].setValue(
             localDate
           );
 
           JSON.parse(results.data).Tables1.forEach((item: any) => {
+            // accept multiple possible server field names for team size and coerce to number
+            const teamSizeRaw = item.TeamSize ?? item.Team_Size ?? item.Team ?? item.teamSize ?? null;
+            const teamSize = teamSizeRaw != null && String(teamSizeRaw).trim() !== '' && !isNaN(Number(teamSizeRaw))
+              ? Number(teamSizeRaw)
+              : null;
+            const orderSeason = item.OrderSeason ?? item.Order_Season ?? item.Season ?? 'N/A';
+
             formArray.push(
               this.fb.group({
                 CustomerName: [item.Customer_ID],
-                // parse incoming ISO timestamps into Date objects so p-calendar shows them
-                InTime: [this.parseISOToLocalDate(item.InTime)],
-                OutTime: [this.parseISOToLocalDate(item.OutTime)],
-                discussion: [item.Discussion],
-                Buyer_Name: [item.BuyerId],
-                Type: [item.Type],
-                PaymentIssue: [item.PaymentIssue],
-                CommercialIssue: [item.CommercialIssue],
-                SampleSubmit: [item.SampleSubmit],
+                TeamSize: [teamSize],
+                OrderSeason: [orderSeason],
+                Description: [item.Description ?? item.Discussion ?? null],
+                Visit1: [item.Visit1 ?? null],
+                Visit2: [item.Visit2 ?? null],
+                Visit3: [item.Visit3 ?? null],
+                OrderSummary: [item.OrderSummary ?? null],
+                SampleSummary: [item.SampleSummary ?? item.SampleSubmit ?? null],
+                NewArticleSummary: [item.NewArticleSummary ?? null],
               })
             );
           });

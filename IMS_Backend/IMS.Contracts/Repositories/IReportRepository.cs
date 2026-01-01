@@ -26,4 +26,5 @@ public interface IReportRepository
     Task<DataSet> FGStockReport();
     Task<DataSet> FGSendAndReceiveReport(FGSentReceiveParams param);
     Task<DataSet> RMPendingDetailsReport(string id);
+    Task<DataSet> TaskMonthlyReport(string fromDate, string toDate);
 }

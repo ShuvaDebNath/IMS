@@ -176,6 +176,12 @@ import { InterliningDescListComponent } from '../master-entry/Interlining-Desc/i
 import { CurrencyCreateComponent } from '../MasterEntry/Currency/currency-create/currency-create.component';
 import { CurrencyListComponent } from '../MasterEntry/Currency/currency-list/currency-list.component';
 import { PiListComponent } from "../PI/pi-list/pi-list.component";
+import { MonthlyTaskReportComponent } from '../task-report/monthly-task-report/monthly-task-report.component';
+import { CustomerVisitReportComponent } from '../task-report/customer-visit-report/customer-visit-report.component';
+import { CustomerVisitReportListComponent } from '../task-report/customer-visit-report-list/customer-visit-report-list.component';
+import { MonthlyTaskReportListComponent } from '../task-report/monthly-task-report-list/monthly-task-report-list.component';
+import { GenerateMonthlyTaskComponent } from '../task-report/generate-monthly-task/generate-monthly-task.component';
+import { GenerateCustomerVisitComponent } from '../task-report/generate-customer-visit/generate-customer-visit.component';
 
 const CustomSelectOptions: INgxSelectOptions = {
   // Check the interface for more options
@@ -321,6 +327,12 @@ const CustomSelectOptions: INgxSelectOptions = {
     ReturnGoodsApplicationComponent,
     UserListComponent,
     UserCreateComponent,
+    MonthlyTaskReportComponent,
+    CustomerVisitReportComponent,
+    CustomerVisitReportListComponent,
+    MonthlyTaskReportListComponent,
+    GenerateMonthlyTaskComponent,
+    GenerateCustomerVisitComponent
   ],
   imports: [
     CommonModule,
@@ -707,6 +719,38 @@ const CustomSelectOptions: INgxSelectOptions = {
                 {
                     path: 'generate-task-report',
                     component: GenerateTaskReportComponent,
+                },
+                {
+                    path: 'all-task-report',
+                    component: AllTaskReportComponent,
+                },
+                {
+                    path: 'all-task-details-report',
+                    component: AllTaskDetailsReportComponent,
+                },
+                {
+                    path: 'generate-monthly-task',
+                    component: GenerateMonthlyTaskComponent,
+                },
+                {
+                    path: 'monthly-task-list',
+                    component: MonthlyTaskReportListComponent,
+                },
+                {
+                    path: 'monthly-task-report',
+                    component: MonthlyTaskReportComponent,
+                },
+                {
+                    path: 'customer-visit-report',
+                    component: CustomerVisitReportComponent,
+                },
+                {
+                    path: 'customer-visit-list',
+                    component: CustomerVisitReportListComponent,
+                },
+                {
+                    path: 'generate-customer-visit',
+                    component: GenerateCustomerVisitComponent,
                 },
             ],
         },

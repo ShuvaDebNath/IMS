@@ -339,6 +339,35 @@ datatable-header-cell.dt-ledger-name
   border-radius: 5px 5px 5px 5px;
 
   background-color: #fff;
+/* Ensure dropdowns, calendars and overlay panels render above tables/containers */
+.p-datepicker,
+.p-datepicker-panel,
+.p-dropdown-panel,
+.p-overlay-panel,
+.p-calendar,
+.p-autocomplete-panel,
+.p-colorpicker,
+.ui-datepicker,
+.ui-datepicker-div,
+.dropdown-menu,
+.bs-datepicker-container,
+.ngx-dropdown,
+.ng-dropdown-panel {
+  z-index: 20000 !important;
+}
+
+/* Angular CDK overlay (if used) */
+.cdk-overlay-container {
+  z-index: 21000 !important;
+}
+
+/* If parent containers use overflow, make sure overlays appended inside body are visible */
+body > .p-overlaypanel,
+body > .p-datepicker,
+body > .ui-datepicker-div {
+  position: absolute;
+  z-index: 20000 !important;
+}
 
 
   border-bottom: 2px solid #99c248;
