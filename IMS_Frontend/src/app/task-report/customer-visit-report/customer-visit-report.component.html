@@ -1,103 +1,116 @@
-<div class="container shadow-sm p-3 mb-5 bg-white rounded">
-	<h1 class="theme-text">Customer Visit Report</h1>
+<div class="m-2 p-2">
+  <div class="card card-default">
+    <div class="card-header theme-bg">
+      <div class="row">
+        <h2 class="">Customer Visit Report</h2>
+      </div>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="SearchForm">
+        <div class="row align-items-center">
+          <div class="col-3">
+            <label class="control-label" for="inlineFormInputGroup"
+              >From Date</label
+            >
+            <input
+              type="date"
+              formControlName="fromDate"
+              class="form-control"
+            />
+          </div>
+          <div class="col-3">
+            <label class="control-label" for="inlineFormInputGroup"
+              >To Date</label
+            >
+            <input type="date" formControlName="toDate" class="form-control" />
+          </div>
+          <div class="col-3">
+            <button
+              title="Search"
+              type="button"
+              (click)="Search()"
+              class="btn btn-sm theme-btn mt-4 p-1"
+            >
+              <i class="fas fa-search"></i>&nbsp;Search
+            </button>
+          </div>
+        </div>
+      </form>
+      <div class="row mb-3" *ngIf="tableData != null">
+        <div class="col-md-12">
+          <button
+            class="btn theme-btn px-4 py-2"
+            (click)="print()"
+            title="Export application data to Excel, Word, or PDF"
+          >
+            <i class="fas fa-download"></i>&nbsp; Export
+          </button>
+        </div>
+      </div>
+      <hr />
+      <p-table
+        #dt
+        [value]="tableData"
+        [paginator]="true"
+        [rows]="10"
+        [responsive]="true"
+        [showCurrentPageReport]="true"
+        [globalFilterFields]="[
+          'Task_Report_Code',
+          'UserName',
+          'TotalRequest',
+          'date'
+        ]"
+      >
+        <ng-template pTemplate="caption">
+          <div class="table-toolbar">
+            <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                placeholder="Global Search"
+              />
+            </span>
+          </div>
+        </ng-template>
 
-	<br />
-	<form [formGroup]="taskForm" style="overflow: auto;">
-		<div class="row mb-3">
-			<div class="col-md-6">
-				<label class="form-label">Task No</label>
-				<input autocomplete="off" type="text" formControlName="TaskNo" class="form-control" readonly />
-			</div>
-			<div class="col-md-6">
-				<label class="control-label">Date</label>
-				<input type="date" formControlName="Date" class="form-control" />
-			</div>
-		</div>
-
-		<table class="table table-bordered" style="width:200% !important;">
-			<thead>
-				<tr>
-					<th>Customer Name</th>
-					<th>Buying house / Factory / Buyer</th>
-					<th>Description</th>
-					<th>Already Receive Order Article</th>
-					<th>Unit Price USD</th>
-					<th>Unit Price USD</th>
-					<th>Prod. Cost Unit</th>
-					<th>Visit Purpose</th>
-					<th>First order received time</th>
-					<th>Latest order received time</th>
-					<th style="width:60px"></th>
-				</tr>
-			</thead>
-
-			<tbody formArrayName="items">
-				<tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
-					<td>
-						<p-dropdown appendTo="body"
-							[options]="CustomerList"
-							optionLabel="CustomerName"
-							optionValue="Customer_ID"
-							[filter]="true"
-							[showClear]="true"
-							placeholder="Select Customer"
-							formControlName="CustomerName">
-						</p-dropdown>
-					</td>
-
-					<td>
-						<input class="form-control form-control-sm" formControlName="Buyer" />
-					</td>
-
-					<td>
-						<input class="form-control form-control-sm" formControlName="Description" />
-					</td>
-
-					<td>
-						<input class="form-control form-control-sm" formControlName="AlreadyReceivedArticle" />
-					</td>
-
-					<td>
-						<input class="form-control form-control-sm" formControlName="UnitPriceUSD" />
-					</td>
-
-					<td>
-						<input class="form-control form-control-sm" formControlName="UnitPriceUSD2" />
-					</td>
-
-					<td>
-						<input class="form-control form-control-sm" formControlName="ProdCostUnit" />
-					</td>
-
-					<td>
-						<input class="form-control form-control-sm" formControlName="VisitPurpose" />
-					</td>
-
-					<td>
-						<input class="form-control form-control-sm" formControlName="FirstOrderReceivedTime" />
-					</td>
-
-					<td>
-						<input class="form-control form-control-sm" formControlName="LatestOrderReceivedTime" />
-					</td>
-
-					<td>
-						<button type="button" class="btn btn-sm btn-danger" (click)="removeItem(i)">×</button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-
-		<div class="d-flex justify-content-end gap-2 mt-3">
-			<button type="button" class="btn btn-outline-success" (click)="addItem()"><i class="bi bi-plus-circle me-1"></i> Add Row</button>
-
-			<button type="submit" (click)="saveData()" class="btn theme-btn btn-rounded" [disabled]="taskForm.invalid" *ngIf="!isEdit">
-				<i class="bi bi-save me-1"></i> Save
-			</button>
-
-			<button type="submit" (click)="UpdateData()" class="btn theme-btn btn-rounded" [disabled]="taskForm.invalid" *ngIf="isEdit">
-				<i class="bi bi-save me-1"></i> Save
-			</button>
-		</div>
-	</form>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="text-align: center">Marketing Concern</th>
+            <th style="text-align: center">Customer Name</th>
+            <th style="text-align: center">Buying/Concern Factory/ Buyer</th>
+            <th style="text-align: center">Remark</th>
+            <th style="text-align: center">Already Receive Order Article</th>
+            <th style="text-align: center">Unit Price(USD)</th>
+            <th style="text-align: center">Unit Price(BDT)</th>
+            <th style="text-align: center">Prod. Cost Unit</th>
+            <th style="text-align: center">Visit purpose</th>
+            <th style="text-align: center">First order received time</th>
+            <th style="text-align: center">Latest order received time</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+          <tr>
+            <td style="text-align: left">{{ item.MakeBy }}</td>
+            <td style="text-align: left">{{ item.customer_name }}</td>
+            <td style="text-align: center">{{ item.Buying_Concern }}</td>
+            <td style="text-align: center">{{ item.Description }}</td>
+            <td style="text-align: center">
+              {{ item.Already_Receive_Order_Article }}
+            </td>
+            <td style="text-align: center">{{ item.Unit_Price_USD }}</td>
+            <td style="text-align: center">{{ item.Unit_Price_BDT }}</td>
+            <td style="text-align: center">{{ item.Prod_Cost_Unit }}</td>
+            <td style="text-align: center">{{ item.Visit_Purpose }}</td>
+            <td style="text-align: center">{{ item.First_Received_Time }}</td>
+            <td style="text-align: center">
+              {{ item.Latest_Order_Receive_Time }}
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
 </div>

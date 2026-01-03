@@ -1133,6 +1133,49 @@ namespace IMS.API.Controllers
         }
 
         [HttpGet]
+        [Route("TaskMonthlyDetailsReport")]
+        public async Task<IActionResult> TaskMonthlyDetailsReport(String rptType, string id = "")
+        {
+            try
+            {
+                var currentUser = HttpContext.User;
+
+                string reportPath = "V2\\TaskReport\\";
+                DataSet ds = await _reportService.TaskMonthlyDetailsReport(id);
+
+                if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
+                {
+
+                    return Ok(new { msg = "Data Not Found" });
+                }
+
+                ds.Tables[0].TableName = "TaskMonthlyDetails";
+
+                var reportName = "Task Details Monthly Report";
+
+                reportPath += "rptTaskDetailsMonthlyReport.rdlc";
+
+
+                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+
+
+                if (rptType.ToLower() == "pdf")
+                {
+                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                }
+                else
+                {
+                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
         [Route("TaskMonthlyReport")]
         public async Task<IActionResult> TaskMonthlyReport(String rptType, string fromDate = "", string toDate = "")
         {
@@ -1149,11 +1192,11 @@ namespace IMS.API.Controllers
                     return Ok(new { msg = "Data Not Found" });
                 }
 
-                ds.Tables[0].TableName = "TaskMonthlyDetails";
+                ds.Tables[0].TableName = "TaskMonthly";
 
-                var reportName = "Task Details Monthly Report";
+                var reportName = "Task Monthly Report";
 
-                reportPath += "rptTaskDetailsMonthlyReport.rdlc";
+                reportPath += "rptTaskMonthlyReport.rdlc";
 
 
                 var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);

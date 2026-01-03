@@ -64,7 +64,7 @@ export class GenerateMonthlyTaskComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.userId = window.localStorage.getItem('userId') || '';
-    this.title.setTitle('Generate Monthly Task Report');
+    this.title.setTitle('Generate Monthly Task');
     this.generateForm();
     this.addItem();
     this.loadPageData();
@@ -133,6 +133,7 @@ export class GenerateMonthlyTaskComponent implements OnInit {
   addItem() {
     const row = this.fb.group({
       CustomerName: this.fb.control<number | null>(null, Validators.required),
+      Buying_Concern: this.fb.control<string | null>(null),
       TeamSize: this.fb.control<number | null>(null),
       OrderSeason: this.fb.control<string | null>('N/A'),
       Description: this.fb.control<string | null>(null),
@@ -247,6 +248,7 @@ export class GenerateMonthlyTaskComponent implements OnInit {
       return {
         Customer_ID: custId,
         Customer_name: customerDisplay,
+        Buying_Concern: i.Buying_Concern,
         TeamSize: i.TeamSize,
         OrderSeason: i.OrderSeason,
         Description: i.Description,
@@ -347,6 +349,7 @@ export class GenerateMonthlyTaskComponent implements OnInit {
       return {
         Customer_ID: custId,
         Customer_name: customerDisplay,
+        Buying_Concern: i.Buying_Concern,
         TeamSize: i.TeamSize,
         OrderSeason: i.OrderSeason,
         Description: i.Description,
@@ -540,6 +543,7 @@ export class GenerateMonthlyTaskComponent implements OnInit {
 
             formArray.push(
               this.fb.group({
+                Buying_Concern: [item.Buying_Concern ?? null],
                 CustomerName: [item.Customer_ID],
                 TeamSize: [teamSize],
                 OrderSeason: [orderSeason],

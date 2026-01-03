@@ -1,1 +1,105 @@
-<p>generate-customer-visit works!</p>
+<div class="container shadow-sm p-3 mb-5 bg-white rounded">
+	<h1 class="theme-text">Generate Customer Visit</h1>
+
+	<br />
+	<form [formGroup]="taskForm" style="overflow: auto;">
+		<div class="row mb-3">
+			<div class="col-md-6">
+				<label class="form-label">Task No</label>
+				<input autocomplete="off" type="text" formControlName="TaskNo" class="form-control" readonly />
+			</div>
+			<div class="col-md-6">
+				<label class="control-label">Date</label>
+				<input type="date" formControlName="Date" class="form-control" />
+			</div>
+		</div>
+
+		<table class="table table-bordered" style="width:200% !important;">
+			<thead>
+				<tr>
+					<th>Customer Name</th>
+					<th>Buying house / Factory / Buyer</th>
+					<th>Description</th>
+					<th>Already Receive Order Article</th>
+					<th>Unit Price USD</th>
+					<th>Unit Price BDT</th>
+					<th>Prod. Cost Unit</th>
+					<th>Visit Purpose</th>
+					<th>First order received time</th>
+					<th>Latest order received time</th>
+					<th style="width:60px"></th>
+				</tr>
+			</thead>
+
+			<tbody formArrayName="items">
+				<tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
+					<td>
+						<p-dropdown appendTo="body"
+							[options]="CustomerList"
+							optionLabel="CustomerName"
+							optionValue="Customer_ID"
+							[filter]="true"
+							[showClear]="true"
+							[virtualScroll]="true"
+							[itemSize]="30"
+							placeholder="Select Customer"
+							formControlName="CustomerName">
+						</p-dropdown>
+					</td>
+
+					<td>
+						<input class="form-control form-control-sm" formControlName="Buyer" />
+					</td>
+
+					<td>
+						<input class="form-control form-control-sm" formControlName="Description" />
+					</td>
+
+					<td>
+						<input class="form-control form-control-sm" formControlName="AlreadyReceivedArticle" />
+					</td>
+
+					<td>
+						<input class="form-control form-control-sm" formControlName="UnitPriceUSD" />
+					</td>
+
+					<td>
+						<input class="form-control form-control-sm" formControlName="UnitPriceBDT" />
+					</td>
+
+					<td>
+						<input class="form-control form-control-sm" formControlName="ProdCostUnit" />
+					</td>
+
+					<td>
+						<input class="form-control form-control-sm" formControlName="VisitPurpose" />
+					</td>
+
+					<td>
+						<input class="form-control form-control-sm" formControlName="FirstOrderReceivedTime" />
+					</td>
+
+					<td>
+						<input class="form-control form-control-sm" formControlName="LatestOrderReceivedTime" />
+					</td>
+
+					<td>
+						<button type="button" class="btn btn-sm btn-danger" (click)="removeItem(i)">×</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="d-flex justify-content-end gap-2 mt-3">
+			<button type="button" class="btn btn-outline-success" (click)="addItem()"><i class="bi bi-plus-circle me-1"></i> Add Row</button>
+
+			<button type="submit" (click)="saveData()" class="btn theme-btn btn-rounded" [disabled]="taskForm.invalid" *ngIf="!isEdit">
+				<i class="bi bi-save me-1"></i> Save
+			</button>
+
+			<button type="submit" (click)="UpdateData()" class="btn theme-btn btn-rounded" [disabled]="taskForm.invalid" *ngIf="isEdit">
+				<i class="bi bi-save me-1"></i> Save
+			</button>
+		</div>
+	</form>
+</div>

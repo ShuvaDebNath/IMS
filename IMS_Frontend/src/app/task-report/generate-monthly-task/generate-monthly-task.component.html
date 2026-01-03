@@ -35,6 +35,7 @@
       <thead>
         <tr>
           <th style="text-align: center">Customer Name</th>
+          <th style="text-align: center">Buying Concern Factory/Buyer</th>
           <th style="text-align: center">How many team you work</th>
           <th style="text-align: center">Order Season</th>
           <th style="text-align: center">Description</th>
@@ -67,6 +68,9 @@
             ></p-dropdown>
           </td>
 
+          <td>
+            <input class="form-control form-control-sm" formControlName="Buying_Concern" />
+          </td>
           <td>
             <p-dropdown appendTo="body" [options]="teamOptions" optionLabel="label" optionValue="value" placeholder="Team" formControlName="TeamSize"></p-dropdown>
           </td>

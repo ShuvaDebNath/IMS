@@ -366,4 +366,17 @@ public class ReportService : IReportService
             throw ex;
         }
     }
+
+    public async Task<DataSet> TaskMonthlyDetailsReport(string id)
+    {
+        try
+        {
+
+            return await _reportRepository.TaskMonthlyDetailsReport(id);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
 }
