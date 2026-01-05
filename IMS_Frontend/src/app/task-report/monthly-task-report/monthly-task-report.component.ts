@@ -97,7 +97,7 @@ export class MonthlyTaskReportComponent {
     var toDate = this.SearchForm.value.toDate;
 
     let param = new GetDataModel();
-    param.procedureName = '[usp_Task_Monthly_Details_Report]';
+    param.procedureName = '[usp_Task_Monthly_Report]';
     param.parameters = {
       FromDate: fromDate,
       ToDate: toDate,

@@ -89,11 +89,17 @@
           <tr>
             <th class="text-center">SL</th>
             <th class="text-center">Task Code</th>
+            <th class="text-center">Buyer name</th>
             <th class="text-center">Customer Name</th>
             <th class="text-center">Contact Person</th>
             <th class="text-center">In Time</th>
             <th class="text-center">Out Time</th>
             <th class="text-center">Discussion</th>
+            <th class="text-center">Old/New</th>
+            <th class="text-center">Purpose</th>
+            <th class="text-center">Payment Issue</th>
+            <th class="text-center">Commercial lssue</th>
+            <th class="text-center">Sample Submit</th>
           </tr>
         </ng-template>
 
@@ -103,11 +109,17 @@
             <td class="text-center align-middle">
               {{ table.Task_Report_Code }}
             </td>
+            <td class="text-center align-middle">{{ table.Buyer_Name }}</td>
             <td class="text-center align-middle">{{ table.CustomerName }}</td>
             <td class="text-center align-middle">{{ table.Contact_Name }}</td>
             <td class="text-center align-middle">{{ table.InTime }}</td>
             <td class="text-center align-middle">{{ table.OutTime }}</td>
             <td class="text-center align-middle">{{ table.Discussion }}</td>
+            <td class="text-center align-middle">{{ table.Type }}</td>
+            <td class="text-center align-middle">{{ table.Purpose }}</td>
+            <td class="text-center align-middle">{{ table.PaymentIssue }}</td>
+            <td class="text-center align-middle">{{ table.CommercialIssue }}</td>
+            <td class="text-center align-middle">{{ table.SampleSubmit }}</td>
           </tr>
         </ng-template>
       </p-table>

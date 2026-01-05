@@ -28,4 +28,6 @@ public interface IReportRepository
     Task<DataSet> RMPendingDetailsReport(string id);
     Task<DataSet> TaskMonthlyReport(string fromDate, string toDate);
     Task<DataSet> TaskMonthlyDetailsReport(string id);
+    Task<DataSet> TaskCustomerVisitReport(string fromDate, string toDate);
+    Task<DataSet> TaskCustomerVisitDetailsReport(string id);
 }

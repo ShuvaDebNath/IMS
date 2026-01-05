@@ -94,12 +94,10 @@ export class CustomerVisitReportComponent implements OnInit {
       var toDate = this.SearchForm.value.toDate;
   
       let param = new GetDataModel();
-      param.procedureName = '[usp_Task_CustomerVisit_List]';
+      param.procedureName = '[usp_Task_Customer_Visit_Report]';
       param.parameters = {
         FromDate: fromDate,
-        ToDate: toDate,
-        PageIndex: this.pageIndex,
-        PageSize: this.pageSize,
+        ToDate: toDate
       };
   
       this.masterEntryService.GetInitialData(param).subscribe({
@@ -110,6 +108,8 @@ export class CustomerVisitReportComponent implements OnInit {
             this.tableData = [];
             let tables = JSON.parse(results.data);
             this.tableData = tables.Tables1;
+            console.log(this.tableData);
+            
   
             //  this.isPage=this.rows[0].totallen>10;
           }
@@ -145,7 +145,7 @@ export class CustomerVisitReportComponent implements OnInit {
     
             excelBtn?.addEventListener('click', () => {
               swal.close();
-              this.reportService.PrintCustomerReport(
+              this.reportService.PrintClinetVisit(
                 { fromDate: fromDate, toDate: toDate },
                 'excel',
                 true
@@ -154,7 +154,7 @@ export class CustomerVisitReportComponent implements OnInit {
     
             wordBtn?.addEventListener('click', () => {
               swal.close();
-              this.reportService.PrintCustomerReport(
+              this.reportService.PrintClinetVisit(
                 { fromDate: fromDate, toDate: toDate },
                 'word',
                 true
@@ -164,7 +164,7 @@ export class CustomerVisitReportComponent implements OnInit {
             pdfBtn?.addEventListener('click', () => {
               swal.close();
     
-              this.reportService.PrintCustomerReport(
+              this.reportService.PrintClinetVisit(
                 { fromDate: fromDate, toDate: toDate },
                 'pdf',
                 true

@@ -172,6 +172,7 @@ export class GenerateTaskReportComponent {
         OutTime: this.fb.control<string | null>(null, Validators.required),
         Type: this.fb.control<string | null>(null, Validators.required),
         discussion: this.fb.control<string | null>(null, Validators.required),
+        purpose: this.fb.control<string | null>(null, Validators.required),
         PaymentIssue: this.fb.control<string | null>(null, Validators.required),
         CommercialIssue: this.fb.control<string | null>(
           null,
@@ -184,6 +185,7 @@ export class GenerateTaskReportComponent {
 
     this.items.push(row);
   }
+
 
   removeItem(i: number) {
     this.items.removeAt(i);
@@ -311,6 +313,7 @@ export class GenerateTaskReportComponent {
         PaymentIssue: PaymentIssue,
         CommercialIssue: CommercialIssue,
         SampleSubmit: SampleSubmit,
+        Purpose: i.purpose
       };
     });
 
@@ -424,6 +427,7 @@ export class GenerateTaskReportComponent {
         PaymentIssue: PaymentIssue,
         CommercialIssue: CommercialIssue,
         SampleSubmit: SampleSubmit,
+        Purpose: i.purpose
       };
     });
 
@@ -611,6 +615,7 @@ export class GenerateTaskReportComponent {
                 PaymentIssue: [item.PaymentIssue],
                 CommercialIssue: [item.CommercialIssue],
                 SampleSubmit: [item.SampleSubmit],
+                purpose: [item.Purpose],
               })
             );
           });

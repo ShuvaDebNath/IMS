@@ -233,17 +233,17 @@ pageIndex = 1;
 
         excelBtn?.addEventListener('click', () => {
           swal.close();
-          this.reportService.PrintCustomerList(item, 'excel', 'F');
+          this.reportService.PrintClientVisitDetailsReport(item, 'excel', 'F');
         });
 
         wordBtn?.addEventListener('click', () => {
           swal.close();
-          this.reportService.PrintCustomerList(item, 'word', 'F');
+          this.reportService.PrintClientVisitDetailsReport(item, 'word', 'F');
         });
 
         pdfBtn?.addEventListener('click', () => {
           swal.close();
-          this.reportService.PrintCustomerList(item, 'pdf', 'F');
+          this.reportService.PrintClientVisitDetailsReport(item, 'pdf', 'F');
         });
       },
     });

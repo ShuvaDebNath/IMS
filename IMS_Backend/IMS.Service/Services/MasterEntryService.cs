@@ -83,7 +83,7 @@ namespace Boilerplate.Service.Services
         {
             try
             {
-                _validationHelper.ValidateModel(item, item.TableName ?? string.Empty);
+               // _validationHelper.ValidateModel(item, item.TableName ?? string.Empty);
 
                 var sqlQuery = $"INSERT INTO [dbo].[{item.TableName}] ";
 

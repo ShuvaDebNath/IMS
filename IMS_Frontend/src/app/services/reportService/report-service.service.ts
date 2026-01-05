@@ -1879,7 +1879,7 @@ export class ReportService {
   PrintClientVisitDetailsReport(report: any, rptType: 'pdf' | 'excel' | 'word', isView: any) {
     const id = report.id ? report.id : '';
 
-    const url = `${this.baseUrl}${this.apiController}/TaskClientVisitDetailsReport`;
+    const url = `${this.baseUrl}${this.apiController}/TaskCustomerVisitDetailsReport`;
     const token = this.gs.getSessionData('token');
 
     const headers = new HttpHeaders({
@@ -1953,7 +1953,7 @@ export class ReportService {
     const fromDate = report.fromDate ? this.formatDate(report.fromDate) : '';
     const toDate = report.toDate ? this.formatDate(report.toDate) : '';
 
-    const url = `${this.baseUrl}${this.apiController}/TaskClientVisit`;
+    const url = `${this.baseUrl}${this.apiController}/TaskCustomerVisitReport`;
     const token = this.gs.getSessionData('token');
 
     const headers = new HttpHeaders({

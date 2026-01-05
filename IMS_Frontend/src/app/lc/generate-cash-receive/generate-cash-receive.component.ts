@@ -168,7 +168,19 @@ export class GenerateCashReceiveComponent {
       error: (err) => {},
     });
   }
+  checkReceiveAmountOnChange(){
+    if (this.Formgroup.value.ReceiveAmount < this.ReceiveAmount && this.isEdit) {
+      swal.fire(
+        'Warning!',
+        'Receive Amount can not be less than '+this.ReceiveAmount+' received amount',
+        'warning'
+      );
+      this.Formgroup.controls.ReceiveAmount.setValue(this.ReceiveAmount);
+      return;
+    }
+  }
   checkReceiveAmount() {
+    
     if (this.Formgroup.value.ReceiveAmount > this.Formgroup.value.PIValue) {
       swal.fire(
         'Warning!',
@@ -312,6 +324,7 @@ export class GenerateCashReceiveComponent {
             this.Formgroup.controls.BenificiaryAccounts.setValue(
               e.Beneficiary_Bank_ID
             );
+            this.ReceiveAmount = e.ReceiveAmount;
             this.Formgroup.controls.Consignee_Name.setValue(e.Consignee_Name);
             this.Formgroup.controls.Customer_Bank.setValue(e.Customer_Bank);
             this.Formgroup.controls.PINo.setValue(e.PINo);

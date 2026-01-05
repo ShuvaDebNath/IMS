@@ -379,4 +379,30 @@ public class ReportService : IReportService
             throw ex;
         }
     }
+
+    public async Task<DataSet> TaskCustomerVisitReport(string fromDate, string toDate)
+    {
+        try
+        {
+
+            return await _reportRepository.TaskCustomerVisitReport(fromDate, toDate);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+    public async Task<DataSet> TaskCustomerVisitDetailsReport(string id)
+    {
+        try
+        {
+
+            return await _reportRepository.TaskCustomerVisitDetailsReport(id);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
 }

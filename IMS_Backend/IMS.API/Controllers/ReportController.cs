@@ -67,49 +67,7 @@ namespace IMS.API.Controllers
         }
 
 
-        [HttpGet]
-        [Route("TaskDetailsReport")]
-        public async Task<IActionResult> TaskDetailsReport(String rptType, string fromDate = "", string toDate = "")
-        {
-            try
-            {
-                var currentUser = HttpContext.User;
-
-                string reportPath = "V2\\TaskReport\\";
-                DataSet ds = await _reportService.TaskDetailsReport(fromDate, toDate);
-
-                if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
-                {
-
-                    return Ok(new { msg = "Data Not Found" });
-                }
-
-                ds.Tables[0].TableName = "TaskDetails";
-
-                var reportName = "Task Details Report";
-
-                reportPath += "rptTaskDetailsReport.rdlc";
-
-
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
-
-
-                if (rptType.ToLower() == "pdf")
-                {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
-                }
-                else
-                {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
-                }
-
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-
+        
         [HttpGet]
         [Route("CustomerReport")]
         public async Task<IActionResult> CustomerReport(String rptType, string Superior_Id = "", string Customer_Id = "", string Status = "", string SentBy = "")
@@ -655,49 +613,6 @@ namespace IMS.API.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("TaskReport")]
-        public async Task<IActionResult> TaskReport(String rptType, string id = "")
-        {
-            try
-            {
-                var currentUser = HttpContext.User;
-
-                string reportPath = "V2\\TaskReport\\";
-                DataSet ds = await _reportService.TaskReport(id);
-
-                if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
-                {
-
-                    return Ok(new { msg = "Data Not Found" });
-                }
-
-                ds.Tables[0].TableName = "TaskReport";
-
-                var reportName = "Task Report";
-
-                reportPath += "rptTaskReport.rdlc";
-
-
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
-
-
-                if (rptType.ToLower() == "pdf")
-                {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
-                }
-                else
-                {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
-                }
-
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-
 
         [HttpGet]
         [Route("ExportReport")]
@@ -1149,11 +1064,11 @@ namespace IMS.API.Controllers
                     return Ok(new { msg = "Data Not Found" });
                 }
 
-                ds.Tables[0].TableName = "TaskMonthlyDetails";
+                ds.Tables[0].TableName = "MonthlyTaskReport";
 
                 var reportName = "Task Details Monthly Report";
 
-                reportPath += "rptTaskDetailsMonthlyReport.rdlc";
+                reportPath += "rptTaskMonthlyDetailsReport.rdlc";
 
 
                 var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
@@ -1192,11 +1107,184 @@ namespace IMS.API.Controllers
                     return Ok(new { msg = "Data Not Found" });
                 }
 
-                ds.Tables[0].TableName = "TaskMonthly";
+                ds.Tables[0].TableName = "MonthlyTaskReport";
 
                 var reportName = "Task Monthly Report";
 
                 reportPath += "rptTaskMonthlyReport.rdlc";
+
+
+                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+
+
+                if (rptType.ToLower() == "pdf")
+                {
+                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                }
+                else
+                {
+                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("TaskCustomerVisitDetailsReport")]
+        public async Task<IActionResult> TaskCustomerVisitDetailsReport(String rptType, string id = "")
+        {
+            try
+            {
+                var currentUser = HttpContext.User;
+
+                string reportPath = "V2\\TaskReport\\";
+                DataSet ds = await _reportService.TaskCustomerVisitDetailsReport(id);
+
+                if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
+                {
+
+                    return Ok(new { msg = "Data Not Found" });
+                }
+
+                ds.Tables[0].TableName = "CustomerDetailsTaskReport";
+
+                var reportName = "Customer Details Report";
+
+                reportPath += "rptTaskCustomerDetailsReport.rdlc";
+
+
+                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+
+
+                if (rptType.ToLower() == "pdf")
+                {
+                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                }
+                else
+                {
+                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("TaskCustomerVisitReport")]
+        public async Task<IActionResult> TaskCustomerVisitReport(String rptType, string fromDate = "", string toDate = "")
+        {
+            try
+            {
+                var currentUser = HttpContext.User;
+
+                string reportPath = "V2\\TaskReport\\";
+                DataSet ds = await _reportService.TaskCustomerVisitReport(fromDate, toDate);
+
+                if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
+                {
+
+                    return Ok(new { msg = "Data Not Found" });
+                }
+
+                ds.Tables[0].TableName = "CustomerDetailsTaskReport";
+
+                var reportName = "Customer Details Report";
+
+                reportPath += "rptTaskCustomerReport.rdlc";
+
+
+                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+
+
+                if (rptType.ToLower() == "pdf")
+                {
+                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                }
+                else
+                {
+                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+
+        [HttpGet]
+        [Route("TaskReport")]
+        public async Task<IActionResult> TaskReport(String rptType, string id = "")
+        {
+            try
+            {
+                var currentUser = HttpContext.User;
+
+                string reportPath = "V2\\TaskReport\\";
+                DataSet ds = await _reportService.TaskReport(id);
+
+                if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
+                {
+
+                    return Ok(new { msg = "Data Not Found" });
+                }
+
+                ds.Tables[0].TableName = "TaskReport";
+
+                var reportName = "Task Report";
+
+                reportPath += "rptTaskReport.rdlc";
+
+
+                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+
+
+                if (rptType.ToLower() == "pdf")
+                {
+                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                }
+                else
+                {
+                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("TaskDetailsReport")]
+        public async Task<IActionResult> TaskDetailsReport(String rptType, string fromDate = "", string toDate = "")
+        {
+            try
+            {
+                var currentUser = HttpContext.User;
+
+                string reportPath = "V2\\TaskReport\\";
+                DataSet ds = await _reportService.TaskDetailsReport(fromDate, toDate);
+
+                if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
+                {
+
+                    return Ok(new { msg = "Data Not Found" });
+                }
+
+                ds.Tables[0].TableName = "TaskDetails";
+
+                var reportName = "Task Details Report";
+
+                reportPath += "rptTaskDetailsReport.rdlc";
 
 
                 var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);

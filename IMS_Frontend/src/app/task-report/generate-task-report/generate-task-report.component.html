@@ -16,7 +16,6 @@
           id="taskNo"
           name="taskNo"
           value=""
-          readonly
         />
       </div>
       <div class="col-md-6">
@@ -96,6 +95,7 @@
           <th style="text-align: center">Out Time</th>
           <th style="text-align: center">Type</th>
           <th style="text-align: center">Discussion</th>
+          <th style="text-align: center">Purpose</th>
           <th style="text-align: center">Payment Issue</th>
           <th style="text-align: center">Commercial Issue</th>
           <th style="text-align: center">Sample Submit</th>
@@ -220,6 +220,13 @@
             <textarea
               class="form-control form-control-sm"
               formControlName="discussion"
+              required="true"
+            ></textarea>
+          </td>
+          <td class="col-description">
+            <textarea
+              class="form-control form-control-sm"
+              formControlName="purpose"
               required="true"
             ></textarea>
           </td>
