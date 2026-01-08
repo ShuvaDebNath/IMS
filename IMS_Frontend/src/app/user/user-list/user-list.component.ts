@@ -54,16 +54,16 @@ export class UserListComponent {
   }
 
   ngOnInit() {
-    // var permissions = this.gs.CheckUserPermission('User');
+    var permissions = this.gs.CheckUserPermission('User');
 
-    // this.insertPermissions = permissions.insertPermissions;
-    // this.updatePermissions = permissions.updatePermissions;
-    // this.deletePermissions = permissions.deletePermissions;
-    // this.printPermissions = permissions.printPermissions;
+    this.insertPermissions = permissions.insertPermissions;
+    this.updatePermissions = permissions.updatePermissions;
+    this.deletePermissions = permissions.deletePermissions;
+    this.printPermissions = permissions.printPermissions;
 
-    // if (!this.printPermissions) {
-    //    //window.location.href = 'dashboard';
-    // }
+    if (!this.printPermissions) {
+       //window.location.href = 'dashboard';
+    }
 
     this.title.setTitle('User List');
     this.initForm();
