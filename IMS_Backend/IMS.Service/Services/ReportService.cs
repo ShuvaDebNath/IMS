@@ -405,4 +405,24 @@ public class ReportService : IReportService
             throw ex;
         }
     }
+
+
+
+    public async Task<DataSet> DeliveryReport(int PI_Master_ID)
+    {
+        try
+        {
+            ProformaInvoiceReportParams param = new ProformaInvoiceReportParams
+            {
+                PI_Master_ID = PI_Master_ID
+
+            };
+
+            return await _reportRepository.DeliveryReport(param);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
 }

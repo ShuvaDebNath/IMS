@@ -32,4 +32,5 @@ public interface IReportService
     public Task<DataSet> TaskMonthlyReport(string fromDate, string toDate);
     public Task<DataSet> TaskCustomerVisitDetailsReport(string id);
     public Task<DataSet> TaskCustomerVisitReport(string fromDate, string toDate);
+    public Task<DataSet> DeliveryReport(int PI_Master_ID);
 }

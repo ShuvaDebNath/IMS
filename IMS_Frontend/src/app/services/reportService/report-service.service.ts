@@ -2010,4 +2010,55 @@ export class ReportService {
         }
       });
   }
+
+  PrintDeliveryReport(report: any, rptType: any, isView: any) {
+    const PI_Master_ID = report.PI_Master_ID ?? '';
+
+    const url = `${this.baseUrl}${this.apiController}/DeliveryReport`;
+    const token = this.gs.getSessionData('token');
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    this.http
+      .get(url, {
+        headers,
+        params: { rptType, PI_Master_ID },
+        responseType: 'blob',
+      })
+      .subscribe((res: Blob) => {
+        const blobType =
+          rptType === 'pdf'
+            ? 'application/pdf'
+            : rptType === 'excel'
+            ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+
+        const blob = new Blob([res], { type: blobType });
+
+        // Choose base filename according to requested reportType
+        const reportTypeKey = (rptType || '').toString();
+        
+        var baseFileName = 'DeliveryReport';
+        const fileName =
+          rptType === 'pdf'
+            ? `${baseFileName}.pdf`
+            : rptType === 'excel'
+            ? `${baseFileName}.xlsx`
+            : `${baseFileName}.docx`;
+
+        if (isView && rptType === 'pdf') {
+          // View PDF in new tab
+          const fileURL = window.URL.createObjectURL(blob);
+          window.open(fileURL, '_blank');
+        } else {
+          // Force download
+          const link = document.createElement('a');
+          link.href = window.URL.createObjectURL(blob);
+          link.download = fileName;
+          link.click();
+        }
+      });
+  }
 }

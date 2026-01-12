@@ -30,4 +30,5 @@ public interface IReportRepository
     Task<DataSet> TaskMonthlyDetailsReport(string id);
     Task<DataSet> TaskCustomerVisitReport(string fromDate, string toDate);
     Task<DataSet> TaskCustomerVisitDetailsReport(string id);
+    Task<DataSet> DeliveryReport(ProformaInvoiceReportParams param);
 }

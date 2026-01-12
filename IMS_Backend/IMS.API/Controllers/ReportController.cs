@@ -8,6 +8,7 @@ using QRCoder;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace IMS.API.Controllers
 {
@@ -25,7 +26,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("SampleRequestReport")]
-        public async Task<IActionResult> SampleRequestReport(String rptType, string fromDate = "", string toDate = "", string requestStatus="" ,string UserID="")
+        public async Task<IActionResult> SampleRequestReport(string rptType, string fromDate = "", string toDate = "", string requestStatus="" ,string UserID="")
         {
             try
             {
@@ -47,16 +48,16 @@ namespace IMS.API.Controllers
                 reportPath += "rptSampleRequestReport.rdlc";
 
 
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
 
 
                 if (rptType.ToLower() == "pdf")
                 {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
                 }
                 else
                 {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
                 }
 
             }
@@ -70,7 +71,7 @@ namespace IMS.API.Controllers
         
         [HttpGet]
         [Route("CustomerReport")]
-        public async Task<IActionResult> CustomerReport(String rptType, string Superior_Id = "", string Customer_Id = "", string Status = "", string SentBy = "")
+        public async Task<IActionResult> CustomerReport(string rptType, string Superior_Id = "", string Customer_Id = "", string Status = "", string SentBy = "")
         {
             try
             {
@@ -92,16 +93,16 @@ namespace IMS.API.Controllers
                 reportPath += "rptCustomerReport.rdlc";
 
 
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
 
 
                 if (rptType.ToLower() == "pdf")
                 {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
                 }
                 else
                 {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
                 }
 
             }
@@ -113,7 +114,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("ProformaInvoiceReport")]
-        public async Task<IActionResult> ProformaInvoiceReport(String rptType, int PI_Master_ID, bool IsMPI)
+        public async Task<IActionResult> ProformaInvoiceReport(string rptType, int PI_Master_ID, bool IsMPI)
         {
             try
             {
@@ -138,16 +139,16 @@ namespace IMS.API.Controllers
                     reportPath += "PI.rdlc";
 
 
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
 
 
                 if (rptType.ToLower() == "pdf")
                 {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
                 }
                 else
                 {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
                 }
 
             }
@@ -159,7 +160,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("CommercialInvoiceReports")]
-        public async Task<IActionResult> CommercialInvoiceReports(String rptType, string commercialInvoiceNo, string reportType)
+        public async Task<IActionResult> CommercialInvoiceReports(string rptType, string commercialInvoiceNo, string reportType)
         {
             try
             {
@@ -232,16 +233,16 @@ namespace IMS.API.Controllers
                     reportPath += "BeneficiaryCertificate.rdlc";
                 }                   
 
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
 
 
                 if (rptType.ToLower() == "pdf")
                 {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
                 }
                 else
                 {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
                 }
 
             }
@@ -253,7 +254,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("DeliveryChallanReport")]
-        public async Task<IActionResult> DeliveryChallanReport(String rptType, string challanNo)
+        public async Task<IActionResult> DeliveryChallanReport(string rptType, string challanNo)
         {
             try
             {
@@ -314,7 +315,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("ApplicationReport")]
-        public async Task<IActionResult> ApplicationReport(String rptType, string fromDate,string toDate,string appType="")
+        public async Task<IActionResult> ApplicationReport(string rptType, string fromDate,string toDate,string appType="")
         {
             try
             {
@@ -336,16 +337,16 @@ namespace IMS.API.Controllers
                 reportPath += "rptApplicationReport.rdlc";
 
 
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
 
 
                 if (rptType.ToLower() == "pdf")
                 {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
                 }
                 else
                 {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
                 }
 
             }
@@ -357,7 +358,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("LCReport")]
-        public async Task<IActionResult> LCReport(String rptType, string fromDate, string toDate, string LCNo = "")
+        public async Task<IActionResult> LCReport(string rptType, string fromDate, string toDate, string LCNo = "")
         {
             try
             {
@@ -379,16 +380,16 @@ namespace IMS.API.Controllers
                 reportPath += "rptLCReport.rdlc";
 
 
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
 
 
                 if (rptType.ToLower() == "pdf")
                 {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
                 }
                 else
                 {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
                 }
 
             }
@@ -400,7 +401,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("CashReceiveReport")]
-        public async Task<IActionResult> CashReceiveReport(String rptType, string fromDate, string toDate)
+        public async Task<IActionResult> CashReceiveReport(string rptType, string fromDate, string toDate)
         {
             try
             {
@@ -422,16 +423,16 @@ namespace IMS.API.Controllers
                 reportPath += "rptCashReceiveReport.rdlc";
 
 
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
 
 
                 if (rptType.ToLower() == "pdf")
                 {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
                 }
                 else
                 {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
                 }
 
             }
@@ -443,7 +444,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("PIAmendMentReport")]
-        public async Task<IActionResult> PIAmendMentReport(String rptType, string id)
+        public async Task<IActionResult> PIAmendMentReport(string rptType, string id)
         {
             try
             {
@@ -464,16 +465,16 @@ namespace IMS.API.Controllers
                 reportPath += "rptApplicationPIAmendmentReport.rdlc";
 
 
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
 
 
                 if (rptType.ToLower() == "pdf")
                 {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
                 }
                 else
                 {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
                 }
 
             }
@@ -486,7 +487,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("PIOtherReport")]
-        public async Task<IActionResult> PIOtherReport(String rptType, string id)
+        public async Task<IActionResult> PIOtherReport(string rptType, string id)
         {
             try
             {
@@ -506,16 +507,16 @@ namespace IMS.API.Controllers
                 reportPath += "rptApplicationOtherReport.rdlc";
 
 
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
 
 
                 if (rptType.ToLower() == "pdf")
                 {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
                 }
                 else
                 {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
                 }
 
             }
@@ -528,7 +529,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("SalesContractReport")]
-        public async Task<IActionResult> SalesContractReport(String rptType, string id)
+        public async Task<IActionResult> SalesContractReport(string rptType, string id)
         {
             try
             {
@@ -550,16 +551,16 @@ namespace IMS.API.Controllers
                 reportPath += "rptSalesContract.rdlc";
 
 
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
 
 
                 if (rptType.ToLower() == "pdf")
                 {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
                 }
                 else
                 {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
                 }
 
             }
@@ -572,7 +573,7 @@ namespace IMS.API.Controllers
       
         [HttpGet]
         [Route("BuyerReport")]
-        public async Task<IActionResult> BuyerReport(String rptType, string fromDate = "", string toDate = "",string SuperioId = "", string BuyerId = "", string Status = "", string sentBy = "")
+        public async Task<IActionResult> BuyerReport(string rptType, string fromDate = "", string toDate = "",string SuperioId = "", string BuyerId = "", string Status = "", string sentBy = "")
         {
             try
             {
@@ -594,16 +595,16 @@ namespace IMS.API.Controllers
                 reportPath += "rptBuyerReport.rdlc";
 
 
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
 
 
                 if (rptType.ToLower() == "pdf")
                 {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
                 }
                 else
                 {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
                 }
 
             }
@@ -616,7 +617,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("ExportReport")]
-        public async Task<IActionResult> ExportReport(String rptType, string id = "")
+        public async Task<IActionResult> ExportReport(string rptType, string id = "")
         {
             try
             {
@@ -638,16 +639,16 @@ namespace IMS.API.Controllers
                 reportPath += "rptExportDetailsReport.rdlc";
 
 
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
 
 
                 if (rptType.ToLower() == "pdf")
                 {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
                 }
                 else
                 {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
                 }
 
             }
@@ -660,7 +661,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("ExportReceiveReport")]
-        public async Task<IActionResult> ExportReceiveReport(String rptType, string id = "")
+        public async Task<IActionResult> ExportReceiveReport(string rptType, string id = "")
         {
             try
             {
@@ -682,16 +683,16 @@ namespace IMS.API.Controllers
                 reportPath += "rptExportReceiveReport.rdlc";
 
 
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
 
 
                 if (rptType.ToLower() == "pdf")
                 {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
                 }
                 else
                 {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
                 }
 
             }
@@ -704,7 +705,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("RawMaterialIssueInvoiceReport")]
-        public async Task<IActionResult> RawMaterialIssueInvoiceReport(String rptType, string id = "")
+        public async Task<IActionResult> RawMaterialIssueInvoiceReport(string rptType, string id = "")
         {
             try
             {
@@ -726,16 +727,16 @@ namespace IMS.API.Controllers
                 reportPath += "rptRawMaterialIssueInvoiceReport.rdlc";
 
 
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
 
 
                 if (rptType.ToLower() == "pdf")
                 {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
                 }
                 else
                 {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
                 }
 
             }
@@ -748,7 +749,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("RMStockReport")]
-        public async Task<IActionResult> RMStockReport(String rptType)
+        public async Task<IActionResult> RMStockReport(string rptType)
         {
             try
             {
@@ -770,16 +771,16 @@ namespace IMS.API.Controllers
                 reportPath += "rptRMStockReport.rdlc";
 
 
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
 
 
                 if (rptType.ToLower() == "pdf")
                 {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
                 }
                 else
                 {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
                 }
 
             }
@@ -792,7 +793,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("FinishGoodSentReport")]
-        public async Task<IActionResult> FinishGoodSentReport(String rptType, string id = "")
+        public async Task<IActionResult> FinishGoodSentReport(string rptType, string id = "")
         {
             try
             {
@@ -814,16 +815,16 @@ namespace IMS.API.Controllers
                 reportPath += "rptFinishGoodSentReport.rdlc";
 
 
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
 
 
                 if (rptType.ToLower() == "pdf")
                 {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
                 }
                 else
                 {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
                 }
 
             }
@@ -835,7 +836,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("FinishGoodReceiveReport")]
-        public async Task<IActionResult> FinishGoodReceiveReport(String rptType, string id = "")
+        public async Task<IActionResult> FinishGoodReceiveReport(string rptType, string id = "")
         {
             try
             {
@@ -857,16 +858,16 @@ namespace IMS.API.Controllers
                 reportPath += "rptFinishGoodReceiveReport.rdlc";
 
 
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
 
 
                 if (rptType.ToLower() == "pdf")
                 {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
                 }
                 else
                 {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
                 }
 
             }
@@ -878,7 +879,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("FGStockReport")]
-        public async Task<IActionResult> FGStockReport(String rptType)
+        public async Task<IActionResult> FGStockReport(string rptType)
         {
             try
             {
@@ -900,16 +901,16 @@ namespace IMS.API.Controllers
                 reportPath += "rptFinishGoodStockReport.rdlc";
 
 
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
 
 
                 if (rptType.ToLower() == "pdf")
                 {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
                 }
                 else
                 {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
                 }
 
             }
@@ -921,7 +922,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("FGSendAndReceiveReport")]
-        public async Task<IActionResult> FGSendAndReceiveReport(String rptType, string fromDate, string toDate,string InvoiceNo = "" )
+        public async Task<IActionResult> FGSendAndReceiveReport(string rptType, string fromDate, string toDate,string InvoiceNo = "" )
         {
             try
             {
@@ -943,16 +944,16 @@ namespace IMS.API.Controllers
                 reportPath += "rptFinishGoodReceiveAndSentReport.rdlc";
 
 
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
 
 
                 if (rptType.ToLower() == "pdf")
                 {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
                 }
                 else
                 {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
                 }
 
             }
@@ -963,7 +964,7 @@ namespace IMS.API.Controllers
         }
         [HttpGet]
         [Route("RMPendingDetailsReport")]
-        public async Task<IActionResult> RMPendingDetailsReport(String rptType, string id = "")
+        public async Task<IActionResult> RMPendingDetailsReport(string rptType, string id = "")
         {
             try
             {
@@ -985,16 +986,16 @@ namespace IMS.API.Controllers
                 reportPath += "rptRMReceivePendingDetailsReport.rdlc";
 
 
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
 
 
                 if (rptType.ToLower() == "pdf")
                 {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
                 }
                 else
                 {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
                 }
 
             }
@@ -1006,7 +1007,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("RMDetailsReport")]
-        public async Task<IActionResult> RMDetailsReport(String rptType, string id = "")
+        public async Task<IActionResult> RMDetailsReport(string rptType, string id = "")
         {
             try
             {
@@ -1028,16 +1029,16 @@ namespace IMS.API.Controllers
                 reportPath += "rptRMReceivePendingDetailsReport.rdlc";
 
 
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
 
 
                 if (rptType.ToLower() == "pdf")
                 {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
                 }
                 else
                 {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
                 }
 
             }
@@ -1049,7 +1050,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("TaskMonthlyDetailsReport")]
-        public async Task<IActionResult> TaskMonthlyDetailsReport(String rptType, string id = "")
+        public async Task<IActionResult> TaskMonthlyDetailsReport(string rptType, string id = "")
         {
             try
             {
@@ -1071,16 +1072,16 @@ namespace IMS.API.Controllers
                 reportPath += "rptTaskMonthlyDetailsReport.rdlc";
 
 
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
 
 
                 if (rptType.ToLower() == "pdf")
                 {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
                 }
                 else
                 {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
                 }
 
             }
@@ -1092,7 +1093,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("TaskMonthlyReport")]
-        public async Task<IActionResult> TaskMonthlyReport(String rptType, string fromDate = "", string toDate = "")
+        public async Task<IActionResult> TaskMonthlyReport(string rptType, string fromDate = "", string toDate = "")
         {
             try
             {
@@ -1114,16 +1115,16 @@ namespace IMS.API.Controllers
                 reportPath += "rptTaskMonthlyReport.rdlc";
 
 
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
 
 
                 if (rptType.ToLower() == "pdf")
                 {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
                 }
                 else
                 {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
                 }
 
             }
@@ -1135,7 +1136,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("TaskCustomerVisitDetailsReport")]
-        public async Task<IActionResult> TaskCustomerVisitDetailsReport(String rptType, string id = "")
+        public async Task<IActionResult> TaskCustomerVisitDetailsReport(string rptType, string id = "")
         {
             try
             {
@@ -1157,16 +1158,16 @@ namespace IMS.API.Controllers
                 reportPath += "rptTaskCustomerDetailsReport.rdlc";
 
 
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
 
 
                 if (rptType.ToLower() == "pdf")
                 {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
                 }
                 else
                 {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
                 }
 
             }
@@ -1178,7 +1179,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("TaskCustomerVisitReport")]
-        public async Task<IActionResult> TaskCustomerVisitReport(String rptType, string fromDate = "", string toDate = "")
+        public async Task<IActionResult> TaskCustomerVisitReport(string rptType, string fromDate = "", string toDate = "")
         {
             try
             {
@@ -1200,16 +1201,16 @@ namespace IMS.API.Controllers
                 reportPath += "rptTaskCustomerReport.rdlc";
 
 
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
 
 
                 if (rptType.ToLower() == "pdf")
                 {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
                 }
                 else
                 {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
                 }
 
             }
@@ -1222,7 +1223,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("TaskReport")]
-        public async Task<IActionResult> TaskReport(String rptType, string id = "")
+        public async Task<IActionResult> TaskReport(string rptType, string id = "")
         {
             try
             {
@@ -1244,16 +1245,16 @@ namespace IMS.API.Controllers
                 reportPath += "rptTaskReport.rdlc";
 
 
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
 
 
                 if (rptType.ToLower() == "pdf")
                 {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
                 }
                 else
                 {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
                 }
 
             }
@@ -1265,7 +1266,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("TaskDetailsReport")]
-        public async Task<IActionResult> TaskDetailsReport(String rptType, string fromDate = "", string toDate = "")
+        public async Task<IActionResult> TaskDetailsReport(string rptType, string fromDate = "", string toDate = "")
         {
             try
             {
@@ -1287,16 +1288,66 @@ namespace IMS.API.Controllers
                 reportPath += "rptTaskDetailsReport.rdlc";
 
 
-                var returnString = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
 
 
                 if (rptType.ToLower() == "pdf")
                 {
-                    return File(returnString, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
                 }
                 else
                 {
-                    return File(returnString, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("DeliveryReport")]
+        public async Task<IActionResult> DeliveryReport(string rptType, int PI_Master_ID)
+        {
+            try
+            {
+                var currentUser = HttpContext.User;
+
+                DataSet ds = await _reportService.DeliveryReport(PI_Master_ID);
+
+                if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
+                {
+
+                    return Ok(new { msg = "Data Not Found" });
+                }
+
+                string reportPath = "V2\\DeliveryReport\\";
+
+                if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
+                {
+
+                    return Ok(new { msg = "Data Not Found" });
+                }
+
+                ds.Tables[0].TableName = "DeliveryReport";
+
+                var reportName = "Delivery Report";
+
+                reportPath += "rptDeliveryReport.rdlc";
+
+
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+
+
+                if (rptType.ToLower() == "pdf")
+                {
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                }
+                else
+                {
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
                 }
 
             }

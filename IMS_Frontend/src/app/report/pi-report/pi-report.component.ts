@@ -12,6 +12,8 @@ import {
 } from '@angular/forms';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
+import Swal from 'sweetalert2';
+import { ReportService } from 'src/app/services/reportService/report-service.service';
 
 @Component({
   selector: 'app-pi-report',
@@ -39,7 +41,8 @@ export class PiReportComponent {
     private title: Title,
     private dme: DoubleMasterEntryService,
     private fb: FormBuilder,
-    private ms: MasterEntryService
+    private ms: MasterEntryService,
+    private reportService: ReportService
   ) {}
 
   ngOnInit(): void {
@@ -134,8 +137,8 @@ export class PiReportComponent {
     });
   }
 
-  piNoClick(piNo: any,lc:any) {
-    console.log(piNo,lc);
+  piNoClick(piNo: any,lc:any,PIData:any) {
+    console.log(piNo,lc,PIData);
     
     swal.fire({
       title: 'Save Voucher?',
@@ -149,11 +152,107 @@ export class PiReportComponent {
     }).then((result) => {
       if (result.isConfirmed) {
         //this.updateVoucherData(); // your Angular fn
+        this.piPrint(PIData);
       } else if (result.isDenied) {
         console.log('Changes discarded.');
+        this.deliveryPrint(PIData);
       } else {
         console.log('User canceled.');
+        this.piPrint(PIData);
       }
     });
   }
+  piPrint(PIData:any) {
+      var item = {
+        PI_Master_ID: PIData?.PI_Master_ID,
+        IsMPI: PIData?.IsMPI,
+      };
+  
+      Swal.fire({
+        title: 'What you want to do?',
+        icon: 'question',
+        html: `
+                        <div style="display: flex; gap: 10px; justify-content: center;">
+                          <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
+                            <i class="fa fa-file-excel"></i> Excel
+                          </button>
+                          <button id="wordBtn" class="btn btn-info" style="padding: 8px 16px;">
+                            <i class="fa fa-file-word"></i> Word
+                          </button>
+                          <button id="pdfBtn" class="btn btn-danger" style="padding: 8px 16px;">
+                            <i class="fa fa-file-pdf"></i> PDF
+                          </button>
+                        </div>
+                      `,
+        showConfirmButton: false,
+        didOpen: () => {
+          const excelBtn = document.getElementById('excelBtn');
+          const wordBtn = document.getElementById('wordBtn');
+          const pdfBtn = document.getElementById('pdfBtn');
+  
+  
+          excelBtn?.addEventListener('click', () => {
+            Swal.close();
+          this.reportService.PrintProformaInvoiceRequest(item, 'word', 'F');
+          });
+  
+          wordBtn?.addEventListener('click', () => {
+            Swal.close();
+          this.reportService.PrintProformaInvoiceRequest(item, 'word', 'F');
+          });
+  
+          pdfBtn?.addEventListener('click', () => {
+            Swal.close();
+          this.reportService.PrintProformaInvoiceRequest(item, 'pdf', 'F');
+          });
+        },
+      });
+    }
+
+
+    deliveryPrint(PIData:any) {
+      var item = {
+        PI_Master_ID: PIData?.PI_Master_ID
+      };
+  
+      Swal.fire({
+        title: 'What you want to do?',
+        icon: 'question',
+        html: `
+                        <div style="display: flex; gap: 10px; justify-content: center;">
+                          <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
+                            <i class="fa fa-file-excel"></i> Excel
+                          </button>
+                          <button id="wordBtn" class="btn btn-info" style="padding: 8px 16px;">
+                            <i class="fa fa-file-word"></i> Word
+                          </button>
+                          <button id="pdfBtn" class="btn btn-danger" style="padding: 8px 16px;">
+                            <i class="fa fa-file-pdf"></i> PDF
+                          </button>
+                        </div>
+                      `,
+        showConfirmButton: false,
+        didOpen: () => {
+          const excelBtn = document.getElementById('excelBtn');
+          const wordBtn = document.getElementById('wordBtn');
+          const pdfBtn = document.getElementById('pdfBtn');
+  
+  
+          excelBtn?.addEventListener('click', () => {
+            Swal.close();
+          this.reportService.PrintDeliveryReport(item, 'word', 'F');
+          });
+  
+          wordBtn?.addEventListener('click', () => {
+            Swal.close();
+          this.reportService.PrintDeliveryReport(item, 'word', 'F');
+          });
+  
+          pdfBtn?.addEventListener('click', () => {
+            Swal.close();
+          this.reportService.PrintDeliveryReport(item, 'pdf', 'F');
+          });
+        },
+      });
+    }
 }
