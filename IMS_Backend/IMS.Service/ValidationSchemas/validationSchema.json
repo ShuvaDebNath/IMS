@@ -114,9 +114,81 @@
         }
       }
     },
+    "tbl_payment_terms": {
+      "QueryParams": {
+        "[Name]": {
+          "Required": true
+        }
+      }
+    },
+    "tbl_item": {
+      "Article_No": {
+        "[Mode]": {
+          "Required": true
+        }
+      }
+    },
     "tbl_users": {
       "QueryParams": {
         "[UserName]": {
+          "[Mode]": {
+            "Required": true
+          }
+        }
+      }
+    },
+    "tbl_raw_material": {
+      "Article_No": {
+        "[Mode]": {
+          "Required": true
+        }
+      }
+    },
+    "tbl_material": {
+      "Article_No": {
+        "[Mode]": {
+          "Required": true
+        }
+      }
+    },
+    "tbl_supplier": {
+      "Sup_Name": {
+        "[Mode]": {
+          "Required": true
+        }
+      }
+    },
+    "tbl_interlining_description": {
+      "Details": {
+        "[Mode]": {
+          "Required": true
+        }
+      }
+    },
+    "tbl_goods_description": {
+      "Details": {
+        "[Mode]": {
+          "Required": true
+        }
+      }
+    },
+    "tbl_pi_bottom_price": {
+      "Article": {
+        "[Mode]": {
+          "Required": true
+        }
+      }
+    },
+    "tbl_terms_of_delivery": {
+      "Details": {
+        "[Mode]": {
+          "Required": true
+        }
+      }
+    },
+    "tbl_delivery_condition": {
+      "Details": {
+        "[Mode]": {
           "Required": true
         }
       }

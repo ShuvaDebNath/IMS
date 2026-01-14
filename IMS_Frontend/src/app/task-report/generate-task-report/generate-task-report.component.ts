@@ -85,9 +85,16 @@ export class GenerateTaskReportComponent {
     this.destroy$.complete();
   }
   generateForm() {
+    var userName = window.localStorage.getItem('userName');
+    const yyyymmdd = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+
+    var taskNo = yyyymmdd+'-'+userName;
+
     this.taskForm = this.fb.group({
+      TaskNo:[taskNo, [Validators.required]],
       ToMail: ['', [Validators.required, Validators.email]],
-      CcMail: ['', [Validators.required, Validators.email]],
+      CcMail: ['lilya@sunshineinterlining.com', [Validators.required, Validators.email]],
+      Date: ['', [Validators.required]],
       items: this.fb.array([], { validators: [this.rowsCompleteValidator()] }),
     });
   }
@@ -233,10 +240,11 @@ export class GenerateTaskReportComponent {
       Mail_CC: fv.CcMail,
       User_ID: this.userId,
       Superior_ID: fv.superiorId,
-      Date: formatted,
-      Task_Report_Code: '',
+      Date: fv.Date,
+      Task_Report_Code: fv.TaskNo,
       MailBody: '',
       Subject: '',
+      
     };
 
     var messegeBody =
@@ -300,8 +308,8 @@ export class GenerateTaskReportComponent {
         next: (res: any) => {
           if (res.messageType === 'Success' && res.status) {
             swal.fire('Success', 'Task saved successfully', 'success');
-
             this.items.clear();
+            this.taskForm.reset();
             this.addItem();
           } else {
             swal.fire(
@@ -345,7 +353,8 @@ export class GenerateTaskReportComponent {
       Mail_CC: fv.CcMail,
       User_ID: this.userId,
       Superior_ID: fv.superiorId,
-      Date: formatted,
+      Date: fv.Date,
+      Task_Report_Code:fv.TaskNo
     };
 
     var index = 0;
@@ -425,7 +434,7 @@ export class GenerateTaskReportComponent {
     const MM = String(d.getMinutes()).padStart(2, '0');
     const SS = String(d.getSeconds()).padStart(2, '0');
 
-    return `${dd}/${mm}/${yyyy} ${HH}:${MM}:${SS}`;
+    return `${yyyy}/${mm}/${dd} ${HH}:${MM}:${SS}`;
   }
 
   /**
@@ -525,6 +534,8 @@ export class GenerateTaskReportComponent {
 
           this.taskForm.controls['ToMail'].setValue(data[0].Mail_TO);
           this.taskForm.controls['CcMail'].setValue(data[0].Mail_CC);
+          this.taskForm.controls['TaskNo'].setValue(data[0].Task_Report_Code);
+          this.taskForm.controls['Date'].setValue(data[0].Date);
 
           JSON.parse(results.data).Tables1.forEach((item: any) => {
             formArray.push(
