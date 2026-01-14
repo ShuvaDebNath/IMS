@@ -61,7 +61,10 @@ PIReport: any[] = [];
       PIId: [''],
       SuperiorId: [''],
       ClientId: [''],
-    });
+    });    
+
+    this.dateForm.get('fromDate')?.setValue(new Date().toISOString().split('T')[0]);
+    this.dateForm.get('toDate')?.setValue(new Date().toISOString().split('T')[0]);
   }
   getInitialData() {
     var ProcedureData = {

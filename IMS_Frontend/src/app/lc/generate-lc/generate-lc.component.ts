@@ -78,7 +78,7 @@ export class GenerateLcComponent {
       Consignee_Name: [''],
       LCReceivingDateByDraft: [''],
       LCReceivingDateOrgBank: [''],
-      LCNo: [''],
+      LCNo: ['', [Validators.required]],
       LCValue: ['', [Validators.required]],
       IssueDate: ['', [Validators.required]],
       ExpiryDate: [''],

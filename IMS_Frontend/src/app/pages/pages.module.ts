@@ -124,13 +124,58 @@ import { ReturnGoodsApplicationComponent } from '../application/return-goods-app
 import { ChallanComponent } from '../challan/challan.component';
 import { UserListComponent } from '../user/user-list/user-list.component';
 import { UserCreateComponent } from '../user/user-create/user-create.component';
-import { A11yModule } from "@angular/cdk/a11y";
+import { A11yModule } from '@angular/cdk/a11y';
 import { AllTaskReportComponent } from '../task-report/all-task-report/all-task-report.component';
 import { AllTaskDetailsReportComponent } from '../task-report/all-task-details-report/all-task-details-report.component';
 import { GenerateTaskReportComponent } from '../task-report/generate-task-report/generate-task-report.component';
 import { CalendarModule } from 'primeng/calendar';
-
-
+import { ColorListComponent } from '../master-entry/color/color-list/color-list.component';
+import { ColorCreateComponent } from '../master-entry/color/color-create/color-create.component';
+import { DeliveyConditionListComponent } from '../master-entry/Delivery-Condition/delivey-condition-list/delivey-condition-list.component';
+import { DeliveyConditionCreateComponent } from '../master-entry/Delivery-Condition/delivey-condition-create/delivey-condition-create.component';
+import { TermsOfDeliveryListComponent } from '../master-entry/Terms-of-Delivery/terms-of-delivery-list/terms-of-delivery-list.component';
+import { TermsOfDeliveryCreateComponent } from '../master-entry/Terms-of-Delivery/terms-of-delivery-create/terms-of-delivery-create.component';
+import { ForceMajeureListComponent } from '../master-entry/Force-Majeure/force-majeure-list/force-majeure-list.component';
+import { ForceMajeureCreateComponent } from '../master-entry/Force-Majeure/force-majeure-create/force-majeure-create.component';
+import { LoadingModeListComponent } from '../master-entry/Loading-Mode/loading-mode-list/loading-mode-list.component';
+import { LoadingModeCreateComponent } from '../master-entry/Loading-Mode/loading-mode-create/loading-mode-create.component';
+import { PackagingListComponent } from '../master-entry/Packaging/packaging-list/packaging-list.component';
+import { PackagingCreateComponent } from '../master-entry/Packaging/packaging-create/packaging-create.component';
+import { PackingListComponent } from '../master-entry/Packing/packing-list/packing-list.component';
+import { PaymentTermsListComponent } from '../master-entry/Payment-Terms/payment-terms-list/payment-terms-list.component';
+import { PackingCreateComponent } from '../master-entry/Packing/packing-create/packing-create.component';
+import { PaymentTermsCreateComponent } from '../master-entry/Payment-Terms/payment-terms-create/payment-terms-create.component';
+import { PriceTermsListComponent } from '../master-entry/Price-Terms/price-terms-list/price-terms-list.component';
+import { PriceTermsCreateComponent } from '../master-entry/Price-Terms/price-terms-create/price-terms-create.component';
+import { ShipmentConditionListComponent } from '../master-entry/Shipment-Condition/shipment-condition-list/shipment-condition-list.component';
+import { ShipmentConditionCreateComponent } from '../master-entry/Shipment-Condition/shipment-condition-create/shipment-condition-create.component';
+import { PIBottomPriceCreateComponent } from '../master-entry/PI-Bottom-Price/pi-bottom-price-create/pi-bottom-price-create.component';
+import { PIBottomPriceListComponent } from '../master-entry/PI-Bottom-Price/pi-bottom-price-list/pi-bottom-price-list.component';
+import { WidthListComponent } from '../master-entry/Width/width-list/width-list.component';
+import { WidthCreateComponent } from '../master-entry/Width/width-create/width-create.component';
+import { UnitListComponent } from '../master-entry/Unit/unit-list/unit-list.component';
+import { UnitCreateComponent } from '../master-entry/Unit/unit-create/unit-create.component';
+import { RawMaterialListComponent } from '../master-entry/Raw-Material/raw-material-list/raw-material-list.component';
+import { RawMaterialCreateComponent } from '../master-entry/Raw-Material/raw-material-create/raw-material-create.component';
+import { MaterialListComponent } from '../master-entry/Material/material-list/material-list.component';
+import { MaterialCreateComponent } from '../master-entry/Material/material-create/material-create.component';
+import { FinishedGoodsListComponent } from '../master-entry/Finished-Goods/finished-goods-list/finished-goods-list.component';
+import { FinishedGoodsCreateComponent } from '../master-entry/Finished-Goods/finished-goods-create/finished-goods-create.component';
+import { SupplierListComponent } from '../master-entry/Supplier/supplier-list/supplier-list.component';
+import { SupplierCreateComponent } from '../master-entry/Supplier/supplier-create/supplier-create.component';
+import { StockLocationCreateComponent } from '../master-entry/Stock-Location/stock-location-create/stock-location-create.component';
+import { StockLocationListComponent } from '../master-entry/Stock-Location/stock-location-list/stock-location-list.component';
+import { LoadingPortListComponent } from '../master-entry/Loading-Port/loading-port-list/loading-port-list.component';
+import { LoadingPortCreateComponent } from '../master-entry/Loading-Port/loading-port-create/loading-port-create.component';
+import { DestinationPortListComponent } from '../master-entry/Destination-Port/destination-port-list/destination-port-list.component';
+import { DestinationPortCreateComponent } from '../master-entry/Destination-Port/destination-port-create/destination-port-create.component';
+import { GoodsDescListComponent } from '../master-entry/Goods-Desc/goods-desc-list/goods-desc-list.component';
+import { GoodsDescCreateComponent } from '../master-entry/Goods-Desc/goods-desc-create/goods-desc-create.component';
+import { InterliningDescCreateComponent } from '../master-entry/Interlining-Desc/interlining-desc-create/interlining-desc-create.component';
+import { InterliningDescListComponent } from '../master-entry/Interlining-Desc/interlining-desc-list/interlining-desc-list.component';
+import { CurrencyCreateComponent } from '../MasterEntry/Currency/currency-create/currency-create.component';
+import { CurrencyListComponent } from '../MasterEntry/Currency/currency-list/currency-list.component';
+import { PiListComponent } from "../PI/pi-list/pi-list.component";
 
 const CustomSelectOptions: INgxSelectOptions = {
   // Check the interface for more options
@@ -157,12 +202,10 @@ const CustomSelectOptions: INgxSelectOptions = {
     AllCommercialInvoiceComponent,
     GeneratePiComponent,
     LandingPageComponent,
-    DeliveredPiComponent,
-    AllPiComponent,
     AllCashReceiveComponent,
     GenerateCashReceiveComponent,
     CashReceiveDetailsComponent,
-    CashReceiveUpdateComponent, 
+    CashReceiveUpdateComponent,
     GeneratePiComponent,
     GenerateCpiComponent,
     AllSalesContractComponent,
@@ -198,7 +241,7 @@ const CustomSelectOptions: INgxSelectOptions = {
     GenerateBuyingHouseComponent,
     AllBuyingHouseComponent,
     GeneratePiComponent,
-    BeneficiaryListComponent,  
+    BeneficiaryListComponent,
     PendingRmImportListComponent,
     ImportedRmListComponent,
     RmReturnListToSupplierComponent,
@@ -215,7 +258,7 @@ const CustomSelectOptions: INgxSelectOptions = {
     ResolvedFgReturnListComponent,
     AllFgSentReportComponent,
     SampleRequestInsertFormComponent,
-    SampleRequestFormComponent,    
+    SampleRequestFormComponent,
     SampleRequestListComponent,
     AllReportComponent,
     MessengerReportComponent,
@@ -228,6 +271,53 @@ const CustomSelectOptions: INgxSelectOptions = {
     PiAmendmentApplicationComponent,
     CancelPiApplicationComponent,
     ExchangeGoodsApplicationComponent,
+    ReturnGoodsApplicationComponent,
+    ColorListComponent,
+    ColorCreateComponent,
+    DeliveyConditionListComponent,
+    DeliveyConditionCreateComponent,
+    TermsOfDeliveryListComponent,
+    TermsOfDeliveryCreateComponent,
+    ForceMajeureListComponent,
+    ForceMajeureCreateComponent,
+    LoadingModeListComponent,
+    LoadingModeCreateComponent,
+    PackagingListComponent,
+    PackagingCreateComponent,
+    PackingListComponent,
+    PackingCreateComponent,
+    PaymentTermsListComponent,
+    PaymentTermsCreateComponent,
+    PriceTermsListComponent,
+    PriceTermsCreateComponent,
+    ShipmentConditionListComponent,
+    ShipmentConditionCreateComponent,
+    PIBottomPriceCreateComponent,
+    PIBottomPriceListComponent,
+    WidthListComponent,
+    WidthCreateComponent,
+    UnitListComponent,
+    UnitCreateComponent,
+    RawMaterialListComponent,
+    RawMaterialCreateComponent,
+    MaterialListComponent,
+    MaterialCreateComponent,
+    FinishedGoodsListComponent,
+    FinishedGoodsCreateComponent,
+    SupplierListComponent,
+    SupplierCreateComponent,
+    StockLocationCreateComponent,
+    StockLocationListComponent,
+    LoadingPortListComponent,
+    LoadingPortCreateComponent,
+    DestinationPortListComponent,
+    DestinationPortCreateComponent,
+    GoodsDescListComponent,
+    GoodsDescCreateComponent,
+    InterliningDescCreateComponent,
+    InterliningDescListComponent,
+    CurrencyCreateComponent,
+    CurrencyListComponent,
     ReturnGoodsApplicationComponent,
     UserListComponent,
     UserCreateComponent,
@@ -316,13 +406,28 @@ const CustomSelectOptions: INgxSelectOptions = {
                     component: ChallanComponent,
                 },
                 { path: 'raw-material-stock', component: RawMaterialStockComponent },
-                { path: 'finish-goods-stock', component: FinishGoodsInfoWithStockComponent },
+                {
+                    path: 'finish-goods-stock',
+                    component: FinishGoodsInfoWithStockComponent,
+                },
                 { path: 'send-finish-goods', component: SendFinishGoodsComponent },
-                { path: 'pending-fg-sent-list-production', component: PendingFinishGoodsSentListProductionComponent },
-                { path: 'received-fg-list-production', component: ReceivedFinishGoodsProductionComponent },
+                {
+                    path: 'pending-fg-sent-list-production',
+                    component: PendingFinishGoodsSentListProductionComponent,
+                },
+                {
+                    path: 'received-fg-list-production',
+                    component: ReceivedFinishGoodsProductionComponent,
+                },
                 { path: 'barcode-generate', component: BarcodeGenerateComponent },
-                { path: 'pending-fg-sent-list-warehouse', component: PendingFinishGoodsSentListWarehouseComponent },
-                { path: 'received-fg-list-warehouse', component: ReceivedFinishGoodsWarehouseComponent },
+                {
+                    path: 'pending-fg-sent-list-warehouse',
+                    component: PendingFinishGoodsSentListWarehouseComponent,
+                },
+                {
+                    path: 'received-fg-list-warehouse',
+                    component: ReceivedFinishGoodsWarehouseComponent,
+                },
                 {
                     path: 'finish-goods-stock',
                     component: FinishGoodsInfoWithStockComponent,
@@ -404,241 +509,207 @@ const CustomSelectOptions: INgxSelectOptions = {
                 { path: 'fullapproved-pi', component: FullApprovePiComponent },
                 { path: 'all-customers', component: AllCustomersComponent },
                 { path: 'generate-customers', component: GenerateCustomerComponent },
-                { path: 'unapproved-customers', component: UnapprovedCustomerComponent },
+                {
+                    path: 'unapproved-customers',
+                    component: UnapprovedCustomerComponent,
+                },
                 { path: 'all-buying-house', component: AllBuyingHouseComponent },
-                { path: 'generate-buying-house', component: GenerateBuyingHouseComponent },
-                { path: 'unapproved-buying-house', component: UnapprovedBuyingHouseComponent },
-                { path: 'export-raw-material', component: ExportRawMaterialComponent },
+                {
+                    path: 'generate-buying-house',
+                    component: GenerateBuyingHouseComponent,
+                },
+                {
+                    path: 'unapproved-buying-house',
+                    component: UnapprovedBuyingHouseComponent,
+                },
+                {
+                    path: 'export-raw-material',
+                    component: ExportRawMaterialComponent,
+                },
                 { path: 'otw-raw-material', component: OtwRawMaterialComponent },
-                { path: 'all-rm-export-report', component: AllRmExportReportComponent },
-                { path: 'resolved-return-list', component: ResolvedReturnListComponent },
-                { path: 'pending-return-list', component: PendingReturnListComponent },
+                {
+                    path: 'all-rm-export-report',
+                    component: AllRmExportReportComponent,
+                },
+                {
+                    path: 'resolved-return-list',
+                    component: ResolvedReturnListComponent,
+                },
+                {
+                    path: 'pending-return-list',
+                    component: PendingReturnListComponent,
+                },
                 { path: 'pi-report', component: PiReportComponent },
-                { path: 'pi-bottom-price-report', component: PiBottomPriceReportComponent },
-                { path: 'delivery-log-report', component: DeliveryLogReportComponent },
+                {
+                    path: 'pi-bottom-price-report',
+                    component: PiBottomPriceReportComponent,
+                },
+                {
+                    path: 'delivery-log-report',
+                    component: DeliveryLogReportComponent,
+                },
                 { path: 'fullapproved-pi', component: FullApprovePiComponent },
-                { path: 'pending-rm-import-list', component: PendingRmImportListComponent },
+                {
+                    path: 'pending-rm-import-list',
+                    component: PendingRmImportListComponent,
+                },
                 { path: 'imported-rm-list', component: ImportedRmListComponent },
-                { path: 'rm-return-list-to', component: RmReturnListToSupplierComponent },
-                { path: 'rm-return-from-production', component: RmReturnListFromProductionComponent },
-                { path: 'finished-good-return-list', component: FinishedGoodReturnListComponent },
+                {
+                    path: 'rm-return-list-to',
+                    component: RmReturnListToSupplierComponent,
+                },
+                {
+                    path: 'rm-return-from-production',
+                    component: RmReturnListFromProductionComponent,
+                },
+                {
+                    path: 'finished-good-return-list',
+                    component: FinishedGoodReturnListComponent,
+                },
                 { path: 'rm-issue-report', component: RmIssueReportComponent },
-                { path: 'finished-good-return-list', component: FinishedGoodReturnListComponent },
+                {
+                    path: 'finished-good-return-list',
+                    component: FinishedGoodReturnListComponent,
+                },
                 { path: 'delivery', component: DeliveryComponent },
                 { path: 'all-customers', component: AllCustomersComponent },
                 { path: 'generate-customers', component: GenerateCustomerComponent },
-                { path: 'unapproved-customers', component: UnapprovedCustomerComponent },
-                { path: 'all-buying-house', component: AllBuyingHouseComponent },
-                { path: 'generate-buying-house', component: GenerateBuyingHouseComponent },
-                { path: 'unapproved-buying-house', component: UnapprovedBuyingHouseComponent },
                 {
-                    path: "beneficiary-list", component: BeneficiaryListComponent
+                    path: 'unapproved-customers',
+                    component: UnapprovedCustomerComponent,
                 },
-                { path: 'pending-fg-return-list', component: PendingFgReturnListComponent },
-                { path: 'resolved-fg-return-list', component: ResolvedFgReturnListComponent },
+                { path: 'all-buying-house', component: AllBuyingHouseComponent },
+                {
+                    path: 'generate-buying-house',
+                    component: GenerateBuyingHouseComponent,
+                },
+                {
+                    path: 'unapproved-buying-house',
+                    component: UnapprovedBuyingHouseComponent,
+                },
+                {
+                    path: 'beneficiary-list',
+                    component: BeneficiaryListComponent,
+                },
+                {
+                    path: 'pending-fg-return-list',
+                    component: PendingFgReturnListComponent,
+                },
+                {
+                    path: 'resolved-fg-return-list',
+                    component: ResolvedFgReturnListComponent,
+                },
                 { path: 'all-fg-sent-report', component: AllFgSentReportComponent },
-                { path: 'sample-request-edit-form', component: SampleRequestFormComponent },
-                { path: 'sample-request-form', component: SampleRequestInsertFormComponent },
-                { path: 'sample-request-list', component: SampleRequestListComponent },
+                {
+                    path: 'sample-request-edit-form',
+                    component: SampleRequestFormComponent,
+                },
+                {
+                    path: 'sample-request-form',
+                    component: SampleRequestInsertFormComponent,
+                },
+                {
+                    path: 'sample-request-list',
+                    component: SampleRequestListComponent,
+                },
                 { path: 'all-report', component: AllReportComponent },
                 { path: 'messsenger-report', component: MessengerReportComponent },
                 { path: 'all-application', component: AllApplicationComponent },
-                { path: 'generate-application', component: GenerateApplicationComponent },
-                { path: 'approve-application', component: ApproveApplicationComponent },
-                { path: 'pi-amendment-application', component: PiAmendmentApplicationComponent },
-                { path: 'cancel-pi-application', component: CancelPiApplicationComponent },
-                { path: 'exchange-goods-application', component: ExchangeGoodsApplicationComponent },
-                { path: 'return-goods-application', component: ReturnGoodsApplicationComponent },
+                {
+                    path: 'generate-application',
+                    component: GenerateApplicationComponent,
+                },
+                {
+                    path: 'approve-application',
+                    component: ApproveApplicationComponent,
+                },
+                {
+                    path: 'pi-amendment-application',
+                    component: PiAmendmentApplicationComponent,
+                },
+                {
+                    path: 'cancel-pi-application',
+                    component: CancelPiApplicationComponent,
+                },
+                {
+                    path: 'exchange-goods-application',
+                    component: ExchangeGoodsApplicationComponent,
+                },
+                {
+                    path: 'return-goods-application',
+                    component: ReturnGoodsApplicationComponent,
+                },
                 { path: 'user-list', component: UserListComponent },
                 { path: 'user-create', component: UserCreateComponent },
+                { path: 'currency-create', component: CurrencyCreateComponent },
+                { path: 'currency-list', component: CurrencyListComponent },
+                {
+                    path: 'payment-terms-create',
+                    component: PaymentTermsCreateComponent,
+                },
+                { path: 'payment-terms-list', component: PaymentTermsListComponent },
+                {
+                    path: 'finish-goods-create',
+                    component: FinishedGoodsCreateComponent,
+                },
+                { path: 'finish-goods-list', component: FinishedGoodsListComponent },
+                {
+                    path: 'raw-material-create',
+                    component: RawMaterialCreateComponent,
+                },
+                { path: 'raw-material-list', component: RawMaterialListComponent },
+                { path: 'material-create', component: MaterialCreateComponent },
+                { path: 'material-list', component: MaterialListComponent },
+                { path: 'supplier-list', component: SupplierListComponent },
+                { path: 'supplier-create', component: SupplierCreateComponent },
+                {
+                    path: 'interlining-desc-list',
+                    component: InterliningDescListComponent,
+                },
+                {
+                    path: 'interlining-desc-create',
+                    component: InterliningDescCreateComponent,
+                },
+                { path: 'goods-desc-create', component: GoodsDescCreateComponent },
+                { path: 'goods-desc-list', component: GoodsDescListComponent },
+                {
+                    path: 'terms-of-delivery-list',
+                    component: TermsOfDeliveryListComponent,
+                },
+                {
+                    path: 'terms-of-delivery-create',
+                    component: TermsOfDeliveryCreateComponent,
+                },
+                {
+                    path: 'delivery-condition-list',
+                    component: DeliveyConditionListComponent,
+                },
+                {
+                    path: 'delivery-condition-create',
+                    component: DeliveyConditionCreateComponent,
+                },
+                {
+                    path: 'pi-bottom-price-list',
+                    component: PIBottomPriceListComponent,
+                },
+                {
+                    path: 'pi-bottom-price-create',
+                    component: PIBottomPriceCreateComponent,
+                },
+                {
+                    path: 'all-task-report',
+                    component: AllTaskReportComponent,
+                },
+                {
+                    path: 'all-task-details-report',
+                    component: AllTaskDetailsReportComponent,
+                },
+                {
+                    path: 'generate-task-report',
+                    component: GenerateTaskReportComponent,
+                },
             ],
         },
-      {
-        path: '',
-        component: PagesComponent,
-        children: [
-          { path: 'dashboard', component: BaseContentComponent },
-          { path: 'role-list', component: RoleListComponent },
-          { path: 'create-role', component: RoleCreateComponent },
-          { path: 'access-panel', component: AccessPanelComponent },
-          { path: 'create-raw-material', component: CreatePageComponent },
-          { path: 'edit-raw-material', component: EditPageComponent },
-          { path: 'list-raw-material', component: ListPageComponent },
-          {
-            path: 'pending-rm-requisition-production',
-            component: PendingRMRequisitionProductionComponent,
-          },
-          {
-            path: 'pending-rm-requisition-warehouse',
-            component: PendingRMRequisitionWareHouseComponent,
-          },
-          {
-            path: 'accepted-rm-requisition-warehouse',
-            component: AcceptedRMRequisitionWareHouseComponent,
-          },
-          {
-            path: 'issued-rm-requisition-production',
-            component: IssuedRMRequisitionProductionComponent,
-          },
-          {
-            path: 'received-raw-material-production',
-            component: ReceivedRMListComponent,
-          },
-          {
-            path: 'all-rm-requisition-list',
-            component: AllRMRequisitionListComponent,
-          },
-          {
-            path: 'issued-rm-requisition-list-warehouse',
-            component: IssuedRMRequisitionListWarehouseComponent,
-          },
-          {
-            path: 'Challan',
-            component: ChallanComponent,
-          },
-          { path: 'raw-material-stock', component: RawMaterialStockComponent },
-          { path: 'finish-goods-stock', component: FinishGoodsInfoWithStockComponent },
-          { path: 'send-finish-goods', component: SendFinishGoodsComponent },
-          { path: 'pending-fg-sent-list-production', component: PendingFinishGoodsSentListProductionComponent },
-          { path: 'received-fg-list-production', component: ReceivedFinishGoodsProductionComponent },
-          { path: 'barcode-generate', component: BarcodeGenerateComponent },
-          { path: 'pending-fg-sent-list-warehouse', component: PendingFinishGoodsSentListWarehouseComponent },
-          { path: 'received-fg-list-warehouse', component: ReceivedFinishGoodsWarehouseComponent },
-          {
-            path: 'finish-goods-stock',
-            component: FinishGoodsInfoWithStockComponent,
-          },
-          {
-            path: 'pending-rm-requisition/edit/:reqId',
-            loadComponent: () =>
-              import(
-                '../production/requisition/raw-material-requisition/edit/PendingRMRequisitionProduction/pending-rm-requisition-production-edit.component'
-              ).then((m) => m.PendingRMRequisitionProductionEditComponent),
-          },
-          { path: 'change-password', component: ChangePasswordComponent },
-          { path: 'landing-page', component: LandingPageComponent },
-          { path: 'all-lc', component: AllLcComponent },
-          { path: 'generate-lc', component: GenerateLcComponent },
-          {
-            path: 'all-commercial-invoice',
-            component: AllCommercialInvoiceComponent,
-          },
-          {
-            path: 'generate-commercial-invoice',
-            component: GenerateCommercialInvoiceComponent,
-          },
-          { path: 'generate-pi', component: GeneratePiComponent },
-          {
-            path: 'arbitration-create',
-            component: ArbitrationCreateComponent,
-          },
-          {
-            path: 'arbitration-list',
-            component: ArbitrationListComponent,
-          },
-          {
-            path: 'beneficiary-create',
-            component: BeneficiaryCreateComponent,
-          },
-          {
-            path: 'beneficiarybank-create',
-            component: BeneficiarybankCreateComponent,
-          },
-          {
-            path: 'beneficiarybank-list',
-            component: BeneficiaryBankListComponent,
-          },
-          {
-            path: 'applicantbank-create',
-            component: ApplicantbankCreateComponent,
-          },
-          {
-            path: 'applicantbank-list',
-            component: ApplicantbankListComponent,
-          },
-          { path: 'all-pi', component: AllPiComponent },
-          { path: 'delivered-pi', component: DeliveredPiComponent },
-          { path: 'all-cash-receive', component: AllCashReceiveComponent },
-          {
-            path: 'generate-cash-receive',
-            component: GenerateCashReceiveComponent,
-          },
-          {
-            path: 'cash-receive-details',
-            component: CashReceiveDetailsComponent,
-          },
-          {
-            path: 'cash-receive-update',
-            component: CashReceiveUpdateComponent,
-          },
-          { path: 'generate-cpi', component: GenerateCpiComponent },
-          {
-            path: 'generate-sales-contract',
-            component: GenerateSalesContractComponent,
-          },
-          { path: 'all-sales-contract', component: AllSalesContractComponent },
-          {
-            path: 'sales-contract-details',
-            component: SalesContractDetailsComponent,
-          },
-          { path: 'generate-cpi', component: GenerateCpiComponent },
-          { path: 'unapproved-pi', component: UnApprovePiComponent },
-          { path: 'partialapproved-pi', component: PartialApprovePiComponent },
-          { path: 'quarterapproved-pi', component: QuarterApprovePiComponent },
-          { path: 'fullapproved-pi', component: FullApprovePiComponent },
-          { path: 'all-customers', component: AllCustomersComponent },
-          { path: 'generate-customers', component: GenerateCustomerComponent },
-          { path: 'unapproved-customers', component: UnapprovedCustomerComponent },
-          { path: 'all-buying-house', component: AllBuyingHouseComponent },
-          { path: 'generate-buying-house', component: GenerateBuyingHouseComponent },
-          { path: 'unapproved-buying-house', component: UnapprovedBuyingHouseComponent },
-          { path: 'export-raw-material', component: ExportRawMaterialComponent },
-          { path: 'otw-raw-material', component: OtwRawMaterialComponent },
-          { path: 'all-rm-export-report', component: AllRmExportReportComponent },
-          { path: 'resolved-return-list', component: ResolvedReturnListComponent },
-          { path: 'pending-return-list', component: PendingReturnListComponent },       
-          { path: 'pi-report', component: PiReportComponent },
-          { path: 'pi-bottom-price-report', component: PiBottomPriceReportComponent },
-          { path: 'delivery-log-report', component: DeliveryLogReportComponent },
-          { path: 'fullapproved-pi', component: FullApprovePiComponent },
-          { path: 'pending-rm-import-list', component: PendingRmImportListComponent },
-          { path: 'imported-rm-list', component: ImportedRmListComponent },
-          { path: 'rm-return-list-to', component: RmReturnListToSupplierComponent },
-          { path: 'rm-return-from-production', component: RmReturnListFromProductionComponent },
-          { path: 'finished-good-return-list', component: FinishedGoodReturnListComponent },
-          { path: 'rm-issue-report', component: RmIssueReportComponent },
-          { path: 'finished-good-return-list', component: FinishedGoodReturnListComponent },
-          { path: 'delivery', component: DeliveryComponent },
-          { path: 'all-customers', component: AllCustomersComponent },
-          { path: 'generate-customers', component: GenerateCustomerComponent },
-          { path: 'unapproved-customers', component: UnapprovedCustomerComponent },
-          { path: 'all-buying-house', component: AllBuyingHouseComponent },
-          { path: 'generate-buying-house', component: GenerateBuyingHouseComponent },
-          { path: 'unapproved-buying-house', component: UnapprovedBuyingHouseComponent },
-          {
-            path: "beneficiary-list", component: BeneficiaryListComponent
-          },
-          { path: 'pending-fg-return-list', component: PendingFgReturnListComponent },
-          { path: 'resolved-fg-return-list', component: ResolvedFgReturnListComponent },
-          { path: 'all-fg-sent-report', component: AllFgSentReportComponent },
-          { path: 'sample-request-edit-form', component: SampleRequestFormComponent },
-          { path: 'sample-request-form', component: SampleRequestInsertFormComponent },
-          { path: 'sample-request-list', component: SampleRequestListComponent },
-          { path: 'all-report', component: AllReportComponent },
-          { path: 'messsenger-report', component: MessengerReportComponent },
-          { path: 'all-task-report', component: AllTaskReportComponent },
-          { path: 'all-task-details-report', component: AllTaskDetailsReportComponent },
-          { path: 'generate-task-report', component: GenerateTaskReportComponent },
-          { path: 'all-application', component: AllApplicationComponent },
-          { path: 'generate-application', component: GenerateApplicationComponent },
-          { path: 'approve-application', component: ApproveApplicationComponent },
-          { path: 'pi-amendment-application', component: PiAmendmentApplicationComponent },
-          { path: 'cancel-pi-application', component: CancelPiApplicationComponent },
-          { path: 'exchange-goods-application', component: ExchangeGoodsApplicationComponent },
-          { path: 'return-goods-application', component: ReturnGoodsApplicationComponent },
-        ],
-      },
-
     ]),
     BrowserAnimationsModule,
     ModalModule.forRoot(),
@@ -648,7 +719,8 @@ const CustomSelectOptions: INgxSelectOptions = {
     AccordionModule.forRoot(),
     UiSwitchModule,
     MatPaginatorModule,
-    A11yModule
+    A11yModule,
+    PiListComponent,
 ],
 })
-export class PagesModule { }
+export class PagesModule {}

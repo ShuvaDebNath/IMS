@@ -56,16 +56,11 @@
             
             <div class="col-md-6">
                 <label class="control-label" for="inlineFormInputGroup">Exp Date</label>
-                <div class="input-group mb-2">
-                    <div class="input-group-sm input-group-prepend">
-                    <div class="input-group-text theme-btn" (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
-                    </div>
-                    <input type="text" autocomplete="off" formControlName="ExpDate" [bsConfig]="{
-                    dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-bg'
-                    }" class=" form-control bg-white" id="ExpDate" name="ExpDate" placeholder="From Date"
-                    #dpfrom="bsDatepicker" bsDatepicker readonly />
-                </div>
+                 <input
+                  type="date"
+                  formControlName="ExpDate"
+                  class="form-control"
+                />
             </div>
             <div class="col-md-6">
                 <label class="control-label" for="inlineFormInputGroup">Be No.</label>
@@ -79,16 +74,11 @@
             
             <div class="col-md-6">
                 <label class="control-label" for="inlineFormInputGroup">Be No. Date</label>
-                <div class="input-group mb-2">
-                    <div class="input-group-sm input-group-prepend">
-                    <div class="input-group-text theme-btn" (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
-                    </div>
-                    <input type="text" autocomplete="off" formControlName="BeDate" [bsConfig]="{
-                    dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-bg'
-                    }" class="form-control bg-white" id="BeDate" name="BeDate" placeholder="From Date"
-                    #dpfrom="bsDatepicker" bsDatepicker readonly />
-                </div>
+                 <input
+                  type="date"
+                  formControlName="BeDate"
+                  class="form-control"
+                />
             </div>
             <div class="col-md-6">
                 <label class="control-label" for="inlineFormInputGroup">Ep No.</label>
@@ -102,16 +92,11 @@
             
             <div class="col-md-6">
                 <label class="control-label" for="inlineFormInputGroup">Ep No. Date</label>
-                <div class="input-group mb-2">
-                    <div class="input-group-sm input-group-prepend">
-                    <div class="input-group-text  theme-btn" (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
-                    </div>
-                    <input type="text" autocomplete="off" formControlName="EpDate" [bsConfig]="{
-                    dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-bg'
-                    }" class=" form-control bg-white" id="EpDate" name="EpDate" placeholder="From Date"
-                    #dpfrom="bsDatepicker" bsDatepicker readonly />
-                </div>
+                 <input
+                  type="date"
+                  formControlName="EpDate"
+                  class="form-control"
+                />
             </div>
             
             <div class="col-md-6">
@@ -152,16 +137,11 @@
             </div>
             <div class="col-md-6">
                 <label class="control-label" for="inlineFormInputGroup">Sailing on or about</label>
-                <div class="input-group mb-2">
-                    <div class="input-group-sm input-group-prepend">
-                    <div class="input-group-text theme-btn" (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
-                    </div>
-                    <input type="text" autocomplete="off" formControlName="SailiongOnOrAbout" [bsConfig]="{
-                    dateInputFormat: 'DD/MM/YYYY',
-                    containerClass: 'theme-bg'
-                    }" class=" form-control bg-white" id="SailiongOnOrAbout" name="SailiongOnOrAbout" placeholder="From Date"
-                    #dpfrom="bsDatepicker" bsDatepicker readonly />
-                </div>
+                <input
+                  type="date"
+                  formControlName="SailiongOnOrAbout"
+                  class="form-control"
+                />
             </div>
             <div class="col-md-6"></div>
             <div class="col-md-6">
