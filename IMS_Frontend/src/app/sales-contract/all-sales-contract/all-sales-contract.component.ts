@@ -49,7 +49,7 @@ export class AllSalesContractComponent {
   toDate: any;
   LCNo: string = '';
   CR_Id: any;
-  dialogId:string='';
+  dialogId: string = '';
 
   showPaginator = false;
   insertPermissions: boolean = true;
@@ -87,24 +87,8 @@ export class AllSalesContractComponent {
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
     this.title.setTitle('All Sales Contract');
 
-    var fDate = new Date();
-    const mm = String(fDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-    const dd = String(fDate.getDate()).padStart(2, '0');
-    const yyyy = fDate.getFullYear();
-
-    const formatted = `${dd}/${mm}/${yyyy}`;
-
-    const threeMonthsAgo = new Date();
-    threeMonthsAgo.setMonth(fDate.getMonth() - 3);
-
-    const mmT = String(threeMonthsAgo.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-    const ddT = String(threeMonthsAgo.getDate()).padStart(2, '0');
-    const yyyyT = threeMonthsAgo.getFullYear();
-
-    const formattedT = `${ddT}/${mmT}/${yyyyT}`;
-
-    this.SearchForm.get('fromDate')?.setValue(formattedT);
-    this.SearchForm.get('toDate')?.setValue(formatted);
+    this.SearchForm.get('fromDate')?.setValue(new Date().toISOString().split('T')[0]);
+    this.SearchForm.get('toDate')?.setValue(new Date().toISOString().split('T')[0]);
 
     this.Search();
   }
@@ -265,29 +249,17 @@ export class AllSalesContractComponent {
 
         excelBtn?.addEventListener('click', () => {
           swal.close();
-          this.reportService.PrintSalescontractReport(
-              item,
-              'excel',
-              'F'
-            );
+          this.reportService.PrintSalescontractReport(item, 'excel', 'F');
         });
 
         wordBtn?.addEventListener('click', () => {
           swal.close();
-          this.reportService.PrintSalescontractReport(
-              item,
-              'word',
-              'F'
-            );
+          this.reportService.PrintSalescontractReport(item, 'word', 'F');
         });
 
         pdfBtn?.addEventListener('click', () => {
           swal.close();
-          this.reportService.PrintSalescontractReport(
-              item,
-              'pdf',
-              'F'
-            );
+          this.reportService.PrintSalescontractReport(item, 'pdf', 'F');
         });
       },
     });

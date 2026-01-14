@@ -1,7 +1,13 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ButtonModule } from 'primeng/button';
@@ -13,26 +19,40 @@ import { GlobalServiceService } from 'src/app/services/Global-service.service';
 import Swal from 'sweetalert2';
 import { DividerModule } from 'primeng/divider';
 import { FieldsetModule } from 'primeng/fieldset';
-import { DropdownModule } from "primeng/dropdown";
+import { DropdownModule } from 'primeng/dropdown';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 import { GetDataModel } from 'src/app/models/GetDataModel';
 import { Router } from '@angular/router';
 import { ReportService } from 'src/app/services/reportService/report-service.service';
+import { getDate } from 'ngx-bootstrap/chronos/utils/date-getters';
 
 @Component({
-  standalone:true,
+  standalone: true,
   selector: 'app-pi-list',
   templateUrl: './pi-list.component.html',
   styleUrls: ['./pi-list.component.css'],
-  imports: [FormsModule,ReactiveFormsModule, CommonModule, TableModule, InputTextModule, DialogModule, ButtonModule, BsDatepickerModule, DividerModule, FieldsetModule, DropdownModule, RouterModule]
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    TableModule,
+    InputTextModule,
+    DialogModule,
+    ButtonModule,
+    BsDatepickerModule,
+    DividerModule,
+    FieldsetModule,
+    DropdownModule,
+    RouterModule,
+  ],
 })
 export class PiListComponent implements OnInit {
-  @Input() PiStatus!:any;
+  @Input() PiStatus!: any;
   isLoading: boolean = false;
   datePipe = new DatePipe('en-US');
-  DataTable!:any[];
-  PIData!:any;
-  PIDetails!:any[];
+  DataTable!: any[];
+  PIData!: any;
+  PIDetails!: any[];
   UserList: any[] = [];
   // Totals for PI details table
   totalsOrderQty: number = 0;
@@ -40,21 +60,24 @@ export class PiListComponent implements OnInit {
   totalsAmount: number = 0;
   totalsProdCost: number = 0;
   totalsRolls: number = 0;
-  PITypeList:any[]=[{value:1,text:'LC'},{value:2,text:'Cash'}];
-  first: any=1;
-  rows: any=10;
+  PITypeList: any[] = [
+    { value: 1, text: 'LC' },
+    { value: 2, text: 'Cash' },
+  ];
+  first: any = 1;
+  rows: any = 10;
   totalRecords!: number;
-  isViewDetails: boolean=false;  
+  isViewDetails: boolean = false;
   PageTitle: any;
 
-  ShowbtnPar:boolean=false;
-  ShowbtnQar:boolean=false;
-  ShowbtnFull:boolean=false;
-  ShowbtnRej:boolean=false;
-  ShowbtnSpecial:boolean=false;
+  ShowbtnPar: boolean = false;
+  ShowbtnQar: boolean = false;
+  ShowbtnFull: boolean = false;
+  ShowbtnRej: boolean = false;
+  ShowbtnSpecial: boolean = false;
 
   SearchFormgroup!: FormGroup;
-  selectedRows: any[] = []; 
+  selectedRows: any[] = [];
 
   insertPermissions: boolean = true;
   updatePermissions: boolean = true;
@@ -62,8 +85,8 @@ export class PiListComponent implements OnInit {
   printPermissions: boolean = true;
   allPermissions: boolean = true;
 
-   isDeliveryDetailsVisible = false;
-   deliveryDetailsData: any = null;
+  isDeliveryDetailsVisible = false;
+  deliveryDetailsData: any = null;
   // Delivery totals
   deliveryTotalsOrdered: number = 0;
   deliveryTotalsDelivered: number = 0;
@@ -75,15 +98,15 @@ export class PiListComponent implements OnInit {
   isSpecialApprovalVisible: boolean = false;
   specialApprovalSaveEnabled: boolean = false;
 
-
-  constructor( private service:MasterEntryService,
-      private getDataService: GetDataService,
-      private gs: GlobalServiceService,
-      private title: Title,
-      private fb: FormBuilder,
-      private router: Router,      
-      private reportService:ReportService,
-  ) { }
+  constructor(
+    private service: MasterEntryService,
+    private getDataService: GetDataService,
+    private gs: GlobalServiceService,
+    private title: Title,
+    private fb: FormBuilder,
+    private router: Router,
+    private reportService: ReportService
+  ) {}
 
   /**
    * Open the generate-pi route in a new browser tab with PI_No as query param.
@@ -104,7 +127,7 @@ export class PiListComponent implements OnInit {
       this.router.navigate(['/generate-pi'], { queryParams: { PI_No: piNo } });
     }
   }
-  
+
   computeDeliveryTotals(items: any[]) {
     this.deliveryTotalsOrdered = 0;
     this.deliveryTotalsDelivered = 0;
@@ -134,16 +157,11 @@ export class PiListComponent implements OnInit {
       User_ID: [''],
       PIType: [''],
       PageNumber: [''],
-      PageSize : ['']
+      PageSize: [''],
     });
-
- 
   }
 
-
-
   ngOnInit() {
-
     this.DataTable = [];
 
     this.ShowbtnPar = false;
@@ -153,7 +171,7 @@ export class PiListComponent implements OnInit {
     this.ShowbtnSpecial = false;
 
     if (this.PiStatus == 'Pending') {
-      this.PageTitle = 'Unapproved PI'
+      this.PageTitle = 'Unapproved PI';
       this.ShowbtnPar = true;
       this.ShowbtnQar = true;
       this.ShowbtnFull = true;
@@ -168,9 +186,8 @@ export class PiListComponent implements OnInit {
       if (!this.printPermissions) {
         window.location.href = 'dashboard';
       }
-    }
-    else if (this.PiStatus == 'Partial Approved') {
-      this.PageTitle = 'Partially Approved PI'
+    } else if (this.PiStatus == 'Partial Approved') {
+      this.PageTitle = 'Partially Approved PI';
       this.ShowbtnQar = true;
       this.ShowbtnFull = true;
       this.ShowbtnSpecial = true;
@@ -184,9 +201,8 @@ export class PiListComponent implements OnInit {
       if (!this.printPermissions) {
         window.location.href = 'dashboard';
       }
-    }
-    else if (this.PiStatus == 'Quartar Approved') {
-      this.PageTitle = 'Quartar Approved PI'
+    } else if (this.PiStatus == 'Quartar Approved') {
+      this.PageTitle = 'Quartar Approved PI';
       this.ShowbtnFull = true;
       this.ShowbtnSpecial = true;
 
@@ -199,22 +215,8 @@ export class PiListComponent implements OnInit {
       if (!this.printPermissions) {
         window.location.href = 'dashboard';
       }
-    }
-    else if (this.PiStatus == 'Full Approved') {
-      this.PageTitle = 'Full Approved PI'
-
-      var permissions = this.gs.CheckUserPermission(this.PageTitle);
-      this.insertPermissions = permissions.insertPermissions;
-      this.updatePermissions = permissions.updatePermissions;
-      this.deletePermissions = permissions.deletePermissions;
-      this.printPermissions = permissions.printPermissions;
-      
-      if (!this.printPermissions) {
-        window.location.href = 'dashboard';
-      }
-    }
-    else if (this.PiStatus == 'Delivered') {
-      this.PageTitle = 'Delivered PI'
+    } else if (this.PiStatus == 'Full Approved') {
+      this.PageTitle = 'Full Approved PI';
 
       var permissions = this.gs.CheckUserPermission(this.PageTitle);
       this.insertPermissions = permissions.insertPermissions;
@@ -225,9 +227,20 @@ export class PiListComponent implements OnInit {
       if (!this.printPermissions) {
         window.location.href = 'dashboard';
       }
-    }
-    else if (this.PiStatus == 'ALL') {
-      this.PageTitle = 'All PI'
+    } else if (this.PiStatus == 'Delivered') {
+      this.PageTitle = 'Delivered PI';
+
+      var permissions = this.gs.CheckUserPermission(this.PageTitle);
+      this.insertPermissions = permissions.insertPermissions;
+      this.updatePermissions = permissions.updatePermissions;
+      this.deletePermissions = permissions.deletePermissions;
+      this.printPermissions = permissions.printPermissions;
+
+      if (!this.printPermissions) {
+        window.location.href = 'dashboard';
+      }
+    } else if (this.PiStatus == 'ALL') {
+      this.PageTitle = 'All PI';
 
       var permissions = this.gs.CheckUserPermission(this.PageTitle);
       this.insertPermissions = permissions.insertPermissions;
@@ -244,27 +257,30 @@ export class PiListComponent implements OnInit {
     //this.LoadTableData('');
     // this.LoadTableData();
     this.GenerateSearchFrom();
+
+    this.SearchFormgroup.controls.FromDate.setValue(new Date())
+    this.SearchFormgroup.controls.ToDate.setValue(new Date())
   }
-  ReloadTable(event:any) {
+  ReloadTable(event: any) {
     this.first = event.first;
     this.rows = event.rows;
-    this.first=(this.first/this.rows)+1;
+    this.first = this.first / this.rows + 1;
     this.LoadTableData('');
   }
-OpenSpecialApprove(Id:number){
-  this.isSpecialApprovalVisible = true;
-  this.specialApprovalMaxDeliverable = 0; // Reset percentage for each row
-  this.specialApprovalSaveEnabled = false; // Reset save button state
-  this.ViewDetails(Id, true);
-}
-  ViewDetails(Id:number, fromSpecialApprove: boolean = false){
+  OpenSpecialApprove(Id: number) {
+    this.isSpecialApprovalVisible = true;
+    this.specialApprovalMaxDeliverable = 0; // Reset percentage for each row
+    this.specialApprovalSaveEnabled = false; // Reset save button state
+    this.ViewDetails(Id, true);
+  }
+  ViewDetails(Id: number, fromSpecialApprove: boolean = false) {
     const procedureData = {
-        procedureName: 'usp_ProformaInvoice_GetDataById',
-        parameters: {
-          PI_Master_ID :Id
-        }
-      };
-   
+      procedureName: 'usp_ProformaInvoice_GetDataById',
+      parameters: {
+        PI_Master_ID: Id,
+      },
+    };
+
     this.isViewDetails = !fromSpecialApprove;
     this.getDataService.GetInitialData(procedureData).subscribe({
       next: (results) => {
@@ -278,187 +294,191 @@ OpenSpecialApprove(Id:number){
           this.gs.Logout();
         }
       },
-      error: (err) => { },
+      error: (err) => {},
     });
   }
 
-
   GetInitialData(): void {
-    
-      const procedureData = {
-        procedureName: 'usp_GetUserInfo_With_Superior',
-        parameters: {
-          UserId :this.gs.getSessionData('userId'),
-        }
-      };
-     
-      this.getDataService.GetInitialData(procedureData).subscribe({
-        next: (results) => {
-          if (results.status) {
-            this.UserList = JSON.parse(results.data).Tables1;
+    const procedureData = {
+      procedureName: 'usp_GetUserInfo_With_Superior',
+      parameters: {
+        UserId: this.gs.getSessionData('userId'),
+      },
+    };
 
-            if (this.UserList.length === 1) {
-              this.SearchFormgroup.controls['User_ID'].setValue(this.UserList[0].User_ID);
-            }
+    this.getDataService.GetInitialData(procedureData).subscribe({
+      next: (results) => {
+        if (results.status) {
+          this.UserList = JSON.parse(results.data).Tables1;
 
-          } else if (results.msg == 'Invalid Token') {
-            Swal.fire('Session Expired!', 'Please Login Again.', 'info');
-            this.gs.Logout();
-            this.isLoading = false;
+          if (this.UserList.length === 1) {
+            this.SearchFormgroup.controls['User_ID'].setValue(
+              this.UserList[0].User_ID
+            );
           }
-        },
-        error: (err) => { this.isLoading = false; },
-      });
-    }
+        } else if (results.msg == 'Invalid Token') {
+          Swal.fire('Session Expired!', 'Please Login Again.', 'info');
+          this.gs.Logout();
+          this.isLoading = false;
+        }
+      },
+      error: (err) => {
+        this.isLoading = false;
+      },
+    });
+  }
 
-  LoadTableData(type:any=''): void {
+  LoadTableData(type: any = ''): void {
     this.SearchFormgroup.controls['PageNumber'].setValue(this.first);
     this.SearchFormgroup.controls['PageSize'].setValue(this.rows);
-    let permas=this.SearchFormgroup.value;
+    let permas = this.SearchFormgroup.value;
 
-    this.DataTable=[];
+    this.DataTable = [];
     this.isLoading = true;
 
-    var getRole = ''
+    var getRole = '';
 
     getRole = this.gs.getSessionData('roleId');
     var userID = this.gs.getSessionData('userId');
 
-      const procedureData = {
-        procedureName: 'usp_ProformaInvoice_GetDataDataTable',
-        parameters: {
-          PINO :permas.PINo?permas.PINo:'',
-          FromDate :permas.FromDate? this.datePipe.transform(permas.FromDate, 'yyyy-MM-dd') :'',
-          ToDate :permas.ToDate? this.datePipe.transform(permas.ToDate, 'yyyy-MM-dd') :'',
-          Shipper :permas.Shipper?permas.Shipper:'',
-          Consignee :permas.Consignee?permas.Consignee:'',
-          CreateBY : getRole == '1' || getRole == '2' ? 
-                    (permas.User_ID?permas.User_ID:'') : 
-                    (permas.User_ID?permas.User_ID:userID),
-          PIType :permas.PIType?permas.PIType:null,
-          PI_Status   : this.PiStatus,
-          PageNumber   : this.first,
-          PageSize    : this.rows
+    const procedureData = {
+      procedureName: 'usp_ProformaInvoice_GetDataDataTable',
+      parameters: {
+        PINO: permas.PINo ? permas.PINo : '',
+        FromDate: permas.FromDate
+          ? this.datePipe.transform(permas.FromDate, 'yyyy-MM-dd')
+          : '',
+        ToDate: permas.ToDate
+          ? this.datePipe.transform(permas.ToDate, 'yyyy-MM-dd')
+          : '',
+        Shipper: permas.Shipper ? permas.Shipper : '',
+        Consignee: permas.Consignee ? permas.Consignee : '',
+        CreateBY:
+          getRole == '1' || getRole == '2'
+            ? permas.User_ID
+              ? permas.User_ID
+              : ''
+            : permas.User_ID
+            ? permas.User_ID
+            : userID,
+        PIType: permas.PIType ? permas.PIType : null,
+        PI_Status: this.PiStatus,
+        PageNumber: this.first,
+        PageSize: this.rows,
+      },
+    };
+
+    console.log(procedureData);
+
+    this.getDataService.GetInitialData(procedureData).subscribe({
+      next: (results) => {
+        if (results.status) {
+          this.DataTable = JSON.parse(results.data).Tables1;
+          this.totalRecords = this.DataTable[0]?.TotalCount;
+          this.isLoading = false;
+          console.log(this.DataTable);
+        } else if (results.msg == 'Invalid Token') {
+          Swal.fire('Session Expired!', 'Please Login Again.', 'info');
+          this.gs.Logout();
+          this.isLoading = false;
         }
-      };
+      },
+      error: (err) => {
+        this.isLoading = false;
+      },
+    });
+  }
 
-     console.log(procedureData);
-     
-      this.getDataService.GetInitialData(procedureData).subscribe({
-        next: (results) => {
-          if (results.status) {
-            this.DataTable = JSON.parse(results.data).Tables1;
-            this.totalRecords=this.DataTable[0]?.TotalCount;  
-            this.isLoading = false;
-             console.log(this.DataTable);
+  clearField() {
+    this.GenerateSearchFrom();
+    this.LoadTableData();
+  }
 
-          } else if (results.msg == 'Invalid Token') {
-            Swal.fire('Session Expired!', 'Please Login Again.', 'info');
-            this.gs.Logout();
-            this.isLoading = false;
-          }
-        },
-        error: (err) => { this.isLoading = false; },
-      });
+  getSelectedRows(status: string) {
+    if (this.selectedRows.length <= 0) {
+      return;
     }
+    const selectedIds = this.selectedRows.map((r) => r.PI_Master_ID);
 
-    clearField() {
-      this.GenerateSearchFrom();
-      this.LoadTableData();
-    }
+    Swal.fire({
+      title: `Do you want to ${status}?`,
+      showDenyButton: true,
+      confirmButtonText: 'Yes',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        selectedIds.forEach((id: any) => {
+          let queryParams = { Status: status, LastUpdateDate: new Date() };
+          let condition = { PI_Master_ID: id };
 
-
-    getSelectedRows(status:string) {
-      if (this.selectedRows.length<=0) {
-        return;
-      }
-      const selectedIds = this.selectedRows.map(r => r.PI_Master_ID);
-
-      Swal.fire({
-        title: `Do you want to ${status}?`,
-        showDenyButton: true,
-        confirmButtonText: "Yes",
-      }).then((result) => {
-
-        if (result.isConfirmed) {
-
-          selectedIds.forEach((id:any)=>{
-            let queryParams={Status:status,LastUpdateDate:new Date()};
-            let condition={PI_Master_ID:id};
-            
-            this.service.UpdateData(queryParams,condition,'tbl_pi_master').subscribe({
+          this.service
+            .UpdateData(queryParams, condition, 'tbl_pi_master')
+            .subscribe({
               next: (results) => {
-
                 if (results.status) {
-
-                  Swal.fire(results.messageType, results.message, 'success').then(()=>{
+                  Swal.fire(
+                    results.messageType,
+                    results.message,
+                    'success'
+                  ).then(() => {
                     this.ngOnInit();
                   });
-                } 
-                else if (results.message == 'Invalid Token') {
+                } else if (results.message == 'Invalid Token') {
                   Swal.fire('Session Expired!', 'Please Login Again.', 'info');
                   this.gs.Logout();
                 }
               },
-              error: (err) => { },
+              error: (err) => {},
             });
-          });
-        }
-      });
-    }
-
-    DeleteData(item: any) {
-        
-        Swal
-          .fire({
-            title: 'Wait!',
-            html: `<span>Once you delete, you won't be able to revert this!<br> <b>[${item.PINo}]</b></span>`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!',
-          })
-          .then((result) => {
-            if (result.isConfirmed == true) {
-              let param = new GetDataModel();
-              param.procedureName = 'usp_ProformaInvoice_Delete';
-              param.parameters = {
-                PI_Id: item.PI_Master_ID,
-              };
-    
-              this.service.GetInitialData(param).subscribe({
-                next: (results: any) => {
-                  
-                  if (results.status) {
-                    var effectedRows = JSON.parse(results.data).Tables1;
-                    if (effectedRows[0].AffectedRows > 0) {
-                      Swal
-                        .fire({
-                          text: `Data Deleted Successfully !`,
-                          title: `Delete Successfully!`,
-                          icon: 'success',
-                          timer: 5000,
-                        })
-                        .then((result) => {
-                          this.ngOnInit();
-                          this.LoadTableData();
-                        });
-                    }
-                  } else if (results.message == 'Invalid Token') {
-                    Swal.fire('Session Expired!', 'Please Login Again.', 'info');
-                    this.gs.Logout();
-                  } else {
-                  }
-                },
-                error: (err) => {},
-              });
-            }
-          });
+        });
       }
+    });
+  }
+
+  DeleteData(item: any) {
+    Swal.fire({
+      title: 'Wait!',
+      html: `<span>Once you delete, you won't be able to revert this!<br> <b>[${item.PINo}]</b></span>`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed == true) {
+        let param = new GetDataModel();
+        param.procedureName = 'usp_ProformaInvoice_Delete';
+        param.parameters = {
+          PI_Id: item.PI_Master_ID,
+        };
+
+        this.service.GetInitialData(param).subscribe({
+          next: (results: any) => {
+            if (results.status) {
+              var effectedRows = JSON.parse(results.data).Tables1;
+              if (effectedRows[0].AffectedRows > 0) {
+                Swal.fire({
+                  text: `Data Deleted Successfully !`,
+                  title: `Delete Successfully!`,
+                  icon: 'success',
+                  timer: 5000,
+                }).then((result) => {
+                  this.ngOnInit();
+                  this.LoadTableData();
+                });
+              }
+            } else if (results.message == 'Invalid Token') {
+              Swal.fire('Session Expired!', 'Please Login Again.', 'info');
+              this.gs.Logout();
+            } else {
+            }
+          },
+          error: (err) => {},
+        });
+      }
+    });
+  }
 
   OpenDeliveryDetails(PI_Master_ID: any) {
-
     const procedureData = {
       procedureName: 'usp_ProformaInvoice_DeliveryDetails_with_LCInfo',
       parameters: { PI_Master_ID: PI_Master_ID },
@@ -490,7 +510,7 @@ OpenSpecialApprove(Id:number){
         ),
     });
   }
-  
+
   /** Compute totals for the currently loaded PIDetails */
   computePidTotals() {
     this.totalsOrderQty = 0;
@@ -523,24 +543,66 @@ OpenSpecialApprove(Id:number){
     }
   }
 
-   Print(){
+
+  Print() {
     var item = {
-      'PI_Master_ID': this.PIData?.PI_Master_ID,
-      "IsMPI": this.PIData?.IsMPI 
-    }
-    
-    this.reportService.PrintProformaInvoiceRequest(item, 'pdf','T');
+      PI_Master_ID: this.PIData?.PI_Master_ID,
+      IsMPI: this.PIData?.IsMPI,
+    };
+
+    Swal.fire({
+      title: 'What you want to do?',
+      icon: 'question',
+      html: `
+                      <div style="display: flex; gap: 10px; justify-content: center;">
+                        <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
+                          <i class="fa fa-file-excel"></i> Excel
+                        </button>
+                        <button id="wordBtn" class="btn btn-info" style="padding: 8px 16px;">
+                          <i class="fa fa-file-word"></i> Word
+                        </button>
+                        <button id="pdfBtn" class="btn btn-danger" style="padding: 8px 16px;">
+                          <i class="fa fa-file-pdf"></i> PDF
+                        </button>
+                      </div>
+                    `,
+      showConfirmButton: false,
+      didOpen: () => {
+        const excelBtn = document.getElementById('excelBtn');
+        const wordBtn = document.getElementById('wordBtn');
+        const pdfBtn = document.getElementById('pdfBtn');
+
+
+        excelBtn?.addEventListener('click', () => {
+          Swal.close();
+        this.reportService.PrintProformaInvoiceRequest(item, 'word', 'F');
+        });
+
+        wordBtn?.addEventListener('click', () => {
+          Swal.close();
+        this.reportService.PrintProformaInvoiceRequest(item, 'word', 'F');
+        });
+
+        pdfBtn?.addEventListener('click', () => {
+          Swal.close();
+        this.reportService.PrintProformaInvoiceRequest(item, 'pdf', 'F');
+        });
+      },
+    });
   }
   saveSpecialApproval() {
     const status = this.PIData?.Status || 'Partial Approved';
     const percent = this.specialApprovalMaxDeliverable;
     let valid = false;
-    let min = 0, max = 0;
+    let min = 0,
+      max = 0;
     if (status === 'Partial Approved') {
-      min = 21; max = 49;
+      min = 21;
+      max = 49;
       valid = percent >= min && percent <= max;
     } else if (status === 'Quartar Approved') {
-      min = 51; max = 99;
+      min = 51;
+      max = 99;
       valid = percent >= min && percent <= max;
     } else {
       valid = true;
@@ -548,9 +610,11 @@ OpenSpecialApprove(Id:number){
     if (!valid) {
       let msg = '';
       if (status === 'Partial Approved') {
-        msg = 'For Partial Approved, please enter a percentage between 21 and 49.';
+        msg =
+          'For Partial Approved, please enter a percentage between 21 and 49.';
       } else if (status === 'Quartar Approved') {
-        msg = 'For Quartar Approved, please enter a percentage between 51 and 99.';
+        msg =
+          'For Quartar Approved, please enter a percentage between 51 and 99.';
       } else {
         msg = 'Invalid percentage.';
       }
@@ -560,34 +624,43 @@ OpenSpecialApprove(Id:number){
     // Simulate API call for saving
     var convertActualPercent = percent / 100;
 
-     const updateParams = { CustomMaxDeliveryPercentage: convertActualPercent };
-     const updateCondition = { PI_Master_ID: this.PIData?.PI_Master_ID };
-     const updateTable = 'tbl_pi_master';
+    const updateParams = { CustomMaxDeliveryPercentage: convertActualPercent };
+    const updateCondition = { PI_Master_ID: this.PIData?.PI_Master_ID };
+    const updateTable = 'tbl_pi_master';
 
-    this.service.UpdateData(updateParams, updateCondition, updateTable).subscribe({
-      next: (res: any) => {
-        if (res.status) {
-          Swal.fire('Success', 'Special approval saved successfully.', 'success');
-          this.isSpecialApprovalVisible = false;
-        } else {
+    this.service
+      .UpdateData(updateParams, updateCondition, updateTable)
+      .subscribe({
+        next: (res: any) => {
+          if (res.status) {
+            Swal.fire(
+              'Success',
+              'Special approval saved successfully.',
+              'success'
+            );
+            this.isSpecialApprovalVisible = false;
+          } else {
+            Swal.fire('Failed', 'Failed to save special approval.', 'error');
+          }
+        },
+        error: () => {
           Swal.fire('Failed', 'Failed to save special approval.', 'error');
-        }
-      },
-      error: () => {
-        Swal.fire('Failed', 'Failed to save special approval.', 'error');
-      }
-    });
+        },
+      });
   }
   validateSpecialApprovalPercentage() {
     const status = this.PIData?.Status || 'Partial Approved';
     const percent = this.specialApprovalMaxDeliverable;
     let valid = false;
-    let min = 0, max = 0;
+    let min = 0,
+      max = 0;
     if (status === 'Partial Approved') {
-      min = 21; max = 49;
+      min = 21;
+      max = 49;
       valid = percent >= min && percent <= max;
     } else if (status === 'Quartar Approved') {
-      min = 51; max = 99;
+      min = 51;
+      max = 99;
       valid = percent >= min && percent <= max;
     } else {
       valid = true;
@@ -596,9 +669,11 @@ OpenSpecialApprove(Id:number){
     if (!valid) {
       let msg = '';
       if (status === 'Partial Approved') {
-        msg = 'For Partial Approved, please enter a percentage between 21 and 49.';
+        msg =
+          'For Partial Approved, please enter a percentage between 21 and 49.';
       } else if (status === 'Quartar Approved') {
-        msg = 'For Quartar Approved, please enter a percentage between 51 and 99.';
+        msg =
+          'For Quartar Approved, please enter a percentage between 51 and 99.';
       } else {
         msg = 'Invalid percentage.';
       }
@@ -608,13 +683,12 @@ OpenSpecialApprove(Id:number){
   }
 
   printChallan(challanNo?: string): void {
-      const no = challanNo ;
-      if (!no) {
-        Swal.fire('Error', 'Challan no missing', 'error');
-        return;
-      }
-      const payload = { Chalan_No: no };
-      this.reportService.PrintDeliveryChallanReport(payload, 'pdf', true);
+    const no = challanNo;
+    if (!no) {
+      Swal.fire('Error', 'Challan no missing', 'error');
+      return;
     }
-    
+    const payload = { Chalan_No: no };
+    this.reportService.PrintDeliveryChallanReport(payload, 'pdf', true);
+  }
 }

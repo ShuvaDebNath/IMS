@@ -1,47 +1,103 @@
-<div class="m-2 p-2 ">
+<div class="m-2 p-2">
   <div class="card shadow">
-  <div class="card-header theme-bg" >
-    <h2 class="p-2 font-weight-bold"><i class="fas fa-list-alt fa-1x"></i>&nbsp;Role List</h2>
-  </div>
-  <div class="card-body">
-    <div>
-      <div class="datatable">
-        <table  class="table table-bordered table-striped" >
-          <thead>
-              <tr>
-                <th style="text-align: center !important;" class="">SL</th>
-                <th style="text-align: center !important;" class="">Role Name</th>
-                <th style="text-align: center !important;" class="" *ngIf="allPersmissions">Action</th>
-              </tr>
-          </thead>
-          <tbody class="text-dark">
-            <tr *ngFor="let item of rows; let i = index">
-              <td style="text-align: center !important;">{{(i+1)+((pageIndex-1)*pageSize)}}</td>
-              <td class="text-center align-middle">{{item.Role_Name}}</td>
-              <td class="d-flex gap-1 justify-content-center align-items-center p-1">
-                <div>
-      <a *ngIf="updatePermissions" class="btn theme-btn-edit " target="_blank" title="Edit" [routerLink]="['/create-role']"
-                  [queryParams]="{Role_Id:item.Role_Id}"><i class="fa fa-edit" ></i></a> 
-                </div>
-                <div>
-   <button *ngIf="deletePermissions" class="btn theme-btn-view" title="Delete" (click)="DeleteRoles(item)"><i
-                    class="fas fa-trash"></i></button> 
-                </div>
-          
-             
-              </td>
-            </tr>
-          </tbody>
-        </table>        
-      </div>
+    <div class="card-header theme-bg">
+      <h2 class="p-2 font-weight-bold">
+        <i class="fas fa-list-alt fa-1x"></i>&nbsp;Role List
+      </h2>
+    </div>
+    <div class="shadow-sm p-2">
+      <p-table
+        *ngIf="tableVisible"
+        #dt
+        [value]="rows"
+        [paginator]="true"
+        [rows]="10"
+        [responsive]="true"
+        [showCurrentPageReport]="true"
+        [globalFilterFields]="[
+          'CurrencyCode',
+          'Name',
+          'ExchangeRate',
+          'IsAvailable'
+        ]"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      >
+        <ng-template pTemplate="caption">
+          <div class="table-toolbar">
+            <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                placeholder="Global Search"
+              />
+            </span>
+          </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="text-align: center !important" class="">SL</th>
+            <th style="text-align: center !important" class="">Role Name</th>
+            <th
+              style="text-align: center !important"
+              class=""
+              *ngIf="allPersmissions"
+            >
+              Action
+            </th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-item let-i="rowIndex">
+          <tr>
+            <td style="text-align: center !important">
+              {{ i + 1 + (pageIndex - 1) * pageSize }}
+            </td>
+            <td class="text-center align-middle">{{ item.Role_Name }}</td>
+            <td
+              class="d-flex gap-1 justify-content-center align-items-center p-1"
+            >
+              <div>
+                <a
+                  *ngIf="updatePermissions"
+                  class="btn theme-btn-edit"
+                  target="_blank"
+                  title="Edit"
+                  [routerLink]="['/create-role']"
+                  [queryParams]="{ Role_Id: item.Role_Id }"
+                  ><i class="fa fa-edit"></i
+                ></a>
+              </div>
+              <div>
+                <button
+                  *ngIf="deletePermissions"
+                  class="btn theme-btn-view"
+                  title="Delete"
+                  (click)="DeleteRoles(item)"
+                >
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
     </div>
   </div>
-</div>
 
-<div class="position-fixed mr-5 mb-4" style="right: 0; bottom: 0;z-index: 100;" >
-  <a class="btn btn-float btn-lg rounded-circle bg-gradient-maroon" [routerLink]="['/create-role']" target="_blank" title="Create Unit" *ngIf="insertPermissions"><i
-      class="fa fa-plus"></i></a>
+  <div
+    class="position-fixed mr-5 mb-4"
+    style="right: 0; bottom: 0; z-index: 100"
+  >
+    <a
+      class="btn btn-float btn-lg rounded-circle bg-gradient-maroon"
+      [routerLink]="['/create-role']"
+      target="_blank"
+      title="Create Unit"
+      *ngIf="insertPermissions"
+      ><i class="fa fa-plus"></i
+    ></a>
+  </div>
 </div>
-
-</div>
-

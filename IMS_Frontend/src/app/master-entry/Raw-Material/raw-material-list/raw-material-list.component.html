@@ -1,0 +1,94 @@
+<div class="container">
+  <h1 class="theme-text">ALL Raw Material  List</h1>
+
+  <div class="col-md-2">
+    <div class="d-flex align-items-center">
+      <button
+        *ngIf="insertPermissions"
+        class="btn theme-btn"
+        style="color: white"
+        routerLink="/raw-material-create"
+        target="_blank"
+      >
+        <i class="fas fa-plus"></i>&nbsp;Create New
+      </button>
+    </div>
+  </div>
+  <div class="shadow-sm p-2">
+    <p-table
+      *ngIf="tableVisible"
+      #dt
+      [value]="allRMList"
+      [paginator]="true"
+      [rows]="10"
+      [responsive]="true"
+      [showCurrentPageReport]="true"
+      [globalFilterFields]="[
+        'Article_No',
+        'Color',
+        'Width',
+        'Unit',
+        'IsAvailable',
+      ]"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    >
+      <ng-template pTemplate="caption">
+        <div class="table-toolbar">
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              type="text"
+              (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+              placeholder="Global Search"
+            />
+          </span>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="text-center">Serial No</th>
+          <th class="text-center">Article No</th>
+          <th class="text-center">Color</th>
+          <th class="text-center">Width</th>
+          <th class="text-center">Unit</th>
+          <th class="text-center">Is Available/th>
+          <th class="text-center">Action</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-ItemLIst let-i="rowIndex">
+        <tr>
+          <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
+          <td class="text-start">{{ ItemLIst.Article_No }}</td>
+          <td class="text-start">{{ ItemLIst.Color }}</td>
+          <td class="text-start">{{ ItemLIst.Width }}</td>
+          <td class="text-start">{{ ItemLIst.Unit }}</td>
+          <td class="text-start" style="color: green;" *ngIf="ItemLIst.IsAvailable==1">True</td>
+          <td class="text-start" style="color:red;" *ngIf="ItemLIst.IsAvailable==0">False</td>
+          <td class="d-flex gap-2 justify-content-center">
+            <a
+              *ngIf="updatePermissions"
+              class="btn bg-gradient-cyan btn-xs mr-2"
+              target="_blank"
+              title="Edit"
+              [routerLink]="['/raw-material-create']"
+              [queryParams]="{ RawMaterialId: ItemLIst.RawMaterial_ID }"
+              ><i class="fa fa-edit"></i
+            ></a>
+            <button
+              *ngIf="deletePermissions"
+              class="btn btn-danger btn-sm d-inline-flex align-items-center"
+              (click)="onDelete(ItemLIst)"
+              title="Delete"
+              aria-label="Delete"
+            >
+              <i class="pi pi-trash me-1"></i>
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

@@ -1982,7 +1982,7 @@
         <LeftMargin>0.2in</LeftMargin>
         <RightMargin>0.2in</RightMargin>
         <TopMargin>0.5in</TopMargin>
-        <BottomMargin>1in</BottomMargin>
+        <BottomMargin>0.1in</BottomMargin>
         <Style />
       </Page>
     </ReportSection>

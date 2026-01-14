@@ -28,6 +28,7 @@ export class RoleListComponent {
   pageSizeOptions: number[] = [];
   tableData = [];
   menu: any;
+  tableVisible:boolean =false;
 
   insertPermissions: boolean = false;
   updatePermissions: boolean = false;
@@ -115,7 +116,7 @@ export class RoleListComponent {
   
             let tables = JSON.parse(results.data);
 
-          
+            this.tableVisible =true;
             this.rows = tables.Tables1
             this.isPage=this.rows[0].totallen>10;
             this.length = this.rows[0].totallen;
