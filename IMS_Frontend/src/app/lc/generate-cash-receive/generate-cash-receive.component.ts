@@ -223,7 +223,7 @@ export class GenerateCashReceiveComponent {
     cd.System_Created_Date = this.Formgroup.value.QtyRolls;
     cd.User_ID = this.Formgroup.value.Marketing_Concern;
     cd.Last_Receive_Amount = this.Formgroup.value.ReceiveAmount;
-    cd.Total_Receive_Amount = this.Formgroup.value.ReceiveAmount;
+    cd.Total_Receive_Amount = 0;
     cd.Last_Receive_Date =
       this.Formgroup.value.ReceiveDate == undefined
         ? null
@@ -233,9 +233,11 @@ export class GenerateCashReceiveComponent {
         ? null
         : this.Formgroup.value.IssueDate;
     cd.Balance =
-      this.Formgroup.value.PIValue - this.Formgroup.value.ReceiveAmount;
+      this.Formgroup.value.PIValue ;
     cd.PI_Master_ID = this.Formgroup.value.PI;
     cd.System_Created_Date = formatted;
+
+    
 
     var TableNameMaster = 'tbl_cash_receive_master';
     var TableNameChild = 'tbl_cash_receive_detail';
@@ -262,6 +264,7 @@ export class GenerateCashReceiveComponent {
       PI_Master_ID: this.Formgroup.value.PI,
     };
 
+    console.log(cd);
     this.masterEntyService
       .SaveDataMasterDetails(
         detailsData,

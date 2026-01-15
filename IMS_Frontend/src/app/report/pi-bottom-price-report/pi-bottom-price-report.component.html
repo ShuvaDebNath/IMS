@@ -186,7 +186,7 @@
       <ng-template pTemplate="body" let-PIDetailsList let-i="rowIndex">
         <tr>
           <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
-          <td class="text-center"><div style="color: blue;" class="piNoView" (click)="piNoClick(PIDetailsList.PINo,PIDetailsList.LC_No)">{{ PIDetailsList.PINo }}</div></td>
+          <td class="text-center"><div style="color: blue;" class="piNoView" (click)="piNoClick(PIDetailsList.PINo,PIDetailsList.LC_No,PIDetailsList)">{{ PIDetailsList.PINo }}</div></td>
           <td class="text-center">{{ PIDetailsList.Date| date : "dd-MMM-yyyy" }}</td>
           <td class="text-center">{{ PIDetailsList.Consignee }}</td>
           <td class="text-center">{{ PIDetailsList.Contact_Name }}</td>

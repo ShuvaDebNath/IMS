@@ -2,7 +2,7 @@
   <h1 class="theme-text">Generate Task Report Form</h1>
 
   <br />
-  <form [formGroup]="taskForm" style="overflow: scroll;">
+  <form [formGroup]="taskForm" style="overflow: scroll">
     <!-- Header fields -->
     <div class="row mb-3">
       <div class="col-md-6">
@@ -21,11 +21,7 @@
       <div class="col-md-6">
         <label class="control-label">Date</label>
 
-        <input
-              type="date"
-              formControlName="Date"
-              class="form-control"
-            />
+        <input type="date" formControlName="Date" class="form-control" />
       </div>
     </div>
     <div class="row mb-3">
@@ -86,55 +82,40 @@
     </div>
 
     <!-- Items table -->
-    <table class="table table-bordered" style="width:160% !important;">
+    <table class="table table-bordered" style="width: 160% !important">
       <thead>
         <tr>
-          <th style="text-align: center">Buyer Name</th>
+          <th style="text-align: center">Buying House</th>
           <th style="text-align: center">Customer Name</th>
           <th style="text-align: center">In Time</th>
           <th style="text-align: center">Out Time</th>
-          <th style="text-align: center">Type</th>
-          <th style="text-align: center">Discussion</th>
-          <th style="text-align: center">Purpose</th>
+          <th style="text-align: center">Old/New</th>
+          <th>Already Receive Order Article</th>
+          <th>Unit Price USD</th>
+          <th>Unit Price BDT</th>
+          <th>Prod. Cost Unit</th>
+          <th>First order received time</th>
+          <th>Latest order received time</th>
           <th style="text-align: center">Payment Issue</th>
           <th style="text-align: center">Commercial Issue</th>
           <th style="text-align: center">Sample Submit</th>
+          <th style="text-align: center">Remarks</th>
           <th style="width: 60px"></th>
         </tr>
       </thead>
 
-      <tbody formArrayName="items" style="width: 160% !important;">
+      <tbody formArrayName="items" style="width: 160% !important">
         <tr
           *ngFor="let item of items.controls; let i = index"
           [formGroupName]="i"
         >
           <td>
-            <div class="form-group">
-              <p-dropdown appendTo="body"
-                class="p-0 rm-dd"
-                [panelStyle]="{ width: '300px' }"
-                [options]="BuyerList"
-                optionLabel="Buyer_Name"
-                optionValue="Id"
-                [filter]="true"
-                filterBy="Buyer_Name"
-                [showClear]="true"
-                placeholder="Please Select"
-                formControlName="Buyer_Name"
-                [virtualScroll]="true"
-                [virtualScrollItemSize]="30"
-              >
-                <ng-template let-article pTemplate="item">
-                  <div class="flex align-items-center gap-2">
-                    <div>{{ article.Buyer_Name }}</div>
-                  </div>
-                </ng-template>
-              </p-dropdown>
-            </div>
-          </td>
+						<input class="form-control form-control-sm" formControlName="Buyer" />
+					</td>
           <td>
             <div class="form-group">
-              <p-dropdown appendTo="body"
+              <p-dropdown
+                appendTo="body"
                 class="p-0 rm-dd"
                 [panelStyle]="{ width: '300px' }"
                 [options]="CustomerList"
@@ -158,7 +139,8 @@
           </td>
 
           <td class="col-description">
-            <p-calendar appendTo="body"
+            <p-calendar
+              appendTo="body"
               inputId="calendar-24h"
               formControlName="InTime"
               [showTime]="true"
@@ -167,7 +149,8 @@
           </td>
 
           <td class="col-description">
-            <p-calendar appendTo="body"
+            <p-calendar
+              appendTo="body"
               inputId="calendar-24h"
               formControlName="OutTime"
               [showTime]="true"
@@ -194,7 +177,8 @@
           </td>
           <td>
             <div class="form-group">
-              <p-dropdown appendTo="body"
+              <p-dropdown
+                appendTo="body"
                 class="p-0 rm-dd"
                 [panelStyle]="{ width: '300px' }"
                 [options]="type"
@@ -216,23 +200,52 @@
               </p-dropdown>
             </div>
           </td>
-          <td class="col-description">
-            <textarea
+
+          <td>
+            <input
               class="form-control form-control-sm"
-              formControlName="discussion"
-              required="true"
-            ></textarea>
+              formControlName="AlreadyReceivedArticle"
+            />
           </td>
-          <td class="col-description">
-            <textarea
+
+          <td>
+            <input
               class="form-control form-control-sm"
-              formControlName="purpose"
-              required="true"
-            ></textarea>
+              formControlName="UnitPriceUSD"
+            />
+          </td>
+
+          <td>
+            <input
+              class="form-control form-control-sm"
+              formControlName="UnitPriceBDT"
+            />
+          </td>
+
+          <td>
+            <input
+              class="form-control form-control-sm"
+              formControlName="ProdCostUnit"
+            />
+          </td>
+
+          <td>
+            <input
+              class="form-control form-control-sm"
+              formControlName="FirstOrderReceivedTime"
+            />
+          </td>
+
+          <td>
+            <input
+              class="form-control form-control-sm"
+              formControlName="LatestOrderReceivedTime"
+            />
           </td>
           <td>
             <div class="form-group">
-              <p-dropdown appendTo="body"
+              <p-dropdown
+                appendTo="body"
                 class="p-0 rm-dd"
                 [panelStyle]="{ width: '300px' }"
                 [options]="solveList"
@@ -256,7 +269,8 @@
           </td>
           <td>
             <div class="form-group">
-              <p-dropdown appendTo="body"
+              <p-dropdown
+                appendTo="body"
                 class="p-0 rm-dd"
                 [panelStyle]="{ width: '300px' }"
                 [options]="solveList"
@@ -282,6 +296,13 @@
             <textarea
               class="form-control form-control-sm"
               formControlName="SampleSubmit"
+              required="true"
+            ></textarea>
+          </td>
+          <td class="col-description">
+            <textarea
+              class="form-control form-control-sm"
+              formControlName="discussion"
               required="true"
             ></textarea>
           </td>

@@ -171,8 +171,13 @@ export class GenerateTaskReportComponent {
         InTime: this.fb.control<string | null>(null, Validators.required),
         OutTime: this.fb.control<string | null>(null, Validators.required),
         Type: this.fb.control<string | null>(null, Validators.required),
-        discussion: this.fb.control<string | null>(null, Validators.required),
-        purpose: this.fb.control<string | null>(null, Validators.required),
+        remarks: this.fb.control<string | null>(null, Validators.required),
+        AlreadyReceivedArticle: this.fb.control<string | null>(null),
+        UnitPriceUSD: this.fb.control<string | null>(null),
+        UnitPriceBDT: this.fb.control<string | null>(null),
+        ProdCostUnit: this.fb.control<string | null>(null),
+        FirstOrderReceivedTime: this.fb.control<string | null>(null),
+        LatestOrderReceivedTime: this.fb.control<string | null>(null),
         PaymentIssue: this.fb.control<string | null>(null, Validators.required),
         CommercialIssue: this.fb.control<string | null>(
           null,
@@ -185,7 +190,6 @@ export class GenerateTaskReportComponent {
 
     this.items.push(row);
   }
-
 
   removeItem(i: number) {
     this.items.removeAt(i);
@@ -305,15 +309,20 @@ export class GenerateTaskReportComponent {
         InTime: this.formatDateTime(i.InTime),
         OutTime: this.formatDateTime(i.OutTime),
         Customer_ID: custId,
-        Discussion: i.discussion ?? i.description ?? '',
+        Discussion: i.remarks ,
         Customer_name: customerDisplay,
         Task_Report_ID: '',
-        BuyerId: Buyer_Name,
+        Buyer: i.Buyer,
         Type: Type,
         PaymentIssue: PaymentIssue,
         CommercialIssue: CommercialIssue,
         SampleSubmit: SampleSubmit,
-        Purpose: i.purpose
+        Already_Receive_Order_Article: i.AlreadyReceivedArticle,
+        Unit_Price_USD: i.UnitPriceUSD,
+        Unit_Price_BDT: i.UnitPriceBDT,
+        Prod_Cost_Unit: i.ProdCostUnit,
+        First_Received_Time: i.FirstOrderReceivedTime,
+        Latest_Order_Receive_Time: i.LatestOrderReceivedTime,
       };
     });
 
@@ -404,7 +413,7 @@ export class GenerateTaskReportComponent {
         (c: any) => String(c.Customer_ID) === String(custId)
       );
       console.log(i);
-      
+
       const customerDisplay = cust ? cust.CustomerName : '';
       const Location = cust ? cust.Customer_Address : '';
       const customerPhone = cust ? cust.Phone_No : '';
@@ -427,7 +436,7 @@ export class GenerateTaskReportComponent {
         PaymentIssue: PaymentIssue,
         CommercialIssue: CommercialIssue,
         SampleSubmit: SampleSubmit,
-        Purpose: i.purpose
+        Purpose: i.purpose,
       };
     });
 
@@ -442,8 +451,7 @@ export class GenerateTaskReportComponent {
       Task_Report_ID: this.TaskId,
     };
 
-    console.log((detailRows));
-    
+    console.log(detailRows);
 
     this.doubleMasterEntryService
       .UpdateDataMasterDetails(
@@ -598,9 +606,7 @@ export class GenerateTaskReportComponent {
           this.taskForm.controls['ToMail'].setValue(data[0].Mail_TO);
           this.taskForm.controls['CcMail'].setValue(data[0].Mail_CC);
           this.taskForm.controls['TaskNo'].setValue(data[0].Task_Report_Code);
-          this.taskForm.controls['Date'].setValue(
-            localDate
-          );
+          this.taskForm.controls['Date'].setValue(localDate);
 
           JSON.parse(results.data).Tables1.forEach((item: any) => {
             formArray.push(
