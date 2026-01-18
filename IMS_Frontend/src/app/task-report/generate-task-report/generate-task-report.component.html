@@ -90,17 +90,17 @@
           <th style="text-align: center">In Time</th>
           <th style="text-align: center">Out Time</th>
           <th style="text-align: center">Old/New</th>
-          <th>Already Receive Order Article</th>
-          <th>Unit Price USD</th>
-          <th>Unit Price BDT</th>
-          <th>Prod. Cost Unit</th>
-          <th>First order received time</th>
-          <th>Latest order received time</th>
+          <th style="text-align: center">Already Receive Order Article</th>
+          <th style="text-align: center">Unit Price USD</th>
+          <th style="text-align: center">Unit Price BDT</th>
+          <th style="text-align: center">Prod. Cost Unit</th>
+          <th style="text-align: center">First order received time</th>
+          <th style="text-align: center">Latest order received time</th>
           <th style="text-align: center">Payment Issue</th>
           <th style="text-align: center">Commercial Issue</th>
           <th style="text-align: center">Sample Submit</th>
           <th style="text-align: center">Remarks</th>
-          <th style="width: 60px"></th>
+          <th></th>
         </tr>
       </thead>
 
@@ -110,7 +110,7 @@
           [formGroupName]="i"
         >
           <td>
-						<input class="form-control form-control-sm" formControlName="Buyer" />
+						<input class="form-control form-control-sm" formControlName="Buyer" style="width: 180px;"/>
 					</td>
           <td>
             <div class="form-group">
@@ -205,6 +205,7 @@
             <input
               class="form-control form-control-sm"
               formControlName="AlreadyReceivedArticle"
+              style="width: 180px;"
             />
           </td>
 
@@ -212,6 +213,7 @@
             <input
               class="form-control form-control-sm"
               formControlName="UnitPriceUSD"
+              style="width: 180px;"
             />
           </td>
 
@@ -219,6 +221,7 @@
             <input
               class="form-control form-control-sm"
               formControlName="UnitPriceBDT"
+              style="width: 180px;"
             />
           </td>
 
@@ -226,6 +229,7 @@
             <input
               class="form-control form-control-sm"
               formControlName="ProdCostUnit"
+              style="width: 180px;"
             />
           </td>
 
@@ -233,6 +237,7 @@
             <input
               class="form-control form-control-sm"
               formControlName="FirstOrderReceivedTime"
+              style="width: 180px;"
             />
           </td>
 
@@ -240,6 +245,7 @@
             <input
               class="form-control form-control-sm"
               formControlName="LatestOrderReceivedTime"
+              style="width: 180px;"
             />
           </td>
           <td>
@@ -296,6 +302,7 @@
             <textarea
               class="form-control form-control-sm"
               formControlName="SampleSubmit"
+              style="width: 180px;"
               required="true"
             ></textarea>
           </td>
@@ -303,6 +310,7 @@
             <textarea
               class="form-control form-control-sm"
               formControlName="discussion"
+              style="width: 180px;"
               required="true"
             ></textarea>
           </td>

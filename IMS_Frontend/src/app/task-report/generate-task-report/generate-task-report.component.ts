@@ -71,7 +71,7 @@ export class GenerateTaskReportComponent {
     private gs: GlobalServiceService,
     private activeLink: ActivatedRoute,
     private title: Title,
-    private masterEntryService: MasterEntryService
+    private masterEntryService: MasterEntryService,
   ) {}
 
   ngOnInit(): void {
@@ -181,11 +181,11 @@ export class GenerateTaskReportComponent {
         PaymentIssue: this.fb.control<string | null>(null, Validators.required),
         CommercialIssue: this.fb.control<string | null>(
           null,
-          Validators.required
+          Validators.required,
         ),
         SampleSubmit: this.fb.control<string | null>(null, Validators.required),
       },
-      { validators: [this.outTimeAfterInValidator()] }
+      { validators: [this.outTimeAfterInValidator()] },
     );
 
     this.items.push(row);
@@ -249,7 +249,7 @@ export class GenerateTaskReportComponent {
       swal.fire(
         'Validation Error',
         'Please fill all required fields.',
-        'warning'
+        'warning',
       );
       return;
     }
@@ -286,7 +286,7 @@ export class GenerateTaskReportComponent {
       // row can store the selected customer id in CustomerName control
       const custId = i.CustomerName ?? i.CustomerId ?? null;
       const cust = this.CustomerList?.find(
-        (c: any) => String(c.Customer_ID) === String(custId)
+        (c: any) => String(c.Customer_ID) === String(custId),
       );
       console.log(cust);
 
@@ -309,7 +309,7 @@ export class GenerateTaskReportComponent {
         InTime: this.formatDateTime(i.InTime),
         OutTime: this.formatDateTime(i.OutTime),
         Customer_ID: custId,
-        Discussion: i.remarks ,
+        Discussion: i.remarks,
         Customer_name: customerDisplay,
         Task_Report_ID: '',
         Buyer: i.Buyer,
@@ -323,6 +323,8 @@ export class GenerateTaskReportComponent {
         Prod_Cost_Unit: i.ProdCostUnit,
         First_Received_Time: i.FirstOrderReceivedTime,
         Latest_Order_Receive_Time: i.LatestOrderReceivedTime,
+        Buying_House: i.Buyer,
+        Already_Receive_Order_Articl: i.ProdCostUnit,
       };
     });
 
@@ -335,7 +337,7 @@ export class GenerateTaskReportComponent {
     const now = new Date();
     const ymd = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(
       2,
-      '0'
+      '0',
     )}${String(now.getDate()).padStart(2, '0')}`;
     const username = (localStorage.getItem('userName') || '').toString();
     masterRow['Subject'] = `Employee Daily Report - ${ymd}-${username}`;
@@ -349,7 +351,7 @@ export class GenerateTaskReportComponent {
         'Task_Report_ID', // columnNamePrimary (PK)
         'Task_Report_ID', // columnNameForign (FK in child)
         'TR', // serialType (your code uses it)
-        'TR' // columnNameSerialNo (series name)
+        'TR', // columnNameSerialNo (series name)
       )
       .subscribe({
         next: (res: any) => {
@@ -362,7 +364,7 @@ export class GenerateTaskReportComponent {
             swal.fire(
               'Task Update Failed',
               res?.message || 'Task update failed.',
-              'info'
+              'info',
             );
           }
         },
@@ -377,7 +379,7 @@ export class GenerateTaskReportComponent {
       swal.fire(
         'Validation Error',
         'Please fill all required fields.',
-        'warning'
+        'warning',
       );
       return;
     }
@@ -410,7 +412,7 @@ export class GenerateTaskReportComponent {
       // row can store the selected customer id in CustomerName control
       const custId = i.CustomerName ?? i.CustomerId ?? null;
       const cust = this.CustomerList?.find(
-        (c: any) => String(c.Customer_ID) === String(custId)
+        (c: any) => String(c.Customer_ID) === String(custId),
       );
       console.log(i);
 
@@ -436,7 +438,14 @@ export class GenerateTaskReportComponent {
         PaymentIssue: PaymentIssue,
         CommercialIssue: CommercialIssue,
         SampleSubmit: SampleSubmit,
-        Purpose: i.purpose,
+        Already_Receive_Order_Article: i.AlreadyReceivedArticle,
+        Unit_Price_USD: i.UnitPriceUSD,
+        Unit_Price_BDT: i.UnitPriceBDT,
+        Prod_Cost_Unit: i.ProdCostUnit,
+        First_Received_Time: i.FirstOrderReceivedTime,
+        Latest_Order_Receive_Time: i.LatestOrderReceivedTime,
+        Buying_House: i.Buyer,
+        Already_Receive_Order_Articl: i.ProdCostUnit,
       };
     });
 
@@ -444,7 +453,7 @@ export class GenerateTaskReportComponent {
     const now = new Date();
     const ymd = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(
       2,
-      '0'
+      '0',
     )}${String(now.getDate()).padStart(2, '0')}`;
     const username = (localStorage.getItem('userName') || '').toString();
     var whereParam = {
@@ -463,7 +472,7 @@ export class GenerateTaskReportComponent {
         'Task_Report_ID', // columnNameForign (FK in child)
         'TR', // serialType (your code uses it)
         'TR', // columnNameSerialNo (series name)
-        whereParam
+        whereParam,
       )
       .subscribe({
         next: (res: any) => {
@@ -473,7 +482,7 @@ export class GenerateTaskReportComponent {
             swal.fire(
               'Task Update Failed',
               res?.message || 'Task update failed.',
-              'info'
+              'info',
             );
           }
         },
@@ -510,7 +519,7 @@ export class GenerateTaskReportComponent {
 
     // Primary match: ISO-like 'YYYY-MM-DDTHH:mm:ss' or 'YYYY-MM-DD HH:mm:ss'
     const isoMatch = s.match(
-      /^([0-9]{4})-([0-9]{2})-([0-9]{2})(?:[T\s]([0-9]{2}):([0-9]{2})(?::([0-9]{2}))?)?/
+      /^([0-9]{4})-([0-9]{2})-([0-9]{2})(?:[T\s]([0-9]{2}):([0-9]{2})(?::([0-9]{2}))?)?/,
     );
     if (isoMatch) {
       const year = Number(isoMatch[1]);
@@ -621,8 +630,15 @@ export class GenerateTaskReportComponent {
                 PaymentIssue: [item.PaymentIssue],
                 CommercialIssue: [item.CommercialIssue],
                 SampleSubmit: [item.SampleSubmit],
-                purpose: [item.Purpose],
-              })
+                Already_Receive_Order_Article: item.AlreadyReceivedArticle,
+                Unit_Price_USD: item.UnitPriceUSD,
+                Unit_Price_BDT: item.UnitPriceBDT,
+                Prod_Cost_Unit: item.ProdCostUnit,
+                First_Received_Time: item.FirstOrderReceivedTime,
+                Latest_Order_Receive_Time: item.LatestOrderReceivedTime,
+                Buying_House: item.Buyer,
+                Already_Receive_Order_Articl: item.ProdCostUnit,
+              }),
             );
           });
         } else if (results.msg == 'Invalid Token') {
