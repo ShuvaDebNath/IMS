@@ -166,12 +166,12 @@ export class GenerateTaskReportComponent {
   addItem() {
     const row = this.fb.group(
       {
-        Buyer_Name: this.fb.control<string | null>(null, Validators.required),
+        Buyer: this.fb.control<string | null>(null, Validators.required),
         CustomerName: this.fb.control<string | null>(null, Validators.required),
         InTime: this.fb.control<string | null>(null, Validators.required),
         OutTime: this.fb.control<string | null>(null, Validators.required),
         Type: this.fb.control<string | null>(null, Validators.required),
-        remarks: this.fb.control<string | null>(null, Validators.required),
+        discussion: this.fb.control<string | null>(null, Validators.required),
         AlreadyReceivedArticle: this.fb.control<string | null>(null),
         UnitPriceUSD: this.fb.control<string | null>(null),
         UnitPriceBDT: this.fb.control<string | null>(null),
@@ -309,10 +309,9 @@ export class GenerateTaskReportComponent {
         InTime: this.formatDateTime(i.InTime),
         OutTime: this.formatDateTime(i.OutTime),
         Customer_ID: custId,
-        Discussion: i.remarks,
+        Discussion: i.discussion,
         Customer_name: customerDisplay,
         Task_Report_ID: '',
-        Buyer: i.Buyer,
         Type: Type,
         PaymentIssue: PaymentIssue,
         CommercialIssue: CommercialIssue,
@@ -324,7 +323,6 @@ export class GenerateTaskReportComponent {
         First_Received_Time: i.FirstOrderReceivedTime,
         Latest_Order_Receive_Time: i.LatestOrderReceivedTime,
         Buying_House: i.Buyer,
-        Already_Receive_Order_Articl: i.ProdCostUnit,
       };
     });
 
@@ -445,7 +443,6 @@ export class GenerateTaskReportComponent {
         First_Received_Time: i.FirstOrderReceivedTime,
         Latest_Order_Receive_Time: i.LatestOrderReceivedTime,
         Buying_House: i.Buyer,
-        Already_Receive_Order_Articl: i.ProdCostUnit,
       };
     });
 
@@ -625,19 +622,17 @@ export class GenerateTaskReportComponent {
                 InTime: [this.parseISOToLocalDate(item.InTime)],
                 OutTime: [this.parseISOToLocalDate(item.OutTime)],
                 discussion: [item.Discussion],
-                Buyer_Name: [item.BuyerId],
+                Buyer: [item.Buying_House],
                 Type: [item.Type],
                 PaymentIssue: [item.PaymentIssue],
                 CommercialIssue: [item.CommercialIssue],
                 SampleSubmit: [item.SampleSubmit],
-                Already_Receive_Order_Article: item.AlreadyReceivedArticle,
-                Unit_Price_USD: item.UnitPriceUSD,
-                Unit_Price_BDT: item.UnitPriceBDT,
-                Prod_Cost_Unit: item.ProdCostUnit,
-                First_Received_Time: item.FirstOrderReceivedTime,
-                Latest_Order_Receive_Time: item.LatestOrderReceivedTime,
-                Buying_House: item.Buyer,
-                Already_Receive_Order_Articl: item.ProdCostUnit,
+                AlreadyReceivedArticle: item.Already_Receive_Order_Article,
+                UnitPriceUSD: item.Unit_Price_USD,
+                UnitPriceBDT: item.Unit_Price_BDT,
+                ProdCostUnit: item.Prod_Cost_Unit,
+                FirstOrderReceivedTime: item.First_Received_Time,
+                LatestOrderReceivedTime: item.Latest_Order_Receive_Time,
               }),
             );
           });

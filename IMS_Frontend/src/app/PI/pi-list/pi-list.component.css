@@ -25,6 +25,10 @@ select.form-control-sm {
   padding-bottom: 4px;
 }
 
+.card-primary:not(.card-outline) > .card-header{
+  background-color: orange !important;
+}
+
 .loader-wrapper {
   position: relative;
   display: flex;

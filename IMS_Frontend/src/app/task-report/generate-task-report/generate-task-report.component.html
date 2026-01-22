@@ -145,6 +145,7 @@
               formControlName="InTime"
               [showTime]="true"
               [hourFormat]="'24'"
+                [style]="{ width: '150px' }"
             />
           </td>
 
@@ -155,6 +156,7 @@
               formControlName="OutTime"
               [showTime]="true"
               [hourFormat]="'24'"
+                [style]="{ width: '150px' }"
             />
             <div
               *ngIf="
@@ -335,11 +337,7 @@
       <button
         type="submit"
         (click)="saveData()"
-        [ngClass]="{
-          'theme-btn-disable': taskForm.invalid
-        }"
         class="btn theme-btn btn-rounded"
-        [disabled]="taskForm.invalid"
         *ngIf="!isEdit"
       >
         <i class="bi bi-save me-1"></i> Save
@@ -359,3 +357,6 @@
     </div>
   </form>
 </div>
+
+
+

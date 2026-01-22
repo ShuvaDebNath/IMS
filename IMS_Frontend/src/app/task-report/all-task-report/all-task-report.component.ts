@@ -185,12 +185,14 @@ export class AllTaskReportComponent {
     this.masterEntryService.GetInitialData(param).subscribe({
       next: (results) => {
         if (results.status) {
+          
           this.detailsData = [];
           let tables = JSON.parse(results.data);
           this.detailsData = tables.Tables1;
           console.log(this.detailsData);
 
           this.detailsDataTable = tables.Tables2;
+          console.log(this.detailsDataTable);
           this.isDetailsVisible = true;
 
           //  this.isPage=this.rows[0].totallen>10;
