@@ -22,12 +22,7 @@
             <label class="control-label" for="inlineFormInputGroup"
               >To Date</label
             >
-            <input
-              type="date"
-              formControlName="toDate"
-              class="form-control"
-            />
-            
+            <input type="date" formControlName="toDate" class="form-control" />
           </div>
           <div class="col-3">
             <button
@@ -103,16 +98,14 @@
                 </button>
 
                 <a
-                  *ngIf="
-                    updatePermissions 
-                  "
+                  *ngIf="updatePermissions"
                   class="btn theme-btn-edit"
                   target="_blank"
                   title="Edit"
                   [routerLink]="['/generate-task-report']"
                   [queryParams]="{ Id: table.Task_Report_ID }"
                   ><i class="fa fa-edit"></i
-                ></a>              
+                ></a>
 
                 <button
                   *ngIf="deletePermissions"
@@ -138,7 +131,11 @@
         <ng-template pTemplate="header">
           <div class="d-flex justify-content-between align-items-center w-100">
             <span>Detail</span>
-            <button class="btn theme-btn btn-sm" title="Print" (click)="printDialog()">
+            <button
+              class="btn theme-btn btn-sm"
+              title="Print"
+              (click)="printDialog()"
+            >
               <i class="fa fa-print"></i>&nbsp; Print
             </button>
           </div>
@@ -153,20 +150,54 @@
           <p-table [value]="detailsDataTable" [responsive]="true">
             <ng-template pTemplate="header">
               <tr>
-                <th style="text-align: center">Customer Name</th>
-                <th style="text-align: center">Contact Person</th>
-                <th style="text-align: center">In Time</th>
-                <th style="text-align: center">Out Time</th>
-                <th style="text-align: center">Discussion</th>
+                <th class="text-center">Task Code</th>
+                <th class="text-center">Buyer name</th>
+                <th class="text-center">Customer Name</th>
+                <th class="text-center">Contact Person</th>
+                <th class="text-center">In Time</th>
+                <th class="text-center">Out Time</th>
+                <th class="text-center">Discussion</th>
+                <th class="text-center">Old/New</th>
+                <th class="text-center">Unit Price BDT</th>
+                <th class="text-center">Unit Price USD</th>
+                <th class="text-center">Prod Cost Unit</th>
+                <th class="text-center">First order received time</th>
+                <th class="text-center">Latest order received time</th>
+                <th class="text-center">Payment Issue</th>
+                <th class="text-center">Commercial lssue</th>
+                <th class="text-center">Sample Submit</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-item>
               <tr>
-                <td style="text-align: left">{{ item.customer_name }}</td>
-                <td style="text-align: left">{{ item.Contact_Name }}</td>
-                <td style="text-align: left">{{ item.InTime }}</td>
-                <td style="text-align: center">{{ item.OutTime }}</td>
-                <td style="text-align: center">{{ item.Discussion }}</td>
+                <td class="text-center align-middle">
+                  {{ item.Task_Report_Code }}
+                </td>
+                <td class="text-center align-middle">{{ item.Buying_House }}</td>
+                <td class="text-center align-middle">
+                  {{ item.customer_name }}
+                </td>
+                <td class="text-center align-middle">
+                  {{ item.Contact_Name }}
+                </td>
+                <td class="text-center align-middle">{{ item.InTime }}</td>
+                <td class="text-center align-middle">{{ item.OutTime }}</td>
+                <td class="text-center align-middle">{{ item.Discussion }}</td>
+                <td class="text-center align-middle">{{ item.Type }}</td>
+                <td class="text-center align-middle">{{ item.Unit_Price_BDT }}</td>
+                <td class="text-center align-middle">{{ item.Unit_Price_USD }}</td>
+                <td class="text-center align-middle">{{ item.Prod_Cost_Unit }}</td>
+                <td class="text-center align-middle">{{ item.First_Received_Time }}</td>
+                <td class="text-center align-middle">{{ item.Latest_Order_Receive_Time }}</td>
+                <td class="text-center align-middle">
+                  {{ item.PaymentIssue }}
+                </td>
+                <td class="text-center align-middle">
+                  {{ item.CommercialIssue }}
+                </td>
+                <td class="text-center align-middle">
+                  {{ item.SampleSubmit }}
+                </td>
               </tr>
             </ng-template>
           </p-table>

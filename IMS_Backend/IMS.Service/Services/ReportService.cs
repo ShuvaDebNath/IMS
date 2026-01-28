@@ -353,4 +353,76 @@ public class ReportService : IReportService
             throw ex;
         }
     }
+
+    public async Task<DataSet> TaskMonthlyReport(string fromDate, string toDate)
+    {
+        try
+        {
+
+            return await _reportRepository.TaskMonthlyReport(fromDate, toDate);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+    public async Task<DataSet> TaskMonthlyDetailsReport(string id)
+    {
+        try
+        {
+
+            return await _reportRepository.TaskMonthlyDetailsReport(id);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+    public async Task<DataSet> TaskCustomerVisitReport(string fromDate, string toDate)
+    {
+        try
+        {
+
+            return await _reportRepository.TaskCustomerVisitReport(fromDate, toDate);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+    public async Task<DataSet> TaskCustomerVisitDetailsReport(string id)
+    {
+        try
+        {
+
+            return await _reportRepository.TaskCustomerVisitDetailsReport(id);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+
+
+    public async Task<DataSet> DeliveryReport(int PI_Master_ID)
+    {
+        try
+        {
+            ProformaInvoiceReportParams param = new ProformaInvoiceReportParams
+            {
+                PI_Master_ID = PI_Master_ID
+
+            };
+
+            return await _reportRepository.DeliveryReport(param);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
 }

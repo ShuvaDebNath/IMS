@@ -169,6 +169,7 @@
               <th class="text-center">Article</th>
               <th class="text-center">Actual Article</th>
               <th class="text-center">Color</th>
+              <th class="text-center">Description</th>
               <th class="text-center">Unit Price</th>
               <th class="text-center">Payment Terms</th>
               <th class="text-center" style="background-color: red">Date</th>
@@ -196,7 +197,7 @@
                 <div
                   style="color: blue"
                   class="piNoView"
-                  (click)="piNoClick(PIDetailsList.PINo, PIDetailsList.LC_No)"
+                  (click)="piNoClick(PIDetailsList.PINo, PIDetailsList.LC_No,PIDetailsList)"
                 >
                   {{ PIDetailsList.PINo }}
                 </div>
@@ -205,6 +206,7 @@
               <td class="text-center">{{ PIDetailsList.Article }}</td>
               <td class="text-center">{{ PIDetailsList.ActualArticle }}</td>
               <td class="text-center">{{ PIDetailsList.Color }}</td>
+              <td class="text-center">{{ PIDetailsList.Description }}</td>
               <td class="text-center">{{ PIDetailsList.UsdPrice }}</td>
               <td class="text-center">{{ PIDetailsList.PaymentTerms }}</td>
               <td class="text-center" style="background-color: red">

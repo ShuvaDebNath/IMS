@@ -56,6 +56,12 @@ import { RawMaterialCreateComponent } from './master-entry/Raw-Material/raw-mate
 import { MaterialListComponent } from './master-entry/Material/material-list/material-list.component';
 import { MaterialCreateComponent } from './master-entry/Material/material-create/material-create.component';
 import { CurrencyListComponent } from './MasterEntry/Currency/currency-list/currency-list.component';
+import { MonthlyTaskReportComponent } from './task-report/monthly-task-report/monthly-task-report.component';
+import { CustomerVisitReportComponent } from './task-report/customer-visit-report/customer-visit-report.component';
+import { CustomerVisitReportListComponent } from './task-report/customer-visit-report-list/customer-visit-report-list.component';
+import { MonthlyTaskReportListComponent } from './task-report/monthly-task-report-list/monthly-task-report-list.component';
+import { GenerateMonthlyTaskComponent } from './task-report/generate-monthly-task/generate-monthly-task.component';
+import { GenerateCustomerVisitComponent } from './task-report/generate-customer-visit/generate-customer-visit.component';
 
 
 
@@ -73,7 +79,7 @@ const CustomSelectOptions: INgxSelectOptions = {
     ForbiddenErrorComponent,
     PageNotFoundComponent,
     LogoutComponent,
-    ResetPasswordComponent,
+    ResetPasswordComponent
   ],
 
   imports: [

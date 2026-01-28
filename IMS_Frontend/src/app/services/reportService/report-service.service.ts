@@ -1739,4 +1739,326 @@ export class ReportService {
         }
       );
   }
+
+
+  PrintTaskMonthlyDetailsReport(report: any, rptType: 'pdf' | 'excel' | 'word', isView: any) {
+    const id = report.id ? report.id : '';
+
+    const url = `${this.baseUrl}${this.apiController}/TaskMonthlyDetailsReport`;
+    const token = this.gs.getSessionData('token');
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    this.http
+      .get(url, {
+        headers,
+        params: {
+          rptType,
+          id,
+        },
+        responseType: 'blob',
+      })
+      .subscribe(
+        (res: Blob) => {
+          if (res.size === 0) {
+            Swal.fire(
+              'No Data Found',
+              'No records found for the selected criteria.',
+              'info'
+            );
+            return;
+          }
+          const blobType =
+            rptType === 'pdf'
+              ? 'application/pdf'
+              : rptType === 'excel'
+              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+
+          const blob = new Blob([res], { type: blobType });
+
+          const fileName =
+            rptType === 'pdf'
+              ? 'MonthlyTaskDetails.pdf'
+              : rptType === 'excel'
+              ? `MonthlyTaskDetails_${this.formatDateDMY(new Date()).replace(
+                  /\//g,
+                  '-'
+                )}.xlsx`
+              : `MonthlyTaskDetails_${this.formatDateDMY(new Date()).replace(
+                  /\//g,
+                  '-'
+                )}.docx`;
+
+          if (isView && rptType === 'pdf') {
+            // View PDF in new tab
+            const fileURL = window.URL.createObjectURL(blob);
+            window.open(fileURL, '_blank');
+          } else {
+            // Force download
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = fileName;
+            link.click();
+          }
+        },
+        (err) => {
+          Swal.fire('Error', 'Failed to generate report.', 'error');
+        }
+      );
+  }
+
+
+  PrintTaskMonthlyDetails(
+    report: any,
+    rptType: 'pdf' | 'excel' | 'word',
+    isView: boolean
+  ) {
+    const fromDate = report.fromDate ? this.formatDate(report.fromDate) : '';
+    const toDate = report.toDate ? this.formatDate(report.toDate) : '';
+
+    const url = `${this.baseUrl}${this.apiController}/TaskMonthlyReport`;
+    const token = this.gs.getSessionData('token');
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    this.http
+      .get(url, {
+        headers,
+        params: { rptType, fromDate, toDate },
+        responseType: 'blob',
+      })
+      .subscribe(
+        (res: Blob) => {
+          const blobType =
+          rptType === 'pdf'
+            ? 'application/pdf'
+            : rptType === 'excel'
+            ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+
+        const blob = new Blob([res], { type: blobType });
+
+        // Choose base filename according to requested reportType
+        const reportTypeKey = (rptType || '').toString();
+        
+        var baseFileName = 'MonthlyTaskReport';
+        const fileName =
+          rptType === 'pdf'
+            ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
+                  /\//g,
+                  '-'
+                )}.pdf`
+            : rptType === 'excel'
+            ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
+                  /\//g,
+                  '-'
+                )}.xlsx`
+            : `${baseFileName}_${this.formatDateDMY(new Date()).replace(
+                  /\//g,
+                  '-'
+                )}.docx`;
+
+        if (isView && rptType === 'pdf') {
+          // View PDF in new tab
+          const fileURL = window.URL.createObjectURL(blob);
+          window.open(fileURL, '_blank');
+        } else {
+          // Force download
+          const link = document.createElement('a');
+          link.href = window.URL.createObjectURL(blob);
+          link.download = fileName;
+          link.click();
+        }
+      });
+  }
+
+  PrintClientVisitDetailsReport(report: any, rptType: 'pdf' | 'excel' | 'word', isView: any) {
+    const id = report.id ? report.id : '';
+
+    const url = `${this.baseUrl}${this.apiController}/TaskCustomerVisitDetailsReport`;
+    const token = this.gs.getSessionData('token');
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    this.http
+      .get(url, {
+        headers,
+        params: {
+          rptType,
+          id,
+        },
+        responseType: 'blob',
+      })
+      .subscribe(
+        (res: Blob) => {
+          if (res.size === 0) {
+            Swal.fire(
+              'No Data Found',
+              'No records found for the selected criteria.',
+              'info'
+            );
+            return;
+          }
+          const blobType =
+            rptType === 'pdf'
+              ? 'application/pdf'
+              : rptType === 'excel'
+              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+
+          const blob = new Blob([res], { type: blobType });
+
+          const fileName =
+            rptType === 'pdf'
+              ? 'ClientVisitDetails.pdf'
+              : rptType === 'excel'
+              ? `ClientVisitDetails${this.formatDateDMY(new Date()).replace(
+                  /\//g,
+                  '-'
+                )}.xlsx`
+              : `ClientVisitDetails${this.formatDateDMY(new Date()).replace(
+                  /\//g,
+                  '-'
+                )}.docx`;
+
+          if (isView && rptType === 'pdf') {
+            // View PDF in new tab
+            const fileURL = window.URL.createObjectURL(blob);
+            window.open(fileURL, '_blank');
+          } else {
+            // Force download
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = fileName;
+            link.click();
+          }
+        },
+        (err) => {
+          Swal.fire('Error', 'Failed to generate report.', 'error');
+        }
+      );
+  }
+
+
+  PrintClinetVisit(
+    report: any,
+    rptType: 'pdf' | 'excel' | 'word',
+    isView: boolean
+  ) {
+    const fromDate = report.fromDate ? this.formatDate(report.fromDate) : '';
+    const toDate = report.toDate ? this.formatDate(report.toDate) : '';
+
+    const url = `${this.baseUrl}${this.apiController}/TaskCustomerVisitReport`;
+    const token = this.gs.getSessionData('token');
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    this.http
+      .get(url, {
+        headers,
+        params: { rptType, fromDate, toDate },
+        responseType: 'blob',
+      })
+      .subscribe(
+        (res: Blob) => {
+          const blobType =
+          rptType === 'pdf'
+            ? 'application/pdf'
+            : rptType === 'excel'
+            ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+
+        const blob = new Blob([res], { type: blobType });
+
+        // Choose base filename according to requested reportType
+        const reportTypeKey = (rptType || '').toString();
+        
+        var baseFileName = 'ClientVisitDetails';
+        const fileName =
+          rptType === 'pdf'
+            ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
+                  /\//g,
+                  '-'
+                )}.pdf`
+            : rptType === 'excel'
+            ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
+                  /\//g,
+                  '-'
+                )}.xlsx`
+            : `${baseFileName}_${this.formatDateDMY(new Date()).replace(
+                  /\//g,
+                  '-'
+                )}.docx`;
+
+        if (isView && rptType === 'pdf') {
+          // View PDF in new tab
+          const fileURL = window.URL.createObjectURL(blob);
+          window.open(fileURL, '_blank');
+        } else {
+          // Force download
+          const link = document.createElement('a');
+          link.href = window.URL.createObjectURL(blob);
+          link.download = fileName;
+          link.click();
+        }
+      });
+  }
+
+  PrintDeliveryReport(report: any, rptType: any, isView: any) {
+    const PI_Master_ID = report.PI_Master_ID ?? '';
+
+    const url = `${this.baseUrl}${this.apiController}/DeliveryReport`;
+    const token = this.gs.getSessionData('token');
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    this.http
+      .get(url, {
+        headers,
+        params: { rptType, PI_Master_ID },
+        responseType: 'blob',
+      })
+      .subscribe((res: Blob) => {
+        const blobType =
+          rptType === 'pdf'
+            ? 'application/pdf'
+            : rptType === 'excel'
+            ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+
+        const blob = new Blob([res], { type: blobType });
+
+        // Choose base filename according to requested reportType
+        const reportTypeKey = (rptType || '').toString();
+        
+        var baseFileName = 'DeliveryReport';
+        const fileName =
+          rptType === 'pdf'
+            ? `${baseFileName}.pdf`
+            : rptType === 'excel'
+            ? `${baseFileName}.xlsx`
+            : `${baseFileName}.docx`;
+
+        if (isView && rptType === 'pdf') {
+          // View PDF in new tab
+          const fileURL = window.URL.createObjectURL(blob);
+          window.open(fileURL, '_blank');
+        } else {
+          // Force download
+          const link = document.createElement('a');
+          link.href = window.URL.createObjectURL(blob);
+          link.download = fileName;
+          link.click();
+        }
+      });
+  }
 }

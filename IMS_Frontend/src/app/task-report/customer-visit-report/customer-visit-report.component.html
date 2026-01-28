@@ -1,0 +1,117 @@
+<div class="m-2 p-2">
+  <div class="card card-default">
+    <div class="card-header theme-bg">
+      <div class="row">
+        <h2 class="">Customer Visit Report</h2>
+      </div>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="SearchForm">
+        <div class="row align-items-center">
+          <div class="col-3">
+            <label class="control-label" for="inlineFormInputGroup"
+              >From Date</label
+            >
+            <input
+              type="date"
+              formControlName="fromDate"
+              class="form-control"
+            />
+          </div>
+          <div class="col-3">
+            <label class="control-label" for="inlineFormInputGroup"
+              >To Date</label
+            >
+            <input type="date" formControlName="toDate" class="form-control" />
+          </div>
+          <div class="col-3">
+            <button
+              title="Search"
+              type="button"
+              (click)="Search()"
+              class="btn btn-sm theme-btn mt-4 p-1"
+            >
+              <i class="fas fa-search"></i>&nbsp;Search
+            </button>
+          </div>
+        </div>
+      </form>
+      <div class="row mb-3" *ngIf="tableData != null">
+        <div class="col-md-12">
+          <button
+            class="btn theme-btn px-4 py-2"
+            (click)="print()"
+            title="Export application data to Excel, Word, or PDF"
+          >
+            <i class="fas fa-download"></i>&nbsp; Export
+          </button>
+        </div>
+      </div>
+      <hr />
+      <p-table
+        #dt
+        [value]="tableData"
+        [paginator]="true"
+        [rows]="10"
+        [responsive]="true"
+        [showCurrentPageReport]="true"
+        [globalFilterFields]="[
+          'Task_Report_Code',
+          'UserName',
+          'TotalRequest',
+          'date'
+        ]"
+      >
+        <ng-template pTemplate="caption">
+          <div class="table-toolbar">
+            <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                placeholder="Global Search"
+              />
+            </span>
+          </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="text-align: center">Marketing Concern</th>
+            <th style="text-align: center">Customer Name</th>
+            <th style="text-align: center">Buying/Concern Factory/ Buyer</th>
+            <th style="text-align: center">Remark</th>
+            <th style="text-align: center">Already Receive Order Article</th>
+            <th style="text-align: center">Unit Price(USD)</th>
+            <th style="text-align: center">Unit Price(BDT)</th>
+            <th style="text-align: center">Prod. Cost Unit</th>
+            <th style="text-align: center">Visit purpose</th>
+            <th style="text-align: center">First order received time</th>
+            <th style="text-align: center">Latest order received time</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+          <tr>
+            <td style="text-align: left">{{ item.MakeBy }}</td>
+            <td style="text-align: left">{{ item.customer_name }}</td>
+            <td style="text-align: center">{{ item.Buying_Concern }}</td>
+            <td style="text-align: center">{{ item.Description }}</td>
+            <td style="text-align: center">
+              {{ item.Already_Receive_Order_Article }}
+            </td>
+            <td style="text-align: center">{{ item.Unit_Price_USD }}</td>
+            <td style="text-align: center">{{ item.Unit_Price_BDT }}</td>
+            <td style="text-align: center">{{ item.Prod_Cost_Unit }}</td>
+            <td style="text-align: center">{{ item.Visit_Purpose }}</td>
+            <td style="text-align: center">{{ item.First_Received_Time }}</td>
+            <td style="text-align: center">
+              {{ item.Latest_Order_Receive_Time }}
+            </td>
+
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

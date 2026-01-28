@@ -28,4 +28,9 @@ public interface IReportService
     public Task<DataSet> FGStockReport();
     public Task<DataSet> FGSendAndReceiveReport(string InvoiceNo,string fromDate, string toDate);
     public Task<DataSet> RMPendingDetailsReport(string id);
+    public Task<DataSet> TaskMonthlyDetailsReport(string id);
+    public Task<DataSet> TaskMonthlyReport(string fromDate, string toDate);
+    public Task<DataSet> TaskCustomerVisitDetailsReport(string id);
+    public Task<DataSet> TaskCustomerVisitReport(string fromDate, string toDate);
+    public Task<DataSet> DeliveryReport(int PI_Master_ID);
 }

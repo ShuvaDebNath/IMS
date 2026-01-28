@@ -22,11 +22,7 @@
             <label class="control-label" for="inlineFormInputGroup"
               >To Date</label
             >
-            <input
-              type="date"
-              formControlName="toDate"
-              class="form-control"
-            />
+            <input type="date" formControlName="toDate" class="form-control" />
           </div>
           <div class="col-3">
             <button
@@ -67,7 +63,7 @@
           'Contact_Name',
           'InTime',
           'OutTime',
-          'Discussion'
+          'Discussion',
         ]"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
       >
@@ -89,25 +85,59 @@
           <tr>
             <th class="text-center">SL</th>
             <th class="text-center">Task Code</th>
+            <th class="text-center">Buyer name</th>
             <th class="text-center">Customer Name</th>
             <th class="text-center">Contact Person</th>
             <th class="text-center">In Time</th>
             <th class="text-center">Out Time</th>
             <th class="text-center">Discussion</th>
+            <th class="text-center">Old/New</th>
+            <th class="text-center">Unit Price BDT</th>
+            <th class="text-center">Unit Price USD</th>
+            <th class="text-center">Prod Cost Unit</th>
+            <th class="text-center">First order received time</th>
+            <th class="text-center">Latest order received time</th>
+            <th class="text-center">Payment Issue</th>
+            <th class="text-center">Commercial lssue</th>
+            <th class="text-center">Sample Submit</th>
           </tr>
         </ng-template>
 
-        <ng-template pTemplate="body" let-table let-i="rowIndex">
+        <ng-template pTemplate="body" let-table let-item="rowIndex">
           <tr>
-            <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
+            <td class="text-center">{{ (dt.first || 0) + item + 1 }}</td>
             <td class="text-center align-middle">
               {{ table.Task_Report_Code }}
             </td>
-            <td class="text-center align-middle">{{ table.CustomerName }}</td>
-            <td class="text-center align-middle">{{ table.Contact_Name }}</td>
+            <td class="text-center align-middle">{{ table.Buying_House }}</td>
+            <td class="text-center align-middle">
+              {{ table.customer_name }}
+            </td>
+            <td class="text-center align-middle">
+              {{ table.Contact_Name }}
+            </td>
             <td class="text-center align-middle">{{ table.InTime }}</td>
             <td class="text-center align-middle">{{ table.OutTime }}</td>
             <td class="text-center align-middle">{{ table.Discussion }}</td>
+            <td class="text-center align-middle">{{ table.Type }}</td>
+            <td class="text-center align-middle">{{ table.Unit_Price_BDT }}</td>
+            <td class="text-center align-middle">{{ table.Unit_Price_USD }}</td>
+            <td class="text-center align-middle">{{ table.Prod_Cost_Unit }}</td>
+            <td class="text-center align-middle">
+              {{ table.First_Received_Time }}
+            </td>
+            <td class="text-center align-middle">
+              {{ table.Latest_Order_Receive_Time }}
+            </td>
+            <td class="text-center align-middle">
+              {{ table.PaymentIssue }}
+            </td>
+            <td class="text-center align-middle">
+              {{ table.CommercialIssue }}
+            </td>
+            <td class="text-center align-middle">
+              {{ table.SampleSubmit }}
+            </td>
           </tr>
         </ng-template>
       </p-table>

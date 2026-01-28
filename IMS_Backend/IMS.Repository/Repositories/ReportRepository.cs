@@ -483,5 +483,107 @@ namespace Boilerplate.Repository.Repositories
             }
         }
 
+        public async Task<DataSet> TaskMonthlyDetailsReport(string id)
+        {
+            try
+            {
+                var parametars = new
+                {
+                    id = id
+                };
+
+                string query = @"exec [usp_Task_Monthly_Details_Report] @id";
+                var ds = await GetDataInDataSetAsync(query, parametars);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<DataSet> TaskMonthlyReport(string fromDate, string toDate)
+        {
+            try
+            {
+                var parametars = new
+                {
+                    fromdate = fromDate,
+                    toDate = toDate
+                };
+
+                string query = @"exec [usp_Task_Monthly_Report] @fromDate,@toDate";
+                var ds = await GetDataInDataSetAsync(query, parametars);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<DataSet> TaskCustomerVisitDetailsReport(string id)
+        {
+            try
+            {
+                var parametars = new
+                {
+                    id = id
+                };
+
+                string query = @"exec [usp_Task_Customer_Visit_Details_Report] @id";
+                var ds = await GetDataInDataSetAsync(query, parametars);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<DataSet> TaskCustomerVisitReport(string fromDate, string toDate)
+        {
+            try
+            {
+                var parametars = new
+                {
+                    fromdate = fromDate,
+                    toDate = toDate
+                };
+
+                string query = @"exec [usp_Task_Customer_Visit_Report] @fromDate,@toDate";
+                var ds = await GetDataInDataSetAsync(query, parametars);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<DataSet> DeliveryReport(ProformaInvoiceReportParams param)
+        {
+            try
+            {
+                var parametars = new
+                {
+                    param.PI_Master_ID
+                };
+
+                string query = @"exec [usp_ProformaInvoice_DeliveryDetails_with_LCInfo] @PI_Master_ID";
+                var ds = await GetDataInDataSetAsync(query, parametars);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }

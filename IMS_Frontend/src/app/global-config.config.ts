@@ -18,6 +18,7 @@ export class GlobalConfig {
   public static USER_NAME = '';
   public static COMPANY_NAME = '';
 
+
   public static handleError(err: HttpErrorResponse) {
     let errorMessage = '';
     if (err.error instanceof ErrorEvent) {

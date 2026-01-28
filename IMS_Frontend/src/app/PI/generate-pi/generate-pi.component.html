@@ -63,7 +63,7 @@
               type="text"
               class="form-control form-control-sm"
               placeholder="PI No"
-              readOnly
+              [readOnly]="this.tempPI!=undefined?false:true"
               id="pino"
               name="pino"
               formControlName="PINo"

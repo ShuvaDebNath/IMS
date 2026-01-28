@@ -524,7 +524,7 @@ export class PiListComponent implements OnInit {
     for (const item of this.PIDetails) {
       const qty = Number(item.Quantity) || 0;
       const delivered = Number(item.Delivered_Quantity) || 0;
-      const amt = Number(item.Total_Amount) || 0;
+      const amt = item.Total_Amount_Tk==null || item.Total_Amount_Tk==undefined?Number(item.Total_Amount) || 0:Number(item.Total_Amount_Tk) || 0;
       const prodCost = Number(item.TotalCommission) || 0;
 
       this.totalsOrderQty += qty;

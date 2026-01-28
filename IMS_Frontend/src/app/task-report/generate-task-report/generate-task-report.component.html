@@ -2,7 +2,7 @@
   <h1 class="theme-text">Generate Task Report Form</h1>
 
   <br />
-  <form [formGroup]="taskForm">
+  <form [formGroup]="taskForm" style="overflow: scroll">
     <!-- Header fields -->
     <div class="row mb-3">
       <div class="col-md-6">
@@ -10,23 +10,18 @@
         <input
           autocomplete="off"
           type="text"
-          formControlName="ExportNo"
+          formControlName="TaskNo"
           class="form-control"
           placeholder="Task No"
           id="taskNo"
           name="taskNo"
           value=""
-          readonly
         />
       </div>
       <div class="col-md-6">
         <label class="control-label">Date</label>
 
-        <input
-              type="date"
-              formControlName="Date"
-              class="form-control"
-            />
+        <input type="date" formControlName="Date" class="form-control" />
       </div>
     </div>
     <div class="row mb-3">
@@ -87,25 +82,40 @@
     </div>
 
     <!-- Items table -->
-    <table class="table table-bordered">
+    <table class="table table-bordered" style="width: 160% !important">
       <thead>
         <tr>
+          <th style="text-align: center">Buying House</th>
           <th style="text-align: center">Customer Name</th>
           <th style="text-align: center">In Time</th>
           <th style="text-align: center">Out Time</th>
-          <th style="text-align: center">Discussion</th>
-          <th style="width: 60px"></th>
+          <th style="text-align: center">Old/New</th>
+          <th style="text-align: center">Already Receive Order Article</th>
+          <th style="text-align: center">Unit Price USD</th>
+          <th style="text-align: center">Unit Price BDT</th>
+          <th style="text-align: center">Prod. Cost Unit</th>
+          <th style="text-align: center">First order received time</th>
+          <th style="text-align: center">Latest order received time</th>
+          <th style="text-align: center">Payment Issue</th>
+          <th style="text-align: center">Commercial Issue</th>
+          <th style="text-align: center">Sample Submit</th>
+          <th style="text-align: center">Remarks</th>
+          <th></th>
         </tr>
       </thead>
 
-      <tbody formArrayName="items">
+      <tbody formArrayName="items" style="width: 160% !important">
         <tr
           *ngFor="let item of items.controls; let i = index"
           [formGroupName]="i"
         >
           <td>
+						<input class="form-control form-control-sm" formControlName="Buyer" style="width: 180px;"/>
+					</td>
+          <td>
             <div class="form-group">
               <p-dropdown
+                appendTo="body"
                 class="p-0 rm-dd"
                 [panelStyle]="{ width: '300px' }"
                 [options]="CustomerList"
@@ -130,19 +140,23 @@
 
           <td class="col-description">
             <p-calendar
+              appendTo="body"
               inputId="calendar-24h"
               formControlName="InTime"
               [showTime]="true"
               [hourFormat]="'24'"
+                [style]="{ width: '150px' }"
             />
           </td>
 
           <td class="col-description">
             <p-calendar
+              appendTo="body"
               inputId="calendar-24h"
               formControlName="OutTime"
               [showTime]="true"
               [hourFormat]="'24'"
+                [style]="{ width: '150px' }"
             />
             <div
               *ngIf="
@@ -163,10 +177,142 @@
               Out Time cannot be earlier than In Time
             </div>
           </td>
+          <td>
+            <div class="form-group">
+              <p-dropdown
+                appendTo="body"
+                class="p-0 rm-dd"
+                [panelStyle]="{ width: '300px' }"
+                [options]="type"
+                optionLabel="label"
+                optionValue="value"
+                [filter]="true"
+                filterBy="label"
+                [showClear]="true"
+                placeholder="Please Select"
+                formControlName="Type"
+                [virtualScroll]="true"
+                [virtualScrollItemSize]="30"
+              >
+                <ng-template let-article pTemplate="item">
+                  <div class="flex align-items-center gap-2">
+                    <div>{{ article.label }}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+            </div>
+          </td>
+
+          <td>
+            <input
+              class="form-control form-control-sm"
+              formControlName="AlreadyReceivedArticle"
+              style="width: 180px;"
+            />
+          </td>
+
+          <td>
+            <input
+              class="form-control form-control-sm"
+              formControlName="UnitPriceUSD"
+              style="width: 180px;"
+            />
+          </td>
+
+          <td>
+            <input
+              class="form-control form-control-sm"
+              formControlName="UnitPriceBDT"
+              style="width: 180px;"
+            />
+          </td>
+
+          <td>
+            <input
+              class="form-control form-control-sm"
+              formControlName="ProdCostUnit"
+              style="width: 180px;"
+            />
+          </td>
+
+          <td>
+            <input
+              class="form-control form-control-sm"
+              formControlName="FirstOrderReceivedTime"
+              style="width: 180px;"
+            />
+          </td>
+
+          <td>
+            <input
+              class="form-control form-control-sm"
+              formControlName="LatestOrderReceivedTime"
+              style="width: 180px;"
+            />
+          </td>
+          <td>
+            <div class="form-group">
+              <p-dropdown
+                appendTo="body"
+                class="p-0 rm-dd"
+                [panelStyle]="{ width: '300px' }"
+                [options]="solveList"
+                optionLabel="label"
+                optionValue="value"
+                [filter]="true"
+                filterBy="label"
+                [showClear]="true"
+                placeholder="Please Select"
+                formControlName="PaymentIssue"
+                [virtualScroll]="true"
+                [virtualScrollItemSize]="30"
+              >
+                <ng-template let-article pTemplate="item">
+                  <div class="flex align-items-center gap-2">
+                    <div>{{ article.label }}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+            </div>
+          </td>
+          <td>
+            <div class="form-group">
+              <p-dropdown
+                appendTo="body"
+                class="p-0 rm-dd"
+                [panelStyle]="{ width: '300px' }"
+                [options]="solveList"
+                optionLabel="label"
+                optionValue="value"
+                [filter]="true"
+                filterBy="label"
+                [showClear]="true"
+                placeholder="Please Select"
+                formControlName="CommercialIssue"
+                [virtualScroll]="true"
+                [virtualScrollItemSize]="30"
+              >
+                <ng-template let-article pTemplate="item">
+                  <div class="flex align-items-center gap-2">
+                    <div>{{ article.label }}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+            </div>
+          </td>
+          <td class="col-description">
+            <textarea
+              class="form-control form-control-sm"
+              formControlName="SampleSubmit"
+              style="width: 180px;"
+              required="true"
+            ></textarea>
+          </td>
           <td class="col-description">
             <textarea
               class="form-control form-control-sm"
               formControlName="discussion"
+              style="width: 180px;"
               required="true"
             ></textarea>
           </td>
@@ -191,11 +337,7 @@
       <button
         type="submit"
         (click)="saveData()"
-        [ngClass]="{
-          'theme-btn-disable': taskForm.invalid
-        }"
         class="btn theme-btn btn-rounded"
-        [disabled]="taskForm.invalid"
         *ngIf="!isEdit"
       >
         <i class="bi bi-save me-1"></i> Save
@@ -215,3 +357,6 @@
     </div>
   </form>
 </div>
+
+
+

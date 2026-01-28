@@ -154,7 +154,7 @@
                   />
                 </div>
               </div>
-              <div class="col-md-6" *ngIf="!isEdit">
+              <div class="col-md-6">
                 <label class="control-label" for="inlineFormInputGroup"
                   >Receive Amount <span>*</span></label
                 >
@@ -164,6 +164,7 @@
                     type="Number"
                     formControlName="ReceiveAmount"
                     (keyup)="checkReceiveAmount()"
+                    (change)="checkReceiveAmountOnChange()"
                     class="form-control"
                     placeholder="Receive Amount"
                     id="ReceiveAmount"

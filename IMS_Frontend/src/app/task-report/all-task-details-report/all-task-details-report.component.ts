@@ -101,12 +101,12 @@ export class AllTaskDetailsReportComponent {
 
     this.masterEntryService.GetInitialData(param).subscribe({
       next: (results) => {
-        console.log(results);
 
         if (results.status) {
           this.tableData = [];
           let tables = JSON.parse(results.data);
           this.tableData = tables.Tables1;
+        console.log( this.tableData);
 
           //  this.isPage=this.rows[0].totallen>10;
         }

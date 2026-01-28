@@ -40,6 +40,17 @@ export class GenerateTaskReportComponent {
     { label: 'Rolls', value: 'roll' },
     { label: 'Bags', value: 'bag' },
   ];
+
+  type = [
+    { label: 'N/A', value: 'N/A' },
+    { label: 'Old', value: 'Old' },
+    { label: 'New', value: 'New' },
+  ];
+  solveList = [
+    { label: 'N/A', value: 'N/A' },
+    { label: 'Yes solved', value: 'Yes solved' },
+    { label: 'Not Solved', value: 'Not Solved' },
+  ];
   reloadingArticles = false;
   LoadingPortList: any[] = [];
   DestinationPortList: any[] = [];
@@ -51,6 +62,7 @@ export class GenerateTaskReportComponent {
   CustomerList: any[] = [];
   userId: any = '';
   superiorId: any = '';
+  BuyerList: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -59,7 +71,7 @@ export class GenerateTaskReportComponent {
     private gs: GlobalServiceService,
     private activeLink: ActivatedRoute,
     private title: Title,
-    private masterEntryService: MasterEntryService
+    private masterEntryService: MasterEntryService,
   ) {}
 
   ngOnInit(): void {
@@ -88,12 +100,17 @@ export class GenerateTaskReportComponent {
     var userName = window.localStorage.getItem('userName');
     const yyyymmdd = new Date().toISOString().slice(0, 10).replace(/-/g, '');
 
-    var taskNo = yyyymmdd+'-'+userName;
+    var taskNo = yyyymmdd + '-' + userName;
+
+    console.log(taskNo);
 
     this.taskForm = this.fb.group({
-      TaskNo:[taskNo, [Validators.required]],
+      TaskNo: [taskNo, [Validators.required]],
       ToMail: ['', [Validators.required, Validators.email]],
-      CcMail: ['lilya@sunshineinterlining.com', [Validators.required, Validators.email]],
+      CcMail: [
+        'lilya@sunshineinterlining.com',
+        [Validators.required, Validators.email],
+      ],
       Date: ['', [Validators.required]],
       items: this.fb.array([], { validators: [this.rowsCompleteValidator()] }),
     });
@@ -129,6 +146,7 @@ export class GenerateTaskReportComponent {
     this.getDataService.GetInitialData(ProcedureData).subscribe({
       next: (results) => {
         if (results.status) {
+          this.BuyerList = JSON.parse(results.data).Tables3;
           this.CustomerList = JSON.parse(results.data).Tables1;
           this.superiorId = JSON.parse(results.data).Tables2[0];
         } else if (results.msg == 'Invalid Token') {
@@ -148,12 +166,26 @@ export class GenerateTaskReportComponent {
   addItem() {
     const row = this.fb.group(
       {
+        Buyer: this.fb.control<string | null>(null, Validators.required),
         CustomerName: this.fb.control<string | null>(null, Validators.required),
         InTime: this.fb.control<string | null>(null, Validators.required),
         OutTime: this.fb.control<string | null>(null, Validators.required),
+        Type: this.fb.control<string | null>(null, Validators.required),
         discussion: this.fb.control<string | null>(null, Validators.required),
+        AlreadyReceivedArticle: this.fb.control<string | null>(null),
+        UnitPriceUSD: this.fb.control<string | null>(null),
+        UnitPriceBDT: this.fb.control<string | null>(null),
+        ProdCostUnit: this.fb.control<string | null>(null),
+        FirstOrderReceivedTime: this.fb.control<string | null>(null),
+        LatestOrderReceivedTime: this.fb.control<string | null>(null),
+        PaymentIssue: this.fb.control<string | null>(null, Validators.required),
+        CommercialIssue: this.fb.control<string | null>(
+          null,
+          Validators.required,
+        ),
+        SampleSubmit: this.fb.control<string | null>(null, Validators.required),
       },
-      { validators: [this.outTimeAfterInValidator()] }
+      { validators: [this.outTimeAfterInValidator()] },
     );
 
     this.items.push(row);
@@ -217,7 +249,7 @@ export class GenerateTaskReportComponent {
       swal.fire(
         'Validation Error',
         'Please fill all required fields.',
-        'warning'
+        'warning',
       );
       return;
     }
@@ -244,7 +276,6 @@ export class GenerateTaskReportComponent {
       Task_Report_Code: fv.TaskNo,
       MailBody: '',
       Subject: '',
-      
     };
 
     var messegeBody =
@@ -255,7 +286,7 @@ export class GenerateTaskReportComponent {
       // row can store the selected customer id in CustomerName control
       const custId = i.CustomerName ?? i.CustomerId ?? null;
       const cust = this.CustomerList?.find(
-        (c: any) => String(c.Customer_ID) === String(custId)
+        (c: any) => String(c.Customer_ID) === String(custId),
       );
       console.log(cust);
 
@@ -263,6 +294,11 @@ export class GenerateTaskReportComponent {
       const Location = cust ? cust.Customer_Address : '';
       const customerPhone = cust ? cust.Phone_No : '';
       const customerContactPerson = cust ? cust.Contact_Name : '';
+      const Buyer_Name = i ? i.Buyer_Name : '';
+      const Type = i ? i.Type : '';
+      const PaymentIssue = i ? i.PaymentIssue : '';
+      const CommercialIssue = i ? i.CommercialIssue : '';
+      const SampleSubmit = i ? i.SampleSubmit : '';
       const customerInfo = cust ? cust.Company_Info : '';
       messegeBody += `Customer No: ${index}<br/>Location: ${Location}<br/>Merchandiser Name: ${customerContactPerson}<br/>Number: ${customerPhone}<br/>Customer Info: ${customerInfo}<br/>In Time: ${
         i.InTime
@@ -273,9 +309,20 @@ export class GenerateTaskReportComponent {
         InTime: this.formatDateTime(i.InTime),
         OutTime: this.formatDateTime(i.OutTime),
         Customer_ID: custId,
-        Discussion: i.discussion ?? i.description ?? '',
+        Discussion: i.discussion,
         Customer_name: customerDisplay,
         Task_Report_ID: '',
+        Type: Type,
+        PaymentIssue: PaymentIssue,
+        CommercialIssue: CommercialIssue,
+        SampleSubmit: SampleSubmit,
+        Already_Receive_Order_Article: i.AlreadyReceivedArticle,
+        Unit_Price_USD: i.UnitPriceUSD,
+        Unit_Price_BDT: i.UnitPriceBDT,
+        Prod_Cost_Unit: i.ProdCostUnit,
+        First_Received_Time: i.FirstOrderReceivedTime,
+        Latest_Order_Receive_Time: i.LatestOrderReceivedTime,
+        Buying_House: i.Buyer,
       };
     });
 
@@ -288,13 +335,13 @@ export class GenerateTaskReportComponent {
     const now = new Date();
     const ymd = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(
       2,
-      '0'
+      '0',
     )}${String(now.getDate()).padStart(2, '0')}`;
     const username = (localStorage.getItem('userName') || '').toString();
     masterRow['Subject'] = `Employee Daily Report - ${ymd}-${username}`;
 
     this.doubleMasterEntryService
-      .MailThenInsert(
+      .SaveDataMasterDetails(
         detailRows, // fd (child rows)
         'tbl_task_report_details', // tableName (child)
         masterRow, // fdMaster (master row)
@@ -302,7 +349,7 @@ export class GenerateTaskReportComponent {
         'Task_Report_ID', // columnNamePrimary (PK)
         'Task_Report_ID', // columnNameForign (FK in child)
         'TR', // serialType (your code uses it)
-        'TR' // columnNameSerialNo (series name)
+        'TR', // columnNameSerialNo (series name)
       )
       .subscribe({
         next: (res: any) => {
@@ -315,7 +362,7 @@ export class GenerateTaskReportComponent {
             swal.fire(
               'Task Update Failed',
               res?.message || 'Task update failed.',
-              'info'
+              'info',
             );
           }
         },
@@ -330,7 +377,7 @@ export class GenerateTaskReportComponent {
       swal.fire(
         'Validation Error',
         'Please fill all required fields.',
-        'warning'
+        'warning',
       );
       return;
     }
@@ -354,7 +401,7 @@ export class GenerateTaskReportComponent {
       User_ID: this.userId,
       Superior_ID: fv.superiorId,
       Date: fv.Date,
-      Task_Report_Code:fv.TaskNo
+      Task_Report_Code: fv.TaskNo,
     };
 
     var index = 0;
@@ -363,13 +410,19 @@ export class GenerateTaskReportComponent {
       // row can store the selected customer id in CustomerName control
       const custId = i.CustomerName ?? i.CustomerId ?? null;
       const cust = this.CustomerList?.find(
-        (c: any) => String(c.Customer_ID) === String(custId)
+        (c: any) => String(c.Customer_ID) === String(custId),
       );
+      console.log(i);
 
       const customerDisplay = cust ? cust.CustomerName : '';
       const Location = cust ? cust.Customer_Address : '';
       const customerPhone = cust ? cust.Phone_No : '';
       const customerContactPerson = cust ? cust.Contact_Name : '';
+      const Buyer_Name = i ? i.Buyer_Name : '';
+      const Type = i ? i.Type : '';
+      const PaymentIssue = i ? i.PaymentIssue : '';
+      const CommercialIssue = i ? i.CommercialIssue : '';
+      const SampleSubmit = i ? i.SampleSubmit : '';
       const customerInfo = cust ? cust.Company_Info : '';
       return {
         InTime: this.formatDateTime(i.InTime),
@@ -377,7 +430,19 @@ export class GenerateTaskReportComponent {
         Customer_ID: custId,
         Discussion: i.discussion ?? i.description ?? '',
         Customer_name: customerDisplay,
-        Task_Report_ID: this.TaskId,
+        Task_Report_ID: '',
+        BuyerId: Buyer_Name,
+        Type: Type,
+        PaymentIssue: PaymentIssue,
+        CommercialIssue: CommercialIssue,
+        SampleSubmit: SampleSubmit,
+        Already_Receive_Order_Article: i.AlreadyReceivedArticle,
+        Unit_Price_USD: i.UnitPriceUSD,
+        Unit_Price_BDT: i.UnitPriceBDT,
+        Prod_Cost_Unit: i.ProdCostUnit,
+        First_Received_Time: i.FirstOrderReceivedTime,
+        Latest_Order_Receive_Time: i.LatestOrderReceivedTime,
+        Buying_House: i.Buyer,
       };
     });
 
@@ -385,12 +450,14 @@ export class GenerateTaskReportComponent {
     const now = new Date();
     const ymd = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(
       2,
-      '0'
+      '0',
     )}${String(now.getDate()).padStart(2, '0')}`;
     const username = (localStorage.getItem('userName') || '').toString();
     var whereParam = {
       Task_Report_ID: this.TaskId,
     };
+
+    console.log(detailRows);
 
     this.doubleMasterEntryService
       .UpdateDataMasterDetails(
@@ -402,7 +469,7 @@ export class GenerateTaskReportComponent {
         'Task_Report_ID', // columnNameForign (FK in child)
         'TR', // serialType (your code uses it)
         'TR', // columnNameSerialNo (series name)
-        whereParam
+        whereParam,
       )
       .subscribe({
         next: (res: any) => {
@@ -412,7 +479,7 @@ export class GenerateTaskReportComponent {
             swal.fire(
               'Task Update Failed',
               res?.message || 'Task update failed.',
-              'info'
+              'info',
             );
           }
         },
@@ -448,7 +515,9 @@ export class GenerateTaskReportComponent {
     const s = String(iso).trim();
 
     // Primary match: ISO-like 'YYYY-MM-DDTHH:mm:ss' or 'YYYY-MM-DD HH:mm:ss'
-    const isoMatch = s.match(/^([0-9]{4})-([0-9]{2})-([0-9]{2})(?:[T\s]([0-9]{2}):([0-9]{2})(?::([0-9]{2}))?)?/);
+    const isoMatch = s.match(
+      /^([0-9]{4})-([0-9]{2})-([0-9]{2})(?:[T\s]([0-9]{2}):([0-9]{2})(?::([0-9]{2}))?)?/,
+    );
     if (isoMatch) {
       const year = Number(isoMatch[1]);
       const month = Number(isoMatch[2]) - 1;
@@ -530,12 +599,20 @@ export class GenerateTaskReportComponent {
 
           const formArray = this.taskForm.get('items') as FormArray;
           formArray.clear();
-          console.log(data);
+          console.log(data, new Date(data[0].Date));
+          const d = new Date(data[0].Date);
+
+          const localDate =
+            d.getFullYear() +
+            '-' +
+            String(d.getMonth() + 1).padStart(2, '0') +
+            '-' +
+            String(d.getDate()).padStart(2, '0');
 
           this.taskForm.controls['ToMail'].setValue(data[0].Mail_TO);
           this.taskForm.controls['CcMail'].setValue(data[0].Mail_CC);
           this.taskForm.controls['TaskNo'].setValue(data[0].Task_Report_Code);
-          this.taskForm.controls['Date'].setValue(data[0].Date);
+          this.taskForm.controls['Date'].setValue(localDate);
 
           JSON.parse(results.data).Tables1.forEach((item: any) => {
             formArray.push(
@@ -545,7 +622,18 @@ export class GenerateTaskReportComponent {
                 InTime: [this.parseISOToLocalDate(item.InTime)],
                 OutTime: [this.parseISOToLocalDate(item.OutTime)],
                 discussion: [item.Discussion],
-              })
+                Buyer: [item.Buying_House],
+                Type: [item.Type],
+                PaymentIssue: [item.PaymentIssue],
+                CommercialIssue: [item.CommercialIssue],
+                SampleSubmit: [item.SampleSubmit],
+                AlreadyReceivedArticle: item.Already_Receive_Order_Article,
+                UnitPriceUSD: item.Unit_Price_USD,
+                UnitPriceBDT: item.Unit_Price_BDT,
+                ProdCostUnit: item.Prod_Cost_Unit,
+                FirstOrderReceivedTime: item.First_Received_Time,
+                LatestOrderReceivedTime: item.Latest_Order_Receive_Time,
+              }),
             );
           });
         } else if (results.msg == 'Invalid Token') {

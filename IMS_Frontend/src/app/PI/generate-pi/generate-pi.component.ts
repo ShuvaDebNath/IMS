@@ -38,7 +38,7 @@ export class GeneratePiComponent implements OnInit {
   PINo!: string;
   PageTitle: any;
   // temporary PI passed from another tab (via localStorage)
-  private tempPI?: string | null;
+  tempPI?: string | null;
 
   // keep a snapshot of original master/details when loading for edit so we can compute audit logs
   private originalMaster: any = null;
@@ -60,7 +60,9 @@ export class GeneratePiComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.PageTitle = 'Generate LC PI'
+    console.log(this.tempPI);
+    
+    this.PageTitle = 'Generate LC PI';
     this.GTQTY = 0;
     this.GTAMNT = 0;
     this.SetDDL = true;
