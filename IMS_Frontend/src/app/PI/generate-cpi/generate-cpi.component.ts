@@ -367,7 +367,11 @@ datePipe = new DatePipe('en-US');
     const roleId = this.gs.getSessionData('roleId');
     const userId = this.gs.getSessionData('userId');
     if (consignee) {
-      this.Formgroup.controls['User_ID']?.setValue(userId);
+      if (roleId == 1 || roleId == 2 || roleId == 12) {
+        this.Formgroup.controls['User_ID']?.setValue(consignee.Created_By);
+      } else {
+        this.Formgroup.controls['User_ID']?.setValue(userId);
+      }
       this.Formgroup.controls['Superior_ID']?.setValue(consignee.Superior_ID)
     }
    
@@ -408,7 +412,7 @@ datePipe = new DatePipe('en-US');
       Currency_ID: this.Formgroup.controls['Currency_ID'].value
     };
     
-    //model.PINo=`${model.Consignee_Initial}-${this.datePipe.transform(model.Date, 'yyyyMMdd')}`;
+    model.PINo=`${model.Consignee_Initial}-${this.datePipe.transform(model.Date, 'yyyyMMdd')}`;
 
     this.service.SaveDataMasterDetails(this.Formgroup.value.ItemArray,
       "tbl_pi_detail",
