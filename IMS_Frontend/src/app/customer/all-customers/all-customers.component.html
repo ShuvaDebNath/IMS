@@ -1,3 +1,4 @@
+
 <div class="container">
   <h1 class="theme-text">ALL Customers List</h1>
 
@@ -6,6 +7,7 @@
     class="row p-3 shadow-sm g-3 align-items-end mb-3"
     (ngSubmit)="loadAllCustomers()"
   >
+
     <div class="col-md-3" *ngIf="SuperiorList">
       <label>Superior Name <span>*</span></label>
       <p-dropdown
@@ -44,7 +46,7 @@
         optionValue="Customer_ID"
         formControlName="CustomerId"
         [virtualScroll]="true"
-        [virtualScrollItemSize]="30"
+        [virtualScrollItemSize]=30
       >
         <ng-template let-AB pTemplate="item">
           <div class="flex align-items-center gap-2">
@@ -61,6 +63,7 @@
       >
         <i class="pi pi-download me-1"></i> Load
       </button>
+      
     </div>
     <div class="col-md-2">
       <div class="d-flex align-items-center">
@@ -73,21 +76,14 @@
         >
           <i class="fas fa-plus"></i>&nbsp;Create New
         </button>
+
+     
       </div>
+      
     </div>
   </form>
-  <div class="row mb-3" *ngIf="tableVisible">
-    <div class="col-md-12">
-      <button
-        class="btn theme-btn px-4 py-2"
-        (click)="printDialog()"
-        title="Export Cash Receive list to Excel, Word, or PDF"
-      >
-        <i class="fas fa-download"></i>&nbsp; Export
-      </button>
-    </div>
-  </div>
   <div class="shadow-sm p-2">
+    
     <p-table
       *ngIf="tableVisible"
       #dt
@@ -125,6 +121,134 @@
           </span>
         </div>
       </ng-template>
+<div class="m-t p-2">
+  <div class="card shadow-sm">
+    <div class="card-header theme-bg">
+      <h1 class="">ALL Customers List</h1>
+    </div>
+    <div class="card-body">
+      <form
+        [formGroup]="dateForm"
+        class="row p-3 shadow-sm g-3 align-items-end mb-3"
+        (ngSubmit)="loadAllCustomers()"
+      >
+        <div class="col-md-3" *ngIf="SuperiorList">
+          <label>Superior Name <span>*</span></label>
+          <p-dropdown
+            [style]="{ width: '100%' }"
+            class="p-0"
+            [options]="SuperiorList"
+            optionLabel="UserName"
+            [filter]="true"
+            filterBy="UserName"
+            [showClear]="true"
+            styleClass="listBottom"
+            placeholder="Please Select"
+            optionValue="User_ID"
+            formControlName="SuperioId"
+            (onChange)="getCustomerList()"
+          >
+            <ng-template let-AB pTemplate="item">
+              <div class="flex align-items-center gap-2">
+                <div>{{ AB.UserName }}</div>
+              </div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+        <div class="col-md-3">
+          <label>Customer Name <span>*</span></label>
+          <p-dropdown
+            [style]="{ width: '100%' }"
+            class="p-0"
+            [options]="CustomerList"
+            optionLabel="Company_Name"
+            [filter]="true"
+            filterBy="Company_Name"
+            [showClear]="true"
+            styleClass="listBottom"
+            placeholder="Please Select"
+            optionValue="Customer_ID"
+            formControlName="CustomerId"
+            [virtualScroll]="true"
+            [virtualScrollItemSize]="30"
+          >
+            <ng-template let-AB pTemplate="item">
+              <div class="flex align-items-center gap-2">
+                <div>{{ AB.Company_Name }}</div>
+              </div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+        <div class="col-md-2">
+          <button
+            type="submit"
+            class="btn theme-btn w-100"
+            [disabled]="dateForm.invalid"
+          >
+            <i class="pi pi-download me-1"></i> Load
+          </button>
+        </div>
+        <div class="col-md-2">
+          <div class="d-flex align-items-center">
+            <button
+              *ngIf="insertPermissions"
+              class="btn theme-btn"
+              style="color: white"
+              routerLink="/generate-customers"
+              target="_blank"
+            >
+              <i class="fas fa-plus"></i>&nbsp;Create New
+            </button>
+          </div>
+        </div>
+      </form>
+      <div class="shadow-sm p-2">
+        <button
+          type="button"
+          class="btn btn-outline-success bg-gradient-warning btn-sm mr-2"
+          (click)="printCustomerReport()"
+        >
+          <i class="fas fa-file-print"></i>&nbsp;Print
+        </button>
+        <p-table
+          *ngIf="tableVisible"
+          #dt
+          [value]="allCustomers"
+          [paginator]="true"
+          [rows]="10"
+          [responsive]="true"
+          [showCurrentPageReport]="true"
+          [globalFilterFields]="[
+            'Company_Name',
+            'Contact_Name',
+            'Customer_Address',
+            'Contact_Title',
+            'UserName',
+            'Phone_No',
+            'Email',
+            'Created_By',
+            'Created_At',
+            'Status',
+            'Updated_By',
+            'Updated_At'
+          ]"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        >
+          <ng-template pTemplate="caption">
+            <div class="table-toolbar">
+              <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    dt.filterGlobal($any($event.target).value, 'contains')
+                  "
+                  placeholder="Global Search"
+                />
+              </span>
+            </div>
+          </ng-template>
 
       <ng-template pTemplate="header">
         <tr>
@@ -150,12 +274,8 @@
           <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
           <td class="text-start">{{ CustomersLIst.Company_Name }}</td>
           <td class="text-start">{{ CustomersLIst.Contact_Name }}</td>
-          <td class="text-start">
-            {{ CustomersLIst.Customer_Address }}
-          </td>
-          <td class="text-start">
-            {{ CustomersLIst.Contact_Title }}
-          </td>
+          <td class="text-start">{{ CustomersLIst.Customer_Address }}</td>
+          <td class="text-start">{{ CustomersLIst.Contact_Title }}</td>
           <td class="text-start">{{ CustomersLIst.UserName }}</td>
           <td class="text-start">{{ CustomersLIst.Phone_No }}</td>
           <td class="text-start">{{ CustomersLIst.Email }}</td>
@@ -167,26 +287,12 @@
           <td class="text-center">{{ CustomersLIst.ApprovedBy }}</td>
           <td class="text-center">{{ CustomersLIst.ApprovedDate | date : "dd-MMM-yyyy" }}</td> -->
 
+
           <td class="d-flex gap-2 justify-content-center">
-            <a
-              *ngIf="updatePermissions"
-              class="btn bg-gradient-cyan btn-xs mr-2"
-              target="_blank"
-              title="Edit"
-              [routerLink]="['/generate-customers']"
-              [queryParams]="{
-                Customer_Id: CustomersLIst.Customer_ID
-              }"
-              ><i class="fa fa-edit"></i
-            ></a>
-            <button
-              *ngIf="deletePermissions"
-              class="btn btn-danger btn-sm d-inline-flex align-items-center"
-              (click)="onDelete(CustomersLIst)"
-              title="Delete"
-              aria-label="Delete"
-            >
-              <i class="pi pi-trash me-1"></i>
+            <a *ngIf="updatePermissions" class="btn bg-gradient-cyan btn-xs mr-2" target="_blank" title="Edit" [routerLink]="['/generate-customers']"
+              [queryParams]="{Customer_Id:CustomersLIst.Customer_ID}"><i class="fa fa-edit" ></i></a> 
+            <button *ngIf="deletePermissions" class="btn btn-danger btn-sm d-inline-flex align-items-center" (click)="onDelete(CustomersLIst)" title="Delete" aria-label="Delete">
+                <i class="pi pi-trash me-1"></i>
             </button>
             <!-- ✅ call the handler that opens the dialog -->
             <button
@@ -200,203 +306,44 @@
           </td>
         </tr>
       </ng-template>
+
     </p-table>
-  </div>
-  <!-- 
-  <p-dialog
-    header="Details"
-    [(visible)]="isDetailsVisible"
-    [modal]="true"
-    [closable]="true"
-    [style]="{ width: '50rem' }"
-    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
-    [style]="{ width: '100vw', height: '100vh', top: '0', left: '0' }"
-    [contentStyle]="{ height: 'calc(100vh - 100px)' }"
-    [maximizable]="true"
-    (onHide)="detailsData = null"
-    styleClass="wide-dialog"
-  >
-    <div *ngIf="detailsData">
-      <h2>Company Name - {{ detailsData.Company_Name }}</h2>
-      <p>Group head: {{ detailsData.Group_head }}</p>
-      <p>Contact Person: {{ detailsData.Contact_Name }}</p>
-      <p>Company Info: {{ detailsData.company_info }}</p>
-      <p>Customer Address: {{ detailsData.Customer_Address }}</p>
-      <p>City: {{ detailsData.City }}</p>
-      <p>Postal Code: {{ detailsData.Postal_Code }}</p>
-      <p>Country: {{ detailsData.Country }}</p>
-      <p>Designation: {{ detailsData.Contact_Title }}</p>
-      <p>Phone No: {{ detailsData.Phone_No }}</p>
-      <p>FAX No: {{ detailsData.FAX_No }}</p>
-      <p>Email: {{ detailsData.Email }}</p>
-      <p>Notes: {{ detailsData.Notes }}</p>
-      <p>Created By: {{ detailsData.CreatedBy }}</p>
-      <p>
-        Created At:
-        {{ detailsData.Created_At | date : "dd-MMM-yyyy" }}
-      </p>
-      <p>status: {{ detailsData.status }}</p>
-      <p>Approved By: {{ detailsData.ApprovedBy }}</p>
-      <p>
-        Approved Date:
-        {{ detailsData.ApprovedDate | date : "dd-MMM-yyyy" }}
-      </p>
-      <p>Uppdated By: {{ detailsData.UppdatedBy }}</p>
-      <p>
-        Updated At:
-        {{ detailsData.Updated_At | date : "dd-MMM-yyyy" }}
-      </p>
-    </div>
-  </p-dialog> -->
 
-  <p-dialog
-    header="Details"
-    [(visible)]="isDetailsVisible"
-    [modal]="true"
-    [closable]="true"
-    [style]="{ width: '50rem' }"
-    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
-    [style]="{ width: '100vw', height: '100vh', top: '0', left: '0' }"
-    [contentStyle]="{ height: 'calc(100vh - 100px)' }"
-    [maximizable]="true"
-    (onHide)="detailsData = null"
-    styleClass="wide-dialog"
-  >
-    <form>
-      <div class="card card-primary" *ngIf="detailsData">
-        <div class="card-header m-0 p-2 sticky-header">
-          <div class="float-left">
-            <h5>Company Name - {{ detailsData.Company_Name }}</h5>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="row">
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Group head</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData.Group_head }}</div>
+    <!-- Details dialog -->
+    <p-dialog
+      header="Detail"
+      [(visible)]="isDetailsVisible"
+      [modal]="true"
+      [closable]="true"
+      [style]="{ width: '70vw' }"
+      (onHide)="detailsData = null"
+    >
+      <div *ngIf="detailsData">
+        <h2>Company Name - {{ detailsData.Company_Name }}</h2>
+        <p>Group head: {{ detailsData.Group_head }}</p>
+        <p>Contact Person: {{ detailsData.Contact_Name }}</p>
+        <p>Company Info: {{ detailsData.company_info }}</p>
+        <p>Customer Address: {{ detailsData.Customer_Address }}</p>
+        <p>City: {{ detailsData.City }}</p>
+        <p>Postal Code: {{ detailsData.Postal_Code }}</p>
+        <p>Country: {{ detailsData.Country }}</p>
+        <p>Designation: {{ detailsData.Contact_Title }}</p>
+        <p>Phone No: {{ detailsData.Phone_No }}</p>
+        <p>FAX No: {{ detailsData.FAX_No }}</p>
+        <p>Email: {{ detailsData.Email }}</p>
+        <p>Notes: {{ detailsData.Notes }}</p>
+        <p>Created By: {{ detailsData.CreatedBy }}</p>
+        <p>Created At: {{ detailsData.Created_At | date : "dd-MMM-yyyy" }}</p>
+        <p>status: {{ detailsData.status }}</p>
+        <p>Approved By: {{ detailsData.ApprovedBy }}</p>
+        <p>Approved Date: {{ detailsData.ApprovedDate | date : "dd-MMM-yyyy" }}</p>
+        <p>Uppdated By: {{ detailsData.UppdatedBy }}</p>
+        <p>Updated At: {{ detailsData.Updated_At | date : "dd-MMM-yyyy" }}</p>
 
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Contact Person</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData.Contact_Name }}</div>
-
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Company Info</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData.company_info }}</div>
-
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Customer Address</strong>
-                </div>
-                <div class="col-md-8 mt-2">
-                  {{ detailsData.Customer_Address }}
-                </div>
-
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>City</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.City }}</div>
-
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Postal Code</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.Postal_Code }}</div>
-
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Country</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.Country }}</div>
-
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Designation</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.Delivery }}</div>
-
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Terms of Delivery</strong>
-                </div>
-                <div class="col-md-8 mt-2">
-                  {{ detailsData?.Contact_Title }}
-                </div>
-
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Phone No</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.Phone_No }}</div>
-
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>FAX No</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.FAX_No }}</div>
-
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Contact Person</strong>
-                </div>
-                <div class="col-md-8 mt-2">
-                  {{ detailsData?.Contact_Person }}
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="row">
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Email</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.Email }}</div>
-
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Notes</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.Notes }}</div>
-
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Created By</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.CreatedBy }}</div>
-
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Created [style.property]="expression"</strong>
-                </div>
-                <div class="col-md-8 mt-2">
-                  {{ detailsData?.Created_At | date : "dd-MMM-yyyy" }}
-                </div>
-
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>status</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.status }}</div>
-
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Approved By</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.ApprovedBy }}</div>
-
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Approved Date</strong>
-                </div>
-                <div class="col-md-8 mt-2">
-                  {{ detailsData?.ApprovedDate | date : "dd-MMM-yyyy" }}
-                </div>
-
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Updated By</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.UppdatedBy }}</div>
-
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Updated At</strong>
-                </div>
-                <div class="col-md-8 mt-2">
-                  {{ detailsData.Updated_At | date : "dd-MMM-yyyy" }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
-    </form>
-  </p-dialog>
+    </p-dialog>
+              
+      </div>
+    </div>
+  </div>
 </div>
