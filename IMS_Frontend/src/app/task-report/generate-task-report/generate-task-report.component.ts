@@ -341,7 +341,7 @@ export class GenerateTaskReportComponent {
     masterRow['Subject'] = `Employee Daily Report - ${ymd}-${username}`;
 
     this.doubleMasterEntryService
-      .MailThenInsert(
+      .SaveDataMasterDetails(
         detailRows, // fd (child rows)
         'tbl_task_report_details', // tableName (child)
         masterRow, // fdMaster (master row)

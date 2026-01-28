@@ -2,8 +2,30 @@
   <h1 class="theme-text">Generate Monthly Report Form</h1>
 
   <br />
-  <form [formGroup]="taskForm" style="overflow: scroll;">
+  <form [formGroup]="taskForm" style="overflow: scroll">
     <!-- Header fields -->
+    <div class="row align-items-center">
+      <div class="col-3">
+        <label class="control-label" for="inlineFormInputGroup"
+          >From Date</label
+        >
+        <input type="date" formControlName="FromDate" class="form-control" />
+      </div>
+      <div class="col-3">
+        <label class="control-label" for="inlineFormInputGroup">To Date</label>
+        <input type="date" formControlName="ToDate" class="form-control" />
+      </div>
+      <div class="col-3">
+        <button
+          title="Load Customer"
+          type="button"
+          (click)="loadCustomer()"
+          class="btn btn-sm theme-btn mt-4 p-1"
+        >
+          <i class="fas fa-search"></i>&nbsp;Load Customer
+        </button>
+      </div>
+    </div>
     <div class="row mb-3">
       <div class="col-md-6">
         <label class="form-label">Task No</label>
@@ -21,16 +43,12 @@
       <div class="col-md-6">
         <label class="control-label">Date</label>
 
-        <input
-              type="date"
-              formControlName="Date"
-              class="form-control"
-            />
+        <input type="date" formControlName="Date" class="form-control" />
       </div>
     </div>
 
     <!-- Items table (Monthly Report fields) -->
-    <table class="table table-bordered" style="width:160% !important;">
+    <table class="table table-bordered" style="width: 160% !important">
       <thead>
         <tr>
           <th style="text-align: center">Customer Name</th>
@@ -38,9 +56,15 @@
           <th style="text-align: center">How many team you work</th>
           <th style="text-align: center">Order Season</th>
           <th style="text-align: center">Description</th>
-          <th style="text-align: center">Time and purpose of first visit this month</th>
-          <th style="text-align: center">Time and purpose of second visit this month</th>
-          <th style="text-align: center">Time and purpose of third visit this month</th>
+          <th style="text-align: center">
+            Time and purpose of first visit this month
+          </th>
+          <th style="text-align: center">
+            Time and purpose of second visit this month
+          </th>
+          <th style="text-align: center">
+            Time and purpose of third visit this month
+          </th>
           <th style="text-align: center">Order Summary</th>
           <th style="text-align: center">Summary of Submitted Sample</th>
           <th style="text-align: center">Summary of New Article Developed</th>
@@ -48,10 +72,14 @@
         </tr>
       </thead>
 
-      <tbody formArrayName="items" style="width: 160% !important;">
-        <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
+      <tbody formArrayName="items" style="width: 160% !important">
+        <tr
+          *ngFor="let item of items.controls; let i = index"
+          [formGroupName]="i"
+        >
           <td>
-            <p-dropdown appendTo="body"
+            <p-dropdown
+              appendTo="body"
               class="p-0 rm-dd"
               [panelStyle]="{ width: '300px' }"
               [options]="CustomerList"
@@ -68,46 +96,90 @@
           </td>
 
           <td>
-            <input class="form-control form-control-sm" formControlName="Buying_Concern" />
+            <input
+              class="form-control form-control-sm"
+              formControlName="Buying_Concern"
+            />
           </td>
           <td>
-            <p-dropdown appendTo="body" [options]="teamOptions" optionLabel="label" optionValue="value" placeholder="Team" formControlName="TeamSize"></p-dropdown>
-          </td>
-
-          <td>
-            <p-dropdown appendTo="body" [options]="orderSeasons" optionLabel="label" optionValue="value" placeholder="Order Season" formControlName="OrderSeason"></p-dropdown>
-          </td>
-
-          <td>
-            <input class="form-control form-control-sm" formControlName="Description" />
-          </td>
-
-          <td>
-            <input class="form-control form-control-sm" formControlName="Visit1" />
+            <p-dropdown
+              appendTo="body"
+              [options]="teamOptions"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="Team"
+              formControlName="TeamSize"
+            ></p-dropdown>
           </td>
 
           <td>
-            <input class="form-control form-control-sm" formControlName="Visit2" />
+            <p-dropdown
+              appendTo="body"
+              [options]="orderSeasons"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="Order Season"
+              formControlName="OrderSeason"
+            ></p-dropdown>
           </td>
 
           <td>
-            <input class="form-control form-control-sm" formControlName="Visit3" />
+            <input
+              class="form-control form-control-sm"
+              formControlName="Description"
+            />
           </td>
 
           <td>
-            <textarea class="form-control form-control-sm" formControlName="OrderSummary"></textarea>
+            <input
+              class="form-control form-control-sm"
+              formControlName="Visit1"
+            />
           </td>
 
           <td>
-            <textarea class="form-control form-control-sm" formControlName="SampleSummary"></textarea>
+            <input
+              class="form-control form-control-sm"
+              formControlName="Visit2"
+            />
           </td>
 
           <td>
-            <textarea class="form-control form-control-sm" formControlName="NewArticleSummary"></textarea>
+            <input
+              class="form-control form-control-sm"
+              formControlName="Visit3"
+            />
           </td>
 
           <td>
-            <button type="button" class="btn btn-sm btn-danger" (click)="removeItem(i)">×</button>
+            <textarea
+              class="form-control form-control-sm"
+              formControlName="OrderSummary"
+            ></textarea>
+          </td>
+
+          <td>
+            <textarea
+              class="form-control form-control-sm"
+              formControlName="SampleSummary"
+            ></textarea>
+          </td>
+
+          <td>
+            <textarea
+              class="form-control form-control-sm"
+              formControlName="NewArticleSummary"
+            ></textarea>
+          </td>
+
+          <td>
+            <button
+              type="button"
+              class="btn btn-sm btn-danger"
+              (click)="removeItem(i)"
+            >
+              ×
+            </button>
           </td>
         </tr>
       </tbody>
@@ -122,7 +194,7 @@
         type="submit"
         (click)="saveData()"
         [ngClass]="{
-          'theme-btn-disable': taskForm.invalid
+          'theme-btn-disable': taskForm.invalid,
         }"
         class="btn theme-btn btn-rounded"
         [disabled]="taskForm.invalid"
@@ -134,7 +206,7 @@
         type="submit"
         (click)="UpdateData()"
         [ngClass]="{
-          'theme-btn-disable': taskForm.invalid
+          'theme-btn-disable': taskForm.invalid,
         }"
         class="btn theme-btn btn-rounded"
         [disabled]="taskForm.invalid"

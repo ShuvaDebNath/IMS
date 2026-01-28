@@ -52,6 +52,8 @@ export class GenerateMonthlyTaskComponent implements OnInit {
   BuyerList: any[] = [];
   userId: any = '';
   superiorId: any = '';
+  fromDate:any;
+  toDate:any;
 
   constructor(
     private fb: FormBuilder,
@@ -85,6 +87,8 @@ export class GenerateMonthlyTaskComponent implements OnInit {
     const taskNo = yyyymmdd + '-' + userName;
 
     this.taskForm = this.fb.group({
+      FromDate: [''],
+      ToDate: [''],
       TaskNo: [taskNo, [Validators.required]],
       Date: ['', [Validators.required]],
       items: this.fb.array([], { validators: [this.rowsCompleteValidator()] }),
@@ -114,7 +118,7 @@ export class GenerateMonthlyTaskComponent implements OnInit {
     this.getDataService.GetInitialData(ProcedureData).subscribe({
       next: (results) => {
         if (results.status) {
-          this.CustomerList = JSON.parse(results.data).Tables1;
+          //this.CustomerList = JSON.parse(results.data).Tables1;
           this.superiorId = JSON.parse(results.data).Tables2[0];
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
@@ -557,6 +561,37 @@ export class GenerateMonthlyTaskComponent implements OnInit {
               })
             );
           });
+        } else if (results.msg == 'Invalid Token') {
+          swal.fire('Session Expierd!', 'Please Login Again.', 'info');
+          this.gs.Logout();
+        } else {
+        }
+      },
+      error: (err) => {},
+    });
+  }
+
+  loadCustomer(){
+    const fromDate = this.taskForm.get('FromDate')?.value;
+    const toDate = this.taskForm.get('ToDate')?.value;
+    
+    console.log('From Date:', fromDate);
+    console.log('To Date:', toDate);
+    
+    var ProcedureData = {
+      procedureName: '[usp_Task_GetCustomer]',
+      parameters: {
+        FromDate: fromDate,
+        ToDate: toDate,
+      },
+    };
+
+    this.getDataService.GetInitialData(ProcedureData).subscribe({
+      next: (results) => {
+        if (results.status) {
+          console.log(results.data);
+          
+          this.CustomerList = JSON.parse(results.data).Tables1;
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
           this.gs.Logout();
