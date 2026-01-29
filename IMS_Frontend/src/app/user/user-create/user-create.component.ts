@@ -187,6 +187,8 @@ export class UserCreateComponent {
           'tbl_users'
         )
         .subscribe((res: any) => {
+          console.log(res);
+          
           if (res.status) {
             swal
               .fire({
@@ -199,12 +201,13 @@ export class UserCreateComponent {
                 this.ngOnInit();
               });
           } else {
-            if (res.message == 'Data already exist') {
-              swal.fire('Data already exist', '', 'warning');
+            if (res.message == 'Data already exist' || res.message.toLowerCase().includes('duplicate')) {
+              swal.fire('Username already exists!', 'Please choose a different username.', 'warning');
             } else if (res.message == 'Invalid Token') {
               swal.fire('Session Expierd!', 'Please Login Again.', 'info');
               this.gs.Logout();
-            } else {
+            } 
+            else {
               swal.fire({
                 title: `Faild!`,
                 text: `Save Faild!`,
@@ -300,15 +303,15 @@ export class UserCreateComponent {
                 this.ngOnInit();
               });
           } else {
-            if (res.message == 'Data already exist') {
-              swal.fire('Data already exist', '', 'warning');
+            if (res.message == 'Data already exist' || res.message.toLowerCase().includes('duplicate')) {
+              swal.fire('Username already exists!', 'Please choose a different username.', 'warning');
             } else if (res.message == 'Invalid Token') {
               swal.fire('Session Expierd!', 'Please Login Again.', 'info');
               this.gs.Logout();
             } else {
               swal.fire({
                 title: `Faild!`,
-                text: `Save Faild!`,
+                text: `Update Faild!`,
                 icon: 'info',
                 timer: 5000,
               });
