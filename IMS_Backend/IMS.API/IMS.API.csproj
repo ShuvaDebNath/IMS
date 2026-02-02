@@ -180,7 +180,7 @@
 
   <ItemGroup>
     <Reference Include="RDLCSimplified">
-      <HintPath>C:\Users\Asus\Downloads\RDLCSimplified.dll</HintPath>
+      <HintPath>D:\RDLCSimplified.dll</HintPath>
     </Reference>
   </ItemGroup>
 

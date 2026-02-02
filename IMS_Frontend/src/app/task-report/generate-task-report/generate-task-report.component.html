@@ -15,10 +15,11 @@
           placeholder="Task No"
           id="taskNo"
           name="taskNo"
+          readonly
           value=""
         />
       </div>
-      <div class="col-md-6">
+      <div class="col-md-6" *ngIf="isEdit">
         <label class="control-label">Date</label>
 
         <input type="date" formControlName="Date" class="form-control" />
@@ -110,8 +111,12 @@
           [formGroupName]="i"
         >
           <td>
-						<input class="form-control form-control-sm" formControlName="Buyer" style="width: 180px;"/>
-					</td>
+            <input
+              class="form-control form-control-sm"
+              formControlName="Buyer"
+              style="width: 180px"
+            />
+          </td>
           <td>
             <div class="form-group">
               <p-dropdown
@@ -145,7 +150,7 @@
               formControlName="InTime"
               [showTime]="true"
               [hourFormat]="'24'"
-                [style]="{ width: '150px' }"
+              [style]="{ width: '150px' }"
             />
           </td>
 
@@ -156,7 +161,7 @@
               formControlName="OutTime"
               [showTime]="true"
               [hourFormat]="'24'"
-                [style]="{ width: '150px' }"
+              [style]="{ width: '150px' }"
             />
             <div
               *ngIf="
@@ -207,7 +212,7 @@
             <input
               class="form-control form-control-sm"
               formControlName="AlreadyReceivedArticle"
-              style="width: 180px;"
+              style="width: 180px"
             />
           </td>
 
@@ -215,7 +220,7 @@
             <input
               class="form-control form-control-sm"
               formControlName="UnitPriceUSD"
-              style="width: 180px;"
+              style="width: 180px"
             />
           </td>
 
@@ -223,7 +228,7 @@
             <input
               class="form-control form-control-sm"
               formControlName="UnitPriceBDT"
-              style="width: 180px;"
+              style="width: 180px"
             />
           </td>
 
@@ -231,7 +236,7 @@
             <input
               class="form-control form-control-sm"
               formControlName="ProdCostUnit"
-              style="width: 180px;"
+              style="width: 180px"
             />
           </td>
 
@@ -239,7 +244,7 @@
             <input
               class="form-control form-control-sm"
               formControlName="FirstOrderReceivedTime"
-              style="width: 180px;"
+              style="width: 180px"
             />
           </td>
 
@@ -247,7 +252,7 @@
             <input
               class="form-control form-control-sm"
               formControlName="LatestOrderReceivedTime"
-              style="width: 180px;"
+              style="width: 180px"
             />
           </td>
           <td>
@@ -304,7 +309,7 @@
             <textarea
               class="form-control form-control-sm"
               formControlName="SampleSubmit"
-              style="width: 180px;"
+              style="width: 180px"
               required="true"
             ></textarea>
           </td>
@@ -312,7 +317,7 @@
             <textarea
               class="form-control form-control-sm"
               formControlName="discussion"
-              style="width: 180px;"
+              style="width: 180px"
               required="true"
             ></textarea>
           </td>
@@ -346,7 +351,7 @@
         type="submit"
         (click)="UpdateData()"
         [ngClass]="{
-          'theme-btn-disable': taskForm.invalid
+          'theme-btn-disable': taskForm.invalid,
         }"
         class="btn theme-btn btn-rounded"
         [disabled]="taskForm.invalid"
@@ -357,6 +362,3 @@
     </div>
   </form>
 </div>
-
-
-

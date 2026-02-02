@@ -111,7 +111,6 @@ export class GenerateTaskReportComponent {
         'lilya@sunshineinterlining.com',
         [Validators.required, Validators.email],
       ],
-      Date: ['', [Validators.required]],
       items: this.fb.array([], { validators: [this.rowsCompleteValidator()] }),
     });
   }
@@ -272,7 +271,7 @@ export class GenerateTaskReportComponent {
       Mail_CC: fv.CcMail,
       User_ID: this.userId,
       Superior_ID: fv.superiorId,
-      Date: fv.Date,
+      Date: new Date().toISOString(),
       Task_Report_Code: fv.TaskNo,
       MailBody: '',
       Subject: '',
@@ -357,6 +356,14 @@ export class GenerateTaskReportComponent {
             swal.fire('Success', 'Task saved successfully', 'success');
             this.items.clear();
             this.taskForm.reset();
+            var userName = window.localStorage.getItem('userName');
+            const yyyymmdd = new Date()
+              .toISOString()
+              .slice(0, 10)
+              .replace(/-/g, '');
+
+            var taskNo = yyyymmdd + '-' + userName;
+            this.taskForm.controls['TaskNo'].setValue(taskNo);
             this.addItem();
           } else {
             swal.fire(
