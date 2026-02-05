@@ -111,6 +111,7 @@ export class GenerateTaskReportComponent {
         'lilya@sunshineinterlining.com',
         [Validators.required, Validators.email],
       ],
+      Date:[''],
       items: this.fb.array([], { validators: [this.rowsCompleteValidator()] }),
     });
   }
@@ -616,6 +617,8 @@ export class GenerateTaskReportComponent {
             '-' +
             String(d.getDate()).padStart(2, '0');
 
+            console.log(localDate);
+            
           this.taskForm.controls['ToMail'].setValue(data[0].Mail_TO);
           this.taskForm.controls['CcMail'].setValue(data[0].Mail_CC);
           this.taskForm.controls['TaskNo'].setValue(data[0].Task_Report_Code);

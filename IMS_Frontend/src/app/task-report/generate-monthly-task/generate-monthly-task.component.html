@@ -41,7 +41,7 @@
           value=""
         />
       </div>
-      <div class="col-md-6">
+      <div class="col-md-6" *ngIf="isEdit">
         <label class="control-label">Date</label>
 
         <input type="date" formControlName="Date" class="form-control" />

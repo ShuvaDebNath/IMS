@@ -90,7 +90,7 @@ export class GenerateMonthlyTaskComponent implements OnInit {
       FromDate: [''],
       ToDate: [''],
       TaskNo: [taskNo, [Validators.required]],
-      Date: ['', [Validators.required]],
+      Date: [''],
       items: this.fb.array([], { validators: [this.rowsCompleteValidator()] }),
     });
   }
@@ -231,7 +231,7 @@ export class GenerateMonthlyTaskComponent implements OnInit {
     const masterRow = {
       User_ID: this.userId,
       Superior_ID: fv.superiorId,
-      Date: fv.Date,
+      Date: new Date().toISOString(),
       Task_Report_Code: fv.TaskNo,
     };
 
@@ -286,6 +286,14 @@ export class GenerateMonthlyTaskComponent implements OnInit {
             this.items.clear();
             this.taskForm.reset();
             this.addItem();
+            var userName = window.localStorage.getItem('userName');
+            const yyyymmdd = new Date()
+              .toISOString()
+              .slice(0, 10)
+              .replace(/-/g, '');
+
+            var taskNo = yyyymmdd + '-' + userName;
+            this.taskForm.controls['TaskNo'].setValue(taskNo);
           } else {
             swal.fire(
               'Task Update Failed',
