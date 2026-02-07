@@ -88,8 +88,10 @@
         <tr>
           <th style="text-align: center">Buying House</th>
           <th style="text-align: center">Customer Name</th>
+          <th style="text-align: center">Article No</th>
           <th style="text-align: center">In Time</th>
           <th style="text-align: center">Out Time</th>
+          <th style="text-align: center">Purpose</th>
           <th style="text-align: center">Old/New</th>
           <th style="text-align: center">Already Receive Order Article</th>
           <th style="text-align: center">Unit Price USD</th>
@@ -143,6 +145,14 @@
             </div>
           </td>
 
+          <td>
+            <input
+              class="form-control form-control-sm"
+              formControlName="Article_No"
+              style="width: 180px"
+            />
+          </td>
+
           <td class="col-description">
             <p-calendar
               appendTo="body"
@@ -181,6 +191,14 @@
             >
               Out Time cannot be earlier than In Time
             </div>
+          </td>
+
+          <td>
+            <input
+              class="form-control form-control-sm"
+              formControlName="Purpose"
+              style="width: 180px"
+            />
           </td>
           <td>
             <div class="form-group">

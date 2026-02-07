@@ -54,6 +54,7 @@
         <tr>
           <th style="text-align: center">Customer Name</th>
           <th style="text-align: center">Buying Concern Factory/Buyer</th>
+          <th style="text-align: center">Concern Factory(If buying office or group)</th>
           <th style="text-align: center">How many team you work</th>
           <th style="text-align: center">Order Season</th>
           <th style="text-align: center">Description</th>
@@ -67,6 +68,8 @@
             Time and purpose of third visit this month
           </th>
           <th style="text-align: center">Order Summary</th>
+          <th style="text-align: center">CM Summary</th>
+          <th style="text-align: center">Net Sales Summary</th>
           <th style="text-align: center">Summary of Submitted Sample</th>
           <th style="text-align: center">Summary of New Article Developed</th>
           <th style="width: 60px"></th>
@@ -100,6 +103,12 @@
             <input
               class="form-control form-control-sm"
               formControlName="Buying_Concern"
+            />
+          </td>
+          <td>
+            <input
+              class="form-control form-control-sm"
+              formControlName="Concern_Factory"
             />
           </td>
           <td>
@@ -157,6 +166,18 @@
               class="form-control form-control-sm"
               formControlName="OrderSummary"
             ></textarea>
+          </td>
+          <td>
+            <input
+              class="form-control form-control-sm"
+              formControlName="CM_Summary"
+            />
+          </td>
+          <td>
+            <input
+              class="form-control form-control-sm"
+              formControlName="Net_Sales_Summary"
+            />
           </td>
 
           <td>

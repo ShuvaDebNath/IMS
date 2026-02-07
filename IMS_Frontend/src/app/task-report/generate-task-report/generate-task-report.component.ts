@@ -178,6 +178,8 @@ export class GenerateTaskReportComponent {
         ProdCostUnit: this.fb.control<string | null>(null),
         FirstOrderReceivedTime: this.fb.control<string | null>(null),
         LatestOrderReceivedTime: this.fb.control<string | null>(null),
+        Purpose: this.fb.control<string | null>(null),
+        Article_No: this.fb.control<string | null>(null),
         PaymentIssue: this.fb.control<string | null>(null, Validators.required),
         CommercialIssue: this.fb.control<string | null>(
           null,
@@ -323,6 +325,8 @@ export class GenerateTaskReportComponent {
         First_Received_Time: i.FirstOrderReceivedTime,
         Latest_Order_Receive_Time: i.LatestOrderReceivedTime,
         Buying_House: i.Buyer,
+        Article_No: i.Article_No,
+        Purpose: i.Purpose,
       };
     });
 
@@ -451,6 +455,8 @@ export class GenerateTaskReportComponent {
         First_Received_Time: i.FirstOrderReceivedTime,
         Latest_Order_Receive_Time: i.LatestOrderReceivedTime,
         Buying_House: i.Buyer,
+        Article_No: i.Article_No,
+        Purpose: i.Purpose,
       };
     });
 
@@ -643,6 +649,8 @@ export class GenerateTaskReportComponent {
                 ProdCostUnit: item.Prod_Cost_Unit,
                 FirstOrderReceivedTime: item.First_Received_Time,
                 LatestOrderReceivedTime: item.Latest_Order_Receive_Time,
+                Article_No: item.Article_No,
+                Purpose: item.Purpose,
               }),
             );
           });
