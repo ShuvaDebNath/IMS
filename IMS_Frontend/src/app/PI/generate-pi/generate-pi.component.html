@@ -7,7 +7,7 @@
         <h1 class=" ">Proforma Invoice</h1>
         <div class="float-right">
           <button
-            *ngIf="tempPI==''"
+            *ngIf="tempPI=='' || tempPI==undefined"
             class="btn btn-sm btn-pi-save mr-2"
             (click)="Save()"
             [disabled]="!Formgroup.valid"
@@ -15,7 +15,7 @@
             <i class="fas fa-save"></i>&nbsp;Save
           </button>
           <button
-            *ngIf="tempPI!=''"
+            *ngIf="tempPI!='' && tempPI!=undefined"
             class="btn btn-sm btn-pi-save mr-2"
             (click)="Update()"
             [disabled]="!Formgroup.valid"
