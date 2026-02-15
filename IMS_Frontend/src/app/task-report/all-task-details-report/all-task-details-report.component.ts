@@ -58,6 +58,7 @@ export class AllTaskDetailsReportComponent {
   getDataModel: GetDataModel = new GetDataModel();
   detailsData: any;
   isDetailsVisible: boolean = false;
+  userId:any = '';
 
   constructor(
     private fb: FormBuilder,
@@ -80,6 +81,7 @@ export class AllTaskDetailsReportComponent {
     this.title.setTitle('All Task Details Report');
     this.SearchForm.get('fromDate')?.setValue(new Date().toISOString().split('T')[0]);
     this.SearchForm.get('toDate')?.setValue(new Date().toISOString().split('T')[0]);
+    this.userId = window.localStorage.getItem('userId') || '';
   }
   initForm(): void {
     this.SearchForm = this.fb.group({
@@ -97,6 +99,7 @@ export class AllTaskDetailsReportComponent {
     param.parameters = {
       FromDate: fromDate,
       ToDate: toDate,
+      userId:this.userId
     };
 
     this.masterEntryService.GetInitialData(param).subscribe({
@@ -124,6 +127,7 @@ export class AllTaskDetailsReportComponent {
     param.parameters = {
       FromDate: fromDate,
       ToDate: toDate,
+      UserId:this.userId
     };
 
     this.masterEntryService.GetInitialData(param).subscribe({
@@ -175,7 +179,7 @@ export class AllTaskDetailsReportComponent {
         excelBtn?.addEventListener('click', () => {
           swal.close();
           this.reportService.PrintTaskDetails(
-            { fromDate: fromDate, toDate: toDate },
+            { fromDate: fromDate, toDate: toDate,userId:this.userId },
             'excel',
             true
           );
@@ -184,7 +188,7 @@ export class AllTaskDetailsReportComponent {
         wordBtn?.addEventListener('click', () => {
           swal.close();
           this.reportService.PrintTaskDetails(
-            { fromDate: fromDate, toDate: toDate },
+            { fromDate: fromDate, toDate: toDate,userId:this.userId },
             'word',
             true
           );
@@ -194,7 +198,7 @@ export class AllTaskDetailsReportComponent {
           swal.close();
 
           this.reportService.PrintTaskDetails(
-            { fromDate: fromDate, toDate: toDate },
+            { fromDate: fromDate, toDate: toDate,userId:this.userId },
             'pdf',
             true
           );

@@ -428,20 +428,6 @@ export class GenerateMonthlyTaskComponent implements OnInit {
       });
   }
 
-  private formatDateTime(value: any): string | null {
-    if (!value) return null;
-    const d = new Date(value);
-    if (isNaN(d.getTime())) return null;
-
-    const dd = String(d.getDate()).padStart(2, '0');
-    const mm = String(d.getMonth() + 1).padStart(2, '0');
-    const yyyy = d.getFullYear();
-    const HH = String(d.getHours()).padStart(2, '0');
-    const MM = String(d.getMinutes()).padStart(2, '0');
-    const SS = String(d.getSeconds()).padStart(2, '0');
-
-    return `${yyyy}/${mm}/${dd} ${HH}:${MM}:${SS}`;
-  }
 
   /**
    * Parse an ISO-like timestamp (e.g. '2025-02-12T15:19:25') into a local Date.
@@ -597,12 +583,15 @@ export class GenerateMonthlyTaskComponent implements OnInit {
     
     console.log('From Date:', fromDate);
     console.log('To Date:', toDate);
+    console.log(this.userId);
+    
     
     var ProcedureData = {
       procedureName: '[usp_Task_GetCustomer]',
       parameters: {
-        FromDate: fromDate,
-        ToDate: toDate,
+        FromDate: this.formatDateTime(fromDate),
+        ToDate: this.formatDateTime(toDate),
+        UserId:this.userId
       },
     };
 
@@ -621,4 +610,20 @@ export class GenerateMonthlyTaskComponent implements OnInit {
       error: (err) => {},
     });
   }
+
+  private formatDateTime(value: any): string | null {
+    if (!value) return null;
+    const d = new Date(value);
+    if (isNaN(d.getTime())) return null;
+
+    const dd = String(d.getDate()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const yyyy = d.getFullYear();
+    const HH = String(d.getHours()).padStart(2, '0');
+    const MM = String(d.getMinutes()).padStart(2, '0');
+    const SS = String(d.getSeconds()).padStart(2, '0');
+
+    return `${mm}-${dd}-${yyyy}`;
+  }
+
 }
