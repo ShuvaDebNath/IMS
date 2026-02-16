@@ -1818,7 +1818,7 @@ export class ReportService {
   ) {
     const fromDate = report.fromDate ? this.formatDate(report.fromDate) : '';
     const toDate = report.toDate ? this.formatDate(report.toDate) : '';
-    const userID = report.userID ? report.userID : '';
+    const userId = report.userId ? report.userId : '';
 
     const url = `${this.baseUrl}${this.apiController}/TaskMonthlyReport`;
     const token = this.gs.getSessionData('token');
@@ -1830,7 +1830,7 @@ export class ReportService {
     this.http
       .get(url, {
         headers,
-        params: { rptType, fromDate, toDate,userID },
+        params: { rptType, fromDate, toDate,userId },
         responseType: 'blob',
       })
       .subscribe(

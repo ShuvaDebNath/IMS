@@ -2,7 +2,7 @@
   <h1 class="theme-text"><label class="theme-text" style="font-size: 2.5rem;" *ngIf="isEdit">Edit</label><label style="font-size: 2.5rem;" class="theme-text" *ngIf="!isEdit">Generate</label> Task Report Form</h1>
 
   <br />
-  <form [formGroup]="taskForm" style="overflow: scroll">
+  <form [formGroup]="taskForm" >
     <!-- Header fields -->
     <div class="row mb-3">
       <div class="col-md-6">
@@ -82,6 +82,7 @@
       </div>
     </div>
 
+    <div style="width: 160% !important; overflow-x: scroll">
     <!-- Items table -->
     <table class="table table-bordered" style="width: 160% !important">
       <thead>
@@ -351,7 +352,7 @@
         </tr>
       </tbody>
     </table>
-
+    </div>
     <div class="d-flex justify-content-end gap-2 mt-3">
       <button type="button" class="btn btn-outline-success" (click)="addItem()">
         <i class="bi bi-plus-circle me-1"></i> Add Row
