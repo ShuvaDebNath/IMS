@@ -1,7 +1,11 @@
 <div *ngIf="isLoading" class="preloader">
   <div class="loader-wrapper">
     <div class="circle">
-      <img class="loader-logo animation__shake" src="assets/preloader.gif" alt="IMS Logo">
+      <img
+        class="loader-logo animation__shake"
+        src="assets/preloader.gif"
+        alt="IMS Logo"
+      />
     </div>
   </div>
 </div>
@@ -9,35 +13,58 @@
 <div class="card">
   <div class="card-header sticky-header">
     <h3 class="card-title mb-2">
-      <strong>{{PageTitle}}</strong>
+      <strong>{{ PageTitle }}</strong>
     </h3>
     <div class="float-right">
       <div class="btn-group" role="group" aria-label="Basic example">
-
-        <button *ngIf="ShowbtnPar" (click)="getSelectedRows('Partial Approved')" type="button"
-          class="btn btn-success mr-2"><i class="fas fa-check"></i>&nbsp;Approve Partially</button>
-        <button *ngIf="ShowbtnQar" (click)="getSelectedRows('Quartar Approved')" type="button"
-          class="btn btn-primary mr-2"><i class="fas fa-check"></i>&nbsp;Approve Quarterly</button>
-        <button *ngIf="ShowbtnFull" (click)="getSelectedRows('Full Approved')" type="button"
-          class="btn btn-warning mr-2"><i class="fas fa-check"></i>&nbsp;Approve Full</button>
-        <button *ngIf="ShowbtnRej" (click)="getSelectedRows('Rejected')" type="button" class="btn btn-danger mr-2"><i
-            class="fas fa-times"></i>&nbsp;Reject</button>
+        <button
+          *ngIf="ShowbtnPar"
+          (click)="getSelectedRows('Partial Approved')"
+          type="button"
+          class="btn btn-success mr-2"
+        >
+          <i class="fas fa-check"></i>&nbsp;Approve Partially
+        </button>
+        <button
+          *ngIf="ShowbtnQar"
+          (click)="getSelectedRows('Quartar Approved')"
+          type="button"
+          class="btn btn-primary mr-2"
+        >
+          <i class="fas fa-check"></i>&nbsp;Approve Quarterly
+        </button>
+        <button
+          *ngIf="ShowbtnFull"
+          (click)="getSelectedRows('Full Approved')"
+          type="button"
+          class="btn btn-warning mr-2"
+        >
+          <i class="fas fa-check"></i>&nbsp;Approve Full
+        </button>
+        <button
+          *ngIf="ShowbtnRej"
+          (click)="getSelectedRows('Rejected')"
+          type="button"
+          class="btn btn-danger mr-2"
+        >
+          <i class="fas fa-times"></i>&nbsp;Reject
+        </button>
       </div>
     </div>
-
   </div>
   <div class="card-body">
     <form id="Search" [formGroup]="SearchFormgroup" forle="form">
-
       <fieldset class="border p-3">
         <legend class="w-auto px-2">Search</legend>
         <p-divider />
         <div class="container-fluid">
-          <div class="row g-3 align-items-end">
-
+          <!-- <div class="row g-3 align-items-end">
             <div class="col-md-2">
               <label>PI Type</label>
-              <select formControlName="PIType" class="form-control form-control-sm">
+              <select
+                formControlName="PIType"
+                class="form-control form-control-sm"
+              >
                 <option value="" disabled selected>Select a type</option>
                 <option *ngFor="let item of PITypeList" [value]="item.value">
                   {{ item.text }}
@@ -46,165 +73,316 @@
             </div>
 
             <div class="col-md-3">
-              <label for="FromDate" class="small font-weight-bold">From Date</label>
-              <input type="date" formControlName="FromDate" class="form-control" />
+              <label for="FromDate" class="small font-weight-bold"
+                >From Date</label
+              >
+              <input
+                type="date"
+                formControlName="FromDate"
+                class="form-control"
+              />
             </div>
 
             <div class="col-md-3">
               <label for="ToDate" class="small font-weight-bold">To Date</label>
-              <input type="date" formControlName="ToDate" class="form-control" />
+              <input
+                type="date"
+                formControlName="ToDate"
+                class="form-control"
+              />
             </div>
-
 
             <div class="col-md-3">
               <label>PI No</label>
-              <input type="text" formControlName="PINo" class="form-control form-control-sm" placeholder="PI No" />
+              <input
+                type="text"
+                formControlName="PINo"
+                class="form-control form-control-sm"
+                placeholder="PI No"
+              />
             </div>
 
             <div class="col-md-3">
               <label>Shipper</label>
-              <input type="text" formControlName="Shipper" class="form-control form-control-sm" placeholder="Shipper" />
+              <input
+                type="text"
+                formControlName="Shipper"
+                class="form-control form-control-sm"
+                placeholder="Shipper"
+              />
             </div>
 
             <div class="col-md-3">
               <label>Consignee</label>
-              <input type="text" formControlName="Consignee" class="form-control form-control-sm"
-                placeholder="Consignee" />
-            </div>            
-            
+              <input
+                type="text"
+                formControlName="Consignee"
+                class="form-control form-control-sm"
+                placeholder="Consignee"
+              />
+            </div>
+
             <div class="col-md-3">
-  <label>Name <span></span></label>
+              <label>Name <span></span></label>
 
-  <!-- If more than 1 user → show dropdown -->
-  <ng-container *ngIf="UserList.length > 1">
-    <p-dropdown
-      [style]="{ width: '100%' }"
-      class="p-0"
-      [options]="UserList"
-      optionLabel="UserName"
-      optionValue="User_ID"
-      [filter]="true"
-      filterBy="UserName"
-      [showClear]="true"
-      styleClass="listBottom"
-      placeholder="Please Select"
-      formControlName="User_ID"
-    >
-      <ng-template let-item pTemplate="item">
-        <div class="flex align-items-center gap-2">
-          <div>{{ item.UserName }}</div>
-        </div>
-      </ng-template>
-    </p-dropdown>
-  </ng-container>
+           
+              <ng-container *ngIf="UserList.length > 1">
+                <p-dropdown
+                  [style]="{ width: '100%' }"
+                  class="p-0"
+                  [options]="UserList"
+                  optionLabel="UserName"
+                  optionValue="User_ID"
+                  [filter]="true"
+                  filterBy="UserName"
+                  [showClear]="true"
+                  styleClass="listBottom"
+                  placeholder="Please Select"
+                  formControlName="User_ID"
+                >
+                  <ng-template let-item pTemplate="item">
+                    <div class="flex align-items-center gap-2">
+                      <div>{{ item.UserName }}</div>
+                    </div>
+                  </ng-template>
+                </p-dropdown>
+              </ng-container>
 
-  <!-- If only 1 user → show text + hidden input -->
-  <ng-container *ngIf="UserList.length === 1">
-    <input type="text" class="form-control" [value]="UserList[0].UserName" readonly>
-    <input type="hidden" formControlName="User_ID" [value]="UserList[0].User_ID">
-  </ng-container>
+        
+              <ng-container *ngIf="UserList.length === 1">
+                <input
+                  type="text"
+                  class="form-control"
+                  [value]="UserList[0].UserName"
+                  readonly
+                />
+                <input
+                  type="hidden"
+                  formControlName="User_ID"
+                  [value]="UserList[0].User_ID"
+                />
+              </ng-container>
+            </div>
+          </div> -->
+<div class="row g-3 align-items-end">
+
+  <div class="col-md-4">
+    <label>PI Type</label>
+    <select formControlName="PIType" class="form-control form-control-sm">
+      <option value="" disabled selected>Select a type</option>
+      <option *ngFor="let item of PITypeList" [value]="item.value">
+        {{ item.text }}
+      </option>
+    </select>
+  </div>
+
+  <div class="col-md-4">
+    <label>From Date</label>
+    <input type="date" formControlName="FromDate" class="form-control" />
+  </div>
+
+  <div class="col-md-4">
+    <label>To Date</label>
+    <input type="date" formControlName="ToDate" class="form-control" />
+  </div>
+
+  <div class="col-md-4">
+    <label>PI No</label>
+    <input
+      type="text"
+      formControlName="PINo"
+      class="form-control form-control-sm"
+      placeholder="PI No"
+    />
+  </div>
+
+  <div class="col-md-4">
+    <label>Shipper</label>
+    <input
+      type="text"
+      formControlName="Shipper"
+      class="form-control form-control-sm"
+      placeholder="Shipper"
+    />
+  </div>
+
+  <div class="col-md-4">
+    <label>Consignee</label>
+    <input
+      type="text"
+      formControlName="Consignee"
+      class="form-control form-control-sm"
+      placeholder="Consignee"
+    />
+  </div>
+
+  <div class="col-md-4">
+    <label>Name</label>
+
+    <ng-container *ngIf="UserList.length > 1">
+      <p-dropdown
+        [style]="{ width: '100%' }"
+        [options]="UserList"
+        optionLabel="UserName"
+        optionValue="User_ID"
+        [filter]="true"
+        filterBy="UserName"
+        [showClear]="true"
+        placeholder="Please Select"
+        formControlName="User_ID"
+      >
+      </p-dropdown>
+    </ng-container>
+
+    <ng-container *ngIf="UserList.length === 1">
+      <input
+        type="text"
+        class="form-control"
+        [value]="UserList[0].UserName"
+        readonly
+      />
+      <input
+        type="hidden"
+        formControlName="User_ID"
+        [value]="UserList[0].User_ID"
+      />
+    </ng-container>
+  </div>
 
 </div>
 
-
-
-          </div>
-
-          <!-- Second Row: Buttons -->
           <div class="row mt-3 justify-content-end">
             <div class="col-auto">
-              <button type="button" (click)="clearField()" class="btn btn-outline-secondary btn-sm">
+              <button
+                type="button"
+                (click)="clearField()"
+                class="btn btn-outline-secondary btn-sm"
+              >
                 <i class="fas fa-undo"></i>&nbsp;Clear
               </button>
             </div>
             <div class="col-auto">
-              <button type="button" (click)="LoadTableData()" class="btn btn-primary btn-sm">
+              <button
+                type="button"
+                (click)="LoadTableData()"
+                class="btn btn-primary btn-sm"
+              >
                 <i class="fas fa-search"></i>&nbsp;Search
               </button>
             </div>
           </div>
         </div>
-
-
       </fieldset>
-
     </form>
 
     <form>
       <p-divider />
-      <p-table 
-      #table 
-      [value]="DataTable" 
-      [lazy]="true" 
-      [paginator]="true" 
-      [rows]="10" 
-      [totalRecords]="totalRecords"
-        [showCurrentPageReport]="true" 
-        (onLazyLoad)="ReloadTable($event)" 
-        [rowsPerPageOptions]="[10,20,50,100]"
+      <p-table
+        #table
+        [value]="DataTable"
+        [lazy]="true"
+        [paginator]="true"
+        [rows]="10"
+        [totalRecords]="totalRecords"
+        [showCurrentPageReport]="true"
+        (onLazyLoad)="ReloadTable($event)"
+        [rowsPerPageOptions]="[10, 20, 50, 100]"
         [scrollable]="true"
         scrollHeight="600px"
-        [(selection)]="selectedRows" 
+        [(selection)]="selectedRows"
         dataKey="PI_Master_ID"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
-
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      >
         <ng-template pTemplate="header">
           <tr>
-            <th *ngIf="PiStatus!='Full Approved'" style="width: 4rem"><p-tableHeaderCheckbox /></th>
-            <th style="text-align: center;">Serial No</th>
+            <th *ngIf="PiStatus != 'Full Approved'" style="width: 4rem">
+              <p-tableHeaderCheckbox />
+            </th>
+            <th style="text-align: center">Serial No</th>
             <th pSortableColumn="PINo" class="text-center">PI No</th>
             <th pSortableColumn="PIDate" class="text-center">Date</th>
-            <th pSortableColumn="BeneficiaryCompanyName" class="text-center">Shipper</th>
-            <th pSortableColumn="CustomerName" class="text-center">Consignee</th>
-            <th pSortableColumn="CreatedByUserName" class="text-center">Generated By</th>
-            <th  *ngIf="PiStatus=='ALL'" pSortableColumn="PIStatus" class="text-center">Status</th>
-            <th style="text-align: center;">Action</th>
+            <th pSortableColumn="BeneficiaryCompanyName" class="text-center">
+              Shipper
+            </th>
+            <th pSortableColumn="CustomerName" class="text-center">
+              Consignee
+            </th>
+            <th pSortableColumn="CreatedByUserName" class="text-center">
+              Generated By
+            </th>
+            <th
+              *ngIf="PiStatus == 'ALL'"
+              pSortableColumn="PIStatus"
+              class="text-center"
+            >
+              Status
+            </th>
+            <th style="text-align: center">Action</th>
           </tr>
         </ng-template>
 
         <ng-template pTemplate="body" let-row let-i="rowIndex">
           <tr>
-            <td *ngIf="PiStatus!='Full Approved'">
+            <td *ngIf="PiStatus != 'Full Approved'">
               <p-tableCheckbox [value]="row" />
             </td>
-            <td style="text-align: center;">{{ (table.first || 0) + i + 1 }}</td>
+            <td style="text-align: center">{{ (table.first || 0) + i + 1 }}</td>
             <td>{{ row.PINo }}</td>
-            <td>{{ row.PIDate | date:'dd-MM-yyyy'}}</td>
+            <td>{{ row.PIDate | date: "dd-MM-yyyy" }}</td>
             <td>{{ row.BeneficiaryCompanyName }}</td>
             <td>{{ row.CustomerName }}</td>
             <td>{{ row.CreatedByUserName }}</td>
-            <td *ngIf="PiStatus=='ALL'" class="text-center">
-              <span [ngClass]="{
-                'badge badge-success': row.PIStatus === 'Approved',
-                'badge badge-warning': row.PIStatus === 'Pending',
-                'badge badge-danger': row.PIStatus === 'Rejected',
-                'badge badge-info': row.PIStatus === 'Partial Approved',
-                'badge badge-primary': row.PIStatus === 'Quartar Approved',
-                'badge badge-secondary': row.PIStatus === 'Full Approved'
-              }">
+            <td *ngIf="PiStatus == 'ALL'" class="text-center">
+              <span
+                [ngClass]="{
+                  'badge badge-success': row.PIStatus === 'Approved',
+                  'badge badge-warning': row.PIStatus === 'Pending',
+                  'badge badge-danger': row.PIStatus === 'Rejected',
+                  'badge badge-info': row.PIStatus === 'Partial Approved',
+                  'badge badge-primary': row.PIStatus === 'Quartar Approved',
+                  'badge badge-secondary': row.PIStatus === 'Full Approved',
+                }"
+              >
                 {{ row.PIStatus }}
               </span>
-
             </td>
             <td class="text-center align-middle">
               <div class="btn-group" role="group">
-            
-                <button class="btn theme-btn-view btn-sm mr-1" title="View" (click)="ViewDetails(row.PI_Master_ID)">
+                <button
+                  class="btn theme-btn-view btn-sm mr-1"
+                  title="View"
+                  (click)="ViewDetails(row.PI_Master_ID)"
+                >
                   <i class="fa fa-eye"></i>
                 </button>
-            
-                <button *ngIf="ShowbtnSpecial" class="btn theme-btn-purple btn-sm mr-1" title="Special Approval"
-                  (click)="OpenSpecialApprove(row.PI_Master_ID)">
-                  <i class="fa fa-check-circle"></i>
-                </button>  
 
-                <button *ngIf="updatePermissions" class="btn theme-btn-edit btn-sm mr-1" title="Edit" type="button" (click)="OpenInNewTab(row.PI_Master_ID)">
+                <button
+                  *ngIf="ShowbtnSpecial"
+                  class="btn theme-btn-purple btn-sm mr-1"
+                  title="Special Approval"
+                  (click)="OpenSpecialApprove(row.PI_Master_ID)"
+                >
+                  <i class="fa fa-check-circle"></i>
+                </button>
+
+                <button
+                  *ngIf="updatePermissions"
+                  class="btn theme-btn-edit btn-sm mr-1"
+                  title="Edit"
+                  type="button"
+                  (click)="OpenInNewTab(row.PI_Master_ID)"
+                >
                   <i class="fa fa-edit"></i>
                 </button>
-            
-                <button *ngIf="deletePermissions" class="btn theme-btn-delete btn-sm" title="Delete" (click)="DeleteData(row)">
+
+                <button
+                  *ngIf="deletePermissions"
+                  class="btn theme-btn-delete btn-sm"
+                  title="Delete"
+                  (click)="DeleteData(row)"
+                >
                   <i class="fas fa-trash"></i>
-                </button>    
+                </button>
               </div>
             </td>
           </tr>
@@ -215,35 +393,50 @@
             <td colspan="6">No data found.</td>
           </tr>
         </ng-template>
-
       </p-table>
     </form>
   </div>
 </div>
 
-
-<p-dialog header="Details" [(visible)]="isViewDetails" [modal]="true" [closable]="true" [style]="{ width: '50rem' }"
-  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{width: '100vw', height: '100vh', top: '0', left: '0'}"
-  [contentStyle]="{'height':'calc(100vh - 100px)'}" [maximizable]="true" (onHide)="isViewDetails = false"
-  styleClass="wide-dialog">
+<p-dialog
+  header="Details"
+  [(visible)]="isViewDetails"
+  [modal]="true"
+  [closable]="true"
+  [style]="{ width: '50rem' }"
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+  [style]="{ width: '100vw', height: '100vh', top: '0', left: '0' }"
+  [contentStyle]="{ height: 'calc(100vh - 100px)' }"
+  [maximizable]="true"
+  (onHide)="isViewDetails = false"
+  styleClass="wide-dialog"
+>
   <form>
     <div class="card card-primary">
       <div class="card-header m-0 p-2 sticky-header">
         <div class="float-left">
-          <h5>{{PIData?.PINo}}</h5>
-          <span>{{PIData?.PIDate | date:'dd/MM/yyyy'}}</span>
+          <h5>{{ PIData?.PINo }}</h5>
+          <span>{{ PIData?.PIDate | date: "dd/MM/yyyy" }}</span>
         </div>
 
         <div class="float-right">
           <div class="btn-group" role="group" aria-label="Basic example">
             <!-- <button type="button" class="btn btn-outline-success bg-gradient-warning  btn-sm mr-2">PI Log</button>
             <button type="button" class="btn btn-outline-success bg-gradient-warning btn-sm mr-2">PI Detail Log</button> -->
-            <button type="button" class="btn btn-outline-success bg-gradient-warning btn-sm mr-2" (click)="Print()">
+            <button
+              type="button"
+              class="btn btn-outline-success bg-gradient-warning btn-sm mr-2"
+              (click)="Print()"
+            >
               <i class="fas fa-file-print"></i>&nbsp;Print
             </button>
-            <button type="button" class="btn btn-outline-success bg-gradient-warning btn-sm mr-2" 
-             (click)="OpenDeliveryDetails(PIData?.PI_Master_ID)">
-             <i class="fas fa-truck"></i>&nbsp;Delivery Detail</button>
+            <button
+              type="button"
+              class="btn btn-outline-success bg-gradient-warning btn-sm mr-2"
+              (click)="OpenDeliveryDetails(PIData?.PI_Master_ID)"
+            >
+              <i class="fas fa-truck"></i>&nbsp;Delivery Detail
+            </button>
           </div>
         </div>
       </div>
@@ -251,106 +444,180 @@
         <div class="row">
           <div class="col-md-6">
             <div class="row">
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Consignee Initial</strong></div>
-              <div class="col-md-8 mt-2">{{PIData?.Consignee_Initial}}</div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Consignee Initial</strong>
+              </div>
+              <div class="col-md-8 mt-2">{{ PIData?.Consignee_Initial }}</div>
 
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Shipper</strong></div>
-              <div class="col-md-8 mt-2">{{PIData?.BeneficiaryCompanyName}}</div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Shipper</strong>
+              </div>
+              <div class="col-md-8 mt-2">
+                {{ PIData?.BeneficiaryCompanyName }}
+              </div>
 
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Beneficiary Bank</strong></div>
-              <div class="col-md-8 mt-2">{{PIData?.BeneficiaryBankName}}</div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Beneficiary Bank</strong>
+              </div>
+              <div class="col-md-8 mt-2">{{ PIData?.BeneficiaryBankName }}</div>
 
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Consignee</strong></div>
-              <div class="col-md-8 mt-2">{{PIData?.CustomerName}}</div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Consignee</strong>
+              </div>
+              <div class="col-md-8 mt-2">{{ PIData?.CustomerName }}</div>
 
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Applicant Bank</strong></div>
-              <div class="col-md-8 mt-2">{{PIData?.CustomerBankName}}</div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Applicant Bank</strong>
+              </div>
+              <div class="col-md-8 mt-2">{{ PIData?.CustomerBankName }}</div>
 
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Buyer Name</strong></div>
-              <div class="col-md-8 mt-2">{{PIData?.BuyerName}}</div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Buyer Name</strong>
+              </div>
+              <div class="col-md-8 mt-2">{{ PIData?.BuyerName }}</div>
 
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Country Of Origin</strong></div>
-              <div class="col-md-8 mt-2">{{PIData?.CountryOfOriginName}}</div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Country Of Origin</strong>
+              </div>
+              <div class="col-md-8 mt-2">{{ PIData?.CountryOfOriginName }}</div>
 
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Delivery Details</strong></div>
-              <div class="col-md-8 mt-2">{{PIData?.Delivery}}</div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Delivery Details</strong>
+              </div>
+              <div class="col-md-8 mt-2">{{ PIData?.Delivery }}</div>
 
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Terms of Delivery</strong></div>
-              <div class="col-md-8 mt-2">{{PIData?.TermsOfDeliveryName}}</div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Terms of Delivery</strong>
+              </div>
+              <div class="col-md-8 mt-2">{{ PIData?.TermsOfDeliveryName }}</div>
 
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Force Majeure</strong></div>
-              <div class="col-md-8 mt-2">{{PIData?.ForceMajeureName}}</div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Force Majeure</strong>
+              </div>
+              <div class="col-md-8 mt-2">{{ PIData?.ForceMajeureName }}</div>
 
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Loading Mode</strong></div>
-              <div class="col-md-8 mt-2">{{PIData?.LoadingModeName}}</div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Loading Mode</strong>
+              </div>
+              <div class="col-md-8 mt-2">{{ PIData?.LoadingModeName }}</div>
 
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Contact Person</strong></div>
-              <div class="col-md-8 mt-2">{{PIData?.Contact_Person}}</div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Contact Person</strong>
+              </div>
+              <div class="col-md-8 mt-2">{{ PIData?.Contact_Person }}</div>
 
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Packing Mode</strong></div>
-              <div class="col-md-8 mt-2">{{PIData?.PackingName}}</div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Packing Mode</strong>
+              </div>
+              <div class="col-md-8 mt-2">{{ PIData?.PackingName }}</div>
 
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Expire Date</strong></div>
-              <div class="col-md-8 mt-2">{{PIData?.ExpireDate|date:'dd/MM/yyyy HH:mm:ss'}}</div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Expire Date</strong>
+              </div>
+              <div class="col-md-8 mt-2">
+                {{ PIData?.ExpireDate | date: "dd/MM/yyyy HH:mm:ss" }}
+              </div>
             </div>
           </div>
           <div class="col-md-6">
             <div class="row">
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Arbitration</strong></div>
-              <div class="col-md-8 mt-2">{{PIData?.ArbitrationName}}</div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Arbitration</strong>
+              </div>
+              <div class="col-md-8 mt-2">{{ PIData?.ArbitrationName }}</div>
 
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Remarks</strong></div>
-              <div class="col-md-8 mt-2">{{PIData?.Remarks}}</div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Remarks</strong>
+              </div>
+              <div class="col-md-8 mt-2">{{ PIData?.Remarks }}</div>
 
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Style</strong></div>
-              <div class="col-md-8 mt-2">{{PIData?.Style}}</div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Style</strong>
+              </div>
+              <div class="col-md-8 mt-2">{{ PIData?.Style }}</div>
 
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Payment Terms</strong></div>
-              <div class="col-md-8 mt-2">{{PIData?.PaymentTermName}}</div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Payment Terms</strong>
+              </div>
+              <div class="col-md-8 mt-2">{{ PIData?.PaymentTermName }}</div>
 
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Price Term</strong></div>
-              <div class="col-md-8 mt-2">{{PIData?.PriceTermName}}</div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Price Term</strong>
+              </div>
+              <div class="col-md-8 mt-2">{{ PIData?.PriceTermName }}</div>
 
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Partial Shipment</strong></div>
-              <div class="col-md-8 mt-2">{{PIData?.ShipmentName}}</div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Partial Shipment</strong>
+              </div>
+              <div class="col-md-8 mt-2">{{ PIData?.ShipmentName }}</div>
 
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Delivery Address</strong></div>
-              <div class="col-md-8 mt-2">{{PIData?.Delivery_Address}}</div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Delivery Address</strong>
+              </div>
+              <div class="col-md-8 mt-2">{{ PIData?.Delivery_Address }}</div>
 
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Documents</strong></div>
-              <div class="col-md-8 mt-2">{{PIData?.Documents}}</div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Documents</strong>
+              </div>
+              <div class="col-md-8 mt-2">{{ PIData?.Documents }}</div>
 
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Goods Description</strong></div>
-              <div class="col-md-8 mt-2">{{PIData?.GoodsDescription}}</div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Goods Description</strong>
+              </div>
+              <div class="col-md-8 mt-2">{{ PIData?.GoodsDescription }}</div>
 
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Shipping Marks</strong></div>
-              <div class="col-md-8 mt-2">{{PIData?.ShippingMarks}}</div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Shipping Marks</strong>
+              </div>
+              <div class="col-md-8 mt-2">{{ PIData?.ShippingMarks }}</div>
 
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Loading Port</strong></div>
-              <div class="col-md-8 mt-2">{{PIData?.Loading_Port}}</div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Loading Port</strong>
+              </div>
+              <div class="col-md-8 mt-2">{{ PIData?.Loading_Port }}</div>
 
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Destination Port</strong></div>
-              <div class="col-md-8 mt-2">{{PIData?.Destination_Port}}</div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Destination Port</strong>
+              </div>
+              <div class="col-md-8 mt-2">{{ PIData?.Destination_Port }}</div>
 
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Created By</strong></div>
-              <div class="col-md-8 mt-2">{{PIData?.CreatedByUserName}}</div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Created By</strong>
+              </div>
+              <div class="col-md-8 mt-2">{{ PIData?.CreatedByUserName }}</div>
 
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Superior</strong></div>
-              <div class="col-md-8 mt-2">{{PIData?.SuperiorName}}</div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Superior</strong>
+              </div>
+              <div class="col-md-8 mt-2">{{ PIData?.SuperiorName }}</div>
 
-              <div class="col-md-4 mt-2 text-right content-middle" *ngIf="PIData?.CustomMaxDeliveryPercentage!=0"><strong>Max Deliverable</strong></div>
-              <div class="col-md-8 mt-2" *ngIf="PIData?.CustomMaxDeliveryPercentage!=0">{{PIData?.CustomMaxDeliveryPercentage}}%</div>
+              <div
+                class="col-md-4 mt-2 text-right content-middle"
+                *ngIf="PIData?.CustomMaxDeliveryPercentage != 0"
+              >
+                <strong>Max Deliverable</strong>
+              </div>
+              <div
+                class="col-md-8 mt-2"
+                *ngIf="PIData?.CustomMaxDeliveryPercentage != 0"
+              >
+                {{ PIData?.CustomMaxDeliveryPercentage }}%
+              </div>
 
-              <div class="col-md-4 mt-2 text-right content-middle"><strong>Status</strong></div>
-              <div class="col-md-8 mt-2"><span class="text-danger"><strong>{{PIData?.Status |
-                    uppercase}}</strong></span></div>
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Status</strong>
+              </div>
+              <div class="col-md-8 mt-2">
+                <span class="text-danger"
+                  ><strong>{{ PIData?.Status | uppercase }}</strong></span
+                >
+              </div>
             </div>
           </div>
         </div>
         <p-divider />
         <div class="table-responsive">
-          <table class="table table-striped table-bordered  table-hover">
-
+          <table class="table table-striped table-bordered table-hover">
             <tr class="bg-gradient-success">
               <th class="text-center align-middle">Article</th>
               <th class="text-center align-middle">A. A.</th>
@@ -360,8 +627,12 @@
               <th class="text-center align-middle">Packaging</th>
               <th class="text-center align-middle">Qty</th>
               <th class="text-center align-middle">Unit</th>
-              <th class="text-center align-middle">Unit Price ({{PIData?.IsMPI==false?'USD':'BDT'}})</th>
-              <th class="text-center align-middle">Total Amount ({{PIData?.IsMPI==false?'USD':'BDT'}})</th>
+              <th class="text-center align-middle">
+                Unit Price ({{ PIData?.IsMPI == false ? "USD" : "BDT" }})
+              </th>
+              <th class="text-center align-middle">
+                Total Amount ({{ PIData?.IsMPI == false ? "USD" : "BDT" }})
+              </th>
               <th class="text-center align-middle">Prod. Cost Unit</th>
               <th class="text-center align-middle">Total Prod. Cost</th>
               <th class="text-center align-middle">Delivered</th>
@@ -369,7 +640,9 @@
 
             <tr *ngFor="let item of PIDetails">
               <td class="text-center align-middle">{{ item.Article }}</td>
-              <td class="text-center align-middle">{{ item.ArticleNo_from_StaticInfo }}</td>
+              <td class="text-center align-middle">
+                {{ item.ArticleNo_from_StaticInfo }}
+              </td>
               <td class="text-center align-middle">{{ item.Description }}</td>
               <td class="text-center align-middle">{{ item.Width }}</td>
               <td class="text-center align-middle">{{ item.Color }}</td>
@@ -377,91 +650,117 @@
               <td class="text-center align-middle">{{ item.Quantity }}</td>
               <td class="text-center align-middle">{{ item.Unit }}</td>
               <td class="text-center align-middle">{{ item.Unit_Price }}</td>
-              <td class="text-center align-middle">{{PIData?.IsMPI==false?item.Total_Amount:item.Total_Amount_Tk}}</td>
-              <td class="text-center align-middle">{{ item.CommissionUnit }}</td>
-              <td class="text-center align-middle">{{ item.TotalCommission }}</td>
-              <td class="text-center align-middle">{{ item.Delivered_Quantity }}</td>
-
-
+              <td class="text-center align-middle">
+                {{
+                  PIData?.IsMPI == false
+                    ? item.Total_Amount
+                    : item.Total_Amount_Tk
+                }}
+              </td>
+              <td class="text-center align-middle">
+                {{ item.CommissionUnit }}
+              </td>
+              <td class="text-center align-middle">
+                {{ item.TotalCommission }}
+              </td>
+              <td class="text-center align-middle">
+                {{ item.Delivered_Quantity }}
+              </td>
             </tr>
 
             <!-- Totals row -->
-            <tr *ngIf="PIDetails && PIDetails.length>0" class="table-secondary font-weight-bold">
+            <tr
+              *ngIf="PIDetails && PIDetails.length > 0"
+              class="table-secondary font-weight-bold"
+            >
               <td colspan="6" class="text-right">Totals</td>
               <td class="text-center">{{ totalsOrderQty }}</td>
               <td></td>
               <td></td>
-              <td class="text-right">{{ totalsAmount | number:'1.2-2' }}</td>
+              <td class="text-right">{{ totalsAmount | number: "1.2-2" }}</td>
               <td></td>
-              <td class="text-right">{{ totalsProdCost | number:'1.2-2' }}</td>
+              <td class="text-right">{{ totalsProdCost | number: "1.2-2" }}</td>
               <td class="text-center">{{ totalsDeliveredQty }}</td>
             </tr>
-
           </table>
         </div>
-
       </div>
       <div class="card-footer m-0 p-2">
         <div class="float-left">
-          <span><strong>{{PIData?.AmountInWord}}</strong></span>
+          <span
+            ><strong>{{ PIData?.AmountInWord }}</strong></span
+          >
         </div>
       </div>
     </div>
   </form>
 </p-dialog>
 
-
-  <p-dialog header="Detail"
-            [(visible)]="isDeliveryDetailsVisible"
-            [modal]="true"
-            [closable]="true"
-            [style]="{ width: '100vw' }"
-            (onHide)="deliveryDetailsData = null">
-    <div *ngIf="deliveryDetailsData">
-      <div class="table-responsive">
-        <table class="table table-striped table-bordered table-hover">
-          <tr class="bg-gradient-success">
-            <th class="text-center align-middle">PI Article</th>
-            <th class="text-center align-middle">Delivery Date</th>
-            <th class="text-center align-middle">Challan No</th>
-            <th class="text-center align-middle">Delivered Article</th>
-            <th class="text-center align-middle">Ordered in Yard</th>
-            <th class="text-center align-middle">Delivered in Yard</th>
-            <th class="text-center align-middle">Ordered in Meter</th>
-            <th class="text-center align-middle">Delivered in Meter</th>
-            <th class="text-center align-middle">Roll</th>
-          </tr>
-          <tr *ngFor="let item of deliveryDetailsData.Items">
-            <td class="text-left align-middle">{{ item.PI_Article_No }}</td>
-            <td class="text-left align-middle">{{ item.DeliveryDate }}</td>
-            <td class="text-center align-middle">
-              <ng-container *ngIf="item.Chalan_No != 0; else noLink">
-                <a href="#" (click)="$event.preventDefault(); printChallan(item.Chalan_No)">{{ item.Chalan_No }}</a>
-              </ng-container>
-              <ng-template #noLink>{{ item.Chalan_No }}</ng-template>
-            </td>
-            <td class="text-center align-middle">{{ item.Delivery_Article_No }}</td>
-            <td class="text-center align-middle">{{ item.Ordered }}</td>
-            <td class="text-center align-middle">{{ item.Delivered }}</td>
-            <td class="text-center align-middle">{{ item.Orderd_In_Meter }}</td>
-            <td class="text-center align-middle">{{ item.Deliverd_In_Meter }}</td>
-            <td class="text-center align-middle">{{ item.Rolls }}</td>
-          </tr>
-          <!-- Totals row -->
-          <tr class="table-secondary font-weight-bold">
-            <td colspan="4" class="text-right">Totals</td>
-            <td class="text-center">{{ deliveryTotalsOrdered }}</td>
-            <td class="text-center">{{ deliveryTotalsDelivered }}</td>
-            <td class="text-center">{{ deliveryTotalsOrderedMeter }}</td>
-            <td class="text-center">{{ deliveryTotalsDeliveredMeter }}</td>
-            <td class="text-center">{{ deliveryTotalsRolls }}</td>
-          </tr>
-        </table>
-      </div>
+<p-dialog
+  header="Detail"
+  [(visible)]="isDeliveryDetailsVisible"
+  [modal]="true"
+  [closable]="true"
+  [style]="{ width: '100vw' }"
+  (onHide)="deliveryDetailsData = null"
+>
+  <div *ngIf="deliveryDetailsData">
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered table-hover">
+        <tr class="bg-gradient-success">
+          <th class="text-center align-middle">PI Article</th>
+          <th class="text-center align-middle">Delivery Date</th>
+          <th class="text-center align-middle">Challan No</th>
+          <th class="text-center align-middle">Delivered Article</th>
+          <th class="text-center align-middle">Ordered in Yard</th>
+          <th class="text-center align-middle">Delivered in Yard</th>
+          <th class="text-center align-middle">Ordered in Meter</th>
+          <th class="text-center align-middle">Delivered in Meter</th>
+          <th class="text-center align-middle">Roll</th>
+        </tr>
+        <tr *ngFor="let item of deliveryDetailsData.Items">
+          <td class="text-left align-middle">{{ item.PI_Article_No }}</td>
+          <td class="text-left align-middle">{{ item.DeliveryDate }}</td>
+          <td class="text-center align-middle">
+            <ng-container *ngIf="item.Chalan_No != 0; else noLink">
+              <a
+                href="#"
+                (click)="$event.preventDefault(); printChallan(item.Chalan_No)"
+                >{{ item.Chalan_No }}</a
+              >
+            </ng-container>
+            <ng-template #noLink>{{ item.Chalan_No }}</ng-template>
+          </td>
+          <td class="text-center align-middle">
+            {{ item.Delivery_Article_No }}
+          </td>
+          <td class="text-center align-middle">{{ item.Ordered }}</td>
+          <td class="text-center align-middle">{{ item.Delivered }}</td>
+          <td class="text-center align-middle">{{ item.Orderd_In_Meter }}</td>
+          <td class="text-center align-middle">{{ item.Deliverd_In_Meter }}</td>
+          <td class="text-center align-middle">{{ item.Rolls }}</td>
+        </tr>
+        <!-- Totals row -->
+        <tr class="table-secondary font-weight-bold">
+          <td colspan="4" class="text-right">Totals</td>
+          <td class="text-center">{{ deliveryTotalsOrdered }}</td>
+          <td class="text-center">{{ deliveryTotalsDelivered }}</td>
+          <td class="text-center">{{ deliveryTotalsOrderedMeter }}</td>
+          <td class="text-center">{{ deliveryTotalsDeliveredMeter }}</td>
+          <td class="text-center">{{ deliveryTotalsRolls }}</td>
+        </tr>
+      </table>
     </div>
-  </p-dialog>
+  </div>
+</p-dialog>
 
-  <p-dialog header="Special Approval" [(visible)]="isSpecialApprovalVisible" [modal]="true" [closable]="true" [style]="{ width: '500px' }">
+<p-dialog
+  header="Special Approval"
+  [(visible)]="isSpecialApprovalVisible"
+  [modal]="true"
+  [closable]="true"
+  [style]="{ width: '500px' }"
+>
   <div class="special-approval-modal">
     <div class="row mb-3">
       <div class="col-5 text-right font-weight-bold">Client Name:</div>
@@ -469,29 +768,47 @@
     </div>
     <div class="row mb-3">
       <div class="col-5 text-right font-weight-bold">PI Number:</div>
-      <div class="col-7">{{ PIData?.PINo}}</div>
+      <div class="col-7">{{ PIData?.PINo }}</div>
     </div>
     <div class="row mb-3">
-      <div class="col-5 text-right font-weight-bold">Max Deliverable % (In Percentage):</div>
+      <div class="col-5 text-right font-weight-bold">
+        Max Deliverable % (In Percentage):
+      </div>
       <div class="col-7">
-        <input type="number" class="form-control" [(ngModel)]="specialApprovalMaxDeliverable" min="0" max="100" step="0.01"
-          (change)="validateSpecialApprovalPercentage()" />
+        <input
+          type="number"
+          class="form-control"
+          [(ngModel)]="specialApprovalMaxDeliverable"
+          min="0"
+          max="100"
+          step="0.01"
+          (change)="validateSpecialApprovalPercentage()"
+        />
       </div>
     </div>
     <div class="row mb-3">
       <div class="col-5 text-right font-weight-bold">PI Status:</div>
-      <div class="col-7"><input type="text" class="form-control" [value]="PIData?.Status || 'Partial Approved'" readonly /></div>
+      <div class="col-7">
+        <input
+          type="text"
+          class="form-control"
+          [value]="PIData?.Status || 'Partial Approved'"
+          readonly
+        />
+      </div>
     </div>
     <div class="special-approval-actions">
-  <button class="btn menu-btn" (click)="isSpecialApprovalVisible=false">
-    <i class="fas fa-times"></i> Close
-  </button>
+      <button class="btn menu-btn" (click)="isSpecialApprovalVisible = false">
+        <i class="fas fa-times"></i> Close
+      </button>
 
-  <button class="btn menu-btn" 
-          [disabled]="!specialApprovalSaveEnabled" 
-          (click)="saveSpecialApproval()">
-    <i class="fas fa-check"></i> Save
-  </button>
-</div>
+      <button
+        class="btn menu-btn"
+        [disabled]="!specialApprovalSaveEnabled"
+        (click)="saveSpecialApproval()"
+      >
+        <i class="fas fa-check"></i> Save
+      </button>
+    </div>
   </div>
 </p-dialog>

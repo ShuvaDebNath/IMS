@@ -1,30 +1,33 @@
 <div class="m-2 p-2">
   <div class="card card-default">
-    <div class="card-header theme-bg">
-      <div class="row">
-        <h2 class="">All LC</h2>
-      </div>
-    </div>
     <div class="card-body">
+      <h2 class="mb-0">All LC</h2>
       <form [formGroup]="SearchForm">
         <div class="row align-items-center">
-          <div class="col-3">
-            <label class="control-label" for="inlineFormInputGroup"
-              >From Date</label
-            >
+          <div class="col-6">
+            <label class="form-label">Select Date</label>
 
-            <input
-              type="date"
-              formControlName="fromDate"
-              class="form-control"
-            />
+            <div class="range-container" style="width: 70%">
+              <p-calendar
+                formControlName="fromDate"
+                [showIcon]="false"
+                dateFormat="dd/mm/yy"
+                placeholder="From"
+                inputStyleClass="custom-date-input"
+              ></p-calendar>
+
+              <span class="range-divider">to</span>
+
+              <p-calendar
+                formControlName="toDate"
+                [showIcon]="false"
+                dateFormat="dd/mm/yy"
+                placeholder="To"
+                inputStyleClass="custom-date-input"
+              ></p-calendar>
+            </div>
           </div>
-          <div class="col-3">
-            <label class="control-label" for="inlineFormInputGroup"
-              >To Date</label
-            >
-            <input type="date" formControlName="toDate" class="form-control" />
-          </div>
+
           <div class="col-3">
             <label for="LCNo" class="">LC No </label>
             <div class="">
@@ -115,7 +118,7 @@
           aria-label="Select page of periodic elements"></mat-paginator>
         
       </div> -->
-      <p-table
+      <!-- <p-table
         #dt
         [value]="tableData"
         [paginator]="true"
@@ -131,7 +134,7 @@
           'Expiry_Date',
           'Mode',
           'IP_Document_Sending_Date',
-          'Group_Head'
+          'Group_Head',
         ]"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
       >
@@ -211,6 +214,75 @@
             </td>
           </tr>
         </ng-template>
+      </p-table> -->
+
+      <p-table
+        #dt
+        [value]="tableData"
+        [paginator]="true"
+        [rows]="10"
+        [scrollable]="true"
+        scrollDirection="horizontal"
+        responsiveLayout="scroll"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+        paginatorPosition="bottom"
+        styleClass="custom-table"
+        [globalFilterFields]="[
+          'Consignee_Name',
+          'PI_No',
+          'LC_No',
+          'LC_Value',
+          'Issue_Date',
+          'Expiry_Date',
+          'Mode',
+          'IP_Document_Sending_Date',
+          'Group_Head',
+        ]"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="Sl" class="">
+              SL
+              <p-sortIcon field="Sl"></p-sortIcon>
+            </th>
+            <th pSortableColumn="Consignee_Name">
+              Consignee
+              <p-sortIcon field="Consignee_Name"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="PI_No">
+              PI(s)
+              <p-sortIcon field="PI_No"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="LC_No">
+              LC No
+              <p-sortIcon field="LC_No"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="LC_Value">
+              LC Value
+              <p-sortIcon field="LC_Value"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="Issue_Date">
+              Issue Date
+              <p-sortIcon field="Issue_Date"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="Expiry_Date">
+              Expiry Date
+              <p-sortIcon field="Expiry_Date"></p-sortIcon>
+            </th>
+
+            <th>Mode</th>
+            <th>IP Documents</th>
+            <th>Group Head</th>
+
+            <th *ngIf="allPersmissions">Action</th>
+          </tr>
+        </ng-template>
       </p-table>
     </div>
     <!--/Region Mat Datatable"-->
@@ -266,186 +338,210 @@
     </p-dialog>
 
     <p-dialog
-    header="Details"
-    [(visible)]="isDetailsVisible"
-    [modal]="true"
-    [closable]="true"
-    [style]="{ width: '50rem' }"
-    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
-    [style]="{ width: '100vw', height: '100vh', top: '0', left: '0' }"
-    [contentStyle]="{ height: 'calc(100vh - 100px)' }"
-    [maximizable]="true"
-    (onHide)="isDetailsVisible = false"
-    styleClass="wide-dialog"
-  >
-    <form>
-      <div class="card card-primary">
-        <div class="card-header m-0 p-2 sticky-header">
-          <div class="float-left">
+      header="Details"
+      [(visible)]="isDetailsVisible"
+      [modal]="true"
+      [closable]="true"
+      [style]="{ width: '50rem' }"
+      [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+      [style]="{ width: '100vw', height: '100vh', top: '0', left: '0' }"
+      [contentStyle]="{ height: 'calc(100vh - 100px)' }"
+      [maximizable]="true"
+      (onHide)="isDetailsVisible = false"
+      styleClass="wide-dialog"
+    >
+      <form>
+        <div class="card card-primary">
+          <div class="card-header m-0 p-2 sticky-header">
+            <div class="float-left"></div>
+            <div class="float-right"></div>
           </div>
-          <div class="float-right">
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="row">
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>User Name</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.Group_Head }}</div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>User Name</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">{{ detailsData?.Group_Head }}</div>
 
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Mode</strong>
-                </div>
-                <div class="col-md-8 mt-2">
-                  {{ detailsData?.Mode }}
-                </div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>Mode</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">
+                    {{ detailsData?.Mode }}
+                  </div>
 
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Consignee Name</strong>
-                </div>
-                <div class="col-md-8 mt-2">
-                  {{ detailsData?.Consignee_Name }}
-                </div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>Consignee Name</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">
+                    {{ detailsData?.Consignee_Name }}
+                  </div>
 
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>LC Receiving Date By Mail/Draft:</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.TotalRoll }}</div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>LC Receiving Date By Mail/Draft:</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">{{ detailsData?.TotalRoll }}</div>
 
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>LC Receiving Date Original By Bank</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.Remarks }}</div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>LC Receiving Date Original By Bank</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">{{ detailsData?.Remarks }}</div>
 
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>LC No</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.LC_No }}</div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>LC No</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">{{ detailsData?.LC_No }}</div>
 
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>LC Value</strong>
-                </div>
-                <div class="col-md-8 mt-2">
-                  {{ detailsData?.LC_Value }}
-                </div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>LC Value</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">
+                    {{ detailsData?.LC_Value }}
+                  </div>
 
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Issue Date</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.Issue_Date }}</div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>Issue Date</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">{{ detailsData?.Issue_Date }}</div>
 
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Expiry Date</strong>
-                </div>
-                <div class="col-md-8 mt-2">
-                  {{ detailsData?.Expiry_Date }}
-                </div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>Expiry Date</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">
+                    {{ detailsData?.Expiry_Date }}
+                  </div>
 
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Customer Bank Name</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.Customer_Bank }}</div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>Customer Bank Name</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">
+                    {{ detailsData?.Customer_Bank }}
+                  </div>
 
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Invoice No With Date</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.Invoice_No }}</div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>Invoice No With Date</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">{{ detailsData?.Invoice_No }}</div>
 
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>IP Documents Sending Date</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.IP_Document_Sending_Date }}</div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>IP Documents Sending Date</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">
+                    {{ detailsData?.IP_Document_Sending_Date }}
+                  </div>
 
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Export LC/SC</strong>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>Export LC/SC</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">
+                    {{ detailsData?.Export_LC_SC }}
+                  </div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>LCA Form No</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">
+                    {{ detailsData?.LCA_Form_No }}
+                  </div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>IRC No</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">{{ detailsData?.IRC_No }}</div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>HS Code</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">{{ detailsData?.HS_Code }}</div>
                 </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.Export_LC_SC }}</div>
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>LCA Form No</strong>
+              </div>
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>Beneficiary Bank</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">{{ detailsData?.BankName }}</div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>IP Documents Receiving Date</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">
+                    {{ detailsData?.IP_Document_Receiving_Date }}
+                  </div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>Documents Presentation To Bank Date</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">
+                    {{ detailsData?.IP_Document_Sending_Date }}
+                  </div>
+
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>Maturity Date</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">
+                    {{ detailsData?.Maturity_Date }}
+                  </div>
+
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>FDD/TT Receive Date</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">
+                    {{
+                      detailsData?.FddTtReceiveDate
+                        | date: "dd/MM/yyyy HH:mm:ss"
+                    }}
+                  </div>
+
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>Actual Payment Receiving Date</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">
+                    {{ detailsData?.Actual_Payment_Receiving_Date }}
+                  </div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>Applicant BIN/VAT</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">
+                    {{ detailsData?.Applicant_BIN_VAT }}
+                  </div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>Applicant TIN</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">
+                    {{ detailsData?.Applicant_TIN }}
+                  </div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>Bank BIN No</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">
+                    {{ detailsData?.Bank_BIN_No }}
+                  </div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>Remarks</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">{{ detailsData?.Remarks }}</div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>User Name</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">{{ detailsData?.Group_Head }}</div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>System_Created_Date</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">
+                    {{ detailsData?.System_Created_Date }}
+                  </div>
                 </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.LCA_Form_No }}</div>
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>IRC No</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.IRC_No }}</div>
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>HS Code</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.HS_Code }}</div>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="row">
-                
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Beneficiary Bank</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.BankName }}</div>
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>IP Documents Receiving Date</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.IP_Document_Receiving_Date }}</div>
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Documents Presentation To Bank Date</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.IP_Document_Sending_Date }}</div>
-
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Maturity Date</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.Maturity_Date }}</div>
-
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>FDD/TT Receive Date</strong>
-                </div>
-                <div class="col-md-8 mt-2">
-                  {{ detailsData?.FddTtReceiveDate | date : "dd/MM/yyyy HH:mm:ss" }}
-                </div>
-                
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Actual Payment Receiving Date</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.Actual_Payment_Receiving_Date }}</div>
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Applicant BIN/VAT</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.Applicant_BIN_VAT }}</div>
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Applicant TIN</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.Applicant_TIN }}</div>
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Bank BIN No</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.Bank_BIN_No }}</div>
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>Remarks</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.Remarks }}</div>
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>User Name</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.Group_Head }}</div>
-                <div class="col-md-4 mt-2 text-right content-middle">
-                  <strong>System_Created_Date</strong>
-                </div>
-                <div class="col-md-8 mt-2">{{ detailsData?.System_Created_Date }}</div>
-              </div>
+            <p-divider />
+          </div>
+          <div class="card-footer m-0 p-2">
+            <div class="float-left">
+              <span
+                ><strong>{{ detailsData?.AmountInWord }}</strong></span
+              >
             </div>
           </div>
-          <p-divider />
         </div>
-        <div class="card-footer m-0 p-2">
-          <div class="float-left">
-            <span
-              ><strong>{{ detailsData?.AmountInWord }}</strong></span
-            >
-          </div>
-        </div>
-      </div>
-    </form>
-  </p-dialog>
+      </form>
+    </p-dialog>
   </div>
 </div>

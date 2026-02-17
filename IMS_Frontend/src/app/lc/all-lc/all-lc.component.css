@@ -62,3 +62,217 @@ thead{
   color: #fff;
   border-radius: 0.25rem;
 }
+
+
+.custom-date-input {
+  height: 40px;
+  border-radius: 6px;
+}
+
+.custom-calendar {
+  width: 100%;
+}
+
+::ng-deep .p-datepicker {
+  width: 280px !important;
+  background-color: #F9F9F9;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+/* Table styling */
+::ng-deep .p-datepicker table {
+  border-collapse: separate !important;
+  border-spacing: 4px 4px;
+  width: 100%;
+}
+
+/* Day name row */
+::ng-deep .p-datepicker thead tr th {
+  text-align: center !important;
+  font-weight: 600 !important;
+  color: #333 !important;
+  font-size: 12px !important;
+  padding: 2px 0 !important;
+}
+
+/* Date cells */
+::ng-deep .p-datepicker tbody tr td {
+  padding: 0 !important;
+}
+
+/* Normal dates */
+::ng-deep .p-datepicker tbody tr td > span {
+  width: 24px !important;
+  height: 24px !important;
+  line-height: 24px !important;
+  font-size: 13px !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: end;
+  color: #1472d6;       /* normal date text */
+  background: transparent !important;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+/* Hover effect */
+::ng-deep .p-datepicker tbody tr td > span:hover {
+  background: #f0f0f0 !important;
+}
+
+/* Today date (always yellow) */
+::ng-deep .p-datepicker .p-datepicker-today > span {
+  color: #F8B84E !important;       
+  font-weight: 700 !important;
+  border-radius: 4px;
+  background: #000;
+}
+
+::ng-deep .p-datepicker .p-datepicker-current,
+::ng-deep .p-datepicker .p-datepicker-current.p-highlight,
+::ng-deep .p-datepicker .p-datepicker-selected,
+::ng-deep .p-datepicker .p-highlight {
+  color: #F8B84E !important;          /* text black */
+  font-weight: 700 !important;
+  border-radius: 4px;
+}
+/* Header styling */
+::ng-deep .p-datepicker .p-datepicker-header {
+  background: #e69d29 !important;
+  border: none !important;
+  height: 40px !important;
+}
+
+/* Month / Year text */
+/* Month / Year label */
+::ng-deep .p-datepicker .p-datepicker-title {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+/* Month / Year dropdown (navigator enabled) */
+::ng-deep .p-datepicker .p-datepicker-month,
+::ng-deep .p-datepicker .p-datepicker-year {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Dropdown select text */
+::ng-deep .p-datepicker select {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  background: transparent !important;
+}
+/* Arrow container */
+::ng-deep .p-datepicker-prev,
+::ng-deep .p-datepicker-next {
+  color: #ffffff !important; /* fallback */
+}
+
+/* Arrow span */
+::ng-deep .p-datepicker-prev span,
+::ng-deep .p-datepicker-next span {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+/* Arrow icon ::before (actual chevron) */
+::ng-deep .p-datepicker-prev span::before,
+::ng-deep .p-datepicker-next span::before {
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+
+/* akhan theke formdate todate */
+/* Outer container for From-To */
+.range-container {
+  display: flex;
+  border: 1px solid #ced4da;
+  background: #fff;
+  border-radius: 6px; /* Outer border radius */
+  
+}
+
+/* Remove inner input borders */
+::ng-deep .range-container .p-calendar input.p-inputtext.custom-date-input {
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;   /* Inner inputs flat */
+  height: 35px !important;
+  padding: 0 10px !important;
+  font-size: 16px !important;
+}
+
+/* Divider full height */
+.range-divider {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  background: #f1f3f5;
+  border-left: 1px solid #ced4da;
+  border-right: 1px solid #ced4da;
+  font-weight: 600;
+}
+
+/* Focus effect: outer container highlight instead of individual input */
+.range-container:focus-within {
+  border-color: #86b7fe;
+}
+
+/* Optional: divider text styling */
+.range-divider {
+  color: #495057;
+}
+
+
+/* table design */
+/* Remove table borders */
+::ng-deep .custom-table .p-datatable-table {
+  border: none !important;
+}
+
+::ng-deep .custom-table .p-datatable-thead > tr > th,
+::ng-deep .custom-table .p-datatable-tbody > tr > td {
+  border: none !important;
+  padding: 14px 16px !important;   /* Column spacing */
+  white-space: nowrap;             /* Prevent wrapping */
+}
+
+/* Zebra effect */
+::ng-deep .custom-table .p-datatable-tbody > tr:nth-child(even) {
+  background: #fafafa;
+}
+
+/* Hover effect */
+::ng-deep .custom-table .p-datatable-tbody > tr:hover {
+  background: #f1f5ff;
+  transition: 0.2s;
+}
+
+/* Header style */
+::ng-deep .custom-table .p-datatable-thead > tr > th {
+  background: #f8f9fa;
+  font-weight: 600;
+}
+
+
+::ng-deep .p-paginator {
+  display: flex !important;
+  align-items: center;
+}
+
+::ng-deep .p-paginator .p-paginator-current {
+  margin-right: auto !important;   /* এইটা left এ আটকে রাখবে */
+}
+
+::ng-deep .p-paginator .p-paginator-pages,
+::ng-deep .p-paginator .p-paginator-next,
+::ng-deep .p-paginator .p-paginator-prev,
+::ng-deep .p-paginator .p-paginator-first,
+::ng-deep .p-paginator .p-paginator-last {
+  margin-left: 0 !important;
+}

@@ -1,101 +1,110 @@
-<div class="row d-flex justify-content-center">
+<div class="row d-flex justify-content-center ">
   <div class="m-2 p-2 shadow">
     <div class="card">
-      <div class="card-header  text-black">
-        <h2 class="p-2 fw-semibold">
-          {{ !isEdit ? "Create" : "Update " }} <br> <span>LC</span>
+      <div class="card-header text-black">
+        <h2 class="p-2  fw-semibold">
+          {{ !isEdit ? "Create" : "Update " }} <br />
+          <span>LC</span>
         </h2>
       </div>
       <div class="card-body">
         <form name="newForm" [formGroup]="Formgroup" role="form">
-    
-          <div class="row g-6">
-  <!-- LEFT SIDE -->
-  <div class="col-md-6">
-    <!-- Marketing Concern -->
-    <div class="row align-items-center mb-3">
-      <div class="col-md-4 text-end fw-semibold">
-        Marketing Concern <span>*</span>
-      </div>
-      <div class="col-md-8">
-        <p-dropdown
-        [style]="{ width: '70%' }"
-          class="w-100 p-0"
-          [options]="MarketingConcern"
-          (onChange)="getPINoByMarketingConcern()"
-          optionLabel="UserName"
-          [filter]="true"
-          filterBy="UserName"
-          [showClear]="true"
-          placeholder="Select"
-          optionValue="User_ID"
-          formControlName="Marketing_Concern"
-        ></p-dropdown>
-      </div>
-    </div>
+          <div class="row g-6 border-bottom pb-2">
+            <!-- LEFT SIDE -->
+            <div class="col-md-6">
+              <!-- Marketing Concern -->
+              <div class="row align-items-center mb-3">
+                <div class="col-md-4 text-end fs-6 fw-bold">
+                  Marketing Concern <span>*</span>
+                </div>
+                <div class="col-md-8">
+                  <p-dropdown
+                    [style]="{ width: '70%' }"
+                    class="w-100 p-0"
+                    [options]="MarketingConcern"
+                    (onChange)="getPINoByMarketingConcern()"
+                    optionLabel="UserName"
+                    [filter]="true"
+                    filterBy="UserName"
+                    [showClear]="true"
+                    placeholder="Select"
+                    optionValue="User_ID"
+                    formControlName="Marketing_Concern"
+                  ></p-dropdown>
+                </div>
+              </div>
 
-    <!-- PIs -->
-    <div class="row align-items-center">
-      <div class="col-md-4 text-end fw-semibold">
-        PIs <span>*</span>
-      </div>
-      <div class="col-md-8">
-        <p-multiSelect
-        [style]="{ width: '70%' }" class="p-0" [options]="PINo" [virtualScroll]="true" [virtualScrollItemSize]="30"
-          class="w-100 p-0"
-          [options]="PINo"
-          [filter]="true"
-          filterBy="label"
-          [showClear]="true"
-          placeholder="Select"
-          formControlName="PINo"
-        ></p-multiSelect>
-      </div>
-    </div>
-  </div>
+              <!-- PIs -->
+              <div class="row align-items-center">
+                <div class="col-md-4 text-end fs-6 fw-bold">
+                  PIs <span>*</span>
+                </div>
+                <div class="col-md-8">
+                  <p-multiSelect
+                    [style]="{ width: '70%' }"
+                    class="p-0"
+                    [options]="PINo"
+                    [virtualScroll]="true"
+                    [virtualScrollItemSize]="30"
+                    class="w-100 p-0"
+                    [options]="PINo"
+                    [filter]="true"
+                    filterBy="label"
+                    [showClear]="true"
+                    placeholder="Select"
+                    formControlName="PINo"
+                  ></p-multiSelect>
+                </div>
+              </div>
+            </div>
 
-  <!-- RIGHT SIDE -->
-  <div class="col-md-6">
-    <!-- Consignee Name -->
-    <div class="row align-items-center mb-3">
-      <div class="col-md-4 text-end fw-semibold">
-        Consignee Name
-      </div>
-      <div class="col-md-8">
-        <input
-         [style]="{ width: '70%' }"
-          type="text"
-          class="form-control"
-          placeholder="Consignee Name"
-          formControlName="Consignee_Name"
-        />
-      </div>
-    </div>
+            <!-- RIGHT SIDE -->
+            <div class="col-md-6">
+              <!-- Consignee Name -->
+              <div class="row align-items-center mb-3">
+                <div class="col-md-4 text-end fs-6 fw-bold">Consignee Name</div>
+                <div class="col-md-8">
+                  <!-- <input
+                    [style]="{ width: '70%' }"
+                    type="text"
+                    class="form-control"
+                    placeholder="Consignee Name"
+                    formControlName="Consignee_Name"
+                  /> -->
+                  <textarea
+                    [style]="{ width: '70%' }"
+                    class="form-control"
+                    placeholder="Consignee Name"
+                    formControlName="Consignee_Name"
+                    rows="2"
+                  ></textarea>
+                </div>
+              </div>
 
-    <!-- Beneficiary Bank -->
-    <div class="row align-items-center">
-      <div class="col-md-4 text-end fw-semibold">
-        Beneficiary Bank <span>*</span>
-      </div>
-      <div class="col-md-8">
-        <p-dropdown
-         [style]="{ width: '70%' }"
-          class="w-100 p-0"
-          [options]="BenificiaryAccounts"
-          optionLabel="BankName"
-          [filter]="true"
-          filterBy="BankName"
-          [showClear]="true"
-          placeholder="Select"
-          optionValue="Beneficiary_Bank_ID"
-          formControlName="BenificiaryAccounts"
-        ></p-dropdown>
-      </div>
-    </div>
-  </div>
-</div>
-
-          <div class="row">
+              <!-- Beneficiary Bank -->
+              <div class="row align-items-center">
+                <div class="col-md-4 text-end fs-6 fw-bold">
+                  Beneficiary Bank <span>*</span>
+                </div>
+                <div class="col-md-8">
+                  <p-dropdown
+                    [style]="{ width: '70%' }"
+                    class="w-100 p-0"
+                    [options]="BenificiaryAccounts"
+                    optionLabel="BankName"
+                    [filter]="true"
+                    filterBy="BankName"
+                    [showClear]="true"
+                    placeholder="Select"
+                    optionValue="Beneficiary_Bank_ID"
+                    formControlName="BenificiaryAccounts"
+                  ></p-dropdown>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 
+          <div class="row g-6 border-bottom pb-2">
             <div class="col-md-6">
               <label class="control-label" for="inlineFormInputGroup"
                 >LC Receiving Date By Mail/Draft</label
@@ -117,8 +126,61 @@
                 class="form-control"
               />
             </div>
-          </div>
+          </div> -->
           <div class="row">
+            <div class="col-12">
+              <h6 class="fs-6 fw-bold mb-3" style="color:#3a87ad">LC Receiving Date :</h6>
+            </div>
+          </div>
+          <div class="row g-6 border-bottom pb-2">
+            <!-- LEFT SIDE -->
+            <div class="col-md-6">
+              <div class="row align-items-center mb-3">
+                <div class="col-md-4 text-end fs-6 fw-bold">
+                  LC Receiving Date By Mail/Draft
+                </div>
+                <div class="col-md-8">
+                  <p-calendar
+                    formControlName="LCReceivingDateByDraft"
+                    [showIcon]="false"
+                    dateFormat="dd/mm/yy"
+                    placeholder="Select Date"
+                    class="w-100"
+                    [style]="{ width: '70%' }"
+                    inputStyleClass="form-control custom-date-input"
+                  ></p-calendar>
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT SIDE -->
+            <div class="col-md-6">
+              <div class="row align-items-center mb-3">
+                <div class="col-md-4 text-end fs-6 fw-bold">
+                  LC Receiving Date Original By Bank
+                </div>
+                <div class="col-md-8">
+                  <!-- <input
+                    [style]="{ width: '70%' }"
+                    type="date"
+                    formControlName="LCReceivingDateOrgBank"
+                    class="form-control"
+                  /> -->
+                  <p-calendar
+                    formControlName="LCReceivingDateOrgBank"
+                    [showIcon]="false"
+                    dateFormat="dd/mm/yy"
+                    placeholder="Select Date"
+                    class="w-100"
+                    [style]="{ width: '70%' }"
+                    inputStyleClass="form-control custom-date-input"
+                  ></p-calendar>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- <div class="row">
             <div class="col-md-6">
               <label for="LCNo" class="">LC No <span>*</span></label>
               <div class="">
@@ -444,9 +506,278 @@
                 </div>
               </div>
             </div>
+          </div> -->
+
+          <div class="row g-6 border-bottom pb-2 mt-4">
+            <!-- LC No -->
+            <div class="col-md-6">
+              <div class="row align-items-center mb-3">
+                <div class="col-md-4 text-end fs-6 fw-bold">
+                  LC No <span>*</span>
+                </div>
+                <div class="col-md-8">
+                  <input
+                    [style]="{ width: '70%' }"
+                    type="text"
+                    formControlName="LCNo"
+                    class="form-control"
+                    placeholder="LC No"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- LC Value -->
+            <div class="col-md-6">
+              <div class="row align-items-center mb-3">
+                <div class="col-md-4 text-end fs-6 fw-bold">
+                  LC Value <span>*</span>
+                </div>
+                <div class="col-md-8">
+                  <div class="input-group" [style.width]="'70%'">
+                    <span class="input-group-text" style="color: #28a745"
+                      >$</span
+                    >
+                    <input
+                      type="number"
+                      formControlName="LCValue"
+                      class="form-control"
+                      placeholder="LC Value"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Issue Date -->
+            <div class="col-md-6">
+              <div class="row align-items-center mb-3">
+                <div class="col-md-4 text-end fs-6 fw-bold">
+                  Issue Date <span>*</span>
+                </div>
+                <div class="col-md-8">
+                  <!-- <input
+                    [style]="{ width: '70%' }"
+                    type="date"
+                    formControlName="IssueDate"
+                    class="form-control"
+                  /> -->
+                  <p-calendar
+                    formControlName="IssueDate"
+                    [showIcon]="false"
+                    dateFormat="dd/mm/yy"
+                    placeholder="Select Date"
+                    class="w-100"
+                    [style]="{ width: '70%' }"
+                    inputStyleClass="form-control custom-date-input"
+                  ></p-calendar>
+                </div>
+              </div>
+            </div>
+
+            <!-- Expiry Date -->
+            <div class="col-md-6">
+              <div class="row align-items-center mb-3">
+                <div class="col-md-4 text-end fs-6 fw-bold">Expiry Date</div>
+                <div class="col-md-8">
+                  <!-- <input
+                    [style]="{ width: '70%' }"
+                    type="date"
+                    formControlName="ExpiryDate"
+                    class="form-control"
+                  /> -->
+                  <p-calendar
+                    formControlName="ExpiryDate"
+                    [showIcon]="false"
+                    dateFormat="dd/mm/yy"
+                    placeholder="Select Date"
+                    class="w-100"
+                    [style]="{ width: '70%' }"
+                    inputStyleClass="form-control custom-date-input"
+                  ></p-calendar>
+                </div>
+              </div>
+            </div>
+
+            <!-- Customer Bank Name -->
+            <div class="col-md-6">
+              <div class="row align-items-center mb-3">
+                <div class="col-md-4 text-end fs-6 fw-bold">
+                  Customer Bank Name
+                </div>
+                <div class="col-md-8">
+                  <input
+                    [style]="{ width: '70%' }"
+                    type="text"
+                    formControlName="CustomerBankName"
+                    class="form-control"
+                    placeholder="Customer Bank Name"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Payment Terms -->
+            <div class="col-md-6">
+              <div class="row align-items-center mb-3">
+                <div class="col-md-4 text-end fs-6 fw-bold">
+                  Payment Terms (LC) <span>*</span>
+                </div>
+                <div class="col-md-8">
+                  <p-dropdown
+                    [style]="{ width: '70%' }"
+                    class="p-0"
+                    [options]="PaymentTerms"
+                    optionLabel="Mode"
+                    [filter]="true"
+                    filterBy="Mode"
+                    [showClear]="true"
+                    placeholder="Please Select"
+                    optionValue="Payment_Term_ID"
+                    formControlName="PaymentTermsLC"
+                  ></p-dropdown>
+                </div>
+              </div>
+            </div>
+
+            <!-- All Date Fields (Same Pattern) -->
+
+            <ng-container
+              *ngFor="
+                let field of [
+                  {
+                    label: 'Invoice No With Date',
+                    control: 'InvoiceNoWitDate',
+                  },
+                  {
+                    label: 'IP Documents Sending Date',
+                    control: 'IPDocSendingDate',
+                  },
+                  {
+                    label: 'IP Documents Receiving Date',
+                    control: 'IPDocReceivingDate',
+                  },
+                  { label: 'Maturity Date', control: 'MaturityDate' },
+                  {
+                    label: 'Documents Presentation To Bank Date',
+                    control: 'DocPresBankDate',
+                  },
+                  { label: 'FDD/TT Receive Date', control: 'FDDRecDate' },
+                  {
+                    label: 'Actual Payment Receiving Date',
+                    control: 'ActualPaymentRecDate',
+                  },
+                  { label: 'Export LC/SC Date', control: 'ExportLCSCDate' },
+                ]
+              "
+            >
+              <div class="col-md-6">
+                <div class="row align-items-center mb-3">
+                  <div class="col-md-4 text-end fs-6 fw-bold">
+                    {{ field.label }}
+                  </div>
+                  <div class="col-md-8">
+                    <!-- <input
+                      [style]="{ width: '70%' }"
+                      type="date"
+                      [formControlName]="field.control"
+                      class="form-control"
+                    /> -->
+                    <p-calendar
+                      [formControlName]="field.control"
+                      [showIcon]="false"
+                      dateFormat="dd/mm/yy"
+                      placeholder="Select Date"
+                      class="w-100"
+                      [style]="{ width: '70%' }"
+                      inputStyleClass="form-control custom-date-input"
+                    ></p-calendar>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- Text Fields -->
+            <!-- <ng-container
+              *ngFor="
+                let field of [
+                  { label: 'Export LC/SC', control: 'ExportLCSC' },
+                  { label: 'LCA Form No', control: 'LCAFormNo' },
+                  { label: 'Applicant TIN', control: 'ApplicantTIN' },
+                  { label: 'Applicant BIN/VAT', control: 'ApplicantBINVAT' },
+                  { label: 'HS Code', control: 'HSCode' },
+                  { label: 'Bank BIN No.', control: 'BankBINNo' },
+                  { label: 'Remarks', control: 'Remarks' },
+                  { label: 'IRC No.', control: 'IRCNo' },
+                ]
+              "
+            >
+              <div class="col-md-6">
+                <div class="row align-items-center mb-3">
+                  <div class="col-md-4 text-end fs-6 fw-bold">
+                    {{ field.label }}
+                  </div>
+                  <div class="col-md-8">
+                    <input
+                      [style]="{ width: '70%' }"
+                      type="text"
+                      [formControlName]="field.control"
+                      class="form-control"
+                      [placeholder]="field.label"
+                    />
+                  </div>
+                </div>
+              </div>
+            </ng-container> -->
+
+            <ng-container
+              *ngFor="
+                let field of [
+                  { label: 'Export LC/SC', control: 'ExportLCSC' },
+                  { label: 'LCA Form No', control: 'LCAFormNo' },
+                  { label: 'Applicant TIN', control: 'ApplicantTIN' },
+                  { label: 'Applicant BIN/VAT', control: 'ApplicantBINVAT' },
+                  { label: 'HS Code', control: 'HSCode' },
+                  { label: 'Bank BIN No.', control: 'BankBINNo' },
+                  { label: 'Remarks', control: 'Remarks', type: 'textarea' },
+                  { label: 'IRC No.', control: 'IRCNo' },
+                ]
+              "
+            >
+              <div class="col-md-6">
+                <div class="row align-items-center mb-3">
+                  <div class="col-md-4 text-end fs-6 fw-bold">
+                    {{ field.label }}
+                  </div>
+                  <div class="col-md-8">
+                    <!-- Conditional rendering: textarea for Remarks, input for others -->
+                    <ng-container
+                      *ngIf="field.type === 'textarea'; else inputField"
+                    >
+                      <textarea
+                        [style]="{ width: '70%' }"
+                        class="form-control"
+                        [formControlName]="field.control"
+                        [placeholder]="field.label"
+                        rows="2"
+                      ></textarea>
+                    </ng-container>
+                    <ng-template #inputField>
+                      <input
+                        [style]="{ width: '70%' }"
+                        type="text"
+                        class="form-control"
+                        [formControlName]="field.control"
+                        [placeholder]="field.label"
+                      />
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
           </div>
         </form>
-        <div class="flexbox mt-5">
+        <!-- <div class="flexbox mt-5">
           <button
             [routerLink]="['/all-lc']"
             class="btn btn-w-xl text-white theme-btn-cancel"
@@ -466,6 +797,28 @@
           <button
             [hidden]="!isEdit"
             class="btn btn-w-xl text-white theme-btn-edit px-5 float-right"
+            type="button"
+            (click)="updateData()"
+            [disabled]="Formgroup.invalid"
+          >
+            Update
+          </button>
+        </div> -->
+        <div class="d-flex justify-content-center mt-5">
+       <button
+  class="btn btn-w-xl text-white theme-btn px-5 me-3"
+  type="button"
+  (click)="saveData()"
+  [disabled]="Formgroup.invalid"
+  [hidden]="isEdit"
+>
+  <i class="fa fa-save me-2"></i> <!-- icon -->
+  Create
+</button>
+
+          <button
+            [hidden]="!isEdit"
+            class="btn btn-w-xl text-white theme-btn-edit px-5"
             type="button"
             (click)="updateData()"
             [disabled]="Formgroup.invalid"

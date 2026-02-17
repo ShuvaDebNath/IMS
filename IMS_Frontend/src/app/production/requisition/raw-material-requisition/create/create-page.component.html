@@ -1,149 +1,279 @@
 <div class="m-2 p-2">
   <div class="card">
-    <div class="card-header theme-bg">
-  <h1 class="">Raw Material Requisition Form</h1>
-
+    <div class="d-flex align-items-center justify-content-center pt-4">
+      <h1 class="fw-normal">Raw Material Requisition Form</h1>
     </div>
     <div class="card-body">
-<div class="">
-
-  <br />
-  <form [formGroup]="requisitionForm">
-
-    <!-- Header fields -->
-    <div class="row mb-3">
-      <!-- Requisition Date -->
-      <div class="col-md-2">
-        <label class="form-label">Requisition Date</label>
-        <input type="date" class="form-control" formControlName="requisitionDate" />
-      </div>
-
-      <!-- Remarks -->
-      <div class="col-md-8">
-        <label class="form-label">Remarks</label>
-        <textarea class="form-control" formControlName="remarks" rows="1"></textarea>
-      </div>
-    </div>
-
-
-    <h3><strong>Details </strong></h3>
-    <!-- Items table -->
-    <table class="table table-bordered">
-
-      <colgroup>
-        <col style="width: 40%;">
-        <col style="width: 30%;">
-        <col style="width: 10%;">
-        <col style="width: 10%;">
-        <col style="width: 10%;">
-        <col style="width: 5%;">
-      </colgroup>
-      <thead>
-        <tr>
-         
-          <th class="th-article" style="text-align: center;">
-      <span>Article</span>
-
-      <!-- PrimeIcons version (PrimeNG) -->
-      <button type="button"
-              class="icon-btn"
-              [disabled]="reloadingArticles"
-              (click)="refreshArticles()"
-              title="Refresh articles">
-        <i class="pi" [ngClass]="reloadingArticles ? 'pi-spinner pi-spin' : 'pi-refresh'"></i>
-      </button>
-    </th>
-          <th style="text-align: center;">Description</th>
-          <th style="text-align: center;">Qty</th>
-          <th style="text-align: center;">Roll/Bag</th>
-          <th style="text-align: center;">Roll/Bag Qty</th>
-          <th style="width: 60px;"></th>
-        </tr>
-      </thead>
-
-      <tbody formArrayName="items">
-        <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
-          <td>
-            <div class="form-group">
-
-              <p-dropdown class="p-0 rm-dd" [style]="{ width: '100%' }" [panelStyle]="{ width: '100%' }"
-                [options]="rawMaterialArticles" optionLabel="ConcatArticleNo" optionValue="RawMaterial_ID"
-                [filter]="true" filterBy="ConcatArticleNo" [showClear]="true" placeholder="Please Select"
-                (onChange)="onArticleChange(i, $event.value)"
-                formControlName="rawMaterialId">
-                <ng-template let-article pTemplate="item">
-                  <div class="flex align-items-center gap-2">
-                    <div>{{ article.ConcatArticleNo }}</div>
-                  </div>
-                </ng-template>
-              </p-dropdown>
+      <div class="">
+        <br />
+        <form [formGroup]="requisitionForm">
+          <!-- Header fields -->
+          <!-- <div class="row mb-3">
+           
+            <div class="col-md-2">
+              <label class="form-label">Requisition Date</label>
+             
+              <p-calendar
+                formControlName="requisitionDate"
+                [showIcon]="false"
+                dateFormat="dd/mm/yy"
+                placeholder="From"
+                inputStyleClass="custom-date-input"
+              ></p-calendar>
             </div>
-          </td>
 
-          <td class="col-description">
-            <input class="form-control" formControlName="description" />
-          </td>
+        
+            <div class="col-md-8">
+              <label class="form-label">Remarks</label>
+              <textarea
+                class="form-control"
+                formControlName="remarks"
+                rows="1"
+              ></textarea>
+            </div>
+          </div> -->
+          <div class="row">
 
-          <td>
-            <input type="number" class="form-control" formControlName="qty" style="text-align: center;" />
-          </td>
+            <div class="col-md-4">
+              <div class="row g-1 align-items-start">
+                <div class="col-4">
+                  <label class="form-label">Requisition Date</label>
+                </div>
+                <div class="col-8">
+                  <p-calendar
+                    formControlName="requisitionDate"
+                    [showIcon]="false"
+                    dateFormat="dd/mm/yy"
+                    placeholder="From"
+                    inputStyleClass="custom-date-input"
+                    [style]="{width: '100%'}"
+                  ></p-calendar>
+                </div>
+              </div>
+            </div>
 
-          <td>
-            <select class="form-control" formControlName="rollOrBag">
-              <option>Rolls</option>
-              <option>Bags</option>
-            </select>
-          </td>
-
-          <td>
-            <input type="number" class="form-control" formControlName="rollBagQty" style="text-align: center;" />
-          </td>
-
-          <td>
-            <button type="button" class="btn btn-sm btn-danger" (click)="removeItem(i)">
-              ×
-            </button>
-        </tr>
-      </tbody>
-
-
-      <tr class="totals-row">
-        <td></td> 
-        <td class="text-end fw-bold">Totals:</td>
-        <td>
-          <input class="form-control text-end" [value]="totalQty" disabled />
-        </td>
-        <td>
-          <div class="rbq-label">Rolls</div>
-          <div class="rbq-label">Bags</div>
-        </td> 
-        <td colspan="2" class="rbq-total-cell">
-          <div class="rbq-grid">
-            <input class="form-control text-end" [value]="totalRoll" disabled /><br />
-            <input class="form-control text-end" [value]="totalBag" disabled />
+            <!-- Remarks -->
+         
           </div>
-        </td>
-      </tr>
+          <div class="row">
+               <div class="col-md-4 mb-3">
+              <div class="row g-1 align-items-start">
+                <div class="col-4">
+                  <label class="form-label">Remarks</label>
+                </div>
+                <div class="col-8">
+                  <textarea
+                    class="form-control"
+                    formControlName="remarks"
+                    rows="2"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h3><strong>Details </strong></h3>
+          <!-- Items table -->
+          <table class="table table-bordered">
+            <colgroup>
+              <col style="width: 40%" />
+              <col style="width: 30%" />
+              <col style="width: 10%" />
+              <col style="width: 10%" />
+              <col style="width: 10%" />
+              <col style="width: 5%" />
+            </colgroup>
+            <thead class="custom-header">
+              <tr>
+                <th class="th-article" style="text-align: center">
+                  <span>Article</span>
 
-    </table>
+                  <!-- PrimeIcons version (PrimeNG) -->
+                  <button
+                    type="button"
+                    class="icon-btn"
+                    [disabled]="reloadingArticles"
+                    (click)="refreshArticles()"
+                    title="Refresh articles"
+                  >
+                    <i
+                      class="pi"
+                      [ngClass]="
+                        reloadingArticles ? 'pi-spinner pi-spin' : 'pi-refresh'
+                      "
+                    ></i>
+                  </button>
+                </th>
+                <th style="text-align: center">Description</th>
+                <th style="text-align: center">Qty</th>
+                <th style="text-align: center">Roll/Bag</th>
+                <th style="text-align: center">Roll/Bag Qty</th>
+                <th style="width: 60px"></th>
+              </tr>
+            </thead>
 
+            <tbody formArrayName="items">
+              <tr
+                *ngFor="let item of items.controls; let i = index"
+                [formGroupName]="i"
+              >
+                <!-- <td >
+                  <div class="form-group">
+                    <p-dropdown
+                      class="p-0 rm-dd"
+                      [style]="{ width: '100%' }"
+                      [panelStyle]="{ width: '100%' }"
+                      [options]="rawMaterialArticles"
+                      optionLabel="ConcatArticleNo"
+                      optionValue="RawMaterial_ID"
+                      [filter]="true"
+                      filterBy="ConcatArticleNo"
+                      [showClear]="true"
+                      placeholder="Please Select"
+                      (onChange)="onArticleChange(i, $event.value)"
+                      formControlName="rawMaterialId"
+                    >
+                      <ng-template let-article pTemplate="item">
+                        <div class="flex align-items-center gap-2">
+                          <div>{{ article.ConcatArticleNo }}</div>
+                        </div>
+                      </ng-template>
+                    </p-dropdown>
+                  </div>
+                </td> -->
+                <td>
+                  <div
+                    class="d-flex justify-content-center align-items-center"
+                    style="height: 100%"
+                  >
+                    <p-dropdown
+                      class="rm-dd flex-fill"
+                      [style]="{ width: '100%' }"
+                      [panelStyle]="{ width: '100%' }"
+                      [options]="rawMaterialArticles"
+                      optionLabel="ConcatArticleNo"
+                      optionValue="RawMaterial_ID"
+                      [filter]="true"
+                      filterBy="ConcatArticleNo"
+                      [showClear]="true"
+                      placeholder="Please Select"
+                      (onChange)="onArticleChange(i, $event.value)"
+                      formControlName="rawMaterialId"
+                    >
+                      <ng-template let-article pTemplate="item">
+                        <div class="flex align-items-center gap-2">
+                          <div>{{ article.ConcatArticleNo }}</div>
+                        </div>
+                      </ng-template>
+                    </p-dropdown>
+                  </div>
+                </td>
 
-    <div class="d-flex justify-content-end gap-2 mt-3">
-      <button type="button" class="btn btn-outline-success " (click)="addItem()">
-        <i class="bi bi-plus-circle me-1"></i> Add Row
-      </button>
+                <td
+                  class="col-description"
+                  style="text-align: center; vertical-align: middle"
+                >
+                  <input
+                    class="form-control"
+                    formControlName="description"
+                    style="height: 48px"
+                  />
+                </td>
 
-      <button type="submit" (click)="saveData()" [ngClass]="{
-        'theme-btn-disable': requisitionForm.invalid
-      }" class="btn theme-btn btn-rounded" [disabled]="requisitionForm.invalid">
-        <i class="bi bi-save me-1"></i> Save
-      </button>
-    </div>
-  </form>
+                <td style="text-align: center; vertical-align: middle">
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="qty"
+                    style="text-align: center; height: 48px"
+                  />
+                </td>
 
-</div>
+                <td style="text-align: center; vertical-align: middle">
+                  <select
+                    class="form-control"
+                    formControlName="rollOrBag"
+                    style="height: 48px"
+                  >
+                    <option>Rolls</option>
+                    <option>Bags</option>
+                  </select>
+                </td>
+
+                <td style="text-align: center; vertical-align: middle">
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="rollBagQty"
+                    style="text-align: center; height: 48px"
+                  />
+                </td>
+
+                <td style="text-align: center; vertical-align: middle">
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-danger"
+                    (click)="removeItem(i)"
+                  >
+                    ×
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+
+            <tr class="totals-row">
+              <td></td>
+              <td class="text-end fw-bold">Totals:</td>
+              <td>
+                <input
+                  class="form-control text-end"
+                  [value]="totalQty"
+                  disabled
+                />
+              </td>
+              <td>
+                <div class="rbq-label">Rolls</div>
+                <div class="rbq-label">Bags</div>
+              </td>
+              <td colspan="2" class="rbq-total-cell">
+                <div class="rbq-grid">
+                  <input
+                    class="form-control text-end"
+                    [value]="totalRoll"
+                    disabled
+                  /><br />
+                  <input
+                    class="form-control text-end"
+                    [value]="totalBag"
+                    disabled
+                  />
+                </div>
+              </td>
+            </tr>
+          </table>
+
+          <div class="d-flex justify-content-end gap-2 mt-3">
+            <button
+              type="button"
+              class="btn btn-outline-success"
+              (click)="addItem()"
+            >
+              <i class="bi bi-plus-circle me-1"></i> Add Row
+            </button>
+
+            <button
+              type="submit"
+              (click)="saveData()"
+              [ngClass]="{
+                'theme-btn-disable': requisitionForm.invalid,
+              }"
+              class="btn theme-btn btn-rounded"
+              [disabled]="requisitionForm.invalid"
+            >
+              <i class="bi bi-save me-1"></i> Save
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </div>
-
-

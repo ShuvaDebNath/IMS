@@ -1,11 +1,9 @@
-<div class="p-2 m-2 shadow-sm">
+<div class="p-3 m-2 shadow-sm">
   <form name="PIForm" [formGroup]="Formgroup" role="form">
-    <div class="card">
-      <div
-        class="theme-bg sticky-header d-flex align-items-center justify-content-between"
-      >
-        <h1 class=" ">Proforma Invoice</h1>
-        <div class="float-right">
+    <div class="card p-3">
+      <div class="d-flex align-items-center justify-content-center pt-4">
+        <h1 class="fw-normal">Proforma Invoice</h1>
+        <!-- <div class="float-right">
           <button
             class="btn btn-sm btn-pi-save mr-2"
             (click)="Save()"
@@ -16,10 +14,10 @@
           <button class="btn btn-sm btn-pi-refresh" (click)="RefrashDDL()">
             <i class="fas fa-sync"></i>&nbsp;Refresh
           </button>
-        </div>
+        </div> -->
       </div>
       <div class="card-body">
-        <div class="row">
+        <!-- <div class="row">
           <div class="col-md-4">
             <label class="control-label">Consignee Initial</label>
             <input
@@ -31,8 +29,6 @@
               formControlName="Consignee_Initial"
               (keyup)="Formgroup.get('Consignee_Initial')?.markAsTouched()"
             />
-
-            <!-- Validation messages -->
             <div
               *ngIf="
                 Formgroup.get('Consignee_Initial')?.touched &&
@@ -46,45 +42,131 @@
                 Consignee Initial is required.
               </div>
               <div
-                *ngIf="Formgroup.get('Consignee_Initial')?.errors?.['minlength']"
+                *ngIf="
+                  Formgroup.get('Consignee_Initial')?.errors?.['minlength']
+                "
               >
                 Consignee Initial must be 3 characters.
               </div>
               <div
-                *ngIf="Formgroup.get('Consignee_Initial')?.errors?.['maxlength']"
+                *ngIf="
+                  Formgroup.get('Consignee_Initial')?.errors?.['maxlength']
+                "
               >
                 Consignee Initial cannot exceed 3 characters.
               </div>
             </div>
           </div>
+        </div> -->
+        <!-- Consignee Initial -->
+        <!-- Consignee Initial -->
+        <div class="row mb-1">
           <div class="col-md-4">
-            <label class="control-label">PI No</label>
-            <input
-              type="text"
-              class="form-control form-control-sm"
-              placeholder="PI No"
-              [readOnly]="this.tempPI!=undefined?false:true"
-              id="pino"
-              name="pino"
-              formControlName="PINo"
-            />
-          </div>
-          <div class="col-md-4">
-            <label class="control-label">Date</label>
-            <input
-              type="text"
-              autocomplete="off"
-              [readOnly]="true"
-              formControlName="Date"
-              class="form-control form-control-sm"
-            />
-            <!-- bsDatepicker
-            placement="bottom"
-            [bsConfig]="{ isAnimated: true }" <input type="text" class="form-control form-control-sm" placeholder="Date" readOnly id="Date" name="Date" formControlName="Date"/> -->
+            <div class="row g-1 align-items-start">
+              <!-- g-1 diye gutter khub kom -->
+              <div class="col-3">
+                <label class="mb-0"
+                  >Consignee <br />
+                  Initial</label
+                >
+              </div>
+              <div class="col-7">
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  formControlName="Consignee_Initial"
+                  [style]="{
+                    width: '70%',
+                    borderRadius: '5px',
+                    height: '38px',
+                    padding: '5px 10px',
+                  }"
+                />
+                <div
+                  *ngIf="
+                    Formgroup.get('Consignee_Initial')?.touched &&
+                    Formgroup.get('Consignee_Initial')?.invalid
+                  "
+                  class="text-danger"
+                  style="font-size: 0.8rem; margin-top: 2px"
+                >
+                  <div
+                    *ngIf="
+                      Formgroup.get('Consignee_Initial')?.errors?.['required']
+                    "
+                  >
+                    Consignee Initial is required.
+                  </div>
+                  <div
+                    *ngIf="
+                      Formgroup.get('Consignee_Initial')?.errors?.['minlength']
+                    "
+                  >
+                    Consignee Initial must be 3 characters.
+                  </div>
+                  <div
+                    *ngIf="
+                      Formgroup.get('Consignee_Initial')?.errors?.['maxlength']
+                    "
+                  >
+                    Consignee Initial cannot exceed 3 characters.
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+
+        <!-- PI No -->
+        <div class="row mb-1">
+          <div class="col-md-4">
+            <div class="row g-1 align-items-start">
+              <div class="col-3">
+                <label class="mb-0">PI No</label>
+              </div>
+              <div class="col-7">
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  formControlName="PINo"
+                  [style]="{
+                    borderRadius: '5px',
+                    height: '38px',
+                    padding: '5px 10px',
+                    marginBottom: '-6px',
+                  }"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Date -->
+        <div class="row mb-1">
+          <div class="col-md-4">
+            <div class="row g-1 align-items-start">
+              <div class="col-3">
+                <label class="mb-0">Date</label>
+              </div>
+              <div class="col-7">
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  formControlName="Date"
+                  readonly
+                  [style]="{
+                    borderRadius: '5px',
+                    height: '38px',
+                    padding: '5px 10px',
+                  }"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
         <hr />
-        <div class="row">
+        <!-- <div class="row">
           <div class="col-md-4 mb-2">
             <label class="control-label">Shippeer</label><br />
             <p-dropdown
@@ -294,7 +376,11 @@
           <div class="col-md-4 mb-2">
             <label class="control-label">Expire Date</label>
 
-            <input type="date" formControlName="ExpireDate" class="form-control" />
+            <input
+              type="date"
+              formControlName="ExpireDate"
+              class="form-control"
+            />
           </div>
 
           <div class="col-md-4 mb-2">
@@ -312,10 +398,439 @@
             >
             </p-dropdown>
           </div>
+        </div> -->
+
+        <!-- Row 1 -->
+        <div class="row mb-2">
+          <!-- Shippeer -->
+          <div class="col-md-4">
+            <div class="row g-1 align-items-start">
+              <div class="col-3">
+                <label class="mb-0">Shippeer</label>
+              </div>
+              <div class="col-7">
+                <p-dropdown
+                  [options]="ShipperList"
+                  formControlName="Beneficiary_Account_ID"
+                  optionLabel="CompanyName"
+                  optionValue="Beneficiary_Account_ID"
+                  [filter]="true"
+                  filterBy="CompanyName"
+                  [showClear]="true"
+                  panelStyleClass="my-dropdown-panel"
+                  [style]="{ width: '100%' }"
+                  placeholder="Select a Shippeer"
+                ></p-dropdown>
+              </div>
+            </div>
+          </div>
+
+          <!-- Beneficiary's Bank -->
+          <div class="col-md-4">
+            <div class="row g-1 align-items-start">
+              <div class="col-3">
+                <label class="mb-0"
+                  >Beneficiary's <br />
+                  Bank</label
+                >
+              </div>
+              <div class="col-7">
+                <p-dropdown
+                  [options]="BenificaryBankList"
+                  formControlName="Beneficiary_Bank_ID"
+                  optionLabel="BankInfo"
+                  optionValue="Beneficiary_Bank_ID"
+                  [filter]="true"
+                  filterBy="BankInfo"
+                  [showClear]="true"
+                  panelStyleClass="my-dropdown-panel"
+                  [style]="{ width: '100%' }"
+                  placeholder="Select a Beneficiary's Bank"
+                >
+                </p-dropdown>
+              </div>
+            </div>
+          </div>
+
+          <!-- Country of Origin -->
+          <div class="col-md-4">
+            <div class="row g-1 align-items-start">
+              <div class="col-3">
+                <label class="mb-0"
+                  >Country of <br />
+                  Origin</label
+                >
+              </div>
+              <div class="col-7">
+                <p-dropdown
+                  [options]="CountryList"
+                  formControlName="Country_Of_Orgin_ID"
+                  optionLabel="Country"
+                  optionValue="Country_ID"
+                  [filter]="true"
+                  filterBy="Country"
+                  [showClear]="true"
+                  [style]="{ width: '100%' }"
+                  placeholder="Select a Country"
+                >
+                </p-dropdown>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <!-- Row 2 -->
+        <div class="row mb-2">
+          <!-- Packing -->
+          <div class="col-md-4">
+            <div class="row g-1 align-items-start">
+              <div class="col-3">
+                <label class="mb-0">Packing</label>
+              </div>
+              <div class="col-7">
+                <p-dropdown
+                  [options]="PackingList"
+                  formControlName="Packing_ID"
+                  optionLabel="Mode"
+                  optionValue="Packing_ID"
+                  [filter]="true"
+                  filterBy="Mode"
+                  [showClear]="true"
+                  [style]="{ width: '100%' }"
+                  placeholder="Select a Packing"
+                >
+                </p-dropdown>
+              </div>
+            </div>
+          </div>
+
+          <!-- Loading Mode -->
+          <div class="col-md-4">
+            <div class="row g-1 align-items-start">
+              <div class="col-3">
+                <label class="mb-0"
+                  >Loading <br />
+                  Mode</label
+                >
+              </div>
+              <div class="col-7">
+                <p-dropdown
+                  [options]="LoadingModeList"
+                  formControlName="Loading_Mode_ID"
+                  optionLabel="Details"
+                  optionValue="Loading_Mode_ID"
+                  [filter]="true"
+                  filterBy="Details"
+                  [showClear]="true"
+                  [style]="{ width: '100%' }"
+                  placeholder="Select a Loading Mode"
+                >
+                </p-dropdown>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Mode -->
+          <div class="col-md-4">
+            <div class="row g-1 align-items-start">
+              <div class="col-3">
+                <label class="mb-0"
+                  >Payment <br />
+                  Mode</label
+                >
+              </div>
+              <div class="col-7">
+                <p-dropdown
+                  [options]="PaymentModeList"
+                  formControlName="Payment_Term_ID"
+                  optionLabel="Mode"
+                  optionValue="Payment_Term_ID"
+                  [filter]="true"
+                  filterBy="Mode"
+                  [showClear]="true"
+                  [style]="{ width: '100%' }"
+                  placeholder="Select a Payment Mode"
+                >
+                </p-dropdown>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="row mb-2">
+          <!-- Consignee -->
+          <div class="col-md-4">
+            <div class="row g-1 align-items-start">
+              <div class="col-3">
+                <label class="mb-0">Consignee</label>
+              </div>
+              <div class="col-7">
+                <p-dropdown
+                  [options]="ConsigneeList"
+                  formControlName="Customer_ID"
+                  optionLabel="CustomerName"
+                  optionValue="Customer_ID"
+                  [filter]="true"
+                  filterBy="CustomerName"
+                  [showClear]="true"
+                  panelStyleClass="my-dropdown-panel"
+                  [virtualScroll]="true"
+                  [itemSize]="30"
+                  [style]="{ width: '100%' }"
+                  placeholder="Select a Consignee"
+                >
+                </p-dropdown>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Person -->
+          <div class="col-md-4">
+            <div class="row g-1 align-items-start">
+              <div class="col-3">
+                <label class="mb-0"
+                  >Contact <br />
+                  Person</label
+                >
+              </div>
+              <div class="col-7">
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  placeholder="Contact Person"
+                  formControlName="Contact_Person"
+                  style="
+                    width: 100%;
+                    height: 42px;
+                    border-radius: 5px;
+                    padding: 5px 10px;
+                  "
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Applicant Bank -->
+          <div class="col-md-4">
+            <div class="row g-1 align-items-start">
+              <div class="col-3">
+                <label class="mb-0"
+                  >Applicant <br />
+                  Bank</label
+                >
+              </div>
+              <div class="col-7">
+                <p-dropdown
+                  [options]="ApplicantBankList"
+                  formControlName="Customer_Bank_ID"
+                  optionLabel="CustomerBankDetails"
+                  optionValue="Applicant_Bank_ID"
+                  [filter]="true"
+                  filterBy="CustomerBankDetails"
+                  [showClear]="true"
+                  [style]="{ width: '100%' }"
+                  placeholder="Select a Bank"
+                >
+                </p-dropdown>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 4 -->
+        <div class="row mb-2">
+          <!-- Buyer Name -->
+          <div class="col-md-4">
+            <div class="row g-1 align-items-start">
+              <div class="col-3">
+                <label class="mb-0">Buyer Name</label>
+              </div>
+              <div class="col-7">
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  placeholder="Buyer Name"
+                  formControlName="Buyer_Name"
+                  style="
+                    width: 100%;
+                    height: 42px;
+                    border-radius: 5px;
+                    padding: 5px 10px;
+                  "
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Is Buying House Order -->
+          <div class="col-md-4">
+            <div class="row g-1 align-items-start">
+              <div class="col-3">
+                <label class="mb-0 mr-2"
+                  >Is Buying <br />
+                  House <br />
+                  Order?</label
+                >
+              </div>
+              <div class="col-7">
+                <p-checkbox
+                  inputId="IsBuyerMandatory"
+                  name="IsBuyerMandatory"
+                  [binary]="true"
+                  formControlName="IsBuyerMandatory"
+                  [style]="{ width: '100%' }"
+                ></p-checkbox>
+              </div>
+            </div>
+          </div>
+
+          <!-- Buying House -->
+          <div class="col-md-4">
+            <div class="row g-1 align-items-start">
+              <div class="col-3">
+                <label class="mb-0"
+                  >Buying <br />
+                  House</label
+                >
+              </div>
+              <div class="col-7">
+                <p-dropdown
+                  [options]="BuyingHouseList"
+                  formControlName="Buyer_ID"
+                  optionLabel="Buyer_Name"
+                  optionValue="Id"
+                  [filter]="true"
+                  filterBy="Buyer_Name"
+                  [showClear]="true"
+                  [style]="{ width: '100%' }"
+                  placeholder="Select a Buying House"
+                >
+                </p-dropdown>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 5 -->
+        <div class="row mb-2">
+          <!-- Delivery Address -->
+          <div class="col-md-4">
+            <div class="row g-1 align-items-start">
+              <div class="col-3">
+                <label class="mb-1"
+                  >Delivery <br />
+                  Address</label
+                >
+              </div>
+
+              <div class="col-7">
+                <textarea
+                  class="form-control form-control-sm"
+                  rows="3"
+                  formControlName="Delivery_Address"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Style -->
+          <div class="col-md-4">
+            <div class="row g-1 align-items-start">
+              <div class="col-3">
+                <label class="mb-1">Style</label>
+              </div>
+              <div class="col-7">
+                <textarea
+                  class="form-control form-control-sm"
+                  rows="3"
+                  formControlName="Style"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Goods Description -->
+          <div class="col-md-4">
+            <div class="row g-1 align-items-start">
+              <div class="col-3">
+                <label class="mb-1"
+                  >Goods <br />
+                  Description</label
+                >
+              </div>
+
+              <div class="col-7">
+                <textarea
+                  class="form-control form-control-sm"
+                  rows="3"
+                  formControlName="Good_Description"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 6 -->
+        <div class="row mb-2">
+          <!-- Expire Date -->
+          <div class="col-md-4">
+            <div class="row g-1 align-items-start">
+              <div class="col-3">
+                <label class="mb-1">Expire Date</label>
+              </div>
+
+              <div class="col-7">
+                <!-- <input
+                  type="date"
+                  formControlName="ExpireDate"
+                  class="form-control"
+                  style="height: 42px; border-radius: 5px; padding: 5px 10px"
+                /> -->
+                   <p-calendar
+                    formControlName="ExpireDate"
+                    [showIcon]="false"
+                    dateFormat="dd/mm/yy"
+                    placeholder="Select Date"
+                    class="w-100"
+                    [style]="{ width: '100%' }"
+                    inputStyleClass="form-control custom-date-input"
+                  ></p-calendar>
+              </div>
+            </div>
+          </div>
+
+          <!-- Terms of Delivery -->
+          <div class="col-md-4">
+            <div class="row g-1 align-items-start">
+              <div class="col-3">
+                <label class="mb-1"
+                  >Terms <br />
+                  of <br />
+                  Delivery</label
+                >
+              </div>
+              <div class="col-7">
+                <p-dropdown
+                  [options]="TermsofDeliveryList"
+                  formControlName="Terms_of_Delivery_ID"
+                  optionLabel="Details"
+                  optionValue="Id"
+                  [filter]="true"
+                  filterBy="Details"
+                  [showClear]="true"
+                  [style]="{ width: '100%' }"
+                  placeholder="Select Terms of Delivery"
+                >
+                </p-dropdown>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="table-responsive">
           <table class="table table-sm table-bordered table-striped">
-            <thead>
+            <thead class="custom-header">
               <tr>
                 <th class="text-center align-middle sticky-table-column">
                   <button
@@ -561,132 +1076,227 @@
         <hr />
 
         <div class="row">
-          <div class="col-md-4 mb-2">
-            <label class="control-label">Delivery Condition</label><br />
-            <p-dropdown
-              formControlName="Delivery_Condition_ID"
-              [options]="DeliveryConditionList"
-              optionLabel="Details"
-              optionValue="Delivery_Condition_ID"
-              [filter]="true"
-              filterBy="Details"
-              [showClear]="true"
-              [style]="{ width: '100%' }"
-              styleClass="my-dropdown"
-              panelStyleClass="my-dropdown-panel"
-              placeholder="Select a Delivery Condition"
-            >
-            </p-dropdown>
+          <div class="col-md-4">
+            <div class="row g-1 align-items-start">
+              <div class="col-3">
+                <label class="control-label"
+                  >Delivery <br />
+                  Condition</label
+                >
+              </div>
+              <div class="col-7">
+                <p-dropdown
+                  formControlName="Delivery_Condition_ID"
+                  [options]="DeliveryConditionList"
+                  optionLabel="Details"
+                  optionValue="Delivery_Condition_ID"
+                  [filter]="true"
+                  filterBy="Details"
+                  [showClear]="true"
+                  [style]="{ width: '100%' }"
+                  panelStyleClass="my-dropdown-panel"
+                  placeholder="Select a Delivery Condition"
+                >
+                </p-dropdown>
+              </div>
+            </div>
           </div>
-          <div class="col-md-4 mb-2">
-            <label class="control-label">Partial Shipment</label><br />
-            <p-dropdown
-              formControlName="Shipment_Condition_ID"
-              [options]="PartialShipmentList"
-              optionLabel="ShipmentConditions"
-              optionValue="Shipment_Condition_ID"
-              [filter]="true"
-              filterBy="ShipmentConditions"
-              [showClear]="true"
-              [style]="{ width: '100%' }"
-              styleClass="my-dropdown"
-              panelStyleClass="my-dropdown-panel"
-              placeholder="Select a Shipment"
-            >
-            </p-dropdown>
+          <div class="col-md-4">
+            <div class="row g-1 align-items-start">
+              <div class="col-3">
+                <label class="control-label"
+                  >Partial <br />
+                  Shipment</label
+                >
+              </div>
+              <div class="col-7">
+                <p-dropdown
+                  formControlName="Shipment_Condition_ID"
+                  [options]="PartialShipmentList"
+                  optionLabel="ShipmentConditions"
+                  optionValue="Shipment_Condition_ID"
+                  [filter]="true"
+                  filterBy="ShipmentConditions"
+                  [showClear]="true"
+                  [style]="{ width: '100%' }"
+                  panelStyleClass="my-dropdown-panel"
+                  placeholder="Select a Shipment"
+                >
+                </p-dropdown>
+              </div>
+            </div>
           </div>
-          <div class="col-md-4 mb-2">
-            <label class="control-label">Price Terms</label><br />
-            <p-dropdown
-              formControlName="Price_Term_ID"
-              [options]="PriceTermsList"
-              optionLabel="PriceTerm"
-              optionValue="Price_Term_ID"
-              [filter]="true"
-              filterBy="PriceTerm"
-              [showClear]="true"
-              [style]="{ width: '100%' }"
-              styleClass="my-dropdown"
-              panelStyleClass="my-dropdown-panel"
-              placeholder="Select a Price Terms"
-            >
-            </p-dropdown>
+          <div class="col-md-4">
+            <div class="row g-1 align-items-start">
+              <div class="col-3">
+                <label class="control-label"
+                  >Price <br />
+                  Terms</label
+                >
+              </div>
+              <div class="col-7">
+                <!-- <p-dropdown
+                  formControlName="Price_Term_ID"
+                  [options]="PriceTermsList"
+                  optionLabel="PriceTerm"
+                  optionValue="Price_Term_ID"
+                  [filter]="true"
+                  filterBy="PriceTerm"
+                  [showClear]="true"
+                  [style]="{ width: '100%' }"
+                  styleClass="my-dropdown"
+                  panelStyleClass="my-dropdown-panel"
+                  placeholder="Select a Price Terms"
+                >
+                </p-dropdown> -->
+
+<p-dropdown
+  formControlName="Price_Term_ID"
+  [options]="PriceTermsList"
+  optionLabel="PriceTerm"
+  optionValue="Price_Term_ID"
+  [filter]="true"
+  filterBy="PriceTerm"
+  [showClear]="true"
+  [style]="{ width: '100%' }"  
+  panelStyleClass="my-dropdown-panel"
+  placeholder="Select a Price Terms"
+>
+</p-dropdown>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="row g-1 align-items-start">
+              <div class="col-3">
+                <label class="control-label">Documents</label>
+              </div>
+              <div class="col-7">
+                <textarea
+                  id="Documents"
+                  class="form-control form-control-sm"
+                  rows="3"
+                  formControlName="Documents"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="row g-1 align-items-start">
+              <div class="col-3">
+                <label class="control-label"
+                  >Port Of <br />
+                  Loading</label
+                >
+              </div>
+
+              <div class="col-7">
+                <textarea
+                  id="PortOfLoading"
+                  class="form-control form-control-sm"
+                  rows="3"
+                  formControlName="Loading_Port"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="row g-1 align-items-start">
+              <div class="col-3">
+                <label class="control-label"
+                  >Port Of <br />
+                  Destination</label
+                >
+              </div>
+              <div class="col-7">
+                <textarea
+                  id="PortOfDestination"
+                  class="form-control form-control-sm"
+                  rows="3"
+                  formControlName="Destination_Port"
+                ></textarea>
+              </div>
+            </div>
           </div>
 
           <div class="col-md-4 mb-2">
-            <label class="control-label">Documents</label>
-            <textarea
-              id="Documents"
-              class="form-control form-control-sm"
-              rows="3"
-              formControlName="Documents"
-            ></textarea>
-          </div>
-          <div class="col-md-4 mb-2">
-            <label class="control-label">Port Of Loading</label>
-            <textarea
-              id="PortOfLoading"
-              class="form-control form-control-sm"
-              rows="3"
-              formControlName="Loading_Port"
-            ></textarea>
-          </div>
-          <div class="col-md-4 mb-2">
-            <label class="control-label">Port Of Destination</label>
-            <textarea
-              id="PortOfDestination"
-              class="form-control form-control-sm"
-              rows="3"
-              formControlName="Destination_Port"
-            ></textarea>
+            <div class="row g-1 align-items-start">
+              <div class="col-3">
+                <label class="control-label">Remarks</label>
+              </div>
+              <div class="col-7">
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  id="Remarks"
+                  placeholder="Remarks"
+                  formControlName="Remarks"
+                  style="height: 42px"
+                />
+              </div>
+            </div>
           </div>
 
-          <div class="col-md-4 mb-2">
-            <label class="control-label">Remarks</label>
-            <input
-              type="text"
-              class="form-control form-control-sm"
-              id="Remarks"
-              placeholder="Remarks"
-              formControlName="Remarks"
-            />
+          <div class="col-md-4">
+            <div class="row g-1 align-items-start">
+              <div class="col-3">
+                <label class="control-label"
+                  >Force <br />
+                  Majeure</label
+                ><br />
+              </div>
+              <div class="col-7">
+                <p-dropdown
+                  formControlName="Force_Majeure_ID"
+                  [options]="ForceMajeureList"
+                  optionLabel="Force"
+                  optionValue="Force_Majeure_ID"
+                  [filter]="true"
+                  filterBy="Force"
+                  [showClear]="true"
+                  [style]="{ width: '100%' }"
+                  panelStyleClass="my-dropdown-panel"
+                  placeholder="Select a Force Majeure"
+                >
+                </p-dropdown>
+              </div>
+            </div>
           </div>
-
-          <div class="col-md-4 mb-2">
-            <label class="control-label">Force Majeure</label><br />
-            <p-dropdown
-              formControlName="Force_Majeure_ID"
-              [options]="ForceMajeureList"
-              optionLabel="Force"
-              optionValue="Force_Majeure_ID"
-              [filter]="true"
-              filterBy="Force"
-              [showClear]="true"
-              [style]="{ width: '100%' }"
-              styleClass="my-dropdown"
-              panelStyleClass="my-dropdown-panel"
-              placeholder="Select a Force Majeure"
-            >
-            </p-dropdown>
-          </div>
-          <div class="col-md-4 mb-2">
-            <label class="control-label">Arbitration</label><br />
-            <p-dropdown
-              formControlName="Arbitration_ID"
-              [options]="ArbitrationList"
-              optionLabel="Detail"
-              optionValue="Arbitration_ID"
-              [filter]="true"
-              filterBy="Detail"
-              [showClear]="true"
-              styleClass="my-dropdown"
-              panelStyleClass="my-dropdown-panel"
-              [style]="{ width: '100%' }"
-              placeholder="Select a Arbitration"
-            >
-            </p-dropdown>
+          <div class="col-md-4">
+            <div class="row g-1 align-items-start">
+              <div class="col-3">
+                <label class="control-label">Arbitration</label>
+              </div>
+              <div class="col-7">
+                <p-dropdown
+                  formControlName="Arbitration_ID"
+                  [options]="ArbitrationList"
+                  optionLabel="Detail"
+                  optionValue="Arbitration_ID"
+                  [filter]="true"
+                  filterBy="Detail"
+                  [showClear]="true"
+                  panelStyleClass="my-dropdown-panel"
+                  [style]="{ width: '100%' }"
+                  placeholder="Select a Arbitration"
+                >
+                </p-dropdown>
+              </div>
+            </div>
           </div>
         </div>
+        <div class="d-flex justify-content-center mt-4">
+        <button
+            class="btn btn-lg btn-pi-save mr-2"
+            (click)="Save()"
+            [disabled]="!Formgroup.valid"
+          >
+            <i class="fas fa-save"></i>&nbsp;Generate
+          </button>
+        </div>
+ 
       </div>
     </div>
   </form>

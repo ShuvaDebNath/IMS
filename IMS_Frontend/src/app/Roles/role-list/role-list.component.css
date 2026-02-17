@@ -20,3 +20,42 @@
 /* table-bordered td, .table-bordered th,td,tr {
     border: 1px solid #6a1a3f !important;
 } */
+
+td.action-column {
+  border:none !important
+}
+
+td.action-column .btn-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Icon-only buttons */
+td.action-column .btn {
+  width: auto;         /* icon-only, auto width */
+  height: 30px;        /* fixed height */
+  padding: 0 6px;      /* horizontal padding */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 !important; /* square corners */
+  font-size: 0.9rem;   /* icon size */
+}
+
+::ng-deep .p-paginator {
+  display: flex !important;
+  align-items: center;
+}
+
+::ng-deep .p-paginator .p-paginator-current {
+  margin-right: auto !important;   /* এইটা left এ আটকে রাখবে */
+}
+
+::ng-deep .p-paginator .p-paginator-pages,
+::ng-deep .p-paginator .p-paginator-next,
+::ng-deep .p-paginator .p-paginator-prev,
+::ng-deep .p-paginator .p-paginator-first,
+::ng-deep .p-paginator .p-paginator-last {
+  margin-left: 0 !important;
+}

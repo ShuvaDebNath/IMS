@@ -13,13 +13,13 @@ import { Subject } from 'rxjs';
 import { DoubleMasterEntryService } from 'src/app/services/doubleEntry/doubleEntryService.service';
 import { GetDataService } from 'src/app/services/getData/getDataService.service';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-
+import { CalendarModule } from 'primeng/calendar';
 @Component({
   standalone: true,
   selector: 'app-create-page',
   templateUrl: './create-page.component.html',
   styleUrls: ['./create-page.component.css'],
-  imports: [CommonModule, ReactiveFormsModule, DropdownModule,BsDatepickerModule]
+  imports: [CommonModule, ReactiveFormsModule, DropdownModule,BsDatepickerModule,CalendarModule]
 })
 export class CreatePageComponent implements OnInit {
   datePipe = new DatePipe('en-US');
