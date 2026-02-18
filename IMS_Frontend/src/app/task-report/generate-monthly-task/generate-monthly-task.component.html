@@ -1,8 +1,15 @@
 <div class="container shadow-sm p-3 mb-5 bg-white rounded">
-  <h1 class="theme-text">Generate Monthly Report Form</h1>
+  <h1 class="theme-text">
+    <label class="theme-text" style="font-size: 2.5rem" *ngIf="isEdit"
+      >Edit</label
+    ><label style="font-size: 2.5rem" class="theme-text" *ngIf="!isEdit"
+      >Generate</label
+    >
+    Monthly Report Form
+  </h1>
 
   <br />
-  <form [formGroup]="taskForm" style="overflow: scroll">
+  <form [formGroup]="taskForm" >
     <!-- Header fields -->
     <div class="row align-items-center">
       <div class="col-3">
@@ -37,154 +44,178 @@
           placeholder="Task No"
           id="taskNo"
           name="taskNo"
+          [readOnly]="!isEdit"
           value=""
         />
       </div>
-      <div class="col-md-6">
+      <div class="col-md-6" *ngIf="isEdit">
         <label class="control-label">Date</label>
 
         <input type="date" formControlName="Date" class="form-control" />
       </div>
     </div>
+    <div style="width: 160% !important; overflow-x: scroll">
+      <!-- Items table (Monthly Report fields) -->
+      <table class="table table-bordered" style="width: 160% !important">
+        <thead>
+          <tr>
+            <th style="text-align: center">Customer Name</th>
+            <th style="text-align: center">Buying Concern Factory/Buyer</th>
+            <th style="text-align: center">
+              Concern Factory(If buying office or group)
+            </th>
+            <th style="text-align: center">How many team you work</th>
+            <th style="text-align: center">Order Season</th>
+            <th style="text-align: center">Description</th>
+            <th style="text-align: center">
+              Time and purpose of first visit this month
+            </th>
+            <th style="text-align: center">
+              Time and purpose of second visit this month
+            </th>
+            <th style="text-align: center">
+              Time and purpose of third visit this month
+            </th>
+            <th style="text-align: center">Order Summary</th>
+            <th style="text-align: center">CM Summary</th>
+            <th style="text-align: center">Net Sales Summary</th>
+            <th style="text-align: center">Summary of Submitted Sample</th>
+            <th style="text-align: center">Summary of New Article Developed</th>
+            <th style="width: 60px"></th>
+          </tr>
+        </thead>
 
-    <!-- Items table (Monthly Report fields) -->
-    <table class="table table-bordered" style="width: 160% !important">
-      <thead>
-        <tr>
-          <th style="text-align: center">Customer Name</th>
-          <th style="text-align: center">Buying Concern Factory/Buyer</th>
-          <th style="text-align: center">How many team you work</th>
-          <th style="text-align: center">Order Season</th>
-          <th style="text-align: center">Description</th>
-          <th style="text-align: center">
-            Time and purpose of first visit this month
-          </th>
-          <th style="text-align: center">
-            Time and purpose of second visit this month
-          </th>
-          <th style="text-align: center">
-            Time and purpose of third visit this month
-          </th>
-          <th style="text-align: center">Order Summary</th>
-          <th style="text-align: center">Summary of Submitted Sample</th>
-          <th style="text-align: center">Summary of New Article Developed</th>
-          <th style="width: 60px"></th>
-        </tr>
-      </thead>
+        <tbody formArrayName="items" style="width: 160% !important">
+          <tr
+            *ngFor="let item of items.controls; let i = index"
+            [formGroupName]="i"
+          >
+            <td>
+              <p-dropdown
+                appendTo="body"
+                class="p-0 rm-dd"
+                [panelStyle]="{ width: '300px' }"
+                [options]="CustomerList"
+                optionLabel="CustomerName"
+                optionValue="Customer_ID"
+                [filter]="true"
+                [virtualScroll]="true"
+                [itemSize]="30"
+                filterBy="CustomerName"
+                [showClear]="true"
+                placeholder="Select Customer"
+                formControlName="CustomerName"
+              ></p-dropdown>
+            </td>
 
-      <tbody formArrayName="items" style="width: 160% !important">
-        <tr
-          *ngFor="let item of items.controls; let i = index"
-          [formGroupName]="i"
-        >
-          <td>
-            <p-dropdown
-              appendTo="body"
-              class="p-0 rm-dd"
-              [panelStyle]="{ width: '300px' }"
-              [options]="CustomerList"
-              optionLabel="CustomerName"
-              optionValue="Customer_ID"
-              [filter]="true"
-              [virtualScroll]="true"
-              [itemSize]="30"
-              filterBy="CustomerName"
-              [showClear]="true"
-              placeholder="Select Customer"
-              formControlName="CustomerName"
-            ></p-dropdown>
-          </td>
+            <td>
+              <input
+                class="form-control form-control-sm"
+                formControlName="Buying_Concern"
+              />
+            </td>
+            <td>
+              <input
+                class="form-control form-control-sm"
+                formControlName="Concern_Factory"
+              />
+            </td>
+            <td>
+              <p-dropdown
+                appendTo="body"
+                [options]="teamOptions"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Team"
+                formControlName="TeamSize"
+              ></p-dropdown>
+            </td>
 
-          <td>
-            <input
-              class="form-control form-control-sm"
-              formControlName="Buying_Concern"
-            />
-          </td>
-          <td>
-            <p-dropdown
-              appendTo="body"
-              [options]="teamOptions"
-              optionLabel="label"
-              optionValue="value"
-              placeholder="Team"
-              formControlName="TeamSize"
-            ></p-dropdown>
-          </td>
+            <td>
+              <p-dropdown
+                appendTo="body"
+                [options]="orderSeasons"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Order Season"
+                formControlName="OrderSeason"
+              ></p-dropdown>
+            </td>
 
-          <td>
-            <p-dropdown
-              appendTo="body"
-              [options]="orderSeasons"
-              optionLabel="label"
-              optionValue="value"
-              placeholder="Order Season"
-              formControlName="OrderSeason"
-            ></p-dropdown>
-          </td>
+            <td>
+              <input
+                class="form-control form-control-sm"
+                formControlName="Description"
+              />
+            </td>
 
-          <td>
-            <input
-              class="form-control form-control-sm"
-              formControlName="Description"
-            />
-          </td>
+            <td>
+              <input
+                class="form-control form-control-sm"
+                formControlName="Visit1"
+              />
+            </td>
 
-          <td>
-            <input
-              class="form-control form-control-sm"
-              formControlName="Visit1"
-            />
-          </td>
+            <td>
+              <input
+                class="form-control form-control-sm"
+                formControlName="Visit2"
+              />
+            </td>
 
-          <td>
-            <input
-              class="form-control form-control-sm"
-              formControlName="Visit2"
-            />
-          </td>
+            <td>
+              <input
+                class="form-control form-control-sm"
+                formControlName="Visit3"
+              />
+            </td>
 
-          <td>
-            <input
-              class="form-control form-control-sm"
-              formControlName="Visit3"
-            />
-          </td>
+            <td>
+              <textarea
+                class="form-control form-control-sm"
+                formControlName="OrderSummary"
+              ></textarea>
+            </td>
+            <td>
+              <input
+                class="form-control form-control-sm"
+                formControlName="CM_Summary"
+              />
+            </td>
+            <td>
+              <input
+                class="form-control form-control-sm"
+                formControlName="Net_Sales_Summary"
+              />
+            </td>
 
-          <td>
-            <textarea
-              class="form-control form-control-sm"
-              formControlName="OrderSummary"
-            ></textarea>
-          </td>
+            <td>
+              <textarea
+                class="form-control form-control-sm"
+                formControlName="SampleSummary"
+              ></textarea>
+            </td>
 
-          <td>
-            <textarea
-              class="form-control form-control-sm"
-              formControlName="SampleSummary"
-            ></textarea>
-          </td>
+            <td>
+              <textarea
+                class="form-control form-control-sm"
+                formControlName="NewArticleSummary"
+              ></textarea>
+            </td>
 
-          <td>
-            <textarea
-              class="form-control form-control-sm"
-              formControlName="NewArticleSummary"
-            ></textarea>
-          </td>
-
-          <td>
-            <button
-              type="button"
-              class="btn btn-sm btn-danger"
-              (click)="removeItem(i)"
-            >
-              ×
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
+            <td>
+              <button
+                type="button"
+                class="btn btn-sm btn-danger"
+                (click)="removeItem(i)"
+              >
+                ×
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <div class="d-flex justify-content-end gap-2 mt-3">
       <button type="button" class="btn btn-outline-success" (click)="addItem()">
         <i class="bi bi-plus-circle me-1"></i> Add Row

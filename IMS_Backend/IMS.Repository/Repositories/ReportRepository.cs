@@ -68,9 +68,10 @@ namespace Boilerplate.Repository.Repositories
                 {
                     param.fromDate,
                     param.toDate,
+                    param.userId
                 };
 
-                string query = @"exec [usp_Task_Details_Report] @fromDate,@toDate";
+                string query = @"exec [usp_Task_Details_Report] @fromDate,@toDate,@userId";
                 var ds = await GetDataInDataSetAsync(query, parametars);
 
                 return ds;
@@ -503,17 +504,18 @@ namespace Boilerplate.Repository.Repositories
             }
         }
 
-        public async Task<DataSet> TaskMonthlyReport(string fromDate, string toDate)
+        public async Task<DataSet> TaskMonthlyReport(string fromDate, string toDate, string userId)
         {
             try
             {
                 var parametars = new
                 {
                     fromdate = fromDate,
-                    toDate = toDate
+                    toDate = toDate,
+                    userId = userId
                 };
 
-                string query = @"exec [usp_Task_Monthly_Report] @fromDate,@toDate";
+                string query = @"exec [usp_Task_Monthly_Report] @fromDate,@toDate,@userId";
                 var ds = await GetDataInDataSetAsync(query, parametars);
 
                 return ds;
@@ -544,17 +546,18 @@ namespace Boilerplate.Repository.Repositories
             }
         }
 
-        public async Task<DataSet> TaskCustomerVisitReport(string fromDate, string toDate)
+        public async Task<DataSet> TaskCustomerVisitReport(string fromDate, string toDate,string userId)
         {
             try
             {
                 var parametars = new
                 {
                     fromdate = fromDate,
-                    toDate = toDate
+                    toDate = toDate,
+                    userId = userId
                 };
 
-                string query = @"exec [usp_Task_Customer_Visit_Report] @fromDate,@toDate";
+                string query = @"exec [usp_Task_Customer_Visit_Report] @fromDate,@toDate,@userId";
                 var ds = await GetDataInDataSetAsync(query, parametars);
 
                 return ds;

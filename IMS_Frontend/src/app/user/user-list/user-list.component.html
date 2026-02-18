@@ -36,7 +36,9 @@
         </div>
       </form>
       <hr>
-        <p-table #dt [value]="tableData" [paginator]="true" [rows]="10" [responsive]="true" [showCurrentPageReport]="true"
+        <p-table #dt [value]="tableData" [paginator]="true" [rows]="pageSize" [rowsPerPageOptions]='["30","20","10"]' 
+        [responsive]="true" [showCurrentPageReport]="true" (onPageChange)="onPageChange($event)"
+        [rowsPerPageOptions]="rowsPerPageOptions"
         [globalFilterFields]="['UserName','Role_Name','Superior']"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
 
