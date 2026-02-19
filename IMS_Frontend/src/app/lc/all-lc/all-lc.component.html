@@ -4,10 +4,9 @@
       <h2 class="mb-0">All LC</h2>
       <form [formGroup]="SearchForm">
         <div class="row align-items-center">
-          <div class="col-6">
+          <div class="col-5">
             <label class="form-label">Select Date</label>
-
-            <div class="range-container" style="width: 70%">
+            <div class="range-container" style="width: 85%">
               <p-calendar
                 formControlName="fromDate"
                 [showIcon]="false"
@@ -15,9 +14,7 @@
                 placeholder="From"
                 inputStyleClass="custom-date-input"
               ></p-calendar>
-
               <span class="range-divider">to</span>
-
               <p-calendar
                 formControlName="toDate"
                 [showIcon]="false"
@@ -28,29 +25,27 @@
             </div>
           </div>
 
-          <div class="col-3">
-            <label for="LCNo" class="">LC No </label>
-            <div class="">
-              <div class="form-group d-inline">
-                <input
-                  autocomplete="off"
-                  type="text"
-                  formControlName="lcNo"
-                  class="form-control"
-                  placeholder="LC No"
-                  id="LCNo"
-                  name="LCNo"
-                  value=""
-                />
-              </div>
-            </div>
+          <div class="col-4">
+            <label for="LCNo" class="">LC No</label>
+            <input
+              autocomplete="off"
+              type="text"
+              formControlName="lcNo"
+              class="form-control"
+              placeholder="LC No"
+              id="LCNo"
+              name="LCNo"
+              value=""
+            />
           </div>
+
           <div class="col-3">
             <button
               title="Search"
               type="button"
               (click)="Search()"
-              class="btn btn-sm theme-btn mt-4 p-1"
+              class="btn btn-sm theme-btn"
+              style="margin-top: 30px; width: 130px; height: 38px"
             >
               <i class="fas fa-search"></i>&nbsp;Search
             </button>
@@ -221,9 +216,7 @@
         [value]="tableData"
         [paginator]="true"
         [rows]="10"
-        [scrollable]="true"
-        scrollDirection="horizontal"
-        responsiveLayout="scroll"
+        [responsive]="true"
         [showCurrentPageReport]="true"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
         paginatorPosition="bottom"
@@ -242,39 +235,18 @@
       >
         <ng-template pTemplate="header">
           <tr>
-            <th pSortableColumn="Sl" class="">
-              SL
-              <p-sortIcon field="Sl"></p-sortIcon>
-            </th>
-            <th pSortableColumn="Consignee_Name">
-              Consignee
-              <p-sortIcon field="Consignee_Name"></p-sortIcon>
-            </th>
+            <th class="">SL</th>
+            <th>Consignee</th>
 
-            <th pSortableColumn="PI_No">
-              PI(s)
-              <p-sortIcon field="PI_No"></p-sortIcon>
-            </th>
+            <th>PI(s)</th>
 
-            <th pSortableColumn="LC_No">
-              LC No
-              <p-sortIcon field="LC_No"></p-sortIcon>
-            </th>
+            <th>LC No</th>
 
-            <th pSortableColumn="LC_Value">
-              LC Value
-              <p-sortIcon field="LC_Value"></p-sortIcon>
-            </th>
+            <th>LC Value</th>
 
-            <th pSortableColumn="Issue_Date">
-              Issue Date
-              <p-sortIcon field="Issue_Date"></p-sortIcon>
-            </th>
+            <th>Issue Date</th>
 
-            <th pSortableColumn="Expiry_Date">
-              Expiry Date
-              <p-sortIcon field="Expiry_Date"></p-sortIcon>
-            </th>
+            <th>Expiry Date</th>
 
             <th>Mode</th>
             <th>IP Documents</th>

@@ -10,9 +10,7 @@
       <div class="card-body">
         <form name="newForm" [formGroup]="Formgroup" role="form">
           <div class="row g-6 border-bottom pb-2">
-            <!-- LEFT SIDE -->
             <div class="col-md-6">
-              <!-- Marketing Concern -->
               <div class="row align-items-center mb-3">
                 <div class="col-md-4 text-end fs-6 fw-bold">
                   Marketing Concern <span>*</span>
@@ -64,13 +62,6 @@
               <div class="row align-items-center mb-3">
                 <div class="col-md-4 text-end fs-6 fw-bold">Consignee Name</div>
                 <div class="col-md-8">
-                  <!-- <input
-                    [style]="{ width: '70%' }"
-                    type="text"
-                    class="form-control"
-                    placeholder="Consignee Name"
-                    formControlName="Consignee_Name"
-                  /> -->
                   <textarea
                     [style]="{ width: '70%' }"
                     class="form-control"
@@ -103,30 +94,7 @@
               </div>
             </div>
           </div>
-          <!-- 
-          <div class="row g-6 border-bottom pb-2">
-            <div class="col-md-6">
-              <label class="control-label" for="inlineFormInputGroup"
-                >LC Receiving Date By Mail/Draft</label
-              >
-
-              <input
-                type="date"
-                formControlName="LCReceivingDateByDraft"
-                class="form-control"
-              />
-            </div>
-            <div class="col-md-6">
-              <label class="control-label" for="inlineFormInputGroup"
-                >LC Receiving Date Original By Bank</label
-              >
-              <input
-                type="date"
-                formControlName="LCReceivingDateOrgBank"
-                class="form-control"
-              />
-            </div>
-          </div> -->
+       
           <div class="row">
             <div class="col-12">
               <h6 class="fs-6 fw-bold mb-3" style="color:#3a87ad">LC Receiving Date :</h6>
@@ -160,12 +128,6 @@
                   LC Receiving Date Original By Bank
                 </div>
                 <div class="col-md-8">
-                  <!-- <input
-                    [style]="{ width: '70%' }"
-                    type="date"
-                    formControlName="LCReceivingDateOrgBank"
-                    class="form-control"
-                  /> -->
                   <p-calendar
                     formControlName="LCReceivingDateOrgBank"
                     [showIcon]="false"
@@ -179,334 +141,6 @@
               </div>
             </div>
           </div>
-
-          <!-- <div class="row">
-            <div class="col-md-6">
-              <label for="LCNo" class="">LC No <span>*</span></label>
-              <div class="">
-                <div class="form-group d-inline">
-                  <input
-                    autocomplete="off"
-                    type="text"
-                    formControlName="LCNo"
-                    class="form-control"
-                    placeholder="LC No"
-                    id="LCNo"
-                    name="LCNo"
-                    value=""
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <label for="LCValue" class="">LC Value <span>*</span></label>
-              <div class="">
-                <div class="form-group d-inline">
-                  <input
-                    autocomplete="off"
-                    type="number"
-                    formControlName="LCValue"
-                    class="form-control"
-                    placeholder="LC Value"
-                    id="LCValue"
-                    name="LCValue"
-                    value=""
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <label class="control-label" for="inlineFormInputGroup"
-                >Issue Date <span>*</span></label
-              >
-              <input
-                type="date"
-                formControlName="IssueDate"
-                class="form-control"
-              />
-            </div>
-            <div class="col-md-6">
-              <label class="control-label" for="inlineFormInputGroup"
-                >Expiry Date</label
-              >
-              <input
-                type="date"
-                formControlName="ExpiryDate"
-                class="form-control"
-              />
-            </div>
-            <div class="col-md-6">
-              <label for="LCNo" class="">Customer Bank Name</label>
-              <div class="">
-                <div class="form-group d-inline">
-                  <input
-                    autocomplete="off"
-                    type="text"
-                    formControlName="CustomerBankName"
-                    class="form-control"
-                    placeholder="Customer Bank Name"
-                    id="CustomerBankName"
-                    name="CustomerBankName"
-                    value=""
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <label class="control-label" for="inlineFormInputGroup"
-                >Invoice No With Date</label
-              >
-              <input
-                type="date"
-                formControlName="InvoiceNoWitDate"
-                class="form-control"
-              />
-            </div>
-            <div class="col-md-6">
-              <label class="control-label" for="inlineFormInputGroup"
-                >IP Documents Sending Date</label
-              >
-              <input
-                type="date"
-                formControlName="IPDocSendingDate"
-                class="form-control"
-              />
-            </div>
-            <div class="col-md-6">
-              <label class="control-label" for="inlineFormInputGroup"
-                >IP Documents Receiving Date</label
-              >
-              <input
-                type="date"
-                formControlName="IPDocReceivingDate"
-                class="form-control"
-              />
-            </div>
-            <div class="col-md-6">
-              <label>Payment Terms (LC) <span>*</span></label>
-              <p-dropdown
-                [style]="{ width: '100%' }"
-                class="p-0"
-                [options]="PaymentTerms"
-                optionLabel="Mode"
-                [filter]="true"
-                filterBy="Mode"
-                [showClear]="true"
-                styleClass="listBottom"
-                placeholder="Please Select"
-                optionValue="Payment_Term_ID"
-                formControlName="PaymentTermsLC"
-              >
-                <ng-template let-PaymentTerms pTemplate="item">
-                  <div class="flex align-items-center gap-2">
-                    <div>{{ PaymentTerms.Mode }}</div>
-                  </div>
-                </ng-template>
-              </p-dropdown>
-            </div>
-            <div class="col-md-6">
-              <label class="control-label" for="inlineFormInputGroup"
-                >Maturity Date</label
-              >
-              <input
-                type="date"
-                formControlName="MaturityDate"
-                class="form-control"
-              />
-            </div>
-            <div class="col-md-6">
-              <label class="control-label" for="inlineFormInputGroup"
-                >Documents Presentation To Bank Date</label
-              >
-              <input
-                type="date"
-                formControlName="DocPresBankDate"
-                class="form-control"
-              />
-            </div>
-            <div class="col-md-6">
-              <label class="control-label" for="inlineFormInputGroup"
-                >FDD/TT Receive Date</label
-              >
-              <input
-                type="date"
-                formControlName="FDDRecDate"
-                class="form-control"
-              />
-            </div>
-            <div class="col-md-6">
-              <label class="control-label" for="inlineFormInputGroup"
-                >Export LC/SC</label
-              >
-              <div class="">
-                <div class="form-group d-inline">
-                  <input
-                    autocomplete="off"
-                    type="text"
-                    formControlName="ExportLCSC"
-                    class="form-control"
-                    placeholder="Export LC/SC"
-                    id="ExportLCSC"
-                    name="ExportLCSC"
-                    value=""
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <label class="control-label" for="inlineFormInputGroup"
-                >Actual Payment Receiving Date</label
-              >
-              <input
-                type="date"
-                formControlName="ActualPaymentRecDate"
-                class="form-control"
-              />
-            </div>
-            <div class="col-md-6">
-              <label class="control-label" for="inlineFormInputGroup"
-                >Export LC/SC Date</label
-              >
-              <input
-                type="date"
-                formControlName="ExportLCSCDate"
-                class="form-control"
-              />
-            </div>
-            <div class="col-md-6">
-              <label class="control-label" for="inlineFormInputGroup"
-                >LCA Form No</label
-              >
-              <div class="">
-                <div class="form-group d-inline">
-                  <input
-                    autocomplete="off"
-                    type="text"
-                    formControlName="LCAFormNo"
-                    class="form-control"
-                    placeholder="LCA Form No"
-                    id="LCAFormNo"
-                    name="LCAFormNo"
-                    value=""
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <label class="control-label" for="inlineFormInputGroup"
-                >Applicant TIN</label
-              >
-              <div class="">
-                <div class="form-group d-inline">
-                  <input
-                    autocomplete="off"
-                    type="text"
-                    formControlName="ApplicantTIN"
-                    class="form-control"
-                    placeholder="Applicant TIN"
-                    id="ApplicantTIN"
-                    name="ApplicantTIN"
-                    value=""
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <label class="control-label" for="inlineFormInputGroup"
-                >Applicant BIN/VAT</label
-              >
-              <div class="">
-                <div class="form-group d-inline">
-                  <input
-                    autocomplete="off"
-                    type="text"
-                    formControlName="ApplicantBINVAT"
-                    class="form-control"
-                    placeholder="Applicant BIN/VAT"
-                    id="ApplicantBINVAT"
-                    name="ApplicantBINVAT"
-                    value=""
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <label class="control-label" for="inlineFormInputGroup"
-                >HS Code</label
-              >
-              <div class="">
-                <div class="form-group d-inline">
-                  <input
-                    autocomplete="off"
-                    type="text"
-                    formControlName="HSCode"
-                    class="form-control"
-                    placeholder="HS Code"
-                    id="HSCode"
-                    name="HSCode"
-                    value=""
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <label class="control-label" for="inlineFormInputGroup"
-                >Bank BIN No.</label
-              >
-              <div class="">
-                <div class="form-group d-inline">
-                  <input
-                    autocomplete="off"
-                    type="text"
-                    formControlName="BankBINNo"
-                    class="form-control"
-                    placeholder="Bank BIN No."
-                    id="BankBINNo"
-                    name="BankBINNo"
-                    value=""
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <label class="control-label" for="inlineFormInputGroup"
-                >Remarks</label
-              >
-              <div class="">
-                <div class="form-group d-inline">
-                  <input
-                    autocomplete="off"
-                    type="text"
-                    formControlName="Remarks"
-                    class="form-control"
-                    placeholder="Remarks"
-                    id="Remarks"
-                    name="Remarks"
-                    value=""
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <label class="control-label" for="inlineFormInputGroup"
-                >IRC No.</label
-              >
-              <div class="">
-                <div class="form-group d-inline">
-                  <input
-                    autocomplete="off"
-                    type="text"
-                    formControlName="IRCNo"
-                    class="form-control"
-                    placeholder="IRC No.o"
-                    id="IRCNo"
-                    name="IRCNo"
-                    value=""
-                  />
-                </div>
-              </div>
-            </div>
-          </div> -->
 
           <div class="row g-6 border-bottom pb-2 mt-4">
             <!-- LC No -->
@@ -556,12 +190,7 @@
                   Issue Date <span>*</span>
                 </div>
                 <div class="col-md-8">
-                  <!-- <input
-                    [style]="{ width: '70%' }"
-                    type="date"
-                    formControlName="IssueDate"
-                    class="form-control"
-                  /> -->
+                
                   <p-calendar
                     formControlName="IssueDate"
                     [showIcon]="false"
@@ -580,12 +209,7 @@
               <div class="row align-items-center mb-3">
                 <div class="col-md-4 text-end fs-6 fw-bold">Expiry Date</div>
                 <div class="col-md-8">
-                  <!-- <input
-                    [style]="{ width: '70%' }"
-                    type="date"
-                    formControlName="ExpiryDate"
-                    class="form-control"
-                  /> -->
+                 
                   <p-calendar
                     formControlName="ExpiryDate"
                     [showIcon]="false"

@@ -51,20 +51,49 @@ tr {
   font-weight: 600;
   font-size: 13px;
 }
-
-.my-dropdown .p-dropdown-label {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+/* ::ng-deep .p-dropdown-panel {
+  width: auto !important;
+  min-width: 75% !important;  
+  max-width: 75% !important; 
+} */
+ 
+/* ::ng-deep .description-panel {
+  min-width: 90% !important;
+  max-width: 90% !important;
+    width: 90% !important;
+} */
+ ::ng-deep .p-dropdown-panel.description-panel {
+ min-width: 100% !important;
+  max-width: 100% !important;
+    width: 100% !important;
+  max-height: 300px !important;
+  overflow-y: auto !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+  border-radius: 4px !important;
+  background: white !important;
+  z-index: 9999 !important;
+  position: absolute !important;
+}
+::ng-deep .p-dropdown-panel .p-dropdown-items {
+  padding-left: 0 !important;
+  margin: 0 !important; 
 }
 
-/* Panel full text */
-.my-dropdown-panel {
-  width: auto !important;      /* auto width so full text shows */
-  min-width: 150px !important; /* at least same as dropdown */
-  max-width: 500px !important; /* optional: max width */
+
+::ng-deep .p-dropdown-panel .p-dropdown-items ul,
+::ng-deep .p-dropdown-panel .p-dropdown-items ol {
+  padding-left: 0 !important;
+  margin: 0 !important;
+  list-style: none !important;
 }
 
+
+::ng-deep .p-dropdown-panel .p-dropdown-item {
+  white-space: normal !important; 
+  word-break: break-word !important; 
+  padding-left: 0.5rem !important; 
+  line-height: 1.4rem;
+}
 
 .custom-date-input {
   height: 40px;

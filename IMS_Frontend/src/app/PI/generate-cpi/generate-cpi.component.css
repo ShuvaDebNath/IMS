@@ -24,3 +24,41 @@ card-body::after, .card-footer::after, .card-header::after {
     clear: both;
     content: "";
 }
+
+.custom-header th {
+  background-color: #E95420 !important;
+  color: #ffffff !important;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+ ::ng-deep .p-dropdown-panel.description-panel {
+ min-width: 100% !important;
+  max-width: 100% !important;
+    width: 100% !important;
+  max-height: 300px !important;
+  overflow-y: auto !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+  border-radius: 4px !important;
+  background: white !important;
+  z-index: 9999 !important;
+  position: absolute !important;
+}
+::ng-deep .p-dropdown-panel .p-dropdown-items {
+  padding-left: 0 !important;
+  margin: 0 !important; 
+}
+::ng-deep .p-dropdown-panel .p-dropdown-items ul,
+::ng-deep .p-dropdown-panel .p-dropdown-items ol {
+  padding-left: 0 !important;
+  margin: 0 !important;
+  list-style: none !important;
+}
+
+
+::ng-deep .p-dropdown-panel .p-dropdown-item {
+  white-space: normal !important; 
+  word-break: break-word !important; 
+  padding-left: 0.5rem !important; 
+  line-height: 1.4rem;
+}

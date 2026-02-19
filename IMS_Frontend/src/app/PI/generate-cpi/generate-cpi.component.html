@@ -1,15 +1,43 @@
 <div class="p-2 m-2 shadow-sm">
   <form name="PIForm" [formGroup]="Formgroup" role="form">
     <div class="card p-3">
-      <div class="d-flex align-items-center justify-content-center pt-4">
+      <!-- <div class="d-flex align-items-center justify-content-center pt-4">
         <h1 class="fw-normal">Proforma Invoice</h1>
-        <!-- <div class="float-right">
-        <button class="btn btn-sm btn-success mr-2" (click)="Save()" [disabled]="!Formgroup.valid"><i
-            class="fas fa-save"></i>&nbsp;Save</button>
-        <button class="btn btn-sm btn-primary" (click)="RefrashDDL()"><i class="fas fa-sync"></i>&nbsp;Refresh</button>
-	  </div> -->
+        <div class="float-right">
+          <button
+            class="btn btn-sm btn-success mr-2"
+            (click)="Save()"
+            [disabled]="!Formgroup.valid"
+          >
+            <i class="fas fa-save"></i>&nbsp;Save
+          </button>
+          <button class="btn btn-sm btn-primary" (click)="RefrashDDL()">
+            <i class="fas fa-sync"></i>&nbsp;Refresh
+          </button>
+        </div>
+      </div> -->
+      <div
+        class="card-header sticky-header d-flex align-items-center justify-content-between pt-4"
+      >
+        <h1 class="fw-normal m-0">Proforma Invoice</h1>
+        <div>
+          <button
+            class="btn btn-sm btn-pi-save mr-2"
+            (click)="Save()"
+            [disabled]="!Formgroup.valid"
+            style="width: 130px; height: 38px"
+          >
+            <i class="fas fa-save me-1"></i> Save
+          </button>
+          <button
+            class="btn btn-sm btn-pi-refresh"
+            (click)="RefrashDDL()"
+            style="width: 130px; height: 38px"
+          >
+            <i class="fas fa-sync me-1"></i> Refresh
+          </button>
+        </div>
       </div>
-
       <div class="card-body">
         <!-- Consignee Initial -->
         <div class="row mb-1">
@@ -32,7 +60,7 @@
             </div>
           </div>
         </div>
-        <div class="row">
+        <div class="row mb-2">
           <div class="col-md-4">
             <div class="row g-1 align-items-start">
               <div class="col-3">
@@ -85,7 +113,6 @@
                   [filter]="true"
                   filterBy="CompanyName"
                   [showClear]="true"
-                  styleClass="my-dropdown"
                   panelStyleClass="my-dropdown-panel"
                   [style]="{ width: '100%' }"
                   placeholder="Select a Shippeer"
@@ -255,7 +282,7 @@
                   id="ContactPerson"
                   placeholder="Contact Person"
                   formControlName="Contact_Person"
-                  [style]="{ width: '100%' }"
+                  [style]="{ width: '100%', height: '48px' }"
                 />
               </div>
             </div>
@@ -276,13 +303,14 @@
                   id="BuyerName"
                   placeholder="Buyer Name"
                   formControlName="Buyer_Name"
+                  style="height: 48px"
                 />
               </div>
             </div>
           </div>
         </div>
 
-        <div class="row">
+        <div class="row mb-2">
           <div class="col-md-4">
             <div class="row g-1 align-items-start">
               <div class="col-3">
@@ -336,7 +364,7 @@
           </div>
         </div>
 
-        <div class="row">
+        <div class="row mb-2">
           <div class="col-md-4">
             <div class="row g-1 align-items-start">
               <div class="col-3">
@@ -371,11 +399,11 @@
           </div>
         </div>
 
-        <div class="table-responsive">
+        <!-- <div class="table-responsive">
           <table
             class="table table-sm table-bordered table-striped table-border-colups"
           >
-            <thead>
+            <thead class="custom-header">
               <tr>
                 <th class="text-center align-middle sticky-table-column">
                   <button
@@ -417,7 +445,7 @@
                   </td>
                   <td class="align-middle">
                     <input
-                      style="width: 5rem"
+                      style="width: 5rem; height: 48px"
                       formControlName="Article"
                       type="text"
                       class="form-control form-control-sm"
@@ -488,7 +516,7 @@
                   </td>
                   <td class="align-middle">
                     <input
-                      style="width: 5rem"
+                      style="width: 5rem; height: 48px"
                       (change)="calculateAmount(itemrow)"
                       formControlName="Quantity"
                       type="number"
@@ -515,7 +543,7 @@
                   </td>
                   <td class="align-middle">
                     <input
-                      style="width: 5rem"
+                      style="width: 5rem; height: 48px"
                       (change)="calculateAmount(itemrow)"
                       formControlName="Unit_Price"
                       type="number"
@@ -527,7 +555,7 @@
                   </td>
                   <td class="align-middle">
                     <input
-                      style="width: 5rem"
+                      style="width: 5rem; height: 48px"
                       formControlName="Total_Amount_Tk"
                       readonly="readOnly"
                       type="number"
@@ -539,7 +567,7 @@
                   </td>
                   <td class="align-middle">
                     <input
-                      style="width: 5rem"
+                      style="width: 5rem; height: 48px"
                       (change)="calculateAmount(itemrow)"
                       formControlName="CommissionUnit"
                       type="text"
@@ -551,7 +579,7 @@
                   </td>
                   <td class="align-middle">
                     <input
-                      style="width: 5rem"
+                      style="width: 5rem; height: 48px"
                       formControlName="TotalCommission"
                       readonly="readOnly"
                       type="text"
@@ -616,8 +644,513 @@
               </tr>
             </tfoot>
           </table>
-        </div>
+        </div> -->
 
+        <div
+          class="table-responsive"
+          style="
+            max-height: 600px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+          "
+        >
+          <table
+            class="table table-sm table-bordered table-striped table-border-colups"
+            style="min-width: 3000px; margin-bottom: 0"
+          >
+            <thead
+              class="custom-header"
+              style="
+                position: sticky;
+                top: 0;
+                background: white;
+                z-index: 10;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+              "
+            >
+              <tr>
+                <th
+                  class="text-center align-middle sticky-table-column"
+                  style="
+                    width: 70px;
+                    min-width: 70px;
+                    max-width: 70px;
+                    background: #e9ecef;
+                  "
+                >
+                  <button
+                    class="btn btn-sm btn-primary"
+                    (click)="Addrow()"
+                    type="button"
+                    style="padding: 4px 8px"
+                  >
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </th>
+                <th
+                  class="text-center align-middle"
+                  style="width: 150px; min-width: 150px; background: #e9ecef"
+                >
+                  Article No
+                </th>
+                <th
+                  class="text-center align-middle"
+                  style="width: 250px; min-width: 250px; background: #e9ecef"
+                >
+                  Description
+                </th>
+                <th
+                  class="text-center align-middle"
+                  style="width: 120px; min-width: 120px; background: #e9ecef"
+                >
+                  Width
+                </th>
+                <th
+                  class="text-center align-middle"
+                  style="width: 120px; min-width: 120px; background: #e9ecef"
+                >
+                  Color
+                </th>
+                <th
+                  class="text-center align-middle"
+                  style="width: 130px; min-width: 130px; background: #e9ecef"
+                >
+                  Packaging
+                </th>
+                <th
+                  class="text-center align-middle"
+                  style="width: 150px; min-width: 150px; background: #e9ecef"
+                >
+                  Qty
+                </th>
+                <th
+                  class="text-center align-middle"
+                  style="width: 120px; min-width: 120px; background: #e9ecef"
+                >
+                  Unit
+                </th>
+                <th
+                  class="text-center align-middle"
+                  style="width: 150px; min-width: 150px; background: #e9ecef"
+                >
+                  Unit Price
+                </th>
+                <th
+                  class="text-center align-middle"
+                  style="width: 150px; min-width: 150px; background: #e9ecef"
+                >
+                  Total Amount
+                </th>
+                <th
+                  class="text-center align-middle"
+                  style="width: 150px; min-width: 150px; background: #e9ecef"
+                >
+                  Prod. Cost Unit
+                </th>
+                <th
+                  class="text-center align-middle"
+                  style="width: 150px; min-width: 150px; background: #e9ecef"
+                >
+                  Total Prod. Cost
+                </th>
+                <th
+                  class="text-center align-middle"
+                  style="width: 150px; min-width: 150px; background: #e9ecef"
+                >
+                  A. A.
+                </th>
+              </tr>
+            </thead>
+            <tbody formArrayName="ItemArray">
+              <ng-container *ngIf="Formgroup.controls.ItemArray != null">
+                <tr
+                  *ngFor="let itemrow of getControls(); let i = index"
+                  [formGroupName]="i"
+                  style="border-bottom: 1px solid #dee2e6"
+                >
+                  <td
+                    class="sticky-table-column align-middle text-center"
+                    style="
+                      width: 70px;
+                      min-width: 70px;
+                      max-width: 70px;
+                      background: white;
+                    "
+                  >
+                    <button
+                      class="btn btn-sm btn-danger"
+                      (click)="DeleteRow(i)"
+                      type="button"
+                      style="padding: 4px 8px"
+                    >
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </td>
+
+                  <td
+                    class="align-middle"
+                    style="width: 150px; min-width: 150px"
+                  >
+                    <input
+                      style="
+                        width: 100%;
+                        height: 52px;
+                        padding: 8px 12px;
+                        font-size: 14px;
+                      "
+                      formControlName="Article"
+                      type="text"
+                      class="form-control form-control-sm"
+                      placeholder="Article No"
+                      id="ArticleNo"
+                      name="ArticleNo"
+                    />
+                  </td>
+
+                  <td
+                    class="align-middle"
+                    style="width: 250px; min-width: 250px"
+                  >
+                    <p-dropdown
+                      formControlName="Description"
+                      [options]="DescriptionList"
+                      optionLabel="Details"
+                      optionValue="Details"
+                      [filter]="true"
+                      filterBy="Details"
+                      [showClear]="true"
+                      appendTo="body"
+                      panelStyleClass="description-panel"
+                      [style]="{ width: '100%', height: '52px' }"
+                      placeholder="Select Description"
+                      styleClass="w-100"
+                    >
+                    </p-dropdown>
+                  </td>
+
+                  <td
+                    class="align-middle"
+                    style="width: 120px; min-width: 120px"
+                  >
+                    <p-dropdown
+                      formControlName="Width_ID"
+                      [options]="WidthList"
+                      optionLabel="Measurement"
+                      optionValue="Width_ID"
+                      [filter]="true"
+                      filterBy="Measurement"
+                      [showClear]="true"
+                      appendTo="body"
+                      panelStyleClass="description-panel"
+                      [style]="{ width: '100%', height: '52px' }"
+                      placeholder="Select Width"
+                    >
+                    </p-dropdown>
+                  </td>
+
+                  <td
+                    class="align-middle"
+                    style="width: 120px; min-width: 120px"
+                  >
+                    <p-dropdown
+                      formControlName="Color_ID"
+                      [options]="ColorList"
+                      optionLabel="Color"
+                      optionValue="Color_ID"
+                      [filter]="true"
+                      filterBy="Color"
+                      [showClear]="true"
+                      appendTo="body"
+                      panelStyleClass="description-panel"
+                      [style]="{ width: '100%', height: '52px' }"
+                      placeholder="Select Color"
+                    >
+                    </p-dropdown>
+                  </td>
+
+                  <td
+                    class="align-middle"
+                    style="width: 130px; min-width: 130px"
+                  >
+                    <p-dropdown
+                      formControlName="Packaging_ID"
+                      [options]="PackagingList"
+                      optionLabel="Packaging"
+                      optionValue="Packaging_ID"
+                      [filter]="true"
+                      filterBy="Packaging"
+                      [showClear]="true"
+                      appendTo="body"
+                      panelStyleClass="description-panel"
+                      [style]="{ width: '100%', height: '52px' }"
+                      placeholder="Select Packaging"
+                    >
+                    </p-dropdown>
+                  </td>
+
+                  <td
+                    class="align-middle"
+                    style="width: 150px; min-width: 150px"
+                  >
+                    <input
+                      style="
+                        width: 100%;
+                        height: 52px;
+                        padding: 8px 12px;
+                        font-size: 14px;
+                        text-align: right;
+                      "
+                      (change)="calculateAmount(itemrow)"
+                      formControlName="Quantity"
+                      type="number"
+                      class="form-control form-control-sm"
+                      placeholder="Qty"
+                      id="Qty"
+                      name="Qty"
+                    />
+                  </td>
+
+                  <td
+                    class="align-middle"
+                    style="width: 120px; min-width: 120px"
+                  >
+                    <p-dropdown
+                      formControlName="Unit_ID"
+                      [options]="UnitList"
+                      optionLabel="Unit"
+                      optionValue="Unit_ID"
+                      [filter]="true"
+                      filterBy="Unit"
+                      [showClear]="true"
+                      appendTo="body"
+                      panelStyleClass="description-panel"
+                      [style]="{ width: '100%', height: '52px' }"
+                      placeholder="Select Unit"
+                    >
+                    </p-dropdown>
+                  </td>
+
+                  <td
+                    class="align-middle"
+                    style="width: 150px; min-width: 150px"
+                  >
+                    <input
+                      style="
+                        width: 100%;
+                        height: 52px;
+                        padding: 8px 12px;
+                        font-size: 14px;
+                        text-align: right;
+                      "
+                      (change)="calculateAmount(itemrow)"
+                      formControlName="Unit_Price"
+                      type="number"
+                      class="form-control form-control-sm text-right"
+                      placeholder="Unit Price"
+                      id="Rate"
+                      name="Rate"
+                    />
+                  </td>
+
+                  <td
+                    class="align-middle"
+                    style="width: 150px; min-width: 150px"
+                  >
+                    <input
+                      style="
+                        width: 100%;
+                        height: 52px;
+                        padding: 8px 12px;
+                        font-size: 14px;
+                        text-align: right;
+                        font-weight: 600;
+                        background-color: #f0f9ff;
+                        border: 1px solid #b8daff;
+                      "
+                      formControlName="Total_Amount_Tk"
+                      readonly="readOnly"
+                      type="number"
+                      class="form-control form-control-sm text-right"
+                      placeholder="Total Amount"
+                      id="Amount"
+                      name="Amount"
+                    />
+                  </td>
+
+                  <td
+                    class="align-middle"
+                    style="width: 150px; min-width: 150px"
+                  >
+                    <input
+                      style="
+                        width: 100%;
+                        height: 52px;
+                        padding: 8px 12px;
+                        font-size: 14px;
+                        text-align: right;
+                      "
+                      (change)="calculateAmount(itemrow)"
+                      formControlName="CommissionUnit"
+                      type="text"
+                      class="form-control form-control-sm text-right"
+                      placeholder="Prod. Cost Unit"
+                      id="ProdCost"
+                      name="ProdCost"
+                    />
+                  </td>
+
+                  <td
+                    class="align-middle"
+                    style="width: 150px; min-width: 150px"
+                  >
+                    <input
+                      style="
+                        width: 100%;
+                        height: 52px;
+                        padding: 8px 12px;
+                        font-size: 14px;
+                        text-align: right;
+                        font-weight: 600;
+                        background-color: #f0f9ff;
+                        border: 1px solid #b8daff;
+                      "
+                      formControlName="TotalCommission"
+                      readonly="readOnly"
+                      type="text"
+                      class="form-control form-control-sm text-right"
+                      placeholder="Total Prod. Cost"
+                      id="TProdCost"
+                      name="TProdCost"
+                    />
+                  </td>
+
+                  <td
+                    class="align-middle"
+                    style="width: 150px; min-width: 150px"
+                  >
+                    <p-dropdown
+                      formControlName="Item_ID"
+                      [options]="AAList"
+                      optionLabel="Article_No"
+                      optionValue="Item_ID"
+                      [filter]="true"
+                      filterBy="Article_No"
+                      [showClear]="true"
+                      appendTo="body"
+                      panelStyleClass="description-panel"
+                      (onChange)="SetActualArticle(itemrow)"
+                      [style]="{ width: '100%', height: '52px' }"
+                      placeholder="Select Article"
+                    >
+                    </p-dropdown>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+            <tfoot
+              style="
+                position: sticky;
+                bottom: 0;
+                background: white;
+                z-index: 10;
+                box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+              "
+            >
+              <tr style="background: #e9ecef">
+                <th
+                  class="text-center align-middle sticky-table-column"
+                  style="width: 70px; background: #e9ecef"
+                ></th>
+                <th
+                  class="text-center align-middle"
+                  style="width: 150px; background: #e9ecef; font-size: 16px"
+                >
+                  Total
+                </th>
+                <th
+                  class="text-center align-middle"
+                  style="width: 250px; background: #e9ecef"
+                ></th>
+                <th
+                  class="text-center align-middle"
+                  style="width: 120px; background: #e9ecef"
+                ></th>
+                <th
+                  class="text-center align-middle"
+                  style="width: 120px; background: #e9ecef"
+                ></th>
+                <th
+                  class="text-center align-middle"
+                  style="width: 130px; background: #e9ecef"
+                ></th>
+                <th
+                  class="text-center align-middle"
+                  style="width: 150px; background: #e9ecef"
+                >
+                  <input
+                    type="text"
+                    class="form-control form-control-sm fw-bold"
+                    value="{{ GTQTY }}"
+                    placeholder="Total Qty"
+                    id="GTQty"
+                    name="GTQty"
+                    readonly
+                    style="
+                      height: 48px;
+                      font-size: 16px;
+                      font-weight: 700;
+                      background-color: #fff;
+                      border: 2px solid #6c757d;
+                      text-align: center;
+                    "
+                  />
+                </th>
+                <th
+                  class="text-center align-middle"
+                  style="width: 120px; background: #e9ecef"
+                ></th>
+                <th
+                  class="text-center align-middle"
+                  style="width: 150px; background: #e9ecef"
+                ></th>
+                <th
+                  class="text-center align-middle"
+                  style="width: 150px; background: #e9ecef"
+                >
+                  <input
+                    type="text"
+                    class="form-control form-control-sm text-right fw-bold"
+                    value="{{ GTAMNT }}"
+                    placeholder="Total Amount"
+                    id="GTAmout"
+                    name="GTAmout"
+                    readonly
+                    style="
+                      height: 48px;
+                      font-size: 16px;
+                      font-weight: 700;
+                      background-color: #fff;
+                      border: 2px solid #6c757d;
+                    "
+                  />
+                </th>
+                <th
+                  class="text-center align-middle"
+                  style="width: 150px; background: #e9ecef"
+                ></th>
+                <th
+                  class="text-center align-middle"
+                  style="width: 150px; background: #e9ecef"
+                ></th>
+                <th
+                  class="text-center align-middle"
+                  style="width: 150px; background: #e9ecef"
+                ></th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
         <hr />
 
         <div class="row">
@@ -636,7 +1169,6 @@
                   filterBy="Details"
                   [showClear]="true"
                   [style]="{ width: '100%' }"
-                  styleClass="my-dropdown"
                   panelStyleClass="my-dropdown-panel"
                   placeholder="Select a Delivery Condition"
                 >
@@ -659,7 +1191,6 @@
                   filterBy="ShipmentConditions"
                   [showClear]="true"
                   [style]="{ width: '100%' }"
-                  styleClass="my-dropdown"
                   panelStyleClass="my-dropdown-panel"
                   placeholder="Select a Shipment"
                 >
@@ -682,7 +1213,6 @@
                   filterBy="PriceTerm"
                   [showClear]="true"
                   [style]="{ width: '100%' }"
-                  styleClass="my-dropdown"
                   panelStyleClass="my-dropdown-panel"
                   placeholder="Select a Price Terms"
                 >
@@ -691,7 +1221,7 @@
             </div>
           </div>
         </div>
-        <div class="row">
+        <div class="row mb-2">
           <div class="col-md-4">
             <div class="row g-1 align-items-start">
               <div class="col-3">
@@ -751,6 +1281,7 @@
                   id="Remarks"
                   placeholder="Remarks"
                   formControlName="Remarks"
+                  style="height: 48px"
                 />
               </div>
             </div>

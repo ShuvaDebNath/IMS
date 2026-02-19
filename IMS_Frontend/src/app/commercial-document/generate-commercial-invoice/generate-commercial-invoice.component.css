@@ -1,0 +1,155 @@
+.custom-date-input {
+  height: 40px;
+  border-radius: 6px;
+}
+
+.custom-calendar {
+  width: 100%;
+}
+
+::ng-deep .p-datepicker {
+  width: 280px !important;
+  background-color: #F9F9F9;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+/* Table styling */
+::ng-deep .p-datepicker table {
+  border-collapse: separate !important;
+  border-spacing: 4px 4px;
+  width: 100%;
+}
+
+/* Day name row */
+::ng-deep .p-datepicker thead tr th {
+  text-align: center !important;
+  font-weight: 600 !important;
+  color: #333 !important;
+  font-size: 12px !important;
+  padding: 2px 0 !important;
+}
+
+/* Date cells */
+::ng-deep .p-datepicker tbody tr td {
+  padding: 0 !important;
+}
+
+/* Normal dates */
+::ng-deep .p-datepicker tbody tr td > span {
+  width: 24px !important;
+  height: 24px !important;
+  line-height: 24px !important;
+  font-size: 13px !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: end;
+  color: #1472d6;       /* normal date text */
+  background: transparent !important;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+/* Hover effect */
+::ng-deep .p-datepicker tbody tr td > span:hover {
+  background: #f0f0f0 !important;
+}
+
+/* Today date (always yellow) */
+::ng-deep .p-datepicker .p-datepicker-today > span {
+  color: #F8B84E !important;       
+  font-weight: 700 !important;
+  border-radius: 4px;
+  background: #000;
+}
+
+::ng-deep .p-datepicker .p-datepicker-current,
+::ng-deep .p-datepicker .p-datepicker-current.p-highlight,
+::ng-deep .p-datepicker .p-datepicker-selected,
+::ng-deep .p-datepicker .p-highlight {
+  color: #F8B84E !important;          /* text black */
+  font-weight: 700 !important;
+  border-radius: 4px;
+}
+/* Header styling */
+::ng-deep .p-datepicker .p-datepicker-header {
+  background: #e69d29 !important;
+  border: none !important;
+  height: 40px !important;
+}
+
+/* Month / Year text */
+/* Month / Year label */
+::ng-deep .p-datepicker .p-datepicker-title {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+/* Month / Year dropdown (navigator enabled) */
+::ng-deep .p-datepicker .p-datepicker-month,
+::ng-deep .p-datepicker .p-datepicker-year {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Dropdown select text */
+::ng-deep .p-datepicker select {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  background: transparent !important;
+}
+/* Arrow container */
+::ng-deep .p-datepicker-prev,
+::ng-deep .p-datepicker-next {
+  color: #ffffff !important; /* fallback */
+}
+
+/* Arrow span */
+::ng-deep .p-datepicker-prev span,
+::ng-deep .p-datepicker-next span {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+/* Arrow icon ::before (actual chevron) */
+::ng-deep .p-datepicker-prev span::before,
+::ng-deep .p-datepicker-next span::before {
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+
+ ::ng-deep .p-dropdown-panel.description-panel {
+ min-width: 100% !important;
+  max-width: 100% !important;
+    width: 100% !important;
+  max-height: 300px !important;
+  overflow-y: auto !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+  border-radius: 4px !important;
+  background: white !important;
+  z-index: 9999 !important;
+  position: absolute !important;
+}
+::ng-deep .p-dropdown-panel .p-dropdown-items {
+  padding-left: 0 !important;
+  margin: 0 !important; 
+}
+
+
+::ng-deep .p-dropdown-panel .p-dropdown-items ul,
+::ng-deep .p-dropdown-panel .p-dropdown-items ol {
+  padding-left: 0 !important;
+  margin: 0 !important;
+  list-style: none !important;
+}
+
+
+::ng-deep .p-dropdown-panel .p-dropdown-item {
+  white-space: normal !important; 
+  word-break: break-word !important; 
+  padding-left: 0.5rem !important; 
+  line-height: 1.4rem;
+}

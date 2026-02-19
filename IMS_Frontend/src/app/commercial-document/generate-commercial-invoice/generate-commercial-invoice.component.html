@@ -1,182 +1,396 @@
 <div class="m-2 p-2 shadow">
   <div class="row d-flex justify-content-center">
-  <div class="">
-    <div class="card card-default">
-      <div class="card-header theme-bg" >
-        
-          <h2 class="p-2 font-weight-bold">{{!isEdit?'Add':'Edit'}}&nbsp;Commercial Invoice</h2>
-      </div>
-      <div class="card-body">
-        <form name="newForm" [formGroup]="Formgroup" role="form">
-          <div class="row">
-            <!-- <div class="col-md-6">
-                <label for="Commercial_Invoice_No" class="">Commercial Invoice No</label>
-                <div class="">
-                    <div class="form-group d-inline">
-                    <input autocomplete="off" type="text"                  
-                    formControlName="Commercial_Invoice_No"
-                    class="form-control"
-                    placeholder="Commercial Invoice No" id="Commercial_Invoice_No" name="Commercial_Invoice_No" value="">
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-
-            </div> -->
-           <div class="col-md-6">
-            <label>LC <span>*</span></label>
-            <p-dropdown [style]="{'width':'100%'}"
-                [virtualScroll]="true" [virtualScrollItemSize]="30"  class="p-0" [options]="LCList"   optionLabel="LC_No" [filter]="true" filterBy="UserName" [showClear]="true" styleClass="listBottom" placeholder="Please Select" optionValue="lc_id" formControlName="LC_No">
-              <ng-template let-LCList pTemplate="item">
-                      <div class="flex align-items-center gap-2">  
-                          <div>{{ LCList.LC_No }}</div>
+    <div class="p-3">
+      <div class="card card-default">
+        <div class="card-header theme-bg">
+          <h2 class="p-2 font-weight-bold">
+            {{ !isEdit ? "Add" : "Edit" }}&nbsp;Commercial Invoice
+          </h2>
+        </div>
+        <div class="card-body">
+          <form name="newForm" [formGroup]="Formgroup" role="form" class="p-3">
+            <div class="row g-4  justify-content-center align-items-center">
+              <div class="col-md-5">
+                <div class="row g-6 pb-2">
+                  <div class="col-md-12">
+                    <div class="row align-items-center mb-1">
+                      <div class="col-4 align-items-center">
+                        <label for="Commercial_Invoice_No" class=""
+                          >Commercial Invoice No</label
+                        >
                       </div>
-                  </ng-template>
-              </p-dropdown>              
-            </div>
-            <div class="col-md-6">
-                <label>Applicant Bank <span>*</span></label>
-                <p-dropdown [style]="{'width':'100%'}"  class="p-0" [options]="BenificiaryAccounts"  optionLabel="BankName" [filter]="true" filterBy="BankName" [showClear]="true" styleClass="listBottom" placeholder="Please Select" optionValue="Applicant_Bank_ID" formControlName="ApplicantBank">
-                <ng-template let-AB pTemplate="item">
-                        <div class="flex align-items-center gap-2">  
-                            <div>{{ AB.BankName }}</div>
-                        </div>
-                    </ng-template>
-                </p-dropdown> 
-            </div>
-            <div class="col-md-6">
-                <label class="control-label" for="inlineFormInputGroup">Exp No.</label>
-                <div class="form-group d-inline">
-                    <input autocomplete="off" type="text"                  
-                    formControlName="ExpNo"
-                    class="form-control"
-                    placeholder="Exp No" id="ExpNo" name="ExpNo" value="">
+                      <div class="col-7">
+                        <input
+                          autocomplete="off"
+                          type="text"
+                          formControlName="Commercial_Invoice_No"
+                          class="form-control"
+                          placeholder="Commercial Invoice No"
+                          id="Commercial_Invoice_No"
+                          name="Commercial_Invoice_No"
+                          value=""
+                        />
+                      </div>
                     </div>
-            </div>
-            
-            <div class="col-md-6">
-                <label class="control-label" for="inlineFormInputGroup">Exp Date</label>
-                 <input
-                  type="date"
-                  formControlName="ExpDate"
-                  class="form-control"
-                />
-            </div>
-            <div class="col-md-6">
-                <label class="control-label" for="inlineFormInputGroup">Be No.</label>
-                <div class="form-group d-inline">
-                    <input autocomplete="off" type="text"                  
-                    formControlName="BeNo"
-                    class="form-control"
-                    placeholder="Be No" id="BeNo" name="BeNo" value="">
+                  </div>
+
+                  <div class="col-md-12">
+                    <div class="row align-items-center mb-1">
+                      <div class="col-4 align-items-center mb-1">
+                        <label>LC <span>*</span></label>
+                      </div>
+                      <div class="col-7">
+                        <p-dropdown
+                          [style]="{ width: '100%' }"
+                          [virtualScroll]="true"
+                          [virtualScrollItemSize]="30"
+                          class="p-0"
+                          [options]="LCList"
+                          optionLabel="LC_No"
+                          [filter]="true"
+                          filterBy="UserName"
+                          [showClear]="true"
+                          styleClass="listBottom"
+                          placeholder="Please Select"
+                          optionValue="lc_id"
+                          formControlName="LC_No"
+                        >
+                          <ng-template let-LCList pTemplate="item">
+                            <div class="flex align-items-center gap-2">
+                              <div>{{ LCList.LC_No }}</div>
+                            </div>
+                          </ng-template>
+                        </p-dropdown>
+                      </div>
                     </div>
-            </div>
-            
-            <div class="col-md-6">
-                <label class="control-label" for="inlineFormInputGroup">Be No. Date</label>
-                 <input
-                  type="date"
-                  formControlName="BeDate"
-                  class="form-control"
-                />
-            </div>
-            <div class="col-md-6">
-                <label class="control-label" for="inlineFormInputGroup">Ep No.</label>
-                <div class="form-group d-inline">
-                    <input autocomplete="off" type="text"                  
-                    formControlName="EpNo"
-                    class="form-control"
-                    placeholder="Ep No" id="EpNo" name="EpNo" value="">
+                  </div>
+
+                  <div class="col-md-12">
+                    <div class="row align-items-center mb-1">
+                      <div class="col-4 align-items-center mb-1">
+                        <label class="control-label" for="inlineFormInputGroup"
+                          >Exp No.</label
+                        >
+                      </div>
+                      <div class="col-7">
+                        <input
+                          autocomplete="off"
+                          type="text"
+                          formControlName="ExpNo"
+                          class="form-control"
+                          placeholder="Exp No"
+                          id="ExpNo"
+                          name="ExpNo"
+                          value=""
+                        />
+                      </div>
                     </div>
-            </div>
-            
-            <div class="col-md-6">
-                <label class="control-label" for="inlineFormInputGroup">Ep No. Date</label>
-                 <input
-                  type="date"
-                  formControlName="EpDate"
-                  class="form-control"
-                />
-            </div>
-            
-            <div class="col-md-6">
-                <label class="control-label" for="inlineFormInputGroup">Freight Charge <span>*</span></label>
-                <div class="form-group d-inline">
-                    <input autocomplete="off" type="Number"                  
-                    formControlName="FreightCharge"
-                    class="form-control"
-                    placeholder="Freight Charge" id="FreightCharge" name="FreightCharge" value="">
+                  </div>
+                  <div class="col-md-12">
+                    <div class="row align-items-center mb-1">
+                      <div class="col-4 align-items-center mb-1">
+                        <label class="control-label" for="inlineFormInputGroup"
+                          >Be No.</label
+                        >
+                      </div>
+                      <div class="col-7">
+                        <input
+                          autocomplete="off"
+                          type="text"
+                          formControlName="BeNo"
+                          class="form-control"
+                          placeholder="Be No"
+                          id="BeNo"
+                          name="BeNo"
+                          value=""
+                        />
+                      </div>
                     </div>
-            </div>
-            <div class="col-md-6">
-                <label class="control-label" for="inlineFormInputGroup">Qty (Rolls) <span>*</span></label>
-                <div class="form-group d-inline">
-                    <input autocomplete="off" type="Number"                  
-                    formControlName="QtyRolls"
-                    class="form-control"
-                    placeholder="Qty (Rolls)" id="QtyRolls" name="QtyRolls" value="">
+                  </div>
+                  <div class="col-md-12">
+                    <div class="row align-items-center mb-1">
+                      <div class="col-4 align-items-center mb-1">
+                        <label class="control-label" for="inlineFormInputGroup"
+                          >Ep No.</label
+                        >
+                      </div>
+                      <div class="col-7">
+                        <input
+                          autocomplete="off"
+                          type="text"
+                          formControlName="EpNo"
+                          class="form-control"
+                          placeholder="Ep No"
+                          id="EpNo"
+                          name="EpNo"
+                          value=""
+                        />
+                      </div>
                     </div>
-            </div>
-            <div class="col-md-6">
-                <label class="control-label" for="inlineFormInputGroup">Total Gross Weight <span>*</span></label>
-                <div class="form-group d-inline">
-                    <input autocomplete="off" type="Number"                  
-                    formControlName="TotalGrossWeight"
-                    class="form-control"
-                    placeholder="Total Gross Weight" id="TotalGrossWeight" name="TotalGrossWeight" value="">
+                  </div>
+                  <div class="col-md-12">
+                    <div class="row align-items-center mb-1">
+                      <div class="col-4 align-items-center mb-1">
+                        <label class="control-label" for="inlineFormInputGroup"
+                          >Freight Charge <span>*</span></label
+                        >
+                      </div>
+                      <div class="col-7">
+                        <input
+                          autocomplete="off"
+                          type="Number"
+                          formControlName="FreightCharge"
+                          class="form-control"
+                          placeholder="Freight Charge"
+                          id="FreightCharge"
+                          name="FreightCharge"
+                          value=""
+                        />
+                      </div>
                     </div>
-            </div>
-            <div class="col-md-6">
-                <label class="control-label" for="inlineFormInputGroup">Total Net Weight <span>*</span></label>
-                <div class="form-group d-inline">
-                    <input autocomplete="off" type="Number"                  
-                    formControlName="TotalNetWeight"
-                    class="form-control"
-                    placeholder="Total Net Weight" id="TotalNetWeight" name="TotalNetWeight" value="">
+                  </div>
+                  <div class="col-md-12">
+                    <div class="row align-items-center mb-1">
+                      <div class="col-4 align-items-center mb-1">
+                        <label class="control-label" for="inlineFormInputGroup"
+                          >Total Gross Weight <span>*</span></label
+                        >
+                      </div>
+                      <div class="col-7">
+                        <input
+                          autocomplete="off"
+                          type="Number"
+                          formControlName="TotalGrossWeight"
+                          class="form-control"
+                          placeholder="Total Gross Weight"
+                          id="TotalGrossWeight"
+                          name="TotalGrossWeight"
+                          value=""
+                        />
+                      </div>
                     </div>
-            </div>
-            <div class="col-md-6">
-                <label class="control-label" for="inlineFormInputGroup">Sailing on or about</label>
-                <input
-                  type="date"
-                  formControlName="SailiongOnOrAbout"
-                  class="form-control"
-                />
-            </div>
-            <div class="col-md-6"></div>
-            <div class="col-md-6">
-                <label for="Remarks" class="">Remarks</label>
-                <div class="">
-                    <div class="form-group d-inline">
-                    <input autocomplete="off" type="text"                  
-                    formControlName="Remarks"
-                    aria-multiline="true"
-                    class="form-control"
-                    placeholder="Remarks" id="Remarks" name="Remarks" value="">
+                  </div>
+                  <div class="col-md-12">
+                    <div class="row align-items-center mb-1">
+                      <div class="col-4 align-items-center mb-1">
+                        <label class="control-label" for="inlineFormInputGroup"
+                          >Sailing on or about</label
+                        >
+                      </div>
+                      <div class="col-7">
+                        <p-calendar
+                          formControlName="SailiongOnOrAbout"
+                          [showIcon]="false"
+                          dateFormat="dd/mm/yy"
+                          placeholder="Select Date"
+                          class="w-100"
+                          [style]="{ width: '100%' }"
+                          inputStyleClass="form-control custom-date-input"
+                        ></p-calendar>
+                      </div>
                     </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="row align-items-center mb-1">
+                      <div class="col-4 align-items-center mb-1">
+                        <label for="Remarks" class="">Remarks</label>
+                      </div>
+                      <div class="col-7">
+                        <textarea
+                          autocomplete="off"
+                          formControlName="Remarks"
+                          class="form-control"
+                          placeholder="Remarks"
+                          id="Remarks"
+                          name="Remarks"
+                          rows="2"
+                        ></textarea>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              </div>
+              <div class="col-md-2"></div>
+              <div class="col-md-4">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="row align-items-center mb-1">
+                      <div class="col-4 align-items-center mb-1">
+                        <label>Applicant Bank <span>*</span></label>
+                      </div>
+                      <div class="col-8">
+                        <p-dropdown
+                          [style]="{ width: '100%' }"
+                          class="p-0"
+                          [options]="BenificiaryAccounts"
+                          optionLabel="BankName"
+                          [filter]="true"
+                          filterBy="BankName"
+                          [showClear]="true"
+                          styleClass="listBottom"
+                          placeholder="Please Select"
+                          panelStyleClass="description-panel"
+                         appendTo="body"
+                          optionValue="Applicant_Bank_ID"
+                          formControlName="ApplicantBank"
+                        >
+                          <ng-template let-AB pTemplate="item">
+                            <div class="flex align-items-center gap-2">
+                              <div>{{ AB.BankName }}</div>
+                            </div>
+                          </ng-template>
+                        </p-dropdown>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="row align-items-center mb-1">
+                      <div class="col-4 align-items-center mb-1">
+                        <label class="control-label" for="inlineFormInputGroup"
+                          >Exp Date</label
+                        >
+                      </div>
+                      <div class="col-8">
+                        <p-calendar
+                          formControlName="ExpDate"
+                          [showIcon]="false"
+                          dateFormat="dd/mm/yy"
+                          placeholder="Select Date"
+                          class="w-100"
+                          [style]="{ width: '100%' }"
+                          inputStyleClass="form-control custom-date-input"
+                        ></p-calendar>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="row align-items-center mb-1">
+                      <div class="col-4 align-items-center mb-1">
+                        <label class="control-label" for="inlineFormInputGroup"
+                          >Be No. Date</label
+                        >
+                      </div>
+                      <div class="col-8">
+                        <p-calendar
+                          formControlName="BeDate"
+                          [showIcon]="false"
+                          dateFormat="dd/mm/yy"
+                          placeholder="Select Date"
+                          class="w-100"
+                          [style]="{ width: '100%' }"
+                          inputStyleClass="form-control custom-date-input"
+                        ></p-calendar>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="row align-items-center mb-1">
+                      <div class="col-4 align-items-center mb-1">
+                        <label class="control-label" for="inlineFormInputGroup"
+                          >Ep No. Date</label
+                        >
+                      </div>
+                      <div class="col-8">
+                        <p-calendar
+                          formControlName="EpDate"
+                          [showIcon]="false"
+                          dateFormat="dd/mm/yy"
+                          placeholder="Select Date"
+                          class="w-100"
+                          [style]="{ width: '100%' }"
+                          inputStyleClass="form-control custom-date-input"
+                        ></p-calendar>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="row align-items-center mb-1">
+                      <div class="col-4 align-items-center mb-1">
+                        <label class="control-label" for="inlineFormInputGroup"
+                          >Qty (Rolls) <span>*</span></label
+                        >
+                      </div>
+                      <div class="col-8">
+                        <input
+                          autocomplete="off"
+                          type="Number"
+                          formControlName="QtyRolls"
+                          class="form-control"
+                          placeholder="Qty (Rolls)"
+                          id="QtyRolls"
+                          name="QtyRolls"
+                          value=""
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="row align-items-center mb-1">
+                      <div class="col-4 align-items-center mb-1">
+                        <label class="control-label" for="inlineFormInputGroup"
+                          >Total Net Weight <span>*</span></label
+                        >
+                      </div>
+                      <div class="col-8">
+                        <input
+                          autocomplete="off"
+                          type="Number"
+                          formControlName="TotalNetWeight"
+                          class="form-control"
+                          placeholder="Total Net Weight"
+                          id="TotalNetWeight"
+                          name="TotalNetWeight"
+                          value=""
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <div class="col-md-12">
+                    <div class="row align-items-center mb-1">
+                      <div class="col-4 align-items-center mb-1"></div>
+                      <div class="col-8"></div>
+                    </div>
+                  </div> -->
+                </div>
+              </div>
+            </div>
+          </form>
+          <div class="row g-4">
+            <div class="col-md-5">
+              <div class="row g-6 pb-2">
+                <div class="col-md-12">
+                  <div class="row align-items-center mb-1">
+                    <div class="col-6 align-items-center"></div>
+                    <div class="col-4">
+                      <button
+                          class="btn btn-sm theme-btn mr-2"
+                        type="button"
+                        (click)="saveData()"
+                        [disabled]="Formgroup.invalid"
+                        [hidden]="isEdit"
+                        style="width: 130px; height: 38px ;color:white"
+                      >
+                         <i class="fas fa-save"></i>&nbsp;Save
+                      </button>
+                      <button
+                        [hidden]="!isEdit"
+                             class="btn btn-sm theme-btn mr-2"
+                        type="button"
+                        (click)="updateData()"
+                        [disabled]="Formgroup.invalid"
+                         style="width: 130px; height: 38px ;color:white"
+                      >
+                       <i class="fas fa-save"></i>&nbsp;Update
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </form>
-        <div class="flexbox mt-5">
-          <!-- <button [routerLink]="['/all-']" class="btn btn-w-xl text-white btn-outline-danger bg-gradient-danger" type="button"
-            >
-            Cancel
-          </button> -->
-          <button  class="btn btn-w-xl text-white theme-btn-add px-5 float-right" type="button" (click)="saveData()"
-            [disabled]="Formgroup.invalid" [hidden]="isEdit">
-            Save
-          </button>
-          <button [hidden]="!isEdit" class="btn btn-w-xl text-white theme-btn-edit px-5 float-right" type="button" (click)="updateData()"
-            [disabled]="Formgroup.invalid">
-            Update
-          </button>
+    
         </div>
       </div>
     </div>
-
   </div>
 </div>
-</div>
-
-

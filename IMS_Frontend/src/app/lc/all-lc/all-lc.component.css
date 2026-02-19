@@ -230,36 +230,22 @@ thead{
 
 
 /* table design */
-/* Remove table borders */
-::ng-deep .custom-table .p-datatable-table {
-  border: none !important;
+::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  background-color: #6a1a3f !important;
+  color: white !important;
 }
 
-::ng-deep .custom-table .p-datatable-thead > tr > th,
-::ng-deep .custom-table .p-datatable-tbody > tr > td {
-  border: none !important;
-  padding: 14px 16px !important;   /* Column spacing */
-  white-space: nowrap;             /* Prevent wrapping */
+::ng-deep .p-datatable .p-datatable-thead > tr > th .p-sortable-column-icon {
+  color: white !important;
 }
 
-/* Zebra effect */
-::ng-deep .custom-table .p-datatable-tbody > tr:nth-child(even) {
-  background: #fafafa;
+::ng-deep .p-datatable .p-datatable-thead > tr > th.p-sortable-column:hover {
+  background-color: #7a2349 !important;
 }
 
-/* Hover effect */
-::ng-deep .custom-table .p-datatable-tbody > tr:hover {
-  background: #f1f5ff;
-  transition: 0.2s;
+::ng-deep .p-datatable .p-datatable-thead > tr > th.p-sortable-column.p-highlight {
+  background-color: #5a0f2f !important;
 }
-
-/* Header style */
-::ng-deep .custom-table .p-datatable-thead > tr > th {
-  background: #f8f9fa;
-  font-weight: 600;
-}
-
-
 ::ng-deep .p-paginator {
   display: flex !important;
   align-items: center;

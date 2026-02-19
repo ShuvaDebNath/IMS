@@ -25,7 +25,7 @@ import { GetDataModel } from 'src/app/models/GetDataModel';
 import { Router } from '@angular/router';
 import { ReportService } from 'src/app/services/reportService/report-service.service';
 import { getDate } from 'ngx-bootstrap/chronos/utils/date-getters';
-
+import { CalendarModule } from 'primeng/calendar';
 @Component({
   standalone: true,
   selector: 'app-pi-list',
@@ -44,6 +44,7 @@ import { getDate } from 'ngx-bootstrap/chronos/utils/date-getters';
     FieldsetModule,
     DropdownModule,
     RouterModule,
+    CalendarModule
   ],
 })
 export class PiListComponent implements OnInit {

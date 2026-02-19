@@ -11,8 +11,8 @@
 </div>
 
 <div class="card">
-  <div class="card-header sticky-header">
-    <h3 class="card-title mb-2">
+  <div class="card-header sticky-header ">
+    <h3 class="card-title  mb-2" >
       <strong>{{ PageTitle }}</strong>
     </h3>
     <div class="float-right">
@@ -55,7 +55,7 @@
   <div class="card-body">
     <form id="Search" [formGroup]="SearchFormgroup" forle="form">
       <fieldset class="border p-3">
-        <legend class="w-auto px-2">Search</legend>
+        <legend class="w-auto px-2 fw-bold">Search</legend>
         <p-divider />
         <div class="container-fluid">
           <!-- <div class="row g-3 align-items-end">
@@ -164,92 +164,118 @@
               </ng-container>
             </div>
           </div> -->
-<div class="row g-3 align-items-end">
+          <div class="row g-2 align-items-end">
+            <div class="col-md-2">
+              <label>PI Type</label>
+              <select
+                formControlName="PIType"
+                class="form-control form-control-sm custom-select-height"
+                
+              >
+                <option value="" disabled selected>Select a type</option>
+                <option *ngFor="let item of PITypeList" [value]="item.value">
+                  {{ item.text }}
+                </option>
+              </select>
+            </div>
 
-  <div class="col-md-4">
-    <label>PI Type</label>
-    <select formControlName="PIType" class="form-control form-control-sm">
-      <option value="" disabled selected>Select a type</option>
-      <option *ngFor="let item of PITypeList" [value]="item.value">
-        {{ item.text }}
-      </option>
-    </select>
-  </div>
+            <div class="col-md-2">
+              <label>From Date</label>
+              <!-- <input
+                type="date"
+                formControlName="FromDate"
+                class="form-control"
+              /> -->
+              <p-calendar
+                formControlName="FromDate"
+                [showIcon]="false"
+                dateFormat="dd/mm/yy"
+                placeholder="From"
+                inputStyleClass="custom-date-input"
+                [style]="{width:'100%'}"
+              ></p-calendar>
+            </div>
 
-  <div class="col-md-4">
-    <label>From Date</label>
-    <input type="date" formControlName="FromDate" class="form-control" />
-  </div>
+            <div class="col-md-2">
+              <label>To Date</label>
+              <!-- <input
+                type="date"
+                formControlName="ToDate"
+                class="form-control"
+              /> -->
+                  <p-calendar
+                formControlName="ToDate"
+                [showIcon]="false"
+                dateFormat="dd/mm/yy"
+                placeholder="From"
+                inputStyleClass="custom-date-input"
+                [style]="{width:'100%'}"
+              ></p-calendar>
+            </div>
 
-  <div class="col-md-4">
-    <label>To Date</label>
-    <input type="date" formControlName="ToDate" class="form-control" />
-  </div>
+            <div class="col-md-2">
+              <label>PI No</label>
+              <input
+                type="text"
+                formControlName="PINo"
+                class="form-control form-control-sm custom-select-height"
+                placeholder="PI No"
+              />
+            </div>
 
-  <div class="col-md-4">
-    <label>PI No</label>
-    <input
-      type="text"
-      formControlName="PINo"
-      class="form-control form-control-sm"
-      placeholder="PI No"
-    />
-  </div>
+            <div class="col-md-2 ">
+              <label>Shipper</label>
+              <input
+                type="text"
+                formControlName="Shipper"
+                class="form-control form-control-sm custom-select-height"
+                placeholder="Shipper"
+              />
+            </div>
 
-  <div class="col-md-4">
-    <label>Shipper</label>
-    <input
-      type="text"
-      formControlName="Shipper"
-      class="form-control form-control-sm"
-      placeholder="Shipper"
-    />
-  </div>
+            <div class="col-md-2">
+              <label>Consignee</label>
+              <input
+                type="text"
+                formControlName="Consignee"
+                class="form-control form-control-sm custom-select-height"
+                placeholder="Consignee"
+              />
+            </div>
 
-  <div class="col-md-4">
-    <label>Consignee</label>
-    <input
-      type="text"
-      formControlName="Consignee"
-      class="form-control form-control-sm"
-      placeholder="Consignee"
-    />
-  </div>
+            <div class="col-md-2">
+              <label>Name</label>
 
-  <div class="col-md-4">
-    <label>Name</label>
+              <ng-container *ngIf="UserList.length > 1">
+                <p-dropdown
+                  [style]="{ width: '100%' }"
+                  [options]="UserList"
+                  optionLabel="UserName"
+                  optionValue="User_ID"
+                  [filter]="true"
+                  filterBy="UserName"
+                  [showClear]="true"
+                  placeholder="Please Select"
+                  formControlName="User_ID"
+                >
+                </p-dropdown>
+              </ng-container>
 
-    <ng-container *ngIf="UserList.length > 1">
-      <p-dropdown
-        [style]="{ width: '100%' }"
-        [options]="UserList"
-        optionLabel="UserName"
-        optionValue="User_ID"
-        [filter]="true"
-        filterBy="UserName"
-        [showClear]="true"
-        placeholder="Please Select"
-        formControlName="User_ID"
-      >
-      </p-dropdown>
-    </ng-container>
-
-    <ng-container *ngIf="UserList.length === 1">
-      <input
-        type="text"
-        class="form-control"
-        [value]="UserList[0].UserName"
-        readonly
-      />
-      <input
-        type="hidden"
-        formControlName="User_ID"
-        [value]="UserList[0].User_ID"
-      />
-    </ng-container>
-  </div>
-
-</div>
+              <ng-container *ngIf="UserList.length === 1">
+                <input
+                  type="text"
+                  class="form-control"
+                  [value]="UserList[0].UserName"
+                  readonly
+                />
+                <input
+                  type="hidden"
+                  formControlName="User_ID"
+                  [value]="UserList[0].User_ID"
+                />
+              </ng-container>
+            </div>
+          </div>
 
           <div class="row mt-3 justify-content-end">
             <div class="col-auto">
@@ -265,7 +291,7 @@
               <button
                 type="button"
                 (click)="LoadTableData()"
-                class="btn btn-primary btn-sm"
+                class="btn theme-btn btn-sm"
               >
                 <i class="fas fa-search"></i>&nbsp;Search
               </button>
@@ -294,7 +320,7 @@
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
       >
         <ng-template pTemplate="header">
-          <tr>
+          <tr style="background-color: #6a1a3f; color: white;">
             <th *ngIf="PiStatus != 'Full Approved'" style="width: 4rem">
               <p-tableHeaderCheckbox />
             </th>
@@ -333,7 +359,7 @@
             <td>{{ row.CustomerName }}</td>
             <td>{{ row.CreatedByUserName }}</td>
             <td *ngIf="PiStatus == 'ALL'" class="text-center">
-              <span
+              <span style="padding-left: 2px; padding-right: 2px;"
                 [ngClass]="{
                   'badge badge-success': row.PIStatus === 'Approved',
                   'badge badge-warning': row.PIStatus === 'Pending',

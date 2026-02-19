@@ -29,6 +29,7 @@ td.action-column .btn-group {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 3px;
 }
 
 /* Icon-only buttons */
