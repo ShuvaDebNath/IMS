@@ -165,7 +165,13 @@ export class UserCreateComponent {
       const yyyy = fDate.getFullYear();
   
       const formatted = `${mm}/${dd}/${yyyy}`;
-
+      var checkUser = this.CheckUserExist(this.Formgroup.value.UserName)==null?1:this.CheckUserExist(this.Formgroup.value.UserName);
+      console.log(checkUser);
+      
+      if(checkUser>0){
+        swal.fire('info','User name already exist please choose diff username','error')
+        return
+      }
       const isSupplierTruthy = this.Formgroup.value.IsSupplier === true || this.Formgroup.value.IsSupplier === 'True';
       var user: any = {
         UserName: this.Formgroup.value.UserName,
@@ -187,7 +193,12 @@ export class UserCreateComponent {
           'tbl_users'
         )
         .subscribe((res: any) => {
+          console.log(res);
           if (res.status) {
+            if (res.message == 'User Already Exist!' ) {
+              swal.fire('Username already exists!', 'Please choose a different username.', 'warning');
+              return
+            } 
             swal
               .fire({
                 title: `${res.message}!`,
@@ -199,12 +210,13 @@ export class UserCreateComponent {
                 this.ngOnInit();
               });
           } else {
-            if (res.message == 'Data already exist') {
-              swal.fire('Data already exist', '', 'warning');
+            if (res.message == 'Data already exist' || res.message.toLowerCase().includes('duplicate')) {
+              swal.fire('Username already exists!', 'Please choose a different username.', 'warning');
             } else if (res.message == 'Invalid Token') {
               swal.fire('Session Expierd!', 'Please Login Again.', 'info');
               this.gs.Logout();
-            } else {
+            } 
+            else {
               swal.fire({
                 title: `Faild!`,
                 text: `Save Faild!`,
@@ -254,6 +266,34 @@ export class UserCreateComponent {
         error: (err) => {},
       });
     }
+
+    CheckUserExist(UserName:any) {
+      var ProcedureData = {
+        procedureName: '[usp_User_CheckUser]',
+        parameters: {
+          UserName: UserName,
+        },
+      };
+      let userCount = 0;
+      this.masterEntyService.GetInitialData(ProcedureData).subscribe({
+        next: (results) => {
+          if (results.status) {
+            var tableData = JSON.parse(results.data).Tables1;
+            
+            userCount = tableData.length;
+            console.log(tableData,userCount);
+            
+          } else if (results.message == 'Invalid Token') {
+            swal.fire('Session Expierd!', 'Please Login Again.', 'info');
+            this.gs.Logout();
+          } else {
+            userCount = 0;
+          }
+        },
+        error: (err) => {},
+      });
+      return userCount;
+    }
   
     updateData() {
       console.log(this.Formgroup);
@@ -300,15 +340,15 @@ export class UserCreateComponent {
                 this.ngOnInit();
               });
           } else {
-            if (res.message == 'Data already exist') {
-              swal.fire('Data already exist', '', 'warning');
+            if (res.message == 'Data already exist' || res.message.toLowerCase().includes('duplicate')) {
+              swal.fire('Username already exists!', 'Please choose a different username.', 'warning');
             } else if (res.message == 'Invalid Token') {
               swal.fire('Session Expierd!', 'Please Login Again.', 'info');
               this.gs.Logout();
             } else {
               swal.fire({
                 title: `Faild!`,
-                text: `Save Faild!`,
+                text: `Update Faild!`,
                 icon: 'info',
                 timer: 5000,
               });

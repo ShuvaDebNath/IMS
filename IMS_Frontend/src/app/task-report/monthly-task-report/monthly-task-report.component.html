@@ -80,6 +80,9 @@
                 <th style="text-align: center">Marketing Concern</th>
                 <th style="text-align: center">Customer Name</th>
                 <th style="text-align: center">Buying/Concern Factory/ Buyer</th>
+                <th style="text-align: center">
+                  Concern Factory(If buying office or group)
+                </th>
                 <th style="text-align: center">How many team have/how many team you work</th>
                 <th style="text-align: center">Customer Concern Person and Contact</th>
                 <th style="text-align: center">Order Season</th>
@@ -88,6 +91,8 @@
                 <th style="text-align: center">Time and purpose second visit</th>
                 <th style="text-align: center">Time and purpose third visit</th>
                 <th style="text-align: center">Order summary this month</th>
+                <th style="text-align: center">CM Summary</th>
+                <th style="text-align: center">Net Sales Summary</th>
                 <th style="text-align: center">Summary of submitted sample</th>
                 <th style="text-align: center">Summary of new article drop</th>
               </tr>
@@ -97,15 +102,18 @@
               <tr>
                 <td style="text-align: left">{{ item.MakeBy }}</td>
                 <td style="text-align: left">{{ item.customer_name }}</td>
-                <td style="text-align: center">{{ item.Buying_Concern }}</td>
+                <td style="text-align: center">{{ item.Concern_Factory }}</td>
+                <td style="text-align: center">{{ item.Concern_Factory }}</td>
                 <td style="text-align: center">{{ item.TeamSize }}</td>
-                <td style="text-align: center">{{ item.Concern }}</td>
+                <td style="text-align: center">{{ item.Buying_Concern }}</td>
                 <td style="text-align: center">{{ item.OrderSeason }}</td>
                 <td style="text-align: center">{{ item.Description }}</td>
                 <td style="text-align: center">{{ item.Visit1 }}</td>
                 <td style="text-align: center">{{ item.Visit2 }}</td>
                 <td style="text-align: center">{{ item.Visit3 }}</td>
                 <td style="text-align: center">{{ item.OrderSummary }}</td>
+                <td style="text-align: center">{{ item.CM_Summary }}</td>
+                <td style="text-align: center">{{ item.Net_Sales_Summary }}</td>
                 <td style="text-align: center">{{ item.SampleSummary }}</td>
                 <td style="text-align: center">{{ item.NewArticleSummary }}</td>
               </tr>

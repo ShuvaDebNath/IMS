@@ -6,34 +6,31 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>0.8601in</Width>
+              <Width>0.96544in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.87301in</Width>
+              <Width>0.97835in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.39008in</Width>
+              <Width>1.49542in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.10218in</Width>
+              <Width>1.20752in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.5048in</Width>
+              <Width>1.61014in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.2861in</Width>
+              <Width>1.39144in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.72001in</Width>
+              <Width>0.82535in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.05334in</Width>
+              <Width>1.21076in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.10542in</Width>
-            </TablixColumn>
-            <TablixColumn>
-              <Width>1.20959in</Width>
+              <Width>1.31493in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -393,61 +390,6 @@
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox16</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Style>Solid</Style>
-                        </Border>
-                        <TopBorder>
-                          <Color>Black</Color>
-                          <Style>Solid</Style>
-                          <Width>1pt</Width>
-                        </TopBorder>
-                        <BottomBorder>
-                          <Color>Black</Color>
-                          <Style>Solid</Style>
-                          <Width>1pt</Width>
-                        </BottomBorder>
-                        <LeftBorder>
-                          <Color>Black</Color>
-                          <Style>Solid</Style>
-                          <Width>1pt</Width>
-                        </LeftBorder>
-                        <RightBorder>
-                          <Color>Black</Color>
-                          <Style>Solid</Style>
-                          <Width>1pt</Width>
-                        </RightBorder>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox27">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>Visit Purpose</Value>
-                              <Style>
-                                <FontFamily>times New Roman</FontFamily>
-                                <FontSize>9pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox18</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>Solid</Style>
@@ -937,60 +879,6 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Visit_Purpose">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>=Fields!Visit_Purpose.Value</Value>
-                              <Style>
-                                <FontFamily>times New Roman</FontFamily>
-                                <FontSize>8pt</FontSize>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Visit_Purpose</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Style>Solid</Style>
-                        </Border>
-                        <TopBorder>
-                          <Color>Black</Color>
-                          <Style>Solid</Style>
-                          <Width>1pt</Width>
-                        </TopBorder>
-                        <BottomBorder>
-                          <Color>Black</Color>
-                          <Style>Solid</Style>
-                          <Width>1pt</Width>
-                        </BottomBorder>
-                        <LeftBorder>
-                          <Color>Black</Color>
-                          <Style>Solid</Style>
-                          <Width>1pt</Width>
-                        </LeftBorder>
-                        <RightBorder>
-                          <Color>Black</Color>
-                          <Style>Solid</Style>
-                          <Width>1pt</Width>
-                        </RightBorder>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
                     <Textbox Name="First_Received_Time">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
@@ -1112,14 +1000,13 @@
             <TablixMember />
             <TablixMember />
             <TablixMember />
-            <TablixMember />
           </TablixMembers>
         </TablixColumnHierarchy>
         <TablixRowHierarchy>
           <TablixMembers>
             <TablixMember>
               <TablixHeader>
-                <Size>1.05334in</Size>
+                <Size>1.15868in</Size>
                 <CellContents>
                   <Textbox Name="Textbox4">
                     <CanGrow>true</CanGrow>
@@ -1192,7 +1079,7 @@
                 </SortExpression>
               </SortExpressions>
               <TablixHeader>
-                <Size>1.05334in</Size>
+                <Size>1.15868in</Size>
                 <CellContents>
                   <Textbox Name="MakeBy2">
                     <CanGrow>true</CanGrow>
@@ -1237,7 +1124,7 @@
         <DataSetName>CustomerDetailsTaskReport</DataSetName>
         <Top>0.125in</Top>
         <Height>0.5in</Height>
-        <Width>12.15797in</Width>
+        <Width>12.15802in</Width>
         <Style>
           <Border>
             <Style>Solid</Style>

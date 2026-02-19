@@ -75,6 +75,13 @@
         [globalFilterFields]="['UserName', 'Role_Name', 'Superior']"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
       >
+      <hr>
+        <p-table #dt [value]="tableData" [paginator]="true" [rows]="pageSize" [rowsPerPageOptions]='["30","20","10"]' 
+        [responsive]="true" [showCurrentPageReport]="true" (onPageChange)="onPageChange($event)"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        [globalFilterFields]="['UserName','Role_Name','Superior']"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+
         <ng-template pTemplate="caption">
           <div
             class="table-toolbar d-flex justify-content-end align-items-center"

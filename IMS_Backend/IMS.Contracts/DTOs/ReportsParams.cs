@@ -12,5 +12,6 @@ namespace AccountingBackEnd.DAL.DTOs
         public string Id { get; set; }
         public string companyId { get; set; }
         public string applicationType { get; set; }
+        public string userId { get; set; }
     }
 }

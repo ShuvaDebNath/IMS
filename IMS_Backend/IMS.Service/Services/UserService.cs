@@ -5,6 +5,7 @@ using Boilerplate.Contracts.Services;
 using Boilerplate.Entities.DBModels;
 using Boilerplate.Entities.Helpers;
 using System.Data;
+using System.ServiceModel.Channels;
 
 namespace Boilerplate.Service.Services
 {
@@ -71,9 +72,13 @@ namespace Boilerplate.Service.Services
             return result;
         }
 
-        public async Task<bool> SaveUser(UserCreate data, string UserName)
+        public async Task<string> SaveUser(UserCreate data, string UserName)
         {
-
+            var check = await _createUserRepository.CheckUser(data);
+            if (check)
+            {
+                return "2";
+            }
             string password  = data.Password;
 
 
@@ -81,7 +86,7 @@ namespace Boilerplate.Service.Services
             data.Password = passwordHash;
 
             var result = await _createUserRepository.SaveUser(data, UserName);
-            return result;
+            return result?"1":"0";
         }
 
         public async Task<bool> EditUser(UserCreate model, string AuthUserName)

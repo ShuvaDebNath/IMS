@@ -26,9 +26,9 @@ public interface IReportRepository
     Task<DataSet> FGStockReport();
     Task<DataSet> FGSendAndReceiveReport(FGSentReceiveParams param);
     Task<DataSet> RMPendingDetailsReport(string id);
-    Task<DataSet> TaskMonthlyReport(string fromDate, string toDate);
+    Task<DataSet> TaskMonthlyReport(string fromDate, string toDate, string userId);
     Task<DataSet> TaskMonthlyDetailsReport(string id);
-    Task<DataSet> TaskCustomerVisitReport(string fromDate, string toDate);
+    Task<DataSet> TaskCustomerVisitReport(string fromDate, string toDate,string userId);
     Task<DataSet> TaskCustomerVisitDetailsReport(string id);
     Task<DataSet> DeliveryReport(ProformaInvoiceReportParams param);
 }

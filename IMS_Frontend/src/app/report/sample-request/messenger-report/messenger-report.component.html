@@ -116,7 +116,7 @@
               <button
                 *ngIf="updatePermissions"
                 class="btn theme-btn-view"
-                [disabled]="table.HandoverStatus=='To Client' && roleId!='1' && roleId!='2'"
+                [disabled]="(table.HandoverStatus=='' || table.HandoverStatus=='To Client') && roleId!='1' && roleId!='2'"
                 title="Handover to Client"
                 (click)="handoverSample(table,'To Client')"
               >
