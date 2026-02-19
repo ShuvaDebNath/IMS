@@ -1093,14 +1093,14 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("TaskMonthlyReport")]
-        public async Task<IActionResult> TaskMonthlyReport(string rptType, string fromDate = "", string toDate = "")
+        public async Task<IActionResult> TaskMonthlyReport(string rptType, string fromDate = "", string toDate = "",string userId="")
         {
             try
             {
                 var currentUser = HttpContext.User;
 
                 string reportPath = "V2\\TaskReport\\";
-                DataSet ds = await _reportService.TaskMonthlyReport(fromDate, toDate);
+                DataSet ds = await _reportService.TaskMonthlyReport(fromDate, toDate,userId);
 
                 if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
                 {
@@ -1179,14 +1179,14 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("TaskCustomerVisitReport")]
-        public async Task<IActionResult> TaskCustomerVisitReport(string rptType, string fromDate = "", string toDate = "")
+        public async Task<IActionResult> TaskCustomerVisitReport(string rptType, string fromDate = "", string toDate = "",string userId="")
         {
             try
             {
                 var currentUser = HttpContext.User;
 
                 string reportPath = "V2\\TaskReport\\";
-                DataSet ds = await _reportService.TaskCustomerVisitReport(fromDate, toDate);
+                DataSet ds = await _reportService.TaskCustomerVisitReport(fromDate, toDate, userId);
 
                 if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
                 {
@@ -1266,14 +1266,14 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("TaskDetailsReport")]
-        public async Task<IActionResult> TaskDetailsReport(string rptType, string fromDate = "", string toDate = "")
+        public async Task<IActionResult> TaskDetailsReport(string rptType, string fromDate = "", string toDate = "",string userId="")
         {
             try
             {
                 var currentUser = HttpContext.User;
 
                 string reportPath = "V2\\TaskReport\\";
-                DataSet ds = await _reportService.TaskDetailsReport(fromDate, toDate);
+                DataSet ds = await _reportService.TaskDetailsReport(fromDate, toDate, userId);
 
                 if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
                 {

@@ -1,349 +1,245 @@
-
 <div class="container">
   <h1 class="theme-text">ALL Customers List</h1>
-
-  <form
-    [formGroup]="dateForm"
-    class="row p-3 shadow-sm g-3 align-items-end mb-3"
-    (ngSubmit)="loadAllCustomers()"
-  >
-
-    <div class="col-md-3" *ngIf="SuperiorList">
-      <label>Superior Name <span>*</span></label>
-      <p-dropdown
-        [style]="{ width: '100%' }"
-        class="p-0"
-        [options]="SuperiorList"
-        optionLabel="UserName"
-        [filter]="true"
-        filterBy="UserName"
-        [showClear]="true"
-        styleClass="listBottom"
-        placeholder="Please Select"
-        optionValue="User_ID"
-        formControlName="SuperioId"
-        (onChange)="getCustomerList()"
-      >
-        <ng-template let-AB pTemplate="item">
-          <div class="flex align-items-center gap-2">
-            <div>{{ AB.UserName }}</div>
-          </div>
-        </ng-template>
-      </p-dropdown>
-    </div>
-    <div class="col-md-3">
-      <label>Customer Name <span>*</span></label>
-      <p-dropdown
-        [style]="{ width: '100%' }"
-        class="p-0"
-        [options]="CustomerList"
-        optionLabel="Company_Name"
-        [filter]="true"
-        filterBy="Company_Name"
-        [showClear]="true"
-        styleClass="listBottom"
-        placeholder="Please Select"
-        optionValue="Customer_ID"
-        formControlName="CustomerId"
-        [virtualScroll]="true"
-        [virtualScrollItemSize]=30
-      >
-        <ng-template let-AB pTemplate="item">
-          <div class="flex align-items-center gap-2">
-            <div>{{ AB.Company_Name }}</div>
-          </div>
-        </ng-template>
-      </p-dropdown>
-    </div>
-    <div class="col-md-2">
-      <button
-        type="submit"
-        class="btn btn-sm theme-btn w-100"
-        [disabled]="dateForm.invalid"
-      >
-        <i class="pi pi-download me-1"></i> Load
-      </button>
-      
-    </div>
-    <div class="col-md-2">
-      <div class="d-flex align-items-center">
-        <button
-          *ngIf="insertPermissions"
-          class="btn theme-btn"
-          style="color: white"
-          routerLink="/generate-customers"
-          target="_blank"
-        >
-          <i class="fas fa-plus"></i>&nbsp;Create New
-        </button>
-
-     
-      </div>
-      
-    </div>
-  </form>
-  <div class="shadow-sm p-2">
-    
-    <p-table
-      *ngIf="tableVisible"
-      #dt
-      [value]="allCustomers"
-      [paginator]="true"
-      [rows]="10"
-      [responsive]="true"
-      [showCurrentPageReport]="true"
-      [globalFilterFields]="[
-        'Company_Name',
-        'Contact_Name',
-        'Customer_Address',
-        'Contact_Title',
-        'UserName',
-        'Phone_No',
-        'Email',
-        'Created_By',
-        'Created_At',
-        'Status',
-        'Updated_By',
-        'Updated_At'
-      ]"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+  <div class="card-body">
+    <form
+      [formGroup]="dateForm"
+      class="row p-3 shadow-sm g-3 align-items-end mb-3"
+      (ngSubmit)="loadAllCustomers()"
     >
-      <ng-template pTemplate="caption">
-        <div class="table-toolbar">
-          <span class="p-input-icon-left">
-            <i class="pi pi-search"></i>
-            <input
-              pInputText
-              type="text"
-              (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-              placeholder="Global Search"
-            />
-          </span>
-        </div>
-      </ng-template>
-<div class="m-t p-2">
-  <div class="card shadow-sm">
-    <div class="card-header theme-bg">
-      <h1 class="">ALL Customers List</h1>
-    </div>
-    <div class="card-body">
-      <form
-        [formGroup]="dateForm"
-        class="row p-3 shadow-sm g-3 align-items-end mb-3"
-        (ngSubmit)="loadAllCustomers()"
-      >
-        <div class="col-md-3" *ngIf="SuperiorList">
-          <label>Superior Name <span>*</span></label>
-          <p-dropdown
-            [style]="{ width: '100%' }"
-            class="p-0"
-            [options]="SuperiorList"
-            optionLabel="UserName"
-            [filter]="true"
-            filterBy="UserName"
-            [showClear]="true"
-            styleClass="listBottom"
-            placeholder="Please Select"
-            optionValue="User_ID"
-            formControlName="SuperioId"
-            (onChange)="getCustomerList()"
-          >
-            <ng-template let-AB pTemplate="item">
-              <div class="flex align-items-center gap-2">
-                <div>{{ AB.UserName }}</div>
-              </div>
-            </ng-template>
-          </p-dropdown>
-        </div>
-        <div class="col-md-3">
-          <label>Customer Name <span>*</span></label>
-          <p-dropdown
-            [style]="{ width: '100%' }"
-            class="p-0"
-            [options]="CustomerList"
-            optionLabel="Company_Name"
-            [filter]="true"
-            filterBy="Company_Name"
-            [showClear]="true"
-            styleClass="listBottom"
-            placeholder="Please Select"
-            optionValue="Customer_ID"
-            formControlName="CustomerId"
-            [virtualScroll]="true"
-            [virtualScrollItemSize]="30"
-          >
-            <ng-template let-AB pTemplate="item">
-              <div class="flex align-items-center gap-2">
-                <div>{{ AB.Company_Name }}</div>
-              </div>
-            </ng-template>
-          </p-dropdown>
-        </div>
-        <div class="col-md-2">
-          <button
-            type="submit"
-            class="btn theme-btn w-100"
-            [disabled]="dateForm.invalid"
-          >
-            <i class="pi pi-download me-1"></i> Load
-          </button>
-        </div>
-        <div class="col-md-2">
-          <div class="d-flex align-items-center">
-            <button
-              *ngIf="insertPermissions"
-              class="btn theme-btn"
-              style="color: white"
-              routerLink="/generate-customers"
-              target="_blank"
-            >
-              <i class="fas fa-plus"></i>&nbsp;Create New
-            </button>
-          </div>
-        </div>
-      </form>
-      <div class="shadow-sm p-2">
-        <button
-          type="button"
-          class="btn btn-outline-success bg-gradient-warning btn-sm mr-2"
-          (click)="printCustomerReport()"
+      <div class="col-md-3" *ngIf="SuperiorList">
+        <label>Superior Name <span>*</span></label>
+        <p-dropdown
+          [style]="{ width: '100%' }"
+          class="p-0"
+          [options]="SuperiorList"
+          optionLabel="UserName"
+          [filter]="true"
+          filterBy="UserName"
+          [showClear]="true"
+          styleClass="listBottom"
+          placeholder="Please Select"
+          optionValue="User_ID"
+          formControlName="SuperioId"
+          (onChange)="getCustomerList()"
         >
-          <i class="fas fa-file-print"></i>&nbsp;Print
-        </button>
-        <p-table
-          *ngIf="tableVisible"
-          #dt
-          [value]="allCustomers"
-          [paginator]="true"
-          [rows]="10"
-          [responsive]="true"
-          [showCurrentPageReport]="true"
-          [globalFilterFields]="[
-            'Company_Name',
-            'Contact_Name',
-            'Customer_Address',
-            'Contact_Title',
-            'UserName',
-            'Phone_No',
-            'Email',
-            'Created_By',
-            'Created_At',
-            'Status',
-            'Updated_By',
-            'Updated_At'
-          ]"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-        >
-          <ng-template pTemplate="caption">
-            <div class="table-toolbar">
-              <span class="p-input-icon-left">
-                <i class="pi pi-search"></i>
-                <input
-                  pInputText
-                  type="text"
-                  (input)="
-                    dt.filterGlobal($any($event.target).value, 'contains')
-                  "
-                  placeholder="Global Search"
-                />
-              </span>
+          <ng-template let-AB pTemplate="item">
+            <div class="flex align-items-center gap-2">
+              <div>{{ AB.UserName }}</div>
             </div>
           </ng-template>
+        </p-dropdown>
+      </div>
+      <div class="col-md-3">
+        <label>Customer Name <span>*</span></label>
+        <p-dropdown
+          [style]="{ width: '100%' }"
+          class="p-0"
+          [options]="CustomerList"
+          optionLabel="Company_Name"
+          [filter]="true"
+          filterBy="Company_Name"
+          [showClear]="true"
+          styleClass="listBottom"
+          placeholder="Please Select"
+          optionValue="Customer_ID"
+          formControlName="CustomerId"
+          [virtualScroll]="true"
+          [virtualScrollItemSize]="30"
+        >
+          <ng-template let-AB pTemplate="item">
+            <div class="flex align-items-center gap-2">
+              <div>{{ AB.Company_Name }}</div>
+            </div>
+          </ng-template>
+        </p-dropdown>
+      </div>
+      <div class="col-md-2">
+        <button
+          type="submit"
+          class="btn btn-sm theme-btn w-100"
+          [disabled]="dateForm.invalid"
+        >
+          <i class="pi pi-download me-1"></i> Load
+        </button>
+      </div>
+      <div class="col-md-2">
+        <div class="d-flex align-items-center">
+          <button
+            *ngIf="insertPermissions"
+            class="btn theme-btn"
+            style="color: white"
+            routerLink="/generate-customers"
+            target="_blank"
+          >
+            <i class="fas fa-plus"></i>&nbsp;Create New
+          </button>
+        </div>
+      </div>
+    </form>
 
-      <ng-template pTemplate="header">
-        <tr>
-          <th class="text-center">Serial No</th>
-          <th class="text-center">Customer Name</th>
-          <th class="text-center">Contact Person</th>
-          <th class="text-center">Customer Address</th>
-          <th class="text-center">Designation</th>
-          <th class="text-center">Group Head</th>
-          <th class="text-center">Phone Number</th>
-          <th class="text-center">E-mail Address</th>
-          <!-- <th class="text-center">Created By</th>
-          <th class="text-center">Created Date</th>
-          <th class="text-center">Status</th>
-          <th class="text-center">Approved By</th>
-          <th class="text-center">Approved Date</th> -->
-          <th class="text-center">Action</th>
-        </tr>
-      </ng-template>
+    <div class="shadow-sm p-2">
+      <button
+        type="button"
+        class="btn btn-outline-success bg-gradient-warning btn-sm mr-2"
+        (click)="printDialog()"
+      >
+        <i class="fas fa-file-print"></i>&nbsp;Print
+      </button>
+      <p-table
+        *ngIf="tableVisible"
+        #dt
+        [value]="allCustomers"
+        [paginator]="true"
+        [rows]="10"
+        [responsive]="true"
+        [showCurrentPageReport]="true"
+        [globalFilterFields]="[
+          'Company_Name',
+          'Contact_Name',
+          'Customer_Address',
+          'Contact_Title',
+          'UserName',
+          'Phone_No',
+          'Email',
+          'Created_By',
+          'Created_At',
+          'Status',
+          'Updated_By',
+          'Updated_At',
+        ]"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      >
+        <ng-template pTemplate="caption">
+          <div class="table-toolbar">
+            <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                placeholder="Global Search"
+              />
+            </span>
+          </div>
+        </ng-template>
 
-      <ng-template pTemplate="body" let-CustomersLIst let-i="rowIndex">
-        <tr>
-          <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
-          <td class="text-start">{{ CustomersLIst.Company_Name }}</td>
-          <td class="text-start">{{ CustomersLIst.Contact_Name }}</td>
-          <td class="text-start">{{ CustomersLIst.Customer_Address }}</td>
-          <td class="text-start">{{ CustomersLIst.Contact_Title }}</td>
-          <td class="text-start">{{ CustomersLIst.UserName }}</td>
-          <td class="text-start">{{ CustomersLIst.Phone_No }}</td>
-          <td class="text-start">{{ CustomersLIst.Email }}</td>
-          <!-- <td class="text-start">{{ CustomersLIst.CreatedBy }}</td>
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="text-center">Serial No</th>
+            <th class="text-center">Customer Name</th>
+            <th class="text-center">Contact Person</th>
+            <th class="text-center">Customer Address</th>
+            <th class="text-center">Designation</th>
+            <th class="text-center">Group Head</th>
+            <th class="text-center">Phone Number</th>
+            <th class="text-center">E-mail Address</th>
+            <th class="text-center">Created By</th>
+            <th class="text-center">Created At</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Approved By</th>
+            <th class="text-center">Approved Date</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-allCustomers let-i="rowIndex">
+          <tr>
+            <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
+            <td class="text-start">{{ allCustomers.Company_Name }}</td>
+            <td class="text-start">{{ allCustomers.Contact_Name }}</td>
+            <td class="text-start">
+              {{ allCustomers.Customer_Address }}
+            </td>
+            <td class="text-start">
+              {{ allCustomers.Contact_Title }}
+            </td>
+            <td class="text-start">{{ allCustomers.UserName }}</td>
+            <td class="text-start">{{ allCustomers.Phone_No }}</td>
+            <td class="text-start">{{ allCustomers.Email }}</td>
+            <td class="text-start">{{ allCustomers.CreatedBy }}</td>
           <td class="text-center">
-            {{ CustomersLIst.Created_At | date : "dd-MMM-yyyy" }}
+            {{ allCustomers.Created_At | date : "dd-MMM-yyyy" }}
           </td>
-          <td class="text-start">{{ CustomersLIst.Status }}</td>
-          <td class="text-center">{{ CustomersLIst.ApprovedBy }}</td>
-          <td class="text-center">{{ CustomersLIst.ApprovedDate | date : "dd-MMM-yyyy" }}</td> -->
+          <td class="text-start">{{ allCustomers.Status }}</td>
+          <td class="text-center">{{ allCustomers.ApprovedBy }}</td>
+          <td class="text-center">{{ allCustomers.ApprovedDate | date : "dd-MMM-yyyy" }}</td>
 
-
-          <td class="d-flex gap-2 justify-content-center">
-            <a *ngIf="updatePermissions" class="btn bg-gradient-cyan btn-xs mr-2" target="_blank" title="Edit" [routerLink]="['/generate-customers']"
-              [queryParams]="{Customer_Id:CustomersLIst.Customer_ID}"><i class="fa fa-edit" ></i></a> 
-            <button *ngIf="deletePermissions" class="btn btn-danger btn-sm d-inline-flex align-items-center" (click)="onDelete(CustomersLIst)" title="Delete" aria-label="Delete">
+            <td class="d-flex gap-2 justify-content-center">
+              <a
+                *ngIf="updatePermissions"
+                class="btn bg-gradient-cyan btn-xs mr-2"
+                target="_blank"
+                title="Edit"
+                [routerLink]="['/generate-customers']"
+                [queryParams]="{
+                  Customer_Id: allCustomers.Customer_ID,
+                }"
+                ><i class="fa fa-edit"></i
+              ></a>
+              <button
+                *ngIf="deletePermissions"
+                class="btn btn-danger btn-sm d-inline-flex align-items-center"
+                (click)="onDelete(allCustomers)"
+                title="Delete"
+                aria-label="Delete"
+              >
                 <i class="pi pi-trash me-1"></i>
-            </button>
-            <!-- ✅ call the handler that opens the dialog -->
-            <button
-              class="btn btn-info btn-sm text-white d-inline-flex align-items-center"
-              (click)="onDetails(CustomersLIst)"
-              title="Details"
-              aria-label="Details"
-            >
-              <i class="pi pi-eye me-1"></i>
-            </button>
-          </td>
-        </tr>
-      </ng-template>
+              </button>
+              <!-- ✅ call the handler that opens the dialog -->
+              <button
+                class="btn btn-info btn-sm text-white d-inline-flex align-items-center"
+                (click)="onDetails(allCustomers)"
+                title="Details"
+                aria-label="Details"
+              >
+                <i class="pi pi-eye me-1"></i>
+              </button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
 
-    </p-table>
-
-    <!-- Details dialog -->
-    <p-dialog
-      header="Detail"
-      [(visible)]="isDetailsVisible"
-      [modal]="true"
-      [closable]="true"
-      [style]="{ width: '70vw' }"
-      (onHide)="detailsData = null"
-    >
-      <div *ngIf="detailsData">
-        <h2>Company Name - {{ detailsData.Company_Name }}</h2>
-        <p>Group head: {{ detailsData.Group_head }}</p>
-        <p>Contact Person: {{ detailsData.Contact_Name }}</p>
-        <p>Company Info: {{ detailsData.company_info }}</p>
-        <p>Customer Address: {{ detailsData.Customer_Address }}</p>
-        <p>City: {{ detailsData.City }}</p>
-        <p>Postal Code: {{ detailsData.Postal_Code }}</p>
-        <p>Country: {{ detailsData.Country }}</p>
-        <p>Designation: {{ detailsData.Contact_Title }}</p>
-        <p>Phone No: {{ detailsData.Phone_No }}</p>
-        <p>FAX No: {{ detailsData.FAX_No }}</p>
-        <p>Email: {{ detailsData.Email }}</p>
-        <p>Notes: {{ detailsData.Notes }}</p>
-        <p>Created By: {{ detailsData.CreatedBy }}</p>
-        <p>Created At: {{ detailsData.Created_At | date : "dd-MMM-yyyy" }}</p>
-        <p>status: {{ detailsData.status }}</p>
-        <p>Approved By: {{ detailsData.ApprovedBy }}</p>
-        <p>Approved Date: {{ detailsData.ApprovedDate | date : "dd-MMM-yyyy" }}</p>
-        <p>Uppdated By: {{ detailsData.UppdatedBy }}</p>
-        <p>Updated At: {{ detailsData.Updated_At | date : "dd-MMM-yyyy" }}</p>
-
-      </div>
-    </p-dialog>
-              
-      </div>
+      <!-- Details dialog -->
+      <p-dialog
+        header="Detail"
+        [(visible)]="isDetailsVisible"
+        [modal]="true"
+        [closable]="true"
+        [style]="{ width: '70vw' }"
+        (onHide)="detailsData = null"
+      >
+        <div *ngIf="detailsData">
+          <h2>Company Name - {{ detailsData.Company_Name }}</h2>
+          <p>Group head: {{ detailsData.Group_head }}</p>
+          <p>Contact Person: {{ detailsData.Contact_Name }}</p>
+          <p>Company Info: {{ detailsData.company_info }}</p>
+          <p>Customer Address: {{ detailsData.Customer_Address }}</p>
+          <p>City: {{ detailsData.City }}</p>
+          <p>Postal Code: {{ detailsData.Postal_Code }}</p>
+          <p>Country: {{ detailsData.Country }}</p>
+          <p>Designation: {{ detailsData.Contact_Title }}</p>
+          <p>Phone No: {{ detailsData.Phone_No }}</p>
+          <p>FAX No: {{ detailsData.FAX_No }}</p>
+          <p>Email: {{ detailsData.Email }}</p>
+          <p>Notes: {{ detailsData.Notes }}</p>
+          <p>Created By: {{ detailsData.CreatedBy }}</p>
+          <p>
+            Created At:
+            {{ detailsData.Created_At | date: "dd-MMM-yyyy" }}
+          </p>
+          <p>status: {{ detailsData.status }}</p>
+          <p>Approved By: {{ detailsData.ApprovedBy }}</p>
+          <p>
+            Approved Date:
+            {{ detailsData.ApprovedDate | date: "dd-MMM-yyyy" }}
+          </p>
+          <p>Uppdated By: {{ detailsData.UppdatedBy }}</p>
+          <p>
+            Updated At:
+            {{ detailsData.Updated_At | date: "dd-MMM-yyyy" }}
+          </p>
+        </div>
+      </p-dialog>
     </div>
   </div>
 </div>

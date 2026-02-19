@@ -56,12 +56,12 @@ export class GeneratePiComponent implements OnInit {
     private service: MasterEntryService,
     private des: DoubleMasterEntryService,
     private gs: GlobalServiceService,
-    private fb: FormBuilder
-  ) { }
+    private fb: FormBuilder,
+  ) {}
 
   ngOnInit(): void {
     console.log(this.tempPI);
-    
+
     this.PageTitle = 'Generate LC PI';
     this.GTQTY = 0;
     this.GTAMNT = 0;
@@ -81,7 +81,7 @@ export class GeneratePiComponent implements OnInit {
         if (this.Formgroup) {
           this.Formgroup.controls['PINo'].setValue(this.tempPI);
         }
-      } catch (e) { }
+      } catch (e) {}
     }
   }
 
@@ -127,6 +127,7 @@ export class GeneratePiComponent implements OnInit {
           if (master) {
             // set PINo and other master form controls if present
             this.PINo = master.PINo || master.PINO || master.PI_No || this.PINo;
+            this.Formgroup.controls['Customer_Bank_ID'].setValue(master.Customer_Bank_ID);
             try {
               // patch known fields into the form
               const keys = Object.keys(master);
@@ -135,7 +136,7 @@ export class GeneratePiComponent implements OnInit {
                   (this.Formgroup.controls as any)[k].setValue(master[k]);
                 }
               }
-            } catch (e) { }
+            } catch (e) {}
           }
 
           // Details table: try Tables2, Tables1 (if it's the details), or Tables3
@@ -177,7 +178,7 @@ export class GeneratePiComponent implements OnInit {
             } catch (tt) {
               /* ignore */
             }
-          } catch (e) { }
+          } catch (e) {}
         } else {
           if (res.msg === 'Invalid Token') this.gs.Logout();
         }
@@ -201,7 +202,7 @@ export class GeneratePiComponent implements OnInit {
     } catch (e) {
       try {
         localStorage.removeItem('IMS_temp_open_pi');
-      } catch (_) { }
+      } catch (_) {}
       return null;
     }
   }
@@ -218,10 +219,10 @@ export class GeneratePiComponent implements OnInit {
 
     this.Formgroup.get('Customer_ID')?.valueChanges.subscribe((value) => {
       let contactPerson = this.ConsigneeList.filter(
-        (x: any) => x.Customer_ID == value
+        (x: any) => x.Customer_ID == value,
       )[0];
       this.Formgroup.controls['Contact_Person'].setValue(
-        contactPerson.Contact_Name
+        contactPerson.Contact_Name,
       );
     });
   }
@@ -271,7 +272,6 @@ export class GeneratePiComponent implements OnInit {
       Superior_ID: [''],
       LC_ID: [''],
       Customer_ID: [''],
-      Currency_ID: [''],
       IsMPI: [0],
       CR_ID: [''],
       LastUpdateDate: [new Date()],
@@ -349,7 +349,7 @@ export class GeneratePiComponent implements OnInit {
       Swal.fire(
         'Info',
         'Quantity can not be greater than Delivered Quantity (' + dQty + ')',
-        'info'
+        'info',
       );
       itemrow.controls['Quantity'].setValue(0);
       itemrow.controls['Total_Amount'].setValue(0);
@@ -368,7 +368,7 @@ export class GeneratePiComponent implements OnInit {
     this.GrandTotalQty = 0;
     this.GrandTotalAmount = 0;
     const itemArray = this.Formgroup.get('ItemArray') as FormArray;
-    itemArray.controls.forEach(control => {
+    itemArray.controls.forEach((control) => {
       this.GTQTY += control.value.Quantity;
       this.GTAMNT += control.value.Total_Amount;
       this.GrandTotalQty += control.value.Quantity;
@@ -443,6 +443,8 @@ export class GeneratePiComponent implements OnInit {
 
         this.PINo = DataSet.Tables30[0].PINO;
 
+        console.log(DataSet);
+
         if (this.SetDDL) {
           this.SetDDLDefaultValue();
         }
@@ -462,7 +464,6 @@ export class GeneratePiComponent implements OnInit {
   }
 
   Save(): void {
-
     const requiredFields = [
       { key: 'Consignee_Initial', label: 'Consignee Initial' },
       { key: 'PINo', label: 'PI No' },
@@ -479,7 +480,6 @@ export class GeneratePiComponent implements OnInit {
       { key: 'Delivery_Address', label: 'Delivery Address' },
       { key: 'Style', label: 'Style' },
       { key: 'Good_Description', label: 'Goods Description' },
-      { key: 'Currency_ID', label: 'Currency' },
       { key: 'Delivery_Condition_ID', label: 'Delivery Condition' },
       { key: 'Shipment_Condition_ID', label: 'Partial Shipment' },
       { key: 'Price_Term_ID', label: 'Price Terms' },
@@ -487,13 +487,18 @@ export class GeneratePiComponent implements OnInit {
       { key: 'Loading_Port', label: 'Port Of Loading' },
       { key: 'Destination_Port', label: 'Port Of Destination' },
       { key: 'Force_Majeure_ID', label: 'Force Majeure' },
-      { key: 'Arbitration_ID', label: 'Arbitration' }
+      { key: 'Arbitration_ID', label: 'Arbitration' },
     ];
 
     let missingFields: string[] = [];
-    requiredFields.forEach(field => {
+    requiredFields.forEach((field) => {
       const value = this.Formgroup.controls[field.key]?.value;
-      if (value === null || value === undefined || value === '' || value === 0) {
+      if (
+        value === null ||
+        value === undefined ||
+        value === '' ||
+        value === 0
+      ) {
         missingFields.push(field.label);
       }
     });
@@ -513,9 +518,9 @@ export class GeneratePiComponent implements OnInit {
           { key: 'Unit_ID', label: 'Unit' },
           { key: 'Unit_Price', label: 'Unit Price' },
           { key: 'CommissionUnit', label: 'Prod. Cost Unit' },
-          { key: 'Item_ID', label: 'A. A.' }
+          { key: 'Item_ID', label: 'A. A.' },
         ];
-        itemRequired.forEach(col => {
+        itemRequired.forEach((col) => {
           const val = row.get(col.key)?.value;
           if (val === null || val === undefined || val === '' || val === 0) {
             missingFields.push(`Row ${idx + 1}: ${col.label}`);
@@ -528,15 +533,22 @@ export class GeneratePiComponent implements OnInit {
       Swal.fire({
         icon: 'warning',
         title: 'Validation Error',
-        html: 'Please fill the following fields:<br><ul style="text-align:left">' + missingFields.map(f => `<li>${f}</li>`).join('') + '</ul>'
+        html:
+          'Please fill the following fields:<br><ul style="text-align:left">' +
+          missingFields.map((f) => `<li>${f}</li>`).join('') +
+          '</ul>',
       });
       return;
     }
 
     const consigneeValue = this.Formgroup.controls['Customer_ID'].value;
-    const consignee = this.ConsigneeList && this.ConsigneeList.length > 0
-      ? this.ConsigneeList.find((x: any) => x.Customer_ID == consigneeValue || x.Consignee == consigneeValue)
-      : null;
+    const consignee =
+      this.ConsigneeList && this.ConsigneeList.length > 0
+        ? this.ConsigneeList.find(
+            (x: any) =>
+              x.Customer_ID == consigneeValue || x.Consignee == consigneeValue,
+          )
+        : null;
     const roleId = this.gs.getSessionData('roleId');
     const userId = this.gs.getSessionData('userId');
     if (consignee) {
@@ -553,7 +565,8 @@ export class GeneratePiComponent implements OnInit {
       PINo: this.Formgroup.controls['PINo'].value,
       Consignee_Initial: this.Formgroup.controls['Consignee_Initial'].value,
       Date: this.Formgroup.controls['Date'].value,
-      Beneficiary_Account_ID: this.Formgroup.controls['Beneficiary_Account_ID'].value,
+      Beneficiary_Account_ID:
+        this.Formgroup.controls['Beneficiary_Account_ID'].value,
       Beneficiary_Bank_ID: this.Formgroup.controls['Beneficiary_Bank_ID'].value,
       Country_Of_Orgin_ID: this.Formgroup.controls['Country_Of_Orgin_ID'].value,
       Packing_ID: this.Formgroup.controls['Packing_ID'].value,
@@ -561,6 +574,7 @@ export class GeneratePiComponent implements OnInit {
       Payment_Term_ID: this.Formgroup.controls['Payment_Term_ID'].value,
       Consignee: this.Formgroup.controls['Consignee'].value,
       Contact_Person: this.Formgroup.controls['Contact_Person'].value,
+      Buyer_ID: this.Formgroup.controls['Buyer_ID'].value,
       Buyer_Name: this.Formgroup.controls['Buyer_Name'].value,
       Delivery_Address: this.Formgroup.controls['Delivery_Address'].value,
       Style: this.Formgroup.controls['Style'].value,
@@ -581,11 +595,11 @@ export class GeneratePiComponent implements OnInit {
       User_ID: this.Formgroup.controls['User_ID'].value,
       Superior_ID: this.Formgroup.controls['Superior_ID'].value,
       Customer_ID: this.Formgroup.controls['Customer_ID'].value,
-      Currency_ID: this.Formgroup.controls['Currency_ID'].value,
       IsMPI: this.Formgroup.controls['IsMPI'].value,
       LastUpdateDate: this.Formgroup.controls['LastUpdateDate'].value,
       ExpireDate: this.Formgroup.controls['ExpireDate'].value,
-      Terms_of_Delivery_ID: this.Formgroup.controls['Terms_of_Delivery_ID'].value,
+      Terms_of_Delivery_ID:
+        this.Formgroup.controls['Terms_of_Delivery_ID'].value,
       IsBuyerMandatory: this.Formgroup.controls['IsBuyerMandatory'].value,
       Customer_Bank_ID: this.Formgroup.controls['Customer_Bank_ID'].value,
     };
@@ -597,7 +611,6 @@ export class GeneratePiComponent implements OnInit {
     let details: any[] = JSON.parse(JSON.stringify(detailsRaw));
 
     details.forEach((element: any) => {
-
       if (
         element &&
         Object.prototype.hasOwnProperty.call(element, 'PI_Detail_ID')
@@ -609,37 +622,37 @@ export class GeneratePiComponent implements OnInit {
         }
       }
 
-
       if (element.Unit_ID == 2) {
         element.Quantity_In_Meter = element.Quantity;
         element.Quantity = element.Quantity_In_Meter * 1.09361;
       }
     });
 
-    this.service.SaveDataMasterDetails(details,
-      "tbl_pi_detail",
-      model,
-      "tbl_pi_master",
-      "PI_Master_ID",
-      "PI_Master_ID",
-      "tbl_pi_master",
-      "PI_Master_ID"
-    ).subscribe(res => {
-      if (res.messageType == 'Success' && res.status) {
-        Swal.fire(res.messageType, res.message, 'success').then(() => {
-          this.ngOnInit();
-        });
-
-      } else {
-        if (!res.isAuthorized) {
-          this.gs.Logout();
+    this.service
+      .SaveDataMasterDetails(
+        details,
+        'tbl_pi_detail',
+        model,
+        'tbl_pi_master',
+        'PI_Master_ID',
+        'PI_Master_ID',
+        'tbl_pi_master',
+        'PI_Master_ID',
+      )
+      .subscribe((res) => {
+        if (res.messageType == 'Success' && res.status) {
+          Swal.fire(res.messageType, res.message, 'success').then(() => {
+            this.ngOnInit();
+          });
         } else {
-          Swal.fire(res.messageType, res.message, 'info');
+          if (!res.isAuthorized) {
+            this.gs.Logout();
+          } else {
+            Swal.fire(res.messageType, res.message, 'info');
+          }
         }
-      }
-    });
+      });
   }
-
 
   // Determine whether the form is editing an existing PI (true) or creating a new one (false)
   isEditMode(): boolean {
@@ -651,9 +664,6 @@ export class GeneratePiComponent implements OnInit {
       return !!this.tempPI;
     }
   }
-
-
-
 
   // Update behaves similarly to Save but asks for user confirmation and is used when editing
   Update(): void {
@@ -685,6 +695,7 @@ export class GeneratePiComponent implements OnInit {
           Payment_Term_ID: this.Formgroup.controls['Payment_Term_ID'].value,
           Consignee: this.Formgroup.controls['Consignee'].value,
           Contact_Person: this.Formgroup.controls['Contact_Person'].value,
+          Buyer_ID: this.Formgroup.controls['Buyer_ID'].value,
           Buyer_Name: this.Formgroup.controls['Buyer_Name'].value,
           Delivery_Address: this.Formgroup.controls['Delivery_Address'].value,
           Style: this.Formgroup.controls['Style'].value,
@@ -739,7 +750,7 @@ export class GeneratePiComponent implements OnInit {
             'PI_Master_ID',
             '',
             '',
-            whereParams
+            whereParams,
           )
           .subscribe((res) => {
             if (res.messageType == 'Success' && res.status) {
@@ -758,4 +769,3 @@ export class GeneratePiComponent implements OnInit {
     });
   }
 }
-

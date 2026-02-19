@@ -83,14 +83,15 @@ public class ReportService : IReportService
     }
 
 
-    public async Task<DataSet> TaskDetailsReport(string fromDate, string toDate)
+    public async Task<DataSet> TaskDetailsReport(string fromDate, string toDate, string userId)
     {
         try
         {
             ReportsParams param = new ReportsParams
             {
                 fromDate = fromDate,
-                toDate = toDate
+                toDate = toDate,
+                userId = userId
 
             };
 
@@ -354,12 +355,12 @@ public class ReportService : IReportService
         }
     }
 
-    public async Task<DataSet> TaskMonthlyReport(string fromDate, string toDate)
+    public async Task<DataSet> TaskMonthlyReport(string fromDate, string toDate, string userId)
     {
         try
         {
 
-            return await _reportRepository.TaskMonthlyReport(fromDate, toDate);
+            return await _reportRepository.TaskMonthlyReport(fromDate, toDate,userId);
         }
         catch (Exception ex)
         {
@@ -380,12 +381,12 @@ public class ReportService : IReportService
         }
     }
 
-    public async Task<DataSet> TaskCustomerVisitReport(string fromDate, string toDate)
+    public async Task<DataSet> TaskCustomerVisitReport(string fromDate, string toDate, string userId)
     {
         try
         {
 
-            return await _reportRepository.TaskCustomerVisitReport(fromDate, toDate);
+            return await _reportRepository.TaskCustomerVisitReport(fromDate, toDate,userId);
         }
         catch (Exception ex)
         {

@@ -59,6 +59,7 @@ export class AllTaskReportComponent {
   getDataModel: GetDataModel = new GetDataModel();
   detailsData: any;
   isDetailsVisible: boolean = false;
+  userId:any = '';
 
   constructor(
     private fb: FormBuilder,
@@ -75,6 +76,7 @@ export class AllTaskReportComponent {
     this.updatePermissions = permissions.updatePermissions;
     this.deletePermissions = permissions.deletePermissions;
     this.printPermissions = permissions.printPermissions;
+    this.userId = this.gs.getSessionData('userId')
 
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
@@ -98,6 +100,7 @@ export class AllTaskReportComponent {
     param.parameters = {
       FromDate: fromDate,
       ToDate: toDate,
+      UserId:this.userId,
       PageIndex: this.pageIndex,
       PageSize: this.pageSize,
     };

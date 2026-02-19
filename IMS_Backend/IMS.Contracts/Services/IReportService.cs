@@ -8,7 +8,7 @@ namespace Boilerplate.Contracts.Services;
 public interface IReportService
 {
     public Task<DataSet> SampleRequestReport(string fromDate, string toDate, string requestStatus,string UserID);
-    public Task<DataSet> TaskDetailsReport(string fromDate, string toDate);
+    public Task<DataSet> TaskDetailsReport(string fromDate, string toDate, string userId);
     public Task<DataSet> CustomerReport(string Superior_Id, string Customer_Id, string Status, string SentBy);
     public Task<DataSet> ProformaInvoiceReport(int PI_Master_ID);
     public Task<DataSet> CommercialInvoiceReports(string commercialInvoiceNo, string reportType);
@@ -29,8 +29,8 @@ public interface IReportService
     public Task<DataSet> FGSendAndReceiveReport(string InvoiceNo,string fromDate, string toDate);
     public Task<DataSet> RMPendingDetailsReport(string id);
     public Task<DataSet> TaskMonthlyDetailsReport(string id);
-    public Task<DataSet> TaskMonthlyReport(string fromDate, string toDate);
+    public Task<DataSet> TaskMonthlyReport(string fromDate, string toDate,string userId);
     public Task<DataSet> TaskCustomerVisitDetailsReport(string id);
-    public Task<DataSet> TaskCustomerVisitReport(string fromDate, string toDate);
+    public Task<DataSet> TaskCustomerVisitReport(string fromDate, string toDate, string userId);
     public Task<DataSet> DeliveryReport(int PI_Master_ID);
 }

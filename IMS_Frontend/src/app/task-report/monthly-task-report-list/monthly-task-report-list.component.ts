@@ -19,10 +19,10 @@ import { ReportService } from 'src/app/services/reportService/report-service.ser
 @Component({
   selector: 'app-monthly-task-report-list',
   templateUrl: './monthly-task-report-list.component.html',
-  styleUrls: ['./monthly-task-report-list.component.css']
+  styleUrls: ['./monthly-task-report-list.component.css'],
 })
 export class MonthlyTaskReportListComponent {
-pageIndex = 1;
+  pageIndex = 1;
   searchText = '';
   length = 100;
   pageSize = 10;
@@ -59,6 +59,7 @@ pageIndex = 1;
   getDataModel: GetDataModel = new GetDataModel();
   detailsData: any;
   isDetailsVisible: boolean = false;
+  userId: any = '';
 
   constructor(
     private fb: FormBuilder,
@@ -67,7 +68,7 @@ pageIndex = 1;
     private pagesComponent: PagesComponent,
     private masterEntryService: MasterEntryService,
     private title: Title,
-    private reportService: ReportService
+    private reportService: ReportService,
   ) {}
   ngOnInit(): void {
     var permissions = this.gs.CheckUserPermission('All Monthly Task');
@@ -79,8 +80,13 @@ pageIndex = 1;
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
     this.title.setTitle('All Monthly Task');
-    this.SearchForm.get('fromDate')?.setValue(new Date().toISOString().split('T')[0]);
-    this.SearchForm.get('toDate')?.setValue(new Date().toISOString().split('T')[0]);
+    this.SearchForm.get('fromDate')?.setValue(
+      new Date().toISOString().split('T')[0],
+    );
+    this.SearchForm.get('toDate')?.setValue(
+      new Date().toISOString().split('T')[0],
+    );
+    this.userId = window.localStorage.getItem('userId') || '';
   }
   initForm(): void {
     this.SearchForm = this.fb.group({
@@ -98,6 +104,7 @@ pageIndex = 1;
     param.parameters = {
       FromDate: fromDate,
       ToDate: toDate,
+      UserId: this.userId,
       PageIndex: this.pageIndex,
       PageSize: this.pageSize,
     };

@@ -8,6 +8,7 @@ public interface IUserRepository
     Task<bool> ActiveInactive(string userId, bool isActive);
     Task<bool> ResetPassword(string passwordhash, string userId);
     Task<bool> CheckPassword(string passwordhash);
+    Task<bool> CheckUser(UserCreate user);
     Task<DataSet> GetUserBasicData();
     Task<bool> SaveUser(UserCreate user,string UserName);
     Task<bool> DeleteUser(string userId);

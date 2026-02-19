@@ -90,7 +90,7 @@ export class GenerateMonthlyTaskComponent implements OnInit {
       FromDate: [''],
       ToDate: [''],
       TaskNo: [taskNo, [Validators.required]],
-      Date: ['', [Validators.required]],
+      Date: [''],
       items: this.fb.array([], { validators: [this.rowsCompleteValidator()] }),
     });
   }
@@ -138,6 +138,7 @@ export class GenerateMonthlyTaskComponent implements OnInit {
     const row = this.fb.group({
       CustomerName: this.fb.control<number | null>(null, Validators.required),
       Buying_Concern: this.fb.control<string | null>(null),
+      Concern_Factory: this.fb.control<string | null>(null),
       TeamSize: this.fb.control<number | null>(null),
       OrderSeason: this.fb.control<string | null>('N/A'),
       Description: this.fb.control<string | null>(null),
@@ -145,6 +146,8 @@ export class GenerateMonthlyTaskComponent implements OnInit {
       Visit2: this.fb.control<string | null>(null),
       Visit3: this.fb.control<string | null>(null),
       OrderSummary: this.fb.control<string | null>(null),
+      CM_Summary: this.fb.control<string | null>(null),
+      Net_Sales_Summary: this.fb.control<string | null>(null),
       SampleSummary: this.fb.control<string | null>(null),
       NewArticleSummary: this.fb.control<string | null>(null),
     });
@@ -231,7 +234,7 @@ export class GenerateMonthlyTaskComponent implements OnInit {
     const masterRow = {
       User_ID: this.userId,
       Superior_ID: fv.superiorId,
-      Date: fv.Date,
+      Date: new Date().toISOString(),
       Task_Report_Code: fv.TaskNo,
     };
 
@@ -253,6 +256,7 @@ export class GenerateMonthlyTaskComponent implements OnInit {
         Customer_ID: custId,
         Customer_name: customerDisplay,
         Buying_Concern: i.Buying_Concern,
+        Concern_Factory: i.Concern_Factory,
         TeamSize: i.TeamSize,
         OrderSeason: i.OrderSeason,
         Description: i.Description,
@@ -260,6 +264,8 @@ export class GenerateMonthlyTaskComponent implements OnInit {
         Visit2: i.Visit2,
         Visit3: i.Visit3,
         OrderSummary: i.OrderSummary,
+        CM_Summary: i.CM_Summary,
+        Net_Sales_Summary: i.Net_Sales_Summary,
         SampleSummary: i.SampleSummary,
         NewArticleSummary: i.NewArticleSummary,
         Task_Report_ID: '',
@@ -286,6 +292,14 @@ export class GenerateMonthlyTaskComponent implements OnInit {
             this.items.clear();
             this.taskForm.reset();
             this.addItem();
+            var userName = window.localStorage.getItem('userName');
+            const yyyymmdd = new Date()
+              .toISOString()
+              .slice(0, 10)
+              .replace(/-/g, '');
+
+            var taskNo = yyyymmdd + '-' + userName;
+            this.taskForm.controls['TaskNo'].setValue(taskNo);
           } else {
             swal.fire(
               'Task Update Failed',
@@ -354,6 +368,7 @@ export class GenerateMonthlyTaskComponent implements OnInit {
         Customer_ID: custId,
         Customer_name: customerDisplay,
         Buying_Concern: i.Buying_Concern,
+        Concern_Factory: i.Concern_Factory,
         TeamSize: i.TeamSize,
         OrderSeason: i.OrderSeason,
         Description: i.Description,
@@ -361,6 +376,8 @@ export class GenerateMonthlyTaskComponent implements OnInit {
         Visit2: i.Visit2,
         Visit3: i.Visit3,
         OrderSummary: i.OrderSummary,
+        CM_Summary: i.CM_Summary,
+        Net_Sales_Summary: i.Net_Sales_Summary,
         SampleSummary: i.SampleSummary,
         NewArticleSummary: i.NewArticleSummary,
         Task_Report_ID: '',
@@ -411,20 +428,6 @@ export class GenerateMonthlyTaskComponent implements OnInit {
       });
   }
 
-  private formatDateTime(value: any): string | null {
-    if (!value) return null;
-    const d = new Date(value);
-    if (isNaN(d.getTime())) return null;
-
-    const dd = String(d.getDate()).padStart(2, '0');
-    const mm = String(d.getMonth() + 1).padStart(2, '0');
-    const yyyy = d.getFullYear();
-    const HH = String(d.getHours()).padStart(2, '0');
-    const MM = String(d.getMinutes()).padStart(2, '0');
-    const SS = String(d.getSeconds()).padStart(2, '0');
-
-    return `${yyyy}/${mm}/${dd} ${HH}:${MM}:${SS}`;
-  }
 
   /**
    * Parse an ISO-like timestamp (e.g. '2025-02-12T15:19:25') into a local Date.
@@ -551,11 +554,14 @@ export class GenerateMonthlyTaskComponent implements OnInit {
                 CustomerName: [item.Customer_ID],
                 TeamSize: [teamSize],
                 OrderSeason: [orderSeason],
+                Concern_Factory: [item.Concern_Factory],
                 Description: [item.Description ?? item.Discussion ?? null],
                 Visit1: [item.Visit1 ?? null],
                 Visit2: [item.Visit2 ?? null],
                 Visit3: [item.Visit3 ?? null],
                 OrderSummary: [item.OrderSummary ?? null],
+                CM_Summary: [item.CM_Summary ?? null],
+                Net_Sales_Summary: [item.Net_Sales_Summary ?? null],
                 SampleSummary: [item.SampleSummary ?? item.SampleSubmit ?? null],
                 NewArticleSummary: [item.NewArticleSummary ?? null],
               })
@@ -577,12 +583,15 @@ export class GenerateMonthlyTaskComponent implements OnInit {
     
     console.log('From Date:', fromDate);
     console.log('To Date:', toDate);
+    console.log(this.userId);
+    
     
     var ProcedureData = {
       procedureName: '[usp_Task_GetCustomer]',
       parameters: {
-        FromDate: fromDate,
-        ToDate: toDate,
+        FromDate: this.formatDateTime(fromDate),
+        ToDate: this.formatDateTime(toDate),
+        UserId:this.userId
       },
     };
 
@@ -601,4 +610,20 @@ export class GenerateMonthlyTaskComponent implements OnInit {
       error: (err) => {},
     });
   }
+
+  private formatDateTime(value: any): string | null {
+    if (!value) return null;
+    const d = new Date(value);
+    if (isNaN(d.getTime())) return null;
+
+    const dd = String(d.getDate()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const yyyy = d.getFullYear();
+    const HH = String(d.getHours()).padStart(2, '0');
+    const MM = String(d.getMinutes()).padStart(2, '0');
+    const SS = String(d.getSeconds()).padStart(2, '0');
+
+    return `${mm}-${dd}-${yyyy}`;
+  }
+
 }

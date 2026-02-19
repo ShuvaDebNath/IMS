@@ -142,6 +142,7 @@
         </ng-template>
         <div *ngIf="detailsData">
           <div *ngIf="detailsData">
+            <p>TaskId: {{ detailsData[0].TaskType }}</p>
             <p>TaskId: {{ detailsData[0].Task_Report_Code }}</p>
             <p>Date: {{ detailsData[0].date }}</p>
             <p>To Mail: {{ detailsData[0].Mail_TO }}</p>
@@ -153,9 +154,11 @@
                 <th class="text-center">Task Code</th>
                 <th class="text-center">Buyer name</th>
                 <th class="text-center">Customer Name</th>
+                <th class="text-center">Article No</th>
                 <th class="text-center">Contact Person</th>
                 <th class="text-center">In Time</th>
                 <th class="text-center">Out Time</th>
+                <th class="text-center">Purpose</th>
                 <th class="text-center">Discussion</th>
                 <th class="text-center">Old/New</th>
                 <th class="text-center">Unit Price BDT</th>
@@ -178,10 +181,14 @@
                   {{ item.customer_name }}
                 </td>
                 <td class="text-center align-middle">
+                  {{ item.Article_No }}
+                </td>
+                <td class="text-center align-middle">
                   {{ item.Contact_Name }}
                 </td>
                 <td class="text-center align-middle">{{ item.InTime }}</td>
                 <td class="text-center align-middle">{{ item.OutTime }}</td>
+                <td class="text-center align-middle">{{ item.Purpose }}</td>
                 <td class="text-center align-middle">{{ item.Discussion }}</td>
                 <td class="text-center align-middle">{{ item.Type }}</td>
                 <td class="text-center align-middle">{{ item.Unit_Price_BDT }}</td>

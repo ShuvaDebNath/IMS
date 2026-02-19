@@ -97,11 +97,15 @@ namespace Boilerplate.API.Controllers
         public async Task<IActionResult> SaveUser([FromBody] UserCreate data)
         {
             
-            var isSuccess = await _createUserService.SaveUser(data, AuthUserName);
+            var isSuccess = await _createUserService.SaveUser(data, AuthUserName);           
 
-            if (isSuccess)
+            if (isSuccess=="1")
             {
                 return Ok(MessageType.SaveSuccess(data));
+            }
+            else if(isSuccess=="2")
+            {
+                return Ok(MessageType.UserExist());
             }
 
             return Ok(MessageType.ProcessError(null));

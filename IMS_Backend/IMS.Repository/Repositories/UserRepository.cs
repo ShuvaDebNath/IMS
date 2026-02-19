@@ -68,6 +68,15 @@ namespace Boilerplate.Repository.Repositories
             return dt.Rows.Count > 0;
         }
 
+        public async Task<bool> CheckUser(UserCreate asp)
+        {
+            string query = @"SELECT * FROM [dbo].[tbl_users] WHERE UserName = @UserName ";
+
+            DataTable dt = await GetDataInDataTableAsync(query, new { UserName = asp.UserName });
+
+            return dt.Rows.Count > 0;
+        }
+
         public async Task<DataSet> GetUserBasicData()
         {
             string sql = @"exec [prc_GetUserBasicData]";
