@@ -1,215 +1,346 @@
 <div class="row d-flex justify-content-center">
   <div class="m-2 p-2 shadow">
-    <div class="card ">
-      <div
-        class="card-header theme-bg text-white"
-      >
+    <div class="card">
+      <div class="card-header">
         <h2 class="p-2 font-weight-bold">
-          {{!isEdit?'Create':'Edit'}}&nbsp; User
+          {{ !isEdit ? "Create" : "Edit" }}&nbsp; User
         </h2>
       </div>
       <div class="card-body">
-        <form name="newForm" [formGroup]="Formgroup" role="form">
-          <div class="row">
-            <div class="col-md-6">
-              <label for="User_Name" class="">User Name</label>
-              <div class="">
-                <div class="form-group d-inline">
-                  <input
-                    autocomplete="off"
-                    type="text"
-                    formControlName="UserName"
-                    class="form-control"
-                    placeholder="User Name"
-                    id="User_Name"
-                    name="User_Name"
-                    value=""
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6" *ngIf="!isEdit">
-              <label for="Password" class="">Password</label>
-              <div class="">
-                <div class="form-group d-inline">
-                  <input
-                    autocomplete="off"
-                    type="password"
-                    formControlName="Password"
-                    class="form-control"
-                    placeholder="Password"
-                    id="Password"
-                    name="Password"
-                    value=""
-                  />
-                  <div *ngIf="Formgroup.get('Password')?.touched && Formgroup.get('Password')?.invalid" class="text-danger mt-1">
-                    <div *ngIf="Formgroup.get('Password')?.errors?.['required']">Password is required.</div>
-                    <div *ngIf="Formgroup.get('Password')?.errors?.['pattern']">Password must be at least 8 characters and include 1 uppercase, 1 lowercase and 1 number.</div>
+        <div class="container">
+          <form name="newForm" [formGroup]="Formgroup" role="form">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="row g-1 align-items-start">
+                  <div class="col-4 text-end fs-6 fw-bold">
+                    <label for="User_Name" class="">User Name</label>
+                  </div>
+                  <div class="col-8">
+                    <div class="form-group d-inline">
+                      <input
+                        autocomplete="off"
+                        type="text"
+                        formControlName="UserName"
+                        class="form-control"
+                        placeholder="User Name"
+                        id="User_Name"
+                        name="User_Name"
+                        value=""
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-md-6">
-              <label>Role <span>*</span></label>
-              <p-dropdown
-                [style]="{'width':'100%'}"
-                class="p-0"
-                [options]="RoleList"
-                optionLabel="Role_Name"
-                [filter]="true"
-                filterBy="Role_Name"
-                [showClear]="true"
-                styleClass="listBottom"
-                placeholder="Please Select"
-                optionValue="Role_Id"
-                formControlName="Role"
-              >
-                <ng-template let-Role pTemplate="item">
-                  <div class="flex align-items-center gap-2">
-                    <div>{{ Role.Role_Name }}</div>
+            <div class="row">
+              <div class="col-md-6" *ngIf="!isEdit">
+                <div class="row g-1 align-items-start">
+                  <div class="col-4 text-end fs-6 fw-bold">
+                    <label for="Password" class="">Password</label>
                   </div>
-                </ng-template>
-              </p-dropdown>
-            </div>
-            <div class="col-md-6">
-              <label for="Superior" class="">Superior</label>
-              <p-dropdown
-                [style]="{'width':'100%'}"
-                class="p-0"
-                [options]="SuperiorList"
-                optionLabel="UserName"
-                [filter]="true"
-                filterBy="UserName"
-                [showClear]="true"
-                styleClass="listBottom"
-                placeholder="Please Select"
-                optionValue="User_ID"
-                formControlName="Superior"
-              >
-                <ng-template let-User pTemplate="item">
-                  <div class="flex align-items-center gap-2">
-                    <div>{{ User.UserName }}</div>
+                  <div class="col-8">
+                    <div class="">
+                      <div class="form-group d-inline">
+                        <input
+                          autocomplete="off"
+                          type="password"
+                          formControlName="Password"
+                          class="form-control"
+                          placeholder="Password"
+                          id="Password"
+                          name="Password"
+                          value=""
+                        />
+                        <div
+                          *ngIf="
+                            Formgroup.get('Password')?.touched &&
+                            Formgroup.get('Password')?.invalid
+                          "
+                          class="text-danger mt-1"
+                        >
+                          <div
+                            *ngIf="
+                              Formgroup.get('Password')?.errors?.['required']
+                            "
+                          >
+                            Password is required.
+                          </div>
+                          <div
+                            *ngIf="
+                              Formgroup.get('Password')?.errors?.['pattern']
+                            "
+                          >
+                            Password must be at least 8 characters and include 1
+                            uppercase, 1 lowercase and 1 number.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </ng-template>
-              </p-dropdown>
-            </div>
-            
-            <div class="col-md-6">
-              <label for="Email" class="">Email</label>
-              <div class="">
-                <div class="form-group d-inline">
-                  <input
-                    autocomplete="off"
-                    type="text"
-                    formControlName="Email"
-                    class="form-control"
-                    placeholder="Email"
-                    id="Email"
-                    name="Email"
-                    value=""
-                  />
-                </div>
-                <div *ngIf="Formgroup.get('Email')?.touched && Formgroup.get('Email')?.invalid" class="text-danger mt-1">
-                  <div *ngIf="Formgroup.get('Email')?.errors?.['required']">Email is required.</div>
-                  <div *ngIf="Formgroup.get('Email')?.errors?.['email']">Enter a valid email address.</div>
                 </div>
               </div>
             </div>
-            <div class="col-md-6">
-              <label for="Consignee_Name" class="">Is Supplier</label>
-              <p-dropdown
-                [style]="{'width':'100%'}"
-                class="p-0"
-                [options]="IsSupplierList"
-                optionLabel="label"
-                [filter]="true"
-                filterBy="label"
-                [showClear]="true"
-                styleClass="listBottom"
-                placeholder="Please Select"
-                optionValue="value"
-                formControlName="IsSupplier"
-              >
-                <ng-template let-IsSupplier pTemplate="item">
-                  <div class="flex align-items-center gap-2">
-                    <div>{{ IsSupplier.label }}</div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="row g-1 align-items-start">
+                  <div class="col-4 text-end fs-6 fw-bold">
+                    <label>Role <span>*</span></label>
                   </div>
-                </ng-template>
-              </p-dropdown>
-            </div>
-            
-            <div class="col-md-6" *ngIf="Formgroup.get('IsSupplier')?.value">
-              <label for="SupplierList" class="">Supplier List</label>
-              <p-dropdown
-                [style]="{'width':'100%'}"
-                class="p-0"
-                [options]="SupplierList"
-                optionLabel="Sup_Name"
-                [filter]="true"
-                filterBy="Sup_Name"
-                [showClear]="true"
-                styleClass="listBottom"
-                placeholder="Please Select"
-                optionValue="Supplier_ID"
-                formControlName="Supplier"
-              >
-                <ng-template let-supp pTemplate="item">
-                  <div class="flex align-items-center gap-2">
-                    <div>{{ supp.Sup_Name }}</div>
+                  <div class="col-8">
+                    <p-dropdown
+                      [style]="{ width: '100%' }"
+                      class="p-0"
+                      [options]="RoleList"
+                      optionLabel="Role_Name"
+                      [filter]="true"
+                      filterBy="Role_Name"
+                      [showClear]="true"
+                      styleClass="listBottom"
+                      placeholder="Please Select"
+                      optionValue="Role_Id"
+                      formControlName="Role"
+                    >
+                      <ng-template let-Role pTemplate="item">
+                        <div class="flex align-items-center gap-2">
+                          <div>{{ Role.Role_Name }}</div>
+                        </div>
+                      </ng-template>
+                    </p-dropdown>
                   </div>
-                </ng-template>
-              </p-dropdown>
+                </div>
+              </div>
             </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="row g-1 align-items-start">
+                  <div class="col-4 text-end fs-6 fw-bold">
+                    <label for="Superior" class="">Superior</label>
+                  </div>
+                  <div class="col-8">
+                    <p-dropdown
+                      [style]="{ width: '100%' }"
+                      class="p-0"
+                      [options]="SuperiorList"
+                      optionLabel="UserName"
+                      [filter]="true"
+                      filterBy="UserName"
+                      [showClear]="true"
+                      styleClass="listBottom"
+                      placeholder="Please Select"
+                      optionValue="User_ID"
+                      formControlName="Superior"
+                    >
+                      <ng-template let-User pTemplate="item">
+                        <div class="flex align-items-center gap-2">
+                          <div>{{ User.UserName }}</div>
+                        </div>
+                      </ng-template>
+                    </p-dropdown>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="row g-1 align-items-start">
+                  <div class="col-4 text-end fs-6 fw-bold">
+                    <label for="Email" class="">Email</label>
+                  </div>
+                  <div class="col-8">
+                    <div class="">
+                      <div class="form-group d-inline">
+                        <input
+                          autocomplete="off"
+                          type="text"
+                          formControlName="Email"
+                          class="form-control"
+                          placeholder="Email"
+                          id="Email"
+                          name="Email"
+                          value=""
+                        />
+                      </div>
+                      <div
+                        *ngIf="
+                          Formgroup.get('Email')?.touched &&
+                          Formgroup.get('Email')?.invalid
+                        "
+                        class="text-danger mt-1"
+                      >
+                        <div
+                          *ngIf="Formgroup.get('Email')?.errors?.['required']"
+                        >
+                          Email is required.
+                        </div>
+                        <div *ngIf="Formgroup.get('Email')?.errors?.['email']">
+                          Enter a valid email address.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="row g-1 align-items-start">
+                  <div class="col-4 text-end fs-6 fw-bold">
+                    <label for="Consignee_Name" class="">Is Supplier</label>
+                  </div>
+                  <div class="col-8">
+                    <p-dropdown
+                      [style]="{ width: '100%' }"
+                      class="p-0"
+                      [options]="IsSupplierList"
+                      optionLabel="label"
+                      [filter]="true"
+                      filterBy="label"
+                      [showClear]="true"
+                      styleClass="listBottom"
+                      placeholder="Please Select"
+                      optionValue="value"
+                      formControlName="IsSupplier"
+                    >
+                      <ng-template let-IsSupplier pTemplate="item">
+                        <div class="flex align-items-center gap-2">
+                          <div>{{ IsSupplier.label }}</div>
+                        </div>
+                      </ng-template>
+                    </p-dropdown>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6" *ngIf="Formgroup.get('IsSupplier')?.value">
+                <div class="row g-1 align-items-start">
+                  <div class="col-4 text-end fs-6 fw-bold">
+                    <label for="SupplierList" class="">Supplier List</label>
+                  </div>
+                  <div class="col-8">
+                    <p-dropdown
+                      [style]="{ width: '100%' }"
+                      class="p-0"
+                      [options]="SupplierList"
+                      optionLabel="Sup_Name"
+                      [filter]="true"
+                      filterBy="Sup_Name"
+                      [showClear]="true"
+                      styleClass="listBottom"
+                      placeholder="Please Select"
+                      optionValue="Supplier_ID"
+                      formControlName="Supplier"
+                    >
+                      <ng-template let-supp pTemplate="item">
+                        <div class="flex align-items-center gap-2">
+                          <div>{{ supp.Sup_Name }}</div>
+                        </div>
+                      </ng-template>
+                    </p-dropdown>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="row g-1 align-items-start">
+                  <div class="col-4 text-end fs-6 fw-bold">
+                    <label for="Consignee_Name" class="">Is Authorized</label>
+                  </div>
+                  <div class="col-8">
+                    <p-dropdown
+                      [style]="{ width: '100%' }"
+                      class="p-0"
+                      [options]="IsSupplierList"
+                      optionLabel="label"
+                      [filter]="true"
+                      filterBy="label"
+                      [showClear]="true"
+                      styleClass="listBottom"
+                      placeholder="Please Select"
+                      optionValue="value"
+                      formControlName="IsAuthorized"
+                    >
+                      <ng-template let-IsSupplier pTemplate="item">
+                        <div class="flex align-items-center gap-2">
+                          <div>{{ IsSupplier.label }}</div>
+                        </div>
+                      </ng-template>
+                    </p-dropdown>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="row g-1 align-items-start">
+                  <div class="col-4 text-end fs-6 fw-bold"></div>
+                  <div class="col-8">
+                    <!-- <div class="mt-5">
+                      <button
+                        [routerLink]="['/user-list']"
+                        class="btn btn-w-xl text-white theme-btn-cancel"
+                        type="button"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        class="btn btn-w-xl text-white theme-btn px-5 float-right"
+                        type="button"
+                        (click)="saveData()"
+                        [hidden]="isEdit"
+                        [disabled]="Formgroup.invalid"
+                      >
+                        Save
+                      </button>
+                      <button
+                        [hidden]="!isEdit"
+                        class="btn btn-w-xl text-white theme-btn px-5 float-right"
+                        type="button"
+                        (click)="updateData()"
+                      >
+                        Update
+                      </button>
+                    </div> -->
+                    <div class="mt-2 d-flex gap-4">
+                    
+                        <button
+                          class="btn btn-w-xl text-white theme-btn"
+                          type="button"
+                          (click)="saveData()"
+                          [hidden]="isEdit"
+                          [disabled]="Formgroup.invalid"
+                          style="width:130px"
+                        >
+                          <i class="fas fa-save"></i> Save
+                        </button>
 
-             <div class="col-md-6">
-              <label for="Consignee_Name" class="">Is Authorized</label>
-              <p-dropdown
-                [style]="{'width':'100%'}"
-                class="p-0"
-                [options]="IsSupplierList"
-                optionLabel="label"
-                [filter]="true"
-                filterBy="label"
-                [showClear]="true"
-                styleClass="listBottom"
-                placeholder="Please Select"
-                optionValue="value"
-                formControlName="IsAuthorized"
-              >
-                <ng-template let-IsSupplier pTemplate="item">
-                  <div class="flex align-items-center gap-2">
-                    <div>{{ IsSupplier.label }}</div>
+                        <button
+                          class="btn btn-w-xl text-white theme-btn "
+                          type="button"
+                          (click)="updateData()"
+                          [hidden]="!isEdit"
+                          style="width:130px"
+                        >
+                          <i class="fas fa-save"></i> Update
+                        </button>
+                      
+                     
+                        <button
+                          [routerLink]="['/user-list']"
+                          class="btn btn-w-xl text-white theme-btn-cancel"
+                          type="button"
+                          style="width:130px"
+                        >
+                          <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                      
+                    </div>
                   </div>
-                </ng-template>
-              </p-dropdown>
+                </div>
+              </div>
             </div>
-          </div>
-        </form>
-        <div class="flexbox mt-5">
-          <button
-            [routerLink]="['/user-list']"
-            class="btn btn-w-xl text-white theme-btn-cancel"
-            type="button"
-          >
-            Cancel
-          </button>
-          <button
-            class="btn btn-w-xl text-white theme-btn px-5 float-right"
-            type="button"
-            (click)="saveData()"
-            [hidden]="isEdit"
-            [disabled]="Formgroup.invalid"
-          >
-            Save
-          </button>
-          <button
-            [hidden]="!isEdit"
-            class="btn btn-w-xl text-white theme-btn px-5 float-right"
-            type="button"
-            (click)="updateData()"
-          >
-            Update
-          </button>
+          </form>
         </div>
       </div>
     </div>

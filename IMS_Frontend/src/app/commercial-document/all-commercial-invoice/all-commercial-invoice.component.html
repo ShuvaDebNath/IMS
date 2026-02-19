@@ -1,13 +1,11 @@
 <div class="p-2 m-2 shadow-sm">
   <div class="card shadow-sm">
     <div class="card-header theme-bg">
-
       <h2 class="p-2">All Commercial Invoice</h2>
-
     </div>
     <div class="card-body">
       <form [formGroup]="SearchForm">
-        <div class="form-row align-items-center">
+        <!-- <div class="form-row align-items-center">
           <div class="col-auto">
             <label class="control-label" for="inlineFormInputGroup">From Date</label>
             <input
@@ -39,20 +37,81 @@
               style="margin-top: 2.3em !important;">
               <i class="fas fa-search"></i>&nbsp;Search</button>
           </div>
+        </div> -->
+        
+        <div class="row align-items-center">
+          <div class="col-5">
+            <label class="form-label">Select Date</label>
+            <div class="range-container" style="width: 85%">
+              <p-calendar
+                formControlName="fromDate"
+                [showIcon]="false"
+                dateFormat="dd/mm/yy"
+                placeholder="From"
+                inputStyleClass="custom-date-input"
+              ></p-calendar>
+              <span class="range-divider">to</span>
+              <p-calendar
+                formControlName="toDate"
+                [showIcon]="false"
+                dateFormat="dd/mm/yy"
+                placeholder="To"
+                inputStyleClass="custom-date-input"
+              ></p-calendar>
+            </div>
+          </div>
+
+          <div class="col-4">
+           <label for="CDNo" class="">Commercial Document No </label>
+            <div class="">
+              <div class="form-group d-inline">
+                <input autocomplete="off" type="text" formControlName="cdNo" class="form-control"
+                  placeholder="Commercial Document No" id="CDNo" name="CDNo" value="">
+              </div>
+            </div>
+          </div>
+
+          <div class="col-3">
+            <button
+              title="Search"
+              type="button"
+              (click)="Search()"
+              class="btn btn-sm theme-btn"
+              style="margin-top: 30px; width: 130px; height: 38px"
+            >
+              <i class="fas fa-search"></i>&nbsp;Search
+            </button>
+          </div>
         </div>
       </form>
-      <hr>
+      <hr />
 
-      <p-table #dt [value]="tableData" [paginator]="true" [rows]="10" [responsive]="true" [showCurrentPageReport]="true"
-        [globalFilterFields]="['Commercial_Invoice_No','LC_No','PI_No','Date','UserName']"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
-
+      <p-table
+        #dt
+        [value]="tableData"
+        [paginator]="true"
+        [rows]="10"
+        [responsive]="true"
+        [showCurrentPageReport]="true"
+        [globalFilterFields]="[
+          'Commercial_Invoice_No',
+          'LC_No',
+          'PI_No',
+          'Date',
+          'UserName',
+        ]"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      >
         <ng-template pTemplate="caption">
           <div class="table-toolbar d-flex justify-content-end">
             <span class="p-input-icon-left">
               <i class="pi pi-search"></i>
-              <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                placeholder="Global Search" />
+              <input
+                pInputText
+                type="text"
+                (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                placeholder="Global Search"
+              />
             </span>
           </div>
         </ng-template>
@@ -72,76 +131,127 @@
         <ng-template pTemplate="body" let-table let-i="rowIndex">
           <tr>
             <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
-            <td class="text-center align-middle">{{table.Commercial_Invoice_No}}</td>
-            <td class="text-center align-middle">{{table.LC_No}}</td>
-            <td class="text-center align-middle">{{table.PI_No}}</td>
-            <td class="text-center align-middle">{{table.Date| date : "dd-MMM-yyyy"}}</td>
-            <td class="text-center align-middle">{{table.UserName}}</td>
+            <td class="text-center align-middle">
+              {{ table.Commercial_Invoice_No }}
+            </td>
+            <td class="text-center align-middle">{{ table.LC_No }}</td>
+            <td class="text-center align-middle">{{ table.PI_No }}</td>
+            <td class="text-center align-middle">
+              {{ table.Date | date: "dd-MMM-yyyy" }}
+            </td>
+            <td class="text-center align-middle">{{ table.UserName }}</td>
             <td class="text-center align-middle p-1 m-0">
               <div class="d-flex justify-content-center gap-1">
-                <a class="btn theme-btn-view btn-sm " target="_blank" title="View" (click)="viewDetails(table)"><i
-                    class="fa fa-eye"></i></a>
-                <a *ngIf="updatePermissions" class="btn theme-btn-edit " target="_blank" title="Edit"
+                <a
+                  class="btn theme-btn-view btn-sm"
+                  target="_blank"
+                  title="View"
+                  (click)="viewDetails(table)"
+                  ><i class="fa fa-eye"></i
+                ></a>
+                <a
+                  *ngIf="updatePermissions"
+                  class="btn theme-btn-edit"
+                  target="_blank"
+                  title="Edit"
                   [routerLink]="['/generate-commercial-invoice']"
-                  [queryParams]="{Commercial_Invoice_ID:table.Commercial_Invoice_ID}"><i class="fa fa-edit"></i></a>
-                <button *ngIf="deletePermissions" class="btn theme-btn-delete " title="Delete"
-                  (click)="DeleteData(table)"><i class="fas fa-trash"></i></button>
-
+                  [queryParams]="{
+                    Commercial_Invoice_ID: table.Commercial_Invoice_ID,
+                  }"
+                  ><i class="fa fa-edit"></i
+                ></a>
+                <button
+                  *ngIf="deletePermissions"
+                  class="btn theme-btn-delete"
+                  title="Delete"
+                  (click)="DeleteData(table)"
+                >
+                  <i class="fas fa-trash"></i>
+                </button>
               </div>
-
             </td>
           </tr>
         </ng-template>
-
       </p-table>
-
     </div>
 
-    <p-dialog header="Details" [(visible)]="isDetailsVisible" [modal]="true" [closable]="true"
+    <p-dialog
+      header="Details"
+      [(visible)]="isDetailsVisible"
+      [modal]="true"
+      [closable]="true"
       [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
       [style]="{ width: '100vw', height: '100vh', top: '0', left: '0' }"
-      [contentStyle]="{'height':'calc(100vh - 100px)'}" [maximizable]="true" (onHide)="detailsData = null"
-      styleClass="wide-dialog">
+      [contentStyle]="{ height: 'calc(100vh - 100px)' }"
+      [maximizable]="true"
+      (onHide)="detailsData = null"
+      styleClass="wide-dialog"
+    >
       <form>
         <div class="card card-primary" *ngIf="detailsData">
           <div class="card-header m-0 p-2 sticky-header">
             <div class="float-left">
-              <h5>{{detailsData?.Commercial_Invoice_No}}</h5>
-              <span>{{detailsData?.Date}}</span>
+              <h5>{{ detailsData?.Commercial_Invoice_No }}</h5>
+              <span>{{ detailsData?.Date }}</span>
             </div>
 
             <div class="float-right">
               <div class="btn-group" role="group" aria-label="Action Buttons">
-
-                <button type="button" class="btn btn-gradient-primary btn-sm mr-1" (click)="CIPrint()">
+                <button
+                  type="button"
+                  class="btn btn-gradient-primary btn-sm mr-1"
+                  (click)="CIPrint()"
+                >
                   <i class="fas fa-file-invoice"></i> Invoice
                 </button>
 
-                <button type="button" class="btn btn-gradient-success btn-sm mr-1" (click)="PLPrint()">
+                <button
+                  type="button"
+                  class="btn btn-gradient-success btn-sm mr-1"
+                  (click)="PLPrint()"
+                >
                   <i class="fas fa-box-open"></i> PL
                 </button>
 
-                <button type="button" class="btn btn-gradient-danger btn-sm mr-1" (click)="DCPrint()">
+                <button
+                  type="button"
+                  class="btn btn-gradient-danger btn-sm mr-1"
+                  (click)="DCPrint()"
+                >
                   <i class="fas fa-truck"></i> DC
                 </button>
 
-                <button type="button" class="btn btn-gradient-warning btn-sm mr-1" (click)="BOEPrint()">
+                <button
+                  type="button"
+                  class="btn btn-gradient-warning btn-sm mr-1"
+                  (click)="BOEPrint()"
+                >
                   <i class="fas fa-file-contract"></i> BOE
                 </button>
 
-                <button type="button" class="btn btn-gradient-info btn-sm mr-1" (click)="ICPrint()">
+                <button
+                  type="button"
+                  class="btn btn-gradient-info btn-sm mr-1"
+                  (click)="ICPrint()"
+                >
                   <i class="fas fa-file-signature"></i> IC
                 </button>
 
-                <button type="button" class="btn btn-gradient-secondary btn-sm mr-1" (click)="OriginPrint()">
+                <button
+                  type="button"
+                  class="btn btn-gradient-secondary btn-sm mr-1"
+                  (click)="OriginPrint()"
+                >
                   <i class="fas fa-globe"></i> Origin
                 </button>
 
-                <button type="button" class="btn btn-gradient-dark btn-sm mr-1" (click)="BeneficiaryPrint()">
+                <button
+                  type="button"
+                  class="btn btn-gradient-dark btn-sm mr-1"
+                  (click)="BeneficiaryPrint()"
+                >
                   <i class="fas fa-building-columns"></i> Beneficiary
                 </button>
-
-
               </div>
             </div>
           </div>
@@ -150,55 +260,110 @@
               <!-- Left column -->
               <div class="col-md-6">
                 <div class="row">
-                  <div class="col-md-4 mt-2 text-right content-middle"><strong>Shipper/Exporter:</strong></div>
-                  <div class="col-md-8 mt-2">{{detailsData.CompanyName }}{{ detailsData.Address}}</div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>Shipper/Exporter:</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">
+                    {{ detailsData.CompanyName }}{{ detailsData.Address }}
+                  </div>
 
-                  <div class="col-md-4 mt-2 text-right content-middle"><strong>Applicant Bank:</strong></div>
-                  <div class="col-md-8 mt-2">{{detailsData.BankName }}{{ detailsData.Address}}</div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>Applicant Bank:</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">
+                    {{ detailsData.BankName }}{{ detailsData.Address }}
+                  </div>
 
-                  <div class="col-md-4 mt-2 text-right content-middle"><strong>Importer's Notify Address:</strong></div>
-                  <div class="col-md-8 mt-2">{{detailsData?.Consignee_Name}}</div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>Importer's Notify Address:</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">
+                    {{ detailsData?.Consignee_Name }}
+                  </div>
 
-                  <div class="col-md-4 mt-2 text-right content-middle"><strong>Port Of Loading:</strong></div>
-                  <div class="col-md-8 mt-2">{{detailsData?.Loading_Port_Name}}</div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>Port Of Loading:</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">
+                    {{ detailsData?.Loading_Port_Name }}
+                  </div>
 
-                  <div class="col-md-4 mt-2 text-right content-middle"><strong>Final Destination:</strong></div>
-                  <div class="col-md-8 mt-2">{{detailsData?.Destination_Port}}</div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>Final Destination:</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">
+                    {{ detailsData?.Destination_Port }}
+                  </div>
 
-                  <div class="col-md-4 mt-2 text-right content-middle"><strong>Carrier:</strong></div>
-                  <div class="col-md-8 mt-2">{{detailsData?.Details}}</div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>Carrier:</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">{{ detailsData?.Details }}</div>
 
-                  <div class="col-md-4 mt-2 text-right content-middle"><strong>Sailing on or about: </strong></div>
-                  <div class="col-md-8 mt-2">{{detailsData?.Sailing_On_Or_About}}</div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>Sailing on or about: </strong>
+                  </div>
+                  <div class="col-md-8 mt-2">
+                    {{ detailsData?.Sailing_On_Or_About }}
+                  </div>
 
-                  <div class="col-md-4 mt-2 text-right content-middle"><strong>PI's:</strong></div>
-                  <div class="col-md-8 mt-2">{{detailsData?.PINo}}</div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>PI's:</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">{{ detailsData?.PINo }}</div>
 
-                  <div class="col-md-4 mt-2 text-right content-middle"><strong>L/C No/Sales Contact No:</strong></div>
-                  <div class="col-md-8 mt-2">{{detailsData.LC_No }} Date:{{ detailsData.Issue_Date}}</div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>L/C No/Sales Contact No:</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">
+                    {{ detailsData.LC_No }} Date:{{ detailsData.Issue_Date }}
+                  </div>
                 </div>
               </div>
 
               <!-- Right column -->
               <div class="col-md-6">
                 <div class="row">
-                  <div class="col-md-4 mt-2 text-right content-middle"><strong>Export LC/SC :</strong></div>
-                  <div class="col-md-8 mt-2">{{detailsData.Export_LC_SC }} Export LC/SC Date
-                    :{{detailsData.Export_LC_SC_Date}}</div>
-
-                  <div class="col-md-4 mt-2 text-right content-middle"><strong>Beneficiary Bank Details:</strong></div>
-                  <div class="col-md-8 mt-2">{{detailsData.BankName }}{{detailsData.Address}}</div>
-
-                  <div class="col-md-4 mt-2 text-right content-middle"><strong>EXP No. /BE No./EP No.:</strong></div>
-                  <div class="col-md-8 mt-2">Exp: {{detailsData.ExpNo }} Date:{{ detailsData.Export_Date }} BE:{{
-                    detailsData.Be_No }} Date: {{ detailsData.Be_No_Date }} EP: {{detailsData.EP_No }} Date:{{
-                    detailsData.EP_No_Date }}</div>
-
-                  <div class="col-md-4 mt-2 text-right content-middle"><strong>Terms & Conditions:</strong></div>
-                  <div class="col-md-8 mt-2">Payment Terms: {{detailsData.Mode}} Price Term:{{ detailsData.PriceTerm }}
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>Export LC/SC :</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">
+                    {{ detailsData.Export_LC_SC }} Export LC/SC Date :{{
+                      detailsData.Export_LC_SC_Date
+                    }}
                   </div>
 
-                  <div class="col-md-4 mt-2 text-right content-middle"><strong>Others:</strong></div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>Beneficiary Bank Details:</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">
+                    {{ detailsData.BankName }}{{ detailsData.Address }}
+                  </div>
+
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>EXP No. /BE No./EP No.:</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">
+                    Exp: {{ detailsData.ExpNo }} Date:{{
+                      detailsData.Export_Date
+                    }}
+                    BE:{{ detailsData.Be_No }} Date:
+                    {{ detailsData.Be_No_Date }} EP:
+                    {{ detailsData.EP_No }} Date:{{ detailsData.EP_No_Date }}
+                  </div>
+
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>Terms & Conditions:</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">
+                    Payment Terms: {{ detailsData.Mode }} Price Term:{{
+                      detailsData.PriceTerm
+                    }}
+                  </div>
+
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>Others:</strong>
+                  </div>
                   <div class="col-md-8 mt-2">
                     LCA_Form_No: {{ detailsData.LCA_Form_No }}<br />
                     IRC No: {{ detailsData.IRC_No }}<br />
@@ -208,19 +373,21 @@
                     HS Code: {{ detailsData.HS_Code }}<br />
                     Freight Charge: {{ detailsData.FreightCharge }}<br />
                     Quantity(Rolls): {{ detailsData.Qty_Rolls }}<br />
-                    Total Gross Weight: {{ detailsData.Total_Gross_Weight }}<br />
+                    Total Gross Weight: {{ detailsData.Total_Gross_Weight
+                    }}<br />
                     Total Net Weight: {{ detailsData.Total_Net_Weight }}
                   </div>
 
-                  <div class="col-md-4 mt-2 text-right content-middle"><strong>Remarks.:</strong></div>
-                  <div class="col-md-8 mt-2">{{detailsData.Remarks}}</div>
+                  <div class="col-md-4 mt-2 text-right content-middle">
+                    <strong>Remarks.:</strong>
+                  </div>
+                  <div class="col-md-8 mt-2">{{ detailsData.Remarks }}</div>
                 </div>
               </div>
             </div>
             <p-divider />
             <div class="table-responsive">
-              <table class="table table-striped table-bordered  table-hover">
-
+              <table class="table table-striped table-bordered table-hover">
                 <tr class="bg-gradient-success">
                   <th class="text-center align-middle">Article</th>
                   <th class="text-center align-middle">A. A.</th>
@@ -237,39 +404,63 @@
                   <th class="text-center align-middle">Delivered</th>
                 </tr>
 
-                <tr *ngFor="let item of detailsTableData;">
-                  <td class="text-center align-middle">{{ item.Article_No }}</td>
-                  <td class="text-center align-middle">{{ item.ActualArticle }}</td>
-                  <td class="text-center align-middle">{{ item.Description }}</td>
-                  <td class="text-center align-middle">{{ item.Measurement }}</td>
+                <tr *ngFor="let item of detailsTableData">
+                  <td class="text-center align-middle">
+                    {{ item.Article_No }}
+                  </td>
+                  <td class="text-center align-middle">
+                    {{ item.ActualArticle }}
+                  </td>
+                  <td class="text-center align-middle">
+                    {{ item.Description }}
+                  </td>
+                  <td class="text-center align-middle">
+                    {{ item.Measurement }}
+                  </td>
                   <td class="text-center align-middle">{{ item.Color }}</td>
                   <td class="text-center align-middle">{{ item.Packaging }}</td>
                   <td class="text-center align-middle">{{ item.Quantity }}</td>
                   <td class="text-center align-middle">{{ item.Unit }}</td>
-                  <td class="text-center align-middle">{{ item.Unit_Price }}</td>
-                  <td class="text-right align-right">{{ item.Total_Amount }}</td>
-                  <td class="text-center align-middle">{{ item.CommissionUnit }}</td>
-                  <td class="text-center align-middle">{{ item.TotalCommission }}</td>
-                  <td class="text-center align-middle">{{ item.Delivered_Quantity }}</td>
+                  <td class="text-center align-middle">
+                    {{ item.Unit_Price }}
+                  </td>
+                  <td class="text-right align-right">
+                    {{ item.Total_Amount }}
+                  </td>
+                  <td class="text-center align-middle">
+                    {{ item.CommissionUnit }}
+                  </td>
+                  <td class="text-center align-middle">
+                    {{ item.TotalCommission }}
+                  </td>
+                  <td class="text-center align-middle">
+                    {{ item.Delivered_Quantity }}
+                  </td>
                 </tr>
                 <!-- Totals row -->
-                <tr *ngIf="detailsTableData && detailsTableData.length>0" class="table-secondary font-weight-bold">
+                <tr
+                  *ngIf="detailsTableData && detailsTableData.length > 0"
+                  class="table-secondary font-weight-bold"
+                >
                   <td colspan="6" class="text-right">Totals</td>
                   <td class="text-center">{{ detailsTotalQuantity }}</td>
                   <td></td>
                   <td></td>
-                  <td class="text-right">{{ detailsTotalAmount | number:'1.2-2' }}</td>
+                  <td class="text-right">
+                    {{ detailsTotalAmount | number: "1.2-2" }}
+                  </td>
                   <td></td>
                   <td></td>
                   <td class="text-center">{{ detailsTotalDelivered }}</td>
                 </tr>
               </table>
             </div>
-
           </div>
           <div class="card-footer m-0 p-2">
             <div class="float-left">
-              <span><strong>{{detailsData?.AmountInWord}}</strong></span>
+              <span
+                ><strong>{{ detailsData?.AmountInWord }}</strong></span
+              >
             </div>
           </div>
         </div>

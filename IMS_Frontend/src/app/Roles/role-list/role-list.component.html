@@ -22,7 +22,7 @@
         ]"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
       >
-        <ng-template pTemplate="caption">
+        <!-- <ng-template pTemplate="caption">
           <div class="table-toolbar">
             <span class="p-input-icon-left">
               <i class="pi pi-search"></i>
@@ -34,10 +34,25 @@
               />
             </span>
           </div>
+        </ng-template> -->
+          <ng-template pTemplate="caption">
+          <div
+            class="table-toolbar d-flex justify-content-end align-items-center"
+          >
+              <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+                <input
+                pInputText
+                type="text"
+                (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                placeholder="Global Search"
+              />
+            </span>
+          </div>
         </ng-template>
 
         <ng-template pTemplate="header">
-          <tr>
+          <tr class="table-bordered text-center">
             <th style="text-align: center !important" class="">SL</th>
             <th style="text-align: center !important" class="">Role Name</th>
             <th
@@ -56,7 +71,7 @@
               {{ i + 1 + (pageIndex - 1) * pageSize }}
             </td>
             <td class="text-center align-middle">{{ item.Role_Name }}</td>
-            <td
+            <!-- <td
               class="d-flex gap-1 justify-content-center align-items-center p-1"
             >
               <div>
@@ -80,7 +95,31 @@
                   <i class="fas fa-trash"></i>
                 </button>
               </div>
-            </td>
+            </td> -->
+         <td class="action-column d-flex gap-1 justify-content-center align-items-center p-1">
+  <div class="btn-group">
+    <a
+      *ngIf="updatePermissions"
+      class="btn theme-btn-edit btn-sm"
+      target="_blank"
+      title="Edit"
+      [routerLink]="['/create-role']"
+      [queryParams]="{ Role_Id: item.Role_Id }"
+    >
+      <i class="fa fa-edit"></i>
+    </a>
+
+    <button
+      *ngIf="deletePermissions"
+      class="btn theme-btn-view btn-sm"
+      title="Delete"
+      (click)="DeleteRoles(item)"
+    >
+      <i class="fas fa-trash"></i>
+    </button>
+  </div>
+</td>
+
           </tr>
         </ng-template>
       </p-table>
