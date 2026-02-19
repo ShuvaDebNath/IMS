@@ -59,6 +59,8 @@ export class MonthlyTaskReportComponent {
   detailsData: any;
   isDetailsVisible: boolean = false;
 
+  userId:any = '';
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -74,6 +76,8 @@ export class MonthlyTaskReportComponent {
     this.updatePermissions = permissions.updatePermissions;
     this.deletePermissions = permissions.deletePermissions;
     this.printPermissions = permissions.printPermissions;
+
+    this.userId = this.gs.getSessionData('userId')
 
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
@@ -101,6 +105,7 @@ export class MonthlyTaskReportComponent {
     param.parameters = {
       FromDate: fromDate,
       ToDate: toDate,
+      UserId:this.userId
     };
 
     this.masterEntryService.GetInitialData(param).subscribe({
@@ -147,7 +152,7 @@ export class MonthlyTaskReportComponent {
         excelBtn?.addEventListener('click', () => {
           swal.close();
           this.reportService.PrintTaskMonthlyDetails(
-            { fromDate: fromDate, toDate: toDate },
+            { fromDate: fromDate, toDate: toDate,userId:this.userId },
             'excel',
             true
           );
@@ -156,7 +161,7 @@ export class MonthlyTaskReportComponent {
         wordBtn?.addEventListener('click', () => {
           swal.close();
           this.reportService.PrintTaskMonthlyDetails(
-            { fromDate: fromDate, toDate: toDate },
+            { fromDate: fromDate, toDate: toDate,userId:this.userId },
             'word',
             true
           );
@@ -166,7 +171,7 @@ export class MonthlyTaskReportComponent {
           swal.close();
 
           this.reportService.PrintTaskMonthlyDetails(
-            { fromDate: fromDate, toDate: toDate },
+            { fromDate: fromDate, toDate: toDate,userId:this.userId },
             'pdf',
             true
           );

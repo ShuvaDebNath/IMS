@@ -8,6 +8,10 @@ public static class MessageType
     {
         return new Messages{ Status = true, Data = data, Message = "Success, data save done!", MessageType="Success", StatusCode = HttpStatusCode.Created  };
     }
+    public static Messages UserExist()
+    {
+        return new Messages { Status = true, Data = null, Message = "User Already Exist!", MessageType = "Error", StatusCode = HttpStatusCode.InternalServerError };
+    }
     public static Messages SaveError(object data)
     {
         return new Messages { Status = false, Data = data, Message = "Error, can't save data!", MessageType = "Error", StatusCode = HttpStatusCode.InternalServerError };

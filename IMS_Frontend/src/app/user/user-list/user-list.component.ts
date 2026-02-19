@@ -25,8 +25,8 @@ export class UserListComponent {
   searchText: string = '';
   length = 100;
   pageSize = 10;
+  rowsPerPageOptions: number[] = [5, 10, 25, 50];
   isPage = false;
-  pageSizeOptions: number[] = [];
   tableData = [];
   RoleList = [];
   menu: any;
@@ -166,5 +166,9 @@ export class UserListComponent {
     this.router.navigate(['/change-password'], {
       queryParams: { Id: e.User_ID },
     });
+  }
+
+  onPageChange(event: any) {
+    this.pageSize = event.rows;
   }
 }

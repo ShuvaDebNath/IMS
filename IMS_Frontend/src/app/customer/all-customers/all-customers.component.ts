@@ -27,6 +27,7 @@ export class AllCustomersComponent {
   dateForm!: FormGroup;
   tableVisible = false;
   SuperiorList: any;
+  CustomerFilterList:any;
 
   insertPermissions: boolean = false;
   updatePermissions: boolean = false;
@@ -72,6 +73,8 @@ export class AllCustomersComponent {
     this.getDataService.GetInitialData(ProcedureData).subscribe({
       next: (results) => {
         if (results.status) {
+          console.log(JSON.parse(results.data).Tables3);
+          
           this.CustomerList = JSON.parse(results.data).Tables2;
           if (JSON.parse(results.data).Tables3 != undefined)
             this.SuperiorList = JSON.parse(results.data).Tables3;
@@ -124,7 +127,9 @@ export class AllCustomersComponent {
         console.log(results, procedureData);
         if (results.status) {
           this.allCustomers = JSON.parse(results.data).Tables1;
-          console.log(this.allCustomers);
+          console.log(this.allCustomers[0]);
+          
+    console.log(Array.isArray(this.allCustomers));
 
           this.tableVisible = true;
         } else if (results.msg === 'Invalid Token') {
@@ -215,9 +220,12 @@ export class AllCustomersComponent {
 
   getCustomerList() {
     var SuperioId = this.dateForm.value.SuperioId;
-    this.CustomerList = this.CustomerList.filter(
+    
+    this.CustomerFilterList = this.CustomerList.filter(
       (e: any) => e.Superior_ID == SuperioId
     );
+    console.log(this.CustomerFilterList);
+    
   }
 
   printCustomerReport() {

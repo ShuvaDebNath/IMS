@@ -80,22 +80,22 @@
 
         <div class="col-auto">
           <label class="mr-1">Challan No</label>
-          <input type="text" pInputText formControlName="Chalan_No" class="min-w-140" />
+          <input type="text" readonly="true" pInputText formControlName="Chalan_No" class="min-w-140" />
         </div>
 
         <div class="col-auto">
           <label class="mr-1">Deliverable</label>
-          <p-inputNumber formControlName="RestQty" class="min-w-140"></p-inputNumber>
+          <p-inputNumber  [readonly]="true" formControlName="RestQty" class="min-w-140"></p-inputNumber>
         </div>
 
         <div class="col-auto">
           <label class="mr-2">LC No</label>
-          <input type="text" pInputText formControlName="LCNo" class="min-w-140" />
+          <input type="text" readonly="true" pInputText formControlName="LCNo" class="min-w-140" />
         </div>
 
         <div class="col-auto">
           <label class="mr-2">Cash Status</label>
-          <input type="text" pInputText formControlName="IsCash" class="min-w-220" />
+          <input type="text" readonly="true" pInputText formControlName="IsCash" class="min-w-220" />
         </div>
       </div>
 

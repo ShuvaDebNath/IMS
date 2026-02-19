@@ -111,7 +111,7 @@ export class GenerateTaskReportComponent {
         'lilya@sunshineinterlining.com',
         [Validators.required, Validators.email],
       ],
-      Date: ['', [Validators.required]],
+      Date:[''],
       items: this.fb.array([], { validators: [this.rowsCompleteValidator()] }),
     });
   }
@@ -178,6 +178,8 @@ export class GenerateTaskReportComponent {
         ProdCostUnit: this.fb.control<string | null>(null),
         FirstOrderReceivedTime: this.fb.control<string | null>(null),
         LatestOrderReceivedTime: this.fb.control<string | null>(null),
+        Purpose: this.fb.control<string | null>(null),
+        Article_No: this.fb.control<string | null>(null),
         PaymentIssue: this.fb.control<string | null>(null, Validators.required),
         CommercialIssue: this.fb.control<string | null>(
           null,
@@ -272,7 +274,7 @@ export class GenerateTaskReportComponent {
       Mail_CC: fv.CcMail,
       User_ID: this.userId,
       Superior_ID: fv.superiorId,
-      Date: fv.Date,
+      Date: new Date().toISOString(),
       Task_Report_Code: fv.TaskNo,
       MailBody: '',
       Subject: '',
@@ -323,6 +325,8 @@ export class GenerateTaskReportComponent {
         First_Received_Time: i.FirstOrderReceivedTime,
         Latest_Order_Receive_Time: i.LatestOrderReceivedTime,
         Buying_House: i.Buyer,
+        Article_No: i.Article_No,
+        Purpose: i.Purpose,
       };
     });
 
@@ -357,6 +361,14 @@ export class GenerateTaskReportComponent {
             swal.fire('Success', 'Task saved successfully', 'success');
             this.items.clear();
             this.taskForm.reset();
+            var userName = window.localStorage.getItem('userName');
+            const yyyymmdd = new Date()
+              .toISOString()
+              .slice(0, 10)
+              .replace(/-/g, '');
+
+            var taskNo = yyyymmdd + '-' + userName;
+            this.taskForm.controls['TaskNo'].setValue(taskNo);
             this.addItem();
           } else {
             swal.fire(
@@ -443,6 +455,8 @@ export class GenerateTaskReportComponent {
         First_Received_Time: i.FirstOrderReceivedTime,
         Latest_Order_Receive_Time: i.LatestOrderReceivedTime,
         Buying_House: i.Buyer,
+        Article_No: i.Article_No,
+        Purpose: i.Purpose,
       };
     });
 
@@ -609,6 +623,8 @@ export class GenerateTaskReportComponent {
             '-' +
             String(d.getDate()).padStart(2, '0');
 
+            console.log(localDate);
+            
           this.taskForm.controls['ToMail'].setValue(data[0].Mail_TO);
           this.taskForm.controls['CcMail'].setValue(data[0].Mail_CC);
           this.taskForm.controls['TaskNo'].setValue(data[0].Task_Report_Code);
@@ -633,6 +649,8 @@ export class GenerateTaskReportComponent {
                 ProdCostUnit: item.Prod_Cost_Unit,
                 FirstOrderReceivedTime: item.First_Received_Time,
                 LatestOrderReceivedTime: item.Latest_Order_Receive_Time,
+                Article_No: item.Article_No,
+                Purpose: item.Purpose,
               }),
             );
           });

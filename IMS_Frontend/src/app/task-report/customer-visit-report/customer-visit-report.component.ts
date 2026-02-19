@@ -59,6 +59,7 @@ export class CustomerVisitReportComponent implements OnInit {
     getDataModel: GetDataModel = new GetDataModel();
     detailsData: any;
     isDetailsVisible: boolean = false;
+    userId:any = '';
   
     constructor(
       private fb: FormBuilder,
@@ -81,6 +82,7 @@ export class CustomerVisitReportComponent implements OnInit {
       this.title.setTitle('Customer Visit Report');
       this.SearchForm.get('fromDate')?.setValue(new Date().toISOString().split('T')[0]);
       this.SearchForm.get('toDate')?.setValue(new Date().toISOString().split('T')[0]);
+      this.userId = window.localStorage.getItem('userId') || '';
     }
     initForm(): void {
       this.SearchForm = this.fb.group({
@@ -97,7 +99,8 @@ export class CustomerVisitReportComponent implements OnInit {
       param.procedureName = '[usp_Task_Customer_Visit_Report]';
       param.parameters = {
         FromDate: fromDate,
-        ToDate: toDate
+        ToDate: toDate,
+        UserId:this.userId
       };
   
       this.masterEntryService.GetInitialData(param).subscribe({
@@ -146,7 +149,7 @@ export class CustomerVisitReportComponent implements OnInit {
             excelBtn?.addEventListener('click', () => {
               swal.close();
               this.reportService.PrintClinetVisit(
-                { fromDate: fromDate, toDate: toDate },
+                { fromDate: fromDate, toDate: toDate,userId:this.userId },
                 'excel',
                 true
               );
@@ -155,7 +158,7 @@ export class CustomerVisitReportComponent implements OnInit {
             wordBtn?.addEventListener('click', () => {
               swal.close();
               this.reportService.PrintClinetVisit(
-                { fromDate: fromDate, toDate: toDate },
+                { fromDate: fromDate, toDate: toDate ,userId:this.userId},
                 'word',
                 true
               );
@@ -165,7 +168,7 @@ export class CustomerVisitReportComponent implements OnInit {
               swal.close();
     
               this.reportService.PrintClinetVisit(
-                { fromDate: fromDate, toDate: toDate },
+                { fromDate: fromDate, toDate: toDate,userId:this.userId },
                 'pdf',
                 true
               );
