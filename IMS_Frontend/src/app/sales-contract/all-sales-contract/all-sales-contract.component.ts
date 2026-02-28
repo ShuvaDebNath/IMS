@@ -212,7 +212,8 @@ export class AllSalesContractComponent {
       next: (results) => {
         if (results.status) {
           let tables = JSON.parse(results.data);
-
+          console.log(tables.Tables1[0]);
+          
           this.detailsData = tables.Tables1[0];
           this.detailsTableData = tables.Tables2;
         }
