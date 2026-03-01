@@ -97,6 +97,8 @@ export class GenerateCashReceiveComponent {
     this.masterEntyService.GetInitialData(ProcedureData).subscribe({
       next: (results) => {
         if (results.status) {
+          console.log(results.data);
+          
           this.BenificiaryAccounts = JSON.parse(results.data).Tables1;
           this.PaymentTerms = JSON.parse(results.data).Tables2;
           this.MarketingConcern = JSON.parse(results.data).Tables3;
@@ -321,7 +323,8 @@ export class GenerateCashReceiveComponent {
       next: (results) => {
         if (results.status) {
           var tableData = JSON.parse(results.data).Tables1;
-
+          console.log(tableData);
+          
           tableData.forEach((e: any) => {
             this.Formgroup.controls.Marketing_Concern.setValue(e.User_ID);
             this.Formgroup.controls.BenificiaryAccounts.setValue(

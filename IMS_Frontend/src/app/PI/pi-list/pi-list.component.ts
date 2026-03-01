@@ -113,8 +113,10 @@ export class PiListComponent implements OnInit {
    * Open the generate-pi route in a new browser tab with PI_No as query param.
    * Uses window.open with an absolute URL so the browser opens a new tab.
    */
-  OpenInNewTab(piNo: string) {
+  OpenInNewTab(piNo: string,item:any) {
     try {
+      console.log(item);
+      
       const payload = { PI_No: piNo, ts: Date.now() };
       // store a short-lived transfer key for the new tab to consume
       localStorage.setItem('IMS_temp_open_pi', JSON.stringify(payload));
