@@ -1357,6 +1357,56 @@ namespace IMS.API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("UserReport")]
+        public async Task<IActionResult> UserReport(string rptType, int RoleId,int pageLength,int pageNo,string searchParam)
+        {
+            try
+            {
+                var currentUser = HttpContext.User;
+
+                DataSet ds = await _reportService.UserReport(RoleId, pageLength, pageNo, searchParam);
+
+                if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
+                {
+
+                    return Ok(new { msg = "Data Not Found" });
+                }
+
+                string reportPath = "V2\\DeliveryReport\\";
+
+                if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
+                {
+
+                    return Ok(new { msg = "Data Not Found" });
+                }
+
+                ds.Tables[0].TableName = "DeliveryReport";
+
+                var reportName = "Delivery Report";
+
+                reportPath += "rptDeliveryReport.rdlc";
+
+
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+
+
+                if (rptType.ToLower() == "pdf")
+                {
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                }
+                else
+                {
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
 
 
     }

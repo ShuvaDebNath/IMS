@@ -588,5 +588,26 @@ namespace Boilerplate.Repository.Repositories
             }
         }
 
+        public async Task<DataSet> UserReport(int RoleId, int pageLength, int pageNo, string searchParam)
+        {
+            try
+            {
+                var parametars = new
+                {
+                    RoleId = RoleId,
+                    pageLength = pageLength, pageNo = pageNo,searchParam = searchParam
+                };
+
+                string query = @"exec [usp_userReport] @RoleId,@pageLength,@pageNo,@searchParam";
+                var ds = await GetDataInDataSetAsync(query, parametars);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }

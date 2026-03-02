@@ -62,8 +62,8 @@ export class PiListComponent implements OnInit {
   totalsProdCost: number = 0;
   totalsRolls: number = 0;
   PITypeList: any[] = [
-    { value: 1, text: 'LC' },
-    { value: 2, text: 'Cash' },
+    { value: 2, text: 'LC' },
+    { value: 1, text: 'Cash' },
   ];
   first: any = 1;
   rows: any = 10;
@@ -107,22 +107,32 @@ export class PiListComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private reportService: ReportService
-  ) {}
+  ) { }
 
   /**
    * Open the generate-pi route in a new browser tab with PI_No as query param.
    * Uses window.open with an absolute URL so the browser opens a new tab.
    */
-  OpenInNewTab(piNo: string) {
+  OpenInNewTab(piNo: string, item: any) {
     try {
+      console.log(item);
       const payload = { PI_No: piNo, ts: Date.now() };
       // store a short-lived transfer key for the new tab to consume
       localStorage.setItem('IMS_temp_open_pi', JSON.stringify(payload));
 
       const origin = window.location.origin;
       // open generate-pi without query params so PI_No isn't visible in URL
-      const url = `${origin}/generate-pi`;
-      window.open(url, '_blank');
+      if (item.PaymentType == 'LC') {
+
+        const url = `${origin}/generate-pi`;
+        window.open(url, '_blank');
+      }
+      else {
+
+        const url = `${origin}/generate-cpi`;
+        window.open(url, '_blank');
+      }
+
     } catch (e) {
       // Fallback: try to navigate using router in same tab (will show query param)
       this.router.navigate(['/generate-pi'], { queryParams: { PI_No: piNo } });
@@ -288,14 +298,14 @@ export class PiListComponent implements OnInit {
         if (results.status) {
           this.PIDetails = JSON.parse(results.data).Tables1;
           this.PIData = this.PIDetails[0];
-          console.log(this.PIData,this.PIDetails)
+          console.log(this.PIData, this.PIDetails)
           this.computePidTotals();
         } else if (results.msg == 'Invalid Token') {
           Swal.fire('Session Expired!', 'Please Login Again.', 'info');
           this.gs.Logout();
         }
       },
-      error: (err) => {},
+      error: (err) => { },
     });
   }
 
@@ -360,8 +370,8 @@ export class PiListComponent implements OnInit {
               ? permas.User_ID
               : ''
             : permas.User_ID
-            ? permas.User_ID
-            : userID,
+              ? permas.User_ID
+              : userID,
         PIType: permas.PIType ? permas.PIType : null,
         PI_Status: this.PiStatus,
         PageNumber: this.first,
@@ -428,7 +438,7 @@ export class PiListComponent implements OnInit {
                   this.gs.Logout();
                 }
               },
-              error: (err) => {},
+              error: (err) => { },
             });
         });
       }
@@ -473,7 +483,7 @@ export class PiListComponent implements OnInit {
             } else {
             }
           },
-          error: (err) => {},
+          error: (err) => { },
         });
       }
     });
@@ -525,7 +535,7 @@ export class PiListComponent implements OnInit {
     for (const item of this.PIDetails) {
       const qty = Number(item.Quantity) || 0;
       const delivered = Number(item.Delivered_Quantity) || 0;
-      const amt = item.Total_Amount_Tk==null || item.Total_Amount_Tk==undefined?Number(item.Total_Amount) || 0:Number(item.Total_Amount_Tk) || 0;
+      const amt = item.Total_Amount_Tk == null || item.Total_Amount_Tk == undefined ? Number(item.Total_Amount) || 0 : Number(item.Total_Amount_Tk) || 0;
       const prodCost = Number(item.TotalCommission) || 0;
 
       this.totalsOrderQty += qty;
@@ -576,17 +586,17 @@ export class PiListComponent implements OnInit {
 
         excelBtn?.addEventListener('click', () => {
           Swal.close();
-        this.reportService.PrintProformaInvoiceRequest(item, 'word', 'F');
+          this.reportService.PrintProformaInvoiceRequest(item, 'word', 'F');
         });
 
         wordBtn?.addEventListener('click', () => {
           Swal.close();
-        this.reportService.PrintProformaInvoiceRequest(item, 'word', 'F');
+          this.reportService.PrintProformaInvoiceRequest(item, 'word', 'F');
         });
 
         pdfBtn?.addEventListener('click', () => {
           Swal.close();
-        this.reportService.PrintProformaInvoiceRequest(item, 'pdf', 'F');
+          this.reportService.PrintProformaInvoiceRequest(item, 'pdf', 'F');
         });
       },
     });
