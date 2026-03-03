@@ -426,4 +426,16 @@ public class ReportService : IReportService
             throw ex;
         }
     }
+    public async Task<DataSet> UserReport(int RoleId, int pageLength, int pageNo, string searchParam)
+    {
+        try
+        {
+
+            return await _reportRepository.UserReport(RoleId, pageLength, pageNo, searchParam);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
 }
