@@ -25,6 +25,8 @@ export class UserListComponent {
   searchText: string = '';
   length = 100;
   pageSize = 10;
+  
+  currentPage: number = 0;
   rowsPerPageOptions: number[] = [5, 10, 25, 50];
   isPage = false;
   tableData = [];
@@ -62,7 +64,7 @@ export class UserListComponent {
     this.printPermissions = permissions.printPermissions;
 
     if (!this.printPermissions) {
-       //window.location.href = 'dashboard';
+      //window.location.href = 'dashboard';
     }
 
     this.title.setTitle('User List');
@@ -93,7 +95,7 @@ export class UserListComponent {
         } else {
         }
       },
-      error: (err) => {},
+      error: (err) => { },
     });
   }
   Search() {
@@ -115,7 +117,7 @@ export class UserListComponent {
         } else {
         }
       },
-      error: (err) => {},
+      error: (err) => { },
     });
   }
 
@@ -156,7 +158,7 @@ export class UserListComponent {
               } else {
               }
             },
-            error: (err) => {},
+            error: (err) => { },
           });
         }
       });
@@ -168,7 +170,9 @@ export class UserListComponent {
     });
   }
 
+
   onPageChange(event: any) {
+    this.currentPage = event.page;     // 0-based index
     this.pageSize = event.rows;
   }
 }
