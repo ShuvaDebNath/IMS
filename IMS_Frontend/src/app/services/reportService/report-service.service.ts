@@ -2064,4 +2064,75 @@ export class ReportService {
         }
       });
   }
+
+  PrintUserReport(report: any, rptType: any, isView: any) {
+    console.log(report);
+
+    const Superior_Id = report.Superior_Id;
+    const Customer_Id = report.Customer_Id;
+    const Status = report.Status;
+    const sentBy = report.User;
+
+    const url = `${this.baseUrl}${this.apiController}/UserReport`;
+    const token = this.gs.getSessionData('token');
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    this.http
+      .get(url, {
+        headers,
+        params: { rptType, Superior_Id, Customer_Id, Status, sentBy },
+        responseType: 'blob',
+      })
+      .subscribe(
+        (res: Blob) => {
+          if (res.size === 0) {
+            Swal.fire(
+              'No Data Found',
+              'No records found for the selected criteria.',
+              'info'
+            );
+            return;
+          }
+          const blobType =
+            rptType === 'pdf'
+              ? 'application/pdf'
+              : rptType === 'excel'
+              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+
+          const blob = new Blob([res], { type: blobType });
+
+          const fileName =
+            rptType === 'pdf'
+              ? 'CustomerReport.pdf'
+              : rptType === 'excel'
+              ? `CustomerReport_${this.formatDateDMY(new Date()).replace(
+                  /\//g,
+                  '-'
+                )}.xlsx`
+              : `CustomerReport_${this.formatDateDMY(new Date()).replace(
+                  /\//g,
+                  '-'
+                )}.docx`;
+
+          if (isView && rptType === 'pdf') {
+            // View PDF in new tab
+            const fileURL = window.URL.createObjectURL(blob);
+            window.open(fileURL, '_blank');
+          } else {
+            // Force download
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = fileName;
+            link.click();
+          }
+        },
+        (err) => {
+          Swal.fire('Error', 'Failed to generate report.', 'error');
+        }
+      );
+  }
 }

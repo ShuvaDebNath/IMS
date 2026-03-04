@@ -14,6 +14,7 @@ import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
 import { Title } from '@angular/platform-browser';
 import { Roles } from 'src/app/models/roles.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ReportService } from 'src/app/services/reportService/report-service.service';
 
 @Component({
   selector: 'app-user-list',
@@ -36,6 +37,7 @@ export class UserListComponent {
   updatePermissions: boolean = false;
   deletePermissions: boolean = false;
   printPermissions: boolean = false;
+  currentPage = 1;
 
   allPersmissions: boolean = true;
 
@@ -48,7 +50,8 @@ export class UserListComponent {
     private gs: GlobalServiceService,
     private router: Router,
     private fb: FormBuilder,
-    private title: Title
+    private title: Title,
+    private reportService: ReportService,
   ) {
     //this.gs.CheckToken().subscribe();
   }
@@ -62,7 +65,7 @@ export class UserListComponent {
     this.printPermissions = permissions.printPermissions;
 
     if (!this.printPermissions) {
-       //window.location.href = 'dashboard';
+      //window.location.href = 'dashboard';
     }
 
     this.title.setTitle('User List');
@@ -107,7 +110,8 @@ export class UserListComponent {
       next: (results) => {
         if (results.status) {
           let tables = JSON.parse(results.data);
-
+          this.currentPage = 1;
+          this.pageSize = 10;
           this.tableData = tables.Tables1;
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
@@ -170,5 +174,54 @@ export class UserListComponent {
 
   onPageChange(event: any) {
     this.pageSize = event.rows;
+    this.currentPage = event.pageIndex;
+  }
+
+  printDialog() {
+    swal.fire({
+      title: 'What you want to do?',
+      icon: 'question',
+      html: `
+                  <div style="display: flex; gap: 10px; justify-content: center;">
+                    <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
+                      <i class="fa fa-file-excel"></i> Excel
+                    </button>
+                    <button id="wordBtn" class="btn btn-info" style="padding: 8px 16px;">
+                      <i class="fa fa-file-word"></i> Word
+                    </button>
+                    <button id="pdfBtn" class="btn btn-danger" style="padding: 8px 16px;">
+                      <i class="fa fa-file-pdf"></i> PDF
+                    </button>
+                  </div>
+                `,
+      showConfirmButton: false,
+      didOpen: () => {
+        const excelBtn = document.getElementById('excelBtn');
+        const wordBtn = document.getElementById('wordBtn');
+        const pdfBtn = document.getElementById('pdfBtn');
+
+        const sentByStr = localStorage.getItem('userId');
+        const sentBy = sentByStr ? Number(sentByStr) : null;
+        var item = {
+          Status: 'All',
+          User: sentBy,
+        };
+
+        excelBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintCustomerReport(item, 'excel', 'F');
+        });
+
+        wordBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintCustomerReport(item, 'word', 'F');
+        });
+
+        pdfBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintCustomerReport(item, 'pdf', 'F');
+        });
+      },
+    });
   }
 }

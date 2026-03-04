@@ -61,7 +61,7 @@
           <div class="table-toolbar d-flex justify-content-end align-items-center">
             <span class="p-input-icon-left">
               <i class="pi pi-search"></i>
-              <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+              <input pInputText type="text"  [(ngModel)]="searchText"  (input)="dt.filterGlobal($any($event.target).value, 'contains')"
                 placeholder="Global Search" />
             </span>
           </div>
