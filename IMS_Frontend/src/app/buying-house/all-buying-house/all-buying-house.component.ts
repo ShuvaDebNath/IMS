@@ -38,7 +38,7 @@ export class AllBuyingHouseComponent {
     private title: Title,
     private dme: DoubleMasterEntryService,
     private fb: FormBuilder,
-    private ms: MasterEntryService
+    private ms: MasterEntryService,
   ) {}
 
   ngOnInit(): void {
@@ -85,7 +85,7 @@ export class AllBuyingHouseComponent {
       swal.fire(
         'Validation Error!',
         'Please select both From Date and To Date.',
-        'warning'
+        'warning',
       );
       return;
     }
@@ -94,7 +94,7 @@ export class AllBuyingHouseComponent {
       swal.fire(
         'Validation Error!',
         'From Date cannot be later than To Date.',
-        'warning'
+        'warning',
       );
       return;
     }
@@ -138,7 +138,6 @@ export class AllBuyingHouseComponent {
 
     this.getDataService.GetInitialData(procedureData).subscribe({
       next: (results) => {
-
         if (results.status) {
           this.detailsData = JSON.parse(results.data).Tables1[0];
           this.isDetailsVisible = true; // open dialog
@@ -153,7 +152,7 @@ export class AllBuyingHouseComponent {
         swal.fire(
           'Error!',
           'An error occurred while fetching details.',
-          'info'
+          'info',
         ),
     });
   }
@@ -196,10 +195,13 @@ export class AllBuyingHouseComponent {
             swal.fire(
               'Delete Failed',
               err?.error?.message || 'Something went wrong.',
-              'info'
+              'info',
             );
           },
         });
       });
+  }
+  toggleText(item: any) {
+    item.showFull = !item.showFull;
   }
 }

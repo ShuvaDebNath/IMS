@@ -13,32 +13,42 @@
       class="row p-3 shadow-sm g-3 align-items-end mb-3"
       (ngSubmit)="Search()"
     >
-      <div class="col-md-3">
-        <label class="form-label fw-bold">From Date</label>
-        <input
-          type="date"
-          class="form-control form-control-sm"
-          formControlName="fromDate"
-        />
-      </div>
+   <div class="row align-items-end">
+          <div class="col-auto">
+            <label class="form-label">Select Date</label>
 
-      <div class="col-md-3">
-        <label class="form-label fw-bold">To Date</label>
-        <input
-          type="date"
-          class="form-control form-control-sm"
-          formControlName="toDate"
-        />
-      </div>
-      <div class="col-md-2">
-        <button
-          type="submit"
-          class="btn btn-sm theme-btn w-100"
-          [disabled]="SearchForm.invalid"
-        >
-          <i class="pi pi-download me-1"></i> Load
-        </button>
-      </div>
+            <div class="range-container" style="width: 100%">
+              <p-calendar
+                formControlName="fromDate"
+                [showIcon]="false"
+                dateFormat="dd/mm/yy"
+                placeholder="Start Date"
+                inputStyleClass="custom-date-input"
+              ></p-calendar>
+
+              <span class="range-divider">to</span>
+
+              <p-calendar
+                formControlName="toDate"
+                [showIcon]="false"
+                dateFormat="dd/mm/yy"
+                placeholder="End Date"
+                inputStyleClass="custom-date-input"
+              ></p-calendar>
+            </div>
+          </div>
+          <div class="col-auto mt-4">
+            <button
+              title="Search"
+              type="submit"
+              [disabled]="SearchForm.invalid"
+              class="btn btn-sm theme-btn mr-2 text-white"
+              style="margin-top: 2.3em !important; width: 130px; height: 38px"
+            >
+              <i class="pi pi-download me-1"></i> Load
+            </button>
+          </div>
+        </div>
     </form>
     <hr />
 
@@ -54,7 +64,7 @@
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     >
       <ng-template pTemplate="caption">
-        <div class="table-toolbar">
+        <div class="table-toolbar d-flex justify-content-end">
           <span class="p-input-icon-left">
             <i class="pi pi-search"></i>
             <input
@@ -69,12 +79,12 @@
 
       <ng-template pTemplate="header">
         <tr>
-          <th class="bg-gradient-success">SL</th>
-          <th class="bg-gradient-success">Export No</th>
-          <th class="bg-gradient-success">Date</th>
-          <th class="bg-gradient-success">Note</th>
-          <th class="bg-gradient-success">Status</th>
-          <th class="bg-gradient-success" *ngIf="allPersmissions">Action</th>
+          <th >SL</th>
+          <th >Export No</th>
+          <th >Date</th>
+          <th >Note</th>
+          <th >Status</th>
+          <th  *ngIf="allPersmissions">Action</th>
         </tr>
       </ng-template>
 

@@ -176,4 +176,7 @@ export class CustomerVisitReportComponent implements OnInit {
           },
         });
       }
+        toggleText(item: any) {
+  item.showFull = !item.showFull;
+}
 }
