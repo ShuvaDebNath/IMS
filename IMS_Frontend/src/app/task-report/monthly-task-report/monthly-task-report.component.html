@@ -7,41 +7,52 @@
     </div>
     <div class="card-body">
       <form [formGroup]="SearchForm">
-        <div class="row align-items-center">
-          <div class="col-3">
-            <label class="control-label" for="inlineFormInputGroup"
-              >From Date</label
-            >
-            <input
-              type="date"
-              formControlName="fromDate"
-              class="form-control"
-            />
-          </div>
-          <div class="col-3">
-            <label class="control-label" for="inlineFormInputGroup"
-              >To Date</label
-            >
-            <input
-              type="date"
-              formControlName="toDate"
-              class="form-control"
-            />
-            
-          </div>
-          <div class="col-3">
-            <button
-              title="Search"
-              type="button"
-              (click)="Search()"
-              class="btn btn-sm theme-btn mt-4 p-1"
-            >
-              <i class="fas fa-search"></i>&nbsp;Search
-            </button>
+        <div class="align-items-center">
+          <div class="row">
+            <div class="row align-items-end">
+              <div class="col-auto">
+                <label class="form-label">Select Date</label>
+
+                <div class="range-container" style="width: 100%">
+                  <p-calendar
+                    formControlName="fromDate"
+                    [showIcon]="false"
+                    dateFormat="dd/mm/yy"
+                    placeholder="From"
+                    inputStyleClass="custom-date-input"
+                  ></p-calendar>
+
+                  <span class="range-divider">to</span>
+
+                  <p-calendar
+                    formControlName="toDate"
+                    [showIcon]="false"
+                    dateFormat="dd/mm/yy"
+                    placeholder="To"
+                    inputStyleClass="custom-date-input"
+                  ></p-calendar>
+                </div>
+              </div>
+              <div class="col-auto mt-4">
+                <button
+                  title="Search"
+                  type="button"
+                  (click)="Search()"
+                  class="btn btn-sm theme-btn mr-2"
+                  style="
+                    margin-top: 2.3em !important;
+                    width: 130px;
+                    height: 38px;
+                  "
+                >
+                  <i class="fas fa-search"></i>&nbsp;Search
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </form>
-      <div class="row mb-3" *ngIf="tableData != null">
+      <div class="row mb-3 mt-3" *ngIf="tableData != null">
         <div class="col-md-12">
           <button
             class="btn theme-btn px-4 py-2"
@@ -53,10 +64,10 @@
         </div>
       </div>
       <hr />
-      <p-table      
+      <p-table
         #dt
         [paginator]="true"
-        [rows]="10"
+        [rows]="15"
         [responsive]="true"
         [showCurrentPageReport]="true"
         [globalFilterFields]="[
@@ -72,53 +83,449 @@
           'Description',
           'OrderSummary',
           'SampleSummary',
-          'NewArticleSummary'
+          'NewArticleSummary',
         ]"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [value]="tableData" [responsive]="true">
-            <ng-template pTemplate="header">
-              <tr>
-                <th style="text-align: center">Marketing Concern</th>
-                <th style="text-align: center">Customer Name</th>
-                <th style="text-align: center">Buying/Concern Factory/ Buyer</th>
-                <th style="text-align: center">
-                  Concern Factory(If buying office or group)
-                </th>
-                <th style="text-align: center">How many team have/how many team you work</th>
-                <th style="text-align: center">Customer Concern Person and Contact</th>
-                <th style="text-align: center">Order Season</th>
-                <th style="text-align: center">Description</th>
-                <th style="text-align: center">Time and purpose first visit</th>
-                <th style="text-align: center">Time and purpose second visit</th>
-                <th style="text-align: center">Time and purpose third visit</th>
-                <th style="text-align: center">Order summary this month</th>
-                <th style="text-align: center">CM Summary</th>
-                <th style="text-align: center">Net Sales Summary</th>
-                <th style="text-align: center">Summary of submitted sample</th>
-                <th style="text-align: center">Summary of new article drop</th>
-              </tr>
-            </ng-template>
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [value]="tableData"
+        [responsive]="true"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="text-align: center">Marketing Concern</th>
+            <th style="text-align: center">Customer Name</th>
+            <th style="text-align: center">Buying/Concern Factory/ Buyer</th>
+            <th style="text-align: center">
+              Concern Factory(If buying office or group)
+            </th>
+            <th style="text-align: center">
+              How many team have/how many team you work
+            </th>
+            <th style="text-align: center">
+              Customer Concern Person and Contact
+            </th>
+            <th style="text-align: center">Order Season</th>
+            <th style="text-align: center">Description</th>
+            <th style="text-align: center">Time and purpose first visit</th>
+            <th style="text-align: center">Time and purpose second visit</th>
+            <th style="text-align: center">Time and purpose third visit</th>
+            <th style="text-align: center">Order summary this month</th>
+            <th style="text-align: center">CM Summary</th>
+            <th style="text-align: center">Net Sales Summary</th>
+            <th style="text-align: center">Summary of submitted sample</th>
+            <th style="text-align: center">Summary of new article drop</th>
+          </tr>
+        </ng-template>
 
-            <ng-template pTemplate="body" let-item>
-              <tr>
-                <td style="text-align: left">{{ item.MakeBy }}</td>
-                <td style="text-align: left">{{ item.customer_name }}</td>
-                <td style="text-align: center">{{ item.Concern_Factory }}</td>
-                <td style="text-align: center">{{ item.Concern_Factory }}</td>
-                <td style="text-align: center">{{ item.TeamSize }}</td>
-                <td style="text-align: center">{{ item.Buying_Concern }}</td>
-                <td style="text-align: center">{{ item.OrderSeason }}</td>
-                <td style="text-align: center">{{ item.Description }}</td>
-                <td style="text-align: center">{{ item.Visit1 }}</td>
-                <td style="text-align: center">{{ item.Visit2 }}</td>
-                <td style="text-align: center">{{ item.Visit3 }}</td>
-                <td style="text-align: center">{{ item.OrderSummary }}</td>
-                <td style="text-align: center">{{ item.CM_Summary }}</td>
-                <td style="text-align: center">{{ item.Net_Sales_Summary }}</td>
-                <td style="text-align: center">{{ item.SampleSummary }}</td>
-                <td style="text-align: center">{{ item.NewArticleSummary }}</td>
-              </tr>
-            </ng-template>
-          </p-table>
+        <ng-template pTemplate="body" let-item>
+          <tr>
+            <td style="text-align: left">{{ item.MakeBy }}</td>
+            <td class="text-cell">
+              <span *ngIf="!item.showFull && item.customer_name?.length > 15">
+                {{ item.customer_name | slice: 0 : 15 }}...
+                <br />
+                <span
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See more
+                </span>
+              </span>
+
+              <span *ngIf="item.showFull || item.customer_name?.length <= 15">
+                {{ item.customer_name }}
+                <span
+                  *ngIf="item.customer_name?.length > 15"
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See less
+                </span>
+              </span>
+            </td>
+
+            <td class="text-cell">
+              <span *ngIf="!item.showFull && item.Concern_Factory?.length > 15">
+                {{ item.Concern_Factory | slice: 0 : 15 }}...
+                <br />
+                <span
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See more
+                </span>
+              </span>
+
+              <span *ngIf="item.showFull || item.Concern_Factory?.length <= 15">
+                {{ item.Concern_Factory }}
+                <span
+                  *ngIf="item.Concern_Factory?.length > 15"
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See less
+                </span>
+              </span>
+            </td>
+            <!-- <td style="text-align: center">{{ item.Concern_Factory }}</td>
+            <td style="text-align: center">{{ item.TeamSize }}</td>
+            <td style="text-align: center">{{ item.Buying_Concern }}</td>
+            <td style="text-align: center">{{ item.OrderSeason }}</td> -->
+
+ 
+            <td class="text-cell">
+              <span *ngIf="!item.showFull && item.Concern_Factory?.length > 15">
+                {{ item.Concern_Factory | slice: 0 : 15 }}...
+                <br />
+                <span
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See more
+                </span>
+              </span>
+
+              <span *ngIf="item.showFull || item.Concern_Factory?.length <= 15">
+                {{ item.Concern_Factory }}
+                <span
+                  *ngIf="item.Concern_Factory?.length > 15"
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See less
+                </span>
+              </span>
+            </td>
+   
+            <td class="text-cell">
+              <span *ngIf="!item.showFull && item.TeamSize?.length > 15">
+                {{ item.TeamSize | slice: 0 : 15 }}...
+                <br />
+                <span
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See more
+                </span>
+              </span>
+
+              <span *ngIf="item.showFull || item.TeamSize?.length <= 15">
+                {{ item.TeamSize }}
+                <span
+                  *ngIf="item.TeamSize?.length > 15"
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See less
+                </span>
+              </span>
+            </td>
+
+            <td class="text-cell">
+              <span *ngIf="!item.showFull && item.Buying_Concern?.length > 15">
+                {{ item.Buying_Concern | slice: 0 : 15 }}...
+                <br />
+                <span
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See more
+                </span>
+              </span>
+
+              <span *ngIf="item.showFull || item.Buying_Concern?.length <= 15">
+                {{ item.Buying_Concern }}
+                <span
+                  *ngIf="item.Buying_Concern?.length > 15"
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See less
+                </span>
+              </span>
+            </td>
+        
+             <td class="text-cell">
+              <span *ngIf="!item.showFull && item.OrderSeason?.length > 15">
+                {{ item.OrderSeason | slice: 0 : 15 }}...
+                <br />
+                <span
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See more
+                </span>
+              </span>
+
+              <span *ngIf="item.showFull || item.OrderSeason?.length <= 15">
+                {{ item.OrderSeason }}
+                <span
+                  *ngIf="item.OrderSeason?.length > 15"
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See less
+                </span>
+              </span>
+            </td>
+             <td class="text-cell">
+              <span *ngIf="!item.showFull && item.Description?.length > 15">
+                {{ item.Description | slice: 0 : 15 }}...
+                <br />
+                <span
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See more
+                </span>
+              </span>
+
+              <span *ngIf="item.showFull || item.Description?.length <= 15">
+                {{ item.Description }}
+                <span
+                  *ngIf="item.Description?.length > 15"
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See less
+                </span>
+              </span>
+            </td>
+            <!-- <td class="text-cell">
+              <span *ngIf="item.Description?.length <= 15">
+                {{ item.Description }}
+              </span>
+
+              <span *ngIf="item.Description?.length > 15">
+                {{ item.Description | slice: 0 : 15 }}...
+                <br />
+                <span class="see-more" tooltipPosition="top"> See more </span>
+              </span>
+            </td> -->
+            <!-- <td style="text-align: center">{{ item.Visit1 }}</td>
+            <td style="text-align: center">{{ item.Visit2 }}</td>
+            <td style="text-align: center">{{ item.Visit3 }}</td>
+            <td style="text-align: center">{{ item.OrderSummary }}</td>
+            <td style="text-align: center">{{ item.CM_Summary }}</td>
+            <td style="text-align: center">{{ item.Net_Sales_Summary }}</td>
+            <td style="text-align: center">{{ item.SampleSummary }}</td>
+            <td style="text-align: center">{{ item.NewArticleSummary }}</td> -->
+            <td class="text-cell">
+              <span *ngIf="!item.showFull && item.Visit1?.length > 15">
+                {{ item.Visit1 | slice: 0 : 15 }}...
+                <br />
+                <span
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See more
+                </span>
+              </span>
+
+              <span *ngIf="item.showFull || item.Visit1?.length <= 15">
+                {{ item.Visit1 }}
+                <span
+                  *ngIf="item.Visit1?.length > 15"
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See less
+                </span>
+              </span>
+            </td>
+            <td class="text-cell">
+              <span *ngIf="!item.showFull && item.Visit2?.length > 15">
+                {{ item.Visit2 | slice: 0 : 15 }}...
+                <br />
+                <span
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See more
+                </span>
+              </span>
+
+              <span *ngIf="item.showFull || item.Visit2?.length <= 15">
+                {{ item.Visit2 }}
+                <span
+                  *ngIf="item.Visit2?.length > 15"
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See less
+                </span>
+              </span>
+            </td>
+            <td class="text-cell">
+              <span *ngIf="!item.showFull && item.Visit3?.length > 15">
+                {{ item.Visit3 | slice: 0 : 15 }}...
+                <br />
+                <span
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See more
+                </span>
+              </span>
+
+              <span *ngIf="item.showFull || item.Visit3?.length <= 15">
+                {{ item.Visit3 }}
+                <span
+                  *ngIf="item.Visit3?.length > 15"
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See less
+                </span>
+              </span>
+            </td>
+            <td class="text-cell">
+              <span *ngIf="!item.showFull && item.OrderSummary?.length > 15">
+                {{ item.OrderSummary | slice: 0 : 15 }}...
+                <br />
+                <span
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See more
+                </span>
+              </span>
+
+              <span *ngIf="item.showFull || item.OrderSummary?.length <= 15">
+                {{ item.OrderSummary }}
+                <span
+                  *ngIf="item.OrderSummary?.length > 15"
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See less
+                </span>
+              </span>
+            </td>
+            <td class="text-cell">
+              <span *ngIf="!item.showFull && item.CM_Summary?.length > 15">
+                {{ item.CM_Summary | slice: 0 : 15 }}...
+                <br />
+                <span
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See more
+                </span>
+              </span>
+
+              <span *ngIf="item.showFull || item.CM_Summary?.length <= 15">
+                {{ item.CM_Summary }}
+                <span
+                  *ngIf="item.CM_Summary?.length > 15"
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See less
+                </span>
+              </span>
+            </td>
+            <td class="text-cell">
+              <span *ngIf="!item.showFull && item.Net_Sales_Summary?.length > 15">
+                {{ item.Net_Sales_Summary | slice: 0 : 15 }}...
+                <br />
+                <span
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See more
+                </span>
+              </span>
+
+              <span *ngIf="item.showFull || item.Net_Sales_Summary?.length <= 15">
+                {{ item.Net_Sales_Summary }}
+                <span
+                  *ngIf="item.Net_Sales_Summary?.length > 15"
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See less
+                </span>
+              </span>
+            </td>
+            <td class="text-cell">
+              <span *ngIf="!item.showFull && item.SampleSummary?.length > 15">
+                {{ item.SampleSummary | slice: 0 : 15 }}...
+                <br />
+                <span
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See more
+                </span>
+              </span>
+
+              <span *ngIf="item.showFull || item.SampleSummary?.length <= 15">
+                {{ item.SampleSummary }}
+                <span
+                  *ngIf="item.SampleSummary?.length > 15"
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See less
+                </span>
+              </span>
+            </td>
+            <td class="text-cell">
+              <span *ngIf="!item.showFull && item.NewArticleSummary?.length > 15">
+                {{ item.NewArticleSummary | slice: 0 : 15 }}...
+                <br />
+                <span
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See more
+                </span>
+              </span>
+
+              <span *ngIf="item.showFull || item.NewArticleSummary?.length <= 15">
+                {{ item.NewArticleSummary }}
+                <span
+                  *ngIf="item.NewArticleSummary?.length > 15"
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See less
+                </span>
+              </span>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
     </div>
   </div>
 </div>

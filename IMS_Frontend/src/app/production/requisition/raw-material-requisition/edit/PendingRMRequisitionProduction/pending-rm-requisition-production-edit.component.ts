@@ -10,13 +10,13 @@ import { GlobalServiceService } from 'src/app/services/Global-service.service';
 import { DropdownModule } from 'primeng/dropdown';
 import { GetDataService } from 'src/app/services/getData/getDataService.service';
 import { DoubleMasterEntryService } from 'src/app/services/doubleEntry/doubleEntryService.service';
-
+import { CalendarModule } from 'primeng/calendar';
 @Component({
   standalone: true,
   selector: 'app-pending-rm-requisition-production-edit',
   templateUrl: './pending-rm-requisition-production-edit.component.html',
   styleUrls: ['./pending-rm-requisition-production-edit.component.css'],
-  imports: [CommonModule, ReactiveFormsModule, DropdownModule],
+  imports: [CommonModule, ReactiveFormsModule, DropdownModule, CalendarModule],
 })
 export class PendingRMRequisitionProductionEditComponent implements OnInit {
   private fb = inject(FormBuilder);

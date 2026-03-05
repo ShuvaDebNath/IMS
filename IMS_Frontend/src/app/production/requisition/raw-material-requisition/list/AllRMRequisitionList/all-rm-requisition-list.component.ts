@@ -8,6 +8,7 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
+import { CalendarModule } from 'primeng/calendar';
 import {
   FormBuilder,
   FormGroup,
@@ -27,6 +28,7 @@ import { ReportService } from 'src/app/services/reportService/report-service.ser
     InputTextModule,
     DialogModule,
     ReactiveFormsModule,
+    CalendarModule
   ],
 })
 export class AllRMRequisitionListComponent {

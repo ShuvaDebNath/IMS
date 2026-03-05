@@ -42,7 +42,7 @@
           'Weight',
           'StockQuantity',
           'RollQuantity',
-          'BagQuantity'
+          'BagQuantity',
         ]"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
         styleClass="p-datatable-striped p-datatable-hoverable-rows p-datatable-gridlines"
@@ -82,7 +82,7 @@
         </ng-template>
 
         <ng-template pTemplate="header">
-          <tr>
+          <!-- <tr>
             <th style="text-align: center; width: 5%">#</th>
             <th pSortableColumn="Article_No" style="width: 12%">
               Article No <p-sortIcon field="Article_No"></p-sortIcon>
@@ -149,6 +149,42 @@
               ></p-columnFilter>
             </th>
             <th style="text-align: center; width: 10%">Actions</th>
+          </tr> -->
+          <tr>
+            <th style="text-align: center; width: 5%">#</th>
+            <th pSortableColumn="Article_No" style="width: 12%">
+              Article No 
+          
+            </th>
+            <th pSortableColumn="Color" style="width: 10%">
+              Color 
+              
+            </th>
+            <th pSortableColumn="Width" style="width: 8%">
+              Width
+            
+            </th>
+            <th pSortableColumn="Unit" style="width: 7%">
+              Unit
+            
+            </th>
+            <th pSortableColumn="Weight" style="width: 8%">
+              Weight 
+             
+            </th>
+            <th pSortableColumn="StockQuantity" style="width: 8%">
+              Stock 
+             
+            </th>
+            <th pSortableColumn="RollQuantity" style="width: 8%">
+              Roll 
+              
+            </th>
+            <th pSortableColumn="BagQuantity" style="width: 8%">
+              Bag 
+           
+            </th>
+            <th style="text-align: center; width: 10%">Actions</th>
           </tr>
         </ng-template>
 
@@ -169,27 +205,27 @@
             </td>
             <td>{{ row.RollQuantity }}</td>
             <td>{{ row.BagQuantity }}</td>
-            <td style="text-align: center">
-              <div class="btn-group" role="group">
-                <p-button
-                  icon="pi pi-plus"
-                  styleClass="theme-btn-add p-button-sm p-button-rounded"
-                  (onClick)="onStockIn(row)"
-                  tooltip="Add Stock"
-                  tooltipPosition="top"
-                >
-                </p-button>
+           <td class="text-center">
+  <div class="custom-btn-group">
+    <p-button
+      icon="pi pi-plus"
+      styleClass="stock-btn stock-in-btn p-button-sm p-button-rounded"
+      (onClick)="onStockIn(row)"
+      tooltip="Add Stock"
+      tooltipPosition="top"
+    >
+    </p-button>
 
-                <p-button
-                  icon="pi pi-minus"
-                  styleClass="theme-btn-delete p-button-sm p-button-rounded"
-                  (onClick)="onStockOut(row)"
-                  tooltip="Remove Stock"
-                  tooltipPosition="top"
-                >
-                </p-button>
-              </div>
-            </td>
+    <p-button
+      icon="pi pi-minus"
+      styleClass="stock-btn stock-out-btn p-button-sm p-button-rounded"
+      (onClick)="onStockOut(row)"
+      tooltip="Remove Stock"
+      tooltipPosition="top"
+    >
+    </p-button>
+  </div>
+</td>
           </tr>
         </ng-template>
 
