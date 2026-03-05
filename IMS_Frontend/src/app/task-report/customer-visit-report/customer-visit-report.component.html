@@ -7,36 +7,52 @@
     </div>
     <div class="card-body">
       <form [formGroup]="SearchForm">
-        <div class="row align-items-center">
-          <div class="col-3">
-            <label class="control-label" for="inlineFormInputGroup"
-              >From Date</label
-            >
-            <input
-              type="date"
-              formControlName="fromDate"
-              class="form-control"
-            />
-          </div>
-          <div class="col-3">
-            <label class="control-label" for="inlineFormInputGroup"
-              >To Date</label
-            >
-            <input type="date" formControlName="toDate" class="form-control" />
-          </div>
-          <div class="col-3">
-            <button
-              title="Search"
-              type="button"
-              (click)="Search()"
-              class="btn btn-sm theme-btn mt-4 p-1"
-            >
-              <i class="fas fa-search"></i>&nbsp;Search
-            </button>
+        <div class="align-items-center">
+          <div class="row">
+            <div class="row align-items-end">
+              <div class="col-auto">
+                <label class="form-label">Select Date</label>
+
+                <div class="range-container" style="width: 100%">
+                  <p-calendar
+                    formControlName="fromDate"
+                    [showIcon]="false"
+                    dateFormat="dd/mm/yy"
+                    placeholder="From"
+                    inputStyleClass="custom-date-input"
+                  ></p-calendar>
+
+                  <span class="range-divider">to</span>
+
+                  <p-calendar
+                    formControlName="toDate"
+                    [showIcon]="false"
+                    dateFormat="dd/mm/yy"
+                    placeholder="To"
+                    inputStyleClass="custom-date-input"
+                  ></p-calendar>
+                </div>
+              </div>
+              <div class="col-auto mt-4">
+                <button
+                  title="Search"
+                  type="button"
+                  (click)="Search()"
+                  class="btn btn-sm theme-btn mr-2"
+                  style="
+                    margin-top: 2.3em !important;
+                    width: 130px;
+                    height: 38px;
+                  "
+                >
+                  <i class="fas fa-search"></i>&nbsp;Search
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </form>
-      <div class="row mb-3" *ngIf="tableData != null">
+      <div class="row mb-3 mt-2" *ngIf="tableData != null">
         <div class="col-md-12">
           <button
             class="btn theme-btn px-4 py-2"
@@ -59,11 +75,12 @@
           'Task_Report_Code',
           'UserName',
           'TotalRequest',
-          'date'
+          'date',
         ]"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
       >
         <ng-template pTemplate="caption">
-          <div class="table-toolbar">
+          <div class="table-toolbar d-flex justify-content-end">
             <span class="p-input-icon-left">
               <i class="pi pi-search"></i>
               <input
@@ -94,21 +111,121 @@
         <ng-template pTemplate="body" let-item>
           <tr>
             <td style="text-align: left">{{ item.MakeBy }}</td>
-            <td style="text-align: left">{{ item.customer_name }}</td>
-            <td style="text-align: center">{{ item.Buying_Concern }}</td>
-            <td style="text-align: center">{{ item.Description }}</td>
+            <!-- <td style="text-align: left">{{ item.customer_name }}</td> -->
+
+            <td class="text-cell">
+              <span *ngIf="!item.showFull && item.customer_name?.length > 15">
+                {{ item.customer_name | slice: 0 : 15 }}...
+                <br />
+                <span
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See more
+                </span>
+              </span>
+
+              <span *ngIf="item.showFull || item.customer_name?.length <= 15">
+                {{ item.customer_name }}
+                <span
+                  *ngIf="item.customer_name?.length > 15"
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See less
+                </span>
+              </span>
+            </td>
+            <!-- <td style="text-align: center">{{ item.Buying_Concern }}</td> -->
+           <td class="text-cell">
+              <span *ngIf="!item.showFull && item.Buying_Concern?.length > 15">
+                {{ item.Buying_Concern | slice: 0 : 15 }}...
+                <br />
+                <span
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See more
+                </span>
+              </span>
+
+              <span *ngIf="item.showFull || item.Buying_Concern?.length <= 15">
+                {{ item.Buying_Concern }}
+                <span
+                  *ngIf="item.Buying_Concern?.length > 15"
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See less
+                </span>
+              </span>
+            </td>
+            <!-- <td style="text-align: center">{{ item.Description }}</td> -->
+      <td class="text-cell">
+              <span *ngIf="!item.showFull && item.Description?.length > 15">
+                {{ item.Description | slice: 0 : 15 }}...
+                <br />
+                <span
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See more
+                </span>
+              </span>
+
+              <span *ngIf="item.showFull || item.Description?.length <= 15">
+                {{ item.Description }}
+                <span
+                  *ngIf="item.Description?.length > 15"
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See less
+                </span>
+              </span>
+            </td>
             <td style="text-align: center">
               {{ item.Already_Receive_Order_Article }}
             </td>
             <td style="text-align: center">{{ item.Unit_Price_USD }}</td>
             <td style="text-align: center">{{ item.Unit_Price_BDT }}</td>
             <td style="text-align: center">{{ item.Prod_Cost_Unit }}</td>
-            <td style="text-align: center">{{ item.Visit_Purpose }}</td>
+            <!-- <td style="text-align: center">{{ item.Visit_Purpose }}</td> -->
+               <td class="text-cell">
+              <span *ngIf="!item.showFull && item.Visit_Purpose?.length > 15">
+                {{ item.Visit_Purpose | slice: 0 : 15 }}...
+                <br />
+                <span
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See more
+                </span>
+              </span>
+
+              <span *ngIf="item.showFull || item.Visit_Purpose?.length <= 15">
+                {{ item.Visit_Purpose }}
+                <span
+                  *ngIf="item.Visit_Purpose?.length > 15"
+                  class="see-more"
+                  (click)="toggleText(item)"
+                  style="cursor: pointer; color: blue"
+                >
+                  See less
+                </span>
+              </span>
+            </td>
             <td style="text-align: center">{{ item.First_Received_Time }}</td>
             <td style="text-align: center">
               {{ item.Latest_Order_Receive_Time }}
             </td>
-
           </tr>
         </ng-template>
       </p-table>

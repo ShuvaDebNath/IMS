@@ -23,7 +23,7 @@
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
       >
         <ng-template pTemplate="caption">
-          <div class="table-toolbar">
+          <div class="table-toolbar d-flex justify-content-end">
             <span class="p-input-icon-left">
               <i class="pi pi-search"></i>
               <input
@@ -37,7 +37,7 @@
         </ng-template>
 
         <ng-template pTemplate="header">
-          <tr>
+          <tr class="custom-header">
             <th style="text-align: center">Serial No</th>
             <th style="text-align: center">Requisition No</th>
             <th style="text-align: center">Requisition Date</th>
@@ -69,7 +69,7 @@
             <td style="text-align: center">{{ requisition.SentBy }}</td>
             <td class="d-flex gap-2" style="justify-content: center">
               <button
-                class="btn btn-info btn-sm text-white d-inline-flex align-items-center"
+                class="btn theme-btn btn-sm text-white d-inline-flex align-items-center"
                 (click)="onDetails(requisition)"
               >
                 <i class="pi pi-eye me-1"></i>
@@ -85,7 +85,7 @@
       </p-table>
 
       <!-- Details dialog -->
-      <p-dialog
+      <!-- <p-dialog
         header="Detail"
         [(visible)]="isDetailsVisible"
         [modal]="true"
@@ -134,7 +134,71 @@
             </ng-template>
           </p-table>
         </div>
-      </p-dialog>
+      </p-dialog> -->
+
+<p-dialog
+  header="Detail"
+  [(visible)]="isDetailsVisible"
+  [modal]="true"
+  [closable]="true"
+  [style]="{ width: '70vw', maxWidth: '95vw' }"
+  (onHide)="detailsData = null"
+  styleClass="details-dialog"
+>
+  <!-- Export Button -->
+  <div class="mb-3 mt-4 d-flex justify-content-end">
+    <button
+      class="btn theme-btn px-4 py-2"
+      (click)="printDialog()"
+      title="Export LC list to Excel, Word, or PDF"
+    >
+      <i class="fas fa-download"></i>&nbsp; Export
+    </button>
+  </div>
+
+  <!-- Issue Info -->
+  <div *ngIf="detailsData" class="issue-info p-3 mb-3 shadow-sm rounded">
+    <div class="row mb-2">
+      <div class="col-md-4">
+        <p><strong>Issue No:</strong> {{ detailsData.IssueNumber }}</p>
+        <p><strong>Issue Date:</strong> {{ detailsData.IssueDate }}</p>
+      </div>
+      <div class="col-md-4">
+        <p><strong>Req. No:</strong> {{ detailsData.RequisitionNumber }}</p>
+        <p><strong>Date:</strong> {{ detailsData.RequisitionDate }}</p>
+      </div>
+      <div class="col-md-4">
+        <p><strong>Issue Note:</strong> {{ detailsData.MasterNote }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Items Table -->
+  <div *ngIf="detailsData?.Items">
+    <p-table [value]="detailsData?.Items" [responsive]="true" class="shadow-sm rounded">
+      <ng-template pTemplate="header">
+        <tr class="custom-header">
+          <th>Article</th>
+          <th>Description</th>
+          <th>Quantity</th>
+          <th>Roll/Bag</th>
+          <th>Roll Qty</th>
+          <th>Bag Qty</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-item>
+        <tr>
+          <td>{{ item.ConcatArticleNo }}</td>
+          <td>{{ item.DetaisNote }}</td>
+          <td>{{ item.Quantity }}</td>
+          <td>{{ item.Roll_Bag }}</td>
+          <td>{{ item.Roll }}</td>
+          <td>{{ item.Bag }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</p-dialog>
 
       <!-- Details dialog for issue -->
       <p-dialog
@@ -153,7 +217,7 @@
             Remarks: {{ detailsData_for_Accept.MasterNote }}
           </p>
 
-          <!-- Make sure your body template exposes rowIndex -->
+       
           <p-table
             [value]="detailsData_for_Accept.Items"
             responsiveLayout="scroll"
@@ -166,7 +230,6 @@
                 <th class="text-center">Roll/Bag</th>
                 <th class="text-center">Roll Qty</th>
                 <th class="text-center">Bag Qty</th>
-                <!-- <th class="text-center">Status</th> -->
               </tr>
             </ng-template>
 
