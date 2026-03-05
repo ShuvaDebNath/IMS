@@ -11,11 +11,9 @@ import { PagesComponent } from 'src/app/pages/pages.component';
 import { Title } from '@angular/platform-browser';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 import { GetDataModel } from 'src/app/models/GetDataModel';
-import { LC } from 'src/app/models/LCModel';
-import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
-import { DoubleMasterEntryModel } from 'src/app/models/DoubleMasterEntryModel';
 import { ReportService } from 'src/app/services/reportService/report-service.service';
-@Component({
+
+@Component({ 
   selector: 'app-monthly-task-report',
   templateUrl: './monthly-task-report.component.html',
   styleUrls: ['./monthly-task-report.component.css'],
@@ -179,4 +177,7 @@ export class MonthlyTaskReportComponent {
       },
     });
   }
+  toggleText(item: any) {
+  item.showFull = !item.showFull;
+}
 }

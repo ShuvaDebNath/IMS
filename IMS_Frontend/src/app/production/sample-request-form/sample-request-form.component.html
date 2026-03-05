@@ -1,5 +1,5 @@
-<div class="row d-flex justify-content-center">
-  <div class="m-2 p-2 shadow">
+<div class="m-2 p-2 shadow">
+  <div class="row d-flex justify-content-center">
     <div class="card">
       <div class="card-header theme-bg text-white">
         <h2 class="p-2 font-weight-bold">
@@ -7,9 +7,322 @@
         </h2>
       </div>
       <div class="card-body">
-        <form name="newForm" [formGroup]="Formgroup" role="form">
-          <div class="row">
-            <div class="col-md-6">
+        <div class="d-flex justify-content-center mt-4">
+          <form
+            name="newForm"
+            [formGroup]="Formgroup"
+            role="form"
+            [style]="{ width: '90%' }"
+          >
+            <div class="row g-3 align-items-center mb-2">
+              <!-- Request Date -->
+              <div class="col-md-5 d-flex align-items-center">
+                <label class="col-5 text-end fw-semibold mb-0">
+                  Request Date <span class="text-danger">*</span>
+                </label>
+                <div class="col-7">
+                  <p-calendar
+                    formControlName="RequestDate"
+                    [showIcon]="false"
+                    dateFormat="dd/mm/yy"
+                    placeholder="Select Date"
+                    class="w-100"
+                    inputStyleClass="form-control"
+                    [style]="{ width: '100%' }"
+                  ></p-calendar>
+                </div>
+              </div>
+
+              <div class="col-md-2"></div>
+
+              <div class="col-md-5 d-flex align-items-center">
+                <label class="col-5 text-end fw-semibold mb-0">
+                  Customer Name <span class="text-danger">*</span>
+                </label>
+                <div class="col-7">
+                  <p-dropdown
+                    class="w-100"
+                    [options]="CustomerList"
+                    optionLabel="CustomerName"
+                    [filter]="true"
+                    filterBy="CustomerName"
+                    [showClear]="true"
+                    placeholder="Please Select"
+                    optionValue="Customer_ID"
+                    formControlName="CustomerName"
+                    [style]="{ width: '100%' }"
+                  >
+                    <ng-template let-item pTemplate="item">
+                      <div>{{ item.CustomerName }}</div>
+                    </ng-template>
+                  </p-dropdown>
+                </div>
+              </div>
+            </div>
+
+            <div class="row g-3 align-items-center mb-2">
+              <div class="col-md-5 d-flex align-items-center">
+                <label class="col-5 text-end fw-semibold mb-0">
+                  Customer Contact Info
+                </label>
+                <div class="col-7">
+                  <input
+                    autocomplete="off"
+                    type="text"
+                    formControlName="Customer_Contact_Info"
+                    class="form-control"
+                    placeholder="Customer Contact Info"
+                  />
+                </div>
+              </div>
+
+              <div class="col-md-2"></div>
+              <div class="col-md-5 d-flex align-items-center">
+                <label class="col-5 text-end fw-semibold mb-0">
+                  Product Description
+                </label>
+                <div class="col-7">
+                  <p-dropdown
+                    class="w-100"
+                    [options]="DescList"
+                    optionLabel="Details"
+                    [filter]="true"
+                    filterBy="Details"
+                    [showClear]="true"
+                    placeholder="Please Select"
+                    optionValue="InterliningsDescriptionId"
+                    formControlName="Product_Description"
+                    [style]="{ width: '100%' }"
+                  >
+                    <ng-template let-item pTemplate="item">
+                      <div>{{ item.Details }}</div>
+                    </ng-template>
+                  </p-dropdown>
+                </div>
+              </div>
+            </div>
+            <div class="row g-3 align-items-center mb-2">
+              <div class="col-md-5 d-flex align-items-center">
+                <label class="col-5 text-end fw-semibold mb-0">
+                  Article No <span>*</span>
+                </label>
+                <div class="col-7">
+                  <p-dropdown
+                    [style]="{ width: '100%' }"
+                    class="p-0"
+                    [options]="ArticleList"
+                    optionLabel="Article_No"
+                    [filter]="true"
+                    filterBy="Article_No"
+                    [showClear]="true"
+                    styleClass="listBottom"
+                    placeholder="Please Select"
+                    optionValue="Item_ID"
+                    formControlName="ArticleNo"
+                    [virtualScroll]="true"
+                    [virtualScrollItemSize]="30"
+                  >
+                    <ng-template let-ArticleNo pTemplate="item">
+                      <div class="flex align-items-center gap-2">
+                        <div>{{ ArticleNo.Article_No }}</div>
+                      </div>
+                    </ng-template>
+                  </p-dropdown>
+                </div>
+              </div>
+              <div class="col-md-2"></div>
+              <div class="col-md-5 d-flex align-items-center">
+                <label class="col-5 text-end fw-semibold mb-0">
+                  Sample Article No
+                </label>
+                <div class="col-7">
+                  <input
+                    type="text"
+                    autocomplete="off"
+                    type="text"
+                    formControlName="SampleArticleNo"
+                    class="form-control"
+                    placeholder="Sample Article NO"
+                    id="Sample_Article_No"
+                    name="Sample_Article_No"
+                    value=""
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="row g-3 align-items-center mb-2">
+              <div class="col-md-5 d-flex align-items-center">
+                <label class="col-5 text-end fw-semibold mb-0">
+                  Color <span>*</span>
+                </label>
+                <div class="col-7">
+                  <p-dropdown
+                    [style]="{ width: '100%' }"
+                    class="p-0"
+                    [options]="ColorList"
+                    optionLabel="Color"
+                    [filter]="true"
+                    filterBy="Color"
+                    [showClear]="true"
+                    styleClass="listBottom"
+                    placeholder="Please Select"
+                    optionValue="Color_ID"
+                    formControlName="Color"
+                    [virtualScroll]="true"
+                    [virtualScrollItemSize]="30"
+                  >
+                    <ng-template let-ArticleNo pTemplate="item">
+                      <div class="flex align-items-center gap-2">
+                        <div>{{ ArticleNo.Color }}</div>
+                      </div>
+                    </ng-template>
+                  </p-dropdown>
+                </div>
+              </div>
+              <div class="col-md-2"></div>
+              <div class="col-md-5 d-flex align-items-center">
+                <label class="col-5 text-end fw-semibold mb-0">
+                  Width <span>*</span>
+                </label>
+                <div class="col-7">
+                  <p-dropdown
+                    [style]="{ width: '100%' }"
+                    class="p-0"
+                    [options]="WidthList"
+                    optionLabel="Measurement"
+                    [filter]="true"
+                    filterBy="Measurement"
+                    [showClear]="true"
+                    styleClass="listBottom"
+                    placeholder="Please Select"
+                    optionValue="Width_ID"
+                    formControlName="Width"
+                    [virtualScroll]="true"
+                    [virtualScrollItemSize]="30"
+                  >
+                    <ng-template let-ArticleNo pTemplate="item">
+                      <div class="flex align-items-center gap-2">
+                        <div>{{ ArticleNo.Measurement }}</div>
+                      </div>
+                    </ng-template>
+                  </p-dropdown>
+                </div>
+              </div>
+            </div>
+            <div class="row g-3 align-items-center mb-2">
+              <div class="col-md-5 d-flex align-items-center">
+                <label class="col-5 text-end fw-semibold mb-0">
+                  Unit <span>*</span>
+                </label>
+                <div class="col-7">
+                  <p-dropdown
+                    [style]="{ width: '100%' }"
+                    class="p-0"
+                    [options]="UnitList"
+                    optionLabel="Unit"
+                    [filter]="true"
+                    filterBy="Unit"
+                    [showClear]="true"
+                    styleClass="listBottom"
+                    placeholder="Please Select"
+                    optionValue="Unit_ID"
+                    formControlName="Unit"
+                    [virtualScroll]="true"
+                    [virtualScrollItemSize]="30"
+                  >
+                    <ng-template let-ArticleNo pTemplate="item">
+                      <div class="flex align-items-center gap-2">
+                        <div>{{ ArticleNo.Unit }}</div>
+                      </div>
+                    </ng-template>
+                  </p-dropdown>
+                </div>
+              </div>
+              <div class="col-md-2"></div>
+              <div class="col-md-5 d-flex align-items-center">
+                <label class="col-5 text-end fw-semibold mb-0">
+                  Requested Quantity <span>*</span>
+                </label>
+                <div class="col-7">
+                  <input
+                    autocomplete="off"
+                    type="number"
+                    formControlName="Requested_Quantity"
+                    class="form-control"
+                    placeholder="Requested Quantity"
+                    id="Requested_Quantity"
+                    name="Requested_Quantity"
+                    value=""
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="row g-3 align-items-center mb-2">
+              <div class="col-md-5 d-flex align-items-center">
+                <label class="col-5 text-end fw-semibold mb-0">
+                  Shipping Address
+                </label>
+                <div class="col-7">
+                  <textarea
+                    autocomplete="off"
+                    type="text"
+                    formControlName="Shipping_Address"
+                    class="form-control"
+                    placeholder="Shipping Address"
+                    id="Shipping_Address"
+                    name="Shipping_Address"
+                    value=""
+                  ></textarea>
+                </div>
+              </div>
+              <div class="col-md-2"></div>
+              <div class="col-md-5 d-flex align-items-center">
+                <label class="col-5 text-end fw-semibold mb-0">
+                  Carried By <span>*</span>
+                </label>
+                <div class="col-7">
+                  <p-dropdown
+                    [style]="{ width: '100%' }"
+                    class="p-0"
+                    [options]="RequestStatus"
+                    optionLabel="text"
+                    [filter]="true"
+                    filterBy="text"
+                    [showClear]="true"
+                    styleClass="listBottom"
+                    placeholder="Please Select"
+                    optionValue="value"
+                    formControlName="RequestStatus"
+                  >
+                    <ng-template let-RequestStatus pTemplate="item">
+                      <div class="flex align-items-center gap-2">
+                        <div>{{ RequestStatus.text }}</div>
+                      </div>
+                    </ng-template>
+                  </p-dropdown>
+                </div>
+              </div>
+            </div>
+            <div class="row g-3 align-items-center mb-2">
+              <div class="col-md-5 d-flex align-items-center">
+                <label class="col-5 text-end fw-semibold mb-0"> Remarks </label>
+                <div class="col-7">
+                  <textarea
+                    autocomplete="off"
+                    type="text"
+                    formControlName="Remarks"
+                    class="form-control"
+                    placeholder="Remarks"
+                    id="Remarks"
+                    name="Remarks"
+                    value=""
+                  ></textarea>
+                </div>
+              </div>
+              <div class="col-md-2"></div>
+            </div>
+            <div class="row">
+              <!-- <div class="col-md-6">
               <label class="control-label" for="inlineFormInputGroup"
                 >Request Date <span>*</span></label
               >
@@ -38,8 +351,8 @@
                   bsDatepicker
                 />
               </div>
-            </div>
-            <div class="col-md-6">
+            </div> -->
+              <!-- <div class="col-md-6">
               <label for="Customer_Name" class=""
                 >Customer Name <span>*</span></label
               >
@@ -68,249 +381,259 @@
                   </p-dropdown>
                 </div>
               </div>
-            </div>
-            <div class="col-md-6">
-              <label for="Customer_Contact_Info" class=""
-                >Customer Contact Info</label
-              >
-              <div class="">
-                <div class="form-group d-inline">
-                  <input
-                    autocomplete="off"
-                    type="text"
-                    formControlName="Customer_Contact_Info"
-                    class="form-control"
-                    placeholder="Customer Contact Info"
-                    id="Customer_Contact_Info"
-                    name="Customer_Contact_Info"
-                    (onChange)="CustomerDetails()"
-                    value=""
-                  />
+            </div> -->
+              <!-- <div class="col-md-6">
+                <label for="Customer_Contact_Info" class=""
+                  >Customer Contact Info</label
+                >
+                <div class="">
+                  <div class="form-group d-inline">
+                    <input
+                      autocomplete="off"
+                      type="text"
+                      formControlName="Customer_Contact_Info"
+                      class="form-control"
+                      placeholder="Customer Contact Info"
+                      id="Customer_Contact_Info"
+                      name="Customer_Contact_Info"
+                      (onChange)="CustomerDetails()"
+                      value=""
+                    />
+                  </div>
                 </div>
+              </div> -->
+              <!-- <div class="col-md-6">
+                <label>Product Description</label>
+                <p-dropdown
+                  [style]="{ width: '100%' }"
+                  class="p-0"
+                  [options]="DescList"
+                  optionLabel="Details"
+                  [filter]="true"
+                  filterBy="Details"
+                  [showClear]="true"
+                  styleClass="listBottom"
+                  placeholder="Please Select"
+                  optionValue="InterliningsDescriptionId"
+                  formControlName="Product_Description"
+                  [virtualScroll]="true"
+                  [virtualScrollItemSize]="30"
+                >
+                  <ng-template let-Desc pTemplate="item">
+                    <div class="flex align-items-center gap-2">
+                      <div>{{ Desc.Details }}</div>
+                    </div>
+                  </ng-template>
+                </p-dropdown>
+              </div> -->
+              <!-- <div class="col-md-6">
+                <label>Article No <span>*</span></label>
+                <p-dropdown
+                  [style]="{ width: '100%' }"
+                  class="p-0"
+                  [options]="ArticleList"
+                  optionLabel="Article_No"
+                  [filter]="true"
+                  filterBy="Article_No"
+                  [showClear]="true"
+                  styleClass="listBottom"
+                  placeholder="Please Select"
+                  optionValue="Item_ID"
+                  formControlName="ArticleNo"
+                  [virtualScroll]="true"
+                  [virtualScrollItemSize]="30"
+                >
+                  <ng-template let-ArticleNo pTemplate="item">
+                    <div class="flex align-items-center gap-2">
+                      <div>{{ ArticleNo.Article_No }}</div>
+                    </div>
+                  </ng-template>
+                </p-dropdown>
+              </div> -->
+              <!-- <div class="col-md-6">
+                <label>Sample Article No</label>
+                <input
+                  type="text"
+                  autocomplete="off"
+                  type="text"
+                  formControlName="SampleArticleNo"
+                  class="form-control"
+                  placeholder="Sample Article NO"
+                  id="Sample_Article_No"
+                  name="Sample_Article_No"
+                  value=""
+                />
+              </div> -->
+              <!-- <div class="col-md-6">
+                <label>Color <span>*</span></label>
+                <p-dropdown
+                  [style]="{ width: '100%' }"
+                  class="p-0"
+                  [options]="ColorList"
+                  optionLabel="Color"
+                  [filter]="true"
+                  filterBy="Color"
+                  [showClear]="true"
+                  styleClass="listBottom"
+                  placeholder="Please Select"
+                  optionValue="Color_ID"
+                  formControlName="Color"
+                  [virtualScroll]="true"
+                  [virtualScrollItemSize]="30"
+                >
+                  <ng-template let-ArticleNo pTemplate="item">
+                    <div class="flex align-items-center gap-2">
+                      <div>{{ ArticleNo.Color }}</div>
+                    </div>
+                  </ng-template>
+                </p-dropdown>
+              </div> -->
+              <!-- <div class="col-md-6">
+                <label>Width <span>*</span></label>
+                <p-dropdown
+                  [style]="{ width: '100%' }"
+                  class="p-0"
+                  [options]="WidthList"
+                  optionLabel="Measurement"
+                  [filter]="true"
+                  filterBy="Measurement"
+                  [showClear]="true"
+                  styleClass="listBottom"
+                  placeholder="Please Select"
+                  optionValue="Width_ID"
+                  formControlName="Width"
+                  [virtualScroll]="true"
+                  [virtualScrollItemSize]="30"
+                >
+                  <ng-template let-ArticleNo pTemplate="item">
+                    <div class="flex align-items-center gap-2">
+                      <div>{{ ArticleNo.Measurement }}</div>
+                    </div>
+                  </ng-template>
+                </p-dropdown>
+              </div> -->
+              <!-- <div class="col-md-6">
+                <label>Unit <span>*</span></label>
+                <p-dropdown
+                  [style]="{ width: '100%' }"
+                  class="p-0"
+                  [options]="UnitList"
+                  optionLabel="Unit"
+                  [filter]="true"
+                  filterBy="Unit"
+                  [showClear]="true"
+                  styleClass="listBottom"
+                  placeholder="Please Select"
+                  optionValue="Unit_ID"
+                  formControlName="Unit"
+                  [virtualScroll]="true"
+                  [virtualScrollItemSize]="30"
+                >
+                  <ng-template let-ArticleNo pTemplate="item">
+                    <div class="flex align-items-center gap-2">
+                      <div>{{ ArticleNo.Unit }}</div>
+                    </div>
+                  </ng-template>
+                </p-dropdown>
+              </div> -->
+              <!-- <div class="col-md-6">
+                <label>Requested Quantity <span>*</span></label>
+                <input
+                  autocomplete="off"
+                  type="number"
+                  formControlName="Requested_Quantity"
+                  class="form-control"
+                  placeholder="Requested Quantity"
+                  id="Requested_Quantity"
+                  name="Requested_Quantity"
+                  value=""
+                />
+              </div> -->
+              <!-- <div class="col-md-6">
+                <label>Shipping Address</label>
+                <textarea
+                  autocomplete="off"
+                  type="text"
+                  formControlName="Shipping_Address"
+                  class="form-control"
+                  placeholder="Shipping Address"
+                  id="Shipping_Address"
+                  name="Shipping_Address"
+                  value=""
+                ></textarea>
+              </div> -->
+              <!-- <div class="col-md-6">
+                <label>Carried By <span>*</span></label>
+                <p-dropdown
+                  [style]="{ width: '100%' }"
+                  class="p-0"
+                  [options]="RequestStatus"
+                  optionLabel="text"
+                  [filter]="true"
+                  filterBy="text"
+                  [showClear]="true"
+                  styleClass="listBottom"
+                  placeholder="Please Select"
+                  optionValue="value"
+                  formControlName="RequestStatus"
+                >
+                  <ng-template let-RequestStatus pTemplate="item">
+                    <div class="flex align-items-center gap-2">
+                      <div>{{ RequestStatus.text }}</div>
+                    </div>
+                  </ng-template>
+                </p-dropdown>
+              </div> -->
+              <!-- <div class="col-md-6">
+                <label>Remarks</label>
+                <textarea
+                  autocomplete="off"
+                  type="text"
+                  formControlName="Remarks"
+                  class="form-control"
+                  placeholder="Remarks"
+                  id="Remarks"
+                  name="Remarks"
+                  value=""
+                ></textarea>
+              </div> -->
+            </div>
+          </form>
+        </div>
+        <div class="row g-3 align-items-center mb-2">
+          <div class="col-md-5 d-flex align-items-center">
+            <label class="col-5 text-end fw-semibold mb-0"> </label>
+            <div class="col-7">
+              <div class="flexbox mt-5">
+                <button
+                  [routerLink]="['/all-lc']"
+                  class="btn btn-w-xl text-white theme-btn-cancel"
+                  type="button"
+                >
+                  Cancel
+                </button>
+                <button
+                  class="btn btn-w-xl text-white theme-btn px-5 float-right"
+                  type="button"
+                  (click)="saveData()"
+                  [disabled]="Formgroup.invalid"
+                  [hidden]="isEdit"
+                >
+                  Save
+                </button>
+                <button
+                  [hidden]="!isEdit"
+                  class="btn btn-w-xl text-white theme-btn-edit px-5 float-right"
+                  type="button"
+                  (click)="updateData()"
+                  [disabled]="Formgroup.invalid"
+                >
+                  Update
+                </button>
               </div>
             </div>
-            <div class="col-md-6">
-              <label>Product Description</label>
-              <p-dropdown
-                [style]="{ width: '100%' }"
-                class="p-0"
-                [options]="DescList"
-                optionLabel="Details"
-                [filter]="true"
-                filterBy="Details"
-                [showClear]="true"
-                styleClass="listBottom"
-                placeholder="Please Select"
-                optionValue="InterliningsDescriptionId"
-                formControlName="Product_Description"
-                [virtualScroll]="true"
-                [virtualScrollItemSize]="30"
-              >
-                <ng-template let-Desc pTemplate="item">
-                  <div class="flex align-items-center gap-2">
-                    <div>{{ Desc.Details }}</div>
-                  </div>
-                </ng-template>
-              </p-dropdown>
-            </div>
-            <div class="col-md-6">
-              <label>Article No <span>*</span></label>
-              <p-dropdown
-                [style]="{ width: '100%' }"
-                class="p-0"
-                [options]="ArticleList"
-                optionLabel="Article_No"
-                [filter]="true"
-                filterBy="Article_No"
-                [showClear]="true"
-                styleClass="listBottom"
-                placeholder="Please Select"
-                optionValue="Item_ID"
-                formControlName="ArticleNo"
-                [virtualScroll]="true"
-                [virtualScrollItemSize]="30"
-              >
-                <ng-template let-ArticleNo pTemplate="item">
-                  <div class="flex align-items-center gap-2">
-                    <div>{{ ArticleNo.Article_No }}</div>
-                  </div>
-                </ng-template>
-              </p-dropdown>
-            </div>            
-            <div class="col-md-6">
-              <label>Sample Article No</label>
-              <input type="text"
-                autocomplete="off"
-                type="text"
-                formControlName="SampleArticleNo"
-                class="form-control"
-                placeholder="Sample Article NO"
-                id="Sample_Article_No"
-                name="Sample_Article_No"
-                value=""
-              />
-            </div>
-            <div class="col-md-6">
-              <label>Color <span>*</span></label>
-              <p-dropdown
-                [style]="{ width: '100%' }"
-                class="p-0"
-                [options]="ColorList"
-                optionLabel="Color"
-                [filter]="true"
-                filterBy="Color"
-                [showClear]="true"
-                styleClass="listBottom"
-                placeholder="Please Select"
-                optionValue="Color_ID"
-                formControlName="Color"
-                [virtualScroll]="true"
-                [virtualScrollItemSize]="30"
-              >
-                <ng-template let-ArticleNo pTemplate="item">
-                  <div class="flex align-items-center gap-2">
-                    <div>{{ ArticleNo.Color }}</div>
-                  </div>
-                </ng-template>
-              </p-dropdown>
-            </div>
-            <div class="col-md-6">
-              <label>Width <span>*</span></label>
-              <p-dropdown
-                [style]="{ width: '100%' }"
-                class="p-0"
-                [options]="WidthList"
-                optionLabel="Measurement"
-                [filter]="true"
-                filterBy="Measurement"
-                [showClear]="true"
-                styleClass="listBottom"
-                placeholder="Please Select"
-                optionValue="Width_ID"
-                formControlName="Width"
-                [virtualScroll]="true"
-                [virtualScrollItemSize]="30"
-              >
-                <ng-template let-ArticleNo pTemplate="item">
-                  <div class="flex align-items-center gap-2">
-                    <div>{{ ArticleNo.Measurement }}</div>
-                  </div>
-                </ng-template>
-              </p-dropdown>
-            </div>
-            <div class="col-md-6">
-              <label>Unit <span>*</span></label>
-              <p-dropdown
-                [style]="{ width: '100%' }"
-                class="p-0"
-                [options]="UnitList"
-                optionLabel="Unit"
-                [filter]="true"
-                filterBy="Unit"
-                [showClear]="true"
-                styleClass="listBottom"
-                placeholder="Please Select"
-                optionValue="Unit_ID"
-                formControlName="Unit"
-                [virtualScroll]="true"
-                [virtualScrollItemSize]="30"
-              >
-                <ng-template let-ArticleNo pTemplate="item">
-                  <div class="flex align-items-center gap-2">
-                    <div>{{ ArticleNo.Unit }}</div>
-                  </div>
-                </ng-template>
-              </p-dropdown>
-            </div>
-            <div class="col-md-6">
-              <label>Requested Quantity <span>*</span></label>
-              <input
-                autocomplete="off"
-                type="number"
-                formControlName="Requested_Quantity"
-                class="form-control"
-                placeholder="Requested Quantity"
-                id="Requested_Quantity"
-                name="Requested_Quantity"
-                value=""
-              />
-            </div>
-            <div class="col-md-6">
-              <label>Shipping Address</label>
-              <textarea
-                autocomplete="off"
-                type="text"
-                formControlName="Shipping_Address"
-                class="form-control"
-                placeholder="Shipping Address"
-                id="Shipping_Address"
-                name="Shipping_Address"
-                value=""
-              ></textarea>
-            </div>
-            <div class="col-md-6">
-              <label>Carried By <span>*</span></label>
-              <p-dropdown
-                [style]="{ width: '100%' }"
-                class="p-0"
-                [options]="RequestStatus"
-                optionLabel="text"
-                [filter]="true"
-                filterBy="text"
-                [showClear]="true"
-                styleClass="listBottom"
-                placeholder="Please Select"
-                optionValue="value"
-                formControlName="RequestStatus"
-              >
-                <ng-template let-RequestStatus pTemplate="item">
-                  <div class="flex align-items-center gap-2">
-                    <div>{{ RequestStatus.text }}</div>
-                  </div>
-                </ng-template>
-              </p-dropdown>
-            </div>
-            <div class="col-md-6">
-              <label>Remarks</label>
-              <textarea
-                autocomplete="off"
-                type="text"
-                formControlName="Remarks"
-                class="form-control"
-                placeholder="Remarks"
-                id="Remarks"
-                name="Remarks"
-                value=""
-              ></textarea>
-            </div>
           </div>
-        </form>
-        <div class="flexbox mt-5">
-          <button
-            [routerLink]="['/all-lc']"
-            class="btn btn-w-xl text-white theme-btn-cancel"
-            type="button"
-          >
-            Cancel
-          </button>
-          <button
-            class="btn btn-w-xl text-white theme-btn px-5 float-right"
-            type="button"
-            (click)="saveData()"
-            [disabled]="Formgroup.invalid"
-            [hidden]="isEdit"
-          >
-            Save
-          </button>
-          <button
-            [hidden]="!isEdit"
-            class="btn btn-w-xl text-white theme-btn-edit px-5 float-right"
-            type="button"
-            (click)="updateData()"
-            [disabled]="Formgroup.invalid"
-          >
-            Update
-          </button>
+          <div class="col-md-2"></div>
         </div>
       </div>
     </div>

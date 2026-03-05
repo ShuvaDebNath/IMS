@@ -7,28 +7,29 @@
     <div class="card-body">
       <form [formGroup]="Formgroup">
         <h3 class="fs-6"><strong>Details</strong></h3>
-
         <div class="table-responsive" style="overflow-x: auto">
           <table
             class="table table-bordered align-middle"
-            style="min-width: 2000px"
+            style="min-width: 3500px; table-layout: fixed"
           >
             <thead class="table-light">
-              <tr>
-                <th class="text-center">Request Date</th>
-                <th class="text-center">Customer Name</th>
-                <th class="text-center">Contact Info</th>
-                <th class="text-center">Product Description</th>
-                <th class="text-center">Article No</th>
-                <th class="text-center">Sample Article No</th>
-                <th class="text-center">Color</th>
-                <th class="text-center">Width</th>
-                <th class="text-center">Unit</th>
-                <th class="text-center">Qty</th>
-                <th class="text-center">Shipping Address</th>
-                <th class="text-center">Status</th>
-                <th class="text-center">Remarks</th>
-                <th></th>
+              <tr class="custom-header">
+                <th class="text-center" style="width: 7%">Request Date</th>
+                <th class="text-center" style="width: 7%">Customer Name</th>
+                <th class="text-center" style="width: 7%">Contact Info</th>
+                <th class="text-center" style="width: 7%">
+                  Product Description
+                </th>
+                <th class="text-center" style="width: 7%">Article No</th>
+                <th class="text-center" style="width: 7%">Sample Article No</th>
+                <th class="text-center" style="width: 7%">Color</th>
+                <th class="text-center" style="width: 7%">Width</th>
+                <th class="text-center" style="width: 7%">Unit</th>
+                <th class="text-center" style="width: 7%">Qty</th>
+                <th class="text-center" style="width: 7%">Shipping Address</th>
+                <th class="text-center" style="width: 7%">Status</th>
+                <th class="text-center" style="width: 7%">Remarks</th>
+                <th style="width: 2%"></th>
               </tr>
             </thead>
 
@@ -38,22 +39,20 @@
                 [formGroupName]="i"
               >
                 <!-- DATE -->
-                <td class="p-1">
-                  <div class="input-group custom-input-group">
-                    <!-- <span class="input-group-text pointer" >
-                      <i class="fas fa-calendar"></i>
-                    </span> -->
-                    <input
-                      #dateInput
-                      type="date"
-                      formControlName="RequestDate"
-                      class="form-control form-control-lg"
-                      placeholder="Date"
-                    />
-                  </div>
+                <td class="p-1" style="width: 7%">
+                  <p-calendar
+                    formControlName="RequestDate"
+                    [showIcon]="false"
+                    dateFormat="dd/mm/yy"
+                    placeholder="Select Date"
+                    inputStyleClass="custom-date-input"
+                    appendTo="body"
+                    [style]="{ width: '100%' }"
+                  ></p-calendar>
                 </td>
 
-                <td class="p-1">
+                <!-- CUSTOMER NAME -->
+                <td class="p-1" style="width: 7%">
                   <p-dropdown
                     [options]="CustomerList"
                     optionLabel="CustomerName"
@@ -66,26 +65,27 @@
                     [virtualScroll]="true"
                     appendTo="body"
                     [virtualScrollItemSize]="30"
-                    styleClass="custom-dropdown wide-dropdown"
+                    styleClass="w-100"
+                    [style]="{ width: '100%' }"
                     (onChange)="CustomerDetails(item)"
                   ></p-dropdown>
                 </td>
 
-                <td class="p-1">
+                <!-- CONTACT INFO -->
+                <td class="p-1" style="width: 7%">
                   <input
                     type="text"
-                    style="width: 120px;"
                     formControlName="Customer_Contact_Info"
-                    class="form-control form-control-lg"
+                    class="form-control form-control-lg w-100"
                     placeholder="Contact"
+                    style="width: 100%"
                   />
                 </td>
 
                 <!-- PRODUCT DESCRIPTION -->
-                <td class="p-1">
+                <td class="p-1" style="width: 7%">
                   <p-dropdown
-                    [style]="{ width: '100%' }"
-                    class="p-0"
+                    class="p-0 w-100"
                     [options]="DescList"
                     optionLabel="Details"
                     [filter]="true"
@@ -95,7 +95,8 @@
                     placeholder="Please Select"
                     optionValue="InterliningsDescriptionId"
                     formControlName="Product_Description"
-                    styleClass="custom-dropdown wide-dropdown"
+                    styleClass="w-100"
+                    [style]="{ width: '100%' }"
                     [virtualScroll]="true"
                     [virtualScrollItemSize]="30"
                   >
@@ -108,7 +109,7 @@
                 </td>
 
                 <!-- ARTICLE -->
-                <td class="p-1">
+                <td class="p-1" style="width: 7%">
                   <p-dropdown
                     [options]="ArticleList"
                     optionLabel="ItemCode"
@@ -121,7 +122,8 @@
                     appendTo="body"
                     [virtualScroll]="true"
                     [virtualScrollItemSize]="30"
-                    styleClass="custom-dropdown wide-dropdown"
+                    styleClass="w-100"
+                    [style]="{ width: '100%' }"
                   >
                     <ng-template let-ArticleNo pTemplate="item">
                       <div class="flex align-items-center gap-2">
@@ -130,35 +132,34 @@
                     </ng-template>
                   </p-dropdown>
                 </td>
-                <td>
+
+                <!-- SAMPLE ARTICLE -->
+                <td class="p-1" style="width: 7%">
                   <input
                     type="text"
                     autocomplete="off"
-                    style="width: 120px;"
-                    type="text"
                     formControlName="Sample_Article_No"
-                    class="form-control"
-                    placeholder="Sample Article NO"
-                    id="Sample_Article_No"
-                    name="Sample_Article_No"
-                    value=""
+                    class="form-control w-100"
+                    placeholder="Sample Article"
+                    style="width: 100%; height: 48px"
                   />
                 </td>
-                <!-- ARTICLE -->
-                <td class="p-1">
+
+                <!-- COLOR -->
+                <td class="p-1" style="width: 7%">
                   <p-dropdown
-                    [style]="{ width: '100%' }"
-                    class="p-0"
+                    class="p-0 w-100"
                     [options]="ColorList"
                     optionLabel="Color"
                     [filter]="true"
                     filterBy="Color"
                     appendTo="body"
                     [showClear]="true"
-                    placeholder="Please Select"
+                    placeholder="Select"
                     optionValue="Color_ID"
                     formControlName="Color"
-                    styleClass="custom-dropdown wide-dropdown"
+                    styleClass="w-100"
+                    [style]="{ width: '100%' }"
                     [virtualScroll]="true"
                     [virtualScrollItemSize]="30"
                   >
@@ -169,21 +170,22 @@
                     </ng-template>
                   </p-dropdown>
                 </td>
-                <!-- ARTICLE -->
-                <td class="p-1">
+
+                <!-- WIDTH -->
+                <td class="p-1" style="width: 7%">
                   <p-dropdown
-                    [style]="{ width: '100%' }"
-                    class="p-0"
+                    class="p-0 w-100"
                     [options]="WidthList"
                     optionLabel="Measurement"
                     [filter]="true"
                     filterBy="Measurement"
                     [showClear]="true"
                     appendTo="body"
-                    placeholder="Please Select"
+                    placeholder="Select"
                     optionValue="Width_ID"
                     formControlName="Width"
-                    styleClass="custom-dropdown wide-dropdown"
+                    styleClass="w-100"
+                    [style]="{ width: '100%' }"
                     [virtualScroll]="true"
                     [virtualScrollItemSize]="30"
                   >
@@ -194,21 +196,22 @@
                     </ng-template>
                   </p-dropdown>
                 </td>
-                <!-- ARTICLE -->
-                <td class="p-1">
+
+                <!-- UNIT -->
+                <td class="p-1" style="width: 7%">
                   <p-dropdown
-                    [style]="{ width: '100%' }"
-                    class="p-0"
+                    class="p-0 w-100"
                     [options]="UnitList"
                     optionLabel="Unit"
                     [filter]="true"
                     filterBy="Unit"
                     [showClear]="true"
                     appendTo="body"
-                    styleClass="listBottom"
-                    placeholder="Please Select"
+                    placeholder="Select"
                     optionValue="Unit_ID"
                     formControlName="Unit"
+                    styleClass="w-100"
+                    [style]="{ width: '100%' }"
                     [virtualScroll]="true"
                     [virtualScrollItemSize]="30"
                   >
@@ -221,28 +224,28 @@
                 </td>
 
                 <!-- QTY -->
-                <td class="p-1" style="max-width: 120px">
+                <td class="p-1" style="width: 7%">
                   <input
-                    style="width: 120px;"
                     type="number"
                     formControlName="Requested_Quantity"
-                    class="form-control form-control-lg text-center"
+                    class="form-control form-control-lg text-center w-100"
                     placeholder="Qty"
+                    style="width: 100%"
                   />
                 </td>
 
-                <!-- ADDRESS -->
-                <td class="p-1">
+                <!-- SHIPPING ADDRESS -->
+                <td class="p-1" style="width: 7%">
                   <textarea
                     formControlName="Shipping_Address"
-                    class="form-control form-control-lg"
+                    class="form-control form-control-lg w-100"
                     placeholder="Address"
-                    style="height: 48px;width: 120px;"
+                    style="height: 48px; resize: none; width: 100%"
                   ></textarea>
                 </td>
 
                 <!-- STATUS -->
-                <td class="p-1">
+                <td class="p-1" style="width: 7%">
                   <p-dropdown
                     [options]="RequestStatus"
                     optionLabel="text"
@@ -253,26 +256,28 @@
                     optionValue="value"
                     formControlName="RequestStatus"
                     appendTo="body"
-                    styleClass="custom-dropdown wide-dropdown"
+                    styleClass="w-100"
+                    [style]="{ width: '100%' }"
                   ></p-dropdown>
                 </td>
 
                 <!-- REMARKS -->
-                <td class="p-1">
+                <td class="p-1" style="width: 7%">
                   <textarea
                     formControlName="Remarks"
-                    class="form-control form-control-lg"
+                    class="form-control form-control-lg w-100"
                     placeholder="Remarks"
-                    style="height: 48px"
+                    style="height: 48px; resize: none; width: 100%"
                   ></textarea>
                 </td>
 
                 <!-- DELETE BUTTON -->
-                <td class="text-center">
+                <td class="text-center" style="width: 4%">
                   <button
                     type="button"
-                    class="btn btn-sm btn-danger px-2 py-1"
+                    class="btn btn-sm btn-danger d-flex justify-content-center align-items-center"
                     (click)="removeItem(i)"
+                    style="width: 100%; height: 40px"
                   >
                     ×
                   </button>
@@ -281,12 +286,12 @@
             </tbody>
           </table>
         </div>
-
         <div class="d-flex justify-content-end gap-2 mt-3">
           <button
             type="button"
             class="btn btn-outline-success btn-sm"
             (click)="addItem()"
+            style="width: 130px;"
           >
             <i class="bi bi-plus-circle me-1"></i> Add Row
           </button>
@@ -296,6 +301,7 @@
             (click)="saveData()"
             class="btn theme-btn btn-sm"
             *ngIf="!isEdit"
+            style="width: 130px;"
           >
             <i class="bi bi-save me-1"></i> Save
           </button>

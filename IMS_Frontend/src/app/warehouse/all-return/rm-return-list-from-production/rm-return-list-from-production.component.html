@@ -10,7 +10,7 @@
     </div>
   </div>
   <div class="card-body">
-    <form
+    <!-- <form
       [formGroup]="SearchForm"
       class="row p-3 shadow-sm g-3 align-items-end mb-3"
       (ngSubmit)="Search()"
@@ -41,7 +41,51 @@
           <i class="pi pi-download me-1"></i> Load
         </button>
       </div>
-    </form>
+    </form> -->
+     <form
+        [formGroup]="SearchForm"
+        class="row p-3 shadow-sm g-3 align-items-end mb-3"
+        (ngSubmit)="Search()"
+      >
+     
+
+        <div class="row align-items-end">
+          <div class="col-auto">
+            <label class="form-label">Select Date</label>
+
+            <div class="range-container" style="width: 100%">
+              <p-calendar
+                formControlName="fromDate"
+                [showIcon]="false"
+                dateFormat="dd/mm/yy"
+                placeholder="Start Date"
+                inputStyleClass="custom-date-input"
+              ></p-calendar>
+
+              <span class="range-divider">to</span>
+
+              <p-calendar
+                formControlName="toDate"
+                [showIcon]="false"
+                dateFormat="dd/mm/yy"
+                placeholder="End Date"
+                inputStyleClass="custom-date-input"
+              ></p-calendar>
+            </div>
+          </div>
+          <div class="col-auto mt-4">
+            <button
+              title="Search"
+              type="submit"
+              [disabled]="SearchForm.invalid"
+              class="btn btn-sm theme-btn mr-2 text-white"
+              style="margin-top: 2.3em !important; width: 130px; height: 38px"
+            >
+              <i class="pi pi-download me-1"></i> Load
+            </button>
+          </div>
+        </div>
+      </form>
     <hr />
 
     <p-table
@@ -56,7 +100,7 @@
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     >
       <ng-template pTemplate="caption">
-        <div class="table-toolbar">
+        <div class="table-toolbar d-flex justify-content-end">
           <span class="p-input-icon-left">
             <i class="pi pi-search"></i>
             <input
@@ -71,11 +115,11 @@
 
       <ng-template pTemplate="header">
         <tr>
-          <th class="bg-gradient-success">SL</th>
-          <th class="bg-gradient-success">Issue No</th>
-          <th class="bg-gradient-success">Date</th>
-          <th class="bg-gradient-success">Status</th>
-          <th class="bg-gradient-success" *ngIf="allPersmissions">Action</th>
+          <th class="text-center">SL</th>
+          <th class="text-center">Issue No</th>
+          <th class="text-center">Date</th>
+          <th class="text-center">Status</th>
+          <th class="text-center" *ngIf="allPersmissions">Action</th>
         </tr>
       </ng-template>
 
@@ -87,7 +131,7 @@
           <td class="text-center align-middle">{{ table.Status }}</td>
           <td class="text-center align-middle p-0 m-0">
             <a
-              class="btn bg-gradient-cyan btn-xs mr-2"
+              class="btn theme-btn btn-xs mr-2"
               target="_blank"
               title="View Details"
               (click)="viewDetails(table)"
@@ -98,7 +142,7 @@
       </ng-template>
     </p-table>
   </div>
-  <p-dialog
+  <!-- <p-dialog
     header="Detail"
     [(visible)]="isDetailsVisible"
     [modal]="true"
@@ -152,5 +196,78 @@
         </ng-template>
       </p-table>
     </div>
-  </p-dialog>
+  </p-dialog> -->
+<p-dialog
+  header="RM Return Detail"
+  [(visible)]="isDetailsVisible"
+  [modal]="true"
+  [closable]="true"
+  [style]="{ width: '75vw', maxWidth: '95vw' }"
+  (onHide)="detailsTableData = null"
+  styleClass="rm-return-warehouse-dialog"
+>
+  <!-- Resolve Button -->
+  <div *ngIf="detailsTableData" class="mb-3 p-2 shadow-sm rounded bg-light">
+    <button
+      type="button"
+      class="btn btn-success w-100"
+      (click)="ResolveRMReturn(detailsTableData)"
+    >
+      <i class="pi pi-download me-1"></i> Resolve
+    </button>
+  </div>
+
+  <!-- Details Table -->
+  <div *ngIf="detailsTableData">
+    <p-table [value]="detailsTableData" [responsive]="true" class="shadow-sm rounded">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Article</th>
+          <th>Color</th>
+          <th>Width</th>
+          <th>Unit</th>
+          <th>Weight(KG)</th>
+          <th>Return Quantity</th>
+          <th>Return Roll</th>
+          <th>Return Bag</th>
+          <th>Warehouse</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-item>
+        <tr>
+          <td style="text-align: left">{{ item.Article_No }}</td>
+          <td style="text-align: left">{{ item.Color }}</td>
+          <td style="text-align: center">{{ item.Measurement }}</td>
+          <td style="text-align: center">{{ item.Unit }}</td>
+          <td style="text-align: center">{{ item.Weight }}</td>
+          <td style="text-align: center">{{ item.Return_Qty }}</td>
+          <td style="text-align: center">{{ item.Return_Roll }}</td>
+          <td style="text-align: center">{{ item.Return_Bag }}</td>
+          <td style="text-align: center; min-width: 180px;">
+            <p-dropdown
+              [style]="{'width':'100%'}"
+              class="p-0"
+              [options]="warehouseList"
+              optionLabel="Stock_Location_Name"
+              [filter]="true"
+              filterBy="Stock_Location_Name"
+              [showClear]="true"
+              styleClass="listBottom"
+              placeholder="Select Warehouse"
+              optionValue="Stock_Location_ID"
+              (onChange)="StockLocationChange($event,item)"
+            >
+              <ng-template let-warehouse pTemplate="item">
+                <div class="flex align-items-center gap-2">  
+                  <div>{{ warehouse.Stock_Location_Name }}</div>
+                </div>
+              </ng-template>
+            </p-dropdown>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</p-dialog>
+
 </div>

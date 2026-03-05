@@ -62,7 +62,7 @@ import { CustomerVisitReportListComponent } from './task-report/customer-visit-r
 import { MonthlyTaskReportListComponent } from './task-report/monthly-task-report-list/monthly-task-report-list.component';
 import { GenerateMonthlyTaskComponent } from './task-report/generate-monthly-task/generate-monthly-task.component';
 import { GenerateCustomerVisitComponent } from './task-report/generate-customer-visit/generate-customer-visit.component';
-
+import { TooltipModule } from 'primeng/tooltip';
 
 
 const CustomSelectOptions: INgxSelectOptions = {
@@ -86,9 +86,11 @@ const CustomSelectOptions: INgxSelectOptions = {
     FormsModule,
     ReactiveFormsModule,
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
     NgxDatatableModule,
+    TooltipModule,
     NgMultiSelectDropDownModule.forRoot(),
     RouterModule.forRoot([
         { path: '', component: LoginComponent },

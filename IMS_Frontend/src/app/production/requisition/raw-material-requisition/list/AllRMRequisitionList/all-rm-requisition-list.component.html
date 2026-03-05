@@ -9,27 +9,42 @@
         class="row p-3 shadow-sm g-3 align-items-end mb-3"
         (ngSubmit)="loadAllRequisitions()"
       >
-        <div class="col-md-3">
-          <label class="form-label fw-bold">From Date</label>
-          <input type="date" class="form-control" formControlName="fromDate" />
-        </div>
+        <div class="col-auto">
+          <label class="form-label">Select Date</label>
 
-        <div class="col-md-3">
-          <label class="form-label fw-bold">To Date</label>
-          <input type="date" class="form-control" formControlName="toDate" />
-        </div>
+          <div class="range-container" style="width: 100%">
+            <p-calendar
+              formControlName="fromDate"
+              [showIcon]="false"
+              dateFormat="dd/mm/yy"
+              placeholder="Start Date"
+              inputStyleClass="custom-date-input"
+            ></p-calendar>
 
-        <div class="col-md-2">
+            <span class="range-divider">to</span>
+
+            <p-calendar
+              formControlName="toDate"
+              [showIcon]="false"
+              dateFormat="dd/mm/yy"
+              placeholder="End Date"
+              inputStyleClass="custom-date-input"
+            ></p-calendar>
+          </div>
+        </div>
+        <div class="col-auto mt-4">
           <button
+            title="Search"
             type="submit"
-            class="btn theme-btn w-100"
             [disabled]="dateForm.invalid"
+            class="btn btn-sm theme-btn mr-2 text-white"
+            style="margin-top: 2.3em !important; width: 130px; height: 38px"
           >
             <i class="pi pi-download me-1"></i> Load
           </button>
         </div>
       </form>
-      <div class="shadow-sm p-2">
+      <div>
         <p-table
           *ngIf="tableVisible"
           #dt
@@ -44,7 +59,7 @@
             'Total_Qty',
             'Total_bag',
             'Total_Roll',
-            'Status'
+            'Status',
           ]"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
         >
@@ -82,7 +97,7 @@
               <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
               <td class="text-start">{{ requisition.RequisitionNumber }}</td>
               <td class="text-center">
-                {{ requisition.RequisitionDate | date : "dd-MMM-yyyy" }}
+                {{ requisition.RequisitionDate | date: "dd-MMM-yyyy" }}
               </td>
               <td class="text-center">{{ requisition.Total_Qty }}</td>
               <td class="text-center">{{ requisition.Total_bag }}</td>
@@ -95,7 +110,7 @@
           </button> -->
                 <!-- ✅ call the handler that opens the dialog -->
                 <button
-                  class="btn btn-info btn-sm text-white d-inline-flex align-items-center"
+                  class="btn theme-btn-view btn-sm text-white d-inline-flex align-items-center"
                   (click)="onDetails(requisition)"
                   title="Details"
                   aria-label="Details"
@@ -114,7 +129,7 @@
         </p-table>
 
         <!-- Details dialog -->
-        <p-dialog
+        <!-- <p-dialog
           header="Detail"
           [(visible)]="isDetailsVisible"
           [modal]="true"
@@ -126,7 +141,7 @@
           <div class="row mb-3" *ngIf="isDetailsVisible">
             <div class="col-md-12">
               <button
-              class="btn theme-btn px-4 py-2"
+                class="btn theme-btn px-4 py-2"
                 (click)="printDialog()"
                 title="Export LC list to Excel, Word, or PDF"
               >
@@ -136,9 +151,7 @@
           </div>
           <div *ngIf="detailsData">
             <h2>RMRequisition - {{ detailsData.RequisitionNumber }}</h2>
-            <p>
-              Date: {{ detailsData.RequisitionDate | date : "dd-MMM-yyyy" }}
-            </p>
+            <p>Date: {{ detailsData.RequisitionDate | date: "dd-MMM-yyyy" }}</p>
             <p>Total Qty: {{ detailsData.TotalQty }}</p>
             <p>Total Bag: {{ detailsData.TotalBag }}</p>
             <p>Total Roll: {{ detailsData.TotalRoll }}</p>
@@ -167,6 +180,84 @@
               </ng-template>
             </p-table>
           </div>
+        </p-dialog> -->
+        <p-dialog
+          header="Detail"
+          [(visible)]="isDetailsVisible"
+          [modal]="true"
+          [closable]="true"
+          [style]="{ width: '70vw', maxHeight: '80vh' }"
+          [contentStyle]="{ 'overflow-y': 'auto', padding: '20px' }"
+          styleClass="orange-gradient-dialog"
+          (onHide)="detailsData = null"
+        >
+          <hr />
+
+          <!-- Export Button -->
+          <div class="mb-3" *ngIf="isDetailsVisible">
+            <button
+              class="btn theme-btn px-4 py-2"
+              (click)="printDialog()"
+              title="Export LC list to Excel, Word, or PDF"
+            >
+              <i class="fas fa-download"></i>&nbsp; Export
+            </button>
+          </div>
+
+          <!-- Requisition Summary Card -->
+          <div
+            *ngIf="detailsData"
+            class="requisition-summary p-3 bg-light border rounded shadow-sm mb-3"
+          >
+            <h5 class="fw-bold mb-3">
+              RMRequisition - {{ detailsData.RequisitionNumber }}
+            </h5>
+            <div class="row g-2 mb-2">
+              <div class="col-md-4">
+                <strong>Date:</strong>
+                {{ detailsData.RequisitionDate | date: "dd-MMM-yyyy" }}
+              </div>
+              <div class="col-md-4">
+                <strong>Total Qty:</strong> {{ detailsData.TotalQty }}
+              </div>
+              <div class="col-md-4">
+                <strong>Total Bag:</strong> {{ detailsData.TotalBag }}
+              </div>
+              <div class="col-md-4">
+                <strong>Total Roll:</strong> {{ detailsData.TotalRoll }}
+              </div>
+              <div class="col-md-12" *ngIf="detailsData.Remarks">
+                <strong>Remarks:</strong> {{ detailsData.Remarks }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Items Table -->
+          <p-table
+            [value]="detailsData?.Items"
+            [responsive]="true"
+            styleClass="p-datatable-sm p-datatable-striped"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Article</th>
+                <th>Description</th>
+                <th class="text-center">Quantity</th>
+                <th class="text-center">Roll/Bag</th>
+                <th class="text-center">R/B Qty</th>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+              <tr [class.alt-row]="rowIndex % 2 === 1">
+                <td>{{ item.ConcatArticleNo }}</td>
+                <td>{{ item.Description }}</td>
+                <td class="text-center">{{ item.Quantity }}</td>
+                <td class="text-center">{{ item.Roll_Bag }}</td>
+                <td class="text-center">{{ item.RollBag_Quantity }}</td>
+              </tr>
+            </ng-template>
+          </p-table>
         </p-dialog>
       </div>
     </div>
