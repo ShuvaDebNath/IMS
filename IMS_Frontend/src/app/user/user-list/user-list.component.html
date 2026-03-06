@@ -36,6 +36,9 @@
               <i class="fas fa-search"></i>&nbsp;Search</button>
           </div>
         </div> -->
+     
+     
+     
         <div class="row align-items-end">
           <div class="col-md-3">
             <label>Role <span>*</span></label>
@@ -60,6 +63,7 @@
           [responsive]="true" [showCurrentPageReport]="true" (onPage)="onPageChange($event)"
           [rowsPerPageOptions]="[5,10,20,50,tableData.length]" [globalFilterFields]="['UserName','Role_Name','Superior']"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+
 
           <ng-template pTemplate="caption">
             <div class="table-toolbar d-flex justify-content-end align-items-center">
