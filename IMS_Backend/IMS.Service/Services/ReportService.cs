@@ -438,4 +438,16 @@ public class ReportService : IReportService
             throw ex;
         }
     }
+    public async Task<DataSet> PIReport(PIReportParams pIReportParams)
+    {
+        try
+        {
+
+            return await _reportRepository.PIReport(pIReportParams);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
 }

@@ -34,6 +34,8 @@ export class AllCustomersComponent {
   deletePermissions: boolean = false;
   printPermissions: boolean = false;
 
+  roleId:any = '';
+
   constructor(
     private getDataService: GetDataService,
     private gs: GlobalServiceService,
@@ -51,6 +53,7 @@ export class AllCustomersComponent {
     this.deletePermissions = permissions.deletePermissions;
     this.printPermissions = permissions.printPermissions;
 
+    this.roleId = window.localStorage.getItem('roleId');
     if (!this.printPermissions) {
       window.location.href = 'dashboard';
     }
@@ -285,6 +288,56 @@ export class AllCustomersComponent {
         var item = {
           Superior_Id: SuperioId,
           Customer_Id: CustomerId,
+          Status: 'All',
+          User: sentBy,
+        };
+
+        excelBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintCustomerReport(item, 'excel', 'F');
+        });
+
+        wordBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintCustomerReport(item, 'word', 'F');
+        });
+
+        pdfBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintCustomerReport(item, 'pdf', 'F');
+        });
+      },
+    });
+  }
+  printAllDialog() {
+    swal.fire({
+      title: 'What you want to do?',
+      icon: 'question',
+      html: `
+                <div style="display: flex; gap: 10px; justify-content: center;">
+                  <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
+                    <i class="fa fa-file-excel"></i> Excel
+                  </button>
+                  <button id="wordBtn" class="btn btn-info" style="padding: 8px 16px;">
+                    <i class="fa fa-file-word"></i> Word
+                  </button>
+                  <button id="pdfBtn" class="btn btn-danger" style="padding: 8px 16px;">
+                    <i class="fa fa-file-pdf"></i> PDF
+                  </button>
+                </div>
+              `,
+      showConfirmButton: false,
+      didOpen: () => {
+        const excelBtn = document.getElementById('excelBtn');
+        const wordBtn = document.getElementById('wordBtn');
+        const pdfBtn = document.getElementById('pdfBtn');
+
+        const sentByStr = localStorage.getItem('userId');
+        const sentBy = sentByStr ? Number(sentByStr) : null;
+        var { fromDate, toDate, CustomerId, SuperioId } = this.dateForm.value;
+        var item = {
+          Superior_Id: '0',
+          Customer_Id: '',
           Status: 'All',
           User: sentBy,
         };

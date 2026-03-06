@@ -173,8 +173,10 @@ export class UserListComponent {
   }
 
   onPageChange(event: any) {
+    console.log(event);
+    
     this.pageSize = event.rows;
-    this.currentPage = event.pageIndex;
+    this.currentPage = (event.first / event.rows) + 1;
   }
 
   printDialog() {
@@ -203,23 +205,25 @@ export class UserListComponent {
         const sentByStr = localStorage.getItem('userId');
         const sentBy = sentByStr ? Number(sentByStr) : null;
         var item = {
-          Status: 'All',
-          User: sentBy,
+          RoleId: this.SearchForm.value.Role,
+          pageLength: this.pageSize,
+          pageNo:this.currentPage,
+          searchParam:this.searchText==undefined?'':this.searchText
         };
 
         excelBtn?.addEventListener('click', () => {
           swal.close();
-          this.reportService.PrintCustomerReport(item, 'excel', 'F');
+          this.reportService.PrintUserReport(item, 'excel', 'F');
         });
 
         wordBtn?.addEventListener('click', () => {
           swal.close();
-          this.reportService.PrintCustomerReport(item, 'word', 'F');
+          this.reportService.PrintUserReport(item, 'word', 'F');
         });
 
         pdfBtn?.addEventListener('click', () => {
           swal.close();
-          this.reportService.PrintCustomerReport(item, 'pdf', 'F');
+          this.reportService.PrintUserReport(item, 'pdf', 'F');
         });
       },
     });

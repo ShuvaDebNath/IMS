@@ -78,13 +78,22 @@
     </form>
 
     <div class="shadow-sm p-2">
-      <button
+      <div class="d-flex">
+        <button *ngIf="allCustomers.length>0" 
         type="button"
         class="btn btn-outline-success bg-gradient-warning btn-sm mr-2"
         (click)="printDialog()"
       >
         <i class="fas fa-file-print"></i>&nbsp;Print
       </button>
+      <button  *ngIf="roleId==1 || roleId==2"
+        type="button"
+        class="btn btn-outline-success bg-gradient-warning btn-sm mr-2"
+        (click)="printAllDialog()"
+      >
+        <i class="fas fa-file-print"></i>&nbsp;Print All
+      </button>
+      </div>
       <p-table
         *ngIf="tableVisible"
         #dt
