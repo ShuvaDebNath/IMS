@@ -1,13 +1,26 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Text;
 
 namespace IMS.API.Configuration
 {
-    public class ServiceCollectionExtensions
+    public static class ServiceCollectionExtensions
     {
-        public IServiceCollection AddJwtAuthentication(IServiceCollection services, JwtOptions jwtOptions, string scheme = "JwtBearer")
+        // Best-practice extension: configure JWT from IConfiguration to avoid resolving services during startup
+        public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration, string scheme = "JwtBearer")
         {
+            var key = configuration["SecurityJwt:Key"];
+            var issuer = configuration["SecurityJwt:Issuer"];
+
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentException("JWT configuration missing: SecurityJwt:Key is not configured. Set it in appsettings or environment (SECURITYJWT_KEY).");
+            if (string.IsNullOrWhiteSpace(issuer))
+                throw new ArgumentException("JWT configuration missing: SecurityJwt:Issuer is not configured. Set it in appsettings or environment (SECURITYJWT_ISSUER).");
+
+            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+
             services.AddAuthentication(scheme)
                 .AddJwtBearer(scheme, options =>
                 {
@@ -17,11 +30,12 @@ namespace IMS.API.Configuration
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = jwtOptions.Issuer,
-                        ValidAudience = jwtOptions.Issuer,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key))
+                        ValidIssuer = issuer,
+                        ValidAudience = issuer,
+                        IssuerSigningKey = signingKey
                     };
                 });
+
             return services;
         }
     }

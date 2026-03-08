@@ -13,11 +13,11 @@ export class LoginServiceService {
   readonly baseUrl = GlobalConfig.BASE_URL;
   readonly apiControllerUser = 'User';
   readonly apiController = 'Accounts';
-  token:any;
+  //token:any;
 constructor(private http:HttpClient,
     private gs: GlobalServiceService) { 
   
-    this.token = gs.getSessionData('token');
+    //this.token = gs.getSessionData('token');
 }
 
 public GetBasicData(){
@@ -52,10 +52,10 @@ public ResetPassword(fd: any) {
         this.baseUrl + this.apiControllerUser + '/ResetPassword',
         model,
         {
-          headers: new HttpHeaders({
-            Authorization: 'Bearer ' + this.token,
-            'Content-Type': 'application/json',
-          }),
+          // headers: new HttpHeaders({
+          //   Authorization: 'Bearer ' + this.token,
+          //   'Content-Type': 'application/json',
+          // }),
         }
       )
       .pipe(

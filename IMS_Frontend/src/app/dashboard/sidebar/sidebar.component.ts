@@ -1,15 +1,14 @@
 import { Component, OnInit ,Input} from '@angular/core';
-
 import Swal from 'sweetalert2';
 import { GlobalServiceService } from '../../services/Global-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { GlobalConfig } from 'src/app/global-config.config';
-import { LoginComponent } from 'src/app/authentication/login/login.component';
-import { GetDataModel } from 'src/app/models/GetDataModel';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 import { PagesComponent } from 'src/app/pages/pages.component';
 import { Menu } from 'src/app/models/menu.model';
+import { AppStateService } from 'src/app/services/session/app-state.service';
+import { take, filter } from 'rxjs/operators';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -27,6 +26,7 @@ export class SidebarComponent implements OnInit {
   constructor(
     private gs: GlobalServiceService,
     private activeLink: ActivatedRoute,
+    private appState: AppStateService,
     private router: Router,    
     private masterEntryService: MasterEntryService,    
     private pagesComponent: PagesComponent,
@@ -36,11 +36,19 @@ export class SidebarComponent implements OnInit {
 
   }
 
-  ngOnInit() {
-    this.logo=window.localStorage.getItem('concernCompanyLogo');
-    //this.GetUserWiseledger();
+  ngOnInit(): void {
+  this.appState.ready$
+    .pipe(filter(ready => ready), take(1))
+    .subscribe(() => {
+      this.logo=window.localStorage.getItem('concernCompanyLogo');
     this.GetDynamicMenu();
-  }
+    });
+}
+
+  // ngOnInit() {
+  //   this.logo=window.localStorage.getItem('concernCompanyLogo');
+  //   this.GetDynamicMenu();
+  // }
 
   GetDynamicMenu(){
     
