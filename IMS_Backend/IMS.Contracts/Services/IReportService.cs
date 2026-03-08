@@ -1,5 +1,6 @@
 ﻿
 
+using AccountingBackEnd.DAL.DTOs;
 using Boilerplate.Contracts.Responses;
 using System.Data;
 
@@ -33,4 +34,6 @@ public interface IReportService
     public Task<DataSet> TaskCustomerVisitDetailsReport(string id);
     public Task<DataSet> TaskCustomerVisitReport(string fromDate, string toDate, string userId);
     public Task<DataSet> DeliveryReport(int PI_Master_ID);
+    public Task<DataSet> UserReport(int RoleId, int pageLength, int pageNo, string searchParam);
+    public Task<DataSet> PIReport(PIReportParams pIReportParams);
 }

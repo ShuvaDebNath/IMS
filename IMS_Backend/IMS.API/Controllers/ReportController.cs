@@ -1,4 +1,5 @@
-﻿using Boilerplate.API.Controllers;
+﻿using AccountingBackEnd.DAL.DTOs;
+using Boilerplate.API.Controllers;
 using Boilerplate.Contracts;
 using Boilerplate.Contracts.Enum;
 using Boilerplate.Contracts.Services;
@@ -1348,6 +1349,105 @@ namespace IMS.API.Controllers
                 else
                 {
                     return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("UserReport")]
+        public async Task<IActionResult> UserReport(string rptType, int RoleId,int pageLength,int pageNo,string searchParam="")
+        {
+            try
+            {
+                var currentUser = HttpContext.User;
+
+                DataSet ds = await _reportService.UserReport(RoleId, pageLength, pageNo, searchParam);
+
+                if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
+                {
+
+                    return Ok(new { msg = "Data Not Found" });
+                }
+
+                string reportPath = "V2\\UserReport\\";
+
+                if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
+                {
+
+                    return Ok(new { msg = "Data Not Found" });
+                }
+
+                ds.Tables[0].TableName = "UserReport";
+
+                var reportName = "user Report";
+
+                reportPath += "rptUserReport.rdlc";
+
+
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+
+
+                if (rptType.ToLower() == "pdf")
+                {
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                }
+                else
+                {
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        [HttpGet]
+        [Route("PIReport")]
+        public async Task<IActionResult> PIReport([FromQuery] PIReportParams pIReportParams)
+        {
+            try
+            {
+                var currentUser = HttpContext.User;
+
+                DataSet ds = await _reportService.PIReport(pIReportParams);
+
+                if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
+                {
+
+                    return Ok(new { msg = "Data Not Found" });
+                }
+
+                string reportPath = "V2\\PIReport\\";
+
+                if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
+                {
+
+                    return Ok(new { msg = "Data Not Found" });
+                }
+
+                ds.Tables[0].TableName = "PIReport";
+
+                var reportName = "PI Report";
+
+                reportPath += "rptPIReport.rdlc";
+
+
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, pIReportParams.RptType, ds);
+
+
+                if (pIReportParams.RptType.ToLower() == "pdf")
+                {
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(pIReportParams.RptType.ToLower()));
+                }
+                else
+                {
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(pIReportParams.RptType.ToLower()));
                 }
 
             }

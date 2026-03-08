@@ -29,6 +29,9 @@ export class PiReportComponent {
   tableVisible = false;
   SuperiorList: any;
   ClientList: any;
+  pageSize = 10;
+  currentPage = 1;
+  searchText='';
 
   insertPermissions: boolean = false;
   updatePermissions: boolean = false;
@@ -43,7 +46,7 @@ export class PiReportComponent {
     private fb: FormBuilder,
     private ms: MasterEntryService,
     private reportService: ReportService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     var permissions = this.gs.CheckUserPermission('PI Report');
@@ -84,7 +87,7 @@ export class PiReportComponent {
         } else {
         }
       },
-      error: (err) => {},
+      error: (err) => { },
     });
   }
   loadAllPI(): void {
@@ -127,6 +130,8 @@ export class PiReportComponent {
           this.PIReport = JSON.parse(results.data).Tables1;
 
           console.log(this.PIReport);
+          this.currentPage = 1;
+          this.pageSize = 10;
           this.tableVisible = true;
         } else if (results.msg === 'Invalid Token') {
           swal.fire('Session Expired!', 'Please Login Again.', 'info');
@@ -137,14 +142,14 @@ export class PiReportComponent {
     });
   }
 
-  piNoClick(piNo: any,lc:any,PIData:any) {
-    console.log(piNo,lc,PIData);
-    
+  piNoClick(piNo: any, lc: any, PIData: any) {
+    console.log(piNo, lc, PIData);
+
     swal.fire({
       title: 'Save Voucher?',
       text: 'Do you want to save, discard, or cancel?',
       icon: 'warning',
-      showCancelButton: lc==null?false:true,
+      showCancelButton: lc == null ? false : true,
       showDenyButton: true,
       confirmButtonText: 'PI Report',
       denyButtonText: 'Delivery Report',
@@ -162,16 +167,16 @@ export class PiReportComponent {
       }
     });
   }
-  piPrint(PIData:any) {
-      var item = {
-        PI_Master_ID: PIData?.PI_Master_ID,
-        IsMPI: PIData?.IsMPI,
-      };
-  
-      Swal.fire({
-        title: 'What you want to do?',
-        icon: 'question',
-        html: `
+  piPrint(PIData: any) {
+    var item = {
+      PI_Master_ID: PIData?.PI_Master_ID,
+      IsMPI: PIData?.IsMPI,
+    };
+
+    Swal.fire({
+      title: 'What you want to do?',
+      icon: 'question',
+      html: `
                         <div style="display: flex; gap: 10px; justify-content: center;">
                           <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
                             <i class="fa fa-file-excel"></i> Excel
@@ -184,41 +189,41 @@ export class PiReportComponent {
                           </button>
                         </div>
                       `,
-        showConfirmButton: false,
-        didOpen: () => {
-          const excelBtn = document.getElementById('excelBtn');
-          const wordBtn = document.getElementById('wordBtn');
-          const pdfBtn = document.getElementById('pdfBtn');
-  
-  
-          excelBtn?.addEventListener('click', () => {
-            Swal.close();
+      showConfirmButton: false,
+      didOpen: () => {
+        const excelBtn = document.getElementById('excelBtn');
+        const wordBtn = document.getElementById('wordBtn');
+        const pdfBtn = document.getElementById('pdfBtn');
+
+
+        excelBtn?.addEventListener('click', () => {
+          Swal.close();
           this.reportService.PrintProformaInvoiceRequest(item, 'word', 'F');
-          });
-  
-          wordBtn?.addEventListener('click', () => {
-            Swal.close();
+        });
+
+        wordBtn?.addEventListener('click', () => {
+          Swal.close();
           this.reportService.PrintProformaInvoiceRequest(item, 'word', 'F');
-          });
-  
-          pdfBtn?.addEventListener('click', () => {
-            Swal.close();
+        });
+
+        pdfBtn?.addEventListener('click', () => {
+          Swal.close();
           this.reportService.PrintProformaInvoiceRequest(item, 'pdf', 'F');
-          });
-        },
-      });
-    }
+        });
+      },
+    });
+  }
 
 
-    deliveryPrint(PIData:any) {
-      var item = {
-        PI_Master_ID: PIData?.PI_Master_ID
-      };
-  
-      Swal.fire({
-        title: 'What you want to do?',
-        icon: 'question',
-        html: `
+  deliveryPrint(PIData: any) {
+    var item = {
+      PI_Master_ID: PIData?.PI_Master_ID
+    };
+
+    Swal.fire({
+      title: 'What you want to do?',
+      icon: 'question',
+      html: `
                         <div style="display: flex; gap: 10px; justify-content: center;">
                           <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
                             <i class="fa fa-file-excel"></i> Excel
@@ -231,28 +236,89 @@ export class PiReportComponent {
                           </button>
                         </div>
                       `,
-        showConfirmButton: false,
-        didOpen: () => {
-          const excelBtn = document.getElementById('excelBtn');
-          const wordBtn = document.getElementById('wordBtn');
-          const pdfBtn = document.getElementById('pdfBtn');
-  
-  
-          excelBtn?.addEventListener('click', () => {
-            Swal.close();
+      showConfirmButton: false,
+      didOpen: () => {
+        const excelBtn = document.getElementById('excelBtn');
+        const wordBtn = document.getElementById('wordBtn');
+        const pdfBtn = document.getElementById('pdfBtn');
+
+
+        excelBtn?.addEventListener('click', () => {
+          Swal.close();
           this.reportService.PrintDeliveryReport(item, 'word', 'F');
-          });
-  
-          wordBtn?.addEventListener('click', () => {
-            Swal.close();
+        });
+
+        wordBtn?.addEventListener('click', () => {
+          Swal.close();
           this.reportService.PrintDeliveryReport(item, 'word', 'F');
-          });
-  
-          pdfBtn?.addEventListener('click', () => {
-            Swal.close();
+        });
+
+        pdfBtn?.addEventListener('click', () => {
+          Swal.close();
           this.reportService.PrintDeliveryReport(item, 'pdf', 'F');
-          });
-        },
-      });
-    }
+        });
+      },
+    });
+  }
+
+  onPageChange(event: any) {
+    console.log(event);
+
+    this.pageSize = event.rows;
+    this.currentPage = (event.first / event.rows) + 1;
+  }
+
+  printDialog() {
+    swal.fire({
+      title: 'What you want to do?',
+      icon: 'question',
+      html: `
+                      <div style="display: flex; gap: 10px; justify-content: center;">
+                        <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
+                          <i class="fa fa-file-excel"></i> Excel
+                        </button>
+                        <button id="wordBtn" class="btn btn-info" style="padding: 8px 16px;">
+                          <i class="fa fa-file-word"></i> Word
+                        </button>
+                        <button id="pdfBtn" class="btn btn-danger" style="padding: 8px 16px;">
+                          <i class="fa fa-file-pdf"></i> PDF
+                        </button>
+                      </div>
+                    `,
+      showConfirmButton: false,
+      didOpen: () => {
+        const excelBtn = document.getElementById('excelBtn');
+        const wordBtn = document.getElementById('wordBtn');
+        const pdfBtn = document.getElementById('pdfBtn');
+
+        const sentByStr = localStorage.getItem('userId');
+        const sentBy = sentByStr ? Number(sentByStr) : null;
+        const item = {
+          rptType: '',
+          FromDate: this.dateForm.value.fromDate,
+          ToDate: this.dateForm.value.toDate,
+          PI_Master_Id: this.dateForm.value.PIId,
+          ClientId: this.dateForm.value.ClientId,
+          User_Id: this.dateForm.value.SuperiorId,
+          pageLength: this.pageSize,
+          pageNo: this.currentPage,
+          searchParam: this.searchText || ''
+        };
+        excelBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintPIReport(item, 'excel', 'F');
+        });
+
+        wordBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintPIReport(item, 'word', 'F');
+        });
+
+        pdfBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintPIReport(item, 'pdf', 'F');
+        });
+      },
+    });
+  }
 }
