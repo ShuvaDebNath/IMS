@@ -36,6 +36,9 @@
               <i class="fas fa-search"></i>&nbsp;Search</button>
           </div>
         </div> -->
+     
+     
+     
         <div class="row align-items-end">
           <div class="col-md-3">
             <label>Role <span>*</span></label>
@@ -65,6 +68,7 @@
         </div>
       </form>
       <hr />
+
       <!-- <p-table
         #dt
         [value]="tableData"
@@ -76,6 +80,7 @@
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
       > -->
       <hr>
+
         <p-table #dt [value]="tableData" [paginator]="true" [rows]="pageSize" [rowsPerPageOptions]='["30","20","10"]' 
         [responsive]="true" [showCurrentPageReport]="true" (onPageChange)="onPageChange($event)"
         [rowsPerPageOptions]="rowsPerPageOptions"

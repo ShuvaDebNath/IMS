@@ -1,0 +1,335 @@
+.custom-date-input {
+  height: 48px;
+  border-radius: 6px;
+}
+
+.custom-calendar {
+  width: 100%;
+}
+
+::ng-deep .p-datepicker {
+  width: 280px !important;
+  background-color: #F9F9F9;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+/* Table styling */
+::ng-deep .p-datepicker table {
+  border-collapse: separate !important;
+  border-spacing: 4px 4px;
+  width: 100%;
+}
+
+/* Day name row */
+::ng-deep .p-datepicker thead tr th {
+  text-align: center !important;
+  font-weight: 600 !important;
+  color: #333 !important;
+  font-size: 12px !important;
+  padding: 2px 0 !important;
+}
+
+/* Date cells */
+::ng-deep .p-datepicker tbody tr td {
+  padding: 0 !important;
+}
+
+/* Normal dates */
+::ng-deep .p-datepicker tbody tr td > span {
+  width: 24px !important;
+  height: 24px !important;
+  line-height: 24px !important;
+  font-size: 13px !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: end;
+  color: #1472d6;       /* normal date text */
+  background: transparent !important;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+/* Hover effect */
+::ng-deep .p-datepicker tbody tr td > span:hover {
+  background: #f0f0f0 !important;
+}
+
+/* Today date (always yellow) */
+::ng-deep .p-datepicker .p-datepicker-today > span {
+  color: #F8B84E !important;       
+  font-weight: 700 !important;
+  border-radius: 4px;
+  background: #000;
+}
+
+::ng-deep .p-datepicker .p-datepicker-current,
+::ng-deep .p-datepicker .p-datepicker-current.p-highlight,
+::ng-deep .p-datepicker .p-datepicker-selected,
+::ng-deep .p-datepicker .p-highlight {
+  color: #F8B84E !important;          /* text black */
+  font-weight: 700 !important;
+  border-radius: 4px;
+}
+/* Header styling */
+::ng-deep .p-datepicker .p-datepicker-header {
+  background: #e69d29 !important;
+  border: none !important;
+  height: 40px !important;
+}
+
+/* Month / Year text */
+/* Month / Year label */
+::ng-deep .p-datepicker .p-datepicker-title {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+/* Month / Year dropdown (navigator enabled) */
+::ng-deep .p-datepicker .p-datepicker-month,
+::ng-deep .p-datepicker .p-datepicker-year {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Dropdown select text */
+::ng-deep .p-datepicker select {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  background: transparent !important;
+}
+/* Arrow container */
+::ng-deep .p-datepicker-prev,
+::ng-deep .p-datepicker-next {
+  color: #ffffff !important; /* fallback */
+}
+
+/* Arrow span */
+::ng-deep .p-datepicker-prev span,
+::ng-deep .p-datepicker-next span {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+/* Arrow icon ::before (actual chevron) */
+::ng-deep .p-datepicker-prev span::before,
+::ng-deep .p-datepicker-next span::before {
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+
+/* akhan theke formdate todate */
+/* Outer container for From-To */
+.range-container {
+  display: flex;
+  border: 1px solid #ced4da;
+  background: #fff;
+  border-radius: 6px; /* Outer border radius */
+  
+}
+
+/* Remove inner input borders */
+::ng-deep .range-container .p-calendar input.p-inputtext.custom-date-input {
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;   /* Inner inputs flat */
+  height: 48px !important;
+  padding: 0 10px !important;
+  font-size: 16px !important;
+}
+
+/* Divider full height */
+.range-divider {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  background: #f1f3f5;
+  border-left: 1px solid #ced4da;
+  border-right: 1px solid #ced4da;
+  font-weight: 600;
+}
+
+/* Focus effect: outer container highlight instead of individual input */
+.range-container:focus-within {
+  border-color: #86b7fe;
+}
+
+/* Optional: divider text styling */
+.range-divider {
+  color: #495057;
+}
+
+    /* table design */
+::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  background-color: #6a1a3f !important;
+  color: white !important;
+}
+
+::ng-deep .p-datatable .p-datatable-thead > tr > th .p-sortable-column-icon {
+  color: white !important;
+}
+
+::ng-deep .p-datatable .p-datatable-thead > tr > th.p-sortable-column:hover {
+  background-color: #7a2349 !important;
+}
+
+::ng-deep .p-datatable .p-datatable-thead > tr > th.p-sortable-column.p-highlight {
+  background-color: #5a0f2f !important;
+}
+
+::ng-deep .p-paginator {
+  display: flex !important;
+  align-items: center;
+}
+
+::ng-deep .p-paginator .p-paginator-current {
+  margin-right: auto !important;   /* এইটা left এ আটকে রাখবে */
+}
+
+::ng-deep .p-paginator .p-paginator-pages,
+::ng-deep .p-paginator .p-paginator-next,
+::ng-deep .p-paginator .p-paginator-prev,
+::ng-deep .p-paginator .p-paginator-first,
+::ng-deep .p-paginator .p-paginator-last {
+  margin-left: 0 !important;
+}
+
+
+/* Flex wrapper */
+.action-group {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* Common Button Style */
+.action-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  color: #fff;
+}
+
+/* Edit */
+.edit-btn {
+  background: #6a1a3f;
+}
+
+/* Delete */
+.delete-btn {
+  background: linear-gradient(45deg, #dc3545, #ff6b6b);
+}
+
+/* Details */
+.details-btn {
+  background: linear-gradient(45deg, #198754, #20c997);
+}
+
+/* Hover effect */
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Header Gradient */
+::ng-deep .buyer-dialog .p-dialog-header {
+  background: linear-gradient(135deg, #6a1a3f, #6a1a3f);
+  color: #fff;
+  padding: 16px 25px;
+  font-weight: 600;
+}
+
+/* Scroll Fix */
+.buyer-dialog .p-dialog-content {
+  max-height: 75vh;
+  overflow-y: auto;
+  background: #fdf7f9;
+  padding: 25px;
+}
+
+/* Title */
+.buyer-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #6a1a3f;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #e74a3b;
+  padding-bottom: 8px;
+}
+
+/* Grid Layout */
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 15px;
+}
+
+/* Detail Card */
+.detail-item {
+  background: #ffffff;
+  padding: 12px 15px;
+  border-radius: 10px;
+  box-shadow: 0 3px 12px rgba(106, 26, 63, 0.08);
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+}
+
+.detail-item span:first-child {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6a1a3f;
+  margin-bottom: 4px;
+}
+
+/* Status Badge */
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  width: fit-content;
+}
+
+.status-badge.active {
+  background: #6a1a3f;
+}
+
+.status-badge.inactive {
+  background: #e74a3b;
+}
+
+.text-cell {
+  white-space: normal;     /* text wrap hobe */
+  word-break: break-word;  /* long word break korbe */
+  max-width: 200px;        /* optional */
+}
+
+.see-more {
+  color: #007bff;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.see-more:hover {
+  color: #e74a3b;
+  text-decoration: underline;
+}
+
+::ng-deep .custom-tooltip {
+  background: #6a1a3f !important;
+  color: #fff !important;
+  font-size: 13px;
+  padding: 8px 10px;
+  border-radius: 6px;
+}

@@ -7,7 +7,7 @@
     </div>
     <div class="card-body">
       <form [formGroup]="SearchForm">
-        <div class="row align-items-center">
+        <!-- <div class="row align-items-center">
           <div class="col-3">
             <label class="control-label" for="inlineFormInputGroup"
               >From Date</label
@@ -34,7 +34,50 @@
               <i class="fas fa-search"></i>&nbsp;Search
             </button>
           </div>
+        </div> -->
+      
+            <div class="align-items-center">
+          <div class="row">
+            <div class="row align-items-end">
+              <div class="col-auto">
+                <label class="form-label">Select Date</label>
+
+                <div class="range-container" style="width: 100%">
+                  <p-calendar
+                    formControlName="fromDate"
+                    [showIcon]="false"
+                    dateFormat="dd/mm/yy"
+                    placeholder="From"
+                    inputStyleClass="custom-date-input"
+                  ></p-calendar>
+
+                  <span class="range-divider">to</span>
+
+                  <p-calendar
+                    formControlName="toDate"
+                    [showIcon]="false"
+                    dateFormat="dd/mm/yy"
+                    placeholder="To"
+                    inputStyleClass="custom-date-input"
+                  ></p-calendar>
+                  
+                </div>
+              </div>
+              <div class="col-auto mt-4">
+                <button
+                  title="Search"
+                  type="button"
+                  (click)="Search()"
+                  class="btn btn-sm theme-btn mr-2"
+                  style="margin-top: 2.3em !important;width: 130px; height: 38px"
+                >
+                  <i class="fas fa-search"></i>&nbsp;Search
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
+     
       </form>
 
       <div class="row mb-3" *ngIf="tableData != null">
@@ -68,7 +111,7 @@
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
       >
         <ng-template pTemplate="caption">
-          <div class="table-toolbar">
+          <div class="table-toolbar d-flex justify-content-end">
             <span class="p-input-icon-left">
               <i class="pi pi-search"></i>
               <input
