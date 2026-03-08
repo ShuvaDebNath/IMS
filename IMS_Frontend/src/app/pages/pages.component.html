@@ -1,6 +1,6 @@
 <div class="wrapper" style="position: relative;">
-  <!-- Preloader -->
-  <div class="preloader">
+  <!-- Preloader: hide when app is ready so dashboard can render -->
+  <div class="preloader" *ngIf="!appReady">
     <div class="loader-wrapper">
       <div class="circle">
         <img class="loader-logo animation__shake" src="assets/preloader.gif" alt="IMS Logo">

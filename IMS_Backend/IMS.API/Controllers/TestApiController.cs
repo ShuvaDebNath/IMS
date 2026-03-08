@@ -47,10 +47,16 @@ namespace Boilerplate.Web.Controllers
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
+            int expiry = 5;
+            if (!string.IsNullOrEmpty(_config["SecurityJwt:ExpiryMinutes"]))
+            {
+                int.TryParse(_config["SecurityJwt:ExpiryMinutes"], out expiry);
+            }
+
             JwtSecurityToken token = new JwtSecurityToken(_config["SecurityJwt:Issuer"], _config["SecurityJwt:Issuer"],
                                              claims,
                                              notBefore: DateTime.UtcNow,
-                                             expires: DateTime.Now.AddHours(12),
+                                             expires: DateTime.UtcNow.AddMinutes(expiry),
                                              signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

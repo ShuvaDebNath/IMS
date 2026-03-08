@@ -13,12 +13,14 @@ import { ForbiddenErrorComponent } from './error/forbidden-error/forbidden-error
 import { LogoutComponent } from './authentication/logout/logout.component';
 import { ResetPasswordComponent } from './authentication/reset-password/reset-password.component';
 import { LoginComponent } from './authentication/login/login.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgxSelectModule, INgxSelectOptions } from 'ngx-select-ex';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { DatePipe } from '@angular/common';
 import { MatPaginatorModule } from "@angular/material/paginator";
+import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
+import { SessionService } from './services/session/session.service';
 import { GenerateTaskReportComponent } from './task-report/generate-task-report/generate-task-report.component';
 import { AllTaskReportComponent } from './task-report/all-task-report/all-task-report.component';
 import { AllTaskDetailsReportComponent } from './task-report/all-task-details-report/all-task-details-report.component';
@@ -110,7 +112,14 @@ const CustomSelectOptions: INgxSelectOptions = {
 exports:[
 
 ],
-  providers: [DatePipe],
-  bootstrap: [AppComponent],
+  providers: [
+    DatePipe,    
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}

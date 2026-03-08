@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AppStateService } from 'src/app/services/session/app-state.service';
+import { take, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-footer',
@@ -7,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FooterComponent implements OnInit {
 
-  constructor() { }
+  showFooter = false;
+  currentYear = new Date().getFullYear();
 
-  ngOnInit() {
+  constructor(private appState: AppStateService) {}
+
+  ngOnInit(): void {
+    this.appState.ready$
+      .pipe(filter(ready => ready), take(1))
+      .subscribe(() => {
+        this.showFooter = true;
+      });
   }
-
 }
