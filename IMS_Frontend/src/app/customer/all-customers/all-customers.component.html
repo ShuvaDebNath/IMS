@@ -4,27 +4,12 @@
       <h1 class="theme-text text-white">ALL Customers List</h1>
     </div>
     <div class="card-body">
-      <form
-        [formGroup]="dateForm"
-        class="row p-3 shadow-sm g-3 align-items-end mb-3"
-        (ngSubmit)="loadAllCustomers()"
-      >
+      <form [formGroup]="dateForm" class="row p-3 shadow-sm g-3 align-items-end mb-3" (ngSubmit)="loadAllCustomers()">
         <div class="col-md-3" *ngIf="SuperiorList">
           <label>Superior Name <span>*</span></label>
-          <p-dropdown
-            [style]="{ width: '100%' }"
-            class="p-0"
-            [options]="SuperiorList"
-            optionLabel="UserName"
-            [filter]="true"
-            filterBy="UserName"
-            [showClear]="true"
-            styleClass="listBottom"
-            placeholder="Please Select"
-            optionValue="User_ID"
-            formControlName="SuperioId"
-            (onChange)="getCustomerList()"
-          >
+          <p-dropdown [style]="{ width: '100%' }" class="p-0" [options]="SuperiorList" optionLabel="UserName"
+            [filter]="true" filterBy="UserName" [showClear]="true" styleClass="listBottom" placeholder="Please Select"
+            optionValue="User_ID" formControlName="SuperioId" (onChange)="getCustomerList()">
             <ng-template let-AB pTemplate="item">
               <div class="flex align-items-center gap-2">
                 <div>{{ AB.UserName }}</div>
@@ -34,21 +19,10 @@
         </div>
         <div class="col-md-3">
           <label>Customer Name <span>*</span></label>
-          <p-dropdown
-            [style]="{ width: '100%' }"
-            class="p-0"
-            [options]="CustomerList"
-            optionLabel="Company_Name"
-            [filter]="true"
-            filterBy="Company_Name"
-            [showClear]="true"
-            styleClass="listBottom"
-            placeholder="Please Select"
-            optionValue="Customer_ID"
-            formControlName="CustomerId"
-            [virtualScroll]="true"
-            [virtualScrollItemSize]="30"
-          >
+          <p-dropdown [style]="{ width: '100%' }" class="p-0" [options]="CustomerList" optionLabel="Company_Name"
+            [filter]="true" filterBy="Company_Name" [showClear]="true" styleClass="listBottom"
+            placeholder="Please Select" optionValue="Customer_ID" formControlName="CustomerId" [virtualScroll]="true"
+            [virtualScrollItemSize]="30">
             <ng-template let-AB pTemplate="item">
               <div class="flex align-items-center gap-2">
                 <div>{{ AB.Company_Name }}</div>
@@ -57,26 +31,15 @@
           </p-dropdown>
         </div>
         <div class="col-md-2">
-          <button
-            type="submit"
-            class="btn btn-sm theme-btn w-100"
-            [disabled]="dateForm.invalid"
-            style="height: 48px"
-          >
+          <button type="submit" class="btn btn-sm theme-btn w-100" [disabled]="dateForm.invalid" style="height: 48px">
             <i class="pi pi-download me-1"></i> Load
           </button>
         </div>
 
         <div class="col-md-2">
           <div class="d-flex align-items-center">
-            <button
-              *ngIf="insertPermissions"
-              class="btn theme-btn"
-              style="color: white"
-              routerLink="/generate-customers"
-              target="_blank"
-              style="height: 48px"
-            >
+            <button *ngIf="insertPermissions" class="btn theme-btn" style="color: white"
+              routerLink="/generate-customers" target="_blank" style="height: 48px">
               <i class="fas fa-plus"></i>&nbsp;Create New
             </button>
           </div>
@@ -84,23 +47,18 @@
       </form>
 
       <div class="shadow-sm p-2">
-        <button
-          type="button"
-          class="btn btn-outline-success bg-gradient-warning btn-sm mr-2 mb-3"
-          (click)="printDialog()"
-          style="height: 38px; width: 130px"
-        >
-          <i class="fas fa-file-print"></i>&nbsp;Print
-        </button>
-        <p-table
-          *ngIf="tableVisible"
-          #dt
-          [value]="allCustomers"
-          [paginator]="true"
-          [rows]="10"
-          [responsive]="true"
-          [showCurrentPageReport]="true"
-          [globalFilterFields]="[
+        <div class="flex">
+          <button *ngIf="tableVisible" type="button" class="btn btn-outline-success bg-gradient-warning btn-sm mr-2 mb-3"
+            (click)="printDialog()" style="height: 38px; width: 130px">
+            <i class="fas fa-file-print"></i>&nbsp;Print
+          </button>
+          <button *ngIf="roleId==1 || roleId==2" type="button" class="btn btn-outline-success bg-gradient-warning btn-sm mr-2 mb-3"
+            (click)="printAllDialog()" style="height: 38px; width: 130px">
+            <i class="fas fa-file-print"></i>&nbsp;Print All
+          </button>
+        </div>
+        <p-table *ngIf="tableVisible" #dt [value]="allCustomers" [paginator]="true" [rows]="10" [responsive]="true"
+          [showCurrentPageReport]="true" [globalFilterFields]="[
             'Company_Name',
             'Contact_Name',
             'Customer_Address',
@@ -113,21 +71,14 @@
             'Status',
             'Updated_By',
             'Updated_At',
-          ]"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-        >
+          ]" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
           <ng-template pTemplate="caption">
             <div class="table-toolbar d-flex justify-content-end">
               <span class="p-input-icon-left">
                 <i class="pi pi-search"></i>
-                <input
-                  pInputText
-                  type="text"
-                  (input)="
+                <input pInputText type="text" (input)="
                     dt.filterGlobal($any($event.target).value, 'contains')
-                  "
-                  placeholder="Global Search"
-                />
+                  " placeholder="Global Search" />
               </span>
             </div>
           </ng-template>
@@ -156,72 +107,48 @@
               <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
               <!-- <td class="text-start">{{ allCustomers.Company_Name }}</td> -->
               <td class="text-cell">
-                <span
-                  *ngIf="
+                <span *ngIf="
                     !allCustomers.showFull &&
                     allCustomers.Company_Name?.length > 15
-                  "
-                >
+                  ">
                   {{ allCustomers.Company_Name | slice: 0 : 15 }}...
                   <br />
-                  <span
-                    class="see-more"
-                    (click)="toggleText(allCustomers)"
-                    style="cursor: pointer; color: blue"
-                  >
+                  <span class="see-more" (click)="toggleText(allCustomers)" style="cursor: pointer; color: blue">
                     See more
                   </span>
                 </span>
 
-                <span
-                  *ngIf="
+                <span *ngIf="
                     allCustomers.showFull ||
                     allCustomers.Company_Name?.length <= 15
-                  "
-                >
+                  ">
                   {{ allCustomers.Company_Name }}
-                  <span
-                    *ngIf="allCustomers.Company_Name?.length > 15"
-                    class="see-more"
-                    (click)="toggleText(allCustomers)"
-                    style="cursor: pointer; color: blue"
-                  >
+                  <span *ngIf="allCustomers.Company_Name?.length > 15" class="see-more"
+                    (click)="toggleText(allCustomers)" style="cursor: pointer; color: blue">
                     See less
                   </span>
                 </span>
               </td>
               <!-- <td class="text-start">{{ allCustomers.Contact_Name }}</td> -->
               <td class="text-cell">
-                <span
-                  *ngIf="
+                <span *ngIf="
                     !allCustomers.showFull &&
                     allCustomers.Contact_Name?.length > 15
-                  "
-                >
+                  ">
                   {{ allCustomers.Contact_Name | slice: 0 : 15 }}...
                   <br />
-                  <span
-                    class="see-more"
-                    (click)="toggleText(allCustomers)"
-                    style="cursor: pointer; color: blue"
-                  >
+                  <span class="see-more" (click)="toggleText(allCustomers)" style="cursor: pointer; color: blue">
                     See more
                   </span>
                 </span>
 
-                <span
-                  *ngIf="
+                <span *ngIf="
                     allCustomers.showFull ||
                     allCustomers.Contact_Name?.length <= 15
-                  "
-                >
+                  ">
                   {{ allCustomers.Contact_Name }}
-                  <span
-                    *ngIf="allCustomers.Contact_Name?.length > 15"
-                    class="see-more"
-                    (click)="toggleText(allCustomers)"
-                    style="cursor: pointer; color: blue"
-                  >
+                  <span *ngIf="allCustomers.Contact_Name?.length > 15" class="see-more"
+                    (click)="toggleText(allCustomers)" style="cursor: pointer; color: blue">
                     See less
                   </span>
                 </span>
@@ -230,36 +157,24 @@
                 {{ allCustomers.Customer_Address }}
               </td> -->
               <td class="text-cell">
-                <span
-                  *ngIf="
+                <span *ngIf="
                     !allCustomers.showFull &&
                     allCustomers.Customer_Address?.length > 15
-                  "
-                >
+                  ">
                   {{ allCustomers.Customer_Address | slice: 0 : 15 }}...
                   <br />
-                  <span
-                    class="see-more"
-                    (click)="toggleText(allCustomers)"
-                    style="cursor: pointer; color: blue"
-                  >
+                  <span class="see-more" (click)="toggleText(allCustomers)" style="cursor: pointer; color: blue">
                     See more
                   </span>
                 </span>
 
-                <span
-                  *ngIf="
+                <span *ngIf="
                     allCustomers.showFull ||
                     allCustomers.Customer_Address?.length <= 15
-                  "
-                >
+                  ">
                   {{ allCustomers.Customer_Address }}
-                  <span
-                    *ngIf="allCustomers.Customer_Address?.length > 15"
-                    class="see-more"
-                    (click)="toggleText(allCustomers)"
-                    style="cursor: pointer; color: blue"
-                  >
+                  <span *ngIf="allCustomers.Customer_Address?.length > 15" class="see-more"
+                    (click)="toggleText(allCustomers)" style="cursor: pointer; color: blue">
                     See less
                   </span>
                 </span>
@@ -314,35 +229,21 @@
 
               <td class="action-buttons">
                 <!-- Edit Button -->
-                <a
-                  *ngIf="updatePermissions"
-                  class="action-btn edit-btn"
-                  target="_blank"
-                  title="Edit"
-                  [routerLink]="['/generate-customers']"
-                  [queryParams]="{
+                <a *ngIf="updatePermissions" class="action-btn edit-btn" target="_blank" title="Edit"
+                  [routerLink]="['/generate-customers']" [queryParams]="{
                     Customer_Id: allCustomers.Customer_ID,
-                  }"
-                >
+                  }">
                   <i class="fa fa-edit"></i>
                 </a>
 
                 <!-- Delete Button -->
-                <button
-                  *ngIf="deletePermissions"
-                  class="action-btn delete-btn"
-                  (click)="onDelete(allCustomers)"
-                  title="Delete"
-                >
+                <button *ngIf="deletePermissions" class="action-btn delete-btn" (click)="onDelete(allCustomers)"
+                  title="Delete">
                   <i class="pi pi-trash"></i>
                 </button>
 
                 <!-- Details Button -->
-                <button
-                  class="action-btn details-btn"
-                  (click)="onDetails(allCustomers)"
-                  title="Details"
-                >
+                <button class="action-btn details-btn" (click)="onDetails(allCustomers)" title="Details">
                   <i class="pi pi-eye"></i>
                 </button>
               </td>
@@ -391,15 +292,9 @@
             </p>
           </div>
         </p-dialog> -->
-        <p-dialog
-          [(visible)]="isDetailsVisible"
-          [modal]="true"
-          [closable]="true"
-          [style]="{ width: '75vw' }"
-          [contentStyle]="{ 'max-height': '75vh', 'overflow-y': 'auto' }"
-          styleClass="premium-dialog"
-          (onHide)="detailsData = null"
-        >
+        <p-dialog [(visible)]="isDetailsVisible" [modal]="true" [closable]="true" [style]="{ width: '75vw' }"
+          [contentStyle]="{ 'max-height': '75vh', 'overflow-y': 'auto' }" styleClass="premium-dialog"
+          (onHide)="detailsData = null">
           <!-- Custom Header -->
           <ng-template pTemplate="header">
             <div class="premium-header">
@@ -424,12 +319,9 @@
                 </div>
                 <div>
                   <strong>Status:</strong>
-                  <span
-                    class="status-badge"
-                    [ngClass]="
+                  <span class="status-badge" [ngClass]="
                       detailsData.status === 'Active' ? 'active' : 'inactive'
-                    "
-                  >
+                    ">
                     {{ detailsData.status }}
                   </span>
                 </div>
