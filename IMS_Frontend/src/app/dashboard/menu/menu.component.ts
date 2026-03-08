@@ -2,7 +2,8 @@ import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { Menu } from 'src/app/models/menu.model';
 import { GlobalServiceService } from 'src/app/services/Global-service.service';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
-import Swal from 'sweetalert2';
+import { AppStateService } from 'src/app/services/session/app-state.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-menu',
@@ -17,7 +18,7 @@ export class MenuComponent implements OnInit {
   currentTime: string = '';
   private timerInterval: any;
   constructor(private gs: GlobalServiceService,
-    private masterEntryService: MasterEntryService) { }
+     private appState: AppStateService) { }
 
   ngOnInit(): void {
     this.startTimer()
@@ -25,6 +26,27 @@ export class MenuComponent implements OnInit {
     if (this.userName != undefined && this.userName != null)
       this.isShowComInfo = true;
   }
+//   ngOnInit(): void {
+//   this.appState.ready$
+//     .pipe(take(1))
+//     .subscribe(() => {
+//       this.initializeMenu();
+//     });
+// }
+// private initializeMenu(): void {
+//   this.userName = localStorage.getItem('userName');
+//   this.isShowComInfo = !!this.userName;
+
+//   if (!this.menu) {
+//     const menuStr = localStorage.getItem('UserMenu');
+//     if (menuStr) {
+//       this.menu = JSON.parse(menuStr);
+//       this.menu.forEach((m: any) => {
+//         m.Children = JSON.parse(m.Children);
+//       });
+//     }
+//   }
+// }
   startTimer() {
     this.updateTime();
     this.timerInterval = setInterval(() => {

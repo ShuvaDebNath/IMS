@@ -11,13 +11,13 @@ ConfigurationManager configuration = builder.Configuration;
 // Load environment variables from .env file
 Env.Load();
 
-// Use environment variables for connection strings and JWT
+// Use environment variables for connection strings and JWT - environment overrides configuration
 var userDbConnection = Environment.GetEnvironmentVariable("USERDBCONNECTION");
 var transactionDbConnection = Environment.GetEnvironmentVariable("TRANSACTIONDBCONNECTION");
 var jwtKey = Environment.GetEnvironmentVariable("SECURITYJWT_KEY");
 var jwtIssuer = Environment.GetEnvironmentVariable("SECURITYJWT_ISSUER");
 
-// Inject connection strings and JWT into configuration
+// Inject connection strings and JWT into configuration if present
 if (!string.IsNullOrEmpty(userDbConnection))
     configuration["ConnectionStrings:UserDBConnection"] = userDbConnection;
 if (!string.IsNullOrEmpty(transactionDbConnection))
@@ -26,12 +26,6 @@ if (!string.IsNullOrEmpty(jwtKey))
     configuration["SecurityJwt:Key"] = jwtKey;
 if (!string.IsNullOrEmpty(jwtIssuer))
     configuration["SecurityJwt:Issuer"] = jwtIssuer;
-
-// Bind JwtOptions from environment variables
-builder.Services.Configure<JwtOptions>(options => {
-    options.Key = jwtKey ?? string.Empty;
-    options.Issuer = jwtIssuer ?? string.Empty;
-});
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -64,9 +58,8 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromHours(12);
 });
 
-// Inject JWT authentication configuration using options pattern
-var jwtOptions = builder.Services.BuildServiceProvider().GetRequiredService<Microsoft.Extensions.Options.IOptions<JwtOptions>>();
-new ServiceCollectionExtensions().AddJwtAuthentication(builder.Services, jwtOptions.Value);
+// Configure JWT authentication using IConfiguration (best practice)
+builder.Services.AddJwtAuthentication(configuration);
 
 // Configure Custom Authorization & Model Validator
 var authConfigurator = builder.Services.BuildServiceProvider().GetRequiredService<AuthorizationServiceConfigurator>();
