@@ -1,383 +1,466 @@
-<div class="container shadow-sm p-3 mb-5 bg-white rounded">
-  <h1 class="theme-text"><label class="theme-text" style="font-size: 2.5rem;" *ngIf="isEdit">Edit</label><label style="font-size: 2.5rem;" class="theme-text" *ngIf="!isEdit">Generate</label> Task Report Form</h1>
-
-  <br />
-  <form [formGroup]="taskForm" >
-    <!-- Header fields -->
-    <div class="row mb-3">
-      <div class="col-md-6">
-        <label class="form-label">Task No</label>
-        <input
-          autocomplete="off"
-          type="text"
-          formControlName="TaskNo"
-          class="form-control"
-          placeholder="Task No"
-          id="taskNo"
-          name="taskNo"          
-          [readOnly]="!isEdit"
-          value=""
-        />
-      </div>
-      <div class="col-md-6" *ngIf="isEdit">
-        <label class="control-label">Date</label>
-
-        <input type="date" formControlName="Date" class="form-control" />
+<div class="m-2 p-2">
+  <div class="card card-default">
+    <div class="card-header theme-bg">
+      <div class="row">
+        <h1 class="theme-text text-white">
+          <label
+            class="theme-text text-white"
+            style="font-size: 2.5rem"
+            *ngIf="isEdit"
+            >Edit</label
+          ><label
+            style="font-size: 2.5rem"
+            class="theme-text text-white"
+            *ngIf="!isEdit"
+            >Generate</label
+          >
+          Task Report Form
+        </h1>
       </div>
     </div>
-    <div class="row mb-3">
-      <div class="col-md-6">
-        <label class="form-label">To</label>
-        <input
-          autocomplete="off"
-          type="text"
-          formControlName="ToMail"
-          class="form-control"
-          placeholder="To Mail"
-          id="toMail"
-          name="toMail"
-          value=""
-        />
-        <div
-          *ngIf="
-            taskForm.get('ToMail')?.invalid &&
-            (taskForm.get('ToMail')?.touched || taskForm.get('ToMail')?.dirty)
-          "
-          class="text-danger small mt-1"
-        >
-          <div *ngIf="taskForm.get('ToMail')?.hasError('required')">
-            To email is required
+    <div class="card-body">
+      <form [formGroup]="taskForm">
+        <div class="row g-3 align-items-center">
+          <div class="col-md-4 d-flex align-items-center">
+            <label class="form-label fs-6 fw-bold mb-0 col-2">Task No</label>
+            <div class="col-7">
+              <input
+                autocomplete="off"
+                type="text"
+                formControlName="TaskNo"
+                class="form-control"
+                placeholder="Task No"
+                id="taskNo"
+                name="taskNo"
+                [readOnly]="!isEdit"
+                value=""
+              />
+            </div>
           </div>
-          <div *ngIf="taskForm.get('ToMail')?.hasError('email')">
-            Please enter a valid email address
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <label class="form-label">CC</label>
-        <input
-          autocomplete="off"
-          type="text"
-          formControlName="CcMail"
-          class="form-control"
-          placeholder="cc Mail"
-          id="ccMail"
-          name="ccMail"
-          value="lilya@sunshineinterlining.com"
-        />
-        <div
-          *ngIf="
-            taskForm.get('CcMail')?.invalid &&
-            (taskForm.get('CcMail')?.touched || taskForm.get('CcMail')?.dirty)
-          "
-          class="text-danger small mt-1"
-        >
-          <div *ngIf="taskForm.get('CcMail')?.hasError('required')">
-            Cc email is required
-          </div>
-          <div *ngIf="taskForm.get('CcMail')?.hasError('email')">
-            Please enter a valid email address
+
+          <div class="col-md-4 d-flex align-items-center" *ngIf="isEdit">
+            <label class="control-label fs-6 fw-bold mb-0 col-2">Date</label>
+            <div class="col-7">
+              <p-calendar
+                formControlName="Date"
+                [showIcon]="false"
+                dateFormat="dd/mm/yy"
+                placeholder="Select Date"
+                class="w-100"
+                [style]="{ width: '100%' }"
+                inputStyleClass="form-control custom-date-input"
+              ></p-calendar>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <div style="width: 160% !important; overflow-x: scroll">
-    <!-- Items table -->
-    <table class="table table-bordered" style="width: 160% !important">
-      <thead>
-        <tr>
-          <th style="text-align: center">Buying House</th>
-          <th style="text-align: center">Customer Name</th>
-          <th style="text-align: center">Article No</th>
-          <th style="text-align: center">In Time</th>
-          <th style="text-align: center">Out Time</th>
-          <th style="text-align: center">Purpose</th>
-          <th style="text-align: center">Old/New</th>
-          <th style="text-align: center">Already Receive Order Article</th>
-          <th style="text-align: center">Unit Price USD</th>
-          <th style="text-align: center">Unit Price BDT</th>
-          <th style="text-align: center">Prod. Cost Unit</th>
-          <th style="text-align: center">First order received time</th>
-          <th style="text-align: center">Latest order received time</th>
-          <th style="text-align: center">Payment Issue</th>
-          <th style="text-align: center">Commercial Issue</th>
-          <th style="text-align: center">Sample Submit</th>
-          <th style="text-align: center">Remarks</th>
-          <th></th>
-        </tr>
-      </thead>
+        <div class="row mb-3">
+          <div class="row g-3 align-items-center">
+            <div class="col-md-4 d-flex align-items-center">
+              <label class="form-label fs-6 fw-bold mb-0 col-2">To</label>
+              <div class="col-7">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  formControlName="ToMail"
+                  class="form-control"
+                  placeholder="To Mail"
+                  id="toMail"
+                  name="toMail"
+                  value=""
+                />
+                <div
+                  *ngIf="
+                    taskForm.get('ToMail')?.invalid &&
+                    (taskForm.get('ToMail')?.touched ||
+                      taskForm.get('ToMail')?.dirty)
+                  "
+                  class="text-danger small mt-1"
+                >
+                  <div *ngIf="taskForm.get('ToMail')?.hasError('required')">
+                    To email is required
+                  </div>
+                  <div *ngIf="taskForm.get('ToMail')?.hasError('email')">
+                    Please enter a valid email address
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 d-flex align-items-center">
+              <label class="form-label fs-6 fw-bold mb-0 col-2">CC</label>
+              <div class="col-7">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  formControlName="CcMail"
+                  class="form-control"
+                  placeholder="cc Mail"
+                  id="ccMail"
+                  name="ccMail"
+                  value="lilya@sunshineinterlining.com"
+                />
+                <div
+                  *ngIf="
+                    taskForm.get('CcMail')?.invalid &&
+                    (taskForm.get('CcMail')?.touched ||
+                      taskForm.get('CcMail')?.dirty)
+                  "
+                  class="text-danger small mt-1"
+                >
+                  <div *ngIf="taskForm.get('CcMail')?.hasError('required')">
+                    Cc email is required
+                  </div>
+                  <div *ngIf="taskForm.get('CcMail')?.hasError('email')">
+                    Please enter a valid email address
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <tbody formArrayName="items" style="width: 160% !important">
-        <tr
-          *ngFor="let item of items.controls; let i = index"
-          [formGroupName]="i"
+        <div
+          class="table-responsive"
+          style="
+            width: 100%;
+            overflow-x: auto;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 0;
+            margin-bottom: 20px;
+            background: white;
+          "
         >
-          <td>
-            <input
-              class="form-control form-control-sm"
-              formControlName="Buyer"
-              style="width: 180px"
-            />
-          </td>
-          <td>
-            <div class="form-group">
-              <p-dropdown
-                appendTo="body"
-                class="p-0 rm-dd"
-                [panelStyle]="{ width: '300px' }"
-                [options]="CustomerList"
-                optionLabel="CustomerName"
-                optionValue="Customer_ID"
-                [filter]="true"
-                filterBy="CustomerName"
-                [showClear]="true"
-                placeholder="Please Select"
-                formControlName="CustomerName"
-                [virtualScroll]="true"
-                [virtualScrollItemSize]="30"
+          <table
+            class="table table-bordered"
+            style="width: 3500px; table-layout: fixed; margin-bottom: 0"
+          >
+            <thead>
+              <tr class="custom-header">
+                <th style="text-align: center; width: 120px">Buying House</th>
+                <th style="text-align: center; width: 130px">Customer Name</th>
+                <th style="text-align: center; width: 120px">Article No</th>
+                <th style="text-align: center; width: 140px">In Time</th>
+                <th style="text-align: center; width: 140px">Out Time</th>
+                <th style="text-align: center; width: 120px">Purpose</th>
+                <th style="text-align: center; width: 100px">Old/New</th>
+                <th style="text-align: center; width: 160px">
+                  Already Receive Order Article
+                </th>
+                <th style="text-align: center; width: 120px">Unit Price USD</th>
+                <th style="text-align: center; width: 120px">Unit Price BDT</th>
+                <th style="text-align: center; width: 120px">
+                  Prod. Cost Unit
+                </th>
+                <th style="text-align: center; width: 150px">
+                  First order received time
+                </th>
+                <th style="text-align: center; width: 150px">
+                  Latest order received time
+                </th>
+                <th style="text-align: center; width: 120px">Payment Issue</th>
+                <th style="text-align: center; width: 120px">
+                  Commercial Issue
+                </th>
+                <th style="text-align: center; width: 120px">Sample Submit</th>
+                <th style="text-align: center; width: 120px">Remarks</th>
+                <th style="text-align: center; width: 60px"></th>
+              </tr>
+            </thead>
+
+            <tbody formArrayName="items">
+              <tr
+                *ngFor="let item of items.controls; let i = index"
+                [formGroupName]="i"
               >
-                <ng-template let-article pTemplate="item">
-                  <div class="flex align-items-center gap-2">
-                    <div>{{ article.CustomerName }}</div>
+                <td style="width: 120px">
+                  <input
+                    class="form-control form-control-sm"
+                    formControlName="Buyer"
+                    style="width: 100%; height: 48px"
+                  />
+                </td>
+                <td style="width: 130px">
+                  <div class="form-group">
+                    <p-dropdown
+                      appendTo="body"
+                      class="p-0 rm-dd"
+                      [panelStyle]="{ width: '300px' }"
+                      [options]="CustomerList"
+                      optionLabel="CustomerName"
+                      optionValue="Customer_ID"
+                      [filter]="true"
+                      filterBy="CustomerName"
+                      [showClear]="true"
+                      placeholder="Please Select"
+                      formControlName="CustomerName"
+                      [virtualScroll]="true"
+                      [virtualScrollItemSize]="30"
+                      [style]="{ width: '100%' }"
+                      panelStyleClass="description-panel"
+                    >
+                      <ng-template let-article pTemplate="item">
+                        <div class="flex align-items-center gap-2">
+                          <div>{{ article.CustomerName }}</div>
+                        </div>
+                      </ng-template>
+                    </p-dropdown>
                   </div>
-                </ng-template>
-              </p-dropdown>
-            </div>
-          </td>
+                </td>
 
-          <td>
-            <input
-              class="form-control form-control-sm"
-              formControlName="Article_No"
-              style="width: 180px"
-            />
-          </td>
+                <td style="width: 120px">
+                  <input
+                    class="form-control form-control-sm"
+                    formControlName="Article_No"
+                    style="width: 100%; height: 48px"
+                  />
+                </td>
 
-          <td class="col-description">
-            <p-calendar
-              appendTo="body"
-              inputId="calendar-24h"
-              formControlName="InTime"
-              [showTime]="true"
-              [hourFormat]="'24'"
-              [style]="{ width: '150px' }"
-            />
-          </td>
+                <td style="width: 140px">
+                  <p-calendar
+                    appendTo="body"
+                    inputId="calendar-24h"
+                    formControlName="InTime"
+                    [showTime]="true"
+                    [hourFormat]="'24'"
+                    [style]="{ width: '100%' }"
+                    styleClass="w-100"
+                  />
+                </td>
 
-          <td class="col-description">
-            <p-calendar
-              appendTo="body"
-              inputId="calendar-24h"
-              formControlName="OutTime"
-              [showTime]="true"
-              [hourFormat]="'24'"
-              [style]="{ width: '150px' }"
-            />
-            <div
-              *ngIf="
-                item.get('OutTime')?.hasError('required') &&
-                item.get('OutTime')?.touched
-              "
-              class="text-danger small"
-            >
-              Out Time is required
-            </div>
-            <div
-              *ngIf="
-                item.get('OutTime')?.hasError('outBeforeIn') &&
-                item.get('OutTime')?.touched
-              "
-              class="text-danger small"
-            >
-              Out Time cannot be earlier than In Time
-            </div>
-          </td>
-
-          <td>
-            <input
-              class="form-control form-control-sm"
-              formControlName="Purpose"
-              style="width: 180px"
-            />
-          </td>
-          <td>
-            <div class="form-group">
-              <p-dropdown
-                appendTo="body"
-                class="p-0 rm-dd"
-                [panelStyle]="{ width: '300px' }"
-                [options]="type"
-                optionLabel="label"
-                optionValue="value"
-                [filter]="true"
-                filterBy="label"
-                [showClear]="true"
-                placeholder="Please Select"
-                formControlName="Type"
-                [virtualScroll]="true"
-                [virtualScrollItemSize]="30"
-              >
-                <ng-template let-article pTemplate="item">
-                  <div class="flex align-items-center gap-2">
-                    <div>{{ article.label }}</div>
+                <td style="width: 140px">
+                  <p-calendar
+                    appendTo="body"
+                    inputId="calendar-24h"
+                    formControlName="OutTime"
+                    [showTime]="true"
+                    [hourFormat]="'24'"
+                    [style]="{ width: '100%' }"
+                    styleClass="w-100"
+                  />
+                  <div
+                    *ngIf="
+                      item.get('OutTime')?.hasError('required') &&
+                      item.get('OutTime')?.touched
+                    "
+                    class="text-danger small"
+                  >
+                    Out Time is required
                   </div>
-                </ng-template>
-              </p-dropdown>
-            </div>
-          </td>
-
-          <td>
-            <input
-              class="form-control form-control-sm"
-              formControlName="AlreadyReceivedArticle"
-              style="width: 180px"
-            />
-          </td>
-
-          <td>
-            <input
-              class="form-control form-control-sm"
-              formControlName="UnitPriceUSD"
-              style="width: 180px"
-            />
-          </td>
-
-          <td>
-            <input
-              class="form-control form-control-sm"
-              formControlName="UnitPriceBDT"
-              style="width: 180px"
-            />
-          </td>
-
-          <td>
-            <input
-              class="form-control form-control-sm"
-              formControlName="ProdCostUnit"
-              style="width: 180px"
-            />
-          </td>
-
-          <td>
-            <input
-              class="form-control form-control-sm"
-              formControlName="FirstOrderReceivedTime"
-              style="width: 180px"
-            />
-          </td>
-
-          <td>
-            <input
-              class="form-control form-control-sm"
-              formControlName="LatestOrderReceivedTime"
-              style="width: 180px"
-            />
-          </td>
-          <td>
-            <div class="form-group">
-              <p-dropdown
-                appendTo="body"
-                class="p-0 rm-dd"
-                [panelStyle]="{ width: '300px' }"
-                [options]="solveList"
-                optionLabel="label"
-                optionValue="value"
-                [filter]="true"
-                filterBy="label"
-                [showClear]="true"
-                placeholder="Please Select"
-                formControlName="PaymentIssue"
-                [virtualScroll]="true"
-                [virtualScrollItemSize]="30"
-              >
-                <ng-template let-article pTemplate="item">
-                  <div class="flex align-items-center gap-2">
-                    <div>{{ article.label }}</div>
+                  <div
+                    *ngIf="
+                      item.get('OutTime')?.hasError('outBeforeIn') &&
+                      item.get('OutTime')?.touched
+                    "
+                    class="text-danger small"
+                  >
+                    Out Time cannot be earlier than In Time
                   </div>
-                </ng-template>
-              </p-dropdown>
-            </div>
-          </td>
-          <td>
-            <div class="form-group">
-              <p-dropdown
-                appendTo="body"
-                class="p-0 rm-dd"
-                [panelStyle]="{ width: '300px' }"
-                [options]="solveList"
-                optionLabel="label"
-                optionValue="value"
-                [filter]="true"
-                filterBy="label"
-                [showClear]="true"
-                placeholder="Please Select"
-                formControlName="CommercialIssue"
-                [virtualScroll]="true"
-                [virtualScrollItemSize]="30"
-              >
-                <ng-template let-article pTemplate="item">
-                  <div class="flex align-items-center gap-2">
-                    <div>{{ article.label }}</div>
+                </td>
+
+                <td style="width: 120px">
+                  <input
+                    class="form-control form-control-sm"
+                    formControlName="Purpose"
+                    style="width: 100%; height: 48px"
+                  />
+                </td>
+                <td style="width: 100px">
+                  <div class="form-group">
+                    <p-dropdown
+                      appendTo="body"
+                      class="p-0 rm-dd"
+                      [panelStyle]="{ width: '300px' }"
+                      [options]="type"
+                      optionLabel="label"
+                      optionValue="value"
+                      [filter]="true"
+                      filterBy="label"
+                      [showClear]="true"
+                      placeholder="Please Select"
+                      formControlName="Type"
+                      [virtualScroll]="true"
+                      [virtualScrollItemSize]="30"
+                      [style]="{ width: '100%' }"
+                      panelStyleClass="description-panel"
+                    >
+                      <ng-template let-article pTemplate="item">
+                        <div class="flex align-items-center gap-2">
+                          <div>{{ article.label }}</div>
+                        </div>
+                      </ng-template>
+                    </p-dropdown>
                   </div>
-                </ng-template>
-              </p-dropdown>
-            </div>
-          </td>
-          <td class="col-description">
-            <textarea
-              class="form-control form-control-sm"
-              formControlName="SampleSubmit"
-              style="width: 180px"
-              required="true"
-            ></textarea>
-          </td>
-          <td class="col-description">
-            <textarea
-              class="form-control form-control-sm"
-              formControlName="discussion"
-              style="width: 180px"
-              required="true"
-            ></textarea>
-          </td>
-          <td>
-            <button
-              type="button"
-              class="btn btn-sm btn-danger"
-              (click)="removeItem(i)"
-            >
-              ×
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+                </td>
+
+                <td style="width: 160px">
+                  <input
+                    class="form-control form-control-sm"
+                    formControlName="AlreadyReceivedArticle"
+                    style="width: 100%; height: 48px"
+                  />
+                </td>
+
+                <td style="width: 120px">
+                  <input
+                    class="form-control form-control-sm"
+                    formControlName="UnitPriceUSD"
+                    style="width: 100%; height: 48px"
+                  />
+                </td>
+
+                <td style="width: 120px">
+                  <input
+                    class="form-control form-control-sm"
+                    formControlName="UnitPriceBDT"
+                    style="width: 100%; height: 48px"
+                  />
+                </td>
+
+                <td style="width: 120px">
+                  <input
+                    class="form-control form-control-sm"
+                    formControlName="ProdCostUnit"
+                    style="width: 100%; height: 48px"
+                  />
+                </td>
+
+                <td style="width: 150px">
+                  <input
+                    class="form-control form-control-sm"
+                    formControlName="FirstOrderReceivedTime"
+                    style="width: 100%; height: 48px"
+                  />
+                </td>
+
+                <td style="width: 150px">
+                  <input
+                    class="form-control form-control-sm"
+                    formControlName="LatestOrderReceivedTime"
+                    style="width: 100%; height: 48px"
+                  />
+                </td>
+                <td style="width: 120px">
+                  <div class="form-group">
+                    <p-dropdown
+                      appendTo="body"
+                      class="p-0 rm-dd"
+                      [panelStyle]="{ width: '300px' }"
+                      [options]="solveList"
+                      optionLabel="label"
+                      optionValue="value"
+                      [filter]="true"
+                      filterBy="label"
+                      [showClear]="true"
+                      placeholder="Please Select"
+                      formControlName="PaymentIssue"
+                      [virtualScroll]="true"
+                      [virtualScrollItemSize]="30"
+                      [style]="{ width: '100%' }"
+                      styleClass="w-100"
+                      panelStyleClass="description-panel"
+                    >
+                      <ng-template let-article pTemplate="item">
+                        <div class="flex align-items-center gap-2">
+                          <div>{{ article.label }}</div>
+                        </div>
+                      </ng-template>
+                    </p-dropdown>
+                  </div>
+                </td>
+                <td style="width: 120px">
+                  <div class="form-group">
+                    <p-dropdown
+                      appendTo="body"
+                      class="p-0 rm-dd"
+                      [panelStyle]="{ width: '300px' }"
+                      [options]="solveList"
+                      optionLabel="label"
+                      optionValue="value"
+                      [filter]="true"
+                      filterBy="label"
+                      [showClear]="true"
+                      placeholder="Please Select"
+                      formControlName="CommercialIssue"
+                      [virtualScroll]="true"
+                      [virtualScrollItemSize]="30"
+                      [style]="{ width: '100%' }"
+                      styleClass="w-100"
+                      panelStyleClass="description-panel"
+                    >
+                      <ng-template let-article pTemplate="item">
+                        <div class="flex align-items-center gap-2">
+                          <div>{{ article.label }}</div>
+                        </div>
+                      </ng-template>
+                    </p-dropdown>
+                  </div>
+                </td>
+                <td style="width: 120px">
+                  <textarea
+                    class="form-control form-control-sm"
+                    formControlName="SampleSubmit"
+                    style="width: 100%; height: 48px; resize: none"
+                    required="true"
+                  ></textarea>
+                </td>
+                <td style="width: 120px">
+                  <textarea
+                    class="form-control form-control-sm"
+                    formControlName="discussion"
+                    style="width: 100%; height: 48px; resize: none"
+                    required="true"
+                  ></textarea>
+                </td>
+                <td style="width: 60px; text-align: center">
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-danger"
+                    (click)="removeItem(i)"
+                    style="padding: 4px 8px; width: 80%; height: 42px"
+                  >
+                    ×
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 mt-3">
+          <button
+            type="button"
+            class="btn btn-outline-success"
+            (click)="addItem()"
+            style="width: 130px"
+          >
+            <i class="bi bi-plus-circle me-1"></i> Add Row
+          </button>
+
+          <button
+            type="submit"
+            (click)="saveData()"
+            class="btn theme-btn btn-rounded"
+            *ngIf="!isEdit"
+            style="width: 130px"
+          >
+            <i class="bi bi-save me-1"></i> Save
+          </button>
+          <button
+            type="submit"
+            (click)="UpdateData()"
+            [ngClass]="{
+              'theme-btn-disable': taskForm.invalid,
+            }"
+            class="btn theme-btn btn-rounded"
+            [disabled]="taskForm.invalid"
+            *ngIf="isEdit"
+            style="width: 130px"
+          >
+            <i class="bi bi-save me-1"></i> Save
+          </button>
+        </div>
+      </form>
     </div>
-    <div class="d-flex justify-content-end gap-2 mt-3">
-      <button type="button" class="btn btn-outline-success" (click)="addItem()">
-        <i class="bi bi-plus-circle me-1"></i> Add Row
-      </button>
-
-      <button
-        type="submit"
-        (click)="saveData()"
-        class="btn theme-btn btn-rounded"
-        *ngIf="!isEdit"
-      >
-        <i class="bi bi-save me-1"></i> Save
-      </button>
-      <button
-        type="submit"
-        (click)="UpdateData()"
-        [ngClass]="{
-          'theme-btn-disable': taskForm.invalid,
-        }"
-        class="btn theme-btn btn-rounded"
-        [disabled]="taskForm.invalid"
-        *ngIf="isEdit"
-      >
-        <i class="bi bi-save me-1"></i> Save
-      </button>
-    </div>
-  </form>
+  </div>
 </div>

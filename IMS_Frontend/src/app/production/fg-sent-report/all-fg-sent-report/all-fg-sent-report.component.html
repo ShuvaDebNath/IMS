@@ -1,64 +1,71 @@
 <div class="m-2 p-2">
-  <div class="card shadow-sm ">
-  <div
-    class="card-header theme-bg"
-  >
-  
-        <h2 class="p-2">Search Finished Goods Sent Record</h2>
-    
-  </div>
-  <div class="card-body">
-    <form
-      [formGroup]="SearchForm"
-      class="row p-3 shadow-sm g-3 align-items-end mb-3"
-      (ngSubmit)="Search()"
-    >
-      <div class="col-3">
-        <label for="LCNo" class="">Search By Invoice No </label>
-        <div class="">
-          <div class="form-group d-inline">
-            <input
-              autocomplete="off"
-              type="text"
-              formControlName="InvoiceNo"
-              class="form-control"
-              placeholder="Invoice No"
-              id="InvoiceNo"
-              name="InvoiceNo"
-              value=""
-            />
+  <div class="card shadow-sm">
+    <div class="card-header theme-bg">
+      <h2 class="p-2">Search Finished Goods Sent Record</h2>
+    </div>
+    <div class="card-body">
+      <form
+        [formGroup]="SearchForm"
+        class="row p-3 shadow-sm g-3 align-items-end mb-3"
+        (ngSubmit)="Search()"
+      >
+        <div class="row align-items-end">
+          <div class="col-md-4">
+            <label for="LCNo" class="">Search By Invoice No </label>
+            <div class="">
+              <div class="form-group d-inline">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  formControlName="InvoiceNo"
+                  class="form-control"
+                  placeholder="Invoice No"
+                  id="InvoiceNo"
+                  name="InvoiceNo"
+                  value=""
+                  style="width: 100%;"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Select Date</label>
+
+            <div class="range-container">
+              <p-calendar
+                formControlName="fromDate"
+                [showIcon]="false"
+                dateFormat="dd/mm/yy"
+                placeholder="Start Date"
+                inputStyleClass="custom-date-input"
+              ></p-calendar>
+
+              <span class="range-divider">to</span>
+
+              <p-calendar
+                formControlName="toDate"
+                [showIcon]="false"
+                dateFormat="dd/mm/yy"
+                placeholder="End Date"
+                inputStyleClass="custom-date-input"
+              ></p-calendar>
+            </div>
+          </div>
+          <div class="col-md-2 mt-4">
+            <button
+              title="Search"
+              type="submit"
+              [disabled]="SearchForm.invalid"
+              class="btn btn-sm theme-btn mr-2 text-white"
+              style="margin-top: 2.3em !important; width: 130px; height: 38px"
+            >
+              <i class="pi pi-download me-1"></i> Load
+            </button>
           </div>
         </div>
-      </div>
-      <div class="col-md-3">
-        <label class="form-label fw-bold">From Date</label>
-        <input
-          type="date"
-          class="form-control form-control-sm"
-          formControlName="fromDate"
-        />
-      </div>
-
-      <div class="col-md-3">
-        <label class="form-label fw-bold">To Date</label>
-        <input
-          type="date"
-          class="form-control form-control-sm"
-          formControlName="toDate"
-        />
-      </div>
-      <div class="col-md-2">
-        <button
-          type="submit"
-          class="btn btn-sm theme-btn w-100"
-          [disabled]="SearchForm.invalid"
-        >
-          <i class="pi pi-download me-1"></i> Load
-        </button>
-      </div>
-    </form>
-    <hr>
-      <div class="row mb-3" *ngIf="tableData!=null">
+      </form>
+      <hr />
+      <div class="row mb-3" *ngIf="tableData != null">
         <div class="col-md-12">
           <button
             class="btn theme-btn px-4 py-2"
@@ -70,69 +77,83 @@
         </div>
       </div>
 
-    <p-table
-      *ngIf="tableVisible"
-      #dt
-      [value]="tableData"
-      [paginator]="true"
-      [rows]="10"
-      [responsive]="true"
-      [showCurrentPageReport]="true"
-      [globalFilterFields]="['ExportNumber', 'ExportDate','Article_No', 'DetailsNote', 'Color','Measurement','Packaging','GSM','Gross_Weight','Unit','Quantity','Sent_RollBag_Quantity','UserName']"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-    >
-      <ng-template pTemplate="caption">
-        <div class="table-toolbar">
-          <span class="p-input-icon-left">
-            <i class="pi pi-search"></i>
-            <input
-              pInputText
-              type="text"
-              (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-              placeholder="Global Search"
-            />
-          </span>
-        </div>
-      </ng-template>
+      <p-table
+        *ngIf="tableVisible"
+        #dt
+        [value]="tableData"
+        [paginator]="true"
+        [rows]="10"
+        [responsive]="true"
+        [showCurrentPageReport]="true"
+        [globalFilterFields]="[
+          'ExportNumber',
+          'ExportDate',
+          'Article_No',
+          'DetailsNote',
+          'Color',
+          'Measurement',
+          'Packaging',
+          'GSM',
+          'Gross_Weight',
+          'Unit',
+          'Quantity',
+          'Sent_RollBag_Quantity',
+          'UserName',
+        ]"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      >
+        <ng-template pTemplate="caption">
+          <div class="table-toolbar d-flex justify-content-end">
+            <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                placeholder="Global Search"
+              />
+            </span>
+          </div>
+        </ng-template>
 
-      <ng-template pTemplate="header">
-        <tr>            
-          <th class="bg-gradient-success">SL</th>
-          <th class="bg-gradient-success">Invoice No</th>
-          <th class="bg-gradient-success">Invoice Date</th>
-          <th class="bg-gradient-success">Article No</th>
-          <th class="bg-gradient-success">Description</th>
-          <th class="bg-gradient-success">Color</th>
-          <th class="bg-gradient-success">Width</th>
-          <th class="bg-gradient-success">GSM</th>
-          <th class="bg-gradient-success">Weight (KG)</th>
-          <th class="bg-gradient-success">Unit</th>
-          <th class="bg-gradient-success">Quantity</th>
-          <th class="bg-gradient-success">Rolls</th>
-          <th class="bg-gradient-success">Generated By</th>
-        </tr>
-      </ng-template>
+        <ng-template pTemplate="header">
+          <tr class="custom-header">
+            <th >SL</th>
+            <th >Invoice No</th>
+            <th >Invoice Date</th>
+            <th >Article No</th>
+            <th >Description</th>
+            <th >Color</th>
+            <th >Width</th>
+            <th >GSM</th>
+            <th >Weight (KG)</th>
+            <th >Unit</th>
+            <th >Quantity</th>
+            <th >Rolls</th>
+            <th >Generated By</th>
+          </tr>
+        </ng-template>
 
-      <ng-template pTemplate="body" let-table let-i="rowIndex">
-        <tr>
-          <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
-          <td class="text-center align-middle">{{ table.ExportNumber }}</td>
-          <td class="text-center align-middle">{{ table.ExportDate }}</td>
-          <td class="text-center align-middle">{{ table.Article_No }}</td>
-          <td class="text-center align-middle">{{ table.DetailsNote }}</td>
-          <td class="text-center align-middle">{{ table.Color }}</td>
-          <td class="text-center align-middle">{{ table.Measurement }}</td>
-          <td class="text-center align-middle">{{ table.GSM }}</td>
-          <td class="text-center align-middle">{{ table.Gross_Weight }}</td>
-          <td class="text-center align-middle">{{ table.Unit }}</td>
-          <td class="text-center align-middle">{{ table.Quantity }}</td>
-          <td class="text-center align-middle">{{ table.Sent_RollBag_Quantity }}</td>
-          <td class="text-center align-middle">{{ table.UserName }}</td>          
-        </tr>
-      </ng-template>
-    </p-table>
-  </div>  
+        <ng-template pTemplate="body" let-table let-i="rowIndex">
+          <tr>
+            <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
+            <td class="text-center align-middle">{{ table.ExportNumber }}</td>
+            <td class="text-center align-middle">{{ table.ExportDate }}</td>
+            <td class="text-center align-middle">{{ table.Article_No }}</td>
+            <td class="text-center align-middle">{{ table.DetailsNote }}</td>
+            <td class="text-center align-middle">{{ table.Color }}</td>
+            <td class="text-center align-middle">{{ table.Measurement }}</td>
+            <td class="text-center align-middle">{{ table.GSM }}</td>
+            <td class="text-center align-middle">{{ table.Gross_Weight }}</td>
+            <td class="text-center align-middle">{{ table.Unit }}</td>
+            <td class="text-center align-middle">{{ table.Quantity }}</td>
+            <td class="text-center align-middle">
+              {{ table.Sent_RollBag_Quantity }}
+            </td>
+            <td class="text-center align-middle">{{ table.UserName }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
 </div>
-
-</div>
-

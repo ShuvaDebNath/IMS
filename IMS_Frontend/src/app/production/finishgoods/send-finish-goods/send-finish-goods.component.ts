@@ -13,13 +13,13 @@ import { Subject } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
 import { CreateSendFinishGoodsItem, CreateSendFinishGoodsRequest } from 'src/app/models/requisition/sendFinishGoods';
 import { DropdownModule } from 'primeng/dropdown';
-
+import { CalendarModule } from 'primeng/calendar';
 @Component({
   standalone: true,
   selector: 'app-send-finish-goods',
   templateUrl: './send-finish-goods.component.html',
   styleUrls: ['./send-finish-goods.component.css'],
-  imports: [CommonModule, TableModule, InputTextModule, DialogModule, DropdownModule,ReactiveFormsModule],
+  imports: [CommonModule, TableModule, InputTextModule, DialogModule, DropdownModule,ReactiveFormsModule,CalendarModule],
 })
 export class SendFinishGoodsComponent implements OnInit {
   finishGoodsArticles: any[] = [];

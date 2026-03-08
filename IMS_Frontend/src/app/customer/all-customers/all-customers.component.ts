@@ -27,7 +27,7 @@ export class AllCustomersComponent {
   dateForm!: FormGroup;
   tableVisible = false;
   SuperiorList: any;
-  CustomerFilterList:any;
+  CustomerFilterList: any;
 
   insertPermissions: boolean = false;
   updatePermissions: boolean = false;
@@ -41,7 +41,7 @@ export class AllCustomersComponent {
     private dme: DoubleMasterEntryService,
     private fb: FormBuilder,
     private ms: MasterEntryService,
-    private reportService: ReportService
+    private reportService: ReportService,
   ) {}
 
   ngOnInit(): void {
@@ -74,7 +74,7 @@ export class AllCustomersComponent {
       next: (results) => {
         if (results.status) {
           console.log(JSON.parse(results.data).Tables3);
-          
+
           this.CustomerList = JSON.parse(results.data).Tables2;
           if (JSON.parse(results.data).Tables3 != undefined)
             this.SuperiorList = JSON.parse(results.data).Tables3;
@@ -92,7 +92,7 @@ export class AllCustomersComponent {
       swal.fire(
         'Validation Error!',
         'Please select both From Date and To Date.',
-        'warning'
+        'warning',
       );
       return;
     }
@@ -101,7 +101,7 @@ export class AllCustomersComponent {
       swal.fire(
         'Validation Error!',
         'From Date cannot be later than To Date.',
-        'warning'
+        'warning',
       );
       return;
     }
@@ -128,8 +128,8 @@ export class AllCustomersComponent {
         if (results.status) {
           this.allCustomers = JSON.parse(results.data).Tables1;
           console.log(this.allCustomers[0]);
-          
-    console.log(Array.isArray(this.allCustomers));
+
+          console.log(Array.isArray(this.allCustomers));
 
           this.tableVisible = true;
         } else if (results.msg === 'Invalid Token') {
@@ -168,7 +168,7 @@ export class AllCustomersComponent {
         swal.fire(
           'Error!',
           'An error occurred while fetching details.',
-          'info'
+          'info',
         ),
     });
   }
@@ -211,7 +211,7 @@ export class AllCustomersComponent {
             swal.fire(
               'Delete Failed',
               err?.error?.message || 'Something went wrong.',
-              'info'
+              'info',
             );
           },
         });
@@ -220,12 +220,11 @@ export class AllCustomersComponent {
 
   getCustomerList() {
     var SuperioId = this.dateForm.value.SuperioId;
-    
+
     this.CustomerFilterList = this.CustomerList.filter(
-      (e: any) => e.Superior_ID == SuperioId
+      (e: any) => e.Superior_ID == SuperioId,
     );
     console.log(this.CustomerFilterList);
-    
   }
 
   printCustomerReport() {
@@ -305,5 +304,8 @@ export class AllCustomersComponent {
         });
       },
     });
+  }
+  toggleText(item: any) {
+    item.showFull = !item.showFull;
   }
 }

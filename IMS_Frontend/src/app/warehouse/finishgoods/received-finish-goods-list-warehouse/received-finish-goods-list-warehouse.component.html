@@ -1,8 +1,13 @@
-<div class="container">
-  <h1 class="theme-text">Received Finish Goods List</h1>
 
+
+<div class="m-2 p-2">
+  <div class="card">
+    <div class="card-header theme-bg">
+      <h1 class="theme-text text-white">Received Finish Goods List</h1>
+    </div>
+     <div class="card-body">
   <p-table
-    class="theme-bg"
+    
     #dt
     [value]="receivedFinishGoodsList"
     [paginator]="true"
@@ -23,7 +28,7 @@
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
   >
     <ng-template pTemplate="caption">
-      <div class="table-toolbar">
+      <div class="table-toolbar d-flex justify-content-end">
         <span class="p-input-icon-left">
           <i class="pi pi-search"></i>
           <input
@@ -37,7 +42,7 @@
     </ng-template>
 
     <ng-template pTemplate="header">
-      <tr>
+      <tr class="custom-header">
         <th class="text-center">Serial No</th>
         <th class="text-center">Export No</th>
         <th class="text-center">Send Date</th>
@@ -92,7 +97,7 @@
   </p-table>
 
   <!-- Details dialog -->
-  <p-dialog
+  <!-- <p-dialog
     header="Detail"
     [(visible)]="isDetailsVisible"
     [modal]="true"
@@ -149,5 +154,82 @@
         </ng-template>
       </p-table>
     </div>
-  </p-dialog>
+  </p-dialog> -->
+ 
+<p-dialog
+  header="Export Detail"
+  [(visible)]="isDetailsVisible"
+  [modal]="true"
+  [closable]="true"
+  [style]="{ width: '90vw', maxWidth: '100vw' }"
+  (onHide)="detailsData = null"
+  styleClass="export-detail-dialog"
+>
+  <!-- Header Print Button -->
+  <ng-template pTemplate="header">
+    <div class="d-flex justify-content-between align-items-center w-100">
+      <span>Export Detail</span>
+      <button
+        class="btn btn-success btn-sm"
+        title="Print"
+        (click)="printDialog()"
+      >
+        <i class="fa fa-print"></i>&nbsp; Print
+      </button>
+    </div>
+  </ng-template>
+
+  <!-- Export Info -->
+  <div *ngIf="detailsData" class="export-info p-3 mb-3 shadow-sm rounded">
+    <div class="row mb-2">
+      <div class="col-md-4">
+        <p><strong>Export No:</strong> {{ detailsData.ExportNumber }}</p>
+        <p><strong>Date:</strong> {{ detailsData.Export_Date }}</p>
+      </div>
+      <div class="col-md-4">
+        <p><strong>Total Qty:</strong> {{ detailsData.Total_Qty }}</p>
+        <p><strong>Total Bag:</strong> {{ detailsData.Total_Bag }}</p>
+        <p><strong>Total Roll:</strong> {{ detailsData.Total_Roll }}</p>
+      </div>
+      <div class="col-md-4">
+        <p *ngIf="detailsData.Note"><strong>Note:</strong> {{ detailsData.Note }}</p>
+        <p><strong>Total Accepted Qty:</strong> {{ detailsData.TotalAcceptQty }}</p>
+        <p><strong>Total Accepted RollBag Qty:</strong> {{ detailsData.TotalAcceptRollBagQty }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Items Table -->
+  <div *ngIf="detailsData?.Items">
+    <p-table [value]="detailsData?.Items" [responsive]="true" class="shadow-sm rounded">
+      <ng-template pTemplate="header">
+        <tr  class="custom-header">
+          <th>Article</th>
+          <th>Description</th>
+          <th>UoM</th>
+          <th>Quantity</th>
+          <th>Roll/Bag/KG/Piece</th>
+          <th>Gross Weight</th>
+          <th>Accepted Qty</th>
+          <th>Accepted RollBag Qty</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-item>
+        <tr>
+          <td style="text-align: left">{{ item.Article_No }}</td>
+          <td style="text-align: left">{{ item.DetailsNote }}</td>
+          <td style="text-align: center">{{ item.Roll_Bag }}</td>
+          <td style="text-align: center">{{ item.Quantity }}</td>
+          <td style="text-align: center">{{ item.Sent_RollBag_Quantity }}</td>
+          <td style="text-align: center">{{ item.Gross_Weight }}</td>
+          <td style="text-align: center">{{ item.AcceptedQuantity }}</td>
+          <td style="text-align: center">{{ item.AcceptedRollBag_Qty }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</p-dialog>
 </div>
+    </div>
+    </div>
+    
