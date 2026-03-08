@@ -59,7 +59,7 @@
   <!-- Details dialog -->
   <p-dialog header="Detail" [(visible)]="isDetailsVisible" [modal]="true" [closable]="true" [style]="{ width: '70vw' }"
     (onHide)="detailsData = null">
-    <div *ngIf="detailsData">
+    <!-- <div *ngIf="detailsData">
       <h2>{{ detailsData.RequisitionNumber }}</h2>
       <p>Date: {{ detailsData.RequisitionDate }}</p>
       <p>Total Qty: {{ detailsData.TotalQty }}</p>
@@ -92,7 +92,67 @@
         <button class="btn theme-btn-add" (click)="onAccept(detailsData)">Accept</button>
         <button class="btn theme-btn-cancel" (click)="onReject(detailsData)">Reject</button>
       </div>
+    </div> -->
+  <div *ngIf="detailsData" class="req-details-wrapper">
+
+  <!-- ===== Top Info Card ===== -->
+  <div class="req-info-card">
+    <div class="req-header">
+      <h2>{{ detailsData.RequisitionNumber }}</h2>
+      <span class="req-date">Date: {{ detailsData.RequisitionDate }}</span>
     </div>
+
+    <div class="req-summary">
+      <div class="summary-item">
+        <label>Total Qty</label>
+        <span>{{ detailsData.TotalQty }}</span>
+      </div>
+      <div class="summary-item">
+        <label>Total Bag</label>
+        <span>{{ detailsData.TotalBag }}</span>
+      </div>
+      <div class="summary-item">
+        <label>Total Roll</label>
+        <span>{{ detailsData.TotalRoll }}</span>
+      </div>
+    </div>
+
+    <div *ngIf="detailsData.Remarks" class="remarks-box">
+      <strong>Remarks:</strong> {{ detailsData.Remarks }}
+    </div>
+  </div>
+
+  <!-- ===== Table Card ===== -->
+  <div class="req-table-card">
+    <p-table [value]="detailsData.Items" [responsive]="true">
+      <ng-template pTemplate="header">
+        <tr class="custom-header">
+          <th>Article</th>
+          <th>Description</th>
+          <th>Quantity</th>
+          <th>Roll/Bag</th>
+          <th>R/B Qty</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-item>
+        <tr>
+          <td>{{ item.ConcatArticleNo }}</td>
+          <td>{{ item.Description }}</td>
+          <td>{{ item.Quantity }}</td>
+          <td>{{ item.Roll_Bag }}</td>
+          <td>{{ item.RollBag_Quantity }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <!-- ===== Action Buttons ===== -->
+  <div class="d-flex justify-content-between mt-3">
+        <button class="btn theme-btn-add" (click)="onAccept(detailsData)">Accept</button>
+        <button class="btn theme-btn-cancel" (click)="onReject(detailsData)">Reject</button>
+      </div>
+
+</div>
   </p-dialog>
 </div>
   </div>

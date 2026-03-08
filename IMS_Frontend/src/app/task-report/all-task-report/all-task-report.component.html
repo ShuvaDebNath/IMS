@@ -7,32 +7,48 @@
     </div>
     <div class="card-body">
       <form [formGroup]="SearchForm">
-        <div class="row align-items-center">
-          <div class="col-3">
-            <label class="control-label" for="inlineFormInputGroup"
-              >From Date</label
-            >
-            <input
-              type="date"
-              formControlName="fromDate"
-              class="form-control"
-            />
-          </div>
-          <div class="col-3">
-            <label class="control-label" for="inlineFormInputGroup"
-              >To Date</label
-            >
-            <input type="date" formControlName="toDate" class="form-control" />
-          </div>
-          <div class="col-3">
-            <button
-              title="Search"
-              type="button"
-              (click)="Search()"
-              class="btn btn-sm theme-btn mt-4 p-1"
-            >
-              <i class="fas fa-search"></i>&nbsp;Search
-            </button>
+        <div class="align-items-center">
+          <div class="row">
+            <div class="row align-items-end">
+              <div class="col-auto">
+                <label class="form-label">Select Date</label>
+
+                <div class="range-container" style="width: 100%">
+                  <p-calendar
+                    formControlName="fromDate"
+                    [showIcon]="false"
+                    dateFormat="dd/mm/yy"
+                    placeholder="From"
+                    inputStyleClass="custom-date-input"
+                  ></p-calendar>
+
+                  <span class="range-divider">to</span>
+
+                  <p-calendar
+                    formControlName="toDate"
+                    [showIcon]="false"
+                    dateFormat="dd/mm/yy"
+                    placeholder="To"
+                    inputStyleClass="custom-date-input"
+                  ></p-calendar>
+                </div>
+              </div>
+              <div class="col-auto mt-4">
+                <button
+                  title="Search"
+                  type="button"
+                  (click)="Search()"
+                  class="btn btn-sm theme-btn mr-2"
+                  style="
+                    margin-top: 2.3em !important;
+                    width: 130px;
+                    height: 38px;
+                  "
+                >
+                  <i class="fas fa-search"></i>&nbsp;Search
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </form>
@@ -48,12 +64,12 @@
           'Task_Report_Code',
           'UserName',
           'TotalRequest',
-          'date'
+          'date',
         ]"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
       >
         <ng-template pTemplate="caption">
-          <div class="table-toolbar">
+          <div class="table-toolbar d-flex justify-content-end">
             <span class="p-input-icon-left">
               <i class="pi pi-search"></i>
               <input
@@ -90,28 +106,31 @@
               <div class="d-flex justify-content-center gap-1">
                 <button
                   *ngIf="updatePermissions"
-                  class="btn theme-btn-edit"
+                  class="btn theme-btn-edit btn-sm d-flex justify-content-center align-items-center"
                   title="Delivery Details"
                   (click)="ShowTaskDetails(table.Task_Report_ID)"
+                  style="font-size: 12px;"
                 >
                   <i class="fa fa-eye"></i>
                 </button>
 
                 <a
                   *ngIf="updatePermissions"
-                  class="btn theme-btn-edit"
+                  class="btn theme-btn-edit btn-sm d-flex justify-content-center align-items-center"
                   target="_blank"
                   title="Edit"
                   [routerLink]="['/generate-task-report']"
                   [queryParams]="{ Id: table.Task_Report_ID }"
+                  style="font-size: 12px;"
                   ><i class="fa fa-edit"></i
                 ></a>
 
                 <button
                   *ngIf="deletePermissions"
-                  class="btn theme-btn-delete"
+                  class="btn theme-btn-delete btn-sm d-flex justify-content-center align-items-center"
                   title="Delete"
                   (click)="DeleteData(table)"
+                  style="font-size: 12px;"
                 >
                   <i class="fas fa-trash"></i>
                 </button>
@@ -120,7 +139,7 @@
           </tr>
         </ng-template>
       </p-table>
-      <p-dialog
+      <!-- <p-dialog
         header="Detail"
         [(visible)]="isDetailsVisible"
         [modal]="true"
@@ -176,7 +195,9 @@
                 <td class="text-center align-middle">
                   {{ item.Task_Report_Code }}
                 </td>
-                <td class="text-center align-middle">{{ item.Buying_House }}</td>
+                <td class="text-center align-middle">
+                  {{ item.Buying_House }}
+                </td>
                 <td class="text-center align-middle">
                   {{ item.customer_name }}
                 </td>
@@ -191,11 +212,21 @@
                 <td class="text-center align-middle">{{ item.Purpose }}</td>
                 <td class="text-center align-middle">{{ item.Discussion }}</td>
                 <td class="text-center align-middle">{{ item.Type }}</td>
-                <td class="text-center align-middle">{{ item.Unit_Price_BDT }}</td>
-                <td class="text-center align-middle">{{ item.Unit_Price_USD }}</td>
-                <td class="text-center align-middle">{{ item.Prod_Cost_Unit }}</td>
-                <td class="text-center align-middle">{{ item.First_Received_Time }}</td>
-                <td class="text-center align-middle">{{ item.Latest_Order_Receive_Time }}</td>
+                <td class="text-center align-middle">
+                  {{ item.Unit_Price_BDT }}
+                </td>
+                <td class="text-center align-middle">
+                  {{ item.Unit_Price_USD }}
+                </td>
+                <td class="text-center align-middle">
+                  {{ item.Prod_Cost_Unit }}
+                </td>
+                <td class="text-center align-middle">
+                  {{ item.First_Received_Time }}
+                </td>
+                <td class="text-center align-middle">
+                  {{ item.Latest_Order_Receive_Time }}
+                </td>
                 <td class="text-center align-middle">
                   {{ item.PaymentIssue }}
                 </td>
@@ -209,7 +240,85 @@
             </ng-template>
           </p-table>
         </div>
-      </p-dialog>
+      </p-dialog> -->
+   <p-dialog
+  [(visible)]="isDetailsVisible"
+  [modal]="true"
+  [closable]="true"
+  [style]="{ width: '90vw', maxHeight: '85vh' }"
+  [contentStyle]="{ 'overflow-y': 'auto', padding: '15px 20px' }"
+  styleClass="detail-dialog"
+  (onHide)="detailsData = null"
+>
+  <!-- Header with Print -->
+  <ng-template pTemplate="header">
+    <div class="d-flex justify-content-between align-items-center w-100">
+      <span class="dialog-title">Detail</span>
+      <button class="btn theme-btn btn-sm" title="Print" (click)="printDialog()">
+        <i class="fa fa-print me-1"></i> Print
+      </button>
+    </div>
+  </ng-template>
+
+  <!-- Top Info Section -->
+  <div *ngIf="detailsData" class="top-info">
+    <div class="info-row"><span class="info-label">Task Type:</span> {{ detailsData[0]?.TaskType }}</div>
+    <div class="info-row"><span class="info-label">Task Code:</span> {{ detailsData[0]?.Task_Report_Code }}</div>
+    <div class="info-row"><span class="info-label">Date:</span> {{ detailsData[0]?.date }}</div>
+    <div class="info-row"><span class="info-label">To Mail:</span> {{ detailsData[0]?.Mail_TO }}</div>
+    <div class="info-row"><span class="info-label">CC Mail:</span> {{ detailsData[0]?.Mail_CC }}</div>
+  </div>
+
+  <!-- Data Table -->
+  <p-table [value]="detailsDataTable" [responsive]="true" class="detail-table" [scrollable]="true" scrollHeight="60vh">
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="text-center">Task Code</th>
+        <th class="text-center">Buyer Name</th>
+        <th class="text-center">Customer Name</th>
+        <th class="text-center">Article No</th>
+        <th class="text-center">Contact Person</th>
+        <th class="text-center">In Time</th>
+        <th class="text-center">Out Time</th>
+        <th class="text-center">Purpose</th>
+        <th class="text-center">Discussion</th>
+        <th class="text-center">Old/New</th>
+        <th class="text-center">Unit Price BDT</th>
+        <th class="text-center">Unit Price USD</th>
+        <th class="text-center">Prod Cost Unit</th>
+        <th class="text-center">First order received time</th>
+        <th class="text-center">Latest order received time</th>
+        <th class="text-center">Payment Issue</th>
+        <th class="text-center">Commercial Issue</th>
+        <th class="text-center">Sample Submit</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-item let-i="rowIndex">
+      <tr [class.alt-row]="i % 2 === 1" class="table-row">
+        <td class="text-center align-middle">{{ item.Task_Report_Code }}</td>
+        <td class="text-center align-middle">{{ item.Buying_House }}</td>
+        <td class="text-center align-middle">{{ item.customer_name }}</td>
+        <td class="text-center align-middle">{{ item.Article_No }}</td>
+        <td class="text-center align-middle">{{ item.Contact_Name }}</td>
+        <td class="text-center align-middle">{{ item.InTime }}</td>
+        <td class="text-center align-middle">{{ item.OutTime }}</td>
+        <td class="text-center align-middle">{{ item.Purpose }}</td>
+        <td class="text-center align-middle">{{ item.Discussion }}</td>
+        <td class="text-center align-middle">{{ item.Type }}</td>
+        <td class="text-center align-middle">{{ item.Unit_Price_BDT }}</td>
+        <td class="text-center align-middle">{{ item.Unit_Price_USD }}</td>
+        <td class="text-center align-middle">{{ item.Prod_Cost_Unit }}</td>
+        <td class="text-center align-middle">{{ item.First_Received_Time }}</td>
+        <td class="text-center align-middle">{{ item.Latest_Order_Receive_Time }}</td>
+        <td class="text-center align-middle">{{ item.PaymentIssue }}</td>
+        <td class="text-center align-middle">{{ item.CommercialIssue }}</td>
+        <td class="text-center align-middle">{{ item.SampleSubmit }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-dialog>
+   
     </div>
   </div>
 </div>

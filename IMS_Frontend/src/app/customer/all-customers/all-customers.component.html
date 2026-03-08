@@ -1,245 +1,510 @@
-<div class="container">
-  <h1 class="theme-text">ALL Customers List</h1>
-  <div class="card-body">
-    <form
-      [formGroup]="dateForm"
-      class="row p-3 shadow-sm g-3 align-items-end mb-3"
-      (ngSubmit)="loadAllCustomers()"
-    >
-      <div class="col-md-3" *ngIf="SuperiorList">
-        <label>Superior Name <span>*</span></label>
-        <p-dropdown
-          [style]="{ width: '100%' }"
-          class="p-0"
-          [options]="SuperiorList"
-          optionLabel="UserName"
-          [filter]="true"
-          filterBy="UserName"
-          [showClear]="true"
-          styleClass="listBottom"
-          placeholder="Please Select"
-          optionValue="User_ID"
-          formControlName="SuperioId"
-          (onChange)="getCustomerList()"
-        >
-          <ng-template let-AB pTemplate="item">
-            <div class="flex align-items-center gap-2">
-              <div>{{ AB.UserName }}</div>
-            </div>
-          </ng-template>
-        </p-dropdown>
-      </div>
-      <div class="col-md-3">
-        <label>Customer Name <span>*</span></label>
-        <p-dropdown
-          [style]="{ width: '100%' }"
-          class="p-0"
-          [options]="CustomerList"
-          optionLabel="Company_Name"
-          [filter]="true"
-          filterBy="Company_Name"
-          [showClear]="true"
-          styleClass="listBottom"
-          placeholder="Please Select"
-          optionValue="Customer_ID"
-          formControlName="CustomerId"
-          [virtualScroll]="true"
-          [virtualScrollItemSize]="30"
-        >
-          <ng-template let-AB pTemplate="item">
-            <div class="flex align-items-center gap-2">
-              <div>{{ AB.Company_Name }}</div>
-            </div>
-          </ng-template>
-        </p-dropdown>
-      </div>
-      <div class="col-md-2">
-        <button
-          type="submit"
-          class="btn btn-sm theme-btn w-100"
-          [disabled]="dateForm.invalid"
-        >
-          <i class="pi pi-download me-1"></i> Load
-        </button>
-      </div>
-      <div class="col-md-2">
-        <div class="d-flex align-items-center">
-          <button
-            *ngIf="insertPermissions"
-            class="btn theme-btn"
-            style="color: white"
-            routerLink="/generate-customers"
-            target="_blank"
+<div class="m-2 p-2 shadow-sm">
+  <div class="card">
+    <div class="card-header theme-bg">
+      <h1 class="theme-text text-white">ALL Customers List</h1>
+    </div>
+    <div class="card-body">
+      <form
+        [formGroup]="dateForm"
+        class="row p-3 shadow-sm g-3 align-items-end mb-3"
+        (ngSubmit)="loadAllCustomers()"
+      >
+        <div class="col-md-3" *ngIf="SuperiorList">
+          <label>Superior Name <span>*</span></label>
+          <p-dropdown
+            [style]="{ width: '100%' }"
+            class="p-0"
+            [options]="SuperiorList"
+            optionLabel="UserName"
+            [filter]="true"
+            filterBy="UserName"
+            [showClear]="true"
+            styleClass="listBottom"
+            placeholder="Please Select"
+            optionValue="User_ID"
+            formControlName="SuperioId"
+            (onChange)="getCustomerList()"
           >
-            <i class="fas fa-plus"></i>&nbsp;Create New
+            <ng-template let-AB pTemplate="item">
+              <div class="flex align-items-center gap-2">
+                <div>{{ AB.UserName }}</div>
+              </div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+        <div class="col-md-3">
+          <label>Customer Name <span>*</span></label>
+          <p-dropdown
+            [style]="{ width: '100%' }"
+            class="p-0"
+            [options]="CustomerList"
+            optionLabel="Company_Name"
+            [filter]="true"
+            filterBy="Company_Name"
+            [showClear]="true"
+            styleClass="listBottom"
+            placeholder="Please Select"
+            optionValue="Customer_ID"
+            formControlName="CustomerId"
+            [virtualScroll]="true"
+            [virtualScrollItemSize]="30"
+          >
+            <ng-template let-AB pTemplate="item">
+              <div class="flex align-items-center gap-2">
+                <div>{{ AB.Company_Name }}</div>
+              </div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+        <div class="col-md-2">
+          <button
+            type="submit"
+            class="btn btn-sm theme-btn w-100"
+            [disabled]="dateForm.invalid"
+            style="height: 48px"
+          >
+            <i class="pi pi-download me-1"></i> Load
           </button>
         </div>
-      </div>
-    </form>
-
-    <div class="shadow-sm p-2">
-      <button
-        type="button"
-        class="btn btn-outline-success bg-gradient-warning btn-sm mr-2"
-        (click)="printDialog()"
-      >
-        <i class="fas fa-file-print"></i>&nbsp;Print
-      </button>
-      <p-table
-        *ngIf="tableVisible"
-        #dt
-        [value]="allCustomers"
-        [paginator]="true"
-        [rows]="10"
-        [responsive]="true"
-        [showCurrentPageReport]="true"
-        [globalFilterFields]="[
-          'Company_Name',
-          'Contact_Name',
-          'Customer_Address',
-          'Contact_Title',
-          'UserName',
-          'Phone_No',
-          'Email',
-          'Created_By',
-          'Created_At',
-          'Status',
-          'Updated_By',
-          'Updated_At',
-        ]"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-      >
-        <ng-template pTemplate="caption">
-          <div class="table-toolbar">
-            <span class="p-input-icon-left">
-              <i class="pi pi-search"></i>
-              <input
-                pInputText
-                type="text"
-                (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                placeholder="Global Search"
-              />
-            </span>
+        <div class="col-md-2">
+          <div class="d-flex align-items-center">
+            <button
+              *ngIf="insertPermissions"
+              class="btn theme-btn"
+              style="color: white"
+              routerLink="/generate-customers"
+              target="_blank"
+              style="height: 48px"
+            >
+              <i class="fas fa-plus"></i>&nbsp;Create New
+            </button>
           </div>
-        </ng-template>
-
-        <ng-template pTemplate="header">
-          <tr>
-            <th class="text-center">Serial No</th>
-            <th class="text-center">Customer Name</th>
-            <th class="text-center">Contact Person</th>
-            <th class="text-center">Customer Address</th>
-            <th class="text-center">Designation</th>
-            <th class="text-center">Group Head</th>
-            <th class="text-center">Phone Number</th>
-            <th class="text-center">E-mail Address</th>
-            <th class="text-center">Created By</th>
-            <th class="text-center">Created At</th>
-            <th class="text-center">Status</th>
-            <th class="text-center">Approved By</th>
-            <th class="text-center">Approved Date</th>
-            <th class="text-center">Action</th>
-          </tr>
-        </ng-template>
-
-        <ng-template pTemplate="body" let-allCustomers let-i="rowIndex">
-          <tr>
-            <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
-            <td class="text-start">{{ allCustomers.Company_Name }}</td>
-            <td class="text-start">{{ allCustomers.Contact_Name }}</td>
-            <td class="text-start">
-              {{ allCustomers.Customer_Address }}
-            </td>
-            <td class="text-start">
-              {{ allCustomers.Contact_Title }}
-            </td>
-            <td class="text-start">{{ allCustomers.UserName }}</td>
-            <td class="text-start">{{ allCustomers.Phone_No }}</td>
-            <td class="text-start">{{ allCustomers.Email }}</td>
-            <td class="text-start">{{ allCustomers.CreatedBy }}</td>
-          <td class="text-center">
-            {{ allCustomers.Created_At | date : "dd-MMM-yyyy" }}
-          </td>
-          <td class="text-start">{{ allCustomers.Status }}</td>
-          <td class="text-center">{{ allCustomers.ApprovedBy }}</td>
-          <td class="text-center">{{ allCustomers.ApprovedDate | date : "dd-MMM-yyyy" }}</td>
-
-            <td class="d-flex gap-2 justify-content-center">
-              <a
-                *ngIf="updatePermissions"
-                class="btn bg-gradient-cyan btn-xs mr-2"
-                target="_blank"
-                title="Edit"
-                [routerLink]="['/generate-customers']"
-                [queryParams]="{
-                  Customer_Id: allCustomers.Customer_ID,
-                }"
-                ><i class="fa fa-edit"></i
-              ></a>
-              <button
-                *ngIf="deletePermissions"
-                class="btn btn-danger btn-sm d-inline-flex align-items-center"
-                (click)="onDelete(allCustomers)"
-                title="Delete"
-                aria-label="Delete"
-              >
-                <i class="pi pi-trash me-1"></i>
-              </button>
-              <!-- ✅ call the handler that opens the dialog -->
-              <button
-                class="btn btn-info btn-sm text-white d-inline-flex align-items-center"
-                (click)="onDetails(allCustomers)"
-                title="Details"
-                aria-label="Details"
-              >
-                <i class="pi pi-eye me-1"></i>
-              </button>
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
-
-      <!-- Details dialog -->
-      <p-dialog
-        header="Detail"
-        [(visible)]="isDetailsVisible"
-        [modal]="true"
-        [closable]="true"
-        [style]="{ width: '70vw' }"
-        (onHide)="detailsData = null"
-      >
-        <div *ngIf="detailsData">
-          <h2>Company Name - {{ detailsData.Company_Name }}</h2>
-          <p>Group head: {{ detailsData.Group_head }}</p>
-          <p>Contact Person: {{ detailsData.Contact_Name }}</p>
-          <p>Company Info: {{ detailsData.company_info }}</p>
-          <p>Customer Address: {{ detailsData.Customer_Address }}</p>
-          <p>City: {{ detailsData.City }}</p>
-          <p>Postal Code: {{ detailsData.Postal_Code }}</p>
-          <p>Country: {{ detailsData.Country }}</p>
-          <p>Designation: {{ detailsData.Contact_Title }}</p>
-          <p>Phone No: {{ detailsData.Phone_No }}</p>
-          <p>FAX No: {{ detailsData.FAX_No }}</p>
-          <p>Email: {{ detailsData.Email }}</p>
-          <p>Notes: {{ detailsData.Notes }}</p>
-          <p>Created By: {{ detailsData.CreatedBy }}</p>
-          <p>
-            Created At:
-            {{ detailsData.Created_At | date: "dd-MMM-yyyy" }}
-          </p>
-          <p>status: {{ detailsData.status }}</p>
-          <p>Approved By: {{ detailsData.ApprovedBy }}</p>
-          <p>
-            Approved Date:
-            {{ detailsData.ApprovedDate | date: "dd-MMM-yyyy" }}
-          </p>
-          <p>Uppdated By: {{ detailsData.UppdatedBy }}</p>
-          <p>
-            Updated At:
-            {{ detailsData.Updated_At | date: "dd-MMM-yyyy" }}
-          </p>
         </div>
-      </p-dialog>
+      </form>
+
+      <div class="shadow-sm p-2">
+        <button
+          type="button"
+          class="btn btn-outline-success bg-gradient-warning btn-sm mr-2 mb-3"
+          (click)="printDialog()"
+          style="height: 38px; width: 130px"
+        >
+          <i class="fas fa-file-print"></i>&nbsp;Print
+        </button>
+        <p-table
+          *ngIf="tableVisible"
+          #dt
+          [value]="allCustomers"
+          [paginator]="true"
+          [rows]="10"
+          [responsive]="true"
+          [showCurrentPageReport]="true"
+          [globalFilterFields]="[
+            'Company_Name',
+            'Contact_Name',
+            'Customer_Address',
+            'Contact_Title',
+            'UserName',
+            'Phone_No',
+            'Email',
+            'Created_By',
+            'Created_At',
+            'Status',
+            'Updated_By',
+            'Updated_At',
+          ]"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        >
+          <ng-template pTemplate="caption">
+            <div class="table-toolbar d-flex justify-content-end">
+              <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    dt.filterGlobal($any($event.target).value, 'contains')
+                  "
+                  placeholder="Global Search"
+                />
+              </span>
+            </div>
+          </ng-template>
+
+          <ng-template pTemplate="header">
+            <tr class="custom-header">
+              <th class="text-center">Serial No</th>
+              <th class="text-center">Customer Name</th>
+              <th class="text-center">Contact Person</th>
+              <th class="text-center">Customer Address</th>
+              <th class="text-center">Designation</th>
+              <th class="text-center">Group Head</th>
+              <th class="text-center">Phone Number</th>
+              <th class="text-center">E-mail Address</th>
+              <th class="text-center">Created By</th>
+              <th class="text-center">Created At</th>
+              <th class="text-center">Status</th>
+              <th class="text-center">Approved By</th>
+              <th class="text-center">Approved Date</th>
+              <th class="text-center">Action</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-allCustomers let-i="rowIndex">
+            <tr>
+              <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
+              <!-- <td class="text-start">{{ allCustomers.Company_Name }}</td> -->
+              <td class="text-cell">
+                <span
+                  *ngIf="
+                    !allCustomers.showFull &&
+                    allCustomers.Company_Name?.length > 15
+                  "
+                >
+                  {{ allCustomers.Company_Name | slice: 0 : 15 }}...
+                  <br />
+                  <span
+                    class="see-more"
+                    (click)="toggleText(allCustomers)"
+                    style="cursor: pointer; color: blue"
+                  >
+                    See more
+                  </span>
+                </span>
+
+                <span
+                  *ngIf="
+                    allCustomers.showFull ||
+                    allCustomers.Company_Name?.length <= 15
+                  "
+                >
+                  {{ allCustomers.Company_Name }}
+                  <span
+                    *ngIf="allCustomers.Company_Name?.length > 15"
+                    class="see-more"
+                    (click)="toggleText(allCustomers)"
+                    style="cursor: pointer; color: blue"
+                  >
+                    See less
+                  </span>
+                </span>
+              </td>
+              <!-- <td class="text-start">{{ allCustomers.Contact_Name }}</td> -->
+              <td class="text-cell">
+                <span
+                  *ngIf="
+                    !allCustomers.showFull &&
+                    allCustomers.Contact_Name?.length > 15
+                  "
+                >
+                  {{ allCustomers.Contact_Name | slice: 0 : 15 }}...
+                  <br />
+                  <span
+                    class="see-more"
+                    (click)="toggleText(allCustomers)"
+                    style="cursor: pointer; color: blue"
+                  >
+                    See more
+                  </span>
+                </span>
+
+                <span
+                  *ngIf="
+                    allCustomers.showFull ||
+                    allCustomers.Contact_Name?.length <= 15
+                  "
+                >
+                  {{ allCustomers.Contact_Name }}
+                  <span
+                    *ngIf="allCustomers.Contact_Name?.length > 15"
+                    class="see-more"
+                    (click)="toggleText(allCustomers)"
+                    style="cursor: pointer; color: blue"
+                  >
+                    See less
+                  </span>
+                </span>
+              </td>
+              <!-- <td class="text-start">
+                {{ allCustomers.Customer_Address }}
+              </td> -->
+              <td class="text-cell">
+                <span
+                  *ngIf="
+                    !allCustomers.showFull &&
+                    allCustomers.Customer_Address?.length > 15
+                  "
+                >
+                  {{ allCustomers.Customer_Address | slice: 0 : 15 }}...
+                  <br />
+                  <span
+                    class="see-more"
+                    (click)="toggleText(allCustomers)"
+                    style="cursor: pointer; color: blue"
+                  >
+                    See more
+                  </span>
+                </span>
+
+                <span
+                  *ngIf="
+                    allCustomers.showFull ||
+                    allCustomers.Customer_Address?.length <= 15
+                  "
+                >
+                  {{ allCustomers.Customer_Address }}
+                  <span
+                    *ngIf="allCustomers.Customer_Address?.length > 15"
+                    class="see-more"
+                    (click)="toggleText(allCustomers)"
+                    style="cursor: pointer; color: blue"
+                  >
+                    See less
+                  </span>
+                </span>
+              </td>
+              <td class="text-start">
+                {{ allCustomers.Contact_Title }}
+              </td>
+              <td class="text-start">{{ allCustomers.UserName }}</td>
+              <td class="text-start">{{ allCustomers.Phone_No }}</td>
+              <td class="text-start">{{ allCustomers.Email }}</td>
+              <td class="text-start">{{ allCustomers.CreatedBy }}</td>
+              <td class="text-center">
+                {{ allCustomers.Created_At | date: "dd-MMM-yyyy" }}
+              </td>
+              <td class="text-start">{{ allCustomers.Status }}</td>
+              <td class="text-center">{{ allCustomers.ApprovedBy }}</td>
+              <td class="text-center">
+                {{ allCustomers.ApprovedDate | date: "dd-MMM-yyyy" }}
+              </td>
+
+              <!-- <td class="d-flex gap-2 justify-content-center">
+                <a
+                  *ngIf="updatePermissions"
+                  class="btn bg-gradient-cyan btn-xs mr-2"
+                  target="_blank"
+                  title="Edit"
+                  [routerLink]="['/generate-customers']"
+                  [queryParams]="{
+                    Customer_Id: allCustomers.Customer_ID,
+                  }"
+                  ><i class="fa fa-edit"></i
+                ></a>
+                <button
+                  *ngIf="deletePermissions"
+                  class="btn btn-danger btn-sm d-inline-flex align-items-center"
+                  (click)="onDelete(allCustomers)"
+                  title="Delete"
+                  aria-label="Delete"
+                >
+                  <i class="pi pi-trash me-1"></i>
+                </button>
+                
+                <button
+                  class="btn btn-info btn-sm text-white d-inline-flex align-items-center"
+                  (click)="onDetails(allCustomers)"
+                  title="Details"
+                  aria-label="Details"
+                >
+                  <i class="pi pi-eye me-1"></i>
+                </button>
+              </td> -->
+
+              <td class="action-buttons">
+                <!-- Edit Button -->
+                <a
+                  *ngIf="updatePermissions"
+                  class="action-btn edit-btn"
+                  target="_blank"
+                  title="Edit"
+                  [routerLink]="['/generate-customers']"
+                  [queryParams]="{
+                    Customer_Id: allCustomers.Customer_ID,
+                  }"
+                >
+                  <i class="fa fa-edit"></i>
+                </a>
+
+                <!-- Delete Button -->
+                <button
+                  *ngIf="deletePermissions"
+                  class="action-btn delete-btn"
+                  (click)="onDelete(allCustomers)"
+                  title="Delete"
+                >
+                  <i class="pi pi-trash"></i>
+                </button>
+
+                <!-- Details Button -->
+                <button
+                  class="action-btn details-btn"
+                  (click)="onDetails(allCustomers)"
+                  title="Details"
+                >
+                  <i class="pi pi-eye"></i>
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+
+        <!-- Details dialog -->
+        <!-- <p-dialog
+          header="Detail"
+          [(visible)]="isDetailsVisible"
+          [modal]="true"
+          [closable]="true"
+          [style]="{ width: '70vw' }"
+          (onHide)="detailsData = null"
+        >
+          <div *ngIf="detailsData">
+            <h2>Company Name - {{ detailsData.Company_Name }}</h2>
+            <p>Group head: {{ detailsData.Group_head }}</p>
+            <p>Contact Person: {{ detailsData.Contact_Name }}</p>
+            <p>Company Info: {{ detailsData.company_info }}</p>
+            <p>Customer Address: {{ detailsData.Customer_Address }}</p>
+            <p>City: {{ detailsData.City }}</p>
+            <p>Postal Code: {{ detailsData.Postal_Code }}</p>
+            <p>Country: {{ detailsData.Country }}</p>
+            <p>Designation: {{ detailsData.Contact_Title }}</p>
+            <p>Phone No: {{ detailsData.Phone_No }}</p>
+            <p>FAX No: {{ detailsData.FAX_No }}</p>
+            <p>Email: {{ detailsData.Email }}</p>
+            <p>Notes: {{ detailsData.Notes }}</p>
+            <p>Created By: {{ detailsData.CreatedBy }}</p>
+            <p>
+              Created At:
+              {{ detailsData.Created_At | date: "dd-MMM-yyyy" }}
+            </p>
+            <p>status: {{ detailsData.status }}</p>
+            <p>Approved By: {{ detailsData.ApprovedBy }}</p>
+            <p>
+              Approved Date:
+              {{ detailsData.ApprovedDate | date: "dd-MMM-yyyy" }}
+            </p>
+            <p>Uppdated By: {{ detailsData.UppdatedBy }}</p>
+            <p>
+              Updated At:
+              {{ detailsData.Updated_At | date: "dd-MMM-yyyy" }}
+            </p>
+          </div>
+        </p-dialog> -->
+        <p-dialog
+          [(visible)]="isDetailsVisible"
+          [modal]="true"
+          [closable]="true"
+          [style]="{ width: '75vw' }"
+          [contentStyle]="{ 'max-height': '75vh', 'overflow-y': 'auto' }"
+          styleClass="premium-dialog"
+          (onHide)="detailsData = null"
+        >
+          <!-- Custom Header -->
+          <ng-template pTemplate="header">
+            <div class="premium-header">
+              <div>
+                <h3>{{ detailsData?.Company_Name }}</h3>
+                <span class="sub-text">Customer Details Information</span>
+              </div>
+            </div>
+          </ng-template>
+
+          <!-- Body -->
+          <div *ngIf="detailsData" class="premium-body">
+            <!-- Company Info Section -->
+            <div class="info-section">
+              <h5 class="section-title">🏢 Company Information</h5>
+              <div class="info-grid">
+                <div>
+                  <strong>Group Head:</strong> {{ detailsData.Group_head }}
+                </div>
+                <div>
+                  <strong>Company Info:</strong> {{ detailsData.company_info }}
+                </div>
+                <div>
+                  <strong>Status:</strong>
+                  <span
+                    class="status-badge"
+                    [ngClass]="
+                      detailsData.status === 'Active' ? 'active' : 'inactive'
+                    "
+                  >
+                    {{ detailsData.status }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Contact Section -->
+            <div class="info-section">
+              <h5 class="section-title">📞 Contact Information</h5>
+              <div class="info-grid">
+                <div>
+                  <strong>Contact Person:</strong>
+                  {{ detailsData.Contact_Name }}
+                </div>
+                <div>
+                  <strong>Designation:</strong> {{ detailsData.Contact_Title }}
+                </div>
+                <div><strong>Phone:</strong> {{ detailsData.Phone_No }}</div>
+                <div><strong>Fax:</strong> {{ detailsData.FAX_No }}</div>
+                <div><strong>Email:</strong> {{ detailsData.Email }}</div>
+              </div>
+            </div>
+
+            <!-- Address Section -->
+            <div class="info-section">
+              <h5 class="section-title">📍 Address Details</h5>
+              <div class="info-grid">
+                <div>
+                  <strong>Address:</strong> {{ detailsData.Customer_Address }}
+                </div>
+                <div><strong>City:</strong> {{ detailsData.City }}</div>
+                <div>
+                  <strong>Postal Code:</strong> {{ detailsData.Postal_Code }}
+                </div>
+                <div><strong>Country:</strong> {{ detailsData.Country }}</div>
+              </div>
+            </div>
+
+            <!-- Audit Section -->
+            <div class="info-section">
+              <h5 class="section-title">🗂 Audit Information</h5>
+              <div class="info-grid">
+                <div>
+                  <strong>Created By:</strong> {{ detailsData.CreatedBy }}
+                </div>
+                <div>
+                  <strong>Created At:</strong>
+                  {{ detailsData.Created_At | date: "dd-MMM-yyyy" }}
+                </div>
+                <div>
+                  <strong>Approved By:</strong> {{ detailsData.ApprovedBy }}
+                </div>
+                <div>
+                  <strong>Approved Date:</strong>
+                  {{ detailsData.ApprovedDate | date: "dd-MMM-yyyy" }}
+                </div>
+                <div>
+                  <strong>Updated By:</strong> {{ detailsData.UppdatedBy }}
+                </div>
+                <div>
+                  <strong>Updated At:</strong>
+                  {{ detailsData.Updated_At | date: "dd-MMM-yyyy" }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Notes -->
+            <div class="info-section">
+              <h5 class="section-title">📝 Notes</h5>
+              <div class="notes-box">
+                {{ detailsData.Notes || "No additional notes available." }}
+              </div>
+            </div>
+          </div>
+        </p-dialog>
+      </div>
     </div>
   </div>
 </div>

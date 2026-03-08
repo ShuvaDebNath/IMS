@@ -15,32 +15,42 @@
       class="row p-3 shadow-sm g-3 align-items-end mb-3"
       (ngSubmit)="Search()"
     >
-      <div class="col-md-3">
-        <label class="form-label fw-bold">From Date</label>
-        <input
-          type="date"
-          class="form-control form-control-sm"
-          formControlName="fromDate"
-        />
-      </div>
+       <div class="row align-items-end">
+          <div class="col-auto">
+            <label class="form-label">Select Date</label>
 
-      <div class="col-md-3">
-        <label class="form-label fw-bold">To Date</label>
-        <input
-          type="date"
-          class="form-control form-control-sm"
-          formControlName="toDate"
-        />
-      </div>
-      <div class="col-md-2">
-        <button
-          type="submit"
-          class="btn btn-sm theme-btn w-100"
-          [disabled]="SearchForm.invalid"
-        >
-          <i class="pi pi-download me-1"></i> Load
-        </button>
-      </div>
+            <div class="range-container" style="width: 100%">
+              <p-calendar
+                formControlName="fromDate"
+                [showIcon]="false"
+                dateFormat="dd/mm/yy"
+                placeholder="Start Date"
+                inputStyleClass="custom-date-input"
+              ></p-calendar>
+
+              <span class="range-divider">to</span>
+
+              <p-calendar
+                formControlName="toDate"
+                [showIcon]="false"
+                dateFormat="dd/mm/yy"
+                placeholder="End Date"
+                inputStyleClass="custom-date-input"
+              ></p-calendar>
+            </div>
+          </div>
+          <div class="col-auto mt-4">
+            <button
+              title="Search"
+              type="submit"
+              [disabled]="SearchForm.invalid"
+              class="btn btn-sm theme-btn mr-2 text-white"
+              style="margin-top: 2.3em !important; width: 130px; height: 38px"
+            >
+              <i class="pi pi-download me-1"></i> Load
+            </button>
+          </div>
+        </div>
     </form>
     <hr />
 
@@ -56,7 +66,7 @@
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     >
       <ng-template pTemplate="caption">
-        <div class="table-toolbar">
+        <div class="table-toolbar d-flex justify-content-end">
           <span class="p-input-icon-left">
             <i class="pi pi-search"></i>
             <input
@@ -71,11 +81,11 @@
 
       <ng-template pTemplate="header">
         <tr>
-          <th class="bg-gradient-success">SL</th>
-          <th class="bg-gradient-success">Export No</th>
-          <th class="bg-gradient-success">Date</th>
-          <th class="bg-gradient-success">Status</th>
-          <th class="bg-gradient-success" *ngIf="allPersmissions">Action</th>
+          <th class="text-center">SL</th>
+          <th class="text-center">Export No</th>
+          <th class="text-center">Date</th>
+          <th class="text-center">Status</th>
+          <th class="text-center" *ngIf="allPersmissions">Action</th>
         </tr>
       </ng-template>
 
@@ -85,24 +95,31 @@
           <td class="text-center align-middle">{{ table.ExportNumber }}</td>
           <td class="text-center align-middle">{{ table.Received_Date }}</td>
           <td class="text-center align-middle">{{ table.Status }}</td>
-          <td class="text-center align-middle p-0 m-0">
-            <a
-              class="btn bg-gradient-cyan btn-xs mr-2"
-              target="_blank"
-              title="View Details"
-              (click)="viewDetails(table)"
-              ><i class="fa fa-eye"></i>Details</a
-            >
+         <td class="text-center align-middle">
+  <button
+    type="button"
+    class="action-btn view-btn"
+    title="View Details"
+    (click)="viewDetails(table)"
+  >
+    <i class="fa fa-eye"></i>
+    <span>Details</span>
+  </button>
 
-            <button class="btn bg-gradient-danger btn-xs" title="Mail">
-              <i class="fas fa-eye"></i>Send Mail To Supplier
-            </button>
-          </td>
+  <button
+    type="button"
+    class="action-btn mail-btn"
+    title="Send Mail To Supplier"
+  >
+    <i class="fas fa-envelope"></i>
+    <span>Send Mail To Supplier</span>
+  </button>
+</td>
         </tr>
       </ng-template>
     </p-table>
   </div>
-  <p-dialog
+  <!-- <p-dialog
     header="Detail"
     [(visible)]="isDetailsVisible"
     [modal]="true"
@@ -165,8 +182,88 @@
         </ng-template>
       </p-table>
     </div>
-  </p-dialog>
+  </p-dialog> -->
+<p-dialog
+  header="Detail"
+  [(visible)]="isDetailsVisible"
+  [modal]="true"
+  [closable]="true"
+  [styleClass]="'custom-detail-dialog'"
+  (onHide)="detailsData = null"
+>
+  <!-- Header -->
+  <ng-template pTemplate="header">
+    <div class="dialog-header d-flex justify-content-between align-items-center w-100">
+      <span class="title">Detail</span>
+      <button class="btn theme-btn btn-sm" title="Print" (click)="printDialog()">
+        <i class="fa fa-print"></i> Print
+      </button>
+    </div>
+  </ng-template>
 
+  <!-- Body -->
+  <div *ngIf="detailsData" class="dialog-body p-3">
+    <!-- Export Info Box -->
+   <div class="export-info p-3 mb-3 shadow-sm rounded d-flex flex-wrap justify-content-between align-items-start">
+  <div class="export-item">
+    <h5 class="mb-1">{{ detailsData.ExportNumber }}</h5>
+    <small class="text-muted">{{ detailsData.ExportDate }}</small>
+  </div>
+
+  <div class="export-item">
+    <p><strong>Loading Port:</strong> {{ detailsData.Loading_Port_Name }}</p>
+    <p><strong>Destination Port:</strong> {{ detailsData.Destination_Port_Name }}</p>
+  </div>
+
+  <div class="export-item">
+    <p><strong>Shipping Info:</strong> {{ detailsData.Shipping_Information }}</p>
+    <p><strong>Remarks:</strong> {{ detailsData.Note }}</p>
+  </div>
+
+  <div class="export-item">
+    <p><strong>Net Weight:</strong> {{ detailsData.Net_Weight }} kg</p>
+    <p><strong>Total Roll:</strong> {{ detailsData.Total_Roll }}</p>
+    <p><strong>Total Bag:</strong> {{ detailsData.Total_Bag }}</p>
+  </div>
+</div>
+
+    <!-- Table -->
+    <div class="table-responsive custom-table-wrapper">
+      <p-table [value]="detailsTableData" [responsive]="true" [scrollable]="true" scrollHeight="400px" class="p-datatable-striped">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Article</th>
+            <th>Description</th>
+            <th>Color</th>
+            <th>Width</th>
+            <th>Weight (KG)</th>
+            <th>Unit</th>
+            <th>Sent Qty</th>
+            <th>Accepted Qty</th>
+            <th>Roll/Bag</th>
+            <th>Sent R/B Qty</th>
+            <th>Accepted R/B Qty</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData>
+          <tr>
+            <td>{{ rowData.Article_No }}</td>
+            <td>{{ rowData.Description }}</td>
+            <td>{{ rowData.Color }}</td>
+            <td>{{ rowData.Measurement }}</td>
+            <td>{{ rowData.Weight }}</td>
+            <td>{{ rowData.Unit }}</td>
+            <td>{{ rowData.Quantity }}</td>
+            <td>{{ rowData.AcceptedQuantity }}</td>
+            <td>{{ rowData.Roll_Bag }}</td>
+            <td>{{ rowData.RollBag_Quantity }}</td>
+            <td>{{ rowData.AcceptedRollBag_Qty }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</p-dialog>
   <!-- <p-dialog
     header="Receive"
     [(visible)]="isReceiveInfoVisible"

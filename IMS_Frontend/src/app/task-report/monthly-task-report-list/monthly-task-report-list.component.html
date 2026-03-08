@@ -7,32 +7,48 @@
     </div>
     <div class="card-body">
       <form [formGroup]="SearchForm">
-        <div class="row align-items-center">
-          <div class="col-3">
-            <label class="control-label" for="inlineFormInputGroup"
-              >From Date</label
-            >
-            <input
-              type="date"
-              formControlName="fromDate"
-              class="form-control"
-            />
-          </div>
-          <div class="col-3">
-            <label class="control-label" for="inlineFormInputGroup"
-              >To Date</label
-            >
-            <input type="date" formControlName="toDate" class="form-control" />
-          </div>
-          <div class="col-3">
-            <button
-              title="Search"
-              type="button"
-              (click)="Search()"
-              class="btn btn-sm theme-btn mt-4 p-1"
-            >
-              <i class="fas fa-search"></i>&nbsp;Search
-            </button>
+        <div class="align-items-center">
+          <div class="row">
+            <div class="row align-items-end">
+              <div class="col-auto">
+                <label class="form-label">Select Date</label>
+
+                <div class="range-container" style="width: 100%">
+                  <p-calendar
+                    formControlName="fromDate"
+                    [showIcon]="false"
+                    dateFormat="dd/mm/yy"
+                    placeholder="From"
+                    inputStyleClass="custom-date-input"
+                  ></p-calendar>
+
+                  <span class="range-divider">to</span>
+
+                  <p-calendar
+                    formControlName="toDate"
+                    [showIcon]="false"
+                    dateFormat="dd/mm/yy"
+                    placeholder="To"
+                    inputStyleClass="custom-date-input"
+                  ></p-calendar>
+                </div>
+              </div>
+              <div class="col-auto mt-4">
+                <button
+                  title="Search"
+                  type="button"
+                  (click)="Search()"
+                  class="btn btn-sm theme-btn mr-2"
+                  style="
+                    margin-top: 2.3em !important;
+                    width: 130px;
+                    height: 38px;
+                  "
+                >
+                  <i class="fas fa-search"></i>&nbsp;Search
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </form>
@@ -53,7 +69,7 @@
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
       >
         <ng-template pTemplate="caption">
-          <div class="table-toolbar">
+          <div class="table-toolbar d-flex justify-content-end">
             <span class="p-input-icon-left">
               <i class="pi pi-search"></i>
               <input
@@ -90,28 +106,31 @@
               <div class="d-flex justify-content-center gap-1">
                 <button
                   *ngIf="updatePermissions"
-                  class="btn theme-btn-edit"
+                  class="btn theme-btn-edit btn-sm d-flex justify-content-center align-items-center"
                   title="Delivery Details"
                   (click)="ShowTaskDetails(table.Task_Report_ID)"
+                  style="font-size: 12px;"
                 >
                   <i class="fa fa-eye"></i>
                 </button>
 
                 <a
                   *ngIf="updatePermissions"
-                  class="btn theme-btn-edit"
+                  class="btn theme-btn-edit btn-sm d-flex justify-content-center align-items-center"
                   target="_blank"
                   title="Edit"
                   [routerLink]="['/generate-monthly-task']"
                   [queryParams]="{ Id: table.Task_Report_ID }"
+                  style="font-size: 12px;"
                   ><i class="fa fa-edit"></i
                 ></a>
 
                 <button
                   *ngIf="deletePermissions"
-                  class="btn theme-btn-delete"
+                  class="btn theme-btn-delete btn-sm d-flex justify-content-center align-items-center"
                   title="Delete"
                   (click)="DeleteData(table)"
+                  style="font-size: 12px;"
                 >
                   <i class="fas fa-trash"></i>
                 </button>
@@ -120,7 +139,7 @@
           </tr>
         </ng-template>
       </p-table>
-      <p-dialog
+      <!-- <p-dialog
         header="Detail"
         [(visible)]="isDetailsVisible"
         [modal]="true"
@@ -199,7 +218,87 @@
             </ng-template>
           </p-table>
         </div>
-      </p-dialog>
+      </p-dialog> -->
+    <p-dialog
+  [(visible)]="isDetailsVisible"
+  [modal]="true"
+  [closable]="true"
+  [style]="{ width: '95vw', maxHeight: '85vh' }"
+  [contentStyle]="{ 'overflow-y': 'auto', padding: '15px 20px' }"
+  styleClass="wide-detail-dialog"
+  (onHide)="detailsData = null"
+>
+  <!-- Header with Print -->
+  <ng-template pTemplate="header">
+    <div class="d-flex justify-content-between align-items-center w-100">
+      <span class="dialog-title">Detail</span>
+      <button class="btn theme-btn btn-sm" title="Print" (click)="printDialog()">
+        <i class="fa fa-print me-1"></i> Print
+      </button>
+    </div>
+  </ng-template>
+
+  <!-- Top Info -->
+  <div *ngIf="detailsData" class="top-info">
+    <div class="info-row">
+      <span class="info-label">Task Code:</span> {{ detailsData[0]?.Task_Report_Code }}
+    </div>
+    <div class="info-row">
+      <span class="info-label">Date:</span> {{ detailsData[0]?.date }}
+    </div>
+  </div>
+
+  <!-- Data Table -->
+  <p-table
+    [value]="detailsDataTable"
+    [scrollable]="true"
+    scrollHeight="60vh"
+    class="wide-detail-table"
+    [responsive]="true"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Marketing Concern</th>
+        <th>Customer Name</th>
+        <th>Buying/Concern Factory/ Buyer</th>
+        <th>Concern Factory (If buying office or group)</th>
+        <th>Team Size</th>
+        <th>Customer Concern Person and Contact</th>
+        <th>Order Season</th>
+        <th>Description</th>
+        <th>Visit 1 (Time & Purpose)</th>
+        <th>Visit 2 (Time & Purpose)</th>
+        <th>Visit 3 (Time & Purpose)</th>
+        <th>Order Summary This Month</th>
+        <th>CM Summary</th>
+        <th>Net Sales Summary</th>
+        <th>Submitted Sample Summary</th>
+        <th>New Article Drop Summary</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-item let-i="rowIndex">
+      <tr [class.alt-row]="i % 2 === 1" class="table-row">
+        <td>{{ item.MakeBy }}</td>
+        <td>{{ item.customer_name }}</td>
+        <td class="text-center">{{ item.Buying_Concern }}</td>
+        <td class="text-center">{{ item.Concern_Factory }}</td>
+        <td class="text-center">{{ item.TeamSize }}</td>
+        <td class="text-center">{{ item.Concern }}</td>
+        <td class="text-center">{{ item.OrderSeason }}</td>
+        <td class="text-center">{{ item.Description }}</td>
+        <td class="text-center">{{ item.Visit1 }}</td>
+        <td class="text-center">{{ item.Visit2 }}</td>
+        <td class="text-center">{{ item.Visit3 }}</td>
+        <td class="text-center">{{ item.OrderSummary }}</td>
+        <td class="text-center">{{ item.CM_Summary }}</td>
+        <td class="text-center">{{ item.Net_Sales_Summary }}</td>
+        <td class="text-center">{{ item.SampleSummary }}</td>
+        <td class="text-center">{{ item.NewArticleSummary }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-dialog>
     </div>
   </div>
 </div>

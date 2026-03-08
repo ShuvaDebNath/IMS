@@ -45,8 +45,8 @@
                 {{ requisition.ReceivedStatus_from_Production }}
               </span>
             </td>
-            <td class="text-center">
-              <button class="btn btn-sm btn-outline-primary" (click)="onDetails(requisition)" title="View Details">
+            <td class="d-flex justify-content-center align-items-center">
+              <button class="btn btn-sm theme-btn-view d-flex justify-content-center align-items-center" (click)="onDetails(requisition)" title="View Details">
                 <i class="pi pi-eye"></i>
               </button>
             </td>
@@ -65,7 +65,7 @@
   </div>
 
   <!-- Details dialog -->
-  <p-dialog header="Requisition Details" [(visible)]="isDetailsVisible" [modal]="true" [closable]="true"
+  <!-- <p-dialog header="Requisition Details" [(visible)]="isDetailsVisible" [modal]="true" [closable]="true"
     [style]="{ width: '70vw' }" (onHide)="detailsData = null">
     <div *ngIf="detailsData" class="p-3">
       <div class="mb-3">
@@ -103,7 +103,63 @@
         </ng-template>
       </p-table>
     </div>
-  </p-dialog>
+  </p-dialog> -->
+<p-dialog
+  header="Requisition Details"
+  [(visible)]="isDetailsVisible"
+  [modal]="true"
+  [closable]="true"
+  [style]="{ width: '75vw', maxHeight: '80vh' }"
+  [contentStyle]="{ 'overflow-y': 'auto', padding: '20px' }"
+  styleClass="wide-dialog"
+  (onHide)="detailsData = null"
+>
+  <div *ngIf="detailsData">
+    <!-- Issue Info -->
+    <div class="issue-info mb-4 p-3 bg-light border rounded">
+      <h5 class="fw-bold mb-2">Issue No: {{ detailsData.IssueNumber }}</h5>
+      <div class="row g-2">
+        <div class="col-md-6"><strong>Issue Date:</strong> {{ detailsData.IssueDate | date:'dd-MMM-yyyy' }}</div>
+        <div class="col-md-6"><strong>Requisition No:</strong> {{ detailsData.RequisitionNumber }}</div>
+        <div class="col-md-6"><strong>Requisition Date:</strong> {{ detailsData.RequisitionDate | date:'dd-MMM-yyyy' }}</div>
+        <div class="col-md-12" *ngIf="detailsData.MasterNote"><strong>Note:</strong> {{ detailsData.MasterNote }}</div>
+      </div>
+    </div>
+
+    <!-- Items Table -->
+    <p-table
+      [value]="detailsData.Items"
+      styleClass="p-datatable-sm p-datatable-striped issue-table"
+      [responsiveLayout]="'scroll'"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Article</th>
+          <th>Description</th>
+          <th class="text-center">Sent Qty</th>
+          <th class="text-center">Roll/Bag</th>
+          <th class="text-center">Roll Qty</th>
+          <th class="text-center">Bag Qty</th>
+          <th class="text-center">Accepted Qty</th>
+          <th class="text-center">Accepted Roll/Bag Qty</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+        <tr [class.alt-row]="rowIndex % 2 === 1">
+          <td>{{ item.ConcatArticleNo }}</td>
+          <td>{{ item.DetaisNote }}</td>
+          <td class="text-center">{{ item.Quantity }}</td>
+          <td class="text-center">{{ item.Roll_Bag }}</td>
+          <td class="text-center">{{ item.Roll }}</td>
+          <td class="text-center">{{ item.Bag }}</td>
+          <td class="text-center">{{ item.AcceptedQuantity }}</td>
+          <td class="text-center">{{ item.AcceptedRollBag_Qty }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</p-dialog>
 
 </div>
 

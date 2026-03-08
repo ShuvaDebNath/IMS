@@ -1,7 +1,12 @@
-<div class="container">
-  <h1 class="theme-text">Unapproved Customers List</h1>
 
-  <form
+
+<div class="m-2 p-2 shadow-sm">
+  <div class="card">
+    <div class="card-header theme-bg">
+      <h1 class="theme-text text-white">Unapproved Customers List</h1>
+    </div>
+      <div class="card-body">
+         <form
     [formGroup]="dateForm"
     class="row p-3 shadow-sm g-3 align-items-end mb-3"
     (ngSubmit)="loadAllCustomers()"
@@ -58,6 +63,7 @@
         type="submit"
         class="btn btn-sm theme-btn w-100"
         [disabled]="dateForm.invalid"
+        style="height: 48px;"
       >
         <i class="pi pi-download me-1"></i> Load
       </button>
@@ -70,6 +76,7 @@
           style="color: white"
           routerLink="/generate-customers"
           target="_blank"
+            style="height: 48px;"
         >
           <i class="fas fa-plus"></i>&nbsp;Create New
         </button>
@@ -113,7 +120,7 @@
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     >
       <ng-template pTemplate="caption">
-        <div class="table-toolbar">
+        <div class="table-toolbar d-flex justify-content-end">
           <span class="p-input-icon-left">
             <i class="pi pi-search"></i>
             <input
@@ -127,7 +134,7 @@
       </ng-template>
 
       <ng-template pTemplate="header">
-        <tr>
+        <tr class="custom-header">
           <th class="text-center">Serial No</th>
           <th class="text-center">Customer Name</th>
           <th class="text-center">Contact Person</th>
@@ -184,7 +191,7 @@
             </button>
             <!-- ✅ call the handler that opens the dialog -->
             <button
-              class="btn btn-info btn-sm text-white d-inline-flex align-items-center"
+              class="btn theme-btn btn-sm text-white d-inline-flex align-items-center"
               (click)="onDetails(CustomersLIst)"
               title="Details"
               aria-label="Details"
@@ -197,7 +204,7 @@
     </p-table>
 
     <!-- Details dialog -->
-    <p-dialog
+    <!-- <p-dialog
     header="Details"
     [(visible)]="isDetailsVisible"
     [modal]="true"
@@ -346,6 +353,69 @@
         </div>
       </div>
     </form>
-  </p-dialog>
+  </p-dialog> -->
+<p-dialog
+
+  [(visible)]="isDetailsVisible"
+  [modal]="true"
+  [closable]="true"
+  [maximizable]="true"
+  [style]="{ width: '80vw', maxWidth: '95vw', height: '90vh' }"
+  [contentStyle]="{ height: 'calc(90vh - 80px)', overflowY: 'auto' }"
+  (onHide)="detailsData = null"
+  styleClass="premium-details-dialog"
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex justify-content-between align-items-center w-100">
+      <h4 class="m-0">{{ detailsData?.Company_Name }}</h4>
+  
+    </div>
+  </ng-template>
+
+  <div *ngIf="detailsData" class="premium-card">
+
+    <!-- Card Body -->
+    <div class="premium-card-body">
+    
+      <div class="row g-3 p-5 d-flex justify-content-center">
+        <!-- Left Column -->
+        <div class="col-md-4">
+          <div class="info-row"><span class="label">Group Head:</span> {{ detailsData.Group_head }}</div>
+          <div class="info-row"><span class="label">Contact Person:</span> {{ detailsData.Contact_Name }}</div>
+          <div class="info-row"><span class="label">Company Info:</span> {{ detailsData.company_info }}</div>
+          <div class="info-row"><span class="label">Customer Address:</span> {{ detailsData.Customer_Address }}</div>
+          <div class="info-row"><span class="label">City:</span> {{ detailsData?.City }}</div>
+          <div class="info-row"><span class="label">Postal Code:</span> {{ detailsData?.Postal_Code }}</div>
+          <div class="info-row"><span class="label">Country:</span> {{ detailsData?.Country }}</div>
+          <div class="info-row"><span class="label">Designation:</span> {{ detailsData?.Delivery }}</div>
+          <div class="info-row"><span class="label">Phone:</span> {{ detailsData?.Phone_No }}</div>
+          <div class="info-row"><span class="label">Fax:</span> {{ detailsData?.FAX_No }}</div>
+        </div>
+
+        <!-- Right Column -->
+          <div class="col-md-2"></div>
+        <div class="col-md-4">
+          <div class="info-row"><span class="label">Email:</span> {{ detailsData?.Email }}</div>
+          <div class="info-row"><span class="label">Notes:</span> {{ detailsData?.Notes }}</div>
+          <div class="info-row"><span class="label badge">Status:</span> <span class="status">{{ detailsData?.status }}</span></div>
+          <div class="info-row"><span class="label">Created By:</span> {{ detailsData?.CreatedBy }}</div>
+          <div class="info-row"><span class="label">Created At:</span> {{ detailsData?.Created_At | date : 'dd-MMM-yyyy' }}</div>
+          <div class="info-row"><span class="label">Approved By:</span> {{ detailsData?.ApprovedBy }}</div>
+          <div class="info-row"><span class="label">Approved Date:</span> {{ detailsData?.ApprovedDate | date : 'dd-MMM-yyyy' }}</div>
+          <div class="info-row"><span class="label">Updated By:</span> {{ detailsData?.UpdatedBy }}</div>
+          <div class="info-row"><span class="label">Updated At:</span> {{ detailsData?.Updated_At | date : 'dd-MMM-yyyy' }}</div>
+        </div>
+      </div>
+    </div>
+
+  
   </div>
+</p-dialog>
+  
+
+
 </div>
+      </div>
+    </div>
+    </div>
+    

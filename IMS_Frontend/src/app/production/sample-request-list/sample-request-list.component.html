@@ -7,47 +7,47 @@
     </div>
     <div class="card-body">
       <form [formGroup]="SearchForm">
-        <div class="row align-items-center">
-          <div class="col-3">
-            <label class="control-label" for="inlineFormInputGroup"
-              >From Date</label
-            >
-            <input
-                  type="date"
-                  formControlName="fromDate"
-                  class="form-control"
-                />
-          </div>
-          <div class="col-3">
-            <label class="control-label" for="inlineFormInputGroup"
-              >To Date</label
-            >
-            <input
-                  type="date"
-                  formControlName="toDate"
-                  class="form-control"
-                />
-          </div>
-          <div class="col-3 d-flex">
-            <div style="margin-right: 10px">
-              <button
-                title="Search"
-                type="button"
-                (click)="Search()"
-                class="btn btn-sm theme-btn mt-4 p-1"
-              >
-                <i class="fas fa-search"></i>&nbsp;Search
-              </button>
-            </div>
-            <div *ngIf="tableData != undefined">
-              <button
-                title="Print"
-                type="button"
-                (click)="Print()"
-                class="btn btn-sm theme-btn mt-4 p-1"
-              >
-                <i class="fas fa-print"></i>&nbsp;Print
-              </button>
+        <div class="align-items-center">
+          <div class="row">
+            <div class="row align-items-end">
+              <div class="col-auto">
+                <label class="form-label">Select Date</label>
+
+                <div class="range-container" style="width: 100%">
+                  <p-calendar
+                    formControlName="fromDate"
+                    [showIcon]="false"
+                    dateFormat="dd/mm/yy"
+                    placeholder="From"
+                    inputStyleClass="custom-date-input"
+                  ></p-calendar>
+
+                  <span class="range-divider">to</span>
+
+                  <p-calendar
+                    formControlName="toDate"
+                    [showIcon]="false"
+                    dateFormat="dd/mm/yy"
+                    placeholder="To"
+                    inputStyleClass="custom-date-input"
+                  ></p-calendar>
+                </div>
+              </div>
+              <div class="col-auto mt-4">
+                <button
+                  title="Search"
+                  type="button"
+                  (click)="Search()"
+                  class="btn btn-sm theme-btn mr-2"
+                  style="
+                    margin-top: 2.3em !important;
+                    width: 130px;
+                    height: 38px;
+                  "
+                >
+                  <i class="fas fa-search"></i>&nbsp;Search
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -68,12 +68,12 @@
           'Color',
           'RequestedQuantity',
           'RequestStatus',
-          'RequestBy'
+          'RequestBy',
         ]"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
       >
         <ng-template pTemplate="caption">
-          <div class="table-toolbar">
+          <div class="table-toolbar d-flex justify-content-end">
             <span class="p-input-icon-left">
               <i class="pi pi-search"></i>
               <input
@@ -116,34 +116,37 @@
                 table.HandoverStatus == ""
                   ? "Not handovered yet"
                   : table.HandoverStatus == "Received"
-                  ? "Messenger Received"
-                  : "Handovered " + table.HandoverStatus
+                    ? "Messenger Received"
+                    : "Handovered " + table.HandoverStatus
               }}
             </td>
             <td class="text-center align-middle p-1 m-0">
               <div class="d-flex justify-content-center gap-1">
                 <a
-                  class="btn theme-btn-view"
+                  class="btn theme-btn-view btn-sm  d-flex justify-content-center align-items-center"
                   target="_blank"
                   title="View"
                   (click)="viewDetails(table)"
+                style="font-size: 12px;"
                   ><i class="fa fa-eye"></i
                 ></a>
 
                 <a
                   *ngIf="updatePermissions"
                   (click)="checkPermission(table)"
-                  class="btn theme-btn-edit"
+                  class="btn theme-btn-edit btn-sm  d-flex justify-content-center align-items-center"
                   target="_blank"
                   title="Edit"
+                  style="font-size: 12px;"
                   ><i class="fa fa-edit"></i
                 ></a>
 
                 <button
                   *ngIf="deletePermissions"
-                  class="btn theme-btn-delete"
+                  class="btn theme-btn-delete btn-sm  d-flex justify-content-center align-items-center"
                   title="Delete"
                   (click)="DeleteData(table)"
+                  style="font-size: 12px;"
                 >
                   <i class="fas fa-trash"></i>
                 </button>
@@ -154,7 +157,7 @@
       </p-table>
     </div>
     <!--/Region Mat Datatable"-->
-    <p-dialog
+    <!-- <p-dialog
       header="Detail"
       [(visible)]="isDetailsVisible"
       [modal]="true"
@@ -175,6 +178,75 @@
         <p>Carried By: {{ detailsData.RequestStatus }}</p>
         <p>Remarks: {{ detailsData.Remarks }}</p>
       </div>
-    </p-dialog>
+    </p-dialog> -->
+    <p-dialog
+  header="Request Details"
+  [(visible)]="isDetailsVisible"
+  [modal]="true"
+  [closable]="true"
+  [style]="{ width: '60vw' }"
+  [contentStyle]="{ 'max-height': 'calc(75vh - 80px)', 'overflow-y': 'auto', 'padding': '0 15px' }"
+  styleClass="organized-dialog"
+  [breakpoints]="{ '960px': '90vw', '640px': '95vw' }"
+>
+  <div *ngIf="detailsData" class="details-grid-container">
+
+    <!-- Request Info -->
+    <div class="section-title">Request Info</div>
+    <div class="detail-row">
+      <span class="label">Request Date</span>
+      <span class="value">{{ detailsData.RequestDate }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Request By</span>
+      <span class="value">{{ detailsData.RequestBy }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Remarks</span>
+      <span class="value">{{ detailsData.Remarks }}</span>
+    </div>
+
+    <!-- Customer Info -->
+    <div class="section-title">Customer Info</div>
+    <div class="detail-row">
+      <span class="label">Customer Name</span>
+      <span class="value">{{ detailsData.CustomerName }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Contact Info</span>
+      <span class="value">{{ detailsData.CustomerContactInfo }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Shipping Address</span>
+      <span class="value">{{ detailsData.ShippingAddress }}</span>
+    </div>
+
+    <!-- Product Info -->
+    <div class="section-title">Product Info</div>
+    <div class="detail-row">
+      <span class="label">Article</span>
+      <span class="value">{{ detailsData.Article }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Description</span>
+      <span class="value">{{ detailsData.ProductDescription }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Color</span>
+      <span class="value">{{ detailsData.Color }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Quantity</span>
+      <span class="value">{{ detailsData.RequestedQuantity }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Status</span>
+      <span class="value status-badge">{{ detailsData.RequestStatus }}</span>
+    </div>
+
+  </div>
+
+
+</p-dialog>
   </div>
 </div>
