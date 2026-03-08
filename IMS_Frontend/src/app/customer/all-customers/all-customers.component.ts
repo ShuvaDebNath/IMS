@@ -27,12 +27,14 @@ export class AllCustomersComponent {
   dateForm!: FormGroup;
   tableVisible = false;
   SuperiorList: any;
-  CustomerFilterList:any;
+  CustomerFilterList: any;
 
   insertPermissions: boolean = false;
   updatePermissions: boolean = false;
   deletePermissions: boolean = false;
   printPermissions: boolean = false;
+
+  roleId:any = '';
 
   constructor(
     private getDataService: GetDataService,
@@ -41,7 +43,7 @@ export class AllCustomersComponent {
     private dme: DoubleMasterEntryService,
     private fb: FormBuilder,
     private ms: MasterEntryService,
-    private reportService: ReportService
+    private reportService: ReportService,
   ) {}
 
   ngOnInit(): void {
@@ -51,6 +53,7 @@ export class AllCustomersComponent {
     this.deletePermissions = permissions.deletePermissions;
     this.printPermissions = permissions.printPermissions;
 
+    this.roleId = window.localStorage.getItem('roleId');
     if (!this.printPermissions) {
       window.location.href = 'dashboard';
     }
@@ -74,7 +77,7 @@ export class AllCustomersComponent {
       next: (results) => {
         if (results.status) {
           console.log(JSON.parse(results.data).Tables3);
-          
+
           this.CustomerList = JSON.parse(results.data).Tables2;
           if (JSON.parse(results.data).Tables3 != undefined)
             this.SuperiorList = JSON.parse(results.data).Tables3;
@@ -92,7 +95,7 @@ export class AllCustomersComponent {
       swal.fire(
         'Validation Error!',
         'Please select both From Date and To Date.',
-        'warning'
+        'warning',
       );
       return;
     }
@@ -101,7 +104,7 @@ export class AllCustomersComponent {
       swal.fire(
         'Validation Error!',
         'From Date cannot be later than To Date.',
-        'warning'
+        'warning',
       );
       return;
     }
@@ -128,8 +131,8 @@ export class AllCustomersComponent {
         if (results.status) {
           this.allCustomers = JSON.parse(results.data).Tables1;
           console.log(this.allCustomers[0]);
-          
-    console.log(Array.isArray(this.allCustomers));
+
+          console.log(Array.isArray(this.allCustomers));
 
           this.tableVisible = true;
         } else if (results.msg === 'Invalid Token') {
@@ -168,7 +171,7 @@ export class AllCustomersComponent {
         swal.fire(
           'Error!',
           'An error occurred while fetching details.',
-          'info'
+          'info',
         ),
     });
   }
@@ -211,7 +214,7 @@ export class AllCustomersComponent {
             swal.fire(
               'Delete Failed',
               err?.error?.message || 'Something went wrong.',
-              'info'
+              'info',
             );
           },
         });
@@ -220,12 +223,11 @@ export class AllCustomersComponent {
 
   getCustomerList() {
     var SuperioId = this.dateForm.value.SuperioId;
-    
+
     this.CustomerFilterList = this.CustomerList.filter(
-      (e: any) => e.Superior_ID == SuperioId
+      (e: any) => e.Superior_ID == SuperioId,
     );
     console.log(this.CustomerFilterList);
-    
   }
 
   printCustomerReport() {
@@ -305,5 +307,58 @@ export class AllCustomersComponent {
         });
       },
     });
+  }
+  printAllDialog() {
+    swal.fire({
+      title: 'What you want to do?',
+      icon: 'question',
+      html: `
+                <div style="display: flex; gap: 10px; justify-content: center;">
+                  <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
+                    <i class="fa fa-file-excel"></i> Excel
+                  </button>
+                  <button id="wordBtn" class="btn btn-info" style="padding: 8px 16px;">
+                    <i class="fa fa-file-word"></i> Word
+                  </button>
+                  <button id="pdfBtn" class="btn btn-danger" style="padding: 8px 16px;">
+                    <i class="fa fa-file-pdf"></i> PDF
+                  </button>
+                </div>
+              `,
+      showConfirmButton: false,
+      didOpen: () => {
+        const excelBtn = document.getElementById('excelBtn');
+        const wordBtn = document.getElementById('wordBtn');
+        const pdfBtn = document.getElementById('pdfBtn');
+
+        const sentByStr = localStorage.getItem('userId');
+        const sentBy = sentByStr ? Number(sentByStr) : null;
+        var { fromDate, toDate, CustomerId, SuperioId } = this.dateForm.value;
+        var item = {
+          Superior_Id: '0',
+          Customer_Id: '',
+          Status: 'All',
+          User: sentBy,
+        };
+
+        excelBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintCustomerReport(item, 'excel', 'F');
+        });
+
+        wordBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintCustomerReport(item, 'word', 'F');
+        });
+
+        pdfBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintCustomerReport(item, 'pdf', 'F');
+        });
+      },
+    });
+  }
+  toggleText(item: any) {
+    item.showFull = !item.showFull;
   }
 }

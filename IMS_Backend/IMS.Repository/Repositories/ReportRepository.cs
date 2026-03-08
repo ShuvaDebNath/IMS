@@ -609,5 +609,41 @@ namespace Boilerplate.Repository.Repositories
             }
         }
 
+        public async Task<DataSet> PIReport(PIReportParams pIReportParams)
+        {
+            try
+            {
+                var parameters = new
+                {
+                    FromDate = pIReportParams.FromDate,
+                    ToDate = pIReportParams.ToDate,
+                    PI_Master_Id = pIReportParams.PI_Master_Id,
+                    ClientId = pIReportParams.ClientId,
+                    User_Id = pIReportParams.User_Id,
+                    pageLength = pIReportParams.PageLength,
+                    pageNo = pIReportParams.PageNo,
+                    searchParam = pIReportParams.SearchParam
+                };
+
+                string query = @"exec [usp_ProformaInvoice_Report_Print]                     
+                    @FromDate,
+                    @ToDate,
+                    @PI_Master_Id,
+                    @ClientId,
+                    @User_Id,
+                    @pageLength,
+                    @pageNo,
+                    @searchParam";
+
+                var ds = await GetDataInDataSetAsync(query, parameters);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }

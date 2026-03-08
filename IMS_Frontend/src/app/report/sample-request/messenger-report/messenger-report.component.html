@@ -8,24 +8,25 @@
     <div class="card-body">
       <form [formGroup]="SearchForm">
         <div class="row align-items-center">
-          
           <div class="col-3 d-flex">
-            <div style="margin-right: 10px;">
+            <div style="margin-right: 10px">
               <button
                 title="Search"
                 type="button"
                 (click)="Search()"
                 class="btn btn-sm theme-btn mt-4 p-1"
+                style="width: 130px; height: 42px"
               >
                 <i class="fas fa-search"></i>&nbsp;Load
               </button>
             </div>
-            <div *ngIf="tableData!=undefined">
+            <div *ngIf="tableData != undefined">
               <button
                 title="Print"
                 type="button"
                 (click)="Print()"
                 class="btn btn-sm theme-btn mt-4 p-1"
+                 style="width: 130px; height: 42px"
               >
                 <i class="fas fa-search"></i>&nbsp;Print
               </button>
@@ -50,12 +51,12 @@
           'ProductDescription',
           'RequestedQuantity',
           'RequestStatus',
-          'RequestBy'
+          'RequestBy',
         ]"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
       >
         <ng-template pTemplate="caption">
-          <div class="table-toolbar">
+          <div class="table-toolbar d-flex justify-content-end">
             <span class="p-input-icon-left">
               <i class="pi pi-search"></i>
               <input
@@ -111,27 +112,38 @@
             </td>
             <td class="text-center align-middle">{{ table.RequestBy }}</td>
             <td class="text-center align-middle">{{ table.RequestStatus }}</td>
-            <td class="text-center align-middle">{{ table.HandoverStatus==''?'Not handovered yet':'Handovered '+table.HandoverStatus }}</td>
+            <td class="text-center align-middle">
+              {{
+                table.HandoverStatus == ""
+                  ? "Not handovered yet"
+                  : "Handovered " + table.HandoverStatus
+              }}
+            </td>
             <td class="text-center align-middle">
               <button
                 *ngIf="updatePermissions"
                 class="btn theme-btn-view"
-                [disabled]="(table.HandoverStatus=='' || table.HandoverStatus=='To Client') && roleId!='1' && roleId!='2'"
+                [disabled]="
+                  (table.HandoverStatus == '' ||
+                    table.HandoverStatus == 'To Client') &&
+                  roleId != '1' &&
+                  roleId != '2'
+                "
                 title="Handover to Client"
-                (click)="handoverSample(table,'To Client')"
+                (click)="handoverSample(table, 'To Client')"
               >
                 Handover to Client
               </button>
               <button
-                *ngIf="updatePermissions && (roleId=='1' || roleId=='2')"
+                *ngIf="updatePermissions && (roleId == '1' || roleId == '2')"
                 class="btn theme-btn-delete"
-                [disabled]="table.HandoverStatus=='To Messenger'"
+                [disabled]="table.HandoverStatus == 'To Messenger'"
                 title="Revert"
-                (click)="handoverSample(table,'To Messenger')"
+                style="margin-top: 2px;"
+                (click)="handoverSample(table, 'To Messenger')"
               >
                 Revert
               </button>
-
             </td>
           </tr>
         </ng-template>

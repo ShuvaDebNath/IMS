@@ -56,7 +56,6 @@
           <button class="btn theme-btn-delete btn-sm d-inline-flex align-items-center" (click)="onDelete(requisition)" title="Delete" aria-label="Delete">
             <i class="pi pi-trash me-1"></i>
           </button>
-          <!-- ✅ call the handler that opens the dialog -->
           <button class="btn theme-btn-view btn-sm text-white d-inline-flex align-items-center"
                   (click)="onDetails(requisition)" title="Details" aria-label="Details">
             <i class="pi pi-eye me-1"></i>
@@ -73,7 +72,7 @@
   </p-table>
 
   <!-- Details dialog -->
-  <p-dialog header="Detail"
+  <!-- <p-dialog header="Detail"
             [(visible)]="isDetailsVisible"
             [modal]="true"
             [closable]="true"
@@ -120,7 +119,71 @@
         </ng-template>
       </p-table>
     </div>
-  </p-dialog>
+  </p-dialog> -->
+<p-dialog
+  header="Detail"
+  [(visible)]="isDetailsVisible"
+  [modal]="true"
+  [closable]="true"
+  [style]="{ width: '70vw', maxHeight: '80vh' }"
+  [contentStyle]="{ 'overflow-y': 'auto', padding: '20px' }"
+  styleClass="rmrequisition-dialog"
+  (onHide)="detailsData = null"
+>
+  <!-- Export Button -->
+  <div class="d-flex justify-content-end mb-3" *ngIf="isDetailsVisible">
+    <button
+      class="btn theme-btn px-4 py-2"
+      (click)="printDialog()"
+      title="Export LC list to Excel, Word, or PDF"
+    >
+      <i class="fas fa-download me-1"></i> Export
+    </button>
+  </div>
+
+  <!-- Header Info -->
+  <div *ngIf="detailsData" class="top-info mb-3">
+    <h3 class="mb-1">RMRequisition - {{ detailsData.RequisitionNumber }}</h3>
+    <div class="info-row">
+      <span class="info-label">Date:</span> {{ detailsData.RequisitionDate | date:'dd-MMM-yyyy' }}
+    </div>
+    <div class="info-row">
+      <span class="info-label">Total Qty:</span> {{ detailsData.TotalQty }}
+    </div>
+    <div class="info-row">
+      <span class="info-label">Total Bag:</span> {{ detailsData.TotalBag }}
+    </div>
+    <div class="info-row">
+      <span class="info-label">Total Roll:</span> {{ detailsData.TotalRoll }}
+    </div>
+    <div class="info-row" *ngIf="detailsData.Remarks">
+      <span class="info-label">Remarks:</span> {{ detailsData.Remarks }}
+    </div>
+  </div>
+
+  <!-- Items Table -->
+  <p-table [value]="detailsData?.Items" [responsive]="true" class="rmrequisition-table">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Article</th>
+        <th>Description</th>
+        <th>Quantity</th>
+        <th>Roll/Bag</th>
+        <th>R/B Qty</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-item let-i="rowIndex">
+      <tr [class.alt-row]="i % 2 === 1" class="table-row">
+        <td>{{ item.ConcatArticleNo }}</td>
+        <td>{{ item.Description }}</td>
+        <td class="text-center">{{ item.Quantity }}</td>
+        <td class="text-center">{{ item.Roll_Bag }}</td>
+        <td class="text-center">{{ item.RollBag_Quantity }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-dialog>
 </div>
   </div>
   </div>

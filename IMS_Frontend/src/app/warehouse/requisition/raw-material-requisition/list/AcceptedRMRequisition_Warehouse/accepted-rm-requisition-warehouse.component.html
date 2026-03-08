@@ -66,7 +66,7 @@
   <!-- Details dialog -->
   <p-dialog header="Detail" [(visible)]="isDetailsVisible" [modal]="true" [closable]="true" [style]="{ width: '70vw' }"
     (onHide)="detailsData = null">
-    <div *ngIf="detailsData">
+    <!-- <div *ngIf="detailsData">
       <h2>RMRequisition - {{ detailsData.RequisitionNumber }}</h2>
       <p>Date: {{ detailsData.RequisitionDate }}</p>
       <p>Total Qty: {{ detailsData.TotalQty }}</p>
@@ -94,13 +94,69 @@
           </tr>
         </ng-template>
       </p-table>
+    </div> -->
+ <div *ngIf="detailsData" class="rm-details-wrapper">
+
+  <!-- ===== Header Card ===== -->
+  <div class="rm-info-card">
+    <div class="rm-header">
+      <h2>RM Requisition - {{ detailsData.RequisitionNumber }}</h2>
+      <span class="rm-date">Date: {{ detailsData.RequisitionDate }}</span>
     </div>
+
+    <!-- Summary Section -->
+    <div class="rm-summary">
+      <div class="rm-summary-item">
+        <label>Total Qty</label>
+        <span>{{ detailsData.TotalQty }}</span>
+      </div>
+      <div class="rm-summary-item">
+        <label>Total Bag</label>
+        <span>{{ detailsData.TotalBag }}</span>
+      </div>
+      <div class="rm-summary-item">
+        <label>Total Roll</label>
+        <span>{{ detailsData.TotalRoll }}</span>
+      </div>
+    </div>
+
+    <!-- Remarks -->
+    <div *ngIf="detailsData.Remarks" class="rm-remarks">
+      <strong>Remarks:</strong> {{ detailsData.Remarks }}
+    </div>
+  </div>
+
+  <!-- ===== Table Card ===== -->
+  <div class="rm-table-card">
+    <p-table [value]="detailsData.Items" [responsive]="true">
+      <ng-template pTemplate="header">
+        <tr class="custom-header">
+          <th>Article</th>
+          <th>Description</th>
+          <th>Quantity</th>
+          <th>Roll/Bag</th>
+          <th>R/B Qty</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-item>
+        <tr>
+          <td>{{ item.ConcatArticleNo }}</td>
+          <td>{{ item.Description }}</td>
+          <td>{{ item.Quantity }}</td>
+          <td>{{ item.Roll_Bag }}</td>
+          <td>{{ item.RollBag_Quantity }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+</div>
   </p-dialog>
 
   <!-- Details dialog for issue -->
   <p-dialog header="Detail" [(visible)]="isDetailsVisible_for_Issue" [modal]="true" [closable]="true"
     [style]="{ width: '70vw' }" (onHide)="detailsData_for_Issue = null" styleClass="wide-dialog">
-    <div *ngIf="detailsData_for_Issue">
+    <!-- <div *ngIf="detailsData_for_Issue">
       <h2>{{ detailsData_for_Issue.RequisitionNumber }}</h2>
       <p>Date: {{ detailsData_for_Issue.RequisitionDate }}</p>
       <p>Total Qty: {{ detailsData_for_Issue.TotalQty }}</p>
@@ -108,7 +164,6 @@
       <p>Total Roll: {{ detailsData_for_Issue.TotalRoll }}</p>
       <p *ngIf="detailsData_for_Issue.Remarks">Remarks: {{ detailsData_for_Issue.Remarks }}</p>
 
-      <!-- Make sure your body template exposes rowIndex -->
       <p-table [value]="detailsData_for_Issue.Items" responsiveLayout="scroll">
         <ng-template pTemplate="header">
           <tr>
@@ -132,7 +187,6 @@
             <td class="text-capitalize">{{ item.Roll_Bag }}</td>
             <td class="text-end">{{ item.RollBag_Quantity }}</td>
 
-            <!-- Accepted Qty -->
             <td style="width:120px">
               <input type="number" class="form-control form-control-sm text-end danger-input"
                 [(ngModel)]="item.IssuedQuantity" name="accQty{{ rowIndex }}" min="0" [max]="item.Quantity"
@@ -143,7 +197,6 @@
               </div>
             </td>
 
-            <!-- Accepted Roll -->
             <td style="width:120px">
               <input type="number" class="form-control form-control-sm text-end danger-input"
                 [(ngModel)]="item.IssuedRoll_Bag" name="accRoll{{ rowIndex }}" min="0" [max]="item.RollBag_Quantity"
@@ -154,7 +207,6 @@
               </div>
             </td>
 
-            <!-- Note as textarea -->
             <td style="min-width:220px">
               <textarea class="form-control form-control-sm" rows="2" [(ngModel)]="item.Note" name="note{{ rowIndex }}"
                 placeholder="Type note…">
@@ -176,7 +228,109 @@
           [disabled]="!canSend">Send</button>
 
       </div>
+    </div> -->
+  <div *ngIf="detailsData_for_Issue" class="issue-wrapper">
+
+  <!-- ===== Top Info Card ===== -->
+  <div class="issue-info-card">
+    <div class="issue-header">
+      <h2>Warehouse Issue - {{ detailsData_for_Issue.RequisitionNumber }}</h2>
+      <span class="issue-date">
+        Date: {{ detailsData_for_Issue.RequisitionDate }}
+      </span>
     </div>
+
+    <div class="issue-summary">
+      <div class="issue-summary-item">
+        <label>Total Qty</label>
+        <span>{{ detailsData_for_Issue.TotalQty }}</span>
+      </div>
+      <div class="issue-summary-item">
+        <label>Total Bag</label>
+        <span>{{ detailsData_for_Issue.TotalBag }}</span>
+      </div>
+      <div class="issue-summary-item">
+        <label>Total Roll</label>
+        <span>{{ detailsData_for_Issue.TotalRoll }}</span>
+      </div>
+    </div>
+
+    <div *ngIf="detailsData_for_Issue.Remarks" class="issue-remarks">
+      <strong>Remarks:</strong> {{ detailsData_for_Issue.Remarks }}
+    </div>
+  </div>
+
+  <!-- ===== Table Card ===== -->
+  <div class="issue-table-card">
+
+    <p-table [value]="detailsData_for_Issue.Items" responsiveLayout="scroll">
+      <ng-template pTemplate="header">
+        <tr class="custom-header">
+          <th>Article</th>
+          <th>Description</th>
+          <th>Quantity</th>
+          <th>Roll/Bag</th>
+          <th>R/B Qty</th>
+          <th>Accepted Qty</th>
+          <th>Accepted Roll</th>
+          <th>Note</th>
+          <th>Status</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+        <tr>
+          <td>{{ item.ConcatArticleNo }}</td>
+          <td>{{ item.Description }}</td>
+          <td class="text-end">{{ item.Quantity }}</td>
+          <td>{{ item.Roll_Bag }}</td>
+          <td class="text-end">{{ item.RollBag_Quantity }}</td>
+
+          <td>
+            <input type="number"
+              class="form-control form-control-sm issue-input"
+              [(ngModel)]="item.IssuedQuantity"
+              name="accQty{{ rowIndex }}" />
+          </td>
+
+          <td>
+            <input type="number"
+              class="form-control form-control-sm issue-input"
+              [(ngModel)]="item.IssuedRoll_Bag"
+              name="accRoll{{ rowIndex }}" />
+          </td>
+
+          <td>
+            <textarea class="form-control form-control-sm issue-textarea"
+              rows="2"
+              [(ngModel)]="item.Note"
+              name="note{{ rowIndex }}"
+              placeholder="Type note…">
+            </textarea>
+          </td>
+
+          <td class="text-center">
+            <span class="status-badge"
+              [ngClass]="isFull(item) ? 'status-full' : 'status-partial'">
+              {{ isFull(item) ? 'Full' : 'Partial' }}
+            </span>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+  </div>
+
+  <!-- ===== Action Section ===== -->
+  <div class="issue-action">
+    <button class="send-btn"
+      (click)="onSendFromWarehouse(detailsData_for_Issue)"
+      [disabled]="!canSend">
+      Send to Production
+    </button>
+  </div>
+
+</div>
   </p-dialog>
 </div>
 
