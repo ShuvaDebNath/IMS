@@ -1,6 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { setTheme } from 'ngx-bootstrap/utils';
 import { TreeTableModule } from 'primeng/treetable';
+import { SessionService } from './services/session/session.service';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,7 @@ import { TreeTableModule } from 'primeng/treetable';
 
 @HostListener('window:message', ['$event'])
 export class AppComponent implements OnInit {
-  constructor() {
+  constructor(private sessionService: SessionService) {
     setTheme('bs4');
   }
 

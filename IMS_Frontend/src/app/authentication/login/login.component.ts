@@ -3,13 +3,15 @@ import swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { LoginServiceService } from '../../services/authentication/Login-service.service';
 import { GlobalServiceService } from '../../services/Global-service.service';
+import { SessionService } from '../../services/session/session.service' 
+import { AppStateService } from 'src/app/services/session/app-state.service';
+
 import {
   FormBuilder,
   FormGroup,
   Validators
 } from '@angular/forms';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
-import { GetDataModel } from 'src/app/models/GetDataModel';
 
 @Component({
   selector: 'app-login',
@@ -27,7 +29,14 @@ export class LoginComponent implements OnInit {
   currentTime: string = '';
   isLoading = false;
   private timerInterval: any;
-  constructor(private router: Router, private service: LoginServiceService, private fb: FormBuilder, private gs: GlobalServiceService, private ms: MasterEntryService) {
+  constructor(
+    private router: Router, 
+    private service: LoginServiceService, 
+    private fb: FormBuilder, 
+    private gs: GlobalServiceService, 
+    private ms: MasterEntryService, 
+    private sessionService: SessionService,
+  private appState: AppStateService) {
     gs.ClearSession();
   }
 
@@ -78,11 +87,22 @@ export class LoginComponent implements OnInit {
       if (res.isAuthorized) {
         // let company = this.companyList.filter((x: { ComId: any; })=> x.ComId == this.LoginForm.controls.comId.value);
         window.localStorage.setItem('token', res.token);
+
+       
+        console.log(res);
         // debugger;
         window.localStorage.setItem('userName', res.userName);
         window.localStorage.setItem('companyId', res.companyId);
         window.localStorage.setItem('roleId', res.role_Id);
         window.localStorage.setItem('userId', res.userId);
+        window.localStorage.setItem('expiresInMinutes', res.expiresInMinutes);
+
+        const expiryMinutes = Number(res.expiresInMinutes);
+        const expiryAt = Date.now() + expiryMinutes * 60 * 1000;
+
+        window.localStorage.setItem('tokenExpiryAt', expiryAt.toString());
+
+        this.sessionService.startSession(expiryMinutes);
 
         var menu = "";
         var menuWithButtonPermission = "";
@@ -104,7 +124,8 @@ export class LoginComponent implements OnInit {
               console.log(JSON.stringify(menuWithButtonPermission));
               
               this.router.navigate(['/dashboard']).then(() => {
-                window.location.reload();
+                //window.location.reload();
+                this.appState.markReady(); 
               });
             } else if (results.msg == 'Invalid Token') {
               swal.fire('Session Expierd!', 'Please Login Again.', 'info');

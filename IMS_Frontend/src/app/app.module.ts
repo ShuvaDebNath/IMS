@@ -20,6 +20,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { DatePipe } from '@angular/common';
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
+import { SessionService } from './services/session/session.service';
 
 const CustomSelectOptions: INgxSelectOptions = {
   keepSelectedItems: false,
@@ -65,12 +66,12 @@ exports:[
 
 ],
   providers: [
-  DatePipe,
-  {
-    provide: HTTP_INTERCEPTORS,
-    useClass: AuthInterceptor,
-    multi: true
-  }
+    DatePipe,    
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
 ],
   bootstrap: [AppComponent]
 })

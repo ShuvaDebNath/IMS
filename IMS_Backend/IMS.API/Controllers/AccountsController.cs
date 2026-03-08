@@ -34,15 +34,30 @@ namespace Boilerplate.API.Controllers
         {
             var user = await _authService.GetAspNetUserAsync(userInfo);
 
-            if (user != null )
+            if (user != null)
             {
-                var tokenString = GetToken(user);
+                var tokenResult = GetToken(user);
 
-                return Ok(new { IsAuthorized = true, TOKEN = tokenString, UserName = user.UserName,  UserId = user.User_ID,Role_Id = user.Role_id });
+                return Ok(new
+                {
+                    IsAuthorized = true,
+                    TOKEN = tokenResult.Token,
+                    ExpiresInMinutes = tokenResult.ExpiryMinutes,
+                    UserName = user.UserName,
+                    UserId = user.User_ID,
+                    Role_Id = user.Role_id
+                });
             }
             else
             {
-                return Ok(new { IsAuthorized = false, IsViewWalkthrough = false, Data = (string)null, Message = MessageTypes.InvalidUser, MessageType = MessageTypes.UnAuthorize });
+                return Ok(new
+                {
+                    IsAuthorized = false,
+                    IsViewWalkthrough = false,
+                    Data = (string)null,
+                    Message = MessageTypes.InvalidUser,
+                    MessageType = MessageTypes.UnAuthorize
+                });
             }
         }
 
@@ -52,7 +67,7 @@ namespace Boilerplate.API.Controllers
         {
             var user = await _authService.GetAspNetUserByPasswordAsync(userInfo);
 
-            if (user != null )
+            if (user != null)
             {
                 var (menuPermissions, menuPermitted) = await _authService.GetUserControlsInfo(user.User_ID);
 
@@ -61,8 +76,14 @@ namespace Boilerplate.API.Controllers
                 var permittedMenu = await _authService.GetAllPermittedMenu(user.User_ID);
                 var (buttonPermissions, permittedButtons) = await _authService.GetButtonPermissins(menuPermissions.UserId);
 
-                return Ok(new { IsAuthorized = true, TOKEN = tokenString, PermittedMenus = permittedMenu, PermittedButtons = permittedButtons, 
-                    UserName = user.UserName, FullName = menuPermissions.FullName, 
+                return Ok(new
+                {
+                    IsAuthorized = true,
+                    TOKEN = tokenString,
+                    PermittedMenus = permittedMenu,
+                    PermittedButtons = permittedButtons,
+                    UserName = user.UserName,
+                    FullName = menuPermissions.FullName,
                     UserId = menuPermissions.UserId,
                     UserType = user.Role_id
                 });
@@ -132,36 +153,72 @@ namespace Boilerplate.API.Controllers
         [HttpPost(nameof(ButtonAction))]
         public async Task<IActionResult> ButtonAction(int menuID)
         {
-            var btns = await _authService.ButtonAction(AuthUserId,menuID);
+            var btns = await _authService.ButtonAction(AuthUserId, menuID);
 
             return Ok(MessageType.DataFound(new { Btns = btns }));
         }
         #endregion
 
-        private string GetToken(UserDto userInfo)
+        //private string GetToken(UserDto userInfo)
+        //{
+        //    SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["SecurityJwt:Key"]));
+        //    SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+        //    List<Claim> claims = new List<Claim> {
+        //        new Claim(TokenVariableParams.UserId, userInfo.User_ID),
+        //        new Claim(TokenVariableParams.UserName, userInfo.UserName),
+        //        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        //    };
+
+        //    int expiry = 5;
+        //    if (!string.IsNullOrEmpty(_config["SecurityJwt:ExpiryMinutes"]))
+        //    {
+        //        int.TryParse(_config["SecurityJwt:ExpiryMinutes"], out expiry);
+        //    }
+
+        //    JwtSecurityToken token = new JwtSecurityToken(_config["SecurityJwt:Issuer"], _config["SecurityJwt:Issuer"],
+        //                                     claims,
+        //                                     notBefore: DateTime.UtcNow,
+        //                                     expires: DateTime.UtcNow.AddMinutes(expiry),
+        //                                     signingCredentials: credentials);
+
+        //    return new JwtSecurityTokenHandler().WriteToken(token);
+        //}
+
+        private (string Token, int ExpiryMinutes) GetToken(UserDto userInfo)
         {
-            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["SecurityJwt:Key"]));
-            SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-            List<Claim> claims = new List<Claim> {
-                new Claim(TokenVariableParams.UserId, userInfo.User_ID),
-                new Claim(TokenVariableParams.UserName, userInfo.UserName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
-
             int expiry = 5;
             if (!string.IsNullOrEmpty(_config["SecurityJwt:ExpiryMinutes"]))
             {
                 int.TryParse(_config["SecurityJwt:ExpiryMinutes"], out expiry);
             }
 
-            JwtSecurityToken token = new JwtSecurityToken(_config["SecurityJwt:Issuer"], _config["SecurityJwt:Issuer"],
-                                             claims,
-                                             notBefore: DateTime.UtcNow,
-                                             expires: DateTime.UtcNow.AddMinutes(expiry),
-                                             signingCredentials: credentials);
+            var securityKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(_config["SecurityJwt:Key"])
+            );
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            var credentials = new SigningCredentials(
+                securityKey,
+                SecurityAlgorithms.HmacSha256
+            );
+
+            var claims = new List<Claim>
+                                {
+                                    new Claim(TokenVariableParams.UserId, userInfo.User_ID),
+                                    new Claim(TokenVariableParams.UserName, userInfo.UserName),
+                                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                                };
+
+            var token = new JwtSecurityToken(
+                issuer: _config["SecurityJwt:Issuer"],
+                audience: _config["SecurityJwt:Issuer"],
+                claims: claims,
+                notBefore: DateTime.UtcNow,
+                expires: DateTime.UtcNow.AddMinutes(expiry),
+                signingCredentials: credentials
+            );
+
+            return (new JwtSecurityTokenHandler().WriteToken(token), expiry);
         }
 
     }

@@ -1,97 +1,128 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { AppStateService } from './app-state.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionService {
 
-  private expiryTime = 0;
-  private warningTime = 0;
-  private intervalRef: any;
+  private expiryAt = 0;
   private warningShown = false;
+  private intervalRef: any;
 
   constructor(
     private router: Router,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private appState: AppStateService
   ) {
-    this.bindUserActivity();
+    this.bindVisibilityEvents();
+    this.restoreSessionFromStorage();
   }
 
   /**
-   * Call this AFTER successful login
-   * expiryMinutes comes from backend response
+   * On app load (e.g. after refresh), restore session timer from localStorage
+   * so auto-logout still works when tokenExpiryAt is set.
    */
-  startSession(expiryMinutes: number): void {
-    this.clearSession();
+  private restoreSessionFromStorage(): void {
+    try {
+      const token = localStorage.getItem('token');
+      const expiryAtStr = localStorage.getItem('tokenExpiryAt');
+      if (!token || !expiryAtStr) return;
+      const expiryAt = Number(expiryAtStr);
+      if (isNaN(expiryAt) || expiryAt <= Date.now()) return;
+      const remainingMs = expiryAt - Date.now();
+      const remainingMinutes = Math.max(1, Math.ceil(remainingMs / (60 * 1000)));
+      this.startSession(remainingMinutes);
+    } catch {
+      // ignore invalid storage
+    }
+  }
 
-    const now = Date.now();
-    this.expiryTime = now + expiryMinutes * 60 * 1000;
-    this.warningTime = this.expiryTime - (2 * 60 * 1000); // 2 min before expiry
+  startSession(expiryMinutes: number): void {
+    console.log('✅ Session started, minutes:', expiryMinutes);
+
+    this.expiryAt = Date.now() + expiryMinutes * 60 * 1000;
     this.warningShown = false;
 
-    this.ngZone.runOutsideAngular(() => {
-      this.intervalRef = setInterval(() => this.checkSession(), 1000);
-    });
-  }
-
-  private checkSession(): void {
-    const now = Date.now();
-
-    if (now >= this.warningTime && !this.warningShown) {
-      this.warningShown = true;
-
-      Swal.fire({
-        title: 'Session Expiring',
-        text: 'You will be logged out in 2 minutes due to inactivity.',
-        icon: 'warning',
-        confirmButtonText: 'OK',
-        allowOutsideClick: false
-      });
-    }
-
-    if (now >= this.expiryTime) {
-      this.forceLogout();
-    }
-  }
-
-  /**
-   * Called from interceptor on 401
-   * OR from expiry timer
-   */
-  forceLogout(): void {
-    this.clearSession();
-
-    sessionStorage.clear();
-    localStorage.clear();
-
-    this.ngZone.run(() => {
-      this.router.navigate(['/login']).then(() => {
-        window.location.reload();
-      });
-    });
-  }
-
-  clearSession(): void {
     if (this.intervalRef) {
       clearInterval(this.intervalRef);
-      this.intervalRef = null;
     }
-    this.warningShown = false;
+
+    this.ngZone.runOutsideAngular(() => {
+      this.intervalRef = setInterval(() => {
+        this.checkExpiry();
+      }, 1000);
+    });
   }
 
-  /**
-   * Activity only hides repeated warnings
-   * DOES NOT extend token life
-   */
-  private bindUserActivity(): void {
-    const events = ['mousemove', 'keydown', 'click', 'scroll'];
+  private checkExpiry(): void {
+    const now = Date.now();
+    const remainingMs = this.expiryAt - now;
 
-    events.forEach(event => {
-      document.addEventListener(event, () => {
-        this.warningShown = false;
+    if (remainingMs <= 0) {
+      this.ngZone.run(() => this.forceLogout());
+      return;
+    }
+
+    if (remainingMs <= 2 * 60 * 1000 && !this.warningShown) {
+      this.warningShown = true;
+
+      this.ngZone.run(() => {
+        let countdownInterval: any;
+        Swal.fire({
+          icon: 'warning',
+          title: 'Session Expiring',
+          html: 'You will be logged out in <strong id="session-countdown">60</strong> seconds due to inactivity.',
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          showConfirmButton: false,
+          timer: 60000,
+          didOpen: () => {
+            let seconds = 60;
+            const el = document.getElementById('session-countdown');
+            countdownInterval = setInterval(() => {
+              seconds -= 1;
+              if (el) el.textContent = String(seconds);
+              if (seconds <= 0 && countdownInterval) {
+                clearInterval(countdownInterval);
+              }
+            }, 1000);
+          },
+          didClose: () => {
+            if (countdownInterval) clearInterval(countdownInterval);
+          }
+        }).then(() => {
+          this.forceLogout();
+        });
       });
+    }
+  }
+
+  private bindVisibilityEvents(): void {
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        this.checkExpiry();
+      }
     });
+
+    window.addEventListener('focus', () => {
+      this.checkExpiry();
+    });
+  }
+
+  forceLogout(): void {
+    console.log('🚨 Session expired. Logging out.');
+
+    if (this.intervalRef) {
+      clearInterval(this.intervalRef);
+    }
+
+    localStorage.clear();
+    sessionStorage.clear();
+    this.appState.reset();
+
+    this.router.navigate(['/login']);
   }
 }

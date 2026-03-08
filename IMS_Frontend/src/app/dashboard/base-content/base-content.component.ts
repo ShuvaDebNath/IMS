@@ -3,6 +3,8 @@ import { GlobalServiceService } from '../../services/Global-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { Title } from '@angular/platform-browser';
+import { AppStateService } from 'src/app/services/session/app-state.service';
+
 @Component({
   selector: 'app-base-content',
   templateUrl: './base-content.component.html',
@@ -11,25 +13,18 @@ import { Title } from '@angular/platform-browser';
 export class BaseContentComponent implements OnInit {
   loaderstatus:boolean = true;
   constructor(
-    private gs: GlobalServiceService,
-    private activeLink: ActivatedRoute,
-    private router: Router,
-    private location: Location,
-    private title:Title
+    private title:Title,
+    private appState: AppStateService
   ) {
-    // let has = this.activeLink.snapshot.queryParamMap.has('token');
-    // if (has) {
-    //   let token = this.activeLink.snapshot.queryParams['token'];
-    //   window.localStorage.setItem('usermanagetoken', token);
-    //   let url = this.router.url.split('?')[0];
-    //   this.location.replaceState(url);
-    //   this.gs.GetAccessToken(token).subscribe();
-    // }else{
-    //   this.gs.CheckToken().subscribe();
-    // }
+    
   }
 
   ngOnInit() {
     this.title.setTitle('Dashboard');
+    this.appState.ready$.subscribe(isReady => {
+    if (isReady) {
+      this.loaderstatus = false;
+    }
+  });
   }
 }
