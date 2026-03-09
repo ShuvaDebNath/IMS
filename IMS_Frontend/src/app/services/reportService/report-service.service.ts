@@ -19,7 +19,7 @@ export class ReportService {
   constructor(
     private http: HttpClient,
     private gs: GlobalServiceService,
-    private router: Router
+    private router: Router,
   ) {
     this.token = gs.getSessionData('token');
   }
@@ -57,7 +57,7 @@ export class ReportService {
             Swal.fire(
               'No Data Found',
               'No records found for the selected criteria.',
-              'info'
+              'info',
             );
             return;
           }
@@ -91,14 +91,14 @@ export class ReportService {
         },
         (err) => {
           Swal.fire('Error', 'Failed to generate report.', 'error');
-        }
+        },
       );
   }
 
   PrintTaskDetails(
     report: any,
     rptType: 'pdf' | 'excel' | 'word',
-    isView: boolean
+    isView: boolean,
   ) {
     const fromDate = report.fromDate ? this.formatDate(report.fromDate) : '';
     const toDate = report.toDate ? this.formatDate(report.toDate) : '';
@@ -117,49 +117,48 @@ export class ReportService {
         params: { rptType, fromDate, toDate, userId },
         responseType: 'blob',
       })
-      .subscribe(
-        (res: Blob) => {
-          const blobType =
-            rptType === 'pdf'
-              ? 'application/pdf'
-              : rptType === 'excel'
-                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+      .subscribe((res: Blob) => {
+        const blobType =
+          rptType === 'pdf'
+            ? 'application/pdf'
+            : rptType === 'excel'
+              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
-          const blob = new Blob([res], { type: blobType });
+        const blob = new Blob([res], { type: blobType });
 
-          // Choose base filename according to requested reportType
-          const reportTypeKey = (rptType || '').toString();
+        // Choose base filename according to requested reportType
+        const reportTypeKey = (rptType || '').toString();
 
-          var baseFileName = 'PIReport';
-          const fileName =
-            rptType === 'pdf'
-              ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
+        var baseFileName = 'PIReport';
+        const fileName =
+          rptType === 'pdf'
+            ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
                 /\//g,
-                '-'
+                '-',
               )}.pdf`
-              : rptType === 'excel'
-                ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
+            : rptType === 'excel'
+              ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
                   /\//g,
-                  '-'
+                  '-',
                 )}.xlsx`
-                : `${baseFileName}_${this.formatDateDMY(new Date()).replace(
+              : `${baseFileName}_${this.formatDateDMY(new Date()).replace(
                   /\//g,
-                  '-'
+                  '-',
                 )}.docx`;
 
-          if (isView && rptType === 'pdf') {
-            // View PDF in new tab
-            const fileURL = window.URL.createObjectURL(blob);
-            window.open(fileURL, '_blank');
-          } else {
-            // Force download
-            const link = document.createElement('a');
-            link.href = window.URL.createObjectURL(blob);
-            link.download = fileName;
-            link.click();
-          }
-        });
+        if (isView && rptType === 'pdf') {
+          // View PDF in new tab
+          const fileURL = window.URL.createObjectURL(blob);
+          window.open(fileURL, '_blank');
+        } else {
+          // Force download
+          const link = document.createElement('a');
+          link.href = window.URL.createObjectURL(blob);
+          link.download = fileName;
+          link.click();
+        }
+      });
   }
 
   PrintProformaInvoiceRequest(report: any, rptType: any, isView: any) {
@@ -248,7 +247,7 @@ export class ReportService {
   PrintCommercialInvoiceReports(
     report: any,
     rptType: 'pdf' | 'excel' | 'word',
-    isView: boolean
+    isView: boolean,
   ) {
     const commercialInvoiceNo = report.Commercial_Invoice_No ?? '';
     const reportType = report.reportType ?? '';
@@ -379,7 +378,7 @@ export class ReportService {
         (err) => {
           Swal.close();
           Swal.fire('Error', 'Failed to generate report.', 'error');
-        }
+        },
       );
   }
 
@@ -425,7 +424,7 @@ export class ReportService {
             Swal.fire(
               'No Data Found',
               'No records found for the selected criteria.',
-              'info'
+              'info',
             );
             return;
           }
@@ -443,13 +442,13 @@ export class ReportService {
               ? 'ApplicationReport.pdf'
               : rptType === 'excel'
                 ? `ApplicationReport_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.xlsx`
+                    /\//g,
+                    '-',
+                  )}.xlsx`
                 : `ApplicationReport_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.docx`;
+                    /\//g,
+                    '-',
+                  )}.docx`;
 
           if (isView && rptType === 'pdf') {
             // View PDF in new tab
@@ -465,7 +464,7 @@ export class ReportService {
         },
         (err) => {
           Swal.fire('Error', 'Failed to generate report.', 'error');
-        }
+        },
       );
   }
 
@@ -495,7 +494,7 @@ export class ReportService {
             Swal.fire(
               'No Data Found',
               'No records found for the selected criteria.',
-              'info'
+              'info',
             );
             return;
           }
@@ -511,18 +510,18 @@ export class ReportService {
           const fileName =
             rptType === 'pdf'
               ? `LCReport${this.formatDateDMY(new Date()).replace(
-                /\//g,
-                '-'
-              )}.pdf`
+                  /\//g,
+                  '-',
+                )}.pdf`
               : rptType === 'excel'
                 ? `LCReport${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.xlsx`
+                    /\//g,
+                    '-',
+                  )}.xlsx`
                 : `LCReport${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.docx`;
+                    /\//g,
+                    '-',
+                  )}.docx`;
 
           if (isView && rptType === 'pdf') {
             // View PDF in new tab
@@ -538,7 +537,7 @@ export class ReportService {
         },
         (err) => {
           Swal.fire('Error', 'Failed to generate report.', 'error');
-        }
+        },
       );
   }
 
@@ -567,7 +566,7 @@ export class ReportService {
             Swal.fire(
               'No Data Found',
               'No records found for the selected criteria.',
-              'info'
+              'info',
             );
             return;
           }
@@ -583,18 +582,18 @@ export class ReportService {
           const fileName =
             rptType === 'pdf'
               ? `CashReceiveReport${this.formatDateDMY(new Date()).replace(
-                /\//g,
-                '-'
-              )}.pdf`
+                  /\//g,
+                  '-',
+                )}.pdf`
               : rptType === 'excel'
                 ? `CashReceiveReport${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.xlsx`
+                    /\//g,
+                    '-',
+                  )}.xlsx`
                 : `CashReceiveReport${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.docx`;
+                    /\//g,
+                    '-',
+                  )}.docx`;
 
           if (isView && rptType === 'pdf') {
             // View PDF in new tab
@@ -610,7 +609,7 @@ export class ReportService {
         },
         (err) => {
           Swal.fire('Error', 'Failed to generate report.', 'error');
-        }
+        },
       );
   }
 
@@ -638,7 +637,7 @@ export class ReportService {
             Swal.fire(
               'No Data Found',
               'No records found for the selected criteria.',
-              'info'
+              'info',
             );
             return;
           }
@@ -656,13 +655,13 @@ export class ReportService {
               ? 'ApplicationReport.pdf'
               : rptType === 'excel'
                 ? `ApplicationReport_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.xlsx`
+                    /\//g,
+                    '-',
+                  )}.xlsx`
                 : `ApplicationReport_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.docx`;
+                    /\//g,
+                    '-',
+                  )}.docx`;
 
           if (isView && rptType === 'pdf') {
             // View PDF in new tab
@@ -678,7 +677,7 @@ export class ReportService {
         },
         (err) => {
           Swal.fire('Error', 'Failed to generate report.', 'error');
-        }
+        },
       );
   }
 
@@ -706,7 +705,7 @@ export class ReportService {
             Swal.fire(
               'No Data Found',
               'No records found for the selected criteria.',
-              'info'
+              'info',
             );
             return;
           }
@@ -724,13 +723,13 @@ export class ReportService {
               ? 'ApplicationReport.pdf'
               : rptType === 'excel'
                 ? `ApplicationReport_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.xlsx`
+                    /\//g,
+                    '-',
+                  )}.xlsx`
                 : `ApplicationReport_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.docx`;
+                    /\//g,
+                    '-',
+                  )}.docx`;
 
           if (isView && rptType === 'pdf') {
             // View PDF in new tab
@@ -746,7 +745,7 @@ export class ReportService {
         },
         (err) => {
           Swal.fire('Error', 'Failed to generate report.', 'error');
-        }
+        },
       );
   }
 
@@ -774,7 +773,7 @@ export class ReportService {
             Swal.fire(
               'No Data Found',
               'No records found for the selected criteria.',
-              'info'
+              'info',
             );
             return;
           }
@@ -792,13 +791,13 @@ export class ReportService {
               ? 'SalesContractReport.pdf'
               : rptType === 'excel'
                 ? `SalesContractReport_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.xlsx`
+                    /\//g,
+                    '-',
+                  )}.xlsx`
                 : `SalesContractReport_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.docx`;
+                    /\//g,
+                    '-',
+                  )}.docx`;
 
           if (isView && rptType === 'pdf') {
             // View PDF in new tab
@@ -814,29 +813,26 @@ export class ReportService {
         },
         (err) => {
           Swal.fire('Error', 'Failed to generate report.', 'error');
-        }
+        },
       );
   }
 
   PrintCustomerReport(report: any, rptType: any, isView: any) {
-    console.log(report);
-
-    const Superior_Id = report.Superior_Id;
-    const Customer_Id = report.Customer_Id;
-    const Status = report.Status;
-    const sentBy = report.User;
-
     const url = `${this.baseUrl}${this.apiController}/CustomerReport`;
     const token = this.gs.getSessionData('token');
+
+    report.rptType = rptType;
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
 
+    const params = new HttpParams({ fromObject: report });
+
     this.http
       .get(url, {
         headers,
-        params: { rptType, Superior_Id, Customer_Id, Status, sentBy },
+        params: params,
         responseType: 'blob',
       })
       .subscribe(
@@ -845,7 +841,7 @@ export class ReportService {
             Swal.fire(
               'No Data Found',
               'No records found for the selected criteria.',
-              'info'
+              'info',
             );
             return;
           }
@@ -863,13 +859,13 @@ export class ReportService {
               ? 'CustomerReport.pdf'
               : rptType === 'excel'
                 ? `CustomerReport_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.xlsx`
+                    /\//g,
+                    '-',
+                  )}.xlsx`
                 : `CustomerReport_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.docx`;
+                    /\//g,
+                    '-',
+                  )}.docx`;
 
           if (isView && rptType === 'pdf') {
             // View PDF in new tab
@@ -885,7 +881,7 @@ export class ReportService {
         },
         (err) => {
           Swal.fire('Error', 'Failed to generate report.', 'error');
-        }
+        },
       );
   }
 
@@ -926,7 +922,7 @@ export class ReportService {
             Swal.fire(
               'No Data Found',
               'No records found for the selected criteria.',
-              'info'
+              'info',
             );
             return;
           }
@@ -944,13 +940,13 @@ export class ReportService {
               ? 'BuyerReport.pdf'
               : rptType === 'excel'
                 ? `BuyerReport_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.xlsx`
+                    /\//g,
+                    '-',
+                  )}.xlsx`
                 : `BuyerReport_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.docx`;
+                    /\//g,
+                    '-',
+                  )}.docx`;
 
           if (isView && rptType === 'pdf') {
             // View PDF in new tab
@@ -966,7 +962,7 @@ export class ReportService {
         },
         (err) => {
           Swal.fire('Error', 'Failed to generate report.', 'error');
-        }
+        },
       );
   }
 
@@ -994,7 +990,7 @@ export class ReportService {
             Swal.fire(
               'No Data Found',
               'No records found for the selected criteria.',
-              'info'
+              'info',
             );
             return;
           }
@@ -1012,13 +1008,13 @@ export class ReportService {
               ? 'TaskReport.pdf'
               : rptType === 'excel'
                 ? `TaskReport_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.xlsx`
+                    /\//g,
+                    '-',
+                  )}.xlsx`
                 : `TaskReport_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.docx`;
+                    /\//g,
+                    '-',
+                  )}.docx`;
 
           if (isView && rptType === 'pdf') {
             // View PDF in new tab
@@ -1034,14 +1030,14 @@ export class ReportService {
         },
         (err) => {
           Swal.fire('Error', 'Failed to generate report.', 'error');
-        }
+        },
       );
   }
 
   PrintExportReport(
     report: any,
     rptType: 'pdf' | 'excel' | 'word',
-    isView: any
+    isView: any,
   ) {
     const id = report.id ? report.id : '';
 
@@ -1066,7 +1062,7 @@ export class ReportService {
             Swal.fire(
               'No Data Found',
               'No records found for the selected criteria.',
-              'info'
+              'info',
             );
             return;
           }
@@ -1084,13 +1080,13 @@ export class ReportService {
               ? 'ExportReport.pdf'
               : rptType === 'excel'
                 ? `ExportReport_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.xlsx`
+                    /\//g,
+                    '-',
+                  )}.xlsx`
                 : `ExportReport_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.docx`;
+                    /\//g,
+                    '-',
+                  )}.docx`;
 
           if (isView && rptType === 'pdf') {
             // View PDF in new tab
@@ -1106,14 +1102,14 @@ export class ReportService {
         },
         (err) => {
           Swal.fire('Error', 'Failed to generate report.', 'error');
-        }
+        },
       );
   }
 
   PrintRMIssueInvoice(
     report: any,
     rptType: 'pdf' | 'excel' | 'word',
-    isView: any
+    isView: any,
   ) {
     const id = report.id ? report.id : '';
 
@@ -1138,7 +1134,7 @@ export class ReportService {
             Swal.fire(
               'No Data Found',
               'No records found for the selected criteria.',
-              'info'
+              'info',
             );
             return;
           }
@@ -1156,11 +1152,11 @@ export class ReportService {
               ? 'RawMaterialIssueInvoiceReport.pdf'
               : rptType === 'excel'
                 ? `RawMaterialIssueInvoiceReport_${this.formatDateDMY(
-                  new Date()
-                ).replace(/\//g, '-')}.xlsx`
+                    new Date(),
+                  ).replace(/\//g, '-')}.xlsx`
                 : `RawMaterialIssueInvoiceReport_${this.formatDateDMY(
-                  new Date()
-                ).replace(/\//g, '-')}.docx`;
+                    new Date(),
+                  ).replace(/\//g, '-')}.docx`;
 
           if (isView && rptType === 'pdf') {
             // View PDF in new tab
@@ -1176,7 +1172,7 @@ export class ReportService {
         },
         (err) => {
           Swal.fire('Error', 'Failed to generate report.', 'error');
-        }
+        },
       );
   }
 
@@ -1201,7 +1197,7 @@ export class ReportService {
             Swal.fire(
               'No Data Found',
               'No records found for the selected criteria.',
-              'info'
+              'info',
             );
             return;
           }
@@ -1219,13 +1215,13 @@ export class ReportService {
               ? 'RMStockReport.pdf'
               : rptType === 'excel'
                 ? `RMStockReport_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.xlsx`
+                    /\//g,
+                    '-',
+                  )}.xlsx`
                 : `RMStockReport_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.docx`;
+                    /\//g,
+                    '-',
+                  )}.docx`;
 
           if (isView && rptType === 'pdf') {
             // View PDF in new tab
@@ -1241,14 +1237,14 @@ export class ReportService {
         },
         (err) => {
           Swal.fire('Error', 'Failed to generate report.', 'error');
-        }
+        },
       );
   }
 
   PrintExportReceiveReport(
     report: any,
     rptType: 'pdf' | 'excel' | 'word',
-    isView: any
+    isView: any,
   ) {
     const id = report.id ? report.id : '';
 
@@ -1273,7 +1269,7 @@ export class ReportService {
             Swal.fire(
               'No Data Found',
               'No records found for the selected criteria.',
-              'info'
+              'info',
             );
             return;
           }
@@ -1291,13 +1287,13 @@ export class ReportService {
               ? 'ExportReport.pdf'
               : rptType === 'excel'
                 ? `ExportReport_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.xlsx`
+                    /\//g,
+                    '-',
+                  )}.xlsx`
                 : `ExportReport_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.docx`;
+                    /\//g,
+                    '-',
+                  )}.docx`;
 
           if (isView && rptType === 'pdf') {
             // View PDF in new tab
@@ -1313,14 +1309,14 @@ export class ReportService {
         },
         (err) => {
           Swal.fire('Error', 'Failed to generate report.', 'error');
-        }
+        },
       );
   }
 
   PrintFinishGoodSentReport(
     report: any,
     rptType: 'pdf' | 'excel' | 'word',
-    isView: any
+    isView: any,
   ) {
     const id = report.id ? report.id : '';
 
@@ -1345,7 +1341,7 @@ export class ReportService {
             Swal.fire(
               'No Data Found',
               'No records found for the selected criteria.',
-              'info'
+              'info',
             );
             return;
           }
@@ -1362,14 +1358,12 @@ export class ReportService {
             rptType === 'pdf'
               ? 'FinishGoodSentReport.pdf'
               : rptType === 'excel'
-                ? `FinishGoodSentReport_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.xlsx`
-                : `FinishGoodSentReport_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.docx`;
+                ? `FinishGoodSentReport_${this.formatDateDMY(
+                    new Date(),
+                  ).replace(/\//g, '-')}.xlsx`
+                : `FinishGoodSentReport_${this.formatDateDMY(
+                    new Date(),
+                  ).replace(/\//g, '-')}.docx`;
 
           if (isView && rptType === 'pdf') {
             // View PDF in new tab
@@ -1385,14 +1379,14 @@ export class ReportService {
         },
         (err) => {
           Swal.fire('Error', 'Failed to generate report.', 'error');
-        }
+        },
       );
   }
 
   PrintFinishGoodReceiveReport(
     report: any,
     rptType: 'pdf' | 'excel' | 'word',
-    isView: any
+    isView: any,
   ) {
     const id = report.id ? report.id : '';
 
@@ -1417,7 +1411,7 @@ export class ReportService {
             Swal.fire(
               'No Data Found',
               'No records found for the selected criteria.',
-              'info'
+              'info',
             );
             return;
           }
@@ -1435,11 +1429,11 @@ export class ReportService {
               ? 'FinishGoodReceiveReport.pdf'
               : rptType === 'excel'
                 ? `FinishGoodReceiveReport_${this.formatDateDMY(
-                  new Date()
-                ).replace(/\//g, '-')}.xlsx`
+                    new Date(),
+                  ).replace(/\//g, '-')}.xlsx`
                 : `FinishGoodReceiveReport_${this.formatDateDMY(
-                  new Date()
-                ).replace(/\//g, '-')}.docx`;
+                    new Date(),
+                  ).replace(/\//g, '-')}.docx`;
 
           if (isView && rptType === 'pdf') {
             // View PDF in new tab
@@ -1455,7 +1449,7 @@ export class ReportService {
         },
         (err) => {
           Swal.fire('Error', 'Failed to generate report.', 'error');
-        }
+        },
       );
   }
 
@@ -1480,7 +1474,7 @@ export class ReportService {
             Swal.fire(
               'No Data Found',
               'No records found for the selected criteria.',
-              'info'
+              'info',
             );
             return;
           }
@@ -1498,13 +1492,13 @@ export class ReportService {
               ? 'FGStockReport.pdf'
               : rptType === 'excel'
                 ? `FGStockReport_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.xlsx`
+                    /\//g,
+                    '-',
+                  )}.xlsx`
                 : `FGStockReport_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.docx`;
+                    /\//g,
+                    '-',
+                  )}.docx`;
 
           if (isView && rptType === 'pdf') {
             // View PDF in new tab
@@ -1520,7 +1514,7 @@ export class ReportService {
         },
         (err) => {
           Swal.fire('Error', 'Failed to generate report.', 'error');
-        }
+        },
       );
   }
 
@@ -1550,7 +1544,7 @@ export class ReportService {
             Swal.fire(
               'No Data Found',
               'No records found for the selected criteria.',
-              'info'
+              'info',
             );
             return;
           }
@@ -1566,18 +1560,18 @@ export class ReportService {
           const fileName =
             rptType === 'pdf'
               ? `FGSentReceive${this.formatDateDMY(new Date()).replace(
-                /\//g,
-                '-'
-              )}.pdf`
+                  /\//g,
+                  '-',
+                )}.pdf`
               : rptType === 'excel'
                 ? `FGSentReceive${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.xlsx`
+                    /\//g,
+                    '-',
+                  )}.xlsx`
                 : `FGSentReceive${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.docx`;
+                    /\//g,
+                    '-',
+                  )}.docx`;
 
           if (isView && rptType === 'pdf') {
             // View PDF in new tab
@@ -1593,14 +1587,14 @@ export class ReportService {
         },
         (err) => {
           Swal.fire('Error', 'Failed to generate report.', 'error');
-        }
+        },
       );
   }
 
   PrintRequisitionPendingDetilsReport(
     report: any,
     rptType: 'pdf' | 'excel' | 'word',
-    isView: any
+    isView: any,
   ) {
     const id = report.id ? report.id : '';
 
@@ -1625,7 +1619,7 @@ export class ReportService {
             Swal.fire(
               'No Data Found',
               'No records found for the selected criteria.',
-              'info'
+              'info',
             );
             return;
           }
@@ -1642,14 +1636,12 @@ export class ReportService {
             rptType === 'pdf'
               ? 'RMPendingDetailsReport.pdf'
               : rptType === 'excel'
-                ? `RMPendingDetailsReport${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.xlsx`
-                : `RMPendingDetailsReport${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.docx`;
+                ? `RMPendingDetailsReport${this.formatDateDMY(
+                    new Date(),
+                  ).replace(/\//g, '-')}.xlsx`
+                : `RMPendingDetailsReport${this.formatDateDMY(
+                    new Date(),
+                  ).replace(/\//g, '-')}.docx`;
 
           if (isView && rptType === 'pdf') {
             // View PDF in new tab
@@ -1665,14 +1657,14 @@ export class ReportService {
         },
         (err) => {
           Swal.fire('Error', 'Failed to generate report.', 'error');
-        }
+        },
       );
   }
 
   PrintRequisitionDetilsReport(
     report: any,
     rptType: 'pdf' | 'excel' | 'word',
-    isView: any
+    isView: any,
   ) {
     const id = report.id ? report.id : '';
 
@@ -1697,7 +1689,7 @@ export class ReportService {
             Swal.fire(
               'No Data Found',
               'No records found for the selected criteria.',
-              'info'
+              'info',
             );
             return;
           }
@@ -1715,13 +1707,13 @@ export class ReportService {
               ? 'RMDetailsReport.pdf'
               : rptType === 'excel'
                 ? `RMDetailsReport${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.xlsx`
+                    /\//g,
+                    '-',
+                  )}.xlsx`
                 : `RMDetailsReport${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.docx`;
+                    /\//g,
+                    '-',
+                  )}.docx`;
 
           if (isView && rptType === 'pdf') {
             // View PDF in new tab
@@ -1737,12 +1729,15 @@ export class ReportService {
         },
         (err) => {
           Swal.fire('Error', 'Failed to generate report.', 'error');
-        }
+        },
       );
   }
 
-
-  PrintTaskMonthlyDetailsReport(report: any, rptType: 'pdf' | 'excel' | 'word', isView: any) {
+  PrintTaskMonthlyDetailsReport(
+    report: any,
+    rptType: 'pdf' | 'excel' | 'word',
+    isView: any,
+  ) {
     const id = report.id ? report.id : '';
 
     const url = `${this.baseUrl}${this.apiController}/TaskMonthlyDetailsReport`;
@@ -1766,7 +1761,7 @@ export class ReportService {
             Swal.fire(
               'No Data Found',
               'No records found for the selected criteria.',
-              'info'
+              'info',
             );
             return;
           }
@@ -1784,13 +1779,13 @@ export class ReportService {
               ? 'MonthlyTaskDetails.pdf'
               : rptType === 'excel'
                 ? `MonthlyTaskDetails_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.xlsx`
+                    /\//g,
+                    '-',
+                  )}.xlsx`
                 : `MonthlyTaskDetails_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.docx`;
+                    /\//g,
+                    '-',
+                  )}.docx`;
 
           if (isView && rptType === 'pdf') {
             // View PDF in new tab
@@ -1806,15 +1801,14 @@ export class ReportService {
         },
         (err) => {
           Swal.fire('Error', 'Failed to generate report.', 'error');
-        }
+        },
       );
   }
-
 
   PrintTaskMonthlyDetails(
     report: any,
     rptType: 'pdf' | 'excel' | 'word',
-    isView: boolean
+    isView: boolean,
   ) {
     const fromDate = report.fromDate ? this.formatDate(report.fromDate) : '';
     const toDate = report.toDate ? this.formatDate(report.toDate) : '';
@@ -1833,52 +1827,55 @@ export class ReportService {
         params: { rptType, fromDate, toDate, userId },
         responseType: 'blob',
       })
-      .subscribe(
-        (res: Blob) => {
-          const blobType =
-            rptType === 'pdf'
-              ? 'application/pdf'
-              : rptType === 'excel'
-                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+      .subscribe((res: Blob) => {
+        const blobType =
+          rptType === 'pdf'
+            ? 'application/pdf'
+            : rptType === 'excel'
+              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
-          const blob = new Blob([res], { type: blobType });
+        const blob = new Blob([res], { type: blobType });
 
-          // Choose base filename according to requested reportType
-          const reportTypeKey = (rptType || '').toString();
+        // Choose base filename according to requested reportType
+        const reportTypeKey = (rptType || '').toString();
 
-          var baseFileName = 'MonthlyTaskReport';
-          const fileName =
-            rptType === 'pdf'
-              ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
+        var baseFileName = 'MonthlyTaskReport';
+        const fileName =
+          rptType === 'pdf'
+            ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
                 /\//g,
-                '-'
+                '-',
               )}.pdf`
-              : rptType === 'excel'
-                ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
+            : rptType === 'excel'
+              ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
                   /\//g,
-                  '-'
+                  '-',
                 )}.xlsx`
-                : `${baseFileName}_${this.formatDateDMY(new Date()).replace(
+              : `${baseFileName}_${this.formatDateDMY(new Date()).replace(
                   /\//g,
-                  '-'
+                  '-',
                 )}.docx`;
 
-          if (isView && rptType === 'pdf') {
-            // View PDF in new tab
-            const fileURL = window.URL.createObjectURL(blob);
-            window.open(fileURL, '_blank');
-          } else {
-            // Force download
-            const link = document.createElement('a');
-            link.href = window.URL.createObjectURL(blob);
-            link.download = fileName;
-            link.click();
-          }
-        });
+        if (isView && rptType === 'pdf') {
+          // View PDF in new tab
+          const fileURL = window.URL.createObjectURL(blob);
+          window.open(fileURL, '_blank');
+        } else {
+          // Force download
+          const link = document.createElement('a');
+          link.href = window.URL.createObjectURL(blob);
+          link.download = fileName;
+          link.click();
+        }
+      });
   }
 
-  PrintClientVisitDetailsReport(report: any, rptType: 'pdf' | 'excel' | 'word', isView: any) {
+  PrintClientVisitDetailsReport(
+    report: any,
+    rptType: 'pdf' | 'excel' | 'word',
+    isView: any,
+  ) {
     const id = report.id ? report.id : '';
 
     const url = `${this.baseUrl}${this.apiController}/TaskCustomerVisitDetailsReport`;
@@ -1902,7 +1899,7 @@ export class ReportService {
             Swal.fire(
               'No Data Found',
               'No records found for the selected criteria.',
-              'info'
+              'info',
             );
             return;
           }
@@ -1920,13 +1917,13 @@ export class ReportService {
               ? 'ClientVisitDetails.pdf'
               : rptType === 'excel'
                 ? `ClientVisitDetails${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.xlsx`
+                    /\//g,
+                    '-',
+                  )}.xlsx`
                 : `ClientVisitDetails${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.docx`;
+                    /\//g,
+                    '-',
+                  )}.docx`;
 
           if (isView && rptType === 'pdf') {
             // View PDF in new tab
@@ -1942,15 +1939,14 @@ export class ReportService {
         },
         (err) => {
           Swal.fire('Error', 'Failed to generate report.', 'error');
-        }
+        },
       );
   }
-
 
   PrintClinetVisit(
     report: any,
     rptType: 'pdf' | 'excel' | 'word',
-    isView: boolean
+    isView: boolean,
   ) {
     const fromDate = report.fromDate ? this.formatDate(report.fromDate) : '';
     const toDate = report.toDate ? this.formatDate(report.toDate) : '';
@@ -1969,49 +1965,48 @@ export class ReportService {
         params: { rptType, fromDate, toDate, userId },
         responseType: 'blob',
       })
-      .subscribe(
-        (res: Blob) => {
-          const blobType =
-            rptType === 'pdf'
-              ? 'application/pdf'
-              : rptType === 'excel'
-                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+      .subscribe((res: Blob) => {
+        const blobType =
+          rptType === 'pdf'
+            ? 'application/pdf'
+            : rptType === 'excel'
+              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
-          const blob = new Blob([res], { type: blobType });
+        const blob = new Blob([res], { type: blobType });
 
-          // Choose base filename according to requested reportType
-          const reportTypeKey = (rptType || '').toString();
+        // Choose base filename according to requested reportType
+        const reportTypeKey = (rptType || '').toString();
 
-          var baseFileName = 'ClientVisitDetails';
-          const fileName =
-            rptType === 'pdf'
-              ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
+        var baseFileName = 'ClientVisitDetails';
+        const fileName =
+          rptType === 'pdf'
+            ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
                 /\//g,
-                '-'
+                '-',
               )}.pdf`
-              : rptType === 'excel'
-                ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
+            : rptType === 'excel'
+              ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
                   /\//g,
-                  '-'
+                  '-',
                 )}.xlsx`
-                : `${baseFileName}_${this.formatDateDMY(new Date()).replace(
+              : `${baseFileName}_${this.formatDateDMY(new Date()).replace(
                   /\//g,
-                  '-'
+                  '-',
                 )}.docx`;
 
-          if (isView && rptType === 'pdf') {
-            // View PDF in new tab
-            const fileURL = window.URL.createObjectURL(blob);
-            window.open(fileURL, '_blank');
-          } else {
-            // Force download
-            const link = document.createElement('a');
-            link.href = window.URL.createObjectURL(blob);
-            link.download = fileName;
-            link.click();
-          }
-        });
+        if (isView && rptType === 'pdf') {
+          // View PDF in new tab
+          const fileURL = window.URL.createObjectURL(blob);
+          window.open(fileURL, '_blank');
+        } else {
+          // Force download
+          const link = document.createElement('a');
+          link.href = window.URL.createObjectURL(blob);
+          link.download = fileName;
+          link.click();
+        }
+      });
   }
 
   PrintDeliveryReport(report: any, rptType: any, isView: any) {
@@ -2091,7 +2086,7 @@ export class ReportService {
             Swal.fire(
               'No Data Found',
               'No records found for the selected criteria.',
-              'info'
+              'info',
             );
             return;
           }
@@ -2109,13 +2104,13 @@ export class ReportService {
               ? 'UserReport.pdf'
               : rptType === 'excel'
                 ? `UserReport${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.xlsx`
+                    /\//g,
+                    '-',
+                  )}.xlsx`
                 : `UserReport${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.docx`;
+                    /\//g,
+                    '-',
+                  )}.docx`;
 
           if (isView && rptType === 'pdf') {
             // View PDF in new tab
@@ -2131,14 +2126,11 @@ export class ReportService {
         },
         (err) => {
           Swal.fire('Error', 'Failed to generate report.', 'error');
-        }
+        },
       );
   }
 
-
-
   PrintPIReport(report: any, rptType: any, isView: any) {
-
     const url = `${this.baseUrl}${this.apiController}/PIReport`;
     const token = this.gs.getSessionData('token');
 
@@ -2150,19 +2142,19 @@ export class ReportService {
 
     const params = new HttpParams({ fromObject: report });
 
-    this.http.get(url, {
-      headers: headers,
-      params: params,
-      responseType: 'blob'
-    })
+    this.http
+      .get(url, {
+        headers: headers,
+        params: params,
+        responseType: 'blob',
+      })
       .subscribe(
         (res: Blob) => {
-
           if (res.size === 0) {
             Swal.fire(
               'No Data Found',
               'No records found for the selected criteria.',
-              'info'
+              'info',
             );
             return;
           }
@@ -2192,11 +2184,10 @@ export class ReportService {
             link.download = fileName;
             link.click();
           }
-
         },
         (err) => {
           Swal.fire('Error', 'Failed to generate report.', 'error');
-        }
+        },
       );
   }
 }

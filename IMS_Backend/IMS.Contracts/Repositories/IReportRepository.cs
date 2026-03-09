@@ -6,7 +6,8 @@ namespace Boilerplate.Contracts.Repositories;
 public interface IReportRepository
 {
     Task<DataSet> SampleRequestReport(ReportsParams param);
-    Task<DataSet> CustomerReport(CustomerParams param);
+    Task<DataSet> CustomerReport(CustomerReportParams customerReportParams);
+    Task<DataSet> BuyerReport(BuyerReportParams buyerReportParams);
     Task<DataSet> ProformaInvoiceReport(ProformaInvoiceReportParams param);
     Task<DataSet> TaskDetailsReport(ReportsParams param);
     Task<DataSet> CommercialInvoiceReports(CommercialInvoiceReportParams param);
@@ -17,7 +18,6 @@ public interface IReportRepository
     Task<DataSet> PIAmendmentReport(string id);
     Task<DataSet> PIOtherReport(string id);
     Task<DataSet> SalesContractReport(string id);
-    Task<DataSet> BuyerReport(BuyerParams param);
     Task<DataSet> TaskReport(string id);
     Task<DataSet> ExportReport(string id);
     Task<DataSet> RawMaterialIssueInvoiceReport(string id);

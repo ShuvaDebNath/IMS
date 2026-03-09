@@ -83,7 +83,7 @@ namespace Boilerplate.Repository.Repositories
         }
 
 
-        public async Task<DataSet> CustomerReport(CustomerParams param)
+        public async Task<DataSet> CustomerReport(CustomerReportParams param)
         {
             try
             {
@@ -92,10 +92,44 @@ namespace Boilerplate.Repository.Repositories
                     param.Superior_Id,
                     param.Customer_Id,
                     param.Status,
-                    param.SentBy
+                    param.SentBy,
+                    pageLength = param.PageLength,
+                    pageNo = param.PageNo,
+                    searchParam = param.SearchParam
                 };
 
-                string query = @"exec [usp_Customer_GetCustomerData] @Superior_Id,@Customer_Id,@Status,@SentBy";
+                string query = @"exec [usp_Customer_GetCustomerData_Report] @Superior_Id,@Customer_Id,@Status,@SentBy,
+                    @pageLength,
+                    @pageNo,
+                    @searchParam";
+                var ds = await GetDataInDataSetAsync(query, parametars);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<DataSet> BuyerReport(BuyerReportParams param)
+        {
+            try
+            {
+                var parametars = new
+                {
+                    param.Superior_Id,
+                    param.Customer_Id,
+                    param.Status,
+                    param.SentBy,
+                    pageLength = param.PageLength,
+                    pageNo = param.PageNo,
+                    searchParam = param.SearchParam
+                };
+
+                string query = @"exec [usp_Buyer_GetBuyerData_Report] @Superior_Id,@Customer_Id,@Status,@SentBy,
+                    @pageLength,
+                    @pageNo,
+                    @searchParam";
                 var ds = await GetDataInDataSetAsync(query, parametars);
 
                 return ds;
@@ -305,31 +339,6 @@ namespace Boilerplate.Repository.Repositories
             }
         }
 
-
-        public async Task<DataSet> BuyerReport(BuyerParams param)
-        {
-            try
-            {
-                var parametars = new
-                {   
-                    param.FromDate,
-                    param.ToDate,
-                    param.Superior_Id,
-                    param.Customer_Id,
-                    param.Status,
-                    param.SentBy,
-                };
-
-                string query = @"exec [usp_Buyer_Report] @FromDate,@ToDate,@Superior_Id,@Customer_Id,@Status,@SentBy";
-                var ds = await GetDataInDataSetAsync(query, parametars);
-
-                return ds;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
         public async Task<DataSet> TaskReport(String id)
         {
             try

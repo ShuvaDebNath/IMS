@@ -34,7 +34,10 @@ export class AllCustomersComponent {
   deletePermissions: boolean = false;
   printPermissions: boolean = false;
 
+  pageSize:any = 10;
+  currentPage:any = 1;
   roleId:any = '';
+  searchText:any = '';
 
   constructor(
     private getDataService: GetDataService,
@@ -130,9 +133,8 @@ export class AllCustomersComponent {
         console.log(results, procedureData);
         if (results.status) {
           this.allCustomers = JSON.parse(results.data).Tables1;
-          console.log(this.allCustomers[0]);
-
-          console.log(Array.isArray(this.allCustomers));
+          this.currentPage = 1;
+          this.pageSize = 10;
 
           this.tableVisible = true;
         } else if (results.msg === 'Invalid Token') {
@@ -289,7 +291,11 @@ export class AllCustomersComponent {
           Customer_Id: CustomerId,
           Status: 'All',
           User: sentBy,
+          pageLength: this.pageSize,
+          pageNo:this.currentPage,
+          searchParam:this.searchText==undefined?'':this.searchText
         };
+        
 
         excelBtn?.addEventListener('click', () => {
           swal.close();
@@ -360,5 +366,12 @@ export class AllCustomersComponent {
   }
   toggleText(item: any) {
     item.showFull = !item.showFull;
+  }
+
+  onPageChange(event: any) {
+    console.log(event);
+    
+    this.pageSize = event.rows;
+    this.currentPage = (event.first / event.rows) + 1;
   }
 }
