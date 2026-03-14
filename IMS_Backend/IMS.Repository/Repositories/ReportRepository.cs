@@ -117,16 +117,18 @@ namespace Boilerplate.Repository.Repositories
             {
                 var parametars = new
                 {
+                    param.FromDate,
+                    param.ToDate,
                     param.Superior_Id,
-                    param.Customer_Id,
+                    param.Buyer_Id,
                     param.Status,
                     param.SentBy,
                     pageLength = param.PageLength,
                     pageNo = param.PageNo,
-                    searchParam = param.SearchParam
+                    searchParam = param.SearchParam,
                 };
 
-                string query = @"exec [usp_Buyer_GetBuyerData_Report] @Superior_Id,@Customer_Id,@Status,@SentBy,
+                string query = @"exec [usp_Buyer_GetBuyerData_Report] @FromDate,@ToDate,@Superior_Id,@Buyer_Id,@Status,@SentBy,
                     @pageLength,
                     @pageNo,
                     @searchParam";

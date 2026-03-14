@@ -64,6 +64,7 @@ export class PiListComponent implements OnInit {
   PITypeList: any[] = [
     { value: 2, text: 'LC' },
     { value: 1, text: 'Cash' },
+    { value: 3, text: 'Both' },
   ];
   first: any = 1;
   rows: any = 10;
@@ -324,7 +325,7 @@ export class PiListComponent implements OnInit {
 
           if (this.UserList.length === 1) {
             this.SearchFormgroup.controls['User_ID'].setValue(
-              this.UserList[0].User_ID
+              this.UserList[0].UserName
             );
           }
         } else if (results.msg == 'Invalid Token') {
@@ -347,6 +348,7 @@ export class PiListComponent implements OnInit {
     this.DataTable = [];
     this.isLoading = true;
 
+    console.log(permas);
     var getRole = '';
 
     getRole = this.gs.getSessionData('roleId');

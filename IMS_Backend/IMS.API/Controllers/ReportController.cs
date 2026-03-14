@@ -121,7 +121,7 @@ namespace IMS.API.Controllers
             {
                 var currentUser = HttpContext.User;
 
-                string reportPath = "BuyerReport\\";
+                string reportPath = "V2\\BuyerReport\\";
                 DataSet ds = await _reportService.BuyerReport(buyerReportParams);
 
                 if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)

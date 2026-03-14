@@ -11,7 +11,7 @@ namespace AccountingBackEnd.DAL.DTOs
         public string? FromDate { get; set; }
         public string? ToDate { get; set; }
         public string? Superior_Id { get; set; }
-        public string? Customer_Id { get; set; }
+        public string? Buyer_Id { get; set; }
         public string Status { get; set; }
         public string? SentBy { get; set; }
         public int PageLength { get; set; }

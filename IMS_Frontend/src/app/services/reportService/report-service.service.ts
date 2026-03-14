@@ -888,15 +888,12 @@ export class ReportService {
   PrintBuyerReport(report: any, rptType: any, isView: any) {
     console.log(report);
 
-    const fromDate = report.FromDateInput;
-    const toDate = report.ToDateInput;
-    const SuperioId = report.Superior_Id;
-    const CustomerId = report.Customer_Id;
-    const Status = report.Status;
-    const sentBy = report.User;
-
+    
+    report.rptType = rptType;
     const url = `${this.baseUrl}${this.apiController}/BuyerReport`;
     const token = this.gs.getSessionData('token');
+
+    const params = new HttpParams({ fromObject: report });
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -905,15 +902,7 @@ export class ReportService {
     this.http
       .get(url, {
         headers,
-        params: {
-          rptType,
-          fromDate,
-          toDate,
-          SuperioId,
-          CustomerId,
-          Status,
-          sentBy,
-        },
+        params: params,
         responseType: 'blob',
       })
       .subscribe(
