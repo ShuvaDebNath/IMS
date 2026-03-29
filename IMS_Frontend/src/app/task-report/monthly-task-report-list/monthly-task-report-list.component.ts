@@ -96,8 +96,9 @@ export class MonthlyTaskReportListComponent {
   }
   Search() {
     var finput = new Date();
-    var fromDate = this.SearchForm.value.fromDate;
-    var toDate = this.SearchForm.value.toDate;
+    
+    var fromDate = this.formatDateTime(this.SearchForm.value.fromDate);
+    var toDate = this.formatDateTime(this.SearchForm.value.toDate);
 
     let param = new GetDataModel();
     param.procedureName = '[usp_Task_Monthly_List]';
@@ -124,6 +125,20 @@ export class MonthlyTaskReportListComponent {
     });
   }
 
+  private formatDateTime(value: any): string | null {
+    if (!value) return null;
+    const d = new Date(value);
+    if (isNaN(d.getTime())) return null;
+
+    const dd = String(d.getDate()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const yyyy = d.getFullYear();
+    const HH = String(d.getHours()).padStart(2, '0');
+    const MM = String(d.getMinutes()).padStart(2, '0');
+    const SS = String(d.getSeconds()).padStart(2, '0');
+
+    return `${mm}-${dd}-${yyyy}`;
+  }
   DeleteData(item: any) {
     console.log(item);
 

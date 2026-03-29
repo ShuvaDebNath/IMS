@@ -105,13 +105,13 @@ export class GenerateTaskReportComponent {
     console.log(taskNo);
 
     this.taskForm = this.fb.group({
-      TaskNo: [taskNo, [Validators.required]],
+      TaskNo: ['', [Validators.required]],
       ToMail: ['', [Validators.required, Validators.email]],
       CcMail: [
         'lilya@sunshineinterlining.com',
         [Validators.required, Validators.email],
       ],
-      Date:[''],
+      Date: [''],
       items: this.fb.array([], { validators: [this.rowsCompleteValidator()] }),
     });
   }
@@ -146,9 +146,22 @@ export class GenerateTaskReportComponent {
     this.getDataService.GetInitialData(ProcedureData).subscribe({
       next: (results) => {
         if (results.status) {
+          console.log(JSON.parse(results.data));
+
           this.BuyerList = JSON.parse(results.data).Tables3;
           this.CustomerList = JSON.parse(results.data).Tables1;
           this.superiorId = JSON.parse(results.data).Tables2[0];
+
+          let has = this.activeLink.snapshot.queryParamMap.has('Id');
+          if (has) {
+            
+            this.isEdit = true;
+          } else {
+            this.isEdit = false;
+            this.taskForm.controls['TaskNo'].setValue(
+              JSON.parse(results.data).Tables4[0].TaskNo,
+            );
+          }
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
           this.gs.Logout();
@@ -362,13 +375,8 @@ export class GenerateTaskReportComponent {
             this.items.clear();
             this.taskForm.reset();
             var userName = window.localStorage.getItem('userName');
-            const yyyymmdd = new Date()
-              .toISOString()
-              .slice(0, 10)
-              .replace(/-/g, '');
 
-            var taskNo = yyyymmdd + '-' + userName;
-            this.taskForm.controls['TaskNo'].setValue(taskNo);
+            this.loadPageData();
             this.addItem();
           } else {
             swal.fire(
@@ -407,12 +415,28 @@ export class GenerateTaskReportComponent {
     // 1) Form -> DTO (typed)
     const fv = this.taskForm.value;
 
+    // const d = new Date(data[0].Date);
+
+    // const localDate =
+    //   d.getFullYear() +
+    //   '-' +
+    //   String(d.getMonth() + 1).padStart(2, '0') +
+    //   '-' +
+    //   String(d.getDate()).padStart(2, '0');
+
+    // const newLocalDate =
+    //   String(d.getDate()).padStart(2, '0') +
+    //   '/' +
+    //   String(d.getMonth() + 1).padStart(2, '0') +
+    //   '/' +
+    //   d.getFullYear();
+
     const masterRow = {
       Mail_TO: fv.ToMail,
       Mail_CC: fv.CcMail,
       User_ID: this.userId,
       Superior_ID: fv.superiorId,
-      Date: fv.Date,
+      Date: sqlDate,
       Task_Report_Code: fv.TaskNo,
     };
 
@@ -623,12 +647,22 @@ export class GenerateTaskReportComponent {
             '-' +
             String(d.getDate()).padStart(2, '0');
 
-            console.log(localDate);
-            
+          const newLocalDate =
+            String(d.getDate()).padStart(2, '0') +
+            '/' +
+            String(d.getMonth() + 1).padStart(2, '0') +
+            '/' +
+            d.getFullYear();
+
+          console.log(localDate);
+
+          console.log(data[0].Task_Report_Code);
+          
+
           this.taskForm.controls['ToMail'].setValue(data[0].Mail_TO);
           this.taskForm.controls['CcMail'].setValue(data[0].Mail_CC);
           this.taskForm.controls['TaskNo'].setValue(data[0].Task_Report_Code);
-          this.taskForm.controls['Date'].setValue(localDate);
+          this.taskForm.controls['Date'].setValue(newLocalDate);
 
           JSON.parse(results.data).Tables1.forEach((item: any) => {
             formArray.push(

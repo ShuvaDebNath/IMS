@@ -23,7 +23,7 @@ import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.ser
 @Component({
   selector: 'app-generate-monthly-task',
   templateUrl: './generate-monthly-task.component.html',
-  styleUrls: ['./generate-monthly-task.component.css']
+  styleUrls: ['./generate-monthly-task.component.css'],
 })
 export class GenerateMonthlyTaskComponent implements OnInit {
   taskForm!: FormGroup;
@@ -52,8 +52,8 @@ export class GenerateMonthlyTaskComponent implements OnInit {
   BuyerList: any[] = [];
   userId: any = '';
   superiorId: any = '';
-  fromDate:any;
-  toDate:any;
+  fromDate: any;
+  toDate: any;
 
   constructor(
     private fb: FormBuilder,
@@ -62,7 +62,7 @@ export class GenerateMonthlyTaskComponent implements OnInit {
     private gs: GlobalServiceService,
     private activeLink: ActivatedRoute,
     private title: Title,
-    private masterEntryService: MasterEntryService
+    private masterEntryService: MasterEntryService,
   ) {}
   ngOnInit(): void {
     this.userId = window.localStorage.getItem('userId') || '';
@@ -89,7 +89,7 @@ export class GenerateMonthlyTaskComponent implements OnInit {
     this.taskForm = this.fb.group({
       FromDate: [''],
       ToDate: [''],
-      TaskNo: [taskNo, [Validators.required]],
+      TaskNo: ['', [Validators.required]],
       Date: [''],
       items: this.fb.array([], { validators: [this.rowsCompleteValidator()] }),
     });
@@ -120,6 +120,17 @@ export class GenerateMonthlyTaskComponent implements OnInit {
         if (results.status) {
           //this.CustomerList = JSON.parse(results.data).Tables1;
           this.superiorId = JSON.parse(results.data).Tables2[0];
+          const has = this.activeLink.snapshot.queryParamMap.has('Id');
+          if (has) {
+            //this.TaskId = this.activeLink.snapshot.queryParams['Id'];
+            this.isEdit = true;
+            //this.getEditData();
+          } else {
+          this.taskForm.controls['TaskNo'].setValue(
+            JSON.parse(results.data).Tables4[0].TaskNo,
+          );
+            this.isEdit = false;
+          }
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
           this.gs.Logout();
@@ -213,7 +224,7 @@ export class GenerateMonthlyTaskComponent implements OnInit {
       swal.fire(
         'Validation Error',
         'Please fill all required fields.',
-        'warning'
+        'warning',
       );
       return;
     }
@@ -238,13 +249,12 @@ export class GenerateMonthlyTaskComponent implements OnInit {
       Task_Report_Code: fv.TaskNo,
     };
 
-    
     var index = 0;
     const detailRows = fv.items.map((i: any) => {
       index++;
       const custId = i.CustomerName ?? null;
       const cust = this.CustomerList?.find(
-        (c: any) => String(c.Customer_ID) === String(custId)
+        (c: any) => String(c.Customer_ID) === String(custId),
       );
 
       const customerDisplay = cust ? cust.CustomerName : '';
@@ -272,8 +282,6 @@ export class GenerateMonthlyTaskComponent implements OnInit {
       };
     });
 
-
-
     this.doubleMasterEntryService
       .SaveDataMasterDetails(
         detailRows, // fd (child rows)
@@ -283,7 +291,7 @@ export class GenerateMonthlyTaskComponent implements OnInit {
         'Task_Report_ID', // columnNamePrimary (PK)
         'Task_Report_ID', // columnNameForign (FK in child)
         'TR', // serialType (your code uses it)
-        'TR' // columnNameSerialNo (series name)
+        'TR', // columnNameSerialNo (series name)
       )
       .subscribe({
         next: (res: any) => {
@@ -293,18 +301,12 @@ export class GenerateMonthlyTaskComponent implements OnInit {
             this.taskForm.reset();
             this.addItem();
             var userName = window.localStorage.getItem('userName');
-            const yyyymmdd = new Date()
-              .toISOString()
-              .slice(0, 10)
-              .replace(/-/g, '');
-
-            var taskNo = yyyymmdd + '-' + userName;
-            this.taskForm.controls['TaskNo'].setValue(taskNo);
+            this.loadPageData();
           } else {
             swal.fire(
               'Task Update Failed',
               res?.message || 'Task update failed.',
-              'info'
+              'info',
             );
           }
         },
@@ -319,7 +321,7 @@ export class GenerateMonthlyTaskComponent implements OnInit {
       swal.fire(
         'Validation Error',
         'Please fill all required fields.',
-        'warning'
+        'warning',
       );
       return;
     }
@@ -340,7 +342,7 @@ export class GenerateMonthlyTaskComponent implements OnInit {
     const masterRow = {
       User_ID: this.userId,
       Superior_ID: fv.superiorId,
-      Date: fv.Date,
+      Date: sqlDate,
       Task_Report_Code: fv.TaskNo,
     };
 
@@ -350,10 +352,10 @@ export class GenerateMonthlyTaskComponent implements OnInit {
       // row can store the selected customer id in CustomerName control
       const custId = i.CustomerName ?? i.CustomerId ?? null;
       const cust = this.CustomerList?.find(
-        (c: any) => String(c.Customer_ID) === String(custId)
+        (c: any) => String(c.Customer_ID) === String(custId),
       );
       console.log(i);
-      
+
       const customerDisplay = cust ? cust.CustomerName : '';
       const Location = cust ? cust.Customer_Address : '';
       const customerPhone = cust ? cust.Phone_No : '';
@@ -388,15 +390,14 @@ export class GenerateMonthlyTaskComponent implements OnInit {
     const now = new Date();
     const ymd = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(
       2,
-      '0'
+      '0',
     )}${String(now.getDate()).padStart(2, '0')}`;
     const username = (localStorage.getItem('userName') || '').toString();
     var whereParam = {
       Task_Report_ID: this.TaskId,
     };
 
-    console.log((detailRows));
-    
+    console.log(detailRows);
 
     this.doubleMasterEntryService
       .UpdateDataMasterDetails(
@@ -408,7 +409,7 @@ export class GenerateMonthlyTaskComponent implements OnInit {
         'Task_Report_ID', // columnNameForign (FK in child)
         'TR', // serialType (your code uses it)
         'TR', // columnNameSerialNo (series name)
-        whereParam
+        whereParam,
       )
       .subscribe({
         next: (res: any) => {
@@ -418,7 +419,7 @@ export class GenerateMonthlyTaskComponent implements OnInit {
             swal.fire(
               'Task Update Failed',
               res?.message || 'Task update failed.',
-              'info'
+              'info',
             );
           }
         },
@@ -427,7 +428,6 @@ export class GenerateMonthlyTaskComponent implements OnInit {
         },
       });
   }
-
 
   /**
    * Parse an ISO-like timestamp (e.g. '2025-02-12T15:19:25') into a local Date.
@@ -441,7 +441,7 @@ export class GenerateMonthlyTaskComponent implements OnInit {
 
     // Primary match: ISO-like 'YYYY-MM-DDTHH:mm:ss' or 'YYYY-MM-DD HH:mm:ss'
     const isoMatch = s.match(
-      /^([0-9]{4})-([0-9]{2})-([0-9]{2})(?:[T\s]([0-9]{2}):([0-9]{2})(?::([0-9]{2}))?)?/
+      /^([0-9]{4})-([0-9]{2})-([0-9]{2})(?:[T\s]([0-9]{2}):([0-9]{2})(?::([0-9]{2}))?)?/,
     );
     if (isoMatch) {
       const year = Number(isoMatch[1]);
@@ -522,7 +522,7 @@ export class GenerateMonthlyTaskComponent implements OnInit {
         if (results.status) {
           var data = JSON.parse(results.data).Tables1;
           console.log(data);
-          
+
           const formArray = this.taskForm.get('items') as FormArray;
           formArray.clear();
           console.log(data, new Date(data[0].Date));
@@ -535,18 +535,32 @@ export class GenerateMonthlyTaskComponent implements OnInit {
             '-' +
             String(d.getDate()).padStart(2, '0');
 
+            const newLocalDate =
+            String(d.getDate()).padStart(2, '0') +
+            '/' +
+            String(d.getMonth() + 1).padStart(2, '0') +
+            '/' +
+            d.getFullYear();
+
           this.taskForm.controls['TaskNo'].setValue(data[0].Task_Report_Code);
-          this.taskForm.controls['Date'].setValue(
-            localDate
-          );
+          this.taskForm.controls['Date'].setValue(newLocalDate);
 
           JSON.parse(results.data).Tables1.forEach((item: any) => {
             // accept multiple possible server field names for team size and coerce to number
-            const teamSizeRaw = item.TeamSize ?? item.Team_Size ?? item.Team ?? item.teamSize ?? null;
-            const teamSize = teamSizeRaw != null && String(teamSizeRaw).trim() !== '' && !isNaN(Number(teamSizeRaw))
-              ? Number(teamSizeRaw)
-              : null;
-            const orderSeason = item.OrderSeason ?? item.Order_Season ?? item.Season ?? 'N/A';
+            const teamSizeRaw =
+              item.TeamSize ??
+              item.Team_Size ??
+              item.Team ??
+              item.teamSize ??
+              null;
+            const teamSize =
+              teamSizeRaw != null &&
+              String(teamSizeRaw).trim() !== '' &&
+              !isNaN(Number(teamSizeRaw))
+                ? Number(teamSizeRaw)
+                : null;
+            const orderSeason =
+              item.OrderSeason ?? item.Order_Season ?? item.Season ?? 'N/A';
 
             formArray.push(
               this.fb.group({
@@ -562,9 +576,11 @@ export class GenerateMonthlyTaskComponent implements OnInit {
                 OrderSummary: [item.OrderSummary ?? null],
                 CM_Summary: [item.CM_Summary ?? null],
                 Net_Sales_Summary: [item.Net_Sales_Summary ?? null],
-                SampleSummary: [item.SampleSummary ?? item.SampleSubmit ?? null],
+                SampleSummary: [
+                  item.SampleSummary ?? item.SampleSubmit ?? null,
+                ],
                 NewArticleSummary: [item.NewArticleSummary ?? null],
-              })
+              }),
             );
           });
         } else if (results.msg == 'Invalid Token') {
@@ -577,21 +593,20 @@ export class GenerateMonthlyTaskComponent implements OnInit {
     });
   }
 
-  loadCustomer(){
+  loadCustomer() {
     const fromDate = this.taskForm.get('FromDate')?.value;
     const toDate = this.taskForm.get('ToDate')?.value;
-    
+
     console.log('From Date:', fromDate);
     console.log('To Date:', toDate);
     console.log(this.userId);
-    
-    
+
     var ProcedureData = {
       procedureName: '[usp_Task_GetCustomer]',
       parameters: {
         FromDate: this.formatDateTime(fromDate),
         ToDate: this.formatDateTime(toDate),
-        UserId:this.userId
+        UserId: this.userId,
       },
     };
 
@@ -599,7 +614,7 @@ export class GenerateMonthlyTaskComponent implements OnInit {
       next: (results) => {
         if (results.status) {
           console.log(results.data);
-          
+
           this.CustomerList = JSON.parse(results.data).Tables1;
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
@@ -625,5 +640,4 @@ export class GenerateMonthlyTaskComponent implements OnInit {
 
     return `${mm}-${dd}-${yyyy}`;
   }
-
 }
