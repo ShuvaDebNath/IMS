@@ -105,7 +105,7 @@ export class GenerateTaskReportComponent {
     console.log(taskNo);
 
     this.taskForm = this.fb.group({
-      TaskNo: ['', [Validators.required]],
+      TaskNo: [taskNo, [Validators.required]],
       ToMail: ['', [Validators.required, Validators.email]],
       CcMail: [
         'lilya@sunshineinterlining.com',
@@ -152,16 +152,7 @@ export class GenerateTaskReportComponent {
           this.CustomerList = JSON.parse(results.data).Tables1;
           this.superiorId = JSON.parse(results.data).Tables2[0];
 
-          let has = this.activeLink.snapshot.queryParamMap.has('Id');
-          if (has) {
-            
-            this.isEdit = true;
-          } else {
-            this.isEdit = false;
-            this.taskForm.controls['TaskNo'].setValue(
-              JSON.parse(results.data).Tables4[0].TaskNo,
-            );
-          }
+          
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
           this.gs.Logout();
@@ -282,12 +273,20 @@ export class GenerateTaskReportComponent {
     // 1) Form -> DTO (typed)
     const fv = this.taskForm.value;
 
+    const nowTime = new Date();
+    const localISO = new Date(
+      nowTime.getTime() - nowTime.getTimezoneOffset() * 60000,
+    )
+      .toISOString()
+      .slice(0, 19)
+      .replace('T', ' ');
+
     const masterRow = {
       Mail_TO: fv.ToMail,
       Mail_CC: fv.CcMail,
       User_ID: this.userId,
       Superior_ID: fv.superiorId,
-      Date: new Date().toISOString(),
+      Date: localISO,
       Task_Report_Code: fv.TaskNo,
       MailBody: '',
       Subject: '',
@@ -657,7 +656,6 @@ export class GenerateTaskReportComponent {
           console.log(localDate);
 
           console.log(data[0].Task_Report_Code);
-          
 
           this.taskForm.controls['ToMail'].setValue(data[0].Mail_TO);
           this.taskForm.controls['CcMail'].setValue(data[0].Mail_CC);

@@ -351,9 +351,9 @@ export class GeneratePiComponent implements OnInit {
         'Quantity can not be greater than Delivered Quantity (' + dQty + ')',
         'info',
       );
-      itemrow.controls['Quantity'].setValue(0);
-      itemrow.controls['Total_Amount'].setValue(0);
-      itemrow.controls['TotalCommission'].setValue(0);
+      itemrow.controls['Quantity'].setValue(dQty);
+      itemrow.controls['Total_Amount'].setValue(dQty*rate.toFixed(2));
+      itemrow.controls['TotalCommission'].setValue(dQty*proCostUnti.toFixed(2));
     } else {
       itemrow.controls['Total_Amount'].setValue(qty * rate);
       itemrow.controls['TotalCommission'].setValue(qty * proCostUnti);
