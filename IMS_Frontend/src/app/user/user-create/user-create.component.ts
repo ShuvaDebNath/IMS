@@ -172,14 +172,16 @@ export class UserCreateComponent {
         swal.fire('info','User name already exist please choose diff username','error')
         return
       }
-      const isSupplierTruthy = this.Formgroup.value.IsSupplier === true || this.Formgroup.value.IsSupplier === 'True';
+      const isSupplierTruthy = this.Formgroup.value.IsSupplier === true || this.Formgroup.value.IsSupplier === 'true';
+      console.log(this.Formgroup.value.IsAuthorized);
+      
       var user: any = {
         UserName: this.Formgroup.value.UserName,
         Password: this.Formgroup.value.Password,
         Role_id: this.Formgroup.value.Role,
         Superior_ID: this.Formgroup.value.Superior,
         IsSupplier: isSupplierTruthy ? true : false,
-        IsAuthorized: this.Formgroup.value.IsAuthorized=='True' ? true : false,
+        IsAuthorized: this.Formgroup.value.IsAuthorized==true ? true : false,
         Email: this.Formgroup.value.Email
       }
       if (isSupplierTruthy && this.Formgroup.value.Supplier) {
@@ -239,7 +241,8 @@ export class UserCreateComponent {
         next: (results) => {
           if (results.status) {
             var tableData = JSON.parse(results.data).Tables1;
-  
+            console.log(tableData);
+            
             tableData.forEach((e: any) => {
 
               this.Formgroup.controls.UserName.setValue(e.UserName);
@@ -313,7 +316,7 @@ export class UserCreateComponent {
         Role_id: this.Formgroup.value.Role,
         Superior_ID: this.Formgroup.value.Superior,
         IsSupplier: isSupplierTruthy ? true : false,
-        IsAuthorized: this.Formgroup.value.IsAuthorized=='True' ? true : false,
+        IsAuthorized: this.Formgroup.value.IsAuthorized==true ? true : false,
         Email: this.Formgroup.value.Email,
         User_ID: this.Id
       }

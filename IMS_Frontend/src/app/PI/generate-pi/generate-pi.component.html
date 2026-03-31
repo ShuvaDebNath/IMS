@@ -1,30 +1,16 @@
 <div class="p-3 m-2 shadow-sm">
   <form name="PIForm" [formGroup]="Formgroup" role="form">
     <div class="card p-3">
-      <div
-        class="sticky-header d-flex align-items-center justify-content-between pt-4"
-      >
+      <div class="sticky-header d-flex align-items-center justify-content-between pt-4">
         <h1 class="fw-normal">Proforma Invoice</h1>
         <div class="float-right">
-          <button
-            *ngIf="tempPI=='' || tempPI==undefined"
-            class="btn btn-sm btn-pi-save mr-2"
-            (click)="Save()"
-            [disabled]="!Formgroup.valid"
-            style="width: 130px; height: 38px"
-          >
+          <button *ngIf="tempPI=='' || tempPI==undefined" class="btn btn-sm btn-pi-save mr-2" (click)="Save()"
+            [disabled]="!Formgroup.valid" style="width: 130px; height: 38px">
             <i class="fas fa-save"></i>&nbsp;Save
           </button>
-          <button
-            class="btn btn-sm btn-pi-refresh"
-            (click)="RefrashDDL()"
-            style="width: 130px; height: 38px"
-          
-            *ngIf="tempPI!='' && tempPI!=undefined"
-            class="btn btn-sm btn-pi-save mr-2"
-            (click)="Update()"
-            [disabled]="!Formgroup.valid"
-          >
+          <button class="btn btn-sm btn-pi-refresh" (click)="RefrashDDL()" style="width: 130px; height: 38px"
+            *ngIf="tempPI!='' && tempPI!=undefined" class="btn btn-sm btn-pi-save mr-2" (click)="Update()"
+            [disabled]="!Formgroup.valid">
             <i class="fas fa-save"></i>&nbsp;Update
           </button>
           <button class="btn btn-sm btn-pi-refresh" (click)="RefrashDDL()">
@@ -34,56 +20,40 @@
       </div>
       <hr />
       <div class="card-body">
-  
+
         <!-- Consignee Initial -->
         <div class="row mb-1">
           <div class="col-md-4">
             <div class="row g-1 align-items-start">
               <div class="col-3">
-                <label class="mb-0"
-                  >Consignee <br />
-                  Initial</label
-                >
+                <label class="mb-0">Consignee <br />
+                  Initial</label>
               </div>
               <div class="col-7">
-                <input
-                  type="text"
-                  class="form-control form-control-sm"
-                  formControlName="Consignee_Initial"
-                  [style]="{
+                <input type="text" class="form-control form-control-sm" formControlName="Consignee_Initial"
+                  (input)="toUppercase('Consignee_Initial')" [style]="{
                     width: '70%',
                     borderRadius: '5px',
                     height: '38px',
                     padding: '5px 10px',
-                  }"
-                />
-                <div
-                  *ngIf="
+                  }" />
+                <div *ngIf="
                     Formgroup.get('Consignee_Initial')?.touched &&
                     Formgroup.get('Consignee_Initial')?.invalid
-                  "
-                  class="text-danger"
-                  style="font-size: 0.8rem; margin-top: 2px"
-                >
-                  <div
-                    *ngIf="
+                  " class="text-danger" style="font-size: 0.8rem; margin-top: 2px">
+                  <div *ngIf="
                       Formgroup.get('Consignee_Initial')?.errors?.['required']
-                    "
-                  >
+                    ">
                     Consignee Initial is required.
                   </div>
-                  <div
-                    *ngIf="
+                  <div *ngIf="
                       Formgroup.get('Consignee_Initial')?.errors?.['minlength']
-                    "
-                  >
+                    ">
                     Consignee Initial must be 3 characters.
                   </div>
-                  <div
-                    *ngIf="
+                  <div *ngIf="
                       Formgroup.get('Consignee_Initial')?.errors?.['maxlength']
-                    "
-                  >
+                    ">
                     Consignee Initial cannot exceed 3 characters.
                   </div>
                 </div>
@@ -100,16 +70,11 @@
                 <label class="mb-0">PI No</label>
               </div>
               <div class="col-7">
-                <input
-                  type="text"
-                  class="form-control form-control-sm"
-                  formControlName="PINo"
-                  [style]="{
+                <input type="text" class="form-control form-control-sm" formControlName="PINo" [style]="{
                     borderRadius: '5px',
                     height: '38px',
                     padding: '5px 10px',
-                  }"
-                />
+                  }" />
               </div>
             </div>
           </div>
@@ -123,17 +88,11 @@
                 <label class="mb-0">Date</label>
               </div>
               <div class="col-7">
-                <input
-                  type="text"
-                  class="form-control form-control-sm"
-                  formControlName="Date"
-                  readonly
-                  [style]="{
+                <input type="text" class="form-control form-control-sm" formControlName="Date" readonly [style]="{
                     borderRadius: '5px',
                     height: '38px',
                     padding: '5px 10px',
-                  }"
-                />
+                  }" />
               </div>
             </div>
           </div>
@@ -150,18 +109,10 @@
                 <label class="mb-0">Shippeer</label>
               </div>
               <div class="col-7">
-                <p-dropdown
-                  [options]="ShipperList"
-                  formControlName="Beneficiary_Account_ID"
-                  optionLabel="CompanyName"
-                  optionValue="Beneficiary_Account_ID"
-                  [filter]="true"
-                  filterBy="CompanyName"
-                  [showClear]="true"
-                  panelStyleClass="my-dropdown-panel"
-                  [style]="{ width: '100%' }"
-                  placeholder="Select a Shippeer"
-                ></p-dropdown>
+                <p-dropdown [options]="ShipperList" formControlName="Beneficiary_Account_ID" optionLabel="CompanyName"
+                  optionValue="Beneficiary_Account_ID" [filter]="true" filterBy="CompanyName" [showClear]="true"
+                  panelStyleClass="my-dropdown-panel" [style]="{ width: '100%' }"
+                  placeholder="Select a Shippeer"></p-dropdown>
               </div>
             </div>
           </div>
@@ -170,24 +121,14 @@
           <div class="col-md-4">
             <div class="row g-1 align-items-start">
               <div class="col-3">
-                <label class="mb-0"
-                  >Beneficiary's <br />
-                  Bank</label
-                >
+                <label class="mb-0">Beneficiary's <br />
+                  Bank</label>
               </div>
               <div class="col-7">
-                <p-dropdown
-                  [options]="BenificaryBankList"
-                  formControlName="Beneficiary_Bank_ID"
-                  optionLabel="BankInfo"
-                  optionValue="Beneficiary_Bank_ID"
-                  [filter]="true"
-                  filterBy="BankInfo"
-                  [showClear]="true"
-                  panelStyleClass="my-dropdown-panel"
-                  [style]="{ width: '100%' }"
-                  placeholder="Select a Beneficiary's Bank"
-                >
+                <p-dropdown [options]="BenificaryBankList" formControlName="Beneficiary_Bank_ID" optionLabel="BankInfo"
+                  optionValue="Beneficiary_Bank_ID" [filter]="true" filterBy="BankInfo" [showClear]="true"
+                  panelStyleClass="my-dropdown-panel" [style]="{ width: '100%' }"
+                  placeholder="Select a Beneficiary's Bank">
                 </p-dropdown>
               </div>
             </div>
@@ -197,23 +138,13 @@
           <div class="col-md-4">
             <div class="row g-1 align-items-start">
               <div class="col-3">
-                <label class="mb-0"
-                  >Country of <br />
-                  Origin</label
-                >
+                <label class="mb-0">Country of <br />
+                  Origin</label>
               </div>
               <div class="col-7">
-                <p-dropdown
-                  [options]="CountryList"
-                  formControlName="Country_Of_Orgin_ID"
-                  optionLabel="Country"
-                  optionValue="Country_ID"
-                  [filter]="true"
-                  filterBy="Country"
-                  [showClear]="true"
-                  [style]="{ width: '100%' }"
-                  placeholder="Select a Country"
-                >
+                <p-dropdown [options]="CountryList" formControlName="Country_Of_Orgin_ID" optionLabel="Country"
+                  optionValue="Country_ID" [filter]="true" filterBy="Country" [showClear]="true"
+                  [style]="{ width: '100%' }" placeholder="Select a Country">
                 </p-dropdown>
               </div>
             </div>
@@ -229,17 +160,9 @@
                 <label class="mb-0">Packing</label>
               </div>
               <div class="col-7">
-                <p-dropdown
-                  [options]="PackingList"
-                  formControlName="Packing_ID"
-                  optionLabel="Mode"
-                  optionValue="Packing_ID"
-                  [filter]="true"
-                  filterBy="Mode"
-                  [showClear]="true"
-                  [style]="{ width: '100%' }"
-                  placeholder="Select a Packing"
-                >
+                <p-dropdown [options]="PackingList" formControlName="Packing_ID" optionLabel="Mode"
+                  optionValue="Packing_ID" [filter]="true" filterBy="Mode" [showClear]="true"
+                  [style]="{ width: '100%' }" placeholder="Select a Packing">
                 </p-dropdown>
               </div>
             </div>
@@ -249,23 +172,13 @@
           <div class="col-md-4">
             <div class="row g-1 align-items-start">
               <div class="col-3">
-                <label class="mb-0"
-                  >Loading <br />
-                  Mode</label
-                >
+                <label class="mb-0">Loading <br />
+                  Mode</label>
               </div>
               <div class="col-7">
-                <p-dropdown
-                  [options]="LoadingModeList"
-                  formControlName="Loading_Mode_ID"
-                  optionLabel="Details"
-                  optionValue="Loading_Mode_ID"
-                  [filter]="true"
-                  filterBy="Details"
-                  [showClear]="true"
-                  [style]="{ width: '100%' }"
-                  placeholder="Select a Loading Mode"
-                >
+                <p-dropdown [options]="LoadingModeList" formControlName="Loading_Mode_ID" optionLabel="Details"
+                  optionValue="Loading_Mode_ID" [filter]="true" filterBy="Details" [showClear]="true"
+                  [style]="{ width: '100%' }" placeholder="Select a Loading Mode">
                 </p-dropdown>
               </div>
             </div>
@@ -275,23 +188,13 @@
           <div class="col-md-4">
             <div class="row g-1 align-items-start">
               <div class="col-3">
-                <label class="mb-0"
-                  >Payment <br />
-                  Mode</label
-                >
+                <label class="mb-0">Payment <br />
+                  Mode</label>
               </div>
               <div class="col-7">
-                <p-dropdown
-                  [options]="PaymentModeList"
-                  formControlName="Payment_Term_ID"
-                  optionLabel="Mode"
-                  optionValue="Payment_Term_ID"
-                  [filter]="true"
-                  filterBy="Mode"
-                  [showClear]="true"
-                  [style]="{ width: '100%' }"
-                  placeholder="Select a Payment Mode"
-                >
+                <p-dropdown [options]="PaymentModeList" formControlName="Payment_Term_ID" optionLabel="Mode"
+                  optionValue="Payment_Term_ID" [filter]="true" filterBy="Mode" [showClear]="true"
+                  [style]="{ width: '100%' }" placeholder="Select a Payment Mode">
                 </p-dropdown>
               </div>
             </div>
@@ -307,20 +210,10 @@
                 <label class="mb-0">Consignee</label>
               </div>
               <div class="col-7">
-                <p-dropdown
-                  [options]="ConsigneeList"
-                  formControlName="Customer_ID"
-                  optionLabel="CustomerName"
-                  optionValue="Customer_ID"
-                  [filter]="true"
-                  filterBy="CustomerName"
-                  [showClear]="true"
-                  panelStyleClass="my-dropdown-panel"
-                  [virtualScroll]="true"
-                  [itemSize]="30"
-                  [style]="{ width: '100%' }"
-                  placeholder="Select a Consignee"
-                >
+                <p-dropdown [options]="ConsigneeList" formControlName="Customer_ID" optionLabel="CustomerName"
+                  optionValue="Customer_ID" [filter]="true" filterBy="CustomerName" [showClear]="true"
+                  panelStyleClass="my-dropdown-panel" [virtualScroll]="true" [itemSize]="30" [style]="{ width: '100%' }"
+                  placeholder="Select a Consignee">
                 </p-dropdown>
               </div>
             </div>
@@ -330,24 +223,17 @@
           <div class="col-md-4">
             <div class="row g-1 align-items-start">
               <div class="col-3">
-                <label class="mb-0"
-                  >Contact <br />
-                  Person</label
-                >
+                <label class="mb-0">Contact <br />
+                  Person</label>
               </div>
               <div class="col-7">
-                <input
-                  type="text"
-                  class="form-control form-control-sm"
-                  placeholder="Contact Person"
-                  formControlName="Contact_Person"
-                  style="
+                <input type="text" class="form-control form-control-sm" placeholder="Contact Person"
+                  formControlName="Contact_Person" style="
                     width: 100%;
                     height: 42px;
                     border-radius: 5px;
                     padding: 5px 10px;
-                  "
-                />
+                  " />
               </div>
             </div>
           </div>
@@ -356,23 +242,14 @@
           <div class="col-md-4">
             <div class="row g-1 align-items-start">
               <div class="col-3">
-                <label class="mb-0"
-                  >Applicant <br />
-                  Bank</label
-                >
+                <label class="mb-0">Applicant <br />
+                  Bank</label>
               </div>
               <div class="col-7">
-                <p-dropdown
-                  [options]="ApplicantBankList"
-                  formControlName="Customer_Bank_ID"
-                  optionLabel="CustomerBankDetails"
-                  optionValue="Applicant_Bank_ID"
-                  [filter]="true"
-                  filterBy="CustomerBankDetails"
-                  [showClear]="true"
-                  [style]="{ width: '100%' }"
-                  placeholder="Select a Bank"
-                >
+                <p-dropdown [options]="ApplicantBankList" formControlName="Customer_Bank_ID"
+                  optionLabel="CustomerBankDetails" optionValue="Applicant_Bank_ID" [filter]="true"
+                  filterBy="CustomerBankDetails" [showClear]="true" [style]="{ width: '100%' }"
+                  placeholder="Select a Bank">
                 </p-dropdown>
               </div>
             </div>
@@ -388,18 +265,13 @@
                 <label class="mb-0">Buyer Name</label>
               </div>
               <div class="col-7">
-                <input
-                  type="text"
-                  class="form-control form-control-sm"
-                  placeholder="Buyer Name"
-                  formControlName="Buyer_Name"
-                  style="
+                <input type="text" class="form-control form-control-sm" placeholder="Buyer Name"
+                  formControlName="Buyer_Name" style="
                     width: 100%;
                     height: 42px;
                     border-radius: 5px;
                     padding: 5px 10px;
-                  "
-                />
+                  " />
               </div>
             </div>
           </div>
@@ -408,20 +280,13 @@
           <div class="col-md-4">
             <div class="row g-1 align-items-start">
               <div class="col-3">
-                <label class="mb-0 mr-2"
-                  >Is Buying <br />
+                <label class="mb-0 mr-2">Is Buying <br />
                   House <br />
-                  Order?</label
-                >
+                  Order?</label>
               </div>
               <div class="col-7">
-                <p-checkbox
-                  inputId="IsBuyerMandatory"
-                  name="IsBuyerMandatory"
-                  [binary]="true"
-                  formControlName="IsBuyerMandatory"
-                  [style]="{ width: '100%' }"
-                ></p-checkbox>
+                <p-checkbox inputId="IsBuyerMandatory" name="IsBuyerMandatory" [binary]="true"
+                  formControlName="IsBuyerMandatory" [style]="{ width: '100%' }"></p-checkbox>
               </div>
             </div>
           </div>
@@ -430,23 +295,13 @@
           <div class="col-md-4">
             <div class="row g-1 align-items-start">
               <div class="col-3">
-                <label class="mb-0"
-                  >Buying <br />
-                  House</label
-                >
+                <label class="mb-0">Buying <br />
+                  House</label>
               </div>
               <div class="col-7">
-                <p-dropdown
-                  [options]="BuyingHouseList"
-                  formControlName="Buyer_ID"
-                  optionLabel="Buyer_Name"
-                  optionValue="Id"
-                  [filter]="true"
-                  filterBy="Buyer_Name"
-                  [showClear]="true"
-                  [style]="{ width: '100%' }"
-                  placeholder="Select a Buying House"
-                >
+                <p-dropdown [options]="BuyingHouseList" formControlName="Buyer_ID" optionLabel="Buyer_Name"
+                  optionValue="Id" [filter]="true" filterBy="Buyer_Name" [showClear]="true" [style]="{ width: '100%' }"
+                  placeholder="Select a Buying House">
                 </p-dropdown>
               </div>
             </div>
@@ -459,18 +314,12 @@
           <div class="col-md-4">
             <div class="row g-1 align-items-start">
               <div class="col-3">
-                <label class="mb-1"
-                  >Delivery <br />
-                  Address</label
-                >
+                <label class="mb-1">Delivery <br />
+                  Address</label>
               </div>
 
               <div class="col-7">
-                <textarea
-                  class="form-control form-control-sm"
-                  rows="3"
-                  formControlName="Delivery_Address"
-                ></textarea>
+                <textarea class="form-control form-control-sm" rows="3" formControlName="Delivery_Address"></textarea>
               </div>
             </div>
           </div>
@@ -482,11 +331,7 @@
                 <label class="mb-1">Style</label>
               </div>
               <div class="col-7">
-                <textarea
-                  class="form-control form-control-sm"
-                  rows="3"
-                  formControlName="Style"
-                ></textarea>
+                <textarea class="form-control form-control-sm" rows="3" formControlName="Style"></textarea>
               </div>
             </div>
           </div>
@@ -495,18 +340,12 @@
           <div class="col-md-4">
             <div class="row g-1 align-items-start">
               <div class="col-3">
-                <label class="mb-1"
-                  >Goods <br />
-                  Description</label
-                >
+                <label class="mb-1">Goods <br />
+                  Description</label>
               </div>
 
               <div class="col-7">
-                <textarea
-                  class="form-control form-control-sm"
-                  rows="3"
-                  formControlName="Good_Description"
-                ></textarea>
+                <textarea class="form-control form-control-sm" rows="3" formControlName="Good_Description"></textarea>
               </div>
             </div>
           </div>
@@ -528,15 +367,9 @@
                   class="form-control"
                   style="height: 42px; border-radius: 5px; padding: 5px 10px"
                 /> -->
-                <p-calendar
-                  formControlName="ExpireDate"
-                  [showIcon]="false"
-                  dateFormat="dd/mm/yy"
-                  placeholder="Select Date"
-                  class="w-100"
-                  [style]="{ width: '100%' }"
-                  inputStyleClass="form-control custom-date-input"
-                ></p-calendar>
+                <p-calendar formControlName="ExpireDate" [showIcon]="false" dateFormat="dd/mm/yy"
+                  placeholder="Select Date" class="w-100" [style]="{ width: '100%' }"
+                  inputStyleClass="form-control custom-date-input"></p-calendar>
               </div>
             </div>
           </div>
@@ -545,24 +378,14 @@
           <div class="col-md-4">
             <div class="row g-1 align-items-start">
               <div class="col-3">
-                <label class="mb-1"
-                  >Terms <br />
+                <label class="mb-1">Terms <br />
                   of <br />
-                  Delivery</label
-                >
+                  Delivery</label>
               </div>
               <div class="col-7">
-                <p-dropdown
-                  [options]="TermsofDeliveryList"
-                  formControlName="Terms_of_Delivery_ID"
-                  optionLabel="Details"
-                  optionValue="Id"
-                  [filter]="true"
-                  filterBy="Details"
-                  [showClear]="true"
-                  [style]="{ width: '100%' }"
-                  placeholder="Select Terms of Delivery"
-                >
+                <p-dropdown [options]="TermsofDeliveryList" formControlName="Terms_of_Delivery_ID" optionLabel="Details"
+                  optionValue="Id" [filter]="true" filterBy="Details" [showClear]="true" [style]="{ width: '100%' }"
+                  placeholder="Select Terms of Delivery">
                 </p-dropdown>
               </div>
             </div>
@@ -826,381 +649,221 @@
           </table>
         </div> -->
 
-        <div class="table-responsive"
-          style="
+        <div class="table-responsive" style="
             max-height: 700px;
             overflow-y: auto;
             border: 1px solid #dee2e6;
             border-radius: 4px;
-          "
-        >
-          <table
-            class="table table-sm table-bordered table-striped"
-            style="min-width: 3000px; margin-bottom: 0"
-          >
-            <thead
-              class="custom-header"
-              style="
+          ">
+          <table class="table table-sm table-bordered table-striped" style="min-width: 3000px; margin-bottom: 0">
+            <thead class="custom-header" style="
                 position: sticky;
                 top: 0;
                 background: white;
                 z-index: 10;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-              "
-            >
+              ">
               <tr>
-                <th
-                  class="text-center align-middle sticky-table-column"
-                  style="
+                <th class="text-center align-middle sticky-table-column" style="
                     width: 70px;
                     min-width: 70px;
                     max-width: 70px;
                     background: #f8f9fa;
                     font-weight: 600;
-                  "
-                >
-                  <button
-                    class="btn btn-sm theme-btn"
-                    (click)="Addrow()"
-                    type="button"
-                    style="padding: 4px 8px"
-                  >
+                  ">
+                  <button class="btn btn-sm theme-btn" (click)="Addrow()" type="button" style="padding: 4px 8px">
                     <i class="fas fa-plus"></i> Add
                   </button>
                 </th>
-                <th
-                  class="text-center align-middle"
-                  style="
+                <th class="text-center align-middle" style="
                     width: 150px;
                     min-width: 150px;
                     background: #f8f9fa;
                     font-weight: 600;
-                  "
-                >
+                  ">
                   Article No
                 </th>
-                <th
-                  class="text-center align-middle"
-                  style="
+                <th class="text-center align-middle" style="
                     width: 250px;
                     min-width: 250px;
                     background: #f8f9fa;
                     font-weight: 600;
-                  "
-                >
+                  ">
                   Description
                 </th>
-                <th
-                  class="text-center align-middle"
-                  style="
+                <th class="text-center align-middle" style="
                     width: 120px;
                     min-width: 120px;
                     background: #f8f9fa;
                     font-weight: 600;
-                  "
-                >
+                  ">
                   Width
                 </th>
-                <th
-                  class="text-center align-middle"
-                  style="
+                <th class="text-center align-middle" style="
                     width: 120px;
                     min-width: 120px;
                     background: #f8f9fa;
                     font-weight: 600;
-                  "
-                >
+                  ">
                   Color
                 </th>
-                <th
-                  class="text-center align-middle"
-                  style="
+                <th class="text-center align-middle" style="
                     width: 130px;
                     min-width: 130px;
                     background: #f8f9fa;
                     font-weight: 600;
-                  "
-                >
+                  ">
                   Packaging
                 </th>
-                <th
-                  class="text-center align-middle"
-                  style="
+                <th class="text-center align-middle" style="
                     width: 150px;
                     min-width: 150px;
                     background: #f8f9fa;
                     font-weight: 600;
-                  "
-                >
+                  ">
                   Qty
                 </th>
-                <th
-                  class="text-center align-middle"
-                  style="
+                <th class="text-center align-middle" style="
                     width: 120px;
                     min-width: 120px;
                     background: #f8f9fa;
                     font-weight: 600;
-                  "
-                >
+                  ">
                   Unit
                 </th>
-                <th
-                  class="text-center align-middle"
-                  style="
+                <th class="text-center align-middle" style="
                     width: 160px;
                     min-width: 160px;
                     background: #f8f9fa;
                     font-weight: 600;
-                  "
-                >
+                  ">
                   Unit Price ($)
                 </th>
-                <th
-                  class="text-center align-middle"
-                  style="
+                <th class="text-center align-middle" style="
                     width: 160px;
                     min-width: 160px;
                     background: #f8f9fa;
                     font-weight: 600;
-                  "
-                >
+                  ">
                   Total Amount ($)
                 </th>
-                <th
-                  class="text-center align-middle"
-                  style="
+                <th class="text-center align-middle" style="
                     width: 160px;
                     min-width: 160px;
                     background: #f8f9fa;
                     font-weight: 600;
-                  "
-                >
+                  ">
                   Prod. Cost Unit
                 </th>
-                <th
-                  class="text-center align-middle"
-                  style="
+                <th class="text-center align-middle" style="
                     width: 160px;
                     min-width: 160px;
                     background: #f8f9fa;
                     font-weight: 600;
-                  "
-                >
+                  ">
                   Total Prod. Cost
                 </th>
-                <th
-                  class="text-center align-middle"
-                  style="
+                <th class="text-center align-middle" style="
                     width: 150px;
                     min-width: 150px;
                     background: #f8f9fa;
                     font-weight: 600;
-                  "
-                >
+                  ">
                   A. A.
                 </th>
               </tr>
             </thead>
             <tbody formArrayName="ItemArray">
               <ng-container *ngIf="Formgroup.controls.ItemArray != null">
-                <tr
-                  *ngFor="let itemrow of getControls(); let i = index"
-                  [formGroupName]="i"
-                  style="border-bottom: 1px solid #dee2e6"
-                >
-                  <td
-                    class="sticky-table-column align-middle text-center"
-                    style="
+                <tr *ngFor="let itemrow of getControls(); let i = index" [formGroupName]="i"
+                  style="border-bottom: 1px solid #dee2e6">
+                  <td class="sticky-table-column align-middle text-center" style="
                       width: 70px;
                       min-width: 70px;
                       max-width: 70px;
                       background: white;
-                    "
-                  >
-                    <button
-                      class="btn btn-sm btn-danger"
-                      (click)="DeleteRow(i)"
-                      type="button"
-                      style="padding: 4px 8px"
-                    >
+                    ">
+                    <button class="btn btn-sm btn-danger" (click)="DeleteRow(i)" type="button" style="padding: 4px 8px">
                       <i class="fas fa-times"></i>
                     </button>
                   </td>
 
-                  <td
-                    class="align-middle"
-                    style="width: 150px; min-width: 150px"
-                  >
-                    <input
-                      style="
+                  <td class="align-middle" style="width: 150px; min-width: 150px">
+                    <input style="
                         width: 100%;
                         height: 52px;
                         padding: 8px 12px;
                         font-size: 14px;
-                      "
-                      formControlName="Article"
-                      type="text"
-                      class="form-control form-control-sm"
-                      placeholder="Enter Article No"
-                      id="ArticleNo"
-                      name="ArticleNo"
-                    />
+                      " formControlName="Article" type="text" class="form-control form-control-sm"
+                      placeholder="Enter Article No" id="ArticleNo" name="ArticleNo" />
                   </td>
 
-                  <td
-                    class="align-middle"
-                    style="width: 250px; min-width: 250px"
-                  >
-                    <p-dropdown
-                      formControlName="Description"
-                      [options]="DescriptionList"
-                      optionLabel="Details"
-                      optionValue="Details"
-                      [filter]="true"
-                      filterBy="Details"
-                      [showClear]="true"
-                      appendTo="body"
-                      panelStyleClass="description-panel"
-                      [style]="{ width: '100%', height: '52px' }"
-                      placeholder="Select Description"
-                      styleClass="table-dropdown w-100"
-                    >
+                  <td class="align-middle" style="width: 250px; min-width: 250px">
+                    <p-dropdown formControlName="Description" [options]="DescriptionList" optionLabel="Details"
+                      optionValue="Details" [filter]="true" filterBy="Details" [showClear]="true" appendTo="body"
+                      panelStyleClass="description-panel" [style]="{ width: '100%', height: '52px' }"
+                      placeholder="Select Description" styleClass="table-dropdown w-100">
                     </p-dropdown>
                   </td>
 
-                  <td
-                    class="align-middle"
-                    style="width: 120px; min-width: 120px"
-                  >
-                    <p-dropdown
-                      formControlName="Width_ID"
-                      [options]="WidthList"
-                      optionLabel="Measurement"
-                      optionValue="Width_ID"
-                      [filter]="true"
-                      filterBy="Measurement"
-                      [showClear]="true"
-                      appendTo="body"
-                      panelStyleClass="description-panel"
-                      [style]="{ width: '100%', height: '52px' }"
-                      placeholder="Select Width"
-                    >
+                  <td class="align-middle" style="width: 120px; min-width: 120px">
+                    <p-dropdown formControlName="Width_ID" [options]="WidthList" optionLabel="Measurement"
+                      optionValue="Width_ID" [filter]="true" filterBy="Measurement" [showClear]="true" appendTo="body"
+                      panelStyleClass="description-panel" [style]="{ width: '100%', height: '52px' }"
+                      placeholder="Select Width">
                     </p-dropdown>
                   </td>
 
-                  <td
-                    class="align-middle"
-                    style="width: 120px; min-width: 120px"
-                  >
-                    <p-dropdown
-                      formControlName="Color_ID"
-                      [options]="ColorList"
-                      optionLabel="Color"
-                      optionValue="Color_ID"
-                      [filter]="true"
-                      filterBy="Color"
-                      [showClear]="true"
-                      appendTo="body"
-                      panelStyleClass="description-panel"
-                      [style]="{ width: '100%', height: '52px' }"
-                      placeholder="Select Color"
-                    >
+                  <td class="align-middle" style="width: 120px; min-width: 120px">
+                    <p-dropdown formControlName="Color_ID" [options]="ColorList" optionLabel="Color"
+                      optionValue="Color_ID" [filter]="true" filterBy="Color" [showClear]="true" appendTo="body"
+                      panelStyleClass="description-panel" [style]="{ width: '100%', height: '52px' }"
+                      placeholder="Select Color">
                     </p-dropdown>
                   </td>
 
-                  <td
-                    class="align-middle"
-                    style="width: 130px; min-width: 130px"
-                  >
-                    <p-dropdown
-                      formControlName="Packaging_ID"
-                      [options]="PackagingList"
-                      optionLabel="Packaging"
-                      optionValue="Packaging_ID"
-                      [filter]="true"
-                      filterBy="Packaging"
-                      [showClear]="true"
-                      appendTo="body"
-                      panelStyleClass="description-panel"
-                      [style]="{ width: '100%', height: '52px' }"
-                      placeholder="Select Packaging"
-                    >
+                  <td class="align-middle" style="width: 130px; min-width: 130px">
+                    <p-dropdown formControlName="Packaging_ID" [options]="PackagingList" optionLabel="Packaging"
+                      optionValue="Packaging_ID" [filter]="true" filterBy="Packaging" [showClear]="true" appendTo="body"
+                      panelStyleClass="description-panel" [style]="{ width: '100%', height: '52px' }"
+                      placeholder="Select Packaging">
                     </p-dropdown>
                   </td>
 
-                  <td
-                    class="align-middle"
-                    style="width: 150px; min-width: 150px"
-                  >
-                    <input
-                      style="
+                  <td class="align-middle" style="width: 150px; min-width: 150px">
+                    <input style="
                         width: 100%;
                         height: 52px;
                         padding: 8px 12px;
                         font-size: 14px;
                         text-align: right;
                         font-weight: 500;
-                      "
-                      (change)="calculateAmount(itemrow)"
-                      formControlName="Quantity"
-                      type="number"
-                      class="form-control form-control-sm"
-                      placeholder="Enter Quantity"
-                      id="Qty"
-                      name="Qty"
-                    />
+                      " (change)="calculateAmount(itemrow)" formControlName="Quantity" type="number"
+                      class="form-control form-control-sm" placeholder="Enter Quantity" id="Qty" name="Qty" />
                   </td>
 
-                  <td
-                    class="align-middle"
-                    style="width: 120px; min-width: 120px"
-                  >
-                    <p-dropdown
-                      formControlName="Unit_ID"
-                      [options]="UnitList"
-                      optionLabel="Unit"
-                      optionValue="Unit_ID"
-                      [filter]="true"
-                      filterBy="Unit"
-                      [showClear]="true"
-                      appendTo="body"
-                      panelStyleClass="description-panel"
-                      [style]="{ width: '100%', height: '52px' }"
-                      placeholder="Select Unit"
-                    >
+                  <td class="align-middle" style="width: 120px; min-width: 120px">
+                    <p-dropdown formControlName="Unit_ID" [options]="UnitList" optionLabel="Unit" optionValue="Unit_ID"
+                      [filter]="true" filterBy="Unit" [showClear]="true" appendTo="body"
+                      panelStyleClass="description-panel" [style]="{ width: '100%', height: '52px' }"
+                      placeholder="Select Unit">
                     </p-dropdown>
                   </td>
 
-                  <td
-                    class="align-middle"
-                    style="width: 160px; min-width: 160px"
-                  >
-                    <input
-                      style="
+                  <td class="align-middle" style="width: 160px; min-width: 160px">
+                    <input style="
                         width: 100%;
                         height: 52px;
                         padding: 8px 12px;
                         font-size: 14px;
                         text-align: right;
                         font-weight: 500;
-                      "
-                      (change)="calculateAmount(itemrow)"
-                      formControlName="Unit_Price"
-                      type="number"
-                      class="form-control form-control-sm"
-                      placeholder="Enter Unit Price"
-                      id="Rate"
-                      name="Rate"
-                    />
+                      " (change)="calculateAmount(itemrow)" formControlName="Unit_Price" type="number"
+                      class="form-control form-control-sm" placeholder="Enter Unit Price" id="Rate" name="Rate" />
                   </td>
 
-                  <td
-                    class="align-middle"
-                    style="width: 160px; min-width: 160px"
-                  >
-                    <input
-                      style="
+                  <td class="align-middle" style="width: 160px; min-width: 160px">
+                    <input style="
                         width: 100%;
                         height: 52px;
                         padding: 8px 12px;
@@ -1209,45 +872,24 @@
                         font-weight: 600;
                         background-color: #f0f9ff;
                         border: 1px solid #b8daff;
-                      "
-                      formControlName="Total_Amount"
-                      readonly="readOnly"
-                      type="number"
-                      class="form-control form-control-sm"
-                      placeholder="Total Amount"
-                      id="Amount"
-                      name="Amount"
-                    />
+                      " formControlName="Total_Amount" readonly="readOnly" type="number"
+                      class="form-control form-control-sm" placeholder="Total Amount" id="Amount" name="Amount" />
                   </td>
 
-                  <td
-                    class="align-middle"
-                    style="width: 160px; min-width: 160px"
-                  >
-                    <input
-                      style="
+                  <td class="align-middle" style="width: 160px; min-width: 160px">
+                    <input style="
                         width: 100%;
                         height: 52px;
                         padding: 8px 12px;
                         font-size: 14px;
                         text-align: right;
-                      "
-                      (change)="calculateAmount(itemrow)"
-                      formControlName="CommissionUnit"
-                      type="text"
-                      class="form-control form-control-sm"
-                      placeholder="Enter Prod. Cost Unit"
-                      id="ProdCost"
-                      name="ProdCost"
-                    />
+                      " (change)="calculateAmount(itemrow)" formControlName="CommissionUnit" type="text"
+                      class="form-control form-control-sm" placeholder="Enter Prod. Cost Unit" id="ProdCost"
+                      name="ProdCost" />
                   </td>
 
-                  <td
-                    class="align-middle"
-                    style="width: 160px; min-width: 160px"
-                  >
-                    <input
-                      style="
+                  <td class="align-middle" style="width: 160px; min-width: 160px">
+                    <input style="
                         width: 100%;
                         height: 52px;
                         padding: 8px 12px;
@@ -1256,138 +898,62 @@
                         font-weight: 600;
                         background-color: #f0f9ff;
                         border: 1px solid #b8daff;
-                      "
-                      formControlName="TotalCommission"
-                      readonly="readOnly"
-                      type="text"
-                      class="form-control form-control-sm"
-                      placeholder="Total Prod. Cost"
-                      id="TProdCost"
-                      name="TProdCost"
-                    />
+                      " formControlName="TotalCommission" readonly="readOnly" type="text"
+                      class="form-control form-control-sm" placeholder="Total Prod. Cost" id="TProdCost"
+                      name="TProdCost" />
                   </td>
 
-                  <td
-                    class="align-middle"
-                    style="width: 150px; min-width: 150px"
-                  >
-                    <p-dropdown
-                      formControlName="Item_ID"
-                      [options]="AAList"
-                      optionLabel="Article_No"
-                      optionValue="Item_ID"
-                      [filter]="true"
-                      filterBy="Article_No"
-                      [showClear]="true"
-                      appendTo="body"
-                      panelStyleClass="description-panel"
-                      (onChange)="SetActualArticle(itemrow)"
-                      [style]="{ width: '100%', height: '52px' }"
-                      placeholder="Select Article"
-                    >
+                  <td class="align-middle" style="width: 150px; min-width: 150px">
+                    <p-dropdown formControlName="Item_ID" [options]="AAList" optionLabel="Article_No"
+                      optionValue="Item_ID" [filter]="true" filterBy="Article_No" [showClear]="true" appendTo="body"
+                      panelStyleClass="description-panel" (onChange)="SetActualArticle(itemrow)"
+                      [style]="{ width: '100%', height: '52px' }" placeholder="Select Article">
                     </p-dropdown>
                   </td>
                 </tr>
               </ng-container>
             </tbody>
-            <tfoot
-              style="
+            <tfoot style="
                 position: sticky;
                 bottom: 0;
                 background: white;
                 z-index: 10;
                 box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
-              "
-            >
+              ">
               <tr style="background: #e9ecef; font-weight: 600">
-                <th
-                  class="sticky-table-column align-middle"
-                  style="width: 70px; background: #e9ecef"
-                ></th>
-                <th
-                  class="text-center align-middle"
-                  style="width: 150px; background: #e9ecef; font-size: 16px"
-                >
+                <th class="sticky-table-column align-middle" style="width: 70px; background: #e9ecef"></th>
+                <th class="text-center align-middle" style="width: 150px; background: #e9ecef; font-size: 16px">
                   Grand Total
                 </th>
-                <th
-                  class="text-center align-middle"
-                  style="width: 250px; background: #e9ecef"
-                ></th>
-                <th
-                  class="text-center align-middle"
-                  style="width: 120px; background: #e9ecef"
-                ></th>
-                <th
-                  class="text-center align-middle"
-                  style="width: 120px; background: #e9ecef"
-                ></th>
-                <th
-                  class="text-center align-middle"
-                  style="width: 130px; background: #e9ecef"
-                ></th>
-                <th
-                  class="text-center align-middle"
-                  style="width: 150px; background: #e9ecef"
-                >
-                  <input
-                    type="text"
-                    class="form-control form-control-sm text-right fw-bold"
-                    value="{{ GTQTY }}"
-                    placeholder="Total Qty"
-                    id="GTQty"
-                    name="GTQty"
-                    readonly
-                    style="
+                <th class="text-center align-middle" style="width: 250px; background: #e9ecef"></th>
+                <th class="text-center align-middle" style="width: 120px; background: #e9ecef"></th>
+                <th class="text-center align-middle" style="width: 120px; background: #e9ecef"></th>
+                <th class="text-center align-middle" style="width: 130px; background: #e9ecef"></th>
+                <th class="text-center align-middle" style="width: 150px; background: #e9ecef">
+                  <input type="text" class="form-control form-control-sm text-right fw-bold" value="{{ GTQTY }}"
+                    placeholder="Total Qty" id="GTQty" name="GTQty" readonly style="
                       height: 48px;
                       font-size: 16px;
                       font-weight: 700;
                       background-color: #fff;
                       border: 2px solid #6c757d;
-                    "
-                  />
+                    " />
                 </th>
-                <th
-                  class="text-center align-middle"
-                  style="width: 120px; background: #e9ecef"
-                ></th>
-                <th
-                  class="text-center align-middle"
-                  style="width: 160px; background: #e9ecef"
-                ></th>
-                <th
-                  class="text-center align-middle"
-                  style="width: 160px; background: #e9ecef"
-                >
-                  <input
-                    type="text"
-                    class="form-control form-control-sm text-right fw-bold"
-                    value="{{ GTAMNT }}"
-                    placeholder="Total Amount"
-                    id="GTAmout"
-                    name="GTAmout"
-                    readonly
-                    style="
+                <th class="text-center align-middle" style="width: 120px; background: #e9ecef"></th>
+                <th class="text-center align-middle" style="width: 160px; background: #e9ecef"></th>
+                <th class="text-center align-middle" style="width: 160px; background: #e9ecef">
+                  <input type="text" class="form-control form-control-sm text-right fw-bold" value="{{ GTAMNT }}"
+                    placeholder="Total Amount" id="GTAmout" name="GTAmout" readonly style="
                       height: 48px;
                       font-size: 16px;
                       font-weight: 700;
                       background-color: #fff;
                       border: 2px solid #6c757d;
-                    "
-                  />
+                    " />
                 </th>
-                <th
-                  class="text-center align-middle"
-                  style="width: 160px; background: #e9ecef"
-                ></th>
-                <th
-                  class="text-center align-middle"
-                  style="width: 160px; background: #e9ecef"
-                ></th>
-                <th
-                  class="text-center align-middle"
-                  style="width: 150px; background: #e9ecef"
-                ></th>
+                <th class="text-center align-middle" style="width: 160px; background: #e9ecef"></th>
+                <th class="text-center align-middle" style="width: 160px; background: #e9ecef"></th>
+                <th class="text-center align-middle" style="width: 150px; background: #e9ecef"></th>
               </tr>
             </tfoot>
           </table>
@@ -1398,24 +964,14 @@
           <div class="col-md-4">
             <div class="row g-1 align-items-start">
               <div class="col-3">
-                <label class="control-label"
-                  >Delivery <br />
-                  Condition</label
-                >
+                <label class="control-label">Delivery <br />
+                  Condition</label>
               </div>
               <div class="col-7">
-                <p-dropdown
-                  formControlName="Delivery_Condition_ID"
-                  [options]="DeliveryConditionList"
-                  optionLabel="Details"
-                  optionValue="Delivery_Condition_ID"
-                  [filter]="true"
-                  filterBy="Details"
-                  [showClear]="true"
-                  [style]="{ width: '100%' }"
-                  panelStyleClass="my-dropdown-panel"
-                  placeholder="Select a Delivery Condition"
-                >
+                <p-dropdown formControlName="Delivery_Condition_ID" [options]="DeliveryConditionList"
+                  optionLabel="Details" optionValue="Delivery_Condition_ID" [filter]="true" filterBy="Details"
+                  [showClear]="true" [style]="{ width: '100%' }" panelStyleClass="my-dropdown-panel"
+                  placeholder="Select a Delivery Condition">
                 </p-dropdown>
               </div>
             </div>
@@ -1423,24 +979,14 @@
           <div class="col-md-4">
             <div class="row g-1 align-items-start">
               <div class="col-3">
-                <label class="control-label"
-                  >Partial <br />
-                  Shipment</label
-                >
+                <label class="control-label">Partial <br />
+                  Shipment</label>
               </div>
               <div class="col-7">
-                <p-dropdown
-                  formControlName="Shipment_Condition_ID"
-                  [options]="PartialShipmentList"
-                  optionLabel="ShipmentConditions"
-                  optionValue="Shipment_Condition_ID"
-                  [filter]="true"
-                  filterBy="ShipmentConditions"
-                  [showClear]="true"
-                  [style]="{ width: '100%' }"
-                  panelStyleClass="my-dropdown-panel"
-                  placeholder="Select a Shipment"
-                >
+                <p-dropdown formControlName="Shipment_Condition_ID" [options]="PartialShipmentList"
+                  optionLabel="ShipmentConditions" optionValue="Shipment_Condition_ID" [filter]="true"
+                  filterBy="ShipmentConditions" [showClear]="true" [style]="{ width: '100%' }"
+                  panelStyleClass="my-dropdown-panel" placeholder="Select a Shipment">
                 </p-dropdown>
               </div>
             </div>
@@ -1448,24 +994,13 @@
           <div class="col-md-4">
             <div class="row g-1 align-items-start">
               <div class="col-3">
-                <label class="control-label"
-                  >Price <br />
-                  Terms</label
-                >
+                <label class="control-label">Price <br />
+                  Terms</label>
               </div>
               <div class="col-7">
-                <p-dropdown
-                  formControlName="Price_Term_ID"
-                  [options]="PriceTermsList"
-                  optionLabel="PriceTerm"
-                  optionValue="Price_Term_ID"
-                  [filter]="true"
-                  filterBy="PriceTerm"
-                  [showClear]="true"
-                  [style]="{ width: '100%' }"
-                  panelStyleClass="my-dropdown-panel"
-                  placeholder="Select a Price Terms"
-                >
+                <p-dropdown formControlName="Price_Term_ID" [options]="PriceTermsList" optionLabel="PriceTerm"
+                  optionValue="Price_Term_ID" [filter]="true" filterBy="PriceTerm" [showClear]="true"
+                  [style]="{ width: '100%' }" panelStyleClass="my-dropdown-panel" placeholder="Select a Price Terms">
                 </p-dropdown>
               </div>
             </div>
@@ -1477,31 +1012,21 @@
                 <label class="control-label">Documents</label>
               </div>
               <div class="col-7">
-                <textarea
-                  id="Documents"
-                  class="form-control form-control-sm"
-                  rows="3"
-                  formControlName="Documents"
-                ></textarea>
+                <textarea id="Documents" class="form-control form-control-sm" rows="3"
+                  formControlName="Documents"></textarea>
               </div>
             </div>
           </div>
           <div class="col-md-4">
             <div class="row g-1 align-items-start">
               <div class="col-3">
-                <label class="control-label"
-                  >Port Of <br />
-                  Loading</label
-                >
+                <label class="control-label">Port Of <br />
+                  Loading</label>
               </div>
 
               <div class="col-7">
-                <textarea
-                  id="PortOfLoading"
-                  class="form-control form-control-sm"
-                  rows="3"
-                  formControlName="Loading_Port"
-                ></textarea>
+                <textarea id="PortOfLoading" class="form-control form-control-sm" rows="3"
+                  formControlName="Loading_Port"></textarea>
               </div>
             </div>
           </div>
@@ -1509,18 +1034,12 @@
           <div class="col-md-4">
             <div class="row g-1 align-items-start">
               <div class="col-3">
-                <label class="control-label"
-                  >Port Of <br />
-                  Destination</label
-                >
+                <label class="control-label">Port Of <br />
+                  Destination</label>
               </div>
               <div class="col-7">
-                <textarea
-                  id="PortOfDestination"
-                  class="form-control form-control-sm"
-                  rows="3"
-                  formControlName="Destination_Port"
-                ></textarea>
+                <textarea id="PortOfDestination" class="form-control form-control-sm" rows="3"
+                  formControlName="Destination_Port"></textarea>
               </div>
             </div>
           </div>
@@ -1531,14 +1050,8 @@
                 <label class="control-label">Remarks</label>
               </div>
               <div class="col-7">
-                <input
-                  type="text"
-                  class="form-control form-control-sm"
-                  id="Remarks"
-                  placeholder="Remarks"
-                  formControlName="Remarks"
-                  style="height: 42px"
-                />
+                <input type="text" class="form-control form-control-sm" id="Remarks" placeholder="Remarks"
+                  formControlName="Remarks" style="height: 42px" />
               </div>
             </div>
           </div>
@@ -1546,24 +1059,13 @@
           <div class="col-md-4 mt-2">
             <div class="row g-1 align-items-start">
               <div class="col-3">
-                <label class="control-label"
-                  >Force <br />
-                  Majeure</label
-                ><br />
+                <label class="control-label">Force <br />
+                  Majeure</label><br />
               </div>
               <div class="col-7">
-                <p-dropdown
-                  formControlName="Force_Majeure_ID"
-                  [options]="ForceMajeureList"
-                  optionLabel="Force"
-                  optionValue="Force_Majeure_ID"
-                  [filter]="true"
-                  filterBy="Force"
-                  [showClear]="true"
-                  [style]="{ width: '100%' }"
-                  panelStyleClass="my-dropdown-panel"
-                  placeholder="Select a Force Majeure"
-                >
+                <p-dropdown formControlName="Force_Majeure_ID" [options]="ForceMajeureList" optionLabel="Force"
+                  optionValue="Force_Majeure_ID" [filter]="true" filterBy="Force" [showClear]="true"
+                  [style]="{ width: '100%' }" panelStyleClass="my-dropdown-panel" placeholder="Select a Force Majeure">
                 </p-dropdown>
               </div>
             </div>
@@ -1574,18 +1076,9 @@
                 <label class="control-label">Arbitration</label>
               </div>
               <div class="col-7">
-                <p-dropdown
-                  formControlName="Arbitration_ID"
-                  [options]="ArbitrationList"
-                  optionLabel="Detail"
-                  optionValue="Arbitration_ID"
-                  [filter]="true"
-                  filterBy="Detail"
-                  [showClear]="true"
-                  panelStyleClass="my-dropdown-panel"
-                  [style]="{ width: '100%' }"
-                  placeholder="Select a Arbitration"
-                >
+                <p-dropdown formControlName="Arbitration_ID" [options]="ArbitrationList" optionLabel="Detail"
+                  optionValue="Arbitration_ID" [filter]="true" filterBy="Detail" [showClear]="true"
+                  panelStyleClass="my-dropdown-panel" [style]="{ width: '100%' }" placeholder="Select a Arbitration">
                 </p-dropdown>
               </div>
             </div>

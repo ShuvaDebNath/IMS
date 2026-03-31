@@ -57,7 +57,7 @@ export class GeneratePiComponent implements OnInit {
     private des: DoubleMasterEntryService,
     private gs: GlobalServiceService,
     private fb: FormBuilder,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     console.log(this.tempPI);
@@ -81,7 +81,7 @@ export class GeneratePiComponent implements OnInit {
         if (this.Formgroup) {
           this.Formgroup.controls['PINo'].setValue(this.tempPI);
         }
-      } catch (e) {}
+      } catch (e) { }
     }
   }
 
@@ -136,7 +136,7 @@ export class GeneratePiComponent implements OnInit {
                   (this.Formgroup.controls as any)[k].setValue(master[k]);
                 }
               }
-            } catch (e) {}
+            } catch (e) { }
           }
 
           // Details table: try Tables2, Tables1 (if it's the details), or Tables3
@@ -178,7 +178,7 @@ export class GeneratePiComponent implements OnInit {
             } catch (tt) {
               /* ignore */
             }
-          } catch (e) {}
+          } catch (e) { }
         } else {
           if (res.msg === 'Invalid Token') this.gs.Logout();
         }
@@ -202,7 +202,7 @@ export class GeneratePiComponent implements OnInit {
     } catch (e) {
       try {
         localStorage.removeItem('IMS_temp_open_pi');
-      } catch (_) {}
+      } catch (_) { }
       return null;
     }
   }
@@ -213,7 +213,7 @@ export class GeneratePiComponent implements OnInit {
     });
 
     this.Formgroup.get('Consignee_Initial')?.valueChanges.subscribe((value) => {
-      let piNo = value ? `${value}-${this.PINo}` : this.PINo;
+      let piNo = value ? `${value.toUpperCase()}-${this.PINo}` : this.PINo;
       this.Formgroup.controls['PINo'].setValue(piNo);
     });
 
@@ -545,9 +545,9 @@ export class GeneratePiComponent implements OnInit {
     const consignee =
       this.ConsigneeList && this.ConsigneeList.length > 0
         ? this.ConsigneeList.find(
-            (x: any) =>
-              x.Customer_ID == consigneeValue || x.Consignee == consigneeValue,
-          )
+          (x: any) =>
+            x.Customer_ID == consigneeValue || x.Consignee == consigneeValue,
+        )
         : null;
     const roleId = this.gs.getSessionData('roleId');
     const userId = this.gs.getSessionData('userId');
@@ -767,5 +767,13 @@ export class GeneratePiComponent implements OnInit {
           });
       }
     });
+  }
+
+  toUppercase(controlName: string) {
+    const control = this.Formgroup.get(controlName);
+    if (control) {
+      const value = control.value || '';
+      control.setValue(value.toUpperCase(), { emitEvent: false });
+    }
   }
 }
