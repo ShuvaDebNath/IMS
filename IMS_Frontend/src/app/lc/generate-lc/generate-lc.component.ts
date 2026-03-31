@@ -142,6 +142,8 @@ export class GenerateLcComponent {
         if (results.status) {
           this.PINo = JSON.parse(results.data).Tables1;
           
+          console.log(this.PINo);
+          
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
           this.gs.Logout();
@@ -164,6 +166,7 @@ export class GenerateLcComponent {
       next: (results) => {
         if (results.status) {
           this.PINo = JSON.parse(results.data).Tables1;
+          
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
           this.gs.Logout();

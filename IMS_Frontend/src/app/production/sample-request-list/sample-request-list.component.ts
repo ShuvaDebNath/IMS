@@ -68,7 +68,7 @@ export class SampleRequestListComponent {
     private pagesComponent: PagesComponent,
     private masterEntryService: MasterEntryService,
     private title: Title,
-    private reportService: ReportService
+    private reportService: ReportService,
   ) {}
   ngOnInit(): void {
     var permissions = this.gs.CheckUserPermission('Sample Request List');
@@ -101,8 +101,12 @@ export class SampleRequestListComponent {
 
     // this.SearchForm.get('fromDate')?.setValue(formattedT);
     // this.SearchForm.get('toDate')?.setValue(formatted);
-    this.SearchForm.get('fromDate')?.setValue(new Date().toISOString().split('T')[0]);
-    this.SearchForm.get('toDate')?.setValue(new Date().toISOString().split('T')[0]);
+    this.SearchForm.get('fromDate')?.setValue(
+      new Date().toISOString().split('T')[0],
+    );
+    this.SearchForm.get('toDate')?.setValue(
+      new Date().toISOString().split('T')[0],
+    );
   }
   initForm(): void {
     this.SearchForm = this.fb.group({
@@ -112,13 +116,16 @@ export class SampleRequestListComponent {
   }
   Search() {
     if (this.SearchForm.invalid) {
-          Swal.fire('Invalid Inputs!', 'Please Select From Date and To Date.', 'info');
-          return;
-        }
-    
+      Swal.fire(
+        'Invalid Inputs!',
+        'Please Select From Date and To Date.',
+        'info',
+      );
+      return;
+    }
 
-    var fromDate = this.SearchForm.value.fromDate;
-    var toDate = this.SearchForm.value.toDate;
+    var fromDate = this.formatDateTime(this.SearchForm.value.fromDate);
+    var toDate = this.formatDateTime(this.SearchForm.value.toDate);
     var userId = window.localStorage.getItem('userId');
     let param = new GetDataModel();
     param.procedureName = '[usp_SampleRequest_List]';
@@ -175,7 +182,7 @@ export class SampleRequestListComponent {
                     timer: 5000,
                   })
                   .then((result) => {
-                     this.Search()
+                    this.Search();
                   });
               } else if (results.message == 'Invalid Token') {
                 swal.fire('Session Expierd!', 'Please Login Again.', 'info');
@@ -218,86 +225,100 @@ export class SampleRequestListComponent {
   }
 
   checkPermission(e: any) {
-    console.log(e,this.roleId);
-    
+    console.log(e, this.roleId);
+
     if (this.roleId == '50') {
       if (e.HandoverStatus != '') {
         swal.fire(
           'info',
           'Sample already handovered and cannot edit anymore',
-          'info'
+          'info',
         );
       } else {
         if (this.updatePermissions) {
           const url = this.router.createUrlTree(['/sample-request-edit-form'], {
-            queryParams: { SRId:e.Id },
+            queryParams: { SRId: e.Id },
           });
 
           const fullUrl = this.router.serializeUrl(url);
           window.open(fullUrl, '_blank');
-        } 
+        }
       }
     } else {
       if (this.updatePermissions) {
         const url = this.router.createUrlTree(['/sample-request-edit-form'], {
-            queryParams: { SRId:e.Id },
-          });
+          queryParams: { SRId: e.Id },
+        });
 
-          const fullUrl = this.router.serializeUrl(url);
-          window.open(fullUrl, '_blank');
-      } 
+        const fullUrl = this.router.serializeUrl(url);
+        window.open(fullUrl, '_blank');
+      }
     }
   }
 
   Print() {
-      var userId = window.localStorage.getItem('userId');
-      var item = {
-        fromDate: this.SearchForm.value.fromDate,
-        toDate: this.SearchForm.value.toDate,
-        requestStatus: this.SearchForm.value.status,
-        UserID: userId,
-      };
-  
-      var actionType = '';
-      Swal.fire({
-        title: 'Please select what you want to do!!',
-        icon: 'info',
-        showCancelButton: false,
-        showConfirmButton: false,
-        allowOutsideClick: true,
-        customClass: {
-          popup: 'swal-back', // use class name without dot
-        },
-        html: `
+    var userId = window.localStorage.getItem('userId');
+    var item = {
+      fromDate: this.SearchForm.value.fromDate,
+      toDate: this.SearchForm.value.toDate,
+      requestStatus: this.SearchForm.value.status,
+      UserID: userId,
+    };
+
+    var actionType = '';
+    Swal.fire({
+      title: 'Please select what you want to do!!',
+      icon: 'info',
+      showCancelButton: false,
+      showConfirmButton: false,
+      allowOutsideClick: true,
+      customClass: {
+        popup: 'swal-back', // use class name without dot
+      },
+      html: `
         <div style="display: flex; justify-content: center; gap: 10px;">
           <button id="view" class="swal2-confirm swal2-styled" style="background:green">Excel</button>
           <button id="download" class="swal2-confirm swal2-styled" style="background:red">PDF</button>
           <button id="print" class="swal2-confirm swal2-styled" style="background:blue">Word</button>
         </div>
       `,
-      });
-  
-      // Add event listeners for buttons after Swal opens
-      Swal.getPopup()
-        ?.querySelector('#view')
-        ?.addEventListener('click', () => {
-          this.reportService.PrintSampleRequest(item, 'excel', true);
-          Swal.close();
-        });
-  
-      Swal.getPopup()
-        ?.querySelector('#download')
-        ?.addEventListener('click', () => {
-          this.reportService.PrintSampleRequest(item, 'pdf', true);
-          Swal.close();
-        });
-  
-      Swal.getPopup()
-        ?.querySelector('#print')
-        ?.addEventListener('click', () => {
-          this.reportService.PrintSampleRequest(item, 'word', true);
-          Swal.close();
-        });
-    }
+    });
 
+    // Add event listeners for buttons after Swal opens
+    Swal.getPopup()
+      ?.querySelector('#view')
+      ?.addEventListener('click', () => {
+        this.reportService.PrintSampleRequest(item, 'excel', true);
+        Swal.close();
+      });
+
+    Swal.getPopup()
+      ?.querySelector('#download')
+      ?.addEventListener('click', () => {
+        this.reportService.PrintSampleRequest(item, 'pdf', true);
+        Swal.close();
+      });
+
+    Swal.getPopup()
+      ?.querySelector('#print')
+      ?.addEventListener('click', () => {
+        this.reportService.PrintSampleRequest(item, 'word', true);
+        Swal.close();
+      });
+  }
+
+  private formatDateTime(value: any): string | null {
+    if (!value) return null;
+    const d = new Date(value);
+    if (isNaN(d.getTime())) return null;
+
+    const dd = String(d.getDate()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const yyyy = d.getFullYear();
+    const HH = String(d.getHours()).padStart(2, '0');
+    const MM = String(d.getMinutes()).padStart(2, '0');
+    const SS = String(d.getSeconds()).padStart(2, '0');
+
+    return `${mm}-${dd}-${yyyy}`;
+  }
 }
