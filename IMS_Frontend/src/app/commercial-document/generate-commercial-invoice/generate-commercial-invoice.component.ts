@@ -136,25 +136,25 @@ export class GenerateCommercialInvoiceComponent {
       this.Formgroup.value.ExpDate != undefined &&
       this.Formgroup.value.ExpDate != ''
     ) {
-      cd.Export_Date = this.Formgroup.value.ExpDate;
+      cd.Export_Date = this.convertToLocalDates(this.Formgroup.value.ExpDate);
     }
     if (
       this.Formgroup.value.BeDate != undefined &&
       this.Formgroup.value.BeDate != ''
     ) {
-      cd.Be_No_Date = this.Formgroup.value.BeDate;
+      cd.Be_No_Date = this.convertToLocalDates(this.Formgroup.value.BeDate);
     }
     if (
       this.Formgroup.value.EpDate != undefined &&
       this.Formgroup.value.EpDate != ''
     ) {
-      cd.EP_No_Date = this.Formgroup.value.EpDate;
+      cd.EP_No_Date = this.convertToLocalDates(this.Formgroup.value.EpDate);
     }
     if (
       this.Formgroup.value.SailiongOnOrAbout != undefined &&
       this.Formgroup.value.SailiongOnOrAbout != ''
     ) {
-      cd.Sailing_On_Or_About = this.Formgroup.value.SailiongOnOrAbout;
+      cd.Sailing_On_Or_About = this.convertToLocalDates(this.Formgroup.value.SailiongOnOrAbout);
     }
     cd.FreightCharge = this.Formgroup.value.FreightCharge;
     cd.Remarks = this.Formgroup.value.Remarks;
@@ -201,7 +201,7 @@ export class GenerateCommercialInvoiceComponent {
         }
       });
   }
-
+  commInvoicNoedit:any = ''
   GetCDById(LCID: any) {
     var ProcedureData = {
       procedureName: '[usp_CD_ById]',
@@ -213,16 +213,17 @@ export class GenerateCommercialInvoiceComponent {
       next: (results) => {
         if (results.status) {
           var tableData = JSON.parse(results.data).Tables1;
-
+          console.log(tableData);
+          
           tableData.forEach((e: any) => {
             this.Formgroup.controls.LC_No.setValue(e.LC_ID);
             this.Formgroup.controls.ApplicantBank.setValue(e.Applicant_Bank_ID);
             this.Formgroup.controls.ExpNo.setValue(e.ExpNo);
-            this.Formgroup.controls.ExpDate.setValue(e.Export_Date);
+            this.Formgroup.controls.ExpDate.setValue(this.convertDatesddmmyyy(e.Export_Date));
             this.Formgroup.controls.BeNo.setValue(e.Be_No);
-            this.Formgroup.controls.BeDate.setValue(e.Be_No_Date);
+            this.Formgroup.controls.BeDate.setValue(this.convertDatesddmmyyy(e.Be_No_Date));
             this.Formgroup.controls.EpNo.setValue(e.EP_No);
-            this.Formgroup.controls.EpDate.setValue(new Date(e.EP_No_Date));
+            this.Formgroup.controls.EpDate.setValue(this.convertDatesddmmyyy(e.EP_No_Date));
             this.Formgroup.controls.FreightCharge.setValue(e.FreightCharge);
             this.Formgroup.controls.QtyRolls.setValue(e.Qty_Rolls);
             this.Formgroup.controls.TotalGrossWeight.setValue(
@@ -230,9 +231,10 @@ export class GenerateCommercialInvoiceComponent {
             );
             this.Formgroup.controls.TotalNetWeight.setValue(e.Total_Net_Weight);
             this.Formgroup.controls.SailiongOnOrAbout.setValue(
-              e.Sailing_On_Or_About
+              this.convertDatesddmmyyy(e.Sailing_On_Or_About)
             );
             this.Formgroup.controls.Remarks.setValue(e.Remarks);
+            this.commInvoicNoedit = e.Commercial_Invoice_No
           });
         } else if (results.message == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
@@ -264,25 +266,25 @@ export class GenerateCommercialInvoiceComponent {
       this.Formgroup.value.ExpDate != undefined &&
       this.Formgroup.value.ExpDate != ''
     ) {
-      cd.Export_Date = this.Formgroup.value.ExpDate;
+      cd.Export_Date = this.convertToLocalDates(this.convertDatesRaw(this.Formgroup.value.ExpDate));
     }
     if (
       this.Formgroup.value.BeDate != undefined &&
       this.Formgroup.value.BeDate != ''
     ) {
-      cd.Be_No_Date = this.Formgroup.value.BeDate;
+      cd.Be_No_Date = this.convertToLocalDates(this.convertDatesRaw(this.Formgroup.value.BeDate));
     }
     if (
       this.Formgroup.value.EpDate != undefined &&
       this.Formgroup.value.EpDate != ''
     ) {
-      cd.EP_No_Date = this.Formgroup.value.EpDate;
+      cd.EP_No_Date = this.convertToLocalDates(this.convertDatesRaw(this.Formgroup.value.EpDate));
     }
     if (
       this.Formgroup.value.SailiongOnOrAbout != undefined &&
       this.Formgroup.value.SailiongOnOrAbout != ''
     ) {
-      cd.Sailing_On_Or_About = this.Formgroup.value.SailiongOnOrAbout;
+      cd.Sailing_On_Or_About = this.convertToLocalDates(this.convertDatesRaw(this.Formgroup.value.SailiongOnOrAbout));
     }
     cd.FreightCharge = this.Formgroup.value.FreightCharge;
     cd.Remarks = this.Formgroup.value.Remarks;
@@ -292,7 +294,7 @@ export class GenerateCommercialInvoiceComponent {
     cd.Total_Net_Weight = this.Formgroup.value.TotalNetWeight;
     cd.Be_No = this.Formgroup.value.BeNo;
     cd.EP_No = this.Formgroup.value.EpNo;
-    cd.Commercial_Invoice_No = 'temp';
+    cd.Commercial_Invoice_No = this.commInvoicNoedit;
     cd.Date = formatted;
     cd.User_ID = userId == undefined ? '' : userId;
 
@@ -332,5 +334,54 @@ export class GenerateCommercialInvoiceComponent {
           }
         }
       });
+  }
+
+  
+  convertDatesRaw(dateString: any) {
+    if (dateString == '' || dateString == undefined) return '';
+    var fDate = dateString.split('/');
+    const mm = fDate[1]; // Months are 0-based
+    const dd = fDate[0];
+    const yyyy = fDate[2];
+
+    const formatted = `${mm}/${dd}/${yyyy}`;
+
+    return formatted;
+  }
+
+  convertDates(dateString: any) {
+    if (dateString == '' || dateString == undefined) return '';
+    var fDate = new Date(dateString);
+    const mm = String(fDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const dd = String(fDate.getDate()).padStart(2, '0');
+    const yyyy = fDate.getFullYear();
+
+    const formatted = `${mm}/${dd}/${yyyy}`;
+
+    return formatted;
+  }
+  
+  convertDatesddmmyyy(dateString: any) {
+    if (dateString == '' || dateString == undefined) return '';
+    var fDate = new Date(dateString);
+    const mm = String(fDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const dd = String(fDate.getDate()).padStart(2, '0');
+    const yyyy = fDate.getFullYear();
+
+    const formatted = `${dd}/${mm}/${yyyy}`;
+
+    return formatted;
+  }
+
+  convertToLocalDates(dateString: any){
+    const nowTime = new Date(dateString);
+    const localISO = new Date(
+      nowTime.getTime() - nowTime.getTimezoneOffset() * 60000,
+    )
+      .toISOString()
+      .slice(0, 19)
+      .replace('T', ' ');
+
+      return localISO;
   }
 }

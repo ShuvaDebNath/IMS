@@ -30,6 +30,8 @@ export class GenerateLcComponent {
   deletePermissions: boolean = false;
   printPermissions: boolean = false;
 
+  piArrInt:any = [];
+
   constructor(
     private fb: FormBuilder,
     private masterEntyService: MasterEntryService,
@@ -143,6 +145,10 @@ export class GenerateLcComponent {
           this.PINo = JSON.parse(results.data).Tables1;
           
           console.log(this.PINo);
+          if(this.piArrInt.length>0){    
+            console.log(this.piArrInt);        
+            this.Formgroup.controls.PINo.patchValue(this.piArrInt);
+          }
           
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
@@ -206,73 +212,73 @@ export class GenerateLcComponent {
       this.Formgroup.value.LCReceivingDateByDraft != ''
     ) {
       lc.LC_Receiving_Date_By_Bank =
-        this.Formgroup.value.LCReceivingDateByDraft;
+        this.convertToLocalDates(this.Formgroup.value.LCReceivingDateByDraft);
     }
     if (
       this.Formgroup.value.LCReceivingDateByDraft != undefined &&
       this.Formgroup.value.LCReceivingDateByDraft != ''
     ) {
       lc.LC_Receiving_Date_By_Mail =
-        this.Formgroup.value.LCReceivingDateByDraft;
+        this.convertToLocalDates(this.Formgroup.value.LCReceivingDateByDraft);
     }
     if (
       this.Formgroup.value.IssueDate != undefined &&
       this.Formgroup.value.IssueDate != ''
     ) {
-      lc.Issue_Date = this.Formgroup.value.IssueDate;
+      lc.Issue_Date = this.convertToLocalDates(this.Formgroup.value.IssueDate);
     }
     if (
       this.Formgroup.value.ExpiryDate != undefined &&
       this.Formgroup.value.ExpiryDate != ''
     ) {
-      lc.Expiry_Date = this.Formgroup.value.ExpiryDate;
+      lc.Expiry_Date = this.convertToLocalDates(this.Formgroup.value.ExpiryDate);
     }
     if (
       this.Formgroup.value.MaturityDate != undefined &&
       this.Formgroup.value.MaturityDate != ''
     ) {
-      lc.Maturity_Date = this.Formgroup.value.MaturityDate;
+      lc.Maturity_Date = this.convertToLocalDates(this.Formgroup.value.MaturityDate);
     }
     if (
       this.Formgroup.value.DocPresBankDate != undefined &&
       this.Formgroup.value.DocPresBankDate != ''
     ) {
-      lc.Presentation_To_Bank_Date = this.Formgroup.value.DocPresBankDate;
+      lc.Presentation_To_Bank_Date = this.convertToLocalDates(this.Formgroup.value.DocPresBankDate);
     }
     if (
       this.Formgroup.value.IPDocSendingDate != undefined &&
       this.Formgroup.value.IPDocSendingDate != ''
     ) {
-      lc.IP_Document_Sending_Date = this.Formgroup.value.IPDocSendingDate;
+     lc.IP_Document_Sending_Date =  this.convertToLocalDates(this.Formgroup.value.IPDocSendingDate);
     }
     if (
       this.Formgroup.value.IPDocReceivingDate != undefined &&
       this.Formgroup.value.IPDocReceivingDate != ''
     ) {
-      lc.IP_Document_Receiving_Date = this.Formgroup.value.IPDocReceivingDate;
+      lc.IP_Document_Receiving_Date = this.convertToLocalDates(this.Formgroup.value.IPDocReceivingDate);
     }
     if (
       this.Formgroup.value.FDDRecDate != undefined &&
       this.Formgroup.value.FDDRecDate != ''
     ) {
-      lc.FddTtReceiveDate = this.Formgroup.value.FDDRecDate;
+      lc.FddTtReceiveDate = this.convertToLocalDates(this.Formgroup.value.FDDRecDate);
     }
     if (
       this.Formgroup.value.ActualPaymentRecDate != undefined &&
       this.Formgroup.value.ActualPaymentRecDate != ''
     ) {
       lc.Actual_Payment_Receiving_Date =
-        this.Formgroup.value.DocPrActualPaymentRecDateesBankDate;
+        this.convertToLocalDates(this.Formgroup.value.ActualPaymentRecDate);
     }
     if (
       this.Formgroup.value.ExportLCSCDate != undefined &&
       this.Formgroup.value.ExportLCSCDate != ''
     ) {
-      lc.Export_LC_SC_Date = this.Formgroup.value.ExportLCSCDate;
+      lc.Export_LC_SC_Date = this.convertToLocalDates(this.Formgroup.value.ExportLCSCDate);
     }
 
     lc.Customer_Bank = this.Formgroup.value.CustomerBankName;
-    lc.Invoice_No = this.Formgroup.value.InvoiceNoWitDate;
+    lc.Invoice_No = this.convertToLocalDates(this.Formgroup.value.InvoiceNoWitDate);
     lc.Payment_Term_ID = this.Formgroup.value.PaymentTermsLC;
     lc.Export_LC_SC = this.Formgroup.value.ExportLCSC;
     lc.LCA_Form_No = this.Formgroup.value.LCAFormNo;
@@ -349,43 +355,48 @@ export class GenerateLcComponent {
           tableData.forEach((e: any) => {
             
             var piArr = e.PI_No.split(',');
-            const piArrInt = piArr.map(Number);
+            this.piArrInt = piArr.map(Number);
+
+            console.log(e);            
             
             this.Formgroup.controls.Marketing_Concern.setValue(e.User_ID);
+            this.getPINoByMarketingConcern();
+            setTimeout(() => {
+                  }, 1000);
             this.Formgroup.controls.BenificiaryAccounts.setValue(
               e.Beneficiary_Bank_ID
             );
             this.Formgroup.controls.Consignee_Name.setValue(e.Consignee_Name);
             this.Formgroup.controls.LCReceivingDateByDraft.setValue(
-              e.LC_Receiving_Date_By_Mail
+              this.convertDatesddmmyyy(e.LC_Receiving_Date_By_Mail)
             );
             this.Formgroup.controls.LCReceivingDateOrgBank.setValue(
-              e.LC_Receiving_Date_By_Bank
+              this.convertDatesddmmyyy(e.LC_Receiving_Date_By_Bank)
             );
             this.Formgroup.controls.LCNo.setValue(e.LC_No);
             this.Formgroup.controls.LCValue.setValue(e.LC_Value);
-            this.Formgroup.controls.IssueDate.setValue(e.Issue_Date);
-            this.Formgroup.controls.ExpiryDate.setValue(e.Expiry_Date);
+            this.Formgroup.controls.IssueDate.setValue(this.convertDatesddmmyyy(e.Issue_Date));
+            this.Formgroup.controls.ExpiryDate.setValue(this.convertDatesddmmyyy(e.Expiry_Date));
             this.Formgroup.controls.CustomerBankName.setValue(e.Customer_Bank);
-            this.Formgroup.controls.InvoiceNoWitDate.setValue(e.Invoice_No);
+            this.Formgroup.controls.InvoiceNoWitDate.setValue(this.convertDatesddmmyyy(e.Invoice_No));
             this.Formgroup.controls.IPDocSendingDate.setValue(
-              e.IP_Document_Sending_Date
-            );
+              this.convertDatesddmmyyy(e.IP_Document_Sending_Date
+            ));
             this.Formgroup.controls.IPDocReceivingDate.setValue(
-              e.IP_Document_Receiving_Date
-            );
+              this.convertDatesddmmyyy(e.IP_Document_Receiving_Date
+            ));
             this.Formgroup.controls.PaymentTermsLC.setValue(e.Mode);
-            this.Formgroup.controls.MaturityDate.setValue(e.Maturity_Date);
+            this.Formgroup.controls.MaturityDate.setValue(this.convertDatesddmmyyy(e.Maturity_Date));
             this.Formgroup.controls.DocPresBankDate.setValue(
-              e.IP_Document_Sending_Date
-            );
-            this.Formgroup.controls.FDDRecDate.setValue(e.FddTtReceiveDate);
+              this.convertDatesddmmyyy(e.IP_Document_Sending_Date
+            ));
+            this.Formgroup.controls.FDDRecDate.setValue(this.convertDatesddmmyyy(e.FddTtReceiveDate));
             this.Formgroup.controls.ExportLCSC.setValue(e.Export_LC_SC);
             this.Formgroup.controls.ActualPaymentRecDate.setValue(
-              e.Actual_Payment_Receiving_Date
+              this.convertDatesddmmyyy(e.Actual_Payment_Receiving_Date)
             );
             this.Formgroup.controls.ExportLCSCDate.setValue(
-              e.Export_LC_SC_Date
+              this.convertDatesddmmyyy(e.Export_LC_SC_Date)
             );
             this.Formgroup.controls.LCAFormNo.setValue(e.LCA_Form_No);
             this.Formgroup.controls.ApplicantTIN.setValue(e.Applicant_TIN);
@@ -396,7 +407,7 @@ export class GenerateLcComponent {
             this.Formgroup.controls.BankBINNo.setValue(e.Bank_BIN_No);
             this.Formgroup.controls.Remarks.setValue(e.Remarks);
             this.Formgroup.controls.IRCNo.setValue(e.IRC_No);
-            this.Formgroup.controls.PINo.patchValue(piArrInt);
+            //this.Formgroup.controls.PINo.patchValue(this.piArrInt);
           });
         } else if (results.message == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
@@ -450,56 +461,56 @@ export class GenerateLcComponent {
       this.Formgroup.value.IssueDate != undefined &&
       this.Formgroup.value.IssueDate != ''
     ) {
-      lc.Issue_Date = this.Formgroup.value.IssueDate;
+      lc.Issue_Date = this.convertToLocalDates(this.Formgroup.value.IssueDate);
     }
     if (
       this.Formgroup.value.ExpiryDate != undefined &&
       this.Formgroup.value.ExpiryDate != ''
     ) {
-      lc.Expiry_Date = this.Formgroup.value.ExpiryDate;
+      lc.Expiry_Date = this.convertToLocalDates(this.Formgroup.value.ExpiryDate);
     }
     if (
       this.Formgroup.value.MaturityDate != undefined &&
       this.Formgroup.value.MaturityDate != ''
     ) {
-      lc.Maturity_Date = this.Formgroup.value.MaturityDate;
+      lc.Maturity_Date = this.convertToLocalDates(this.Formgroup.value.MaturityDate);
     }
     if (
       this.Formgroup.value.DocPresBankDate != undefined &&
       this.Formgroup.value.DocPresBankDate != ''
     ) {
-      lc.Presentation_To_Bank_Date = this.Formgroup.value.DocPresBankDate;
+      lc.Presentation_To_Bank_Date = this.convertToLocalDates(this.Formgroup.value.DocPresBankDate);
     }
     if (
       this.Formgroup.value.IPDocSendingDate != undefined &&
       this.Formgroup.value.IPDocSendingDate != ''
     ) {
-      lc.IP_Document_Sending_Date = this.Formgroup.value.IPDocSendingDate;
+      lc.IP_Document_Sending_Date = this.convertToLocalDates(this.Formgroup.value.IPDocSendingDate);
     }
     if (
       this.Formgroup.value.IPDocReceivingDate != undefined &&
       this.Formgroup.value.IPDocReceivingDate != ''
     ) {
-      lc.IP_Document_Receiving_Date = this.Formgroup.value.IPDocReceivingDate;
+      lc.IP_Document_Receiving_Date = this.convertToLocalDates(this.Formgroup.value.IPDocReceivingDate);
     }
     if (
       this.Formgroup.value.FDDRecDate != undefined &&
       this.Formgroup.value.FDDRecDate != ''
     ) {
-      lc.FddTtReceiveDate = this.Formgroup.value.FDDRecDate;
+      lc.FddTtReceiveDate = this.convertToLocalDates(this.Formgroup.value.FDDRecDate);
     }
     if (
       this.Formgroup.value.ActualPaymentRecDate != undefined &&
       this.Formgroup.value.ActualPaymentRecDate != ''
     ) {
       lc.Actual_Payment_Receiving_Date =
-        this.Formgroup.value.DocPrActualPaymentRecDateesBankDate;
+        this.convertToLocalDates(this.Formgroup.value.ActualPaymentRecDate);
     }
     if (
       this.Formgroup.value.ExportLCSCDate != undefined &&
       this.Formgroup.value.ExportLCSCDate != ''
     ) {
-      lc.Export_LC_SC_Date = this.Formgroup.value.ExportLCSCDate;
+      this.convertToLocalDates(lc.Export_LC_SC_Date = this.Formgroup.value.ExportLCSCDate);
     }
 
     lc.Customer_Bank = this.Formgroup.value.CustomerBankName;
@@ -554,5 +565,30 @@ export class GenerateLcComponent {
     const formatted = `${yyyy}/${mm}/${dd}`;
 
     return formatted;
+  }
+
+  
+  convertDatesddmmyyy(dateString: any) {
+    if (dateString == '' || dateString == undefined) return '';
+    var fDate = new Date(dateString);
+    const mm = String(fDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const dd = String(fDate.getDate()).padStart(2, '0');
+    const yyyy = fDate.getFullYear();
+
+    const formatted = `${dd}/${mm}/${yyyy}`;
+
+    return formatted;
+  }
+
+  convertToLocalDates(dateString: any){
+    const nowTime = new Date(dateString);
+    const localISO = new Date(
+      nowTime.getTime() - nowTime.getTimezoneOffset() * 60000,
+    )
+      .toISOString()
+      .slice(0, 19)
+      .replace('T', ' ');
+
+      return localISO;
   }
 }
