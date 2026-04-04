@@ -16,6 +16,8 @@ import Swal from 'sweetalert2';
 import { DividerModule } from 'primeng/divider';
 import { MasterEntryService } from '../services/masterEntry/masterEntry.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CalendarModule } from 'primeng/calendar';
+
 @Component({
   standalone: true,
   selector: 'app-challan',
@@ -29,6 +31,7 @@ import { ActivatedRoute, Router } from '@angular/router';
     DividerModule,
     DialogModule,
     ButtonModule,
+    CalendarModule,
   ],
 })
 export class ChallanComponent implements OnInit {
@@ -44,7 +47,7 @@ export class ChallanComponent implements OnInit {
 
   private setEditDateMessage(
     msg: string,
-    type: 'success' | 'error' | 'info' | 'warning'
+    type: 'success' | 'error' | 'info' | 'warning',
   ) {
     this.editDateMessageText = msg;
     this.editDateMessageType = type;
@@ -65,7 +68,7 @@ export class ChallanComponent implements OnInit {
     private getDataService: GetDataService,
     private reportService: ReportService,
     private masterEntryService: MasterEntryService,
-    private router: Router
+    private router: Router,
   ) {}
 
   isChallanDetailsVisible = false;
@@ -174,8 +177,8 @@ export class ChallanComponent implements OnInit {
             json.Tables2 && json.Tables2.length > 0
               ? json.Tables2[0]
               : json.Tables1 && json.Tables1.length > 0
-              ? json.Tables1[0]
-              : null;
+                ? json.Tables1[0]
+                : null;
           this.challanDetails = { master: master, details: details };
           this.computeChallanTotals(details);
           this.isChallanDetailsVisible = true;
@@ -190,7 +193,7 @@ export class ChallanComponent implements OnInit {
         Swal.fire(
           'Error',
           'An error occurred while fetching challan info',
-          'error'
+          'error',
         );
       },
     });
@@ -205,7 +208,7 @@ export class ChallanComponent implements OnInit {
         Number(r.Roll ?? r.Rolls ?? r.RollValue ?? r.RollBoxPcs) || 0;
       const delivered =
         Number(
-          r.Delivered ?? r.DeliveredQty ?? r.Quantity ?? r.Deliverd_In_Meter
+          r.Delivered ?? r.DeliveredQty ?? r.Quantity ?? r.Deliverd_In_Meter,
         ) || 0;
       this.challanTotalsRolls += roll;
       this.challanTotalsDelivered += delivered;
@@ -228,7 +231,7 @@ export class ChallanComponent implements OnInit {
 
   private setEditChallanMessage(
     msg: string,
-    type: 'success' | 'error' | 'info' | 'warning'
+    type: 'success' | 'error' | 'info' | 'warning',
   ) {
     this.editChallanMessageText = msg;
     this.editChallanMessageType = type;
@@ -371,7 +374,7 @@ export class ChallanComponent implements OnInit {
                 if (updateSuccess) {
                   this.setEditChallanMessage(
                     'Challan number updated',
-                    'success'
+                    'success',
                   );
                   setTimeout(() => {
                     this.isEditChallanVisible = false;
@@ -382,7 +385,7 @@ export class ChallanComponent implements OnInit {
                 } else {
                   this.setEditChallanMessage(
                     res.msg || 'Failed to update challan',
-                    'error'
+                    'error',
                   );
                 }
               },
@@ -397,7 +400,7 @@ export class ChallanComponent implements OnInit {
             Swal.fire(
               'Error',
               checkRes.msg || 'Failed to validate challan',
-              'error'
+              'error',
             );
           }
         }
@@ -509,13 +512,13 @@ export class ChallanComponent implements OnInit {
           } else if (res.msg === 'Invalid Token') {
             this.setEditDateMessage(
               'Session Expired! Please Login Again.',
-              'info'
+              'info',
             );
             this.gs.Logout();
           } else {
             this.setEditDateMessage(
               res.msg || 'Failed to update date',
-              'error'
+              'error',
             );
           }
         },
@@ -549,13 +552,13 @@ export class ChallanComponent implements OnInit {
               Swal.fire('Deleted', 'Challan deleted', 'success');
               this.isChallanDetailsVisible = false;
               this.tableData = this.tableData.filter(
-                (t) => (t.Chalan_No || t.challanNo || t.ChalanNo) !== challanNo
+                (t) => (t.Chalan_No || t.challanNo || t.ChalanNo) !== challanNo,
               );
             } else {
               Swal.fire(
                 'Error',
                 res.msg || 'Failed to delete challan',
-                'error'
+                'error',
               );
             }
           },
@@ -612,7 +615,7 @@ export class ChallanComponent implements OnInit {
     const width = item?.Color || '';
     const color = item?.Width || '';
     const rollCount = Number(
-      item?.Roll || item?.Rolls || item?.RollValue || item?.RollBoxPcs || 0
+      item?.Roll || item?.Rolls || item?.RollValue || item?.RollBoxPcs || 0,
     );
     const totalRoll = rollCount; // Assuming totalRoll is equivalent to rollCount
 

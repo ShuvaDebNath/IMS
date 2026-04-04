@@ -8,7 +8,10 @@
 	align-items: center;
 	gap: 8px;
 }
-
+.card-header .card-title{
+	font-size: 24px !important;
+	font-weight: bold;
+}
 .delivery-header-row .col-auto {
 	flex: 0 0 auto; /* prevent flex growing/shrinking */
 }
@@ -26,7 +29,15 @@ p-inputNumber.min-w-140,
 p-inputNumber.min-w-220 {
 	display: inline-block;
 }
-
+.btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 130px;
+}
 /* Small visual tweak: align labels a bit tighter */
 .delivery-header-row label {
 	margin-right: 6px;
@@ -46,4 +57,78 @@ p-inputNumber.min-w-220 {
 		flex-direction: column;
 		align-items: stretch;
 	}
+}
+
+/* TABLE HEADER DESIGN */
+::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  background-color: #6a1a3f !important;
+  color: white !important;
+  white-space: nowrap;
+  text-align: center;
+  border: 1px solid #cfcfcf !important; /* Added border */
+}
+
+/* SORT ICON COLOR */
+::ng-deep .p-datatable .p-datatable-thead > tr > th .p-sortable-column-icon {
+  color: white !important;
+}
+
+/* HEADER HOVER */
+::ng-deep .p-datatable .p-datatable-thead > tr > th.p-sortable-column:hover {
+  background-color: #7a2349 !important;
+}
+
+/* ACTIVE SORT HEADER */
+::ng-deep .p-datatable .p-datatable-thead > tr > th.p-sortable-column.p-highlight {
+  background-color: #5a0f2f !important;
+}
+
+/* TABLE CELL ALIGNMENT + BORDERS */
+::ng-deep .p-datatable th,
+::ng-deep .p-datatable td {
+  white-space: nowrap;
+  vertical-align: middle;
+  text-align: center;
+  border: 1px solid #d6d6d6 !important; /* Added cell border */
+}
+
+/* FROZEN COLUMN BACKGROUND */
+::ng-deep .p-datatable .p-frozen-column {
+  background: #fff; 
+}
+
+/* TABLE LAYOUT FIXED (ALL COLUMNS SAME WIDTH) */
+::ng-deep .p-datatable table {
+  border-collapse: collapse;
+  table-layout: fixed; /* Equal width columns */
+  width: 100%;
+}
+
+/* INPUT FULL WIDTH */
+::ng-deep .p-inputnumber,
+::ng-deep .p-dropdown {
+  width: 100%;
+}
+
+/* ROW HOVER EFFECT */
+::ng-deep .p-datatable tbody tr:hover {
+  background: #f9f3f6;
+}
+
+/* PAGINATOR DESIGN */
+::ng-deep .p-paginator {
+  display: flex !important;
+  align-items: center;
+}
+
+::ng-deep .p-paginator .p-paginator-current {
+  margin-right: auto !important;
+}
+
+::ng-deep .p-paginator .p-paginator-pages,
+::ng-deep .p-paginator .p-paginator-next,
+::ng-deep .p-paginator .p-paginator-prev,
+::ng-deep .p-paginator .p-paginator-first,
+::ng-deep .p-paginator .p-paginator-last {
+  margin-left: 0 !important;
 }

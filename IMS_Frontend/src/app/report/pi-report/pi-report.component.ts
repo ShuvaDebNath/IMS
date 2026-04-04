@@ -321,4 +321,7 @@ export class PiReportComponent {
       },
     });
   }
+    toggleText(item: any) {
+    item.showFull = !item.showFull;
+  }
 }
