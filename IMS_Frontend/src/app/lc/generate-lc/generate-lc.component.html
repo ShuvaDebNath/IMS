@@ -266,15 +266,28 @@
               </div>
             </div>
 
+            <div class="col-md-6">
+              <div class="row align-items-center mb-3">
+                <div class="col-md-4 text-end fs-6 fw-bold">
+                  Invoice No With Date
+                </div>
+                <div class="col-md-8">
+                  <input
+                    [style]="{ width: '70%' }"
+                    type="text"
+                    formControlName="InvoiceNoWitDate"
+                    class="form-control"
+                    placeholder="Invoice No With Date"
+                  />
+                </div>
+              </div>
+            </div>
+
             <!-- All Date Fields (Same Pattern) -->
 
             <ng-container
               *ngFor="
                 let field of [
-                  {
-                    label: 'Invoice No With Date',
-                    control: 'InvoiceNoWitDate',
-                  },
                   {
                     label: 'IP Documents Sending Date',
                     control: 'IPDocSendingDate',

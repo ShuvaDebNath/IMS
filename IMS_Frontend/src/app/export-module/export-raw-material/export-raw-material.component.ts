@@ -240,6 +240,22 @@ export class ExportRawMaterialComponent {
     // 1) Form -> DTO (typed)
     const fv = this.exportForm.value;
 
+    var totalQty = 0;
+    var totalRoll = 0;
+    var totalBag = 0;
+    var totalWeight = 0;
+
+    fv.items.map((i:any)=>{
+      totalQty+=i.qty;
+      totalWeight+=i.weight
+      if(i.rollOrBag=='roll'){
+        totalRoll+=i.rollBagQty;
+      }
+      else{
+        totalBag+=i.rollBagQty;
+      }
+    });
+
     this.recalcTotals();
     const masterRow = {
       ExportNumber: fv.ExportNo,
@@ -247,13 +263,13 @@ export class ExportRawMaterialComponent {
       Shipping_Information: fv.ShippingInformation ?? '',
       Loading_Port_ID: fv.Loading_Port,
       Destination_Port_ID: fv.Destination_Port,
-      Net_Weight: 0,
+      Net_Weight: totalWeight,
       Sent_By: window.localStorage.getItem('userId'),
-      Total_Qty: 0,
+      Total_Qty: totalQty,
       Status: 'Pending',
       Note: fv.remarks,
-      Total_Roll: 0,
-      Total_Bag: 0,
+      Total_Roll: totalRoll,
+      Total_Bag: totalBag,
     };
     const detailRows = fv.items.map((i: any) => ({
       RawMaterial_ID: i.article,

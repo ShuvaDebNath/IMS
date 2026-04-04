@@ -278,7 +278,7 @@ export class GenerateLcComponent {
     }
 
     lc.Customer_Bank = this.Formgroup.value.CustomerBankName;
-    lc.Invoice_No = this.convertToLocalDates(this.Formgroup.value.InvoiceNoWitDate);
+    lc.Invoice_No = this.Formgroup.value.InvoiceNoWitDate;
     lc.Payment_Term_ID = this.Formgroup.value.PaymentTermsLC;
     lc.Export_LC_SC = this.Formgroup.value.ExportLCSC;
     lc.LCA_Form_No = this.Formgroup.value.LCAFormNo;
@@ -378,7 +378,7 @@ export class GenerateLcComponent {
             this.Formgroup.controls.IssueDate.setValue(this.convertDatesddmmyyy(e.Issue_Date));
             this.Formgroup.controls.ExpiryDate.setValue(this.convertDatesddmmyyy(e.Expiry_Date));
             this.Formgroup.controls.CustomerBankName.setValue(e.Customer_Bank);
-            this.Formgroup.controls.InvoiceNoWitDate.setValue(this.convertDatesddmmyyy(e.Invoice_No));
+            this.Formgroup.controls.InvoiceNoWitDate.setValue(e.Invoice_No);
             this.Formgroup.controls.IPDocSendingDate.setValue(
               this.convertDatesddmmyyy(e.IP_Document_Sending_Date
             ));
