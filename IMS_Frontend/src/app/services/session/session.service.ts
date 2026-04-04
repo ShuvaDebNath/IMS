@@ -50,11 +50,11 @@ export class SessionService {
       clearInterval(this.intervalRef);
     }
 
-    this.ngZone.runOutsideAngular(() => {
-      this.intervalRef = setInterval(() => {
-        this.checkExpiry();
-      }, 1000);
-    });
+    // this.ngZone.runOutsideAngular(() => {
+    //   this.intervalRef = setInterval(() => {
+    //     this.checkExpiry();
+    //   }, 1000);
+    // });
   }
 
   private checkExpiry(): void {

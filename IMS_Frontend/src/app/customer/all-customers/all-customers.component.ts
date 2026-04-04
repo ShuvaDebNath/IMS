@@ -362,3 +362,4 @@ export class AllCustomersComponent {
     item.showFull = !item.showFull;
   }
 }
+ 
