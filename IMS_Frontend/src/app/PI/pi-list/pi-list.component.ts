@@ -412,7 +412,9 @@ export class PiListComponent implements OnInit {
       return;
     }
     const selectedIds = this.selectedRows.map((r) => r.PI_Master_ID);
-
+    console.log(status);
+    
+       var percentageStatus = '0';
     Swal.fire({
       title: `Do you want to ${status}?`,
       showDenyButton: true,
@@ -420,7 +422,13 @@ export class PiListComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         selectedIds.forEach((id: any) => {
-          let queryParams = { Status: status, LastUpdateDate: new Date() };
+          if(status=='Quartar Approved'){
+            percentageStatus = '99'
+          }
+          else if(status=='Full Apporved'){
+            percentageStatus = '100'
+          }
+          let queryParams = { CustomMaxDeliveryPercentage:percentageStatus,Status: status, LastUpdateDate: new Date() };
           let condition = { PI_Master_ID: id };
 
           this.service
