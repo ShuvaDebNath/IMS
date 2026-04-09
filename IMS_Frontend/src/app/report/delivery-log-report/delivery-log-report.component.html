@@ -4,7 +4,7 @@
       <h1>Delivery Log Report</h1>
     </div>
     <div class="card-body">
-      <form
+      <!-- <form
         [formGroup]="dateForm"
         class="row p-3 shadow-sm g-3 align-items-end mb-3"
         (ngSubmit)="loadAllPI()"
@@ -107,6 +107,133 @@
             <i class="pi pi-download me-1"></i> Load
           </button>
         </div>
+      </form> -->
+       <form
+        [formGroup]="dateForm"
+        class="row g-3 p-3 shadow-sm rounded align-items-center mb-3"
+        (ngSubmit)="loadAllPI()"
+      >
+        <!-- Select Date -->
+        <div class="col-4">
+          <label class="form-label">Select Date</label>
+          <div class="range-container">
+            <p-calendar
+              formControlName="fromDate"
+              dateFormat="dd/mm/yy"
+              placeholder="From"
+              inputStyleClass="custom-date-input"
+            ></p-calendar>
+
+            <span class="range-divider">to</span>
+
+            <p-calendar
+              formControlName="toDate"
+              dateFormat="dd/mm/yy"
+              placeholder="To"
+              inputStyleClass="custom-date-input"
+            ></p-calendar>
+          </div>
+        </div>
+
+        <!-- PI No -->
+        <div class="col-md-2">
+          <label class="form-label fw-bold"
+            >PI No <span class="text-danger">*</span></label
+          >
+          <p-dropdown
+            [style]="{ width: '100%' }"
+            class="p-0"
+            [options]="PIList"
+            optionLabel="PINo"
+            [filter]="true"
+            filterBy="PINo"
+            [showClear]="true"
+            placeholder="Select PI"
+            optionValue="PI_Master_Id"
+            formControlName="PIId"
+            [virtualScroll]="true"
+            [virtualScrollItemSize]="30"
+            appendTo="body"
+            panelStyleClass="description-panel"
+            [style]="{ width: '100%', height: '52px' }"
+            placeholder="Select Description"
+            styleClass="table-dropdown w-100"
+          >
+            <ng-template let-AB pTemplate="item">
+              <div>{{ AB.PINo }}</div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+
+        <!-- Client List -->
+        <div class="col-md-2">
+          <label class="form-label fw-bold"
+            >Client List <span class="text-danger">*</span></label
+          >
+          <p-dropdown
+            [style]="{ width: '100%' }"
+            class="p-0"
+            [options]="ClientList"
+            optionLabel="Company_Name"
+            [filter]="true"
+            filterBy="Company_Name"
+            [showClear]="true"
+            placeholder="Select Client"
+            optionValue="Customer_ID"
+            formControlName="ClientId"
+            [virtualScroll]="true"
+            [virtualScrollItemSize]="30"
+            appendTo="body"
+            panelStyleClass="description-panel"
+            [style]="{ width: '100%', height: '52px' }"
+            placeholder="Select Description"
+            styleClass="table-dropdown w-100"
+          >
+            <ng-template let-AB pTemplate="item">
+              <div>{{ AB.Company_Name }}</div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+
+        <!-- Marketing Concern -->
+        <div class="col-md-2">
+          <label class="form-label fw-bold"
+            >Marketing Concern <span class="text-danger">*</span></label
+          >
+          <p-dropdown
+            [style]="{ width: '100%' }"
+            class="p-0"
+            [options]="SuperiorList"
+            optionLabel="UserName"
+            [filter]="true"
+            filterBy="UserName"
+            [showClear]="true"
+            placeholder="Select User"
+            optionValue="User_ID"
+            formControlName="SuperiorId"
+            appendTo="body"
+            panelStyleClass="description-panel"
+            [style]="{ width: '100%', height: '52px' }"
+            placeholder="Select Description"
+            styleClass="table-dropdown w-100"
+          >
+            <ng-template let-AB pTemplate="item">
+              <div>{{ AB.UserName }}</div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+
+        <!-- Load Button -->
+        <div class="col-md-2 d-flex flex-column justify-content-end">
+          <button
+            type="submit"
+            class="btn theme-btn w-100"
+            [disabled]="dateForm.invalid"
+            style="height: 48px"
+          >
+            <i class="pi pi-download me-1"></i> Load
+          </button>
+        </div>
       </form>
       <div class="shadow-sm p-2">
         <!-- Delivery log table uses server-side keyset pagination,
@@ -145,7 +272,7 @@
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
         >
           <ng-template pTemplate="caption">
-            <div class="table-toolbar">
+            <div class="table-toolbar d-flex justify-content-end">
               <span class="p-input-icon-left">
                 <i class="pi pi-search"></i>
                 <input

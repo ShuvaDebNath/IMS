@@ -8,7 +8,7 @@
     <div class="card-body">
       <form [formGroup]="SearchForm">
         <div class="row align-items-center">
-          <div class="col-3">
+          <!-- <div class="col-3">
             <label class="control-label" for="inlineFormInputGroup"
               >From Date</label
             ><input
@@ -22,6 +22,27 @@
               >To Date</label
             >
             <input type="date" formControlName="toDate" class="form-control" />
+          </div> -->
+
+          <div class="col-4">
+            <label class="form-label">Select Date</label>
+            <div class="range-container">
+              <p-calendar
+                formControlName="fromDate"
+                dateFormat="dd/mm/yy"
+                placeholder="From"
+                inputStyleClass="custom-date-input"
+              ></p-calendar>
+
+              <span class="range-divider">to</span>
+
+              <p-calendar
+                formControlName="toDate"
+                dateFormat="dd/mm/yy"
+                placeholder="To"
+                inputStyleClass="custom-date-input"
+              ></p-calendar>
+            </div>
           </div>
           <div class="col-3">
             <label class="control-label" for="inlineFormInputGroup"
@@ -53,6 +74,7 @@
               type="button"
               (click)="Search()"
               class="btn btn-sm theme-btn mt-4 p-1"
+              style="height: 48px; width: 130px;"
             >
               <i class="fas fa-search"></i>&nbsp;Search
             </button>
@@ -98,12 +120,12 @@
           'Warehouse',
           'Comments',
           'UserName',
-          'Status'
+          'Status',
         ]"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
       >
         <ng-template pTemplate="caption">
-          <div class="table-toolbar">
+          <div class="table-toolbar d-flex justify-content-end">
             <span class="p-input-icon-left">
               <i class="pi pi-search"></i>
               <input

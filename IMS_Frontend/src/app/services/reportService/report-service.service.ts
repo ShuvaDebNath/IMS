@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { GlobalConfig } from '../../global-config.config';
 import { GlobalServiceService } from '../../services/Global-service.service';
@@ -65,8 +65,8 @@ export class ReportService {
             rptType === 'pdf'
               ? 'application/pdf'
               : rptType === 'excel'
-              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
           const blob = new Blob([res], { type: blobType });
 
@@ -74,8 +74,8 @@ export class ReportService {
             rptType === 'pdf'
               ? 'SampleRequestReport.pdf'
               : rptType === 'excel'
-              ? 'SampleRequestReport.xlsx'
-              : 'SampleRequestReport.docx';
+                ? 'SampleRequestReport.xlsx'
+                : 'SampleRequestReport.docx';
 
           if (isView && rptType === 'pdf') {
             // View PDF in new tab
@@ -114,52 +114,52 @@ export class ReportService {
     this.http
       .get(url, {
         headers,
-        params: { rptType, fromDate, toDate ,userId},
+        params: { rptType, fromDate, toDate, userId },
         responseType: 'blob',
       })
       .subscribe(
         (res: Blob) => {
           const blobType =
-          rptType === 'pdf'
-            ? 'application/pdf'
-            : rptType === 'excel'
-            ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-            : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+            rptType === 'pdf'
+              ? 'application/pdf'
+              : rptType === 'excel'
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
-        const blob = new Blob([res], { type: blobType });
+          const blob = new Blob([res], { type: blobType });
 
-        // Choose base filename according to requested reportType
-        const reportTypeKey = (rptType || '').toString();
-        
-        var baseFileName = 'PIReport';
-        const fileName =
-          rptType === 'pdf'
-            ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.pdf`
-            : rptType === 'excel'
-            ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
+          // Choose base filename according to requested reportType
+          const reportTypeKey = (rptType || '').toString();
+
+          var baseFileName = 'PIReport';
+          const fileName =
+            rptType === 'pdf'
+              ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
+                /\//g,
+                '-'
+              )}.pdf`
+              : rptType === 'excel'
+                ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.xlsx`
-            : `${baseFileName}_${this.formatDateDMY(new Date()).replace(
+                : `${baseFileName}_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.docx`;
 
-        if (isView && rptType === 'pdf') {
-          // View PDF in new tab
-          const fileURL = window.URL.createObjectURL(blob);
-          window.open(fileURL, '_blank');
-        } else {
-          // Force download
-          const link = document.createElement('a');
-          link.href = window.URL.createObjectURL(blob);
-          link.download = fileName;
-          link.click();
-        }
-      });
+          if (isView && rptType === 'pdf') {
+            // View PDF in new tab
+            const fileURL = window.URL.createObjectURL(blob);
+            window.open(fileURL, '_blank');
+          } else {
+            // Force download
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = fileName;
+            link.click();
+          }
+        });
   }
 
   PrintProformaInvoiceRequest(report: any, rptType: any, isView: any) {
@@ -184,21 +184,21 @@ export class ReportService {
           rptType === 'pdf'
             ? 'application/pdf'
             : rptType === 'excel'
-            ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-            : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
         const blob = new Blob([res], { type: blobType });
 
         // Choose base filename according to requested reportType
         const reportTypeKey = (rptType || '').toString();
-        
+
         var baseFileName = 'PIReport';
         const fileName =
           rptType === 'pdf'
             ? `${baseFileName}.pdf`
             : rptType === 'excel'
-            ? `${baseFileName}.xlsx`
-            : `${baseFileName}.docx`;
+              ? `${baseFileName}.xlsx`
+              : `${baseFileName}.docx`;
 
         if (isView && rptType === 'pdf') {
           // View PDF in new tab
@@ -271,8 +271,8 @@ export class ReportService {
           rptType === 'pdf'
             ? 'application/pdf'
             : rptType === 'excel'
-            ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-            : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
         const blob = new Blob([res], { type: blobType });
 
@@ -309,8 +309,8 @@ export class ReportService {
           rptType === 'pdf'
             ? `${baseFileName}.pdf`
             : rptType === 'excel'
-            ? `${baseFileName}.xlsx`
-            : `${baseFileName}.docx`;
+              ? `${baseFileName}.xlsx`
+              : `${baseFileName}.docx`;
 
         if (isView && rptType === 'pdf') {
           // View PDF in new tab
@@ -433,8 +433,8 @@ export class ReportService {
             rptType === 'pdf'
               ? 'application/pdf'
               : rptType === 'excel'
-              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
           const blob = new Blob([res], { type: blobType });
 
@@ -442,11 +442,11 @@ export class ReportService {
             rptType === 'pdf'
               ? 'ApplicationReport.pdf'
               : rptType === 'excel'
-              ? `ApplicationReport_${this.formatDateDMY(new Date()).replace(
+                ? `ApplicationReport_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.xlsx`
-              : `ApplicationReport_${this.formatDateDMY(new Date()).replace(
+                : `ApplicationReport_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.docx`;
@@ -503,23 +503,23 @@ export class ReportService {
             rptType === 'pdf'
               ? 'application/pdf'
               : rptType === 'excel'
-              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
           const blob = new Blob([res], { type: blobType });
 
           const fileName =
             rptType === 'pdf'
               ? `LCReport${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.pdf`
+                /\//g,
+                '-'
+              )}.pdf`
               : rptType === 'excel'
-              ? `LCReport${this.formatDateDMY(new Date()).replace(
+                ? `LCReport${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.xlsx`
-              : `LCReport${this.formatDateDMY(new Date()).replace(
+                : `LCReport${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.docx`;
@@ -575,23 +575,23 @@ export class ReportService {
             rptType === 'pdf'
               ? 'application/pdf'
               : rptType === 'excel'
-              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
           const blob = new Blob([res], { type: blobType });
 
           const fileName =
             rptType === 'pdf'
               ? `CashReceiveReport${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.pdf`
+                /\//g,
+                '-'
+              )}.pdf`
               : rptType === 'excel'
-              ? `CashReceiveReport${this.formatDateDMY(new Date()).replace(
+                ? `CashReceiveReport${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.xlsx`
-              : `CashReceiveReport${this.formatDateDMY(new Date()).replace(
+                : `CashReceiveReport${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.docx`;
@@ -646,8 +646,8 @@ export class ReportService {
             rptType === 'pdf'
               ? 'application/pdf'
               : rptType === 'excel'
-              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
           const blob = new Blob([res], { type: blobType });
 
@@ -655,11 +655,11 @@ export class ReportService {
             rptType === 'pdf'
               ? 'ApplicationReport.pdf'
               : rptType === 'excel'
-              ? `ApplicationReport_${this.formatDateDMY(new Date()).replace(
+                ? `ApplicationReport_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.xlsx`
-              : `ApplicationReport_${this.formatDateDMY(new Date()).replace(
+                : `ApplicationReport_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.docx`;
@@ -714,8 +714,8 @@ export class ReportService {
             rptType === 'pdf'
               ? 'application/pdf'
               : rptType === 'excel'
-              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
           const blob = new Blob([res], { type: blobType });
 
@@ -723,11 +723,11 @@ export class ReportService {
             rptType === 'pdf'
               ? 'ApplicationReport.pdf'
               : rptType === 'excel'
-              ? `ApplicationReport_${this.formatDateDMY(new Date()).replace(
+                ? `ApplicationReport_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.xlsx`
-              : `ApplicationReport_${this.formatDateDMY(new Date()).replace(
+                : `ApplicationReport_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.docx`;
@@ -782,8 +782,8 @@ export class ReportService {
             rptType === 'pdf'
               ? 'application/pdf'
               : rptType === 'excel'
-              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
           const blob = new Blob([res], { type: blobType });
 
@@ -791,11 +791,11 @@ export class ReportService {
             rptType === 'pdf'
               ? 'SalesContractReport.pdf'
               : rptType === 'excel'
-              ? `SalesContractReport_${this.formatDateDMY(new Date()).replace(
+                ? `SalesContractReport_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.xlsx`
-              : `SalesContractReport_${this.formatDateDMY(new Date()).replace(
+                : `SalesContractReport_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.docx`;
@@ -853,8 +853,8 @@ export class ReportService {
             rptType === 'pdf'
               ? 'application/pdf'
               : rptType === 'excel'
-              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
           const blob = new Blob([res], { type: blobType });
 
@@ -862,11 +862,11 @@ export class ReportService {
             rptType === 'pdf'
               ? 'CustomerReport.pdf'
               : rptType === 'excel'
-              ? `CustomerReport_${this.formatDateDMY(new Date()).replace(
+                ? `CustomerReport_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.xlsx`
-              : `CustomerReport_${this.formatDateDMY(new Date()).replace(
+                : `CustomerReport_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.docx`;
@@ -934,8 +934,8 @@ export class ReportService {
             rptType === 'pdf'
               ? 'application/pdf'
               : rptType === 'excel'
-              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
           const blob = new Blob([res], { type: blobType });
 
@@ -943,11 +943,11 @@ export class ReportService {
             rptType === 'pdf'
               ? 'BuyerReport.pdf'
               : rptType === 'excel'
-              ? `BuyerReport_${this.formatDateDMY(new Date()).replace(
+                ? `BuyerReport_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.xlsx`
-              : `BuyerReport_${this.formatDateDMY(new Date()).replace(
+                : `BuyerReport_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.docx`;
@@ -1002,8 +1002,8 @@ export class ReportService {
             rptType === 'pdf'
               ? 'application/pdf'
               : rptType === 'excel'
-              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
           const blob = new Blob([res], { type: blobType });
 
@@ -1011,11 +1011,11 @@ export class ReportService {
             rptType === 'pdf'
               ? 'TaskReport.pdf'
               : rptType === 'excel'
-              ? `TaskReport_${this.formatDateDMY(new Date()).replace(
+                ? `TaskReport_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.xlsx`
-              : `TaskReport_${this.formatDateDMY(new Date()).replace(
+                : `TaskReport_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.docx`;
@@ -1074,8 +1074,8 @@ export class ReportService {
             rptType === 'pdf'
               ? 'application/pdf'
               : rptType === 'excel'
-              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
           const blob = new Blob([res], { type: blobType });
 
@@ -1083,11 +1083,11 @@ export class ReportService {
             rptType === 'pdf'
               ? 'ExportReport.pdf'
               : rptType === 'excel'
-              ? `ExportReport_${this.formatDateDMY(new Date()).replace(
+                ? `ExportReport_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.xlsx`
-              : `ExportReport_${this.formatDateDMY(new Date()).replace(
+                : `ExportReport_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.docx`;
@@ -1146,8 +1146,8 @@ export class ReportService {
             rptType === 'pdf'
               ? 'application/pdf'
               : rptType === 'excel'
-              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
           const blob = new Blob([res], { type: blobType });
 
@@ -1155,10 +1155,10 @@ export class ReportService {
             rptType === 'pdf'
               ? 'RawMaterialIssueInvoiceReport.pdf'
               : rptType === 'excel'
-              ? `RawMaterialIssueInvoiceReport_${this.formatDateDMY(
+                ? `RawMaterialIssueInvoiceReport_${this.formatDateDMY(
                   new Date()
                 ).replace(/\//g, '-')}.xlsx`
-              : `RawMaterialIssueInvoiceReport_${this.formatDateDMY(
+                : `RawMaterialIssueInvoiceReport_${this.formatDateDMY(
                   new Date()
                 ).replace(/\//g, '-')}.docx`;
 
@@ -1209,8 +1209,8 @@ export class ReportService {
             rptType === 'pdf'
               ? 'application/pdf'
               : rptType === 'excel'
-              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
           const blob = new Blob([res], { type: blobType });
 
@@ -1218,11 +1218,11 @@ export class ReportService {
             rptType === 'pdf'
               ? 'RMStockReport.pdf'
               : rptType === 'excel'
-              ? `RMStockReport_${this.formatDateDMY(new Date()).replace(
+                ? `RMStockReport_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.xlsx`
-              : `RMStockReport_${this.formatDateDMY(new Date()).replace(
+                : `RMStockReport_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.docx`;
@@ -1281,8 +1281,8 @@ export class ReportService {
             rptType === 'pdf'
               ? 'application/pdf'
               : rptType === 'excel'
-              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
           const blob = new Blob([res], { type: blobType });
 
@@ -1290,11 +1290,11 @@ export class ReportService {
             rptType === 'pdf'
               ? 'ExportReport.pdf'
               : rptType === 'excel'
-              ? `ExportReport_${this.formatDateDMY(new Date()).replace(
+                ? `ExportReport_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.xlsx`
-              : `ExportReport_${this.formatDateDMY(new Date()).replace(
+                : `ExportReport_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.docx`;
@@ -1353,8 +1353,8 @@ export class ReportService {
             rptType === 'pdf'
               ? 'application/pdf'
               : rptType === 'excel'
-              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
           const blob = new Blob([res], { type: blobType });
 
@@ -1362,11 +1362,11 @@ export class ReportService {
             rptType === 'pdf'
               ? 'FinishGoodSentReport.pdf'
               : rptType === 'excel'
-              ? `FinishGoodSentReport_${this.formatDateDMY(new Date()).replace(
+                ? `FinishGoodSentReport_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.xlsx`
-              : `FinishGoodSentReport_${this.formatDateDMY(new Date()).replace(
+                : `FinishGoodSentReport_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.docx`;
@@ -1425,8 +1425,8 @@ export class ReportService {
             rptType === 'pdf'
               ? 'application/pdf'
               : rptType === 'excel'
-              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
           const blob = new Blob([res], { type: blobType });
 
@@ -1434,10 +1434,10 @@ export class ReportService {
             rptType === 'pdf'
               ? 'FinishGoodReceiveReport.pdf'
               : rptType === 'excel'
-              ? `FinishGoodReceiveReport_${this.formatDateDMY(
+                ? `FinishGoodReceiveReport_${this.formatDateDMY(
                   new Date()
                 ).replace(/\//g, '-')}.xlsx`
-              : `FinishGoodReceiveReport_${this.formatDateDMY(
+                : `FinishGoodReceiveReport_${this.formatDateDMY(
                   new Date()
                 ).replace(/\//g, '-')}.docx`;
 
@@ -1488,8 +1488,8 @@ export class ReportService {
             rptType === 'pdf'
               ? 'application/pdf'
               : rptType === 'excel'
-              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
           const blob = new Blob([res], { type: blobType });
 
@@ -1497,11 +1497,11 @@ export class ReportService {
             rptType === 'pdf'
               ? 'FGStockReport.pdf'
               : rptType === 'excel'
-              ? `FGStockReport_${this.formatDateDMY(new Date()).replace(
+                ? `FGStockReport_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.xlsx`
-              : `FGStockReport_${this.formatDateDMY(new Date()).replace(
+                : `FGStockReport_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.docx`;
@@ -1558,23 +1558,23 @@ export class ReportService {
             rptType === 'pdf'
               ? 'application/pdf'
               : rptType === 'excel'
-              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
           const blob = new Blob([res], { type: blobType });
 
           const fileName =
             rptType === 'pdf'
               ? `FGSentReceive${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.pdf`
+                /\//g,
+                '-'
+              )}.pdf`
               : rptType === 'excel'
-              ? `FGSentReceive${this.formatDateDMY(new Date()).replace(
+                ? `FGSentReceive${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.xlsx`
-              : `FGSentReceive${this.formatDateDMY(new Date()).replace(
+                : `FGSentReceive${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.docx`;
@@ -1633,8 +1633,8 @@ export class ReportService {
             rptType === 'pdf'
               ? 'application/pdf'
               : rptType === 'excel'
-              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
           const blob = new Blob([res], { type: blobType });
 
@@ -1642,11 +1642,11 @@ export class ReportService {
             rptType === 'pdf'
               ? 'RMPendingDetailsReport.pdf'
               : rptType === 'excel'
-              ? `RMPendingDetailsReport${this.formatDateDMY(new Date()).replace(
+                ? `RMPendingDetailsReport${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.xlsx`
-              : `RMPendingDetailsReport${this.formatDateDMY(new Date()).replace(
+                : `RMPendingDetailsReport${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.docx`;
@@ -1705,8 +1705,8 @@ export class ReportService {
             rptType === 'pdf'
               ? 'application/pdf'
               : rptType === 'excel'
-              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
           const blob = new Blob([res], { type: blobType });
 
@@ -1714,11 +1714,11 @@ export class ReportService {
             rptType === 'pdf'
               ? 'RMDetailsReport.pdf'
               : rptType === 'excel'
-              ? `RMDetailsReport${this.formatDateDMY(new Date()).replace(
+                ? `RMDetailsReport${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.xlsx`
-              : `RMDetailsReport${this.formatDateDMY(new Date()).replace(
+                : `RMDetailsReport${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.docx`;
@@ -1774,8 +1774,8 @@ export class ReportService {
             rptType === 'pdf'
               ? 'application/pdf'
               : rptType === 'excel'
-              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
           const blob = new Blob([res], { type: blobType });
 
@@ -1783,11 +1783,11 @@ export class ReportService {
             rptType === 'pdf'
               ? 'MonthlyTaskDetails.pdf'
               : rptType === 'excel'
-              ? `MonthlyTaskDetails_${this.formatDateDMY(new Date()).replace(
+                ? `MonthlyTaskDetails_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.xlsx`
-              : `MonthlyTaskDetails_${this.formatDateDMY(new Date()).replace(
+                : `MonthlyTaskDetails_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.docx`;
@@ -1830,52 +1830,52 @@ export class ReportService {
     this.http
       .get(url, {
         headers,
-        params: { rptType, fromDate, toDate,userId },
+        params: { rptType, fromDate, toDate, userId },
         responseType: 'blob',
       })
       .subscribe(
         (res: Blob) => {
           const blobType =
-          rptType === 'pdf'
-            ? 'application/pdf'
-            : rptType === 'excel'
-            ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-            : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+            rptType === 'pdf'
+              ? 'application/pdf'
+              : rptType === 'excel'
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
-        const blob = new Blob([res], { type: blobType });
+          const blob = new Blob([res], { type: blobType });
 
-        // Choose base filename according to requested reportType
-        const reportTypeKey = (rptType || '').toString();
-        
-        var baseFileName = 'MonthlyTaskReport';
-        const fileName =
-          rptType === 'pdf'
-            ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.pdf`
-            : rptType === 'excel'
-            ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
+          // Choose base filename according to requested reportType
+          const reportTypeKey = (rptType || '').toString();
+
+          var baseFileName = 'MonthlyTaskReport';
+          const fileName =
+            rptType === 'pdf'
+              ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
+                /\//g,
+                '-'
+              )}.pdf`
+              : rptType === 'excel'
+                ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.xlsx`
-            : `${baseFileName}_${this.formatDateDMY(new Date()).replace(
+                : `${baseFileName}_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.docx`;
 
-        if (isView && rptType === 'pdf') {
-          // View PDF in new tab
-          const fileURL = window.URL.createObjectURL(blob);
-          window.open(fileURL, '_blank');
-        } else {
-          // Force download
-          const link = document.createElement('a');
-          link.href = window.URL.createObjectURL(blob);
-          link.download = fileName;
-          link.click();
-        }
-      });
+          if (isView && rptType === 'pdf') {
+            // View PDF in new tab
+            const fileURL = window.URL.createObjectURL(blob);
+            window.open(fileURL, '_blank');
+          } else {
+            // Force download
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = fileName;
+            link.click();
+          }
+        });
   }
 
   PrintClientVisitDetailsReport(report: any, rptType: 'pdf' | 'excel' | 'word', isView: any) {
@@ -1910,8 +1910,8 @@ export class ReportService {
             rptType === 'pdf'
               ? 'application/pdf'
               : rptType === 'excel'
-              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
           const blob = new Blob([res], { type: blobType });
 
@@ -1919,11 +1919,11 @@ export class ReportService {
             rptType === 'pdf'
               ? 'ClientVisitDetails.pdf'
               : rptType === 'excel'
-              ? `ClientVisitDetails${this.formatDateDMY(new Date()).replace(
+                ? `ClientVisitDetails${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.xlsx`
-              : `ClientVisitDetails${this.formatDateDMY(new Date()).replace(
+                : `ClientVisitDetails${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.docx`;
@@ -1966,52 +1966,52 @@ export class ReportService {
     this.http
       .get(url, {
         headers,
-        params: { rptType, fromDate, toDate,userId },
+        params: { rptType, fromDate, toDate, userId },
         responseType: 'blob',
       })
       .subscribe(
         (res: Blob) => {
           const blobType =
-          rptType === 'pdf'
-            ? 'application/pdf'
-            : rptType === 'excel'
-            ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-            : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+            rptType === 'pdf'
+              ? 'application/pdf'
+              : rptType === 'excel'
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
-        const blob = new Blob([res], { type: blobType });
+          const blob = new Blob([res], { type: blobType });
 
-        // Choose base filename according to requested reportType
-        const reportTypeKey = (rptType || '').toString();
-        
-        var baseFileName = 'ClientVisitDetails';
-        const fileName =
-          rptType === 'pdf'
-            ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
-                  /\//g,
-                  '-'
-                )}.pdf`
-            : rptType === 'excel'
-            ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
+          // Choose base filename according to requested reportType
+          const reportTypeKey = (rptType || '').toString();
+
+          var baseFileName = 'ClientVisitDetails';
+          const fileName =
+            rptType === 'pdf'
+              ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
+                /\//g,
+                '-'
+              )}.pdf`
+              : rptType === 'excel'
+                ? `${baseFileName}_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.xlsx`
-            : `${baseFileName}_${this.formatDateDMY(new Date()).replace(
+                : `${baseFileName}_${this.formatDateDMY(new Date()).replace(
                   /\//g,
                   '-'
                 )}.docx`;
 
-        if (isView && rptType === 'pdf') {
-          // View PDF in new tab
-          const fileURL = window.URL.createObjectURL(blob);
-          window.open(fileURL, '_blank');
-        } else {
-          // Force download
-          const link = document.createElement('a');
-          link.href = window.URL.createObjectURL(blob);
-          link.download = fileName;
-          link.click();
-        }
-      });
+          if (isView && rptType === 'pdf') {
+            // View PDF in new tab
+            const fileURL = window.URL.createObjectURL(blob);
+            window.open(fileURL, '_blank');
+          } else {
+            // Force download
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = fileName;
+            link.click();
+          }
+        });
   }
 
   PrintDeliveryReport(report: any, rptType: any, isView: any) {
@@ -2035,21 +2035,21 @@ export class ReportService {
           rptType === 'pdf'
             ? 'application/pdf'
             : rptType === 'excel'
-            ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-            : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
         const blob = new Blob([res], { type: blobType });
 
         // Choose base filename according to requested reportType
         const reportTypeKey = (rptType || '').toString();
-        
+
         var baseFileName = 'DeliveryReport';
         const fileName =
           rptType === 'pdf'
             ? `${baseFileName}.pdf`
             : rptType === 'excel'
-            ? `${baseFileName}.xlsx`
-            : `${baseFileName}.docx`;
+              ? `${baseFileName}.xlsx`
+              : `${baseFileName}.docx`;
 
         if (isView && rptType === 'pdf') {
           // View PDF in new tab
@@ -2063,5 +2063,140 @@ export class ReportService {
           link.click();
         }
       });
+  }
+
+  PrintUserReport(report: any, rptType: any, isView: any) {
+    console.log(report);
+
+    const RoleId = report.RoleId == '' ? 0 : report.RoleId;
+    const pageLength = report.pageLength;
+    const pageNo = report.pageNo;
+    const searchParam = report.searchParam;
+    const url = `${this.baseUrl}${this.apiController}/UserReport`;
+    const token = this.gs.getSessionData('token');
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    this.http
+      .get(url, {
+        headers,
+        params: { rptType, RoleId, pageLength, pageNo, searchParam },
+        responseType: 'blob',
+      })
+      .subscribe(
+        (res: Blob) => {
+          if (res.size === 0) {
+            Swal.fire(
+              'No Data Found',
+              'No records found for the selected criteria.',
+              'info'
+            );
+            return;
+          }
+          const blobType =
+            rptType === 'pdf'
+              ? 'application/pdf'
+              : rptType === 'excel'
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+
+          const blob = new Blob([res], { type: blobType });
+
+          const fileName =
+            rptType === 'pdf'
+              ? 'UserReport.pdf'
+              : rptType === 'excel'
+                ? `UserReport${this.formatDateDMY(new Date()).replace(
+                  /\//g,
+                  '-'
+                )}.xlsx`
+                : `UserReport${this.formatDateDMY(new Date()).replace(
+                  /\//g,
+                  '-'
+                )}.docx`;
+
+          if (isView && rptType === 'pdf') {
+            // View PDF in new tab
+            const fileURL = window.URL.createObjectURL(blob);
+            window.open(fileURL, '_blank');
+          } else {
+            // Force download
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = fileName;
+            link.click();
+          }
+        },
+        (err) => {
+          Swal.fire('Error', 'Failed to generate report.', 'error');
+        }
+      );
+  }
+
+
+
+  PrintPIReport(report: any, rptType: any, isView: any) {
+
+    const url = `${this.baseUrl}${this.apiController}/PIReport`;
+    const token = this.gs.getSessionData('token');
+
+    report.rptType = rptType;
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    const params = new HttpParams({ fromObject: report });
+
+    this.http.get(url, {
+      headers: headers,
+      params: params,
+      responseType: 'blob'
+    })
+      .subscribe(
+        (res: Blob) => {
+
+          if (res.size === 0) {
+            Swal.fire(
+              'No Data Found',
+              'No records found for the selected criteria.',
+              'info'
+            );
+            return;
+          }
+
+          const blobType =
+            rptType === 'pdf'
+              ? 'application/pdf'
+              : rptType === 'excel'
+                ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+
+          const blob = new Blob([res], { type: blobType });
+
+          const fileName =
+            rptType === 'pdf'
+              ? 'PIReport.pdf'
+              : rptType === 'excel'
+                ? `PIReport${this.formatDateDMY(new Date()).replace(/\//g, '-')}.xlsx`
+                : `PIReport${this.formatDateDMY(new Date()).replace(/\//g, '-')}.docx`;
+
+          if (isView && rptType === 'pdf') {
+            const fileURL = window.URL.createObjectURL(blob);
+            window.open(fileURL, '_blank');
+          } else {
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = fileName;
+            link.click();
+          }
+
+        },
+        (err) => {
+          Swal.fire('Error', 'Failed to generate report.', 'error');
+        }
+      );
   }
 }

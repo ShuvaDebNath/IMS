@@ -31,4 +31,6 @@ public interface IReportRepository
     Task<DataSet> TaskCustomerVisitReport(string fromDate, string toDate,string userId);
     Task<DataSet> TaskCustomerVisitDetailsReport(string id);
     Task<DataSet> DeliveryReport(ProformaInvoiceReportParams param);
+    Task<DataSet> UserReport(int RoleId, int pageLength, int pageNo, string searchParam);
+    Task<DataSet> PIReport(PIReportParams param);
 }
