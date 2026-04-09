@@ -21,7 +21,7 @@ import { ReportService } from 'src/app/services/reportService/report-service.ser
   styleUrls: ['./delivery-log-report.component.css']
 })
 export class DeliveryLogReportComponent {
-PIReport: any[] = [];
+  PIReport: any[] = [];
   detailsData: any = null;
   isDetailsVisible = false;
   PIList: any;
@@ -30,6 +30,18 @@ PIReport: any[] = [];
   SuperiorList: any;
   ClientList: any;
 
+  // Pagination state (classic 1,2,3... UI backed by keyset pagination)
+  pageSize = 50;
+  currentPage = 1;
+  totalRecords = 0;
+  totalPages = 0;
+  /**
+   * pageKeys[page] holds the keyset cursor used to request that page:
+   * - page 1 uses { lastDate: null, lastLedgerId: null }
+   * - page 2 uses the last row from page 1, etc.
+   */
+  pageKeys: { page: number; lastDate: string | null; lastLedgerId: number | null }[] = [];
+  isLoading = false;
 
   insertPermissions: boolean = false;
   updatePermissions: boolean = false;
@@ -69,6 +81,7 @@ PIReport: any[] = [];
     this.dateForm.get('fromDate')?.setValue(new Date().toISOString().split('T')[0]);
     this.dateForm.get('toDate')?.setValue(new Date().toISOString().split('T')[0]);
   }
+
   getInitialData() {
     var ProcedureData = {
       procedureName: '[usp_ProformaInvoice_GetInitial_Report]',
@@ -90,6 +103,10 @@ PIReport: any[] = [];
       error: (err) => {},
     });
   }
+
+  /**
+   * Load first page of Delivery Log result set (resets pagination and keyset cursor).
+   */
   loadAllPI(): void {
     if (this.dateForm.invalid) {
       swal.fire(
@@ -99,7 +116,8 @@ PIReport: any[] = [];
       );
       return;
     }
-    const { fromDate, toDate, PIId , SuperiorId, ClientId} = this.dateForm.value;
+
+    const { fromDate, toDate, PIId, SuperiorId, ClientId } = this.dateForm.value;
     if (new Date(fromDate) > new Date(toDate)) {
       swal.fire(
         'Validation Error!',
@@ -109,9 +127,53 @@ PIReport: any[] = [];
       return;
     }
 
-    const sentByStr = localStorage.getItem('userId');
-    const sentBy = sentByStr ? Number(sentByStr) : null;
-    
+    // Reset pagination state for a new search
+    this.PIReport = [];
+    this.tableVisible = false;
+    this.currentPage = 1;
+    this.totalRecords = 0;
+    this.totalPages = 0;
+    this.pageKeys = [];
+
+    // Page 1 always starts with null keyset (top of ordered list)
+    this.pageKeys[1] = { page: 1, lastDate: null, lastLedgerId: null };
+
+    this.fetchPage(1, fromDate, toDate, PIId, SuperiorId, ClientId);
+  }
+
+  /**
+   * Load a specific page using stored keyset cursor.
+   */
+  loadPage(page: number): void {
+    if (this.isLoading || page === this.currentPage || page < 1 || (this.totalPages && page > this.totalPages)) {
+      return;
+    }
+
+    if (!this.canNavigateTo(page) || this.dateForm.invalid) {
+      return;
+    }
+
+    const { fromDate, toDate, PIId, SuperiorId, ClientId } = this.dateForm.value;
+    this.fetchPage(page, fromDate, toDate, PIId, SuperiorId, ClientId);
+  }
+
+  /**
+   * Core keyset pagination call to backend stored procedure.
+   * It never uses OFFSET; it always asks for "next page after cursor".
+   */
+  private fetchPage(
+    page: number,
+    fromDate: string,
+    toDate: string,
+    PIId: any,
+    SuperiorId: any,
+    ClientId: any
+  ): void {
+    this.isLoading = true;
+
+    // Keyset cursor for requested page
+    const key = this.pageKeys[page] || { page, lastDate: null, lastLedgerId: null };
+
     const procedureData = {
       procedureName: 'usp_ProformaInvoice_DeliveryLog_Report',
       parameters: {
@@ -120,23 +182,154 @@ PIReport: any[] = [];
         PI_Master_Id: PIId,
         Client_Id: ClientId,
         User_Id: SuperiorId,
+        PageSize: this.pageSize,
+        LastDate: key.lastDate,
+        LastLedgerId: key.lastLedgerId
       },
     };
 
     this.getDataService.GetInitialData(procedureData).subscribe({
       next: (results) => {
+        this.isLoading = false;
         if (results.status) {
-          this.PIReport = JSON.parse(results.data).Tables1;
+          const parsed = JSON.parse(results.data);
+          const pageRows: any[] = parsed?.Tables1 ?? [];
 
-    console.log(this.PIReport);
+          if (!pageRows.length) {
+            if (page === 1) {
+              this.PIReport = [];
+              this.tableVisible = false;
+              this.totalRecords = 0;
+              this.totalPages = 0;
+            }
+            return;
+          }
+
+          // Replace current page data (classic page-based view)
+          this.PIReport = pageRows;
           this.tableVisible = true;
+          this.currentPage = page;
+
+          // On first page, capture total record count from totallen column
+          if (this.totalRecords === 0) {
+            const firstRow: any = pageRows[0];
+            const totalLenRaw =
+              firstRow?.totallen ??
+              firstRow?.TotalLen ??
+              firstRow?.TOTALLEN ??
+              firstRow?.totalLength;
+            this.totalRecords = Number(totalLenRaw) || 0;
+            this.totalPages = this.totalRecords
+              ? Math.ceil(this.totalRecords / this.pageSize)
+              : 1;
+          }
+
+          // If this page is "full", compute and store keyset for the next page
+          if (pageRows.length === this.pageSize) {
+            const lastRow: any = pageRows[pageRows.length - 1];
+            const nextPage = page + 1;
+            const nextKey = {
+              page: nextPage,
+              lastDate: lastRow?.Date ?? null,
+              lastLedgerId:
+                lastRow?.['PI_Ledger_ID'] ??
+                lastRow?.['Pi_Ledger_ID'] ??
+                lastRow?.['pi_ledger_id'] ??
+                null
+            };
+
+            if (nextKey.lastDate && nextKey.lastLedgerId != null && !this.pageKeys[nextPage]) {
+              this.pageKeys[nextPage] = nextKey;
+            }
+          }
         } else if (results.msg === 'Invalid Token') {
+          this.isLoading = false;
           swal.fire('Session Expired!', 'Please Login Again.', 'info');
           this.gs.Logout();
         }
       },
-      error: () => swal.fire('Error!', 'Failed to load data.', 'info'),
+      error: () => {
+        this.isLoading = false;
+        swal.fire('Error!', 'Failed to load data.', 'info');
+      },
     });
+  }
+
+  /**
+   * Only allow navigation to pages whose keyset cursor we have computed.
+   * Page 1 is always allowed; higher pages become available after visiting previous pages.
+   */
+  canNavigateTo(page: number): boolean {
+    if (page < 1 || (this.totalPages && page > this.totalPages)) {
+      return false;
+    }
+    if (page === 1) {
+      return true;
+    }
+    return !!this.pageKeys[page];
+  }
+
+  // -------- Pagination navigation API used by the template --------
+
+  goToPage(page: number): void {
+    if (!this.canNavigateTo(page)) {
+      return;
+    }
+    this.loadPage(page);
+  }
+
+  nextPage(): void {
+    const target = this.currentPage + 1;
+    if (this.canNavigateTo(target)) {
+      this.loadPage(target);
+    }
+  }
+
+  previousPage(): void {
+    const target = this.currentPage - 1;
+    if (this.canNavigateTo(target)) {
+      this.loadPage(target);
+    }
+  }
+
+  firstPage(): void {
+    if (this.canNavigateTo(1)) {
+      this.loadPage(1);
+    }
+  }
+
+  lastPage(): void {
+    if (this.totalPages > 0 && this.canNavigateTo(this.totalPages)) {
+      this.loadPage(this.totalPages);
+    }
+  }
+
+  /**
+   * Utility for template to render a sliding window of page numbers
+   * around the current page, e.g. 4 5 [6] 7 8 (max 5 buttons).
+   */
+  get pageArray(): number[] {
+    if (this.totalPages <= 0) {
+      return [];
+    }
+
+    const maxButtons = 5;
+    let start = this.currentPage - Math.floor(maxButtons / 2);
+    if (start < 1) {
+      start = 1;
+    }
+
+    let end = start + maxButtons - 1;
+    if (end > this.totalPages) {
+      end = this.totalPages;
+      start = Math.max(1, end - maxButtons + 1);
+    }
+
+    const pages: number[] = [];
+    for (let p = start; p <= end; p++) {
+      pages.push(p);
+    }
+    return pages;
   }
 
   piNoClick(piNo: any,lc:any,PIData:any) {
