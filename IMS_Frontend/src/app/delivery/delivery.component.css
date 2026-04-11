@@ -47,3 +47,9 @@ p-inputNumber.min-w-220 {
 		align-items: stretch;
 	}
 }
+
+.p-error {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+}
