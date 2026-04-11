@@ -25,6 +25,7 @@ export interface CreateSendFinishGoodsItem {
   Sent_RollBag_Quantity: number;  
   Gross_Weight: number;
   Unit_ID?: number | null;
+  rollOrBag?:string|null;
 
 }
 
