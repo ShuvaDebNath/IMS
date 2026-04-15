@@ -19,6 +19,7 @@ export class MasterEntryService {
   readonly baseUrl = GlobalConfig.BASE_URL_REPORT;
   readonly postApiController: string="DoubleMasterEntry";
   readonly postApiMasterEntryController: string="MasterEntry";
+  readonly postApiProformaInvoiceController: string="ProformaInvoice";
   readonly userController: string="User";
   token:any;
   readonly getapiController = 'GetData';
@@ -382,7 +383,7 @@ public GetAllData(model: GetDataModel){
 
     return this.http
       .post<ResponseModel>(
-        this.baseUrlApi + this.postApiController + '/Insert',
+        this.baseUrlApi + this.postApiController + '/Save', //'/Insert',
         model,
         {
           headers: new HttpHeaders({

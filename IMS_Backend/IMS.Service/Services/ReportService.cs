@@ -45,23 +45,19 @@ public class ReportService : IReportService
         }
     }
 
-    public async Task<DataSet> CustomerReport(CustomerReportParams customerReportParams)
+    public async Task<DataSet> CustomerReport(string Superior_Id, string Customer_Id, string Status, string SentBy)
     {
         try
         {
-            return await _reportRepository.CustomerReport(customerReportParams);
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
-    }
+            CustomerParams param = new CustomerParams
+            {
+                Superior_Id = Superior_Id,
+                Customer_Id = Customer_Id,
+                Status = Status,
+                SentBy = SentBy,
 
-    public async Task<DataSet> BuyerReport(BuyerReportParams buyerReportParams)
-    {
-        try
-        {
-            return await _reportRepository.BuyerReport(buyerReportParams);
+            };
+            return await _reportRepository.CustomerReport(param);
         }
         catch (Exception ex)
         {
@@ -229,6 +225,27 @@ public class ReportService : IReportService
         {
 
             return await _reportRepository.SalesContractReport(id);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+     public async Task<DataSet> BuyerReport(string fromDate, string toDate, string Superior_Id, string Customer_Id, string Status, string SentBy)
+    {
+        try
+        {
+            BuyerParams param = new BuyerParams
+            {
+                FromDate = fromDate,
+                ToDate = toDate,
+                Superior_Id = Superior_Id,
+                Customer_Id = Customer_Id,
+                Status = Status,
+                SentBy = SentBy,
+
+            };
+            return await _reportRepository.BuyerReport(param);
         }
         catch (Exception ex)
         {
@@ -470,18 +487,17 @@ public class ReportService : IReportService
     {
         var config = await _reportRepository.GetReportConfigAsync(reportKey);
 
-        // Normalise: replace any null values with empty string so the SP
-        // receives "" instead of NULL — prevents "no result" from SP null checks.
-        var safeParams = parameters.ToDictionary(
-            kvp => kvp.Key,
-            kvp => kvp.Value ?? string.Empty);
-
         if (config is null)
             throw new KeyNotFoundException(
                 $"No active report configuration found for key '{reportKey}'. " +
                 $"Insert an active row into the ReportConfigs table.");
 
-       
+        // Normalise: replace any null value with "" so the SP never receives
+        // NULL — prevents stored procedures that use ISNULL(@Param, '') from
+        // returning no results when the frontend omits optional parameters.
+        var safeParams = parameters.ToDictionary(
+            kvp => kvp.Key,
+            kvp => kvp.Value ?? string.Empty);
 
         var ds = await _reportRepository.ExecuteSpReportAsync(config.SpName, safeParams);
 
