@@ -65,7 +65,8 @@
         </div>
       </div>
 
-      <p-table
+    
+     <p-table
         #dt
         [value]="tableData"
         [paginator]="true"
@@ -131,7 +132,7 @@
                   title="View"
                   (click)="viewDetails(table)"
                   ><i class="fa fa-eye"></i
-                ></a>
+                ></a >
 
                 <a
                   *ngIf="updatePermissions"
@@ -141,7 +142,7 @@
                   [routerLink]="['/generate-lc']"
                   [queryParams]="{ LC_No: table.LC_ID }"
                   ><i class="fa fa-edit"></i
-                ></a>
+                ></a >
 
                 <button
                   *ngIf="deletePermissions"

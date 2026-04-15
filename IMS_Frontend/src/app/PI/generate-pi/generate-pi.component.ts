@@ -443,8 +443,6 @@ export class GeneratePiComponent implements OnInit {
 
         this.PINo = DataSet.Tables30[0].PINO;
 
-        console.log(DataSet);
-
         if (this.SetDDL) {
           this.SetDDLDefaultValue();
         }

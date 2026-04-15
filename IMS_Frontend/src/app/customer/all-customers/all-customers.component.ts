@@ -375,3 +375,4 @@ export class AllCustomersComponent {
     this.currentPage = (event.first / event.rows) + 1;
   }
 }
+ 

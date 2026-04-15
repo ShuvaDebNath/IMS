@@ -1,5 +1,6 @@
 ﻿using AccountingBackEnd.DAL.DTOs;
 using Boilerplate.Contracts;
+using Dapper;
 using Boilerplate.Contracts.Enum;
 using Boilerplate.Contracts.Repositories;
 using Boilerplate.Contracts.Services;
@@ -653,6 +654,91 @@ namespace Boilerplate.Repository.Repositories
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        public async Task<DataSet> DeliveryLogReport(DeliveryLogReportParams delivertlogReportParams)
+        {
+            try
+            {
+                var parameters = new
+                {
+                    FromDate = delivertlogReportParams.FromDate,
+                    ToDate = delivertlogReportParams.ToDate,
+                    PI_Master_Id = delivertlogReportParams.PIMasterId,
+                    ClientId = delivertlogReportParams.ClientId,
+                    User_Id = delivertlogReportParams.UserId
+                };
+
+                string query = @"exec [usp_ProformaInvoice_DeliveryLog_Report_Print]                     
+                    @FromDate,
+                    @ToDate,
+                    @PI_Master_Id,
+                    @Client_Id,
+                    @User_Id";
+
+                var ds = await GetDataInDataSetAsync(query, parameters);
+
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        // ── Generic Report Engine ─────────────────────────────────────────────────
+
+        /// <summary>
+        /// Fetches the active <see cref="ReportConfig"/> row from <c>ReportConfigs</c>
+        /// that matches <paramref name="reportKey"/> (case-insensitive, DB collation).
+        /// Returns <c>null</c> when no matching active row exists.
+        /// </summary>
+        public async Task<ReportConfig?> GetReportConfigAsync(string reportKey)
+        {
+            try
+            {
+                const string query = @"
+                    SELECT Id, ReportKey, SpName, RdlcPath, TableName, ReportName, isActive AS IsActive
+                    FROM   ReportConfigs
+                    WHERE  ReportKey = @ReportKey
+                      AND  isActive  = 1";
+
+                return await GetAllSingleAsync<ReportConfig>(query, new { ReportKey = reportKey });
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Executes any report stored procedure generically.
+        /// <paramref name="parameters"/> keys must match SP parameter names (without @).
+        /// Empty / whitespace values are still forwarded so the SP can apply its own
+        /// default logic (NULL checks, ISNULL, etc.).
+        /// </summary>
+        public async Task<DataSet> ExecuteSpReportAsync(
+            string spName,
+            Dictionary<string, string> parameters)
+        {
+            try
+            {
+                var dp = new DynamicParameters();
+                foreach (var (key, value) in parameters)
+                    dp.Add(key, value ?? string.Empty);
+
+                // Build: exec [usp_MyProc] @Param1, @Param2, ...
+                var placeholders = string.Join(",\n    ",
+                    parameters.Keys.Select(k => $"@{k}"));
+
+                string query = $"exec [{spName}]\n    {placeholders}";
+
+                return await GetDataInDataSetAsync(query, dp);
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 
