@@ -1,10 +1,24 @@
 <div class="container-fluid">
   <div class="shadow-sm p-3 mb-5 bg-white rounded">
-    <h1 class="theme-text">
-      <label class="theme-text" style="font-size: 2.5rem" *ngIf="isEdit">Edit</label>
-      <label style="font-size: 2.5rem" class="theme-text" *ngIf="!isEdit">Generate</label>
-      Monthly Report Form
-    </h1>
+
+    <div class="card-header theme-bg">
+      <div class="row">
+        <h1 class="theme-text text-white">
+          <label
+            class="theme-text text-white"
+            style="font-size: 2.5rem"
+            *ngIf="isEdit"
+            >Edit</label
+          ><label
+            style="font-size: 2.5rem"
+            class="theme-text text-white"
+            *ngIf="!isEdit"
+            >Generate</label
+          >
+          Monthly Report Form
+        </h1>
+      </div>
+    </div>
 
     <br />
     <form [formGroup]="taskForm">

@@ -118,8 +118,7 @@ export class SendFinishGoodsComponent implements OnInit {
           Quantity: [0, [Validators.required, Validators.min(1)]],
           Sent_RollBag_Quantity: [0, [Validators.required, Validators.min(1)]],
           Gross_Weight: [0, [Validators.required, Validators.min(0.1)]],
-          Unit_ID: [null],
-          Roll_Bag: ['']
+          rollOrBag: ['']
         })
       );
     }
@@ -143,7 +142,7 @@ export class SendFinishGoodsComponent implements OnInit {
       Quantity: number;
       Sent_RollBag_Quantity: number;
       Gross_Weight: number;
-      Unit_ID: number | null;
+      rollOrBag:string;
     }>;
 
     this.totalBag = 0;
@@ -153,22 +152,22 @@ export class SendFinishGoodsComponent implements OnInit {
 
     rows.forEach(r => {
       const qty = Number(r.Sent_RollBag_Quantity) || 0;
-      const unitId = Number(r.Unit_ID); 
+      const rollOrBag = r.rollOrBag
 
-      console.log({ r, qty, unitId });
+      console.log({ r, qty, rollOrBag });
       
 
-      switch (unitId) {
-        case 1: // YARD => ROLL
+      switch (rollOrBag) {
+        case 'Yard': // YARD => ROLL
           this.totalRoll += qty;
           break;
-        case 2: // METER => BAG
+        case 'Bag': // METER => BAG
           this.totalBag += qty;
           break;
-        case 3: // KG
+        case 'KG': // KG
           this.totalKG += qty;
           break;
-        case 4: // PIECE
+        case 'Piece': // PIECE
           this.totalPiece += qty;
           break;
       }
@@ -236,16 +235,17 @@ export class SendFinishGoodsComponent implements OnInit {
         Item_ID: Number(g.Item_ID),
         Note: g.Note ?? null,
         Quantity: Number(g.Quantity ?? 0),
-        Roll_Bag: g.Roll_Bag,
+        Roll_Bag: g.rollOrBag,
         Sent_RollBag_Quantity: Number(g.Sent_RollBag_Quantity ?? 0),
         Gross_Weight: Number(g.Gross_Weight ?? 0)
       }));
   
       this.recalcTotals();
+  console.log(fv);
   
       const payload: CreateSendFinishGoodsRequest = {
         exportDate: new Date(fv.ExportDate).toISOString().split('T')[0],
-        note: fv.note ?? null,
+        note: fv.Note ?? null,
         items,
         exportNumber: null,
         totalQty: this.totalQty,
@@ -276,6 +276,7 @@ export class SendFinishGoodsComponent implements OnInit {
         ActionApplied: payload.actionApplied ?? null,
         SentFrom: fv.SentFrom ?? null
       };
+      console.log(payload);
       
       const detailRows = payload.items.map(i => ({
         Item_ID: i.Item_ID,

@@ -165,7 +165,7 @@
                 <input
                   type="hidden"
                   formControlName="User_ID"
-                  [value]="UserList[0].User_ID"
+                  [value]="UserList[0].UserName"
                 />
               </ng-container>
             </div>
@@ -251,7 +251,7 @@
             <td>{{ row.PIDate | date: "dd-MM-yyyy" }}</td>
             <td>{{ row.BeneficiaryCompanyName }}</td>
             <td>{{ row.CustomerName }}</td>
-            <td>{{ row.CreatedByUserName }}</td>
+            <td>{{ row.MakeBy }}</td>
             <td *ngIf="PiStatus == 'ALL'" class="text-center">
               <span style="padding-left: 2px; padding-right: 2px;"
                 [ngClass]="{

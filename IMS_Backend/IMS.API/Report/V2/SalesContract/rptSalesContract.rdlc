@@ -361,6 +361,10 @@
           <DataField>CustomMaxDeliveryPercentage</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
+        <Field Name="Consignee_Name">
+          <DataField>Consignee_Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>DataSet1</rd:DataSetName>
@@ -534,7 +538,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>ContactPerson</rd:DefaultName>
-            <Top>0.77463in</Top>
+            <Top>1.02463in</Top>
             <Left>1.18625in</Left>
             <Height>0.19697in</Height>
             <Width>7.15625in</Width>
@@ -567,7 +571,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox33</rd:DefaultName>
-            <Top>0.77463in</Top>
+            <Top>1.02463in</Top>
             <Left>0.15847in</Left>
             <Height>0.19697in</Height>
             <Width>1in</Width>
@@ -600,7 +604,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox34</rd:DefaultName>
-            <Top>0.9716in</Top>
+            <Top>1.2216in</Top>
             <Left>0.15847in</Left>
             <Height>0.19697in</Height>
             <Width>0.98611in</Width>
@@ -632,7 +636,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>DeliveryAddress</rd:DefaultName>
-            <Top>0.9716in</Top>
+            <Top>1.2216in</Top>
             <Left>1.18625in</Left>
             <Height>0.19697in</Height>
             <Width>7.15625in</Width>
@@ -665,7 +669,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox36</rd:DefaultName>
-            <Top>0.44319in</Top>
+            <Top>0.69319in</Top>
             <Left>0.15847in</Left>
             <Height>0.1613in</Height>
             <Width>1in</Width>
@@ -697,7 +701,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>VATNo</rd:DefaultName>
-            <Top>0.44319in</Top>
+            <Top>0.69319in</Top>
             <Left>1.18625in</Left>
             <Height>0.1613in</Height>
             <Width>4.10069in</Width>
@@ -734,7 +738,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox38</rd:DefaultName>
-            <Top>1.61125in</Top>
+            <Top>1.86125in</Top>
             <Left>0.15847in</Left>
             <Height>0.16667in</Height>
             <Width>8.18403in</Width>
@@ -767,7 +771,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox6</rd:DefaultName>
-            <Top>0.61838in</Top>
+            <Top>0.86838in</Top>
             <Left>0.15847in</Left>
             <Height>0.15625in</Height>
             <Width>1in</Width>
@@ -799,7 +803,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>BuyerName</rd:DefaultName>
-            <Top>0.60449in</Top>
+            <Top>0.85449in</Top>
             <Left>1.18625in</Left>
             <Height>0.17014in</Height>
             <Width>7.15625in</Width>
@@ -832,7 +836,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox10</rd:DefaultName>
-            <Top>1.36554in</Top>
+            <Top>1.61554in</Top>
             <Left>0.15847in</Left>
             <Height>0.17494in</Height>
             <Width>1in</Width>
@@ -864,7 +868,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Style</rd:DefaultName>
-            <Top>1.36554in</Top>
+            <Top>1.61554in</Top>
             <Left>1.18625in</Left>
             <Height>0.17494in</Height>
             <Width>7.15625in</Width>
@@ -899,7 +903,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox1</rd:DefaultName>
-            <Top>7.19732in</Top>
+            <Top>7.59732in</Top>
             <Left>0.15845in</Left>
             <Height>0.18072in</Height>
             <Width>8.18405in</Width>
@@ -1556,6 +1560,77 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
+                  <Height>0.19792in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox4">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>10.Expire Date</Value>
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox4</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="ExpireDate">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!ExpireDate.Value</Value>
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                    <Format>d MMMM, yyyy</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>ExpireDate</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
                   <Height>0.20278in</Height>
                   <TablixCells>
                     <TablixCell>
@@ -1567,7 +1642,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>10.Remarks</Value>
+                                  <Value>11.Remarks</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1668,7 +1743,7 @@
                                           <Paragraph>
                                             <TextRuns>
                                               <TextRun>
-                                                <Value>11.Beneficiary's A\C Details</Value>
+                                                <Value>12.Beneficiary's A\C Details</Value>
                                                 <Style>
                                                   <FontSize>9pt</FontSize>
                                                   <FontWeight>Bold</FontWeight>
@@ -2251,7 +2326,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>12.Customer Bank Name</Value>
+                                  <Value>13.Customer Bank Name</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -2320,7 +2395,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>13.Force Majeure</Value>
+                                  <Value>14.Force Majeure</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -2390,7 +2465,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>14.Arbitration</Value>
+                                  <Value>15.Arbitration</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -2472,12 +2547,13 @@
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
+                <TablixMember />
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>SalesContract</DataSetName>
-            <Top>2.98147in</Top>
+            <Top>3.23147in</Top>
             <Left>0.15846in</Left>
-            <Height>3.42729in</Height>
+            <Height>3.62521in</Height>
             <Width>8.18404in</Width>
             <ZIndex>16</ZIndex>
             <Style>
@@ -2535,7 +2611,7 @@
               </Image>
             </ReportItems>
             <KeepTogether>true</KeepTogether>
-            <Top>6.4532in</Top>
+            <Top>6.8532in</Top>
             <Left>0.15845in</Left>
             <Height>0.67468in</Height>
             <Width>4.11155in</Width>
@@ -2581,7 +2657,7 @@
               </Textbox>
             </ReportItems>
             <KeepTogether>true</KeepTogether>
-            <Top>6.4532in</Top>
+            <Top>6.8532in</Top>
             <Left>4.27001in</Left>
             <Height>0.67468in</Height>
             <Width>4.07249in</Width>
@@ -2611,7 +2687,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox34</rd:DefaultName>
-            <Top>1.16857in</Top>
+            <Top>1.41857in</Top>
             <Left>0.15847in</Left>
             <Height>0.19697in</Height>
             <Width>0.98611in</Width>
@@ -2643,7 +2719,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>DeliveryAddress</rd:DefaultName>
-            <Top>1.16857in</Top>
+            <Top>1.41857in</Top>
             <Left>1.18625in</Left>
             <Height>0.19697in</Height>
             <Width>7.15625in</Width>
@@ -3666,7 +3742,7 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>SalesContract</DataSetName>
-            <Top>1.89458in</Top>
+            <Top>2.14458in</Top>
             <Left>0.15847in</Left>
             <Height>1in</Height>
             <Width>8.18407in</Width>
@@ -3677,8 +3753,73 @@
               </Border>
             </Style>
           </Tablix>
+          <Textbox Name="Textbox29">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Consignee </Value>
+                    <Style>
+                      <FontSize>9pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox28</rd:DefaultName>
+            <Top>0.50458in</Top>
+            <Left>0.15847in</Left>
+            <Height>0.13277in</Height>
+            <Width>1in</Width>
+            <ZIndex>22</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Shipper2">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Fields!Consignee_Name.Value</Value>
+                    <Style>
+                      <FontSize>9pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Shipper</rd:DefaultName>
+            <Top>0.49875in</Top>
+            <Left>1.18625in</Left>
+            <Height>0.14666in</Height>
+            <Width>7.12513in</Width>
+            <ZIndex>23</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
         </ReportItems>
-        <Height>7.42872in</Height>
+        <Height>7.79471in</Height>
         <Style>
           <Border>
             <Style>Solid</Style>

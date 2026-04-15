@@ -25,14 +25,8 @@
             <div class="row g-1 align-items-start">
               <div class="col-3"><label class="form-label">Export Date</label></div>
               <div class="col-7">
-                 <p-calendar
-                    formControlName="ExportDate"
-                    [showIcon]="false"
-                    dateFormat="dd/mm/yy"
-                    placeholder="From"
-                    inputStyleClass="custom-date-input"
-                    [style]="{width:'100%'}"
-                  ></p-calendar>
+                <p-calendar formControlName="ExportDate" [showIcon]="false" dateFormat="dd/mm/yy" placeholder="From"
+                  inputStyleClass="custom-date-input" [style]="{width:'100%'}"></p-calendar>
               </div>
             </div>
           </div>
@@ -40,9 +34,9 @@
         <div class="row mb-1">
           <div class="col-md-4">
             <div class="row g-1 align-items-start">
-              <div class="col-3">   <label class="form-label">Note</label></div>
+              <div class="col-3"> <label class="form-label">Note</label></div>
               <div class="col-7">
-                       <input type="text" class="form-control" formControlName="SentFrom">
+                <input type="text" class="form-control" formControlName="Note">
               </div>
             </div>
           </div>
@@ -52,7 +46,7 @@
             <div class="row g-1 align-items-start">
               <div class="col-3"><label class="form-label">Sent From</label></div>
               <div class="col-7">
-                       <textarea class="form-control" formControlName="Note" rows="2"></textarea>
+                <textarea class="form-control" formControlName="SentFrom" rows="2"></textarea>
               </div>
             </div>
           </div>
@@ -73,51 +67,30 @@
             <tr class="custom-header">
               <th class="th-article" style="text-align: center">
                 <span>Article</span>
-                <button
-                  type="button"
-                  class="icon-btn"
-                  [disabled]="reloadingArticles"
-                  (click)="refreshArticles()"
-                  title="Refresh articles"
-                >
-                  <i
-                    class="pi"
-                    [ngClass]="
+                <button type="button" class="icon-btn" [disabled]="reloadingArticles" (click)="refreshArticles()"
+                  title="Refresh articles">
+                  <i class="pi" [ngClass]="
                       reloadingArticles ? 'pi-spinner pi-spin' : 'pi-refresh'
-                    "
-                  ></i>
+                    "></i>
                 </button>
               </th>
               <th style="text-align: center">Description</th>
               <th style="text-align: center">Qty</th>
+              <th style="text-align: center">Roll/Bag/KG/Meter</th>
               <th style="text-align: center">Roll/Bag/KG/Meter Qty</th>
               <th style="text-align: center">Gross Weight(KGS)</th>
               <th style="width: 60px">Action</th>
             </tr>
           </thead>
           <tbody formArrayName="items">
-            <tr
-              *ngFor="let item of items.controls; let i = index"
-              [formGroupName]="i"
-            >
+            <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
               <td>
                 <div class="form-group">
-                  <p-dropdown
-                    class="p-0 rm-dd"
-                    [style]="{ width: '100%' }"
-                    [panelStyle]="{ width: '100%' }"
-                    [options]="finishGoodsArticles"
-                    optionLabel="Article_No"
-                    optionValue="Item_ID"
-                    [filter]="true"
-                    filterBy="Article_No"
-                    [showClear]="true"
-                    placeholder="Please Select"
-                    (onChange)="onArticleChange(i, $event.value)"
-                    formControlName="Item_ID"
-                    [virtualScroll]="true"
-                    [itemSize]="30"
-                  >
+                  <p-dropdown class="p-0 rm-dd" [style]="{ width: '100%' }" [panelStyle]="{ width: '100%' }"
+                    [options]="finishGoodsArticles" optionLabel="Article_No" optionValue="Item_ID" [filter]="true"
+                    filterBy="Article_No" [showClear]="true" placeholder="Please Select"
+                    (onChange)="onArticleChange(i, $event.value)" formControlName="Item_ID" [virtualScroll]="true"
+                    [itemSize]="30">
                     <ng-template let-article pTemplate="item">
                       <div class="flex align-items-center gap-2">
                         <div>{{ article.Article_No }}</div>
@@ -130,45 +103,27 @@
                 <input class="form-control" formControlName="Note" />
               </td>
               <td>
-                <input
-                  type="number"
-                  class="form-control"
-                  formControlName="Quantity"
-                  style="text-align: center"
-                />
+                <input type="number" class="form-control" formControlName="Quantity" style="text-align: center" />
+              </td>
+
+
+              <td style="text-align: center; vertical-align: middle">
+                <select class="form-control" formControlName="rollOrBag" style="height: 48px">
+                  <option value="Yard">Rolls</option>
+                  <option value="Bag">Bags</option>
+                  <option value="KG">KG</option>
+                  <option value="Piece">Meter</option>
+                </select>
               </td>
               <td>
-                <input
-                  type="number"
-                  class="form-control"
-                  formControlName="Unit_ID"
-                />
-                <input
-                  type="text"
-                  class="form-control"
-                  formControlName="Roll_Bag"
-                />
-                <input
-                  type="number"
-                  class="form-control"
-                  formControlName="Sent_RollBag_Quantity"
-                  style="text-align: center"
-                />
+                <input type="number" class="form-control" formControlName="Sent_RollBag_Quantity"
+                  style="text-align: center" />
               </td>
               <td>
-                <input
-                  type="number"
-                  class="form-control"
-                  formControlName="Gross_Weight"
-                  style="text-align: center"
-                />
+                <input type="number" class="form-control" formControlName="Gross_Weight" style="text-align: center" />
               </td>
               <td>
-                <button
-                  type="button"
-                  class="btn btn-sm btn-danger"
-                  (click)="removeItem(i)"
-                >
+                <button type="button" class="btn btn-sm btn-danger" (click)="removeItem(i)">
                   ×
                 </button>
               </td>
@@ -178,67 +133,33 @@
             <td></td>
             <td class="text-end fw-bold">Totals:</td>
             <td>
-              <input
-                class="form-control text-center"
-                [value]="totalQty"
-                disabled
-              />
+              <input class="form-control text-center" [value]="totalQty" disabled />
             </td>
+            <td></td>
             <td>
               Roll:
-              <input
-                class="form-control text-center"
-                [value]="totalRoll"
-                disabled
-              />
+              <input class="form-control text-center" [value]="totalRoll" disabled />
               Bag:
-              <input
-                class="form-control text-center"
-                [value]="totalBag"
-                disabled
-              />
+              <input class="form-control text-center" [value]="totalBag" disabled />
               KG:
-              <input
-                class="form-control text-center"
-                [value]="totalKG"
-                disabled
-              />
+              <input class="form-control text-center" [value]="totalKG" disabled />
               Piece:
-              <input
-                class="form-control text-center"
-                [value]="totalPiece"
-                disabled
-              />
+              <input class="form-control text-center" [value]="totalPiece" disabled />
             </td>
             <td>
-              <input
-                class="form-control text-center"
-                [value]="totalGrossWeight"
-                disabled
-              />
+              <input class="form-control text-center" [value]="totalGrossWeight" disabled />
             </td>
             <td></td>
           </tr>
         </table>
         <div class="d-flex justify-content-end gap-2 mt-3">
-          <button
-            type="button"
-            class="btn btn-outline-success"
-            (click)="addItem()"
-            style="width: 130px; height: 38px"
-          >
+          <button type="button" class="btn btn-outline-success" (click)="addItem()" style="width: 130px; height: 38px">
             <i class="bi bi-plus-circle me-1"></i> Add Row
           </button>
-          <button
-            type="submit"
-            (click)="saveData()"
-            [ngClass]="{
+          <button type="submit" (click)="saveData()" [ngClass]="{
               'theme-btn-disable': finishGoodsProductionForm.invalid,
-            }"
-            class="btn theme-btn btn-rounded"
-            [disabled]="finishGoodsProductionForm.invalid"
-            style="width: 130px; height: 38px"
-          >
+            }" class="btn theme-btn btn-rounded" [disabled]="finishGoodsProductionForm.invalid"
+            style="width: 130px; height: 38px">
             <i class="bi bi-save me-1"></i> Save
           </button>
         </div>

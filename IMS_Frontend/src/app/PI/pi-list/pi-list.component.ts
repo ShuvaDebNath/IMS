@@ -64,6 +64,7 @@ export class PiListComponent implements OnInit {
   PITypeList: any[] = [
     { value: 2, text: 'LC' },
     { value: 1, text: 'Cash' },
+    { value: 3, text: 'Both' },
   ];
   first: any = 1;
   rows: any = 10;
@@ -324,7 +325,7 @@ export class PiListComponent implements OnInit {
 
           if (this.UserList.length === 1) {
             this.SearchFormgroup.controls['User_ID'].setValue(
-              this.UserList[0].User_ID
+              this.UserList[0].UserName
             );
           }
         } else if (results.msg == 'Invalid Token') {
@@ -347,6 +348,7 @@ export class PiListComponent implements OnInit {
     this.DataTable = [];
     this.isLoading = true;
 
+    console.log(permas);
     var getRole = '';
 
     getRole = this.gs.getSessionData('roleId');
@@ -410,7 +412,9 @@ export class PiListComponent implements OnInit {
       return;
     }
     const selectedIds = this.selectedRows.map((r) => r.PI_Master_ID);
-
+    console.log(status);
+    
+       var percentageStatus = '0';
     Swal.fire({
       title: `Do you want to ${status}?`,
       showDenyButton: true,
@@ -418,7 +422,13 @@ export class PiListComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         selectedIds.forEach((id: any) => {
-          let queryParams = { Status: status, LastUpdateDate: new Date() };
+          if(status=='Quartar Approved'){
+            percentageStatus = '99'
+          }
+          else if(status=='Full Apporved'){
+            percentageStatus = '100'
+          }
+          let queryParams = { CustomMaxDeliveryPercentage:percentageStatus,Status: status, LastUpdateDate: new Date() };
           let condition = { PI_Master_ID: id };
 
           this.service

@@ -18,7 +18,11 @@
               optionValue="value"
               [style]="{ width: '100%' }"
               placeholder="Select a type"
+              [ngClass]="{ 'p-invalid': isInvalid(SearchFormgroup.get('PIType')) }"
             />
+            <small class="p-error" *ngIf="isInvalid(SearchFormgroup.get('PIType'))">
+              PI Type is required.
+            </small>
           </div>
 
           <div class="col-auto">
@@ -36,6 +40,7 @@
               optionValue="PI_Master_ID"
               formControlName="PIId"
               appendTo="body"
+              [ngClass]="{ 'p-invalid': isInvalid(SearchFormgroup.get('PIId')) }"
             >
               <ng-template let-PIList pTemplate="item">
                 <div class="flex align-items-center gap-2">
@@ -43,6 +48,9 @@
                 </div>
               </ng-template>
             </p-dropdown>
+            <small class="p-error" *ngIf="isInvalid(SearchFormgroup.get('PIId'))">
+              PI No is required.
+            </small>
           </div>
 
           <div class="col-auto mt-auto">
@@ -194,13 +202,22 @@
                   placeholder="Deliver Quantity"
                   formControlName="Delivered"
                   (keyup)="SetMeterValue($event, item)"
+                  (change)="warehouseStockCheck(item)"
+                  [ngClass]="{ 'p-invalid': isInvalid(item.controls.Delivered) }"
                 />
+                <small class="p-error" *ngIf="isInvalid(item.controls.Delivered)">
+                  Deliver Quantity is required and must be greater than 0.
+                </small>
               </td>
               <td>
                 <p-inputNumber
                   placeholder="Roll/BOX/PCS"
                   formControlName="Roll"
+                  [ngClass]="{ 'p-invalid': isInvalid(item.controls.Roll) }"
                 />
+                <small class="p-error" *ngIf="isInvalid(item.controls.Roll)">
+                  Roll/BOX/PCS is required.
+                </small>
               </td>
               <td>
                 <input
@@ -224,6 +241,8 @@
                   optionValue="Stock_Location_ID"
                   formControlName="Stock_Location_ID"
                   appendTo="body"
+                  (onChange)="warehouseStockCheck(item)"
+                  [ngClass]="{ 'p-invalid': isInvalid(item.controls.Stock_Location_ID) }"
                 >
                   <ng-template let-RequestStatus pTemplate="item">
                     <div class="flex align-items-center gap-2">
@@ -231,6 +250,9 @@
                     </div>
                   </ng-template>
                 </p-dropdown>
+                <small class="p-error" *ngIf="isInvalid(item.controls.Stock_Location_ID)">
+                  Stock Location is required.
+                </small>
               </td>
             </tr>
           </ng-template>

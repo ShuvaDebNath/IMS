@@ -91,6 +91,16 @@
         </div>
       </form>
       <div class="shadow-sm p-2">
+         <div class="flex">
+          <button *ngIf="tableVisible" type="button" class="btn btn-outline-success bg-gradient-warning btn-sm mr-2 mb-3"
+            (click)="printDialog()" style="height: 38px; width: 130px">
+            <i class="fas fa-file-print"></i>&nbsp;Print
+          </button>
+          <button *ngIf="roleId==1 || roleId==2" type="button" class="btn btn-outline-success bg-gradient-warning btn-sm mr-2 mb-3"
+            (click)="printAllDialog()" style="height: 38px; width: 130px">
+            <i class="fas fa-file-print"></i>&nbsp;Print All
+          </button>
+        </div>
         <p-table
           *ngIf="tableVisible"
           #dt

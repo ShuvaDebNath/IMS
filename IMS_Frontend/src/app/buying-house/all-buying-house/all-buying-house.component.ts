@@ -12,6 +12,7 @@ import {
 } from '@angular/forms';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
+import { ReportService } from 'src/app/services/reportService/report-service.service';
 
 @Component({
   selector: 'app-all-buying-house',
@@ -32,6 +33,11 @@ export class AllBuyingHouseComponent {
   deletePermissions: boolean = false;
   printPermissions: boolean = false;
 
+  pageSize: any = 10;
+  currentPage: any = 1;
+  roleId: any = '';
+  searchText: any = '';
+
   constructor(
     private getDataService: GetDataService,
     private gs: GlobalServiceService,
@@ -39,7 +45,8 @@ export class AllBuyingHouseComponent {
     private dme: DoubleMasterEntryService,
     private fb: FormBuilder,
     private ms: MasterEntryService,
-  ) {}
+    private reportService: ReportService,
+  ) { }
 
   ngOnInit(): void {
     var permissions = this.gs.CheckUserPermission('All Buying House');
@@ -47,6 +54,8 @@ export class AllBuyingHouseComponent {
     this.updatePermissions = permissions.updatePermissions;
     this.deletePermissions = permissions.deletePermissions;
     this.printPermissions = permissions.printPermissions;
+
+    this.roleId = window.localStorage.getItem('roleId');
 
     if (!this.printPermissions) {
       window.location.href = 'dashboard';
@@ -77,7 +86,7 @@ export class AllBuyingHouseComponent {
         } else {
         }
       },
-      error: (err) => {},
+      error: (err) => { },
     });
   }
   loadAllBuyers(): void {
@@ -203,5 +212,126 @@ export class AllBuyingHouseComponent {
   }
   toggleText(item: any) {
     item.showFull = !item.showFull;
+  }
+  printDialog() {
+    swal.fire({
+      title: 'What you want to do?',
+      icon: 'question',
+      html: `
+                  <div style="display: flex; gap: 10px; justify-content: center;">
+                    <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
+                      <i class="fa fa-file-excel"></i> Excel
+                    </button>
+                    <button id="wordBtn" class="btn btn-info" style="padding: 8px 16px;">
+                      <i class="fa fa-file-word"></i> Word
+                    </button>
+                    <button id="pdfBtn" class="btn btn-danger" style="padding: 8px 16px;">
+                      <i class="fa fa-file-pdf"></i> PDF
+                    </button>
+                  </div>
+                `,
+      showConfirmButton: false,
+      didOpen: () => {
+        const excelBtn = document.getElementById('excelBtn');
+        const wordBtn = document.getElementById('wordBtn');
+        const pdfBtn = document.getElementById('pdfBtn');
+
+        const sentByStr = localStorage.getItem('userId');
+        const sentBy = sentByStr ? Number(sentByStr) : null;
+        var { fromDate, toDate, BuyerId, SuperioId } = this.dateForm.value;
+        var item = {
+          
+          FromDate: fromDate,
+          ToDate: toDate,
+          Superior_Id: SuperioId,
+          Buyer_Id: BuyerId,
+          Status: 'Approved',
+          SentBy: sentBy,
+          PageLength: this.pageSize,
+          PageNo: this.currentPage,
+          SearchParam: this.searchText == undefined ? '' : this.searchText
+        };
+
+        excelBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintBuyerReport(item, 'excel', 'F');
+        });
+
+        wordBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintBuyerReport(item, 'word', 'F');
+        });
+
+        pdfBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintBuyerReport(item, 'pdf', 'F');
+        });
+      },
+    });
+  }
+  printAllDialog() {
+    swal.fire({
+      title: 'What you want to do?',
+      icon: 'question',
+      html: `
+                  <div style="display: flex; gap: 10px; justify-content: center;">
+                    <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
+                      <i class="fa fa-file-excel"></i> Excel
+                    </button>
+                    <button id="wordBtn" class="btn btn-info" style="padding: 8px 16px;">
+                      <i class="fa fa-file-word"></i> Word
+                    </button>
+                    <button id="pdfBtn" class="btn btn-danger" style="padding: 8px 16px;">
+                      <i class="fa fa-file-pdf"></i> PDF
+                    </button>
+                  </div>
+                `,
+      showConfirmButton: false,
+      didOpen: () => {
+        const excelBtn = document.getElementById('excelBtn');
+        const wordBtn = document.getElementById('wordBtn');
+        const pdfBtn = document.getElementById('pdfBtn');
+
+        const sentByStr = localStorage.getItem('userId');
+        const sentBy = sentByStr ? Number(sentByStr) : null;
+        var { fromDate, toDate, CustomerId, SuperioId } = this.dateForm.value;
+        
+        var item = {
+          
+          FromDate: fromDate,
+          ToDate: toDate,
+          Superior_Id: '0',
+          Buyer_Id: '',
+          Status: 'All',
+          SentBy: sentBy,
+          PageLength: this.pageSize,
+          PageNo: this.currentPage,
+          SearchParam: this.searchText == undefined ? '' : this.searchText
+        };
+
+
+        excelBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintBuyerReport(item, 'excel', 'F');
+        });
+
+        wordBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintBuyerReport(item, 'word', 'F');
+        });
+
+        pdfBtn?.addEventListener('click', () => {
+          swal.close();
+          this.reportService.PrintBuyerReport(item, 'pdf', 'F');
+        });
+      },
+    });
+  }
+
+  onPageChange(event: any) {
+    console.log(event);
+
+    this.pageSize = event.rows;
+    this.currentPage = (event.first / event.rows) + 1;
   }
 }

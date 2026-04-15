@@ -59,6 +59,11 @@ p-inputNumber.min-w-220 {
 	}
 }
 
+.p-error {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+}
 /* TABLE HEADER DESIGN */
 ::ng-deep .p-datatable .p-datatable-thead > tr > th {
   background-color: #6a1a3f !important;

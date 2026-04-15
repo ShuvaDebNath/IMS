@@ -191,11 +191,22 @@ export class SampleRequestInsertFormComponent {
 
     for (const index in fv.items) {
       console.log(index, fv.items[index]);
+
+      
+    const nowTime = new Date(fv.items[index].RequestDate);
+    const localISO = new Date(
+      nowTime.getTime() - nowTime.getTimezoneOffset() * 60000,
+    )
+      .toISOString()
+      .slice(0, 19)
+      .replace('T', ' ');
+
+
       const selectedText = this.ArticleList.find(
         (x: any) => x.Item_ID === fv.items[index].ArticleNo
       )?.Color_ID;
       var sr = new SampleRequest();
-      sr.RequestDate = fv.items[index].RequestDate;
+      sr.RequestDate = localISO;
       //sr. = this.Formgroup.value.PINo;
       sr.CustomerId = fv.items[index].CustomerName;
       sr.CustomerContactInfo = fv.items[index].Customer_Contact_Info;

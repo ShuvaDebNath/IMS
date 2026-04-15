@@ -45,19 +45,23 @@ public class ReportService : IReportService
         }
     }
 
-    public async Task<DataSet> CustomerReport(string Superior_Id, string Customer_Id, string Status, string SentBy)
+    public async Task<DataSet> CustomerReport(CustomerReportParams customerReportParams)
     {
         try
         {
-            CustomerParams param = new CustomerParams
-            {
-                Superior_Id = Superior_Id,
-                Customer_Id = Customer_Id,
-                Status = Status,
-                SentBy = SentBy,
+            return await _reportRepository.CustomerReport(customerReportParams);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
 
-            };
-            return await _reportRepository.CustomerReport(param);
+    public async Task<DataSet> BuyerReport(BuyerReportParams buyerReportParams)
+    {
+        try
+        {
+            return await _reportRepository.BuyerReport(buyerReportParams);
         }
         catch (Exception ex)
         {
@@ -225,27 +229,6 @@ public class ReportService : IReportService
         {
 
             return await _reportRepository.SalesContractReport(id);
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
-    }
-     public async Task<DataSet> BuyerReport(string fromDate, string toDate, string Superior_Id, string Customer_Id, string Status, string SentBy)
-    {
-        try
-        {
-            BuyerParams param = new BuyerParams
-            {
-                FromDate = fromDate,
-                ToDate = toDate,
-                Superior_Id = Superior_Id,
-                Customer_Id = Customer_Id,
-                Status = Status,
-                SentBy = SentBy,
-
-            };
-            return await _reportRepository.BuyerReport(param);
         }
         catch (Exception ex)
         {

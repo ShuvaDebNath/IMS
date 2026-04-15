@@ -57,7 +57,8 @@
             <i class="fas fa-file-print"></i>&nbsp;Print All
           </button>
         </div>
-        <p-table *ngIf="tableVisible" #dt [value]="allCustomers" [paginator]="true" [rows]="10" [responsive]="true"
+        <p-table *ngIf="tableVisible" #dt [value]="allCustomers" [paginator]="true" [rows]="10" [responsive]="true"(onPage)="onPageChange($event)"
+          [rowsPerPageOptions]="[5,10,20,50,allCustomers.length]"
           [showCurrentPageReport]="true" [globalFilterFields]="[
             'Company_Name',
             'Contact_Name',
@@ -78,7 +79,7 @@
                 <i class="pi pi-search"></i>
                 <input pInputText type="text" (input)="
                     dt.filterGlobal($any($event.target).value, 'contains')
-                  " placeholder="Global Search" />
+                  " [(ngModel)]="searchText" placeholder="Global Search" />
               </span>
             </div>
           </ng-template>

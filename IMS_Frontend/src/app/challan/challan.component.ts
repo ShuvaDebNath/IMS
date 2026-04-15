@@ -627,12 +627,12 @@ export class ChallanComponent implements OnInit {
     let html = `<html><head><title>QR Codes</title>
       <style>
         body { font-family: Arial, sans-serif; }
-        .qr-row { margin-left:-5px;display: flex; justify-content: flex-start; margin-bottom: 0px; }
-        .qr-block5 { text-align: center; margin: 8px; }
-        .qr-block1 { text-align: center; margin: 8px;margin-left:-6px; }
-        .qr-block2 { text-align: center; margin: 8px;margin-left:-4px; }
-        .qr-block3 { text-align: center; margin: 8px;margin-left:-3px; }
-        .qr-block4 { text-align: center; margin: 8px;margin-left:-2px; }
+        .qr-row { margin-left:-5px;display: flex; justify-content: flex-start; margin-bottom: 6px; }
+        .qr-block5 { text-align: center; margin: 8px;margin-left: -12px; }
+        .qr-block1 { text-align: center; margin: 8px;margin-left:-4px; }
+        .qr-block2 { text-align: center; margin: 8px;margin-left: -4px; }
+        .qr-block3 { text-align: center; margin: 8px;margin-left: -8px; }
+        .qr-block4 { text-align: center; margin: 8px;margin-left: -7px; }
         .qr-label { margin-top: 0px; font-size: 15px; }
         .qr-challan-date{margin-bottom: 10px; }
       </style>

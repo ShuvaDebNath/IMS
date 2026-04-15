@@ -73,14 +73,14 @@ namespace IMS.API.Controllers
         
         [HttpGet]
         [Route("CustomerReport")]
-        public async Task<IActionResult> CustomerReport(string rptType, string Superior_Id = "", string Customer_Id = "", string Status = "", string SentBy = "")
+        public async Task<IActionResult> CustomerReport([FromQuery] CustomerReportParams customerReportParams)
         {
             try
             {
                 var currentUser = HttpContext.User;
 
                 string reportPath = "CustomerReport\\";
-                DataSet ds = await _reportService.CustomerReport(Superior_Id, Customer_Id, Status, SentBy);
+                DataSet ds = await _reportService.CustomerReport(customerReportParams);
 
                 if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
                 {
@@ -95,16 +95,59 @@ namespace IMS.API.Controllers
                 reportPath += "rptCustomerReport.rdlc";
 
 
-                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, customerReportParams.RptType, ds);
 
 
-                if (rptType.ToLower() == "pdf")
+                if (customerReportParams.RptType.ToLower() == "pdf")
                 {
-                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(customerReportParams.RptType.ToLower()));
                 }
                 else
                 {
-                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(customerReportParams.RptType.ToLower()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("BuyerReport")]
+        public async Task<IActionResult> BuyerReport([FromQuery] BuyerReportParams buyerReportParams)
+        {
+            try
+            {
+                var currentUser = HttpContext.User;
+
+                string reportPath = "V2\\BuyerReport\\";
+                DataSet ds = await _reportService.BuyerReport(buyerReportParams);
+
+                if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
+                {
+
+                    return Ok(new { msg = "Data Not Found" });
+                }
+
+                ds.Tables[0].TableName = "BuyerReport";
+
+                var reportName = "Buyer Report";
+
+                reportPath += "rptBuyerReport.rdlc";
+
+
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, buyerReportParams.RptType, ds);
+
+
+                if (buyerReportParams.RptType.ToLower() == "pdf")
+                {
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(buyerReportParams.RptType.ToLower()));
+                }
+                else
+                {
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(buyerReportParams.RptType.ToLower()));
                 }
 
             }
@@ -590,48 +633,7 @@ namespace IMS.API.Controllers
         }
 
       
-        [HttpGet]
-        [Route("BuyerReport")]
-        public async Task<IActionResult> BuyerReport(string rptType, string fromDate = "", string toDate = "",string SuperioId = "", string BuyerId = "", string Status = "", string sentBy = "")
-        {
-            try
-            {
-                var currentUser = HttpContext.User;
-
-                string reportPath = "V2\\BuyerReport\\";
-                DataSet ds = await _reportService.BuyerReport(fromDate, toDate, SuperioId, BuyerId, Status, sentBy);
-
-                if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
-                {
-
-                    return Ok(new { msg = "Data Not Found" });
-                }
-
-                ds.Tables[0].TableName = "BuyerReport";
-
-                var reportName = "Buyer Report";
-
-                reportPath += "rptBuyerReport.rdlc";
-
-
-                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
-
-
-                if (rptType.ToLower() == "pdf")
-                {
-                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
-                }
-                else
-                {
-                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
-                }
-
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
+        
 
 
         [HttpGet]

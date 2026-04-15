@@ -111,7 +111,9 @@ export class BeneficiarybankCreateComponent implements OnInit {
     this.masterEntyService.GetEditData(masterEntryModel).subscribe((res: any) => {
       if (res.status) {
         let data = JSON.parse(res.data)[0];
-        data.IsAvailable = data.IsAvailable === 1 ? true : false;
+        console.log(data);
+        
+        data.IsAvailable = data.IsAvailable === true ? true : false;
         this.Formgroup.patchValue(data);
       } else {
         if (res.msg == 'Invalid Token') {

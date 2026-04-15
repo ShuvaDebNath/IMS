@@ -183,7 +183,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
     <PackageReference Include="QRCoder" Version="1.7.0" />
-    <PackageReference Include="ReportViewerCore.NETCore" Version="15.1.26" />
+    <PackageReference Include="ReportViewerCore.NETCore" Version="15.1.33" />
     <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
     <PackageReference Include="System.CodeDom" Version="9.0.0" />
@@ -199,7 +199,7 @@
 
   <ItemGroup>
     <Reference Include="RDLCSimplified">
-      <HintPath>D:\Personal Project\RDLCSimplified.dll</HintPath>
+      <HintPath>D:\RDLCSimplified.dll</HintPath>
     </Reference>
   </ItemGroup>
 

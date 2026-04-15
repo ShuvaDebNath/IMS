@@ -59,7 +59,7 @@ export class AllTaskReportComponent {
   getDataModel: GetDataModel = new GetDataModel();
   detailsData: any;
   isDetailsVisible: boolean = false;
-  userId:any = '';
+  userId: any = '';
 
   constructor(
     private fb: FormBuilder,
@@ -68,7 +68,7 @@ export class AllTaskReportComponent {
     private pagesComponent: PagesComponent,
     private masterEntryService: MasterEntryService,
     private title: Title,
-    private reportService: ReportService
+    private reportService: ReportService,
   ) {}
   ngOnInit(): void {
     var permissions = this.gs.CheckUserPermission('All Task Report');
@@ -76,13 +76,17 @@ export class AllTaskReportComponent {
     this.updatePermissions = permissions.updatePermissions;
     this.deletePermissions = permissions.deletePermissions;
     this.printPermissions = permissions.printPermissions;
-    this.userId = this.gs.getSessionData('userId')
+    this.userId = this.gs.getSessionData('userId');
 
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
     this.title.setTitle('All Task Report');
-    this.SearchForm.get('fromDate')?.setValue(new Date().toISOString().split('T')[0]);
-    this.SearchForm.get('toDate')?.setValue(new Date().toISOString().split('T')[0]);
+    this.SearchForm.get('fromDate')?.setValue(
+      new Date().toISOString().split('T')[0],
+    );
+    this.SearchForm.get('toDate')?.setValue(
+      new Date().toISOString().split('T')[0],
+    );
   }
   initForm(): void {
     this.SearchForm = this.fb.group({
@@ -92,15 +96,16 @@ export class AllTaskReportComponent {
   }
   Search() {
     var finput = new Date();
-    var fromDate = this.SearchForm.value.fromDate;
-    var toDate = this.SearchForm.value.toDate;
+    var fromDate = this.formatDateTime(this.SearchForm.value.fromDate);
+    var toDate = this.formatDateTime(this.SearchForm.value.toDate);
+    console.log(fromDate);
 
     let param = new GetDataModel();
     param.procedureName = '[usp_Task_List]';
     param.parameters = {
       FromDate: fromDate,
       ToDate: toDate,
-      UserId:this.userId,
+      UserId: this.userId,
       PageIndex: this.pageIndex,
       PageSize: this.pageSize,
     };
@@ -118,6 +123,21 @@ export class AllTaskReportComponent {
         }
       },
     });
+  }
+
+  private formatDateTime(value: any): string | null {
+    if (!value) return null;
+    const d = new Date(value);
+    if (isNaN(d.getTime())) return null;
+
+    const dd = String(d.getDate()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const yyyy = d.getFullYear();
+    const HH = String(d.getHours()).padStart(2, '0');
+    const MM = String(d.getMinutes()).padStart(2, '0');
+    const SS = String(d.getSeconds()).padStart(2, '0');
+
+    return `${mm}-${dd}-${yyyy}`;
   }
 
   DeleteData(item: any) {
@@ -188,7 +208,6 @@ export class AllTaskReportComponent {
     this.masterEntryService.GetInitialData(param).subscribe({
       next: (results) => {
         if (results.status) {
-          
           this.detailsData = [];
           let tables = JSON.parse(results.data);
           this.detailsData = tables.Tables1;
