@@ -2,26 +2,51 @@
   <div class="card">
     <div class="card-header theme-bg">
       <h1 class="">PI Report</h1>
-
-
     </div>
     <div class="card-body">
-      <form [formGroup]="dateForm" class="row p-3 shadow-sm g-3 align-items-end mb-3" (ngSubmit)="loadAllPI()">
-        <div class="col-md-2">
-          <label class="form-label fw-bold">From Date</label>
-          <input type="date" class="form-control " formControlName="fromDate" />
-        </div>
+      <!-- <form
+        [formGroup]="dateForm"
+        class="row p-3 shadow-sm g-3 align-items-end mb-3"
+        (ngSubmit)="loadAllPI()"
+      >
+         <div class="col-3">
+            <label class="form-label">Select Date</label>
+            <div class="range-container">
+              <p-calendar
+                formControlName="fromDate"
+                dateFormat="dd/mm/yy"
+                placeholder="From"
+                inputStyleClass="custom-date-input"
+              ></p-calendar>
 
-        <div class="col-md-2">
-          <label class="form-label fw-bold">To Date</label>
-          <input type="date" class="form-control " formControlName="toDate" />
-        </div>
+              <span class="range-divider">to</span>
+
+              <p-calendar
+                formControlName="toDate"
+                dateFormat="dd/mm/yy"
+                placeholder="To"
+                inputStyleClass="custom-date-input"
+              ></p-calendar>
+            </div>
+          </div>
 
         <div class="col-md-2">
           <label>PI No <span>*</span></label>
-          <p-dropdown [style]="{ width: '100%' }" class="p-0" [options]="PIList" optionLabel="PINo" [filter]="true"
-            filterBy="PINo" [showClear]="true" styleClass="listBottom" placeholder="Please Select"
-            optionValue="PI_Master_Id" formControlName="PIId" [virtualScroll]="true" [virtualScrollItemSize]="30">
+          <p-dropdown
+            [style]="{ width: '100%' }"
+            class="p-0"
+            [options]="PIList"
+            optionLabel="PINo"
+            [filter]="true"
+            filterBy="PINo"
+            [showClear]="true"
+            styleClass="listBottom"
+            placeholder="Please Select"
+            optionValue="PI_Master_Id"
+            formControlName="PIId"
+            [virtualScroll]="true"
+            [virtualScrollItemSize]="30"
+          >
             <ng-template let-AB pTemplate="item">
               <div class="flex align-items-center gap-2">
                 <div>{{ AB.PINo }}</div>
@@ -32,10 +57,21 @@
 
         <div class="col-md-2">
           <label>Client List<span>*</span></label>
-          <p-dropdown [style]="{ width: '100%' }" class="p-0" [options]="ClientList" optionLabel="Company_Name"
-            [filter]="true" filterBy="Company_Name" [showClear]="true" styleClass="listBottom"
-            placeholder="Please Select" optionValue="Customer_ID" formControlName="ClientId" [virtualScroll]="true"
-            [virtualScrollItemSize]="30">
+          <p-dropdown
+            [style]="{ width: '100%' }"
+            class="p-0"
+            [options]="ClientList"
+            optionLabel="Company_Name"
+            [filter]="true"
+            filterBy="Company_Name"
+            [showClear]="true"
+            styleClass="listBottom"
+            placeholder="Please Select"
+            optionValue="Customer_ID"
+            formControlName="ClientId"
+            [virtualScroll]="true"
+            [virtualScrollItemSize]="30"
+          >
             <ng-template let-AB pTemplate="item">
               <div class="flex align-items-center gap-2">
                 <div>{{ AB.Company_Name }}</div>
@@ -45,9 +81,19 @@
         </div>
         <div class="col-md-2">
           <label>Marketing Concern <span>*</span></label>
-          <p-dropdown [style]="{ width: '100%' }" class="p-0" [options]="SuperiorList" optionLabel="UserName"
-            [filter]="true" filterBy="UserName" [showClear]="true" styleClass="listBottom" placeholder="Please Select"
-            optionValue="User_ID" formControlName="SuperiorId">
+          <p-dropdown
+            [style]="{ width: '100%' }"
+            class="p-0"
+            [options]="SuperiorList"
+            optionLabel="UserName"
+            [filter]="true"
+            filterBy="UserName"
+            [showClear]="true"
+            styleClass="listBottom"
+            placeholder="Please Select"
+            optionValue="User_ID"
+            formControlName="SuperiorId"
+          >
             <ng-template let-AB pTemplate="item">
               <div class="flex align-items-center gap-2">
                 <div>{{ AB.UserName }}</div>
@@ -56,59 +102,217 @@
           </p-dropdown>
         </div>
         <div class="col-md-2">
-          <button type="submit" class="btn h-100 pt-3 theme-btn w-100" [disabled]="dateForm.invalid">
+          <button
+            type="submit"
+            class="btn h-100 pt-3 theme-btn w-100"
+            [disabled]="dateForm.invalid"
+          >
+            <i class="pi pi-download me-1"></i> Load
+          </button>
+        </div>
+      </form> -->
+      <form
+        [formGroup]="dateForm"
+        class="row g-3 p-3 shadow-sm rounded align-items-center mb-3"
+        (ngSubmit)="loadAllPI()"
+      >
+        <!-- Select Date -->
+        <div class="col-4">
+          <label class="form-label">Select Date</label>
+          <div class="range-container">
+            <p-calendar
+              formControlName="fromDate"
+              dateFormat="dd/mm/yy"
+              placeholder="From"
+              inputStyleClass="custom-date-input"
+            ></p-calendar>
+
+            <span class="range-divider">to</span>
+
+            <p-calendar
+              formControlName="toDate"
+              dateFormat="dd/mm/yy"
+              placeholder="To"
+              inputStyleClass="custom-date-input"
+            ></p-calendar>
+          </div>
+        </div>
+
+        <!-- PI No -->
+        <div class="col-md-2">
+          <label class="form-label fw-bold"
+            >PI No <span class="text-danger">*</span></label
+          >
+          <p-dropdown
+            [style]="{ width: '100%' }"
+            class="p-0"
+            [options]="PIList"
+            optionLabel="PINo"
+            [filter]="true"
+            filterBy="PINo"
+            [showClear]="true"
+            placeholder="Select PI"
+            optionValue="PI_Master_Id"
+            formControlName="PIId"
+            [virtualScroll]="true"
+            [virtualScrollItemSize]="30"
+            appendTo="body"
+            panelStyleClass="description-panel"
+            [style]="{ width: '100%', height: '52px' }"
+            placeholder="Select Description"
+            styleClass="table-dropdown w-100"
+          >
+            <ng-template let-AB pTemplate="item">
+              <div>{{ AB.PINo }}</div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+
+        <!-- Client List -->
+        <div class="col-md-2">
+          <label class="form-label fw-bold"
+            >Client List <span class="text-danger">*</span></label
+          >
+          <p-dropdown
+            [style]="{ width: '100%' }"
+            class="p-0"
+            [options]="ClientList"
+            optionLabel="Company_Name"
+            [filter]="true"
+            filterBy="Company_Name"
+            [showClear]="true"
+            placeholder="Select Client"
+            optionValue="Customer_ID"
+            formControlName="ClientId"
+            [virtualScroll]="true"
+            [virtualScrollItemSize]="30"
+            appendTo="body"
+            panelStyleClass="description-panel"
+            [style]="{ width: '100%', height: '52px' }"
+            placeholder="Select Description"
+            styleClass="table-dropdown w-100"
+          >
+            <ng-template let-AB pTemplate="item">
+              <div>{{ AB.Company_Name }}</div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+
+        <!-- Marketing Concern -->
+        <div class="col-md-2">
+          <label class="form-label fw-bold"
+            >Marketing Concern <span class="text-danger">*</span></label
+          >
+          <p-dropdown
+            [style]="{ width: '100%' }"
+            class="p-0"
+            [options]="SuperiorList"
+            optionLabel="UserName"
+            [filter]="true"
+            filterBy="UserName"
+            [showClear]="true"
+            placeholder="Select User"
+            optionValue="User_ID"
+            formControlName="SuperiorId"
+            appendTo="body"
+            panelStyleClass="description-panel"
+            [style]="{ width: '100%', height: '52px' }"
+            placeholder="Select Description"
+            styleClass="table-dropdown w-100"
+          >
+            <ng-template let-AB pTemplate="item">
+              <div>{{ AB.UserName }}</div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+
+        <!-- Load Button -->
+        <div class="col-md-2 d-flex flex-column justify-content-end">
+          <button
+            type="submit"
+            class="btn theme-btn w-100"
+            [disabled]="dateForm.invalid"
+            style="height: 48px"
+          >
             <i class="pi pi-download me-1"></i> Load
           </button>
         </div>
       </form>
       <div class="shadow-sm p-2">
-        <button *ngIf="PIReport.length>0" type="button" class="btn btn-outline-success bg-gradient-warning btn-sm mr-2" (click)="printDialog()">
+        <button
+          *ngIf="PIReport.length > 0"
+          type="button"
+          class="btn btn-outline-success bg-gradient-warning btn-sm mr-2"
+          (click)="printDialog()"
+          style="width: 130px; height: 42px; margin-bottom: 20px"
+        >
           <i class="fas fa-file-print"></i>&nbsp;Print
         </button>
-        <p-table *ngIf="tableVisible" #dt [value]="PIReport" [paginator]="true" [rows]="pageSize" [responsive]="true"
-          (onPage)="onPageChange($event)" [rowsPerPageOptions]="[5,10,20,50,PIReport.length]"
-          [showCurrentPageReport]="true" [globalFilterFields]="[
-        'PINo',
-        'Date',
-        'Consignee',
-        'Contact_Name',
-        'PaymentTerms',
-        'Article',
-        'ActualArticle',
-        'Color',
-        'Packaging',
-        'UsdPrice',
-        'BDTPrice',
-        'Quantity',
-        'Unit',
-        'Total_Amount',
-        'TotalUSD',
-        'TotalBDT',
-        'ProdCostUnt',
-        'ProdCostTotal',
-        'Delivered_Quantity',
-        'Created_By',
-        'LC_No',
-        'AAarticle'
-      ]" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+        <p-table
+          *ngIf="tableVisible"
+          #dt
+          [value]="PIReport"
+          [paginator]="true"
+          [rows]="pageSize"
+          [responsive]="true"
+             [scrollable]="true"
+          scrollHeight="400px"
+          scrollDirection="both"
+          (onPage)="onPageChange($event)"
+          [rowsPerPageOptions]="[5, 10, 20, 50, PIReport.length]"
+          [showCurrentPageReport]="true"
+          
+          [globalFilterFields]="[
+            'PINo',
+            'Date',
+            'Consignee',
+            'Contact_Name',
+            'PaymentTerms',
+            'Article',
+            'ActualArticle',
+            'Color',
+            'Packaging',
+            'UsdPrice',
+            'BDTPrice',
+            'Quantity',
+            'Unit',
+            'Total_Amount',
+            'TotalUSD',
+            'TotalBDT',
+            'ProdCostUnt',
+            'ProdCostTotal',
+            'Delivered_Quantity',
+            'Created_By',
+            'LC_No',
+            'AAarticle',
+          ]"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        >
           <ng-template pTemplate="caption">
-            <div class="table-toolbar">
+            <div class="table-toolbar d-flex justify-content-end">
               <span class="p-input-icon-left">
                 <i class="pi pi-search"></i>
-                <input pInputText type="text" [(ngModel)]="searchText"
-                  (input)="dt.filterGlobal($any($event.target).value, 'contains')" placeholder="Global Search" />
+                <input
+                  pInputText
+                  type="text"
+                  [(ngModel)]="searchText"
+                  (input)="
+                    dt.filterGlobal($any($event.target).value, 'contains')
+                  "
+                  placeholder="Global Search"
+                />
               </span>
             </div>
           </ng-template>
 
           <ng-template pTemplate="header">
             <tr>
-              <th class="text-center">Sl No</th>
-              <th class="text-center">PI No</th>
+              <th class="text-center" pFrozenColumn>Sl No</th>
+              <th class="text-center" pFrozenColumn>PI No</th>
               <th class="text-center">Date</th>
               <th class="text-center">Consignee</th>
               <th class="text-center">Merch. Name</th>
-              <th class="text-center">Payment Terms</th>
+              <th class="text-center" style="width: 160px" >Payment Terms</th>
               <th class="text-center">Article</th>
               <th class="text-center">Actual Article</th>
               <th class="text-center">Color</th>
@@ -129,16 +333,50 @@
 
           <ng-template pTemplate="body" let-PIDetailsList let-i="rowIndex">
             <tr>
-              <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
-              <td class="text-center">
-                <div style="color: blue;" class="piNoView"
-                  (click)="piNoClick(PIDetailsList.PINo,PIDetailsList.LC_No,PIDetailsList)">{{ PIDetailsList.PINo }}
+              <td class="text-center" pFrozenColumn>{{ (dt.first || 0) + i + 1 }}</td>
+              <td class="text-center" pFrozenColumn>
+                <div
+                  style="color: blue"
+                  class="piNoView"
+                  (click)="
+                    piNoClick(
+                      PIDetailsList.PINo,
+                      PIDetailsList.LC_No,
+                      PIDetailsList
+                    )
+                  "
+                >
+                  {{ PIDetailsList.PINo }}
                 </div>
               </td>
-              <td class="text-center">{{ PIDetailsList.Date| date : "dd-MMM-yyyy" }}</td>
+              <td class="text-center">
+                {{ PIDetailsList.Date | date: "dd-MMM-yyyy" }}
+              </td>
               <td class="text-center">{{ PIDetailsList.Consignee }}</td>
               <td class="text-center">{{ PIDetailsList.Contact_Name }}</td>
-              <td class="text-center">{{ PIDetailsList.PaymentTerms }}</td>
+                    <td class="text-cell">
+                <span *ngIf="
+                    !PIDetailsList.showFull &&
+                     PIDetailsList.PaymentTerms?.length > 10
+                  ">
+                  {{ PIDetailsList.PaymentTerms | slice: 0 : 10 }}...
+                  <br />
+                  <span class="see-more" (click)="toggleText(PIDetailsList)" style="cursor: pointer; color: blue">
+                    See more
+                  </span>
+                </span>
+
+                <span *ngIf="
+                    PIDetailsList.showFull ||
+                    PIDetailsList.PaymentTerms?.length <= 10
+                  ">
+                  {{ PIDetailsList.PaymentTerms }}
+                  <span *ngIf="PIDetailsList.PaymentTerms?.length > 10" class="see-more"
+                    (click)="toggleText(PIDetailsList)" style="cursor: pointer; color: blue">
+                    See less
+                  </span>
+                </span>
+              </td>
               <td class="text-center">{{ PIDetailsList.Article }}</td>
               <td class="text-center">{{ PIDetailsList.AAarticle }}</td>
               <td class="text-center">{{ PIDetailsList.Color }}</td>
@@ -151,16 +389,15 @@
               <td class="text-center">{{ PIDetailsList.TotalBDT }}</td>
               <td class="text-center">{{ PIDetailsList.ProdCostUnt }}</td>
               <td class="text-center">{{ PIDetailsList.ProdCostTotal }}</td>
-              <td class="text-center">{{ PIDetailsList.Delivered_Quantity }}</td>
+              <td class="text-center">
+                {{ PIDetailsList.Delivered_Quantity }}
+              </td>
               <td class="text-center">{{ PIDetailsList.Created_By }}</td>
               <td class="text-center">{{ PIDetailsList.LC_No }}</td>
             </tr>
           </ng-template>
         </p-table>
       </div>
-
     </div>
-
   </div>
-
 </div>
