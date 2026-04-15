@@ -1,4 +1,4 @@
-﻿using Boilerplate.Contracts;
+using Boilerplate.Contracts;
 using Boilerplate.Contracts.Repositories;
 using IMS.Contracts.DTOs;
 using Microsoft.Extensions.Configuration;
@@ -111,6 +111,19 @@ namespace Boilerplate.Repository.Repositories
                     adapter = new SqlDataAdapter(cmd);
                     adapter.Fill(ds);
                 }
+
+                // Simple debug logging to trace how many rows are returned
+                try
+                {
+                    var rowCount = (ds.Tables.Count > 0) ? ds.Tables[0].Rows.Count : 0;
+                    System.Diagnostics.Debug.WriteLine(
+                        $"[GetDataRepository] Procedure '{model.ProcedureName}' returned {rowCount} rows.");
+                }
+                catch
+                {
+                    // logging must never break execution
+                }
+
                 return ds;
             }
             catch (Exception ex)
@@ -123,6 +136,9 @@ namespace Boilerplate.Repository.Repositories
         {
             if (model.Parameters != null)
             {
+                // ensure we don't accumulate parameters across calls
+                parameters.Clear();
+
                 StringBuilder allParams = new StringBuilder();
                 string? strParams = Convert.ToString(model.Parameters);
                 var param = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(strParams);
@@ -138,7 +154,24 @@ namespace Boilerplate.Repository.Repositories
                     {
                         allParams.Append("@" + item.Name);
                     }
-                    parameters.Add(new SqlParameter($"@{item.Name}", item.Value.ToString()));
+
+                    // Handle nulls safely and preserve types for SQL parameters
+                    var dynVal = item.Value;
+                    object sqlValue;
+                    if (dynVal == null)
+                    {
+                        sqlValue = DBNull.Value;
+                    }
+                    else if (dynVal is Newtonsoft.Json.Linq.JValue jv)
+                    {
+                        sqlValue = jv.Value ?? DBNull.Value;
+                    }
+                    else
+                    {
+                        sqlValue = dynVal;
+                    }
+
+                    parameters.Add(new SqlParameter($"@{item.Name}", sqlValue));
                 }
                 return allParams;
             }

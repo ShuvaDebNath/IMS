@@ -3,111 +3,7 @@
     <div class="card-header theme-bg">
       <h1>Delivery Log Report</h1>
     </div>
-    <div class="card-body">
-      <!-- <form
-        [formGroup]="dateForm"
-        class="row p-3 shadow-sm g-3 align-items-end mb-3"
-        (ngSubmit)="loadAllPI()"
-      >
-        <div class="col-md-2">
-          <label class="form-label fw-bold">From Date</label>
-          <input
-                  type="date"
-                  formControlName="fromDate"
-                  class="form-control"
-                />
-        </div>
-
-        <div class="col-md-2">
-          <label class="form-label fw-bold">To Date</label>
-          <input
-                  type="date"
-                  formControlName="toDate"
-                  class="form-control"
-                />
-        </div>
-
-        <div class="col-md-2">
-          <label>PI No <span>*</span></label>
-          <p-dropdown
-            [style]="{ width: '100%' }"
-            class="p-0"
-            [options]="PIList"
-            optionLabel="PINo"
-            [filter]="true"
-            filterBy="PINo"
-            [showClear]="true"
-            styleClass="listBottom"
-            placeholder="Please Select"
-            optionValue="PI_Master_Id"
-            formControlName="PIId"
-            [virtualScroll]="true"
-            [virtualScrollItemSize]="30"
-          >
-            <ng-template let-AB pTemplate="item">
-              <div class="flex align-items-center gap-2">
-                <div>{{ AB.PINo }}</div>
-              </div>
-            </ng-template>
-          </p-dropdown>
-        </div>
-
-        <div class="col-md-2">
-          <label>Client List<span>*</span></label>
-          <p-dropdown
-            [style]="{ width: '100%' }"
-            class="p-0"
-            [options]="ClientList"
-            optionLabel="Company_Name"
-            [filter]="true"
-            filterBy="Company_Name"
-            [showClear]="true"
-            styleClass="listBottom"
-            placeholder="Please Select"
-            optionValue="Customer_ID"
-            formControlName="ClientId"
-            [virtualScroll]="true"
-            [virtualScrollItemSize]="30"
-          >
-            <ng-template let-AB pTemplate="item">
-              <div class="flex align-items-center gap-2">
-                <div>{{ AB.Company_Name }}</div>
-              </div>
-            </ng-template>
-          </p-dropdown>
-        </div>
-        <div class="col-md-2">
-          <label>Marketing Concern <span>*</span></label>
-          <p-dropdown
-            [style]="{ width: '100%' }"
-            class="p-0"
-            [options]="SuperiorList"
-            optionLabel="UserName"
-            [filter]="true"
-            filterBy="UserName"
-            [showClear]="true"
-            styleClass="listBottom"
-            placeholder="Please Select"
-            optionValue="User_ID"
-            formControlName="SuperiorId"
-          >
-            <ng-template let-AB pTemplate="item">
-              <div class="flex align-items-center gap-2">
-                <div>{{ AB.UserName }}</div>
-              </div>
-            </ng-template>
-          </p-dropdown>
-        </div>
-        <div class="col-md-2">
-          <button
-            type="submit"
-            class="btn btn-sm theme-btn w-100 pt-3"
-            [disabled]="dateForm.invalid"
-          >
-            <i class="pi pi-download me-1"></i> Load
-          </button>
-        </div>
-      </form> -->
+    <div class="card-body">      
        <form
         [formGroup]="dateForm"
         class="row g-3 p-3 shadow-sm rounded align-items-center mb-3"
@@ -133,40 +29,10 @@
               inputStyleClass="custom-date-input"
             ></p-calendar>
           </div>
-        </div>
-
-        <!-- PI No -->
-        <div class="col-md-2">
-          <label class="form-label fw-bold"
-            >PI No <span class="text-danger">*</span></label
-          >
-          <p-dropdown
-            [style]="{ width: '100%' }"
-            class="p-0"
-            [options]="PIList"
-            optionLabel="PINo"
-            [filter]="true"
-            filterBy="PINo"
-            [showClear]="true"
-            placeholder="Select PI"
-            optionValue="PI_Master_Id"
-            formControlName="PIId"
-            [virtualScroll]="true"
-            [virtualScrollItemSize]="30"
-            appendTo="body"
-            panelStyleClass="description-panel"
-            [style]="{ width: '100%', height: '52px' }"
-            placeholder="Select Description"
-            styleClass="table-dropdown w-100"
-          >
-            <ng-template let-AB pTemplate="item">
-              <div>{{ AB.PINo }}</div>
-            </ng-template>
-          </p-dropdown>
-        </div>
+        </div>        
 
         <!-- Client List -->
-        <div class="col-md-2">
+        <div class="col-md-4 col-lg-3">
           <label class="form-label fw-bold"
             >Client List <span class="text-danger">*</span></label
           >
@@ -186,42 +52,44 @@
             appendTo="body"
             panelStyleClass="description-panel"
             [style]="{ width: '100%', height: '52px' }"
-            placeholder="Select Description"
+            placeholder="Select Client"
             styleClass="table-dropdown w-100"
           >
             <ng-template let-AB pTemplate="item">
               <div>{{ AB.Company_Name }}</div>
             </ng-template>
           </p-dropdown>
-        </div>
-
-        <!-- Marketing Concern -->
-        <div class="col-md-2">
+        </div>   
+        
+        <!-- Shipper List -->
+        <div class="col-md-4 col-lg-3">
           <label class="form-label fw-bold"
-            >Marketing Concern <span class="text-danger">*</span></label
+            >Shipper List <span class="text-danger">*</span></label
           >
           <p-dropdown
             [style]="{ width: '100%' }"
             class="p-0"
-            [options]="SuperiorList"
-            optionLabel="UserName"
+            [options]="BaneficiaryAccountList"
+            optionLabel="CompanyName"
             [filter]="true"
-            filterBy="UserName"
+            filterBy="CompanyName"
             [showClear]="true"
-            placeholder="Select User"
-            optionValue="User_ID"
-            formControlName="SuperiorId"
+            placeholder="Select Shipper"
+            optionValue="Beneficiary_Account_ID"
+            formControlName="Beneficiary_Account_ID"
+            [virtualScroll]="true"
+            [virtualScrollItemSize]="30"
             appendTo="body"
             panelStyleClass="description-panel"
             [style]="{ width: '100%', height: '52px' }"
-            placeholder="Select Description"
+            placeholder="Select Shipper"
             styleClass="table-dropdown w-100"
           >
             <ng-template let-AB pTemplate="item">
-              <div>{{ AB.UserName }}</div>
+              <div>{{ AB.CompanyName }}</div>
             </ng-template>
           </p-dropdown>
-        </div>
+        </div> 
 
         <!-- Load Button -->
         <div class="col-md-2 d-flex flex-column justify-content-end">
@@ -232,18 +100,29 @@
             style="height: 48px"
           >
             <i class="pi pi-download me-1"></i> Load
-          </button>
+          </button>         
         </div>
       </form>
       <div class="shadow-sm p-2">
+
+         <button
+          *ngIf="tableVisible"
+            class="btn theme-btn px-4 py-2"
+            (click)="printDeliveryLogReport()"
+            title="Export LC list to Excel, Word, or PDF"
+          >
+            <i class="fas fa-download"></i>&nbsp; Export
+          </button>
+
+
+        <!-- Delivery log table uses server-side keyset pagination,
+             but presents classic numbered pages in the UI. -->
         <p-table
           *ngIf="tableVisible"
           #dt
           [value]="PIReport"
-          [paginator]="true"
-          [rows]="10"
+          [paginator]="false"
           [responsive]="true"
-          [showCurrentPageReport]="true"
           [globalFilterFields]="[
             'PINo',
             'Date',
@@ -317,7 +196,7 @@
 
           <ng-template pTemplate="body" let-PIDetailsList let-i="rowIndex">
             <tr>
-              <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
+              <td class="text-center">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
               <td class="text-center">{{ PIDetailsList.MarketingPerson }}</td>
               <td class="text-center">{{ PIDetailsList.Consignee }}</td>
               <td class="text-center">
@@ -358,6 +237,59 @@
             </tr>
           </ng-template>
         </p-table>
+        <!-- Pagination summary + controls (DataTables-like) -->
+        <div class="d-flex justify-content-between align-items-center mt-2" *ngIf="tableVisible">
+          <div class="text-muted">
+            Showing
+            {{ totalRecords ? (currentPage - 1) * pageSize + 1 : 0 }}
+            to
+            {{ totalRecords ? (currentPage - 1) * pageSize + PIReport.length : 0 }}
+            of {{ totalRecords }} entries
+          </div>
+
+          <ul class="pagination mb-0">
+            <li class="page-item" [class.disabled]="isLoading || currentPage === 1">
+              <button class="page-link" (click)="firstPage()">&laquo;</button>
+            </li>
+            <li class="page-item" [class.disabled]="isLoading || currentPage === 1">
+              <button class="page-link" (click)="previousPage()">&lsaquo;</button>
+            </li>
+
+            <li
+              class="page-item"
+              *ngFor="let page of pageArray; trackBy: trackByPage"
+              [class.active]="page === currentPage"
+              [class.disabled]="!canNavigateTo(page)"
+            >
+              <button class="page-link" (click)="goToPage(page)">
+                {{ page }}
+              </button>
+            </li>
+
+            <li
+              class="page-item"
+              [class.disabled]="isLoading || !canNavigateTo(currentPage + 1)"
+            >
+              <button class="page-link" (click)="nextPage()">
+                &rsaquo;
+              </button>
+            </li>
+            <li
+              class="page-item"
+              [class.disabled]="isLoading || totalPages === 0 || currentPage === totalPages || !canNavigateTo(totalPages)"
+            >
+              <button class="page-link" (click)="lastPage()">
+                &raquo;
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Loading indicator during any fetch -->
+        <div class="text-center mt-2" *ngIf="isLoading">
+          <i class="pi pi-spin pi-spinner me-1"></i>
+          Loading...
+        </div>
       </div>
     </div>
   </div>

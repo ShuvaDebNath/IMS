@@ -17,6 +17,7 @@ import { DividerModule } from 'primeng/divider';
 import { MasterEntryService } from '../services/masterEntry/masterEntry.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CalendarModule } from 'primeng/calendar';
+import { DateFormat } from 'src/app/shared/date-format';
 
 @Component({
   standalone: true,
@@ -124,8 +125,8 @@ export class ChallanComponent implements OnInit {
       parameters: {
         ChallanNo: challanNo || '',
         PINo: piNo || '',
-        FromDate: fromDate || '',
-        ToDate: toDate || '',
+        FromDate: DateFormat.toApiDate(fromDate) || '',
+        ToDate: DateFormat.toApiDate(toDate) || '',
       },
     };
     Swal.fire({
@@ -579,6 +580,7 @@ export class ChallanComponent implements OnInit {
     }
     const payload = { Chalan_No: no };
     this.reportService.PrintDeliveryChallanReport(payload, 'pdf', true);
+
   }
 
   onChallanClick(challanNo: string): void {
