@@ -165,49 +165,19 @@ export class PiBottomPriceReportComponent {
   }
 
   piPrint(PIData: any) {
-    var item = {
-      PI_Master_ID: PIData?.PI_Master_ID,
-      IsMPI: PIData?.IsMPI,
+    const params: Record<string, any> = {
+      PI_Master_ID: PIData?.PI_Master_ID
     };
 
-    Swal.fire({
-      title: 'What you want to do?',
-      icon: 'question',
-      html: `
-                              <div style="display: flex; gap: 10px; justify-content: center;">
-                                <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
-                                  <i class="fa fa-file-excel"></i> Excel
-                                </button>
-                                <button id="wordBtn" class="btn btn-info" style="padding: 8px 16px;">
-                                  <i class="fa fa-file-word"></i> Word
-                                </button>
-                                <button id="pdfBtn" class="btn btn-danger" style="padding: 8px 16px;">
-                                  <i class="fa fa-file-pdf"></i> PDF
-                                </button>
-                              </div>
-                            `,
-      showConfirmButton: false,
-      didOpen: () => {
-        const excelBtn = document.getElementById('excelBtn');
-        const wordBtn = document.getElementById('wordBtn');
-        const pdfBtn = document.getElementById('pdfBtn');
-
-        excelBtn?.addEventListener('click', () => {
-          Swal.close();
-          this.reportService.PrintProformaInvoiceRequest(item, 'word', 'F');
-        });
-
-        wordBtn?.addEventListener('click', () => {
-          Swal.close();
-          this.reportService.PrintProformaInvoiceRequest(item, 'word', 'F');
-        });
-
-        pdfBtn?.addEventListener('click', () => {
-          Swal.close();
-          this.reportService.PrintProformaInvoiceRequest(item, 'pdf', 'F');
-        });
-      },
-    });
+    if (PIData.Beneficiary_Account_ID == 5 || PIData.Beneficiary_Account_ID == 12) {
+      this.reportService.showReportDialog('GenericReport/SanxinPIReport', params, 'SanxinPIReport');
+    }
+    else if (PIData?.IsMPI === true) {
+      this.reportService.showReportDialog('GenericReport/CashPIReport', params, 'CashPIReport');
+    }
+    else {
+      this.reportService.showReportDialog('GenericReport/SunshinePIReport', params, 'SunshinePIReport');
+    }
   }
 
   deliveryPrint(PIData: any) {

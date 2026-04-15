@@ -4,17 +4,14 @@ import { Router } from '@angular/router';
 import { GlobalServiceService } from '../../services/Global-service.service';
 import swal from 'sweetalert2';
 import { Page } from 'src/app/models/Page';
-import { GlobalClass } from 'src/app/shared/global-class';
-//Material Datatable
 import { MatPaginator } from '@angular/material/paginator';
 import { PagesComponent } from 'src/app/pages/pages.component';
 import { Title } from '@angular/platform-browser';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 import { GetDataModel } from 'src/app/models/GetDataModel';
 import { LC } from 'src/app/models/LCModel';
-import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
-import { DoubleMasterEntryModel } from 'src/app/models/DoubleMasterEntryModel';
 import { ReportService } from 'src/app/services/reportService/report-service.service';
+import { DateFormat } from 'src/app/shared/date-format';
 
 @Component({
   selector: 'app-all-lc',
@@ -112,49 +109,51 @@ export class AllLcComponent {
   }
   Search() {
     // Convert dates from dd/mm/yyyy to mm/dd/yyyy
-    const convertDateFormat = (dateStr: string): string => {
-      if (!dateStr) return '';
-      const parts = dateStr.split('/');
-      if (parts.length === 3) {
-        return `${parts[1]}/${parts[0]}/${parts[2]}`;
-      }
-      return dateStr;
-    };
+    // const convertDateFormat = (dateStr: string): string => {
+    //   if (!dateStr) return '';
+    //   const parts = dateStr.split('/');
+    //   if (parts.length === 3) {
+    //     return `${parts[1]}/${parts[0]}/${parts[2]}`;
+    //   }
+    //   return dateStr;
+    // };
 
-    var finput = new Date();
-    var fromDate = this.SearchForm.value.fromDate;
-    if (this.SearchForm.value.fromDate instanceof Date) {
-      finput = new Date(this.SearchForm.value.fromDate); // try converting if it's not already a Date
-      const fday = String(finput.getDate()).padStart(2, '0');
-      const fmonth = String(finput.getMonth() + 1).padStart(2, '0'); // months are 0-based
-      const fyear = finput.getFullYear();
+    // var finput = new Date();
+    // var fromDate = this.SearchForm.value.fromDate;
+    // if (this.SearchForm.value.fromDate instanceof Date) {
+    //   finput = new Date(this.SearchForm.value.fromDate); // try converting if it's not already a Date
+    //   const fday = String(finput.getDate()).padStart(2, '0');
+    //   const fmonth = String(finput.getMonth() + 1).padStart(2, '0'); // months are 0-based
+    //   const fyear = finput.getFullYear();
 
-      fromDate = `${fday}/${fmonth}/${fyear}`;
-    }
-    fromDate = convertDateFormat(fromDate);
+    //   fromDate = `${fday}/${fmonth}/${fyear}`;
+    // }
+    // fromDate = convertDateFormat(fromDate);
 
-    var tinput = new Date();
-    var toDate = this.SearchForm.value.toDate;
-    if (this.SearchForm.value.toDate instanceof Date) {
-      tinput = new Date(this.SearchForm.value.toDate); // try converting if it's not already a Date
+    // var tinput = new Date();
+    // var toDate = this.SearchForm.value.toDate;
+    // if (this.SearchForm.value.toDate instanceof Date) {
+    //   tinput = new Date(this.SearchForm.value.toDate); // try converting if it's not already a Date
 
-      const tday = String(tinput.getDate()).padStart(2, '0');
-      const tmonth = String(tinput.getMonth() + 1).padStart(2, '0'); // months are 0-based
-      const tyear = tinput.getFullYear();
+    //   const tday = String(tinput.getDate()).padStart(2, '0');
+    //   const tmonth = String(tinput.getMonth() + 1).padStart(2, '0'); // months are 0-based
+    //   const tyear = tinput.getFullYear();
 
-      toDate = `${tday}/${tmonth}/${tyear}`;
-    }
-    toDate = convertDateFormat(toDate);
+    //   toDate = `${tday}/${tmonth}/${tyear}`;
+    // }
+    // toDate = convertDateFormat(toDate);
 
     let param = new GetDataModel();
     param.procedureName = '[usp_LC_List]';
     param.parameters = {
-      FromDate: fromDate,
-      ToDate: toDate,
+      FromDate: DateFormat.toApiDate(this.SearchForm.value.fromDate),
+      ToDate: DateFormat.toApiDate(this.SearchForm.value.toDate),
       LCNo: this.SearchForm.value.lcNo,
       PageIndex: this.pageIndex,
       PageSize: this.pageSize,
     };
+
+    console.log('Search parameters:', param.parameters); // Debug log for parameters
 
     this.masterEntryService.GetInitialData(param).subscribe({
       next: (results) => {
@@ -235,7 +234,23 @@ export class AllLcComponent {
     
   }
 
-  printLC() {
+  printLC(item?: any): void {
+    const fromDate = DateFormat.toApiDate(this.SearchForm.value.fromDate);
+    const toDate   = DateFormat.toApiDate(this.SearchForm.value.toDate);
+
+    if (!fromDate || !toDate) {
+      swal.fire('Validation Error!', 'Please select both From Date and To Date.', 'warning');
+      return;
+    }
+
+    const params: Record<string, any> = item
+      ? { LC_ID: item.LC_ID, fromDate, toDate, LCNo: this.SearchForm.value.lcNo ?? '' }
+      : { fromDate, toDate, LCNo: this.SearchForm.value.lcNo ?? '' };
+
+    this.reportService.showReportDialog('GenericReport/LCReport', params, 'LCReport');
+  }
+
+  printLCGeneric() {
       swal.fire({
         title: 'What you want to do?',
         icon: 'question',

@@ -248,33 +248,33 @@ export class GenerateCpiComponent implements OnInit {
       if (res.status) {
 
         let DataSet = JSON.parse(res.data);
+        
+        this.ShipperList=DataSet.Tables31;
+        this.BenificaryBankList=DataSet.Tables2;
+        this.CountryList=DataSet.Tables3;
+        this.PackingList=DataSet.Tables4;
+        this.LoadingModeList=DataSet.Tables5;
+        this.PaymentModeList=DataSet.Tables6;
+        this.ConsigneeList=DataSet.Tables7;
+        this.ApplicantBankList=DataSet.Tables8;
+        this.BuyingHouseList=DataSet.Tables9;
+        
+        this.DescriptionList=DataSet.Tables11;
+        this.WidthList=DataSet.Tables12;
+        this.ColorList=DataSet.Tables13;
+        this.PackagingList=DataSet.Tables14;
+        this.UnitList=DataSet.Tables15;
+        this.AAList=DataSet.Tables28;
+        this.DeliveryConditionList=DataSet.Tables17;
+        this.PartialShipmentList=DataSet.Tables18;
+        this.PriceTermsList=DataSet.Tables19;
+        this.ForceMajeureList=DataSet.Tables20;
+        this.ArbitrationList=DataSet.Tables21;
+        this.CurrencyList=DataSet.Tables22;
 
-        this.ShipperList = DataSet.Tables1;
-        this.BenificaryBankList = DataSet.Tables2;
-        this.CountryList = DataSet.Tables3;
-        this.PackingList = DataSet.Tables4;
-        this.LoadingModeList = DataSet.Tables5;
-        this.PaymentModeList = DataSet.Tables6;
-        this.ConsigneeList = DataSet.Tables7;
-        this.ApplicantBankList = DataSet.Tables8;
-        this.BuyingHouseList = DataSet.Tables9;
+        this.PINo=DataSet.Tables30[0].PINO;
 
-        this.DescriptionList = DataSet.Tables11;
-        this.WidthList = DataSet.Tables12;
-        this.ColorList = DataSet.Tables13;
-        this.PackagingList = DataSet.Tables14;
-        this.UnitList = DataSet.Tables15;
-        this.AAList = DataSet.Tables28;
-        this.DeliveryConditionList = DataSet.Tables17;
-        this.PartialShipmentList = DataSet.Tables18;
-        this.PriceTermsList = DataSet.Tables19;
-        this.ForceMajeureList = DataSet.Tables20;
-        this.ArbitrationList = DataSet.Tables21;
-        this.CurrencyList = DataSet.Tables22;
-
-        this.PINo = DataSet.Tables30[0].PINO;
-
-        if (this.SetDDL) {
+        if (this.SetDDL){
           this.SetDDLDefaultValue();
         }
 
