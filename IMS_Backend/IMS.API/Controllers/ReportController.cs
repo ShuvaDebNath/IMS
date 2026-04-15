@@ -6,6 +6,7 @@ using Boilerplate.Contracts.Services;
 using Boilerplate.Service.Services;
 using Microsoft.AspNetCore.Mvc;
 using QRCoder;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -279,7 +280,24 @@ namespace IMS.API.Controllers
                     row["QRCode"] = GenerateQrCode(qrText);
                 }
 
-                reportPath += "Chalan.rdlc";
+
+                int shipperId = 0;
+
+                if (ds.Tables[0].Columns.Contains("ShipperId") && ds.Tables[0].Rows.Count > 0)
+                {
+                    shipperId = Convert.ToInt32(ds.Tables[0].Rows[0]["ShipperId"]);
+                }
+
+                // Conditional report selection
+                if (shipperId == 12 || shipperId == 5)
+                {
+                    reportPath += "ChallanSanxin.rdlc";
+                }
+                else
+                {
+                    reportPath += "Chalan.rdlc";
+                }
+                
                 string reportName = "DeliveryChallan";
 
                 var renderedReport = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
@@ -1448,6 +1466,120 @@ namespace IMS.API.Controllers
                 else
                 {
                     return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(pIReportParams.RptType.ToLower()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        // ── Generic Report Endpoint ───────────────────────────────────────────────
+
+        /// <summary>
+        /// Single generic endpoint aligned with the frontend <c>PrintReport()</c> function.
+        ///
+        /// Frontend calls:
+        ///   PrintReport('GenericReport/{reportKey}', params, rptType, isView, baseFileName)
+        ///   → GET api/Report/GenericReport/{reportKey}?rptType=excel&amp;Param1=val&amp;Param2=val&amp;...
+        ///
+        /// Response contract (mirrors what PrintReport expects):
+        ///   • Data found   → returns a binary File blob  (res.size > 0  → downloaded/viewed)
+        ///   • No data      → returns an empty byte[]     (res.size === 0 → "No Data Found" Swal)
+        ///   • Bad reportKey → 400 Bad Request             (error callback → "Failed to generate report." Swal)
+        ///
+        /// To add a new report: insert one active row into the <c>ReportConfigs</c> DB table.
+        /// No code change required.
+        /// </summary>
+        [HttpGet]
+        [Route("GenericReport/{reportKey}")]
+        public async Task<IActionResult> GenericReport(
+            string reportKey,
+            string rptType,
+            [FromQuery] Dictionary<string, string> parameters)
+        {
+            try
+            {
+                // rptType arrives BOTH as an explicit route param AND inside the dictionary
+                // (because [FromQuery] Dictionary captures every query-string key).
+                // Strip it before forwarding to the SP — the SP must not receive rptType.
+                parameters.Remove("rptType");
+
+                var result = await _reportService.RunGenericReportAsync(reportKey, parameters);
+
+                var ds = result.Data;
+
+                // ── No data: return an EMPTY blob so the frontend res.size === 0 check
+                //    triggers the "No Data Found" Swal — NOT a JSON body which would be
+                //    received as a non-empty blob and silently downloaded as a corrupt file.
+                if (ds == null || ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
+                    return File(Array.Empty<byte>(), System.Net.Mime.MediaTypeNames.Application.Octet);
+
+                ds.Tables[0].TableName = result.TableName;
+
+                var rendered = RDLCSimplified.RDLCSetup.GenerateReportAsync(result.RdlcPath, rptType, ds);
+
+                // ── PDF: return inline so the frontend can open it in a new tab.
+                // ── Excel / Word: return as an attachment download; the frontend builds
+                //    the filename from baseFileName + today's date + extension.
+                if (rptType.ToLower() == "pdf")
+                    return File(rendered, RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+
+                return File(
+                    rendered,
+                    System.Net.Mime.MediaTypeNames.Application.Octet,
+                    result.ReportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
+            }
+            catch (KeyNotFoundException knfEx)
+            {
+                // 400 → Angular HTTP client fires the error() callback
+                // → PrintReport's error handler shows "Failed to generate report." Swal.
+                return BadRequest(new { msg = knfEx.Message });
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        // ── Existing specific endpoints ───────────────────────────────────────────
+
+        [HttpGet]
+        [Route("ProformaInvoiceDeliveryLogReport")]
+        public async Task<IActionResult> ProformaInvoiceDeliveryLogReport(
+            string rptType, string fromDate, string toDate, string PI_Master_Id, string User_Id, string Client_Id)
+        {
+            try
+            {
+                var currentUser = HttpContext.User;
+
+                string reportPath = "V2\\LCReport\\";
+                DataSet ds = await _reportService.DeliveryLogReport(fromDate, toDate, PI_Master_Id, User_Id, Client_Id);
+
+                if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
+                {
+
+                    return Ok(new { msg = "Data Not Found" });
+                }
+
+                ds.Tables[0].TableName = "LCReport";
+
+                var reportName = "LC Report";
+
+                reportPath += "rptLCReport.rdlc";
+
+
+                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
+
+
+                if (rptType.ToLower() == "pdf")
+                {
+                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
+                }
+                else
+                {
+                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
                 }
 
             }

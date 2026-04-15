@@ -30,6 +30,7 @@
     <None Remove="Report\V2\CommercialInvoice.rdlc" />
     <None Remove="Report\V2\CustomerReport\rptCustomerReport.rdlc" />
     <None Remove="Report\V2\DeliveryChallan.rdlc" />
+    <None Remove="Report\V2\DeliveryReport\rptDeliveryLogReport.rdlc" />
     <None Remove="Report\V2\ExportReport\rptExportDetailsReport.rdlc" />
     <None Remove="Report\V2\ExportReport\rptExportReceiveReport.rdlc" />
     <None Remove="Report\V2\FinishGood\rptFinishGoodReceiveAndSentReport.rdlc" />
@@ -79,6 +80,12 @@
     <Content Include="Report\V2\Chalan.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Report\V2\ChallanReports\ChalanSanxin.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\ChallanReports\Chalan.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Report\V2\CommercialInvoice.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -86,6 +93,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Report\V2\DeliveryChallan.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\DeliveryReport\rptDeliveryLogReport.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Report\V2\ExportReport\rptExportDetailsReport.rdlc">
@@ -119,6 +129,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Report\V2\PI.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\PIReports\CashPI.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\PIReports\PISanxin.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\PIReports\PISunshine.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Report\V2\RawMaterial\rptRawMaterialIssueInvoiceReport.rdlc">

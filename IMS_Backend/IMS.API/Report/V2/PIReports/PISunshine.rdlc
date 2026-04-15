@@ -11,47 +11,15 @@
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="SalesContract">
+    <DataSet Name="PIInfos">
       <Query>
         <DataSourceName>PI</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
-        <Field Name="SalesContractNo">
-          <DataField>SalesContractNo</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="IsMPI">
-          <DataField>IsMPI</DataField>
-          <rd:TypeName>System.Boolean</rd:TypeName>
-        </Field>
-        <Field Name="Status">
-          <DataField>Status</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ShippingMarks">
-          <DataField>ShippingMarks</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Destination_Port">
-          <DataField>Destination_Port</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Loading_Port">
-          <DataField>Loading_Port</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
         <Field Name="PI_Master_ID">
           <DataField>PI_Master_ID</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="Customer_Bank_ID">
-          <DataField>Customer_Bank_ID</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="Consignee_Initial">
-          <DataField>Consignee_Initial</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="PINo">
           <DataField>PINo</DataField>
@@ -63,11 +31,7 @@
         </Field>
         <Field Name="ExpireDate">
           <DataField>ExpireDate</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Beneficiary_Account_ID">
-          <DataField>Beneficiary_Account_ID</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
+          <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
         <Field Name="BeneficiaryCompanyName">
           <DataField>BeneficiaryCompanyName</DataField>
@@ -93,10 +57,6 @@
           <DataField>Static_BuyerName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Id">
-          <DataField>Id</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
         <Field Name="BuyerName">
           <DataField>BuyerName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -104,10 +64,6 @@
         <Field Name="BuyerAddress">
           <DataField>BuyerAddress</DataField>
           <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Customer_ID">
-          <DataField>Customer_ID</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="CustomerName">
           <DataField>CustomerName</DataField>
@@ -173,25 +129,13 @@
           <DataField>Remarks</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Force_Majeure_ID">
-          <DataField>Force_Majeure_ID</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
         <Field Name="ForceMajeureName">
           <DataField>ForceMajeureName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Arbitration_ID">
-          <DataField>Arbitration_ID</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
         <Field Name="ArbitrationName">
           <DataField>ArbitrationName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Applicant_Bank_ID">
-          <DataField>Applicant_Bank_ID</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="CustomerBankName">
           <DataField>CustomerBankName</DataField>
@@ -204,10 +148,6 @@
         <Field Name="CustomerBankDetails">
           <DataField>CustomerBankDetails</DataField>
           <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Beneficiary_Bank_ID">
-          <DataField>Beneficiary_Bank_ID</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="BeneficiaryBankName">
           <DataField>BeneficiaryBankName</DataField>
@@ -223,10 +163,6 @@
         </Field>
         <Field Name="BeneficiaryBankAddress">
           <DataField>BeneficiaryBankAddress</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="AmountInWord">
-          <DataField>AmountInWord</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="BeneficiaryAccountAddress">
@@ -253,6 +189,10 @@
           <DataField>PaymentType</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="SalesContractNo">
+          <DataField>SalesContractNo</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="SuperiorName">
           <DataField>SuperiorName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -261,21 +201,17 @@
           <DataField>CreatedByUserName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="GrandTotalQty">
-          <DataField>GrandTotalQty</DataField>
+        <Field Name="GrandTotalAmount_LC">
+          <DataField>GrandTotalAmount_LC</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
-        <Field Name="GrandTotalAmount">
-          <DataField>GrandTotalAmount</DataField>
+        <Field Name="GrandTotalAmount_Cash">
+          <DataField>GrandTotalAmount_Cash</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
-        <Field Name="PI_Detail_ID">
-          <DataField>PI_Detail_ID</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="PI_Master_ID1">
-          <DataField>PI_Master_ID1</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
+        <Field Name="GrandTotalAmount_Both">
+          <DataField>GrandTotalAmount_Both</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
         <Field Name="Article">
           <DataField>Article</DataField>
@@ -285,10 +221,6 @@
           <DataField>ArticleNo_from_StaticInfo</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Item_ID">
-          <DataField>Item_ID</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
         <Field Name="ArticleNo_FromItemInfo">
           <DataField>ArticleNo_FromItemInfo</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -297,25 +229,13 @@
           <DataField>Description</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Width_ID">
-          <DataField>Width_ID</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
         <Field Name="Width">
           <DataField>Width</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Color_ID">
-          <DataField>Color_ID</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
         <Field Name="Color">
           <DataField>Color</DataField>
           <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Packaging_ID">
-          <DataField>Packaging_ID</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="Packaging">
           <DataField>Packaging</DataField>
@@ -324,10 +244,6 @@
         <Field Name="Quantity">
           <DataField>Quantity</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="Unit_ID">
-          <DataField>Unit_ID</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="Unit">
           <DataField>Unit</DataField>
@@ -353,22 +269,18 @@
           <DataField>Total_Amount_Tk</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
-        <Field Name="Delivered_Quantity">
-          <DataField>Delivered_Quantity</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="CustomMaxDeliveryPercentage">
-          <DataField>CustomMaxDeliveryPercentage</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
+        <Field Name="AmountInWord">
+          <DataField>AmountInWord</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
       <rd:DataSetInfo>
-        <rd:DataSetName>DataSet1</rd:DataSetName>
-        <rd:SchemaPath>F:\Project\ReportProject\ReportDesign\TDS\DataSet1.xsd</rd:SchemaPath>
-        <rd:TableName>usp_SC_Report</rd:TableName>
+        <rd:DataSetName>PI</rd:DataSetName>
+        <rd:SchemaPath>E:\Maliha Projects\ReportProject\ReportDesign\Report\PI.xsd</rd:SchemaPath>
+        <rd:TableName>usp_ProformaInvoice</rd:TableName>
         <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
         <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
-        <rd:TableAdapterName>usp_SC_ReportTableAdapter</rd:TableAdapterName>
+        <rd:TableAdapterName>usp_ProformaInvoiceTableAdapter</rd:TableAdapterName>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
@@ -383,7 +295,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>SC/NO</Value>
+                    <Value>PI/NO</Value>
                     <Style>
                       <FontSize>11pt</FontSize>
                       <FontWeight>Bold</FontWeight>
@@ -415,7 +327,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=First(Fields!SalesContractNo.Value, "SalesContract")</Value>
+                    <Value>=Fields!PINo.Value</Value>
                     <Style>
                       <FontSize>11pt</FontSize>
                       <FontWeight>Bold</FontWeight>
@@ -431,6 +343,74 @@
             <Height>0.20833in</Height>
             <Width>2.25in</Width>
             <ZIndex>1</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox26">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Date</Value>
+                    <Style>
+                      <FontSize>9pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox26</rd:DefaultName>
+            <Top>0.26263in</Top>
+            <Left>0.15847in</Left>
+            <Height>0.1589in</Height>
+            <Width>0.98611in</Width>
+            <ZIndex>2</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Date">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Fields!PIDate.Value</Value>
+                    <Style>
+                      <FontSize>9pt</FontSize>
+                      <Format>MMMM d, yyyy</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Date</rd:DefaultName>
+            <Top>0.26263in</Top>
+            <Left>1.18625in</Left>
+            <Height>0.1589in</Height>
+            <Width>3.08377in</Width>
+            <ZIndex>3</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -459,11 +439,11 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox28</rd:DefaultName>
-            <Top>0.31042in</Top>
+            <Top>0.43542in</Top>
             <Left>0.15847in</Left>
             <Height>0.13277in</Height>
             <Width>1in</Width>
-            <ZIndex>2</ZIndex>
+            <ZIndex>4</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -502,11 +482,11 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Shipper</rd:DefaultName>
-            <Top>0.29653in</Top>
+            <Top>0.42153in</Top>
             <Left>1.18625in</Left>
             <Height>0.14666in</Height>
             <Width>7.15625in</Width>
-            <ZIndex>3</ZIndex>
+            <ZIndex>5</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -534,11 +514,11 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>ContactPerson</rd:DefaultName>
-            <Top>0.77463in</Top>
+            <Top>0.89963in</Top>
             <Left>1.18625in</Left>
             <Height>0.19697in</Height>
             <Width>7.15625in</Width>
-            <ZIndex>4</ZIndex>
+            <ZIndex>6</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -567,11 +547,11 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox33</rd:DefaultName>
-            <Top>0.77463in</Top>
+            <Top>0.89963in</Top>
             <Left>0.15847in</Left>
             <Height>0.19697in</Height>
             <Width>1in</Width>
-            <ZIndex>5</ZIndex>
+            <ZIndex>7</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -600,11 +580,11 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox34</rd:DefaultName>
-            <Top>0.9716in</Top>
+            <Top>1.0966in</Top>
             <Left>0.15847in</Left>
             <Height>0.19697in</Height>
             <Width>0.98611in</Width>
-            <ZIndex>6</ZIndex>
+            <ZIndex>8</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -632,11 +612,11 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>DeliveryAddress</rd:DefaultName>
-            <Top>0.9716in</Top>
+            <Top>1.0966in</Top>
             <Left>1.18625in</Left>
             <Height>0.19697in</Height>
             <Width>7.15625in</Width>
-            <ZIndex>7</ZIndex>
+            <ZIndex>9</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -665,11 +645,11 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox36</rd:DefaultName>
-            <Top>0.44319in</Top>
+            <Top>0.56819in</Top>
             <Left>0.15847in</Left>
             <Height>0.1613in</Height>
             <Width>1in</Width>
-            <ZIndex>8</ZIndex>
+            <ZIndex>10</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -697,11 +677,11 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>VATNo</rd:DefaultName>
-            <Top>0.44319in</Top>
+            <Top>0.56819in</Top>
             <Left>1.18625in</Left>
             <Height>0.1613in</Height>
             <Width>4.10069in</Width>
-            <ZIndex>9</ZIndex>
+            <ZIndex>11</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -734,11 +714,11 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox38</rd:DefaultName>
-            <Top>1.61125in</Top>
+            <Top>1.73625in</Top>
             <Left>0.15847in</Left>
             <Height>0.16667in</Height>
             <Width>8.18403in</Width>
-            <ZIndex>10</ZIndex>
+            <ZIndex>12</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -767,11 +747,11 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox6</rd:DefaultName>
-            <Top>0.61838in</Top>
+            <Top>0.74338in</Top>
             <Left>0.15847in</Left>
             <Height>0.15625in</Height>
             <Width>1in</Width>
-            <ZIndex>11</ZIndex>
+            <ZIndex>13</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -799,11 +779,11 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>BuyerName</rd:DefaultName>
-            <Top>0.60449in</Top>
+            <Top>0.72949in</Top>
             <Left>1.18625in</Left>
             <Height>0.17014in</Height>
             <Width>7.15625in</Width>
-            <ZIndex>12</ZIndex>
+            <ZIndex>14</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -832,11 +812,11 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox10</rd:DefaultName>
-            <Top>1.36554in</Top>
+            <Top>1.49054in</Top>
             <Left>0.15847in</Left>
             <Height>0.17494in</Height>
             <Width>1in</Width>
-            <ZIndex>13</ZIndex>
+            <ZIndex>15</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -864,11 +844,11 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Style</rd:DefaultName>
-            <Top>1.36554in</Top>
+            <Top>1.49054in</Top>
             <Left>1.18625in</Left>
             <Height>0.17494in</Height>
             <Width>7.15625in</Width>
-            <ZIndex>14</ZIndex>
+            <ZIndex>16</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -899,11 +879,77 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox1</rd:DefaultName>
-            <Top>7.19732in</Top>
+            <Top>7.38482in</Top>
             <Left>0.15845in</Left>
             <Height>0.18072in</Height>
             <Width>8.18405in</Width>
-            <ZIndex>15</ZIndex>
+            <ZIndex>17</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox50">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Expire Date</Value>
+                    <Style>
+                      <FontSize>9pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox26</rd:DefaultName>
+            <Top>0.26263in</Top>
+            <Left>4.2978in</Left>
+            <Height>0.1589in</Height>
+            <Width>0.98611in</Width>
+            <ZIndex>18</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Date2">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Fields!ExpireDate.Value</Value>
+                    <Style>
+                      <FontSize>9pt</FontSize>
+                      <Format>MMMM d, yyyy</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Date</rd:DefaultName>
+            <Top>0.26263in</Top>
+            <Left>5.32557in</Left>
+            <Height>0.1589in</Height>
+            <Width>3.01693in</Width>
+            <ZIndex>19</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2226,7 +2272,7 @@
                               <TablixMember />
                             </TablixMembers>
                           </TablixRowHierarchy>
-                          <DataSetName>SalesContract</DataSetName>
+                          <DataSetName>PIInfos</DataSetName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -2474,12 +2520,12 @@
                 <TablixMember />
               </TablixMembers>
             </TablixRowHierarchy>
-            <DataSetName>SalesContract</DataSetName>
-            <Top>2.98147in</Top>
+            <DataSetName>PIInfos</DataSetName>
+            <Top>3.14397in</Top>
             <Left>0.15846in</Left>
             <Height>3.42729in</Height>
             <Width>8.18404in</Width>
-            <ZIndex>16</ZIndex>
+            <ZIndex>20</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2535,11 +2581,11 @@
               </Image>
             </ReportItems>
             <KeepTogether>true</KeepTogether>
-            <Top>6.4532in</Top>
+            <Top>6.6407in</Top>
             <Left>0.15845in</Left>
             <Height>0.67468in</Height>
             <Width>4.11155in</Width>
-            <ZIndex>17</ZIndex>
+            <ZIndex>21</ZIndex>
             <Style>
               <Border>
                 <Color>LightGrey</Color>
@@ -2581,11 +2627,11 @@
               </Textbox>
             </ReportItems>
             <KeepTogether>true</KeepTogether>
-            <Top>6.4532in</Top>
+            <Top>6.6407in</Top>
             <Left>4.27001in</Left>
             <Height>0.67468in</Height>
             <Width>4.07249in</Width>
-            <ZIndex>18</ZIndex>
+            <ZIndex>22</ZIndex>
             <Style>
               <Border>
                 <Color>LightGrey</Color>
@@ -2611,11 +2657,11 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox34</rd:DefaultName>
-            <Top>1.16857in</Top>
+            <Top>1.29357in</Top>
             <Left>0.15847in</Left>
             <Height>0.19697in</Height>
             <Width>0.98611in</Width>
-            <ZIndex>19</ZIndex>
+            <ZIndex>23</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2643,11 +2689,11 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>DeliveryAddress</rd:DefaultName>
-            <Top>1.16857in</Top>
+            <Top>1.29357in</Top>
             <Left>1.18625in</Left>
             <Height>0.19697in</Height>
             <Width>7.15625in</Width>
-            <ZIndex>20</ZIndex>
+            <ZIndex>24</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3665,12 +3711,12 @@
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
-            <DataSetName>SalesContract</DataSetName>
-            <Top>1.89458in</Top>
+            <DataSetName>PIInfos</DataSetName>
+            <Top>2.01958in</Top>
             <Left>0.15847in</Left>
             <Height>1in</Height>
             <Width>8.18407in</Width>
-            <ZIndex>21</ZIndex>
+            <ZIndex>25</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3678,7 +3724,7 @@
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>7.42872in</Height>
+        <Height>7.6058in</Height>
         <Style>
           <Border>
             <Style>Solid</Style>
@@ -3699,7 +3745,7 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>Sales Contract</Value>
+                      <Value>PROFORMA INVOICE</Value>
                       <Style>
                         <FontWeight>Bold</FontWeight>
                       </Style>

@@ -2,6 +2,8 @@
 
 using AccountingBackEnd.DAL.DTOs;
 using Boilerplate.Contracts.Responses;
+using IMS.Contracts.DTOs;
+using System.Collections.Generic;
 using System.Data;
 
 namespace Boilerplate.Contracts.Services;
@@ -36,4 +38,12 @@ public interface IReportService
     public Task<DataSet> DeliveryReport(int PI_Master_ID);
     public Task<DataSet> UserReport(int RoleId, int pageLength, int pageNo, string searchParam);
     public Task<DataSet> PIReport(PIReportParams pIReportParams);
+    public Task<DataSet> DeliveryLogReport(string fromDate, string toDate, string PI_Master_Id, string User_Id, string Client_Id);
+
+    /// <summary>
+    /// Generic: resolves <paramref name="reportKey"/> from the internal report registry,
+    /// executes the mapped stored procedure with the supplied <paramref name="parameters"/>,
+    /// and returns the DataSet together with all RDLC metadata needed by the controller.
+    /// </summary>
+    Task<GenericReportResult> RunGenericReportAsync(string reportKey, Dictionary<string, string> parameters);
 }

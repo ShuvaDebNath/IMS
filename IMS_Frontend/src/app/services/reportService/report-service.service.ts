@@ -162,58 +162,6 @@ export class ReportService {
         });
   }
 
-  PrintProformaInvoiceRequest(report: any, rptType: any, isView: any) {
-    const PI_Master_ID = report.PI_Master_ID ?? '';
-    const IsMPI = report.IsMPI ?? '';
-
-    const url = `${this.baseUrl}${this.apiController}/ProformaInvoiceReport`;
-    const token = this.gs.getSessionData('token');
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-
-    this.http
-      .get(url, {
-        headers,
-        params: { rptType, PI_Master_ID, IsMPI },
-        responseType: 'blob',
-      })
-      .subscribe((res: Blob) => {
-        const blobType =
-          rptType === 'pdf'
-            ? 'application/pdf'
-            : rptType === 'excel'
-              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-              : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-
-        const blob = new Blob([res], { type: blobType });
-
-        // Choose base filename according to requested reportType
-        const reportTypeKey = (rptType || '').toString();
-
-        var baseFileName = 'PIReport';
-        const fileName =
-          rptType === 'pdf'
-            ? `${baseFileName}.pdf`
-            : rptType === 'excel'
-              ? `${baseFileName}.xlsx`
-              : `${baseFileName}.docx`;
-
-        if (isView && rptType === 'pdf') {
-          // View PDF in new tab
-          const fileURL = window.URL.createObjectURL(blob);
-          window.open(fileURL, '_blank');
-        } else {
-          // Force download
-          const link = document.createElement('a');
-          link.href = window.URL.createObjectURL(blob);
-          link.download = fileName;
-          link.click();
-        }
-      });
-  }
-
   PrintCustomerList(report: any, rptType: any, isView: any) {
     const Superior_Id = report.Superior_Id ?? '';
     const Customer_Id = report.Customer_Id ?? '';
@@ -468,6 +416,160 @@ export class ReportService {
         }
       );
   }
+
+  showReportDialog(
+    endpoint: string,
+    params: Record<string, any>,
+    baseFileName: string,
+    isViewForPdf = true
+  ): void {
+   
+    const uid = `rptDlg_${Date.now()}`;
+
+    Swal.fire({
+      title: 'What you want to do?',
+      icon: 'question',
+      html: `
+        <div style="display: flex; gap: 10px; justify-content: center;">
+          <button id="${uid}_excel" class="btn btn-primary" style="padding: 8px 16px;">
+            <i class="fa fa-file-excel"></i> Excel
+          </button>
+          <button id="${uid}_word" class="btn btn-info" style="padding: 8px 16px;">
+            <i class="fa fa-file-word"></i> Word
+          </button>
+          <button id="${uid}_pdf" class="btn btn-danger" style="padding: 8px 16px;">
+            <i class="fa fa-file-pdf"></i> PDF
+          </button>
+        </div>
+      `,
+      showConfirmButton: false,
+      didOpen: () => {
+        document.getElementById(`${uid}_excel`)?.addEventListener('click', () => {
+          Swal.close();
+          this.PrintReport(endpoint, params, 'excel', false, baseFileName);
+        });
+
+        document.getElementById(`${uid}_word`)?.addEventListener('click', () => {
+          Swal.close();
+          this.PrintReport(endpoint, params, 'word', false, baseFileName);
+        });
+
+        document.getElementById(`${uid}_pdf`)?.addEventListener('click', () => {
+          Swal.close();
+          this.PrintReport(endpoint, params, 'pdf', isViewForPdf, baseFileName);
+        });
+      },
+    });
+  }
+
+  PrintReport(
+    endpoint: string,
+    params: Record<string, any>,
+    rptType: 'pdf' | 'excel' | 'word',
+    isView: boolean,
+    baseFileName?: string
+  ): void {
+    const url        = `${this.baseUrl}${this.apiController}/${endpoint}`;
+    const token      = this.gs.getSessionData('token');
+    const headers    = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    const httpParams = this.buildHttpParams(params, rptType);
+    const fileName   = baseFileName ?? endpoint;
+
+    this.showLoadingDialog();
+
+    this.http
+      .get(url, { headers, params: httpParams, responseType: 'blob' })
+      .subscribe(
+        (res: Blob) => {
+          Swal.close();
+          if (res.size === 0) {
+            Swal.fire('No Data Found', 'No records found for the selected criteria.', 'info');
+            return;
+          }
+          this.handleBlobDownload(res, rptType, isView, fileName);
+        },
+        () => {
+          Swal.close();
+          Swal.fire('Error', 'Failed to generate report.', 'error');
+        }
+      );
+  }
+
+  private showLoadingDialog(): void {
+    Swal.fire({
+      title: 'Generating report...',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      showConfirmButton: false,
+      didOpen: () => {
+        Swal.showLoading();
+        try {
+          const container = Swal.getContainer();
+          if (container) container.style.zIndex = '2147483647';
+          const popup = Swal.getPopup();
+          if (popup) popup.style.zIndex = '2147483648';
+        } catch {
+         
+        }
+      },
+    });
+  }
+
+  private buildHttpParams(
+    params: Record<string, any>,
+    rptType: 'pdf' | 'excel' | 'word'
+  ): HttpParams {
+    let httpParams = new HttpParams().set('rptType', rptType);
+
+    for (const [key, value] of Object.entries(params)) {
+      if (value === null || value === undefined) continue;
+
+      const stringValue = value instanceof Date
+        ? this.formatDate(value)
+        : String(value);
+
+      httpParams = httpParams.set(key, stringValue);
+    }
+
+    return httpParams;
+  }
+ 
+  private resolveBlobType(rptType: 'pdf' | 'excel' | 'word'): string {
+    const mime: Record<string, string> = {
+      pdf:   'application/pdf',
+      excel: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      word:  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    };
+    return mime[rptType] ?? 'application/octet-stream';
+  }
+
+  private resolveExtension(rptType: 'pdf' | 'excel' | 'word'): string {
+    const ext: Record<string, string> = { pdf: 'pdf', excel: 'xlsx', word: 'docx' };
+    return ext[rptType] ?? 'bin';
+  }
+
+  private handleBlobDownload(
+    res: Blob,
+    rptType: 'pdf' | 'excel' | 'word',
+    isView: boolean,
+    baseFileName: string
+  ): void {
+    const blob     = new Blob([res], { type: this.resolveBlobType(rptType) });
+    const today    = this.formatDateDMY(new Date()).replace(/\//g, '-');
+    const fileName = `${baseFileName}_${today}.${this.resolveExtension(rptType)}`;
+    const objectUrl = window.URL.createObjectURL(blob);
+
+    if (isView && rptType === 'pdf') {
+      window.open(objectUrl, '_blank');
+    } else {
+      const link = document.createElement('a');
+      link.href = objectUrl;
+      link.download = fileName;
+      link.click();      
+      setTimeout(() => window.URL.revokeObjectURL(objectUrl), 1_000);
+    }
+  }
+
 
   PrintLCReport(report: any, rptType: any, isView: any) {
     console.log(report);
