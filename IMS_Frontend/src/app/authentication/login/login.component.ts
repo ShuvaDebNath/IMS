@@ -97,12 +97,12 @@ export class LoginComponent implements OnInit {
         window.localStorage.setItem('userId', res.userId);
         window.localStorage.setItem('expiresInMinutes', res.expiresInMinutes);
 
-        // const expiryMinutes = Number(res.expiresInMinutes);
-        // const expiryAt = Date.now() + expiryMinutes * 60 * 1000;
+        const expiryMinutes = Number(res.expiresInMinutes);
+        const expiryAt = Date.now() + expiryMinutes * 60 * 1000;
 
-        // window.localStorage.setItem('tokenExpiryAt', expiryAt.toString());
+        window.localStorage.setItem('tokenExpiryAt', expiryAt.toString());
 
-        // this.sessionService.startSession(expiryMinutes);
+        this.sessionService.startSession(expiryMinutes);
 
         var menu = "";
         var menuWithButtonPermission = "";

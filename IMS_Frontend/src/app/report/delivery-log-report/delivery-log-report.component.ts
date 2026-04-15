@@ -14,6 +14,7 @@ import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.ser
 import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
 import Swal from 'sweetalert2';
 import { ReportService } from 'src/app/services/reportService/report-service.service';
+import { DateFormat } from 'src/app/shared/date-format';
 
 @Component({
   selector: 'app-delivery-log-report',
@@ -29,6 +30,7 @@ export class DeliveryLogReportComponent {
   tableVisible = false;
   SuperiorList: any;
   ClientList: any;
+  BaneficiaryAccountList: any;
 
   // Pagination state (classic 1,2,3... UI backed by keyset pagination)
   pageSize = 50;
@@ -56,7 +58,7 @@ export class DeliveryLogReportComponent {
     private fb: FormBuilder,
     private ms: MasterEntryService,
     private reportService: ReportService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     var permissions = this.gs.CheckUserPermission('Delivey Log Report');
@@ -73,10 +75,9 @@ export class DeliveryLogReportComponent {
     this.dateForm = this.fb.group({
       fromDate: [null, Validators.required],
       toDate: [null, Validators.required],
-      PIId: [''],
-      SuperiorId: [''],
       ClientId: [''],
-    });    
+      Beneficiary_Account_ID: [''],
+    });
 
     this.dateForm.get('fromDate')?.setValue(new Date().toISOString().split('T')[0]);
     this.dateForm.get('toDate')?.setValue(new Date().toISOString().split('T')[0]);
@@ -91,16 +92,19 @@ export class DeliveryLogReportComponent {
     this.getDataService.GetInitialData(ProcedureData).subscribe({
       next: (results) => {
         if (results.status) {
-          this.PIList = JSON.parse(results.data).Tables1;
-          this.SuperiorList = JSON.parse(results.data).Tables2;
-          this.ClientList = JSON.parse(results.data).Tables3;
+          this.ClientList = JSON.parse(results.data).Tables1;
+          this.BaneficiaryAccountList = JSON.parse(results.data).Tables2;
+
+          console.log(this.ClientList);
+          console.log(this.BaneficiaryAccountList);
+
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
           this.gs.Logout();
         } else {
         }
       },
-      error: (err) => {},
+      error: (err) => { },
     });
   }
 
@@ -117,8 +121,8 @@ export class DeliveryLogReportComponent {
       return;
     }
 
-    const { fromDate, toDate, PIId, SuperiorId, ClientId } = this.dateForm.value;
-    if (new Date(fromDate) > new Date(toDate)) {
+    const { fromDate, toDate, ClientId, Beneficiary_Account_ID } = this.dateForm.value;
+    if (fromDate > toDate) {
       swal.fire(
         'Validation Error!',
         'From Date cannot be later than To Date.',
@@ -138,23 +142,22 @@ export class DeliveryLogReportComponent {
     // Page 1 always starts with null keyset (top of ordered list)
     this.pageKeys[1] = { page: 1, lastDate: null, lastLedgerId: null };
 
-    this.fetchPage(1, fromDate, toDate, PIId, SuperiorId, ClientId);
+    this.fetchPage(1, fromDate, toDate, ClientId, Beneficiary_Account_ID);
   }
 
   /**
    * Load a specific page using stored keyset cursor.
    */
   loadPage(page: number): void {
-    if (this.isLoading || page === this.currentPage || page < 1 || (this.totalPages && page > this.totalPages)) {
-      return;
-    }
+    if (this.isLoading || page === this.currentPage || page < 1) return;
+    if (this.totalPages > 0 && page > this.totalPages) return;
 
     if (!this.canNavigateTo(page) || this.dateForm.invalid) {
       return;
     }
 
-    const { fromDate, toDate, PIId, SuperiorId, ClientId } = this.dateForm.value;
-    this.fetchPage(page, fromDate, toDate, PIId, SuperiorId, ClientId);
+    const { fromDate, toDate, ClientId, Beneficiary_Account_ID } = this.dateForm.value;
+    this.fetchPage(page, fromDate, toDate, ClientId, Beneficiary_Account_ID);
   }
 
   /**
@@ -165,9 +168,8 @@ export class DeliveryLogReportComponent {
     page: number,
     fromDate: string,
     toDate: string,
-    PIId: any,
-    SuperiorId: any,
-    ClientId: any
+    ClientId: any,
+    Beneficiary_Account_ID: any
   ): void {
     this.isLoading = true;
 
@@ -177,11 +179,10 @@ export class DeliveryLogReportComponent {
     const procedureData = {
       procedureName: 'usp_ProformaInvoice_DeliveryLog_Report',
       parameters: {
-        FromDate: fromDate,
-        ToDate: toDate,
-        PI_Master_Id: PIId,
+        FromDate: DateFormat.toApiDate(fromDate),
+        ToDate: DateFormat.toApiDate(toDate),
         Client_Id: ClientId,
-        User_Id: SuperiorId,
+        Beneficiary_Account_ID: Beneficiary_Account_ID,
         PageSize: this.pageSize,
         LastDate: key.lastDate,
         LastLedgerId: key.lastLedgerId
@@ -205,41 +206,52 @@ export class DeliveryLogReportComponent {
             return;
           }
 
-          // Replace current page data (classic page-based view)
           this.PIReport = pageRows;
           this.tableVisible = true;
           this.currentPage = page;
 
-          // On first page, capture total record count from totallen column
-          if (this.totalRecords === 0) {
-            const firstRow: any = pageRows[0];
-            const totalLenRaw =
-              firstRow?.totallen ??
-              firstRow?.TotalLen ??
-              firstRow?.TOTALLEN ??
-              firstRow?.totalLength;
-            this.totalRecords = Number(totalLenRaw) || 0;
-            this.totalPages = this.totalRecords
-              ? Math.ceil(this.totalRecords / this.pageSize)
-              : 1;
+          const firstRow: any = pageRows[0];
+          const totalLenRaw =
+            firstRow?.totallen ??
+            firstRow?.TotalLen ??
+            firstRow?.TOTALLEN ??
+            firstRow?.totalLength ??
+            firstRow?.TotalCount ??
+            firstRow?.totalcount ??
+            firstRow?.Total_Count;
+          const backendTotal = Number(totalLenRaw) || 0;
+          if (backendTotal > 0) {
+            this.totalRecords = backendTotal;
+            this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
           }
 
-          // If this page is "full", compute and store keyset for the next page
-          if (pageRows.length === this.pageSize) {
+          if (pageRows.length < this.pageSize) {
+            this.totalPages = page;
+            if (this.totalRecords === 0) {
+              this.totalRecords = (page - 1) * this.pageSize + pageRows.length;
+            }
+          }
+
+          if (pageRows.length === this.pageSize && !this.pageKeys[page + 1]) {
             const lastRow: any = pageRows[pageRows.length - 1];
             const nextPage = page + 1;
-            const nextKey = {
-              page: nextPage,
-              lastDate: lastRow?.Date ?? null,
-              lastLedgerId:
-                lastRow?.['PI_Ledger_ID'] ??
-                lastRow?.['Pi_Ledger_ID'] ??
-                lastRow?.['pi_ledger_id'] ??
-                null
-            };
+            const lastDate =
+              lastRow?.Date ??
+              lastRow?.date ??
+              lastRow?.DATE ??
+              null;
+            const lastLedgerId =
+              lastRow?.['PI_Ledger_ID'] ??
+              lastRow?.['Pi_Ledger_ID'] ??
+              lastRow?.['PI_Ledger_Id'] ??
+              lastRow?.['pi_ledger_id'] ??
+              lastRow?.['PiLedgerId'] ??
+              lastRow?.['LedgerID'] ??
+              lastRow?.['Ledger_ID'] ??
+              null;
 
-            if (nextKey.lastDate && nextKey.lastLedgerId != null && !this.pageKeys[nextPage]) {
-              this.pageKeys[nextPage] = nextKey;
+            if (lastDate) {
+              this.pageKeys[nextPage] = { page: nextPage, lastDate, lastLedgerId };
             }
           }
         } else if (results.msg === 'Invalid Token') {
@@ -255,21 +267,13 @@ export class DeliveryLogReportComponent {
     });
   }
 
-  /**
-   * Only allow navigation to pages whose keyset cursor we have computed.
-   * Page 1 is always allowed; higher pages become available after visiting previous pages.
-   */
   canNavigateTo(page: number): boolean {
-    if (page < 1 || (this.totalPages && page > this.totalPages)) {
-      return false;
-    }
-    if (page === 1) {
-      return true;
-    }
+    if (page < 1) return false;
+    // totalPages === 0 means "unknown" — don't block; rely on pageKeys instead.
+    if (this.totalPages > 0 && page > this.totalPages) return false;
+    if (page === 1) return true;
     return !!this.pageKeys[page];
   }
-
-  // -------- Pagination navigation API used by the template --------
 
   goToPage(page: number): void {
     if (!this.canNavigateTo(page)) {
@@ -304,10 +308,10 @@ export class DeliveryLogReportComponent {
     }
   }
 
-  /**
-   * Utility for template to render a sliding window of page numbers
-   * around the current page, e.g. 4 5 [6] 7 8 (max 5 buttons).
-   */
+  trackByPage(_index: number, page: number): number {
+    return page;
+  }
+
   get pageArray(): number[] {
     if (this.totalPages <= 0) {
       return [];
@@ -332,14 +336,14 @@ export class DeliveryLogReportComponent {
     return pages;
   }
 
-  piNoClick(piNo: any,lc:any,PIData:any) {
-    console.log(piNo,lc,PIData);
-    
+  piNoClick(piNo: any, lc: any, PIData: any) {
+    console.log(piNo, lc, PIData);
+
     swal.fire({
       title: 'Save Voucher?',
       text: 'Do you want to save, discard, or cancel?',
       icon: 'warning',
-      showCancelButton: lc==null?false:true,
+      showCancelButton: lc == null ? false : true,
       showDenyButton: true,
       confirmButtonText: 'PI Report',
       denyButtonText: 'Delivery Report',
@@ -357,63 +361,34 @@ export class DeliveryLogReportComponent {
       }
     });
   }
-  piPrint(PIData:any) {
-      var item = {
-        PI_Master_ID: PIData?.PI_Master_ID,
-        IsMPI: PIData?.IsMPI,
-      };
-  
-      Swal.fire({
-        title: 'What you want to do?',
-        icon: 'question',
-        html: `
-                        <div style="display: flex; gap: 10px; justify-content: center;">
-                          <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
-                            <i class="fa fa-file-excel"></i> Excel
-                          </button>
-                          <button id="wordBtn" class="btn btn-info" style="padding: 8px 16px;">
-                            <i class="fa fa-file-word"></i> Word
-                          </button>
-                          <button id="pdfBtn" class="btn btn-danger" style="padding: 8px 16px;">
-                            <i class="fa fa-file-pdf"></i> PDF
-                          </button>
-                        </div>
-                      `,
-        showConfirmButton: false,
-        didOpen: () => {
-          const excelBtn = document.getElementById('excelBtn');
-          const wordBtn = document.getElementById('wordBtn');
-          const pdfBtn = document.getElementById('pdfBtn');
-  
-  
-          excelBtn?.addEventListener('click', () => {
-            Swal.close();
-          this.reportService.PrintProformaInvoiceRequest(item, 'word', 'F');
-          });
-  
-          wordBtn?.addEventListener('click', () => {
-            Swal.close();
-          this.reportService.PrintProformaInvoiceRequest(item, 'word', 'F');
-          });
-  
-          pdfBtn?.addEventListener('click', () => {
-            Swal.close();
-          this.reportService.PrintProformaInvoiceRequest(item, 'pdf', 'F');
-          });
-        },
-      });
+  piPrint(PIData: any) {
+
+    const params: Record<string, any> = {
+      PI_Master_ID: PIData?.PI_Master_ID
+    };
+
+    if (PIData.Beneficiary_Account_ID == 5 || PIData.Beneficiary_Account_ID == 12) {
+      this.reportService.showReportDialog('GenericReport/SanxinPIReport', params, 'SanxinPIReport');
+    }
+    else if (PIData?.IsMPI === true) {
+      this.reportService.showReportDialog('GenericReport/CashPIReport', params, 'CashPIReport');
+    }
+    else {
+      this.reportService.showReportDialog('GenericReport/SunshinePIReport', params, 'SunshinePIReport');
     }
 
+  }
 
-    deliveryPrint(PIData:any) {
-      var item = {
-        PI_Master_ID: PIData?.PI_Master_ID
-      };
-  
-      Swal.fire({
-        title: 'What you want to do?',
-        icon: 'question',
-        html: `
+
+  deliveryPrint(PIData: any) {
+    var item = {
+      PI_Master_ID: PIData?.PI_Master_ID
+    };
+
+    Swal.fire({
+      title: 'What you want to do?',
+      icon: 'question',
+      html: `
                         <div style="display: flex; gap: 10px; justify-content: center;">
                           <button id="excelBtn" class="btn btn-primary" style="padding: 8px 16px;">
                             <i class="fa fa-file-excel"></i> Excel
@@ -426,28 +401,56 @@ export class DeliveryLogReportComponent {
                           </button>
                         </div>
                       `,
-        showConfirmButton: false,
-        didOpen: () => {
-          const excelBtn = document.getElementById('excelBtn');
-          const wordBtn = document.getElementById('wordBtn');
-          const pdfBtn = document.getElementById('pdfBtn');
-  
-  
-          excelBtn?.addEventListener('click', () => {
-            Swal.close();
+      showConfirmButton: false,
+      didOpen: () => {
+        const excelBtn = document.getElementById('excelBtn');
+        const wordBtn = document.getElementById('wordBtn');
+        const pdfBtn = document.getElementById('pdfBtn');
+
+
+        excelBtn?.addEventListener('click', () => {
+          Swal.close();
           this.reportService.PrintDeliveryReport(item, 'word', 'F');
-          });
-  
-          wordBtn?.addEventListener('click', () => {
-            Swal.close();
+        });
+
+        wordBtn?.addEventListener('click', () => {
+          Swal.close();
           this.reportService.PrintDeliveryReport(item, 'word', 'F');
-          });
-  
-          pdfBtn?.addEventListener('click', () => {
-            Swal.close();
+        });
+
+        pdfBtn?.addEventListener('click', () => {
+          Swal.close();
           this.reportService.PrintDeliveryReport(item, 'pdf', 'F');
-          });
-        },
-      });
+        });
+      },
+    });
+  }
+
+  printDeliveryLogReport(): void {
+    if (this.dateForm.invalid) {
+      swal.fire('Validation Error!', 'Please select both From Date and To Date.', 'warning');
+      return;
     }
+
+    const fromDate = DateFormat.toApiDate(this.dateForm.value.fromDate);
+    const toDate = DateFormat.toApiDate(this.dateForm.value.toDate);
+
+    if (fromDate > toDate) {
+      swal.fire('Validation Error!', 'From Date cannot be later than To Date.', 'warning');
+      return;
+    }
+    if (fromDate == null || toDate == null) {
+      swal.fire('Validation Error!', 'Please select both From Date and To Date.', 'warning');
+      return;
+    }
+
+    const params: Record<string, any> = {
+      FromDate: fromDate,
+      ToDate: toDate,
+      Client_Id: this.dateForm.value.ClientId ?? '',
+      Beneficiary_Account_ID: this.dateForm.value.Beneficiary_Account_ID ?? '',
+    };
+
+    this.reportService.showReportDialog('GenericReport/DeliveryLogReport', params, 'DeliveryLogReport');
+  }
 }

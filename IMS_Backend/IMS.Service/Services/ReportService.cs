@@ -8,6 +8,7 @@ using IMS.Contracts.DTOs;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Data;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -449,5 +450,64 @@ public class ReportService : IReportService
         {
             throw ex;
         }
+    }
+
+    public async Task<DataSet> DeliveryLogReport(string fromDate, string toDate, string PI_Master_Id, string User_Id, string Client_Id)
+    {
+        try
+        {
+            DeliveryLogReportParams param = new DeliveryLogReportParams
+            {
+                FromDate = fromDate,
+                ToDate = toDate,
+                PIMasterId = PI_Master_Id,
+                UserId = User_Id,
+                ClientId = Client_Id
+
+            };
+            return await _reportRepository.DeliveryLogReport(param);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+    // ── Generic Report Engine (Database-Driven) ───────────────────────────────
+
+    /// <inheritdoc/>
+    /// <remarks>
+    /// Configuration is loaded at runtime from the <c>ReportConfigs</c> table
+    /// (columns: ReportKey, SpName, RdlcPath, TableName, ReportName, isActive).
+    /// To add a new report, insert one active row into that table — no code change required.
+    /// </remarks>
+    public async Task<GenericReportResult> RunGenericReportAsync(
+        string reportKey,
+        Dictionary<string, string> parameters)
+    {
+        var config = await _reportRepository.GetReportConfigAsync(reportKey);
+
+        // Normalise: replace any null values with empty string so the SP
+        // receives "" instead of NULL — prevents "no result" from SP null checks.
+        var safeParams = parameters.ToDictionary(
+            kvp => kvp.Key,
+            kvp => kvp.Value ?? string.Empty);
+
+        if (config is null)
+            throw new KeyNotFoundException(
+                $"No active report configuration found for key '{reportKey}'. " +
+                $"Insert an active row into the ReportConfigs table.");
+
+       
+
+        var ds = await _reportRepository.ExecuteSpReportAsync(config.SpName, safeParams);
+
+        return new GenericReportResult
+        {
+            Data       = ds,
+            RdlcPath   = config.RdlcPath,
+            TableName  = config.TableName,
+            ReportName = config.ReportName,
+        };
     }
 }
