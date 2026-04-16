@@ -163,3 +163,8 @@
   padding-left: 0.5rem !important; 
   line-height: 1.4rem;
 }
+
+::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+  vertical-align: middle !important;
+  text-align: center;
+}

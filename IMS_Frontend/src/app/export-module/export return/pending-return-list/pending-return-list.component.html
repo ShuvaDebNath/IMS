@@ -104,15 +104,24 @@
             <td class="text-center align-middle">{{ table.ExportDate }}</td>
             <td class="text-center align-middle">{{ table.Note }}</td>
             <td class="text-center align-middle">{{ table.Status }}</td>
-            <td class="text-center align-middle p-0 m-0">
-              <a
-                class="btn bg-gradient-cyan btn-xs mr-2"
-                target="_blank"
-                title="View Details"
+   
+            <!-- <td class="text-center align-middle">
+              <button
+                class="btn action-btn view"
                 (click)="viewDetails(table)"
-                ><i class="fa fa-eye"></i
-              ></a>
-            </td>
+                title="View Details"
+              >
+                <i class="fa fa-eye"></i>
+              </button>
+            </td> -->
+            <td class="text-center">
+  <div class="d-flex justify-content-center align-items-center">
+    <button class="action-btn view" (click)="viewDetails(table)"
+                title="View Details">
+      <i class="fa fa-eye"></i>
+    </button>
+  </div>
+</td>
           </tr>
         </ng-template>
       </p-table>

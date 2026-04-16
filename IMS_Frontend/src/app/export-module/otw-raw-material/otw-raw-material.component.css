@@ -274,7 +274,20 @@
   opacity: 0.9;
 }
 
+.action-cell {
+  height: 60px;
+  vertical-align: middle !important;
+  padding: 0 !important;
+}
 
+/* THIS is the key fix */
+.action-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;   /* 🔥 important */
+  gap: 4px;
+}
 /* HEADER */
 .dialog-header {
   display: flex;
@@ -380,4 +393,9 @@
 }
 .color-dot {
   font-weight: 600;
+} 
+
+::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+  vertical-align: middle !important;
+  text-align: center;
 }
