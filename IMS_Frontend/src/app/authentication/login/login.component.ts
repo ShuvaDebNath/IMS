@@ -95,7 +95,7 @@ export class LoginComponent implements OnInit {
         window.localStorage.setItem('companyId', res.companyId);
         window.localStorage.setItem('roleId', res.role_Id);
         window.localStorage.setItem('userId', res.userId);
-        window.localStorage.setItem('expiresInMinutes', res.expiresInMinutes);
+        // window.localStorage.setItem('expiresInMinutes', res.expiresInMinutes);
 
         // const expiryMinutes = Number(res.expiresInMinutes);
         // const expiryAt = Date.now() + expiryMinutes * 60 * 1000;

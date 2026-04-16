@@ -1,182 +1,351 @@
-<div class="card card-default">
-  <div
-    class="content-heading"
-    style="border-bottom: 1px solid rgba(0, 0, 0, 0.125) !important"
-  >
-    <div class="row">
-      <div class="col-6">
-        <h2 class="p-2">On The Way Raw Material</h2>
-      </div>
+<div class="m-2 p-2">
+  <div class="card">
+    <div class="card-header theme-bg">
+      <h1 class="theme-text text-white">On The Way Raw Material</h1>
     </div>
-  </div>
-  <div class="card-body">
-    <form [formGroup]="SearchForm" class="row p-3 shadow-sm g-3 align-items-end mb-3" (ngSubmit)="Search()">
-      <div class="col-md-3">
-        <label class="form-label fw-bold">From Date</label>
-        <input
-          type="date"
-          class="form-control form-control-sm"
-          formControlName="fromDate"
-        />
-      </div>
+    <div class="card-body">
+      <form
+        [formGroup]="SearchForm"
+        class="row p-3 shadow-sm g-3 align-items-end mb-3"
+        (ngSubmit)="Search()"
+      >
+        <!-- <div class="col-md-3">
+          <label class="form-label fw-bold">From Date</label>
+          <input
+            type="date"
+            class="form-control form-control-sm"
+            formControlName="fromDate"
+          />
+        </div> -->
+        <!-- 
+        <div class="col-md-3">
+          <label class="form-label fw-bold">To Date</label>
+          <input
+            type="date"
+            class="form-control form-control-sm"
+            formControlName="toDate"
+          />
+        </div> -->
 
-      <div class="col-md-3">
-        <label class="form-label fw-bold">To Date</label>
-        <input
-          type="date"
-          class="form-control form-control-sm"
-          formControlName="toDate"
-        />
-      </div>
-      <div class="col-md-2">
-        <button
-          type="submit"
-          class="btn btn-sm theme-btn w-100"
-          [disabled]="SearchForm.invalid"
-        >
-          <i class="pi pi-download me-1"></i> Load
-        </button>
-      </div>
-    </form>
-    <hr />
+        <div class="col-4">
+          <label class="form-label">Select Date</label>
+          <div class="range-container">
+            <p-calendar
+              formControlName="fromDate"
+              dateFormat="dd/mm/yy"
+              placeholder="From"
+              inputStyleClass="custom-date-input"
+            ></p-calendar>
 
-    <p-table
-    *ngIf="tableVisible"
-      #dt
-      [value]="tableData"
-      [paginator]="true"
-      [rows]="10"
-      [responsive]="true"
-      [showCurrentPageReport]="true"
-      [globalFilterFields]="[
-        'ExportNumber',
-        'ExportDate',
-        'Total_Qty',
-        'Net_Weight',
-        'Status'
-      ]"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            <span class="range-divider">to</span>
+
+            <p-calendar
+              formControlName="toDate"
+              dateFormat="dd/mm/yy"
+              placeholder="To"
+              inputStyleClass="custom-date-input"
+            ></p-calendar>
+          </div>
+        </div>
+        <div class="col-xl-auto col-lg-2 col-md-6 col-12">
+          <button
+            type="submit"
+            class="btn btn-sm theme-btn"
+            [disabled]="SearchForm.invalid"
+            style="height: 48px; width: 130px"
+          >
+            <i class="pi pi-download me-1"></i> Load
+          </button>
+        </div>
+      </form>
+      <hr />
+
+      <p-table
+        *ngIf="tableVisible"
+        #dt
+        [value]="tableData"
+        [paginator]="true"
+        [rows]="10"
+        [responsive]="true"
+        [showCurrentPageReport]="true"
+        [globalFilterFields]="[
+          'ExportNumber',
+          'ExportDate',
+          'Total_Qty',
+          'Net_Weight',
+          'Status',
+        ]"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      >
+        <ng-template pTemplate="caption">
+          <div class="table-toolbar d-flex justify-content-end">
+            <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                placeholder="Global Search"
+              />
+            </span>
+          </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="text-center">SL</th>
+            <th class="text-center">Export No</th>
+            <th class="text-center">Export Date</th>
+            <th class="text-center">Total Qty</th>
+            <th class="text-center">Net Weight</th>
+            <th class="text-center">Status</th>
+            <th class="text-center" *ngIf="allPersmissions">Action</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-table let-i="rowIndex">
+          <tr>
+            <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
+            <td class="text-center align-middle">{{ table.ExportNumber }}</td>
+            <td class="text-center align-middle">{{ table.ExportDate }}</td>
+            <td class="text-center align-middle">{{ table.Total_Qty }}</td>
+            <td class="text-center align-middle">{{ table.Net_Weight }}</td>
+            <td class="text-center align-middle">{{ table.Status }}</td>
+            <!-- <td class="text-center align-middle p-0 m-0">
+              <a
+                class="btn bg-gradient-cyan btn-xs mr-2"
+                target="_blank"
+                title="View Details"
+                (click)="viewDetails(table)"
+                ><i class="fa fa-eye"></i
+              ></a>
+              <a
+                *ngIf="updatePermissions"
+                class="btn bg-gradient-cyan btn-xs mr-2"
+                target="_blank"
+                title="Edit"
+                [routerLink]="['/export-raw-material']"
+                [queryParams]="{ ExportMasterID: table.ExportMasterID }"
+                ><i class="fa fa-edit"></i
+              ></a>
+              <button
+                *ngIf="deletePermissions"
+                class="btn bg-gradient-danger btn-xs"
+                title="Delete"
+                (click)="DeleteData(table)"
+              >
+                <i class="fas fa-trash"></i>
+              </button>
+            </td> -->
+            <td class="text-center">
+              <a
+                class="btn action-btn view"
+                title="View Details"
+                (click)="viewDetails(table)"
+              >
+                <i class="fa fa-eye"></i>
+              </a>
+
+              <a
+                *ngIf="updatePermissions"
+                class="btn action-btn edit"
+                title="Edit"
+                [routerLink]="['/export-raw-material']"
+                [queryParams]="{ ExportMasterID: table.ExportMasterID }"
+              >
+                <i class="fa fa-edit"></i>
+              </a>
+
+              <button
+                *ngIf="deletePermissions"
+                class="btn action-btn delete"
+                title="Delete"
+                (click)="DeleteData(table)"
+              >
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+    <!-- <p-dialog
+      header="Detail"
+      [(visible)]="isDetailsVisible"
+      [modal]="true"
+      [closable]="true"
+      [style]="{ width: '70vw' }"
+      (onHide)="detailsData = null"
     >
-      <ng-template pTemplate="caption">
-        <div class="table-toolbar">
-          <span class="p-input-icon-left">
-            <i class="pi pi-search"></i>
-            <input
-              pInputText
-              type="text"
-              (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-              placeholder="Global Search"
-            />
-          </span>
+      <ng-template pTemplate="header">
+        <div class="d-flex justify-content-between align-items-center w-100">
+          <span>Detail</span>
+          <button
+            class="btn theme-btn btn-sm"
+            title="Print"
+            (click)="printDialog()"
+          >
+            <i class="fa fa-print"></i>&nbsp; Print
+          </button>
         </div>
       </ng-template>
+      <div *ngIf="detailsData">
+        <h2>{{ detailsData.ExportNumber }}</h2>
+        <h5>{{ detailsData.ExportDate }}</h5>
+        <p>Loading Port: {{ detailsData.Loading_Port_Name }}</p>
+        <p>Destination Port: {{ detailsData.Destination_Port_Name }}</p>
+        <p>Shipping Information: {{ detailsData.Shipping_Information }}</p>
+        <p>Remarks: {{ detailsData.Note }}</p>
+        <p>Net Weight: {{ detailsData.Net_Weight }}</p>
+        <p>Total Roll: {{ detailsData.Total_Bag }}</p>
+        <p>Total Bag: {{ detailsData.Total_Roll }}</p>
+        <p-table [value]="detailsTableData" [responsive]="true">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Article</th>
+              <th>Description</th>
+              <th>Color</th>
+              <th>Width</th>
+              <th>Roll/Bag</th>
+              <th>R/B Qty</th>
+              <th>Weight(KG)</th>
+              <th>Unit</th>
+              <th>Quantity</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-detailsTableData>
+            <tr>
+              <td>{{ detailsTableData.Article_No }}</td>
+              <td>{{ detailsTableData.Description }}</td>
+              <td>{{ detailsTableData.Color }}</td>
+              <td>{{ detailsTableData.Measurement }}</td>
+              <td>{{ detailsTableData.Roll_Bag }}</td>
+              <td>{{ detailsTableData.RollBag_Quantity }}</td>
+              <td>{{ detailsTableData.Weight }}</td>
+              <td>{{ detailsTableData.Unit }}</td>
+              <td>{{ detailsTableData.Quantity }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </p-dialog> -->
+  
+<p-dialog
+  header="Export Details"
+  [(visible)]="isDetailsVisible"
+  [modal]="true"
+  [closable]="true"
+  [style]="{ width: '80vw' }"
+  (onHide)="detailsData = null"
+  [contentStyle]="{ padding: '0' }"
+>
+  <ng-template pTemplate="header">
+    <div class="dialog-header">
+      <div>
+        <div class="title">Export Details</div>
+        <div class="subtitle">
+          {{ detailsData?.ExportNumber }} • {{ detailsData?.ExportDate }}
+        </div>
+      </div>
 
+      <button class="print-btn" (click)="printDialog()">
+        <i class="fa fa-print"></i> Print
+      </button>
+    </div>
+  </ng-template>
+
+  <div *ngIf="detailsData" class="dialog-body">
+
+    <!-- 🔷 Quick Summary Cards -->
+    <div class="summary-grid">
+
+      <div class="summary-card blue">
+        <div class="label">Net Weight</div>
+        <div class="value">{{ detailsData.Net_Weight }} KG</div>
+      </div>
+
+      <div class="summary-card green">
+        <div class="label">Total Roll</div>
+        <div class="value">{{ detailsData.Total_Roll }}</div>
+      </div>
+
+      <div class="summary-card orange">
+        <div class="label">Total Bag</div>
+        <div class="value">{{ detailsData.Total_Bag }}</div>
+      </div>
+
+      <div class="summary-card purple">
+        <div class="label">Status</div>
+        <div class="value">
+          <span class="badge">{{ detailsData.Status || 'N/A' }}</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 🔷 Info Section -->
+    <div class="info-section">
+
+      <div class="info-item">
+        <span class="label">Loading Port</span>
+        <span class="value">{{ detailsData.Loading_Port_Name }}</span>
+      </div>
+
+      <div class="info-item">
+        <span class="label">Destination Port</span>
+        <span class="value">{{ detailsData.Destination_Port_Name }}</span>
+      </div>
+
+      <div class="info-item">
+        <span class="label">Shipping Info</span>
+        <span class="value">{{ detailsData.Shipping_Information }}</span>
+      </div>
+
+      <div class="info-item">
+        <span class="label">Remarks</span>
+        <span class="value">{{ detailsData.Note || '-' }}</span>
+      </div>
+
+    </div>
+
+    <!-- 🔷 Table -->
+    <p-table
+      [value]="detailsTableData"
+      class="p-datatable-sm modern-table"
+      [responsive]="true"
+    >
       <ng-template pTemplate="header">
         <tr>
-          <th class="bg-gradient-success">SL</th>
-          <th class="bg-gradient-success">Export No</th>
-          <th class="bg-gradient-success">Export Date</th>
-          <th class="bg-gradient-success">Total Qty</th>
-          <th class="bg-gradient-success">Net Weight</th>
-          <th class="bg-gradient-success">Status</th>
-          <th class="bg-gradient-success" *ngIf="allPersmissions">Action</th>
+          <th>Article</th>
+          <th>Description</th>
+          <th>Color</th>
+          <th>Width</th>
+          <th>Roll/Bag</th>
+          <th>Qty</th>
+          <th>Weight</th>
+          <th>Unit</th>
+          <th>Total</th>
         </tr>
       </ng-template>
 
-      <ng-template pTemplate="body" let-table let-i="rowIndex">
+      <ng-template pTemplate="body" let-row>
         <tr>
-          <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
-          <td class="text-center align-middle">{{ table.ExportNumber }}</td>
-          <td class="text-center align-middle">{{ table.ExportDate }}</td>
-          <td class="text-center align-middle">{{ table.Total_Qty }}</td>
-          <td class="text-center align-middle">{{ table.Net_Weight }}</td>
-          <td class="text-center align-middle">{{ table.Status }}</td>
-          <td class="text-center align-middle p-0 m-0">
-            <a
-              class="btn bg-gradient-cyan btn-xs mr-2"
-              target="_blank"
-              title="View Details"
-               (click)="viewDetails(table)"
-              ><i class="fa fa-eye"></i
-            ></a>
-            <a
-              *ngIf="updatePermissions"
-              class="btn bg-gradient-cyan btn-xs mr-2"
-              target="_blank"
-              title="Edit"
-              [routerLink]="['/export-raw-material']"
-              [queryParams]="{ ExportMasterID: table.ExportMasterID }"
-              ><i class="fa fa-edit"></i
-            ></a>
-            <button
-              *ngIf="deletePermissions"
-              class="btn bg-gradient-danger btn-xs"
-              title="Delete"
-              (click)="DeleteData(table)"
-            >
-              <i class="fas fa-trash"></i>
-            </button>
+          <td>{{ row.Article_No }}</td>
+          <td>{{ row.Description }}</td>
+          <td>
+            <span class="color-dot">{{ row.Color }}</span>
           </td>
+          <td>{{ row.Measurement }}</td>
+          <td>{{ row.Roll_Bag }}</td>
+          <td>{{ row.RollBag_Quantity }}</td>
+          <td>{{ row.Weight }}</td>
+          <td>{{ row.Unit }}</td>
+          <td class="highlight">{{ row.Quantity }}</td>
         </tr>
       </ng-template>
     </p-table>
+
   </div>
-   <p-dialog header="Detail"
-            [(visible)]="isDetailsVisible"
-            [modal]="true"
-            [closable]="true"
-            [style]="{ width: '70vw' }"
-            (onHide)="detailsData = null">
-            <ng-template pTemplate="header">
-      <div class="d-flex justify-content-between align-items-center w-100">
-        <span>Detail</span>
-        <button
-          class="btn theme-btn btn-sm"
-          title="Print"
-          (click)="printDialog()"
-        >
-          <i class="fa fa-print"></i>&nbsp; Print
-        </button>
-      </div>
-    </ng-template>
-            <div *ngIf="detailsData">
-              <h2>{{detailsData.ExportNumber}}</h2>
-              <h5>{{detailsData.ExportDate}}</h5>
-              <p>Loading Port: {{ detailsData.Loading_Port_Name }}</p>
-              <p>Destination Port: {{ detailsData.Destination_Port_Name }}</p>
-              <p>Shipping Information: {{ detailsData.Shipping_Information }}</p>
-              <p>Remarks: {{ detailsData.Note }}</p>
-              <p>Net Weight: {{ detailsData.Net_Weight }}</p>
-              <p>Total Roll: {{ detailsData.Total_Bag }}</p>
-              <p>Total Bag: {{ detailsData.Total_Roll }}</p>
-              <p-table [value]="detailsTableData" [responsive]="true">
-              <ng-template pTemplate="header">
-                <tr>
-                  <th>Article</th>
-                  <th>Description</th>
-                  <th>Color</th>
-                  <th>Width</th>
-                  <th>Roll/Bag</th>
-                  <th>R/B Qty</th>
-                  <th>Weight(KG)</th>
-                  <th>Unit</th>
-                  <th>Quantity</th>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="body" let-detailsTableData>
-                <tr>
-                  <td>{{ detailsTableData.Article_No }}</td>
-                  <td>{{ detailsTableData.Description }}</td>
-                  <td>{{ detailsTableData.Color }}</td>
-                  <td>{{ detailsTableData.Measurement }}</td>
-                  <td>{{ detailsTableData.Roll_Bag }}</td>
-                  <td>{{ detailsTableData.RollBag_Quantity }}</td>
-                  <td>{{ detailsTableData.Weight }}</td>
-                  <td>{{ detailsTableData.Unit }}</td>
-                  <td>{{ detailsTableData.Quantity }}</td>
-                </tr>
-              </ng-template>
-      </p-table>
-            </div>
-  </p-dialog>
+</p-dialog>
+  </div>
 </div>
