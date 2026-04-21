@@ -1,4 +1,5 @@
 export class Customers {
+  Beneficiary_Account_ID!: string;
   Customer_ID!: string;
   Company_Name!: string;
   Contact_Name!: string;
@@ -21,4 +22,11 @@ export class Customers {
   ItemDoing!: string;
   Status!: string;
   ApprovedById!: string;
+  Office_Address!: string;
+  Factory_Address!: string;
+  Product_Type!: string;
+  Total_Worker!: string;
+  Company_Type!: string;
+  Buyer_Name!: string;
+
 }

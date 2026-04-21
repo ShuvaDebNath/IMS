@@ -55,6 +55,7 @@ export class AllLcComponent {
   getDataModel: GetDataModel = new GetDataModel();
   detailsData: any;
   isDetailsVisible: boolean = false;
+  BaneficiaryAccountList: any;
 
   constructor(
     private fb: FormBuilder,
@@ -97,63 +98,59 @@ export class AllLcComponent {
 
     this.SearchForm.get('fromDate')?.setValue(formattedT);
     this.SearchForm.get('toDate')?.setValue(formatted);
-
-    this.Search();
+    this.FormLoad();
   }
   initForm(): void {
     this.SearchForm = this.fb.group({
       fromDate: ['', [Validators.required]],
       toDate: ['', [Validators.required]],
       lcNo: [''],
+      Beneficiary_Account_ID: ['', [Validators.required]],
     });
   }
+
+  FormLoad() {
+    let param = new GetDataModel();
+    param.procedureName = '[usp_ProformaInvoice_GetInitialData]';
+    param.parameters = {
+      userId: '',
+      roleId: '',
+      paymentType: ''
+    };
+
+    this.masterEntryService.GetInitialData(param).subscribe({
+      next: (results) => {
+        if (results.status) {          
+          this.BaneficiaryAccountList = JSON.parse(results.data).Tables1;
+          if (this.tableData.length > 0) {
+            this.length = parseInt(this.tableData[0].totallen);
+          } else {
+            swal.fire('info', 'No Data Found!!', 'info');
+          }
+        
+        }
+      },
+    });
+
+  }
+
   Search() {
-    // Convert dates from dd/mm/yyyy to mm/dd/yyyy
-    // const convertDateFormat = (dateStr: string): string => {
-    //   if (!dateStr) return '';
-    //   const parts = dateStr.split('/');
-    //   if (parts.length === 3) {
-    //     return `${parts[1]}/${parts[0]}/${parts[2]}`;
-    //   }
-    //   return dateStr;
-    // };
 
-    // var finput = new Date();
-    // var fromDate = this.SearchForm.value.fromDate;
-    // if (this.SearchForm.value.fromDate instanceof Date) {
-    //   finput = new Date(this.SearchForm.value.fromDate); // try converting if it's not already a Date
-    //   const fday = String(finput.getDate()).padStart(2, '0');
-    //   const fmonth = String(finput.getMonth() + 1).padStart(2, '0'); // months are 0-based
-    //   const fyear = finput.getFullYear();
-
-    //   fromDate = `${fday}/${fmonth}/${fyear}`;
-    // }
-    // fromDate = convertDateFormat(fromDate);
-
-    // var tinput = new Date();
-    // var toDate = this.SearchForm.value.toDate;
-    // if (this.SearchForm.value.toDate instanceof Date) {
-    //   tinput = new Date(this.SearchForm.value.toDate); // try converting if it's not already a Date
-
-    //   const tday = String(tinput.getDate()).padStart(2, '0');
-    //   const tmonth = String(tinput.getMonth() + 1).padStart(2, '0'); // months are 0-based
-    //   const tyear = tinput.getFullYear();
-
-    //   toDate = `${tday}/${tmonth}/${tyear}`;
-    // }
-    // toDate = convertDateFormat(toDate);
-
+    if (this.SearchForm.invalid) {
+      swal.fire('Validation Error!', 'Please fill all required fields.', 'warning');
+      return;
+    }
+    
     let param = new GetDataModel();
     param.procedureName = '[usp_LC_List]';
     param.parameters = {
       FromDate: DateFormat.toApiDate(this.SearchForm.value.fromDate),
       ToDate: DateFormat.toApiDate(this.SearchForm.value.toDate),
       LCNo: this.SearchForm.value.lcNo,
+      Beneficiary_Account_ID: this.SearchForm.value.Beneficiary_Account_ID,
       PageIndex: this.pageIndex,
       PageSize: this.pageSize,
     };
-
-    console.log('Search parameters:', param.parameters); // Debug log for parameters
 
     this.masterEntryService.GetInitialData(param).subscribe({
       next: (results) => {
@@ -161,12 +158,13 @@ export class AllLcComponent {
           this.tableData = [];
           let tables = JSON.parse(results.data);
           this.tableData = tables.Tables1;
+          this.BaneficiaryAccountList = JSON.parse(results.data).Tables2;
           if (this.tableData.length > 0) {
             this.length = parseInt(this.tableData[0].totallen);
           } else {
             swal.fire('info', 'No Data Found!!', 'info');
           }
-          //  this.isPage=this.rows[0].totallen>10;
+        
         }
       },
     });
@@ -244,8 +242,8 @@ export class AllLcComponent {
     }
 
     const params: Record<string, any> = item
-      ? { LC_ID: item.LC_ID, fromDate, toDate, LCNo: this.SearchForm.value.lcNo ?? '' }
-      : { fromDate, toDate, LCNo: this.SearchForm.value.lcNo ?? '' };
+      ? { LC_ID: item.LC_ID, fromDate, toDate, LCNo: this.SearchForm.value.lcNo ?? '', Beneficiary_Account_ID: this.SearchForm.value.Beneficiary_Account_ID ?? '' }
+      : { fromDate, toDate, LCNo: this.SearchForm.value.lcNo ?? '', Beneficiary_Account_ID: this.SearchForm.value.Beneficiary_Account_ID ?? '' };
 
     this.reportService.showReportDialog('GenericReport/LCReport', params, 'LCReport');
   }

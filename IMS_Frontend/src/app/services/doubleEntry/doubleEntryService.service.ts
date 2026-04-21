@@ -29,6 +29,7 @@ export class DoubleMasterEntryService {
   readonly baseUrlApi = GlobalConfig.BASE_URL;
   readonly baseUrl = GlobalConfig.BASE_URL_REPORT;
   readonly postApiController: string="DoubleMasterEntry";
+  readonly postApiProformaInvoiceController: string="ProformaInvoice";
   token:any;
   readonly getapiController = 'GetData';
 
@@ -277,6 +278,53 @@ export class DoubleMasterEntryService {
           return Response;
         })
       );
+  }
+
+  public UpdateDataMasterDetailsWithLog(fd: any, tableName: any,fdMaster:any,tableNameMaster: any,primaryColumnName: any,ColumnNameForign: any,serialType:any,ColumnNameSerialNo:any,Whereparam:any) {
+    let model: DoubleMasterEntryModel=new DoubleMasterEntryModel();
+
+    model.tableNameMaster = tableNameMaster;
+    model.tableNameChild=tableName;
+
+    model.columnNamePrimary = primaryColumnName;
+    model.columnNameForign = ColumnNameForign;
+    model.columnNameSerialNo = ColumnNameSerialNo;
+    model.serialType = serialType;
+    model.isFlag = null;
+    model.detailsData=fd;
+    model.data  =fdMaster;
+    model.whereParams = Whereparam;
+
+    return this.http
+      .post<ResponseModel>(
+        this.baseUrlApi + this.postApiProformaInvoiceController + '/Update',
+        model,
+        {
+          headers: new HttpHeaders({
+            Authorization: 'Bearer ' + this.token,
+            'Content-Type': 'application/json',
+          }),
+        }
+      )
+      .pipe(
+        map((Response) => {
+          return Response;
+        })
+      );
+  }
+
+  public GetPiAuditLog(piId: number) {
+    return this.http
+      .get<{ piNo: string; clientName: string; logs: any[] }>(
+        `${this.baseUrlApi}${this.postApiProformaInvoiceController}/AuditLog/${piId}`,
+        {
+          headers: new HttpHeaders({
+            Authorization: 'Bearer ' + this.token,
+            'Content-Type': 'application/json',
+          }),
+        }
+      )
+      .pipe(map((res) => res));
   }
 
   public DeleteDataMasterDetails(fd: any, tableName: any,fdMaster:any,tableNameMaster: any,primaryColumnName: any,ColumnNameForign: any,serialType:any,ColumnNameSerialNo:any,Whereparam:any) {

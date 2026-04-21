@@ -37,12 +37,14 @@ public class ProformaInvoiceController : BaseApiController
             if (newPiId > 0)
             {
                 await _piLogService.LogAsync(
-                    piId:       newPiId,
-                    actionType: "CREATE",
-                    data:       model,
-                    changedBy:  ParseUserId(AuthUserId),
-                    ipAddress:  GetClientIp(),
-                    userAgent:  GetUserAgent());
+                    piId:          newPiId,
+                    actionType:    "CREATE",
+                    masterData:    model.Data,
+                    detailsData:   model.DetailsData,
+                    changedBy:     ParseUserId(AuthUserId),
+                    changedByName: AuthUserName,
+                    ipAddress:     GetClientIp(),
+                    userAgent:     GetUserAgent());
             }
 
             return Ok(newPiId);
@@ -64,16 +66,37 @@ public class ProformaInvoiceController : BaseApiController
 
             if (result.Status)
             {
-                var piId = ExtractPiId(model);
+
+                string? strWhereParams = Convert.ToString(model.WhereParams);
+                var whereParams = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(strWhereParams);
+                object? pkValue = null;
+                foreach (var item in (IEnumerable<dynamic>)whereParams)
+                {
+                    if (item.Name.ToLower() == model.ColumnNamePrimary?.ToLower())
+                    {
+                        pkValue = item.Value;
+                        break;
+                    }
+                }
+
+                long piId = 0;
+
+                if (pkValue != null && long.TryParse(pkValue.ToString(), out var parsedId))
+                {
+                    piId = parsedId;
+                }
+
                 if (piId > 0)
                 {
                     await _piLogService.LogAsync(
-                        piId:       piId,
-                        actionType: "UPDATE",
-                        data:       model,
-                        changedBy:  ParseUserId(AuthUserId),
-                        ipAddress:  GetClientIp(),
-                        userAgent:  GetUserAgent());
+                        piId:          piId,
+                        actionType:    "UPDATE",
+                        masterData:    model.Data,
+                        detailsData:   model.DetailsData,
+                        changedBy:     ParseUserId(AuthUserId),
+                        changedByName: AuthUserName,
+                        ipAddress:     GetClientIp(),
+                        userAgent:     GetUserAgent());
                 }
             }
 
@@ -82,6 +105,22 @@ public class ProformaInvoiceController : BaseApiController
         catch (Exception ex)
         {
             throw new Exception(ex.ToString());
+        }
+    }
+
+    // ── AUDIT LOG ─────────────────────────────────────────────────────────────
+
+    [HttpGet("AuditLog/{piId:long}")]
+    public async Task<IActionResult> GetAuditLog(long piId)
+    {
+        try
+        {
+            var result = await _piLogService.GetAuditLogAsync(piId);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
         }
     }
 
@@ -101,23 +140,48 @@ public class ProformaInvoiceController : BaseApiController
     private static long ParseUserId(string? userId) =>
         long.TryParse(userId, out var id) ? id : 0;
 
-    /// <summary>
-    /// Extracts PI_Master_Id from the WhereParams or Data of the model.
-    /// WhereParams is expected to be a JSON object with a "PI_Master_Id" field.
-    /// </summary>
     private static long ExtractPiId(DoubleMasterEntryModel model)
     {
+        if (model == null) return 0;
+
+        // 1. Try WhereParams first
+        var id = GetValueFromObject(model.WhereParams);
+        if (id > 0) return id;
+
+        // 2. Fallback to Data
+        id = GetValueFromObject(model.Data);
+        return id;
+    }
+
+    private static long GetValueFromObject(object source)
+    {
+        if (source == null) return 0;
+
         try
         {
-            if (model.WhereParams is null) return 0;
+            var prop = source.GetType()
+                .GetProperties()
+                .FirstOrDefault(p =>
+                    string.Equals(p.Name, "PI_Master_ID", StringComparison.OrdinalIgnoreCase));
 
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(model.WhereParams);
-            var dict = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+            if (prop == null) return 0;
 
-            if (dict != null && dict.TryGetValue("PI_Master_Id", out var val))
-                return Convert.ToInt64(val);
+            var value = prop.GetValue(source);
+
+            if (value == null) return 0;
+
+            // Handle different types safely
+            if (value is long l) return l;
+            if (value is int i) return i;
+            if (long.TryParse(value.ToString(), out var result))
+                return result;
         }
-        catch { /* non-critical — log will simply be skipped */ }
+        catch (Exception ex)
+        {
+            // 👉 For logging system, NEVER silently ignore
+            // Add your logger here
+            // _logger.LogError(ex, "Failed to extract PI_Master_ID");
+        }
 
         return 0;
     }

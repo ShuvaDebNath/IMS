@@ -23,6 +23,7 @@ Formgroup!: FormGroup;
   CustomerId!: string;
   CountryList!: any;
   menu: any;
+  BaneficiaryAccountList: any;
 
   insertPermissions: boolean = false;
   updatePermissions: boolean = false;
@@ -71,10 +72,8 @@ Formgroup!: FormGroup;
   }
 
   GenerateFrom() {
-    // Customer_ID, Company_Name, Contact_Name, Customer_Address, City, Postal_Code, Country_ID, Contact_Title, Phone_No, FAX_No, Email, Notes, Superior_ID, Created_By, Updated_By, Created_At, Updated_At, 
-    //                      IsAvailable, ItemDoing, Status, ApprovedById, ApprovedDate
-
     this.Formgroup = this.fb.group({
+      Beneficiary_Account_ID: ['', [Validators.required]],
       Company_Name: ['', [Validators.required]],
       Contact_Name: [''],
       Customer_Address: [''],
@@ -88,6 +87,12 @@ Formgroup!: FormGroup;
       Notes: [''],
       Company_Info:[''],
       User_Id: [''],
+      Office_Address: [''],
+      Factory_Address: [''],
+      Product_Type: [''],
+      Total_Worker: [''],
+      Company_Type: [''],
+      Buyer_Name: [''],
       IsAvailable: ['', [Validators.required]],
       Status: [''],
     });
@@ -105,6 +110,7 @@ Formgroup!: FormGroup;
       next: (results) => {
         if (results.status) {
           this.CountryList = JSON.parse(results.data).Tables1;
+          this.BaneficiaryAccountList = JSON.parse(results.data).Tables4;
           if(JSON.parse(results.data).Tables3!=undefined)
           this.UserList = JSON.parse(results.data).Tables3;``
         } else if (results.msg == 'Invalid Token') {
@@ -152,6 +158,13 @@ Formgroup!: FormGroup;
     cd.Created_By = this.Formgroup.value.FreightCharge;
     cd.Created_At = formatted;
     cd.Created_By = userId == undefined ? '' : userId;
+    cd.Beneficiary_Account_ID = this.Formgroup.value.Beneficiary_Account_ID;
+    cd.Office_Address = this.Formgroup.value.Office_Address;
+    cd.Factory_Address = this.Formgroup.value.Factory_Address;
+    cd.Product_Type = this.Formgroup.value.Product_Type;
+    cd.Total_Worker = this.Formgroup.value.Total_Worker;
+    cd.Company_Type = this.Formgroup.value.Company_Type;
+    cd.Buyer_Name = this.Formgroup.value.Buyer_Name;
 
     var tableName = 'tbl_customer';
 
@@ -216,7 +229,13 @@ Formgroup!: FormGroup;
             this.Formgroup.controls.FAX_No.setValue(e.FAX_No);
             this.Formgroup.controls.Email.setValue(e.Email);
             this.Formgroup.controls.Notes.setValue(e.Notes);
-            console.log(e.Superior_ID);
+            this.Formgroup.controls.Beneficiary_Account_ID.setValue(e.Beneficiary_Account_ID);
+            this.Formgroup.controls.Office_Address.setValue(e.Office_Address);
+            this.Formgroup.controls.Factory_Address.setValue(e.Factory_Address);
+            this.Formgroup.controls.Product_Type.setValue(e.Product_Type);
+            this.Formgroup.controls.Total_Worker.setValue(e.Total_Worker);
+            this.Formgroup.controls.Company_Type.setValue(e.Company_Type);
+            this.Formgroup.controls.Buyer_Name.setValue(e.Buyer_Name);
             
             this.Formgroup.controls.User_Id.setValue(e.Superior_ID);
             this.Formgroup.controls.IsAvailable.setValue(e.IsAvailable);
@@ -258,7 +277,14 @@ Formgroup!: FormGroup;
     cd.FAX_No = this.Formgroup.value.FAX_No;
     cd.Email = this.Formgroup.value.Email;
     cd.Notes = this.Formgroup.value.Notes;
-    console.log(this.Formgroup.value.User_Id);
+    
+    cd.Beneficiary_Account_ID = this.Formgroup.value.Beneficiary_Account_ID;
+    cd.Office_Address = this.Formgroup.value.Office_Address;
+    cd.Factory_Address = this.Formgroup.value.Factory_Address;
+    cd.Product_Type = this.Formgroup.value.Product_Type;
+    cd.Total_Worker = this.Formgroup.value.Total_Worker;
+    cd.Company_Type = this.Formgroup.value.Company_Type;
+    cd.Buyer_Name = this.Formgroup.value.Buyer_Name;
     
     cd.Superior_ID = this.Formgroup.value.User_Id;
     cd.IsAvailable = this.Formgroup.value.IsAvailable;
@@ -266,7 +292,6 @@ Formgroup!: FormGroup;
     cd.Created_By = this.Formgroup.value.FreightCharge;
     cd.Created_At = formatted;
     cd.Created_By = userId == undefined ? '' : userId;
-    console.log(cd);
     
     var tableName = 'tbl_customer';
 

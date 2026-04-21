@@ -383,7 +383,41 @@ public GetAllData(model: GetDataModel){
 
     return this.http
       .post<ResponseModel>(
-        this.baseUrlApi + this.postApiController + '/Save', //'/Insert',
+        this.baseUrlApi + this.postApiController + '/Insert',
+        model,
+        {
+          headers: new HttpHeaders({
+            Authorization: 'Bearer ' + this.token,
+            'Content-Type': 'application/json',
+          }),
+        }
+      )
+      .pipe(
+        map((Response) => {
+          return Response;
+        })
+      );
+  }
+
+  public SaveDataMasterDetailsWithLog(fd: any, tableName: any,fdMaster:any,tableNameMaster: any,primaryColumnName: any,ColumnNameForign: any,serialType:any,ColumnNameSerialNo:any,GuidKey:any = false,whereparam:any = {}) {
+    let model: DoubleMasterEntryModel=new DoubleMasterEntryModel();
+
+    model.tableNameMaster = tableNameMaster;
+    model.tableNameChild=tableName;
+
+    model.columnNamePrimary = primaryColumnName;
+    model.columnNameForign = ColumnNameForign;
+    model.columnNameSerialNo = ColumnNameSerialNo;
+    model.serialType = serialType;
+    model.isFlag = null;
+    model.detailsData=fd;
+    model.data  =fdMaster;
+    model.whereParams = whereparam;
+    model.GuidKey = GuidKey;
+
+    return this.http
+      .post<ResponseModel>(
+        this.baseUrlApi + this.postApiProformaInvoiceController + '/Save',
         model,
         {
           headers: new HttpHeaders({

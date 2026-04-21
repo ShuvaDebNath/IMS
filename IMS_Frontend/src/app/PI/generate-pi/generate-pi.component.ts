@@ -6,6 +6,7 @@ import { DoubleMasterEntryService } from 'src/app/services/doubleEntry/doubleEnt
 import { GlobalServiceService } from 'src/app/services/Global-service.service';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 import Swal from 'sweetalert2';
+import { DateFormat } from 'src/app/shared/date-format';
 
 @Component({
   selector: 'app-generate-pi',
@@ -60,8 +61,6 @@ export class GeneratePiComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.tempPI);
-
     this.PageTitle = 'Generate LC PI';
     this.GTQTY = 0;
     this.GTAMNT = 0;
@@ -101,7 +100,6 @@ export class GeneratePiComponent implements OnInit {
       this.service.GetInitialData(model).subscribe((res: any) => {
         if (res.status) {
           const ds = JSON.parse(res.data);
-          console.log(ds);
 
           if (ds.Tables1[0].ExpireDate) {
             const parts = ds.Tables1[0].ExpireDate.split('/');
@@ -562,7 +560,7 @@ export class GeneratePiComponent implements OnInit {
       PI_Master_ID: this.Formgroup.controls['PI_Master_ID'].value,
       PINo: this.Formgroup.controls['PINo'].value,
       Consignee_Initial: this.Formgroup.controls['Consignee_Initial'].value,
-      Date: this.Formgroup.controls['Date'].value,
+      Date: DateFormat.toApiDate(this.Formgroup.controls['Date'].value),
       Beneficiary_Account_ID:
         this.Formgroup.controls['Beneficiary_Account_ID'].value,
       Beneficiary_Bank_ID: this.Formgroup.controls['Beneficiary_Bank_ID'].value,
@@ -595,7 +593,7 @@ export class GeneratePiComponent implements OnInit {
       Customer_ID: this.Formgroup.controls['Customer_ID'].value,
       IsMPI: this.Formgroup.controls['IsMPI'].value,
       LastUpdateDate: this.Formgroup.controls['LastUpdateDate'].value,
-      ExpireDate: this.Formgroup.controls['ExpireDate'].value,
+      ExpireDate: DateFormat.toApiDate(this.Formgroup.controls['ExpireDate'].value),
       Terms_of_Delivery_ID:
         this.Formgroup.controls['Terms_of_Delivery_ID'].value,
       IsBuyerMandatory: this.Formgroup.controls['IsBuyerMandatory'].value,
@@ -627,7 +625,7 @@ export class GeneratePiComponent implements OnInit {
     });
 
     this.service
-      .SaveDataMasterDetails(
+      .SaveDataMasterDetailsWithLog(
         details,
         'tbl_pi_detail',
         model,
@@ -677,11 +675,12 @@ export class GeneratePiComponent implements OnInit {
       cancelButtonText: 'Cancel',
     }).then((result) => {
       if (result.isConfirmed) {
+        // Use getRawValue to get all form values, including disabled controls and nested arrays
         let model = {
           PI_Master_ID: this.Formgroup.controls['PI_Master_ID'].value,
           PINo: this.Formgroup.controls['PINo'].value,
           Consignee_Initial: this.Formgroup.controls['Consignee_Initial'].value,
-          Date: this.Formgroup.controls['Date'].value,
+          Date: DateFormat.toApiDate(this.Formgroup.controls['Date'].value),
           Beneficiary_Account_ID:
             this.Formgroup.controls['Beneficiary_Account_ID'].value,
           Beneficiary_Bank_ID:
@@ -693,7 +692,6 @@ export class GeneratePiComponent implements OnInit {
           Payment_Term_ID: this.Formgroup.controls['Payment_Term_ID'].value,
           Consignee: this.Formgroup.controls['Consignee'].value,
           Contact_Person: this.Formgroup.controls['Contact_Person'].value,
-          Buyer_ID: this.Formgroup.controls['Buyer_ID'].value,
           Buyer_Name: this.Formgroup.controls['Buyer_Name'].value,
           Delivery_Address: this.Formgroup.controls['Delivery_Address'].value,
           Style: this.Formgroup.controls['Style'].value,
@@ -706,7 +704,7 @@ export class GeneratePiComponent implements OnInit {
           Documents: this.Formgroup.controls['Documents'].value,
           Shipping_Marks: this.Formgroup.controls['Shipping_Marks'].value,
           Loading_Port: this.Formgroup.controls['Loading_Port'].value,
-          Destination_Port: this.Formgroup.controls['Destination_Port'].value,
+          Destination_Port: this.Formgroup.controls['Destination_Port'].value,  
           Remarks: this.Formgroup.controls['Remarks'].value,
           Force_Majeure_ID: this.Formgroup.controls['Force_Majeure_ID'].value,
           Arbitration_ID: this.Formgroup.controls['Arbitration_ID'].value,
@@ -720,13 +718,14 @@ export class GeneratePiComponent implements OnInit {
           Customer_ID: this.Formgroup.controls['Customer_ID'].value,
           IsMPI: this.Formgroup.controls['IsMPI'].value,
           LastUpdateDate: this.Formgroup.controls['LastUpdateDate'].value,
-          ExpireDate: this.Formgroup.controls['ExpireDate'].value,
+          ExpireDate: DateFormat.toApiDate(this.Formgroup.controls['ExpireDate'].value),
           Terms_of_Delivery_ID:
             this.Formgroup.controls['Terms_of_Delivery_ID'].value,
           IsBuyerMandatory: this.Formgroup.controls['IsBuyerMandatory'].value,
           Customer_Bank_ID: this.Formgroup.controls['Customer_Bank_ID'].value,
         };
 
+        // Deep-clone to avoid mutating the live FormArray in-place.
         let details = this.Formgroup.value.ItemArray;
 
         details.forEach((element: any) => {
@@ -736,10 +735,10 @@ export class GeneratePiComponent implements OnInit {
           }
         });
 
-        const whereParams = { PI_Master_ID: model.PI_Master_ID };
+        const whereParams = { PI_Master_ID: model.PI_Master_ID };     
 
         this.des
-          .UpdateDataMasterDetails(
+          .UpdateDataMasterDetailsWithLog(
             details,
             'tbl_pi_detail',
             model,
