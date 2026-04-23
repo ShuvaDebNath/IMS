@@ -17,6 +17,7 @@ import { DoubleMasterEntryModel } from 'src/app/models/DoubleMasterEntryModel';
 import { CD } from 'src/app/models/CDModel';
 import Swal from 'sweetalert2';
 import { ReportService } from 'src/app/services/reportService/report-service.service';
+import { DateFormat } from 'src/app/shared/date-format';
 
 @Component({
   selector: 'app-all-commercial-invoice',
@@ -94,35 +95,13 @@ pageIndex = 1;
       cdNo: [''],
     });
   }
-  Search(){
-    var finput = new Date();    
-    var fromDate = this.SearchForm.value.fromDate;
-    if (this.SearchForm.value.fromDate instanceof Date) {
-      finput = new Date(this.SearchForm.value.fromDate); // try converting if it's not already a Date
-      const fday = String(finput.getDate()).padStart(2, '0');
-      const fmonth = String(finput.getMonth() + 1).padStart(2, '0'); // months are 0-based
-      const fyear = finput.getFullYear();
-      
-      fromDate = `${fday}/${fmonth}/${fyear}`;
-    }    
-
-    var tinput = new Date();
-    var toDate = this.SearchForm.value.toDate;
-    if (this.SearchForm.value.toDate instanceof Date) {
-      tinput = new Date(this.SearchForm.value.toDate); // try converting if it's not already a Date
-      
-      const tday = String(tinput.getDate()).padStart(2, '0');
-      const tmonth = String(tinput.getMonth() + 1).padStart(2, '0'); // months are 0-based
-      const tyear = tinput.getFullYear();
-
-      toDate = `${tday}/${tmonth}/${tyear}`;
-    }
+  Search(){    
     
     let param = new GetDataModel();
     param.procedureName = '[usp_CD_List]';
     param.parameters = {
-      FromDate: fromDate,
-      ToDate: toDate,
+      FromDate: DateFormat.toApiDate(this.SearchForm.value.fromDate),
+      ToDate: DateFormat.toApiDate(this.SearchForm.value.toDate),
       CDNo: this.SearchForm.value.cdNo,
       PageIndex:this.pageIndex,
       PageSize:this.pageSize      
@@ -135,7 +114,6 @@ pageIndex = 1;
           this.tableData = [];
           let tables = JSON.parse(results.data);
           this.tableData = tables.Tables1; 
-          //  this.isPage=this.rows[0].totallen>10;
           this.length = parseInt(this.tableData[0].totallen);
         }
 
@@ -235,81 +213,63 @@ pageIndex = 1;
   }
 
   CIPrint(){  
-    this.ReportViewerOptionsBySwal('CI');  
+
+    const params: Record<string, any> = {
+      Commercial_Invoice_No: this.detailsData?.Commercial_Invoice_No,
+    };
+
+    this.reportService.showReportDialog('GenericReport/CommercialReport', params, 'CommercialReport');
+
   }
   PLPrint(){
-    this.ReportViewerOptionsBySwal('PL');
+
+    const params: Record<string, any> = {
+      Commercial_Invoice_No: this.detailsData?.Commercial_Invoice_No,
+    };
+
+    this.reportService.showReportDialog('GenericReport/PackingListReport', params, 'PackingListReport');
   }
 
   DCPrint(){
-    this.ReportViewerOptionsBySwal('DC');
+
+    const params: Record<string, any> = {
+      Commercial_Invoice_No: this.detailsData?.Commercial_Invoice_No,
+    };
+
+    this.reportService.showReportDialog('GenericReport/DeliveryChallanReport', params, 'DeliveryChallanReport');
   }
 
   BOEPrint(){
-    this.ReportViewerOptionsBySwal('BOE');
+
+    const params: Record<string, any> = {
+      Commercial_Invoice_No: this.detailsData?.Commercial_Invoice_No,
+    };
+    this.reportService.showReportDialog('GenericReport/BillOfExchangeReport', params, 'BillOfExchangeReport');
   }
 
-  ICPrint(){
-    this.ReportViewerOptionsBySwal('IC');
+  ICPrint(){   
+
+    const params: Record<string, any> = {
+      Commercial_Invoice_No: this.detailsData?.Commercial_Invoice_No,
+    };
+    this.reportService.showReportDialog('GenericReport/InspectionCertificateReport', params, 'InspectionCertificateReport');
   }
 
-  OriginPrint(){
-    this.ReportViewerOptionsBySwal('Origin');
+  OriginPrint(){    
+
+    const params: Record<string, any> = {
+      Commercial_Invoice_No: this.detailsData?.Commercial_Invoice_No,
+    };
+    this.reportService.showReportDialog('GenericReport/CertificateOfOriginReport', params, 'CertificateOfOriginReport');
   }
 
-  BeneficiaryPrint(){
-    this.ReportViewerOptionsBySwal('Beneficiary');
+  BeneficiaryPrint(){   
+
+    const params: Record<string, any> = {
+      Commercial_Invoice_No: this.detailsData?.Commercial_Invoice_No,
+    };
+    this.reportService.showReportDialog('GenericReport/BeneficiaryCertificateReport', params, 'BeneficiaryCertificateReport');
   }
 
-   ReportViewerOptionsBySwal(reportType?: string) {
-      var actionType = '';
-      const item: any = {
-        Commercial_Invoice_No: this.detailsData?.Commercial_Invoice_No,
-        reportType: reportType || null,
-      };
-      Swal.fire({
-        title: 'Please select what you want to do!!',
-        icon: 'info',
-        showCancelButton: false,
-        showConfirmButton: false,
-        allowOutsideClick: true,
-        // Put Swal container/popup on top of other app modals by assigning high z-index classes
-        customClass: {
-          container: 'swal-container-high',
-          popup: 'swal-popup-high',
-        },
-        html: `
-          <div style="display: flex; justify-content: center; gap: 10px;">
-            <button id="view" class="swal2-confirm swal2-styled" style="background:green">Excel</button>
-            <button id="download" class="swal2-confirm swal2-styled" style="background:red">PDF</button>
-            <button id="print" class="swal2-confirm swal2-styled" style="background:blue">Word</button>
-          </div>
-        `,
-      });
-
-      // Add event listeners for buttons after Swal opens
-      Swal.getPopup()
-        ?.querySelector('#view')
-        ?.addEventListener('click', () => {
-          this.reportService.PrintCommercialInvoiceReports(item, 'excel', true);
-          Swal.close();
-        });
-
-      Swal.getPopup()
-        ?.querySelector('#download')
-        ?.addEventListener('click', () => {
-          this.reportService.PrintCommercialInvoiceReports(item, 'pdf', true);
-          Swal.close();
-        });
-
-      Swal.getPopup()
-        ?.querySelector('#print')
-        ?.addEventListener('click', () => {
-          this.reportService.PrintCommercialInvoiceReports(item, 'word', true);
-          Swal.close();
-        });
-
-      // The caller-specific reportType is included in `item` so the report service
-      // can dispatch the correct report variant based on that flag.
-    }
+ 
 }

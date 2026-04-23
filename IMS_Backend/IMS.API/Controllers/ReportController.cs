@@ -202,101 +202,7 @@ namespace IMS.API.Controllers
                 throw;
             }
         }
-
-        [HttpGet]
-        [Route("CommercialInvoiceReports")]
-        public async Task<IActionResult> CommercialInvoiceReports(string rptType, string commercialInvoiceNo, string reportType)
-        {
-            try
-            {
-                var currentUser = HttpContext.User;
-                var reportName = "";
-
-                string reportPath = "V2\\";
-                DataSet ds = await _reportService.CommercialInvoiceReports(commercialInvoiceNo, reportType);
-
-                if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
-                {
-
-                    return Ok(new { msg = "Data Not Found" });
-                }
-
-                if (reportType == "CI")
-                {
-                    ds.Tables[0].TableName = "dtCommercialInvoice";
-
-                    reportName = "Commercial Invoice Report";
-
-                    reportPath += "CommercialInvoice.rdlc";
-                }
-                else if (reportType == "PL")
-                {
-                    ds.Tables[0].TableName = "dtCommercialInvoice";
-
-                    reportName = "Packing List Report";
-
-                    reportPath += "PackingList.rdlc";
-                } 
-                else if (reportType == "DC")
-                {
-                    ds.Tables[0].TableName = "dtCommercialInvoice";
-
-                    reportName = "Delivery Challan Report";
-
-                    reportPath += "DeliveryChallan.rdlc";
-                }
-                else if (reportType == "BOE")
-                {
-                    ds.Tables[0].TableName = "dtCommercialInvoice";
-
-                    reportName = "Bill of Exchange Report";
-
-                    reportPath += "BillOfExchange.rdlc";
-                }
-                else if (reportType == "IC")
-                {
-                    ds.Tables[0].TableName = "dtCommercialInvoice";
-
-                    reportName = "Inspection Certificate Report";
-
-                    reportPath += "InspectionCertificate.rdlc";
-                }
-                else if (reportType == "Origin")
-                {
-                    ds.Tables[0].TableName = "dtCommercialInvoice";
-
-                    reportName = "Country of Origin Report";
-
-                    reportPath += "CertificateOfOrigin.rdlc";
-                }
-                else if (reportType == "Beneficiary")
-                {
-                    ds.Tables[0].TableName = "dtCommercialInvoice";
-
-                    reportName = "Baneficiary Certificate Report";
-
-                    reportPath += "BeneficiaryCertificate.rdlc";
-                }                   
-
-                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
-
-
-                if (rptType.ToLower() == "pdf")
-                {
-                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
-                }
-                else
-                {
-                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
-                }
-
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-
+       
         [HttpGet]
         [Route("DeliveryChallanReport")]
         public async Task<IActionResult> DeliveryChallanReport(string rptType, string challanNo)
@@ -417,49 +323,7 @@ namespace IMS.API.Controllers
                 throw;
             }
         }
-
-        [HttpGet]
-        [Route("LCReport")]
-        public async Task<IActionResult> LCReport(string rptType, string fromDate, string toDate, string LCNo = "")
-        {
-            try
-            {
-                var currentUser = HttpContext.User;
-
-                string reportPath = "V2\\LCReport\\";
-                DataSet ds = await _reportService.LCReport(fromDate, toDate, LCNo);
-
-                if (ds != null && ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count <= 0)
-                {
-
-                    return Ok(new { msg = "Data Not Found" });
-                }
-
-                ds.Tables[0].TableName = "LCReport";
-
-                var reportName = "LC Report";
-
-                reportPath += "rptLCReport.rdlc";
-
-
-                var returnstring = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
-
-
-                if (rptType.ToLower() == "pdf")
-                {
-                    return File(returnstring, contentType: RDLCSimplified.RDLCSetup.GetContentType(rptType.ToLower()));
-                }
-                else
-                {
-                    return File(returnstring, System.Net.Mime.MediaTypeNames.Application.Octet, reportName + "." + RDLCSimplified.RDLCSetup.GetExtension(rptType.ToLower()));
-                }
-
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
+     
 
         [HttpGet]
         [Route("CashReceiveReport")]

@@ -17,6 +17,7 @@ public static class DataAccessRegistration
         service.AddTransient<IDoubleMasterEntryRepository, DoubleMasterEntryRepository>();
         service.AddTransient<IReportRepository, ReportRepository>();
         service.AddTransient<IPiLogRepository, PiLogRepository>();
+        service.AddTransient<IBeneficiaryRepository, BeneficiaryRepository>();
         service.AddScoped<IGetDataRepository, GetDataRepository>();
         // Register post-insert actions and factory from contracts
         service.AddTransient<IDoubleMasterEntryPostInsertAction, UpdateRequisitionMasterAction>();

@@ -478,6 +478,51 @@ public GetAllData(model: GetDataModel){
       );
   }
 
+  // ── Beneficiary dedicated endpoints ──────────────────────────────────────
+  // New methods — existing SaveSingleData / UpdateData / GetEditData untouched.
+
+  public GetBeneficiaryById(id: number) {
+    return this.http
+      .get<{ status: boolean; data: any }>(
+        `${this.baseUrlApi}Beneficiary/GetById/${id}`,
+        {
+          headers: new HttpHeaders({
+            Authorization: 'Bearer ' + this.token,
+          }),
+        }
+      )
+      .pipe(map((r) => r));
+  }
+
+  public SaveBeneficiary(formData: FormData) {
+    return this.http
+      .post<any>(
+        this.baseUrlApi + 'Beneficiary/Save',
+        formData,
+        {
+          headers: new HttpHeaders({
+            // Do NOT set Content-Type — browser auto-sets multipart/form-data with boundary
+            Authorization: 'Bearer ' + this.token,
+          }),
+        }
+      )
+      .pipe(map((r) => r));
+  }
+
+  public UpdateBeneficiary(formData: FormData) {
+    return this.http
+      .put<any>(
+        this.baseUrlApi + 'Beneficiary/Update',
+        formData,
+        {
+          headers: new HttpHeaders({
+            Authorization: 'Bearer ' + this.token,
+          }),
+        }
+      )
+      .pipe(map((r) => r));
+  }
+
   public UpdateDataMasterDetails(fd: any, tableName: any,fdMaster:any,tableNameMaster: any,primaryColumnName: any,ColumnNameForign: any,serialType:any,ColumnNameSerialNo:any,Whereparam:any) {
     let model: DoubleMasterEntryModel=new DoubleMasterEntryModel();
 

@@ -34,5 +34,5 @@ Customer_ID!: string;
 Group_Head!: string;
 totallen!: string;
 Superior_ID!: string;
-  
+Sailing_On_Or_About!: string;
 }

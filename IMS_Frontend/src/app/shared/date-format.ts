@@ -17,15 +17,49 @@ export class DateFormat {
    * @example
    *   DateFormat.toApiDate(new Date('2024-01-01'))  // "2024-01-01"
    */
+  // static toApiDate(value: Date | string | null | undefined): string {
+  //   if (!value) return '';
+  //   const d = value instanceof Date ? value : new Date(value);
+  //   if (isNaN(d.getTime())) return '';
+  //   const yyyy = d.getFullYear();
+  //   const mm   = String(d.getMonth() + 1).padStart(2, '0');
+  //   const dd   = String(d.getDate()).padStart(2, '0');
+  //   return `${yyyy}-${mm}-${dd}`;
+  // }
+
   static toApiDate(value: Date | string | null | undefined): string {
-    if (!value) return '';
-    const d = value instanceof Date ? value : new Date(value);
-    if (isNaN(d.getTime())) return '';
-    const yyyy = d.getFullYear();
-    const mm   = String(d.getMonth() + 1).padStart(2, '0');
-    const dd   = String(d.getDate()).padStart(2, '0');
-    return `${yyyy}-${mm}-${dd}`;
+  if (!value) return '';
+
+  let d: Date;
+
+  if (value instanceof Date) {
+    d = value;
+  } else if (typeof value === 'string') {
+    // Handle dd/MM/yyyy
+    if (value.includes('/')) {
+      const parts = value.split('/');
+      if (parts.length === 3) {
+        const [dd, mm, yyyy] = parts;
+        d = new Date(+yyyy, +mm - 1, +dd);
+      } else {
+        return '';
+      }
+    } else {
+      // fallback for ISO string
+      d = new Date(value);
+    }
+  } else {
+    return '';
   }
+
+  if (isNaN(d.getTime())) return '';
+
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+
+  return `${yyyy}-${mm}-${dd}`;
+}
 
   /**
    * Converts a Date object or ISO string to "DD-MMM-YYYY" for display

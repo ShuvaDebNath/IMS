@@ -28,6 +28,13 @@
     <None Remove="Report\V2\CertificateOfOrigin.rdlc" />
     <None Remove="Report\V2\Chalan.rdlc" />
     <None Remove="Report\V2\CommercialInvoice.rdlc" />
+    <None Remove="Report\V2\CommercialReports\BeneficiaryCertificate.rdlc" />
+    <None Remove="Report\V2\CommercialReports\BillOfExchange.rdlc" />
+    <None Remove="Report\V2\CommercialReports\CertificateOfOrigin.rdlc" />
+    <None Remove="Report\V2\CommercialReports\CommercialInvoice.rdlc" />
+    <None Remove="Report\V2\CommercialReports\DeliveryChallan.rdlc" />
+    <None Remove="Report\V2\CommercialReports\InspectionCertificate.rdlc" />
+    <None Remove="Report\V2\CommercialReports\PackingList.rdlc" />
     <None Remove="Report\V2\CustomerReport\rptCustomerReport.rdlc" />
     <None Remove="Report\V2\DeliveryChallan.rdlc" />
     <None Remove="Report\V2\DeliveryReport\rptDeliveryLogReport.rdlc" />
@@ -87,6 +94,27 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Report\V2\CommercialInvoice.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\CommercialReports\BeneficiaryCertificate.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\CommercialReports\BillOfExchange.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\CommercialReports\CertificateOfOrigin.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\CommercialReports\CommercialInvoice.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\CommercialReports\DeliveryChallan.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\CommercialReports\InspectionCertificate.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\CommercialReports\PackingList.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Report\V2\CustomerReport\rptCustomerReport.rdlc">
