@@ -21,7 +21,14 @@ export class BeneficiaryCreateComponent implements OnInit {
   insertPermissions: boolean = false;
   updatePermissions: boolean = false;
   paymentTypes: any[] = [];
-  countryData: any[]=[]
+  countryData: any[] = [];
+
+  // ── Logo upload (new — existing properties/methods are NOT modified) ──────
+  selectedFile:   File   | null = null;
+  logoPreviewUrl: string | null = null;
+
+  private readonly ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+  private readonly MAX_SIZE_MB   = 2;
   constructor(
     private fb: FormBuilder,
     private masterEntyService: MasterEntryService,
@@ -43,10 +50,10 @@ export class BeneficiaryCreateComponent implements OnInit {
     this.GenerateForm();
 
     if (this.isEdit) {
-      this.GetBeneficiaryById(this.BeneficiaryId);
+      this.LoadBeneficiaryData(+this.BeneficiaryId); // new — loads form fields + logo preview
     }
-    this.GetPaymentType()
-    this.GetCountry()
+    this.GetPaymentType();
+    this.GetCountry();
   }
   GetPaymentType() {
     this.masterEntyService.GetDataTable({
@@ -200,5 +207,178 @@ export class BeneficiaryCreateComponent implements OnInit {
         }
       }
     });
+  }
+
+  LoadBeneficiaryData(id: number): void {
+    this.masterEntyService.GetBeneficiaryById(id).subscribe({
+      next: (res) => {
+        if (!res.status || !res.data) {
+          swal.fire('Error', 'Beneficiary not found.', 'error');
+          return;
+        }
+
+        const d = res.data;
+
+        this.Formgroup.patchValue({
+          CompanyName:   d.companyName,
+          BinNo:         d.binNo,
+          Address:       d.address,
+          City:          d.city,
+          Country_ID:    d.country_ID,
+          ETIN:          d.etin,
+          VATRegNo:      d.vatRegNo,
+          IsAvailable:   d.isAvailable,
+          PaymentTypeId: d.paymentTypeId,
+        });
+
+        if (d.logoImageBase64) {
+          this.logoPreviewUrl = d.logoImageBase64;
+        }
+      },
+      error: () => swal.fire('Error', 'Failed to load beneficiary data.', 'error'),
+    });
+  }
+
+  onFileSelected(event: any): void {
+    const file: File | undefined = event.target.files?.[0];
+    if (!file) return;
+
+    if (!this.isValidImageFile(file)) {
+      event.target.value = '';   // reset input
+      this.selectedFile   = null;
+      this.logoPreviewUrl = null;
+      return;
+    }
+
+    this.selectedFile = file;
+
+    const reader = new FileReader();
+    reader.onload = (e: any) => (this.logoPreviewUrl = e.target.result);
+    reader.readAsDataURL(file);
+  }
+
+  clearFile(): void {
+    this.selectedFile   = null;
+    this.logoPreviewUrl = null;
+  }
+
+  submitCreate(): void {
+    if (!this.selectedFile) {
+      this.saveData(); 
+      return;
+    }
+
+    if (this.Formgroup.invalid) {
+      swal.fire('Invalid Inputs!', 'Please fill required fields.', 'info');
+      return;
+    }
+
+    const formData = this.buildFormData();
+
+    this.masterEntyService.SaveBeneficiary(formData).subscribe({
+      next: (res: any) => {
+        if (res.status) {
+          swal.fire({
+            title: 'Saved!',
+            text: 'Save Successfully!',
+            icon: 'success',
+            timer: 5000,
+          }).then(() => {
+            this.clearFile();
+            this.ngOnInit();
+          });
+        } else {
+          this.handleApiError(res, 'Save Failed!');
+        }
+      },
+      error: () => swal.fire('Error', 'An unexpected error occurred.', 'error'),
+    });
+  }
+
+  submitUpdate(): void {
+    if (!this.selectedFile) {
+      this.updateData(); 
+      return;
+    }
+
+    if (this.Formgroup.invalid) {
+      swal.fire('Invalid Inputs!', 'Please check inputs', 'info');
+      return;
+    }
+
+    const formData = this.buildFormData();
+    formData.append('Beneficiary_Account_ID', this.BeneficiaryId);
+
+    this.masterEntyService.UpdateBeneficiary(formData).subscribe({
+      next: (res: any) => {
+        if (res.status) {
+          swal.fire({
+            title: 'Updated!',
+            text: 'Update Successfully!',
+            icon: 'success',
+            timer: 5000,
+          }).then(() => {
+            this.clearFile();
+            this.ngOnInit();
+          });
+        } else {
+          this.handleApiError(res, 'Update Failed!');
+        }
+      },
+      error: () => swal.fire('Error', 'An unexpected error occurred.', 'error'),
+    });
+  }
+
+  private isValidImageFile(file: File): boolean {
+    if (!this.ALLOWED_TYPES.includes(file.type)) {
+      swal.fire(
+        'Invalid File Type',
+        'Only JPG, PNG, and WebP images are allowed.',
+        'warning'
+      );
+      return false;
+    }
+
+    if (file.size > this.MAX_SIZE_MB * 1024 * 1024) {
+      swal.fire(
+        'File Too Large',
+        `Image must be smaller than ${this.MAX_SIZE_MB} MB.`,
+        'warning'
+      );
+      return false;
+    }
+
+    return true;
+  }
+
+  private buildFormData(): FormData {
+    const formData  = new FormData();
+    const formValue = { ...this.Formgroup.value };
+
+    formValue.IsAvailable   = formValue.IsAvailable ? 1 : 0;
+    formValue.Sent_By       = (localStorage.getItem('userId') ?? '').toString();
+    formValue.Received_By   = '58';
+    formValue.Received_Date = this.nowSql();
+
+    Object.entries(formValue).forEach(([key, value]) => {
+      if (value !== null && value !== undefined) {
+        formData.append(key, String(value));
+      }
+    });
+
+    if (this.selectedFile) {
+      formData.append('logoImage', this.selectedFile, this.selectedFile.name);
+    }
+
+    return formData;
+  }
+
+  private handleApiError(res: any, fallbackMsg: string): void {
+    if (res.message === 'Invalid Token') {
+      swal.fire('Session Expired!', 'Please Login Again.', 'info');
+      this.gs.Logout();
+    } else {
+      swal.fire('Failed!', res.message || fallbackMsg, 'info');
+    }
   }
 }

@@ -75,6 +75,33 @@
               <option *ngFor="let pt of paymentTypes" [value]="pt.id">{{ pt.name }}</option>
             </select>
           </div>
+
+          <!-- Logo Image Upload -->
+          <div class="col-md-6">
+            <label class="form-label">Company Logo <small class="text-muted">(JPG / PNG / WebP, max 2 MB)</small></label>
+            <input
+              type="file"
+              class="form-control"
+              accept="image/jpeg,image/jpg,image/png,image/webp"
+              (change)="onFileSelected($event)"
+            />
+            <!-- Preview -->
+            <div *ngIf="logoPreviewUrl" class="mt-2 d-flex align-items-center gap-3">
+              <img
+                [src]="logoPreviewUrl"
+                alt="Logo preview"
+                style="max-height: 80px; max-width: 160px; border: 1px solid #dee2e6; border-radius: 6px; padding: 4px; object-fit: contain;"
+              />
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-danger"
+                (click)="clearFile()"
+                title="Remove selected file"
+              >
+                <i class="fas fa-times"></i> Remove
+              </button>
+            </div>
+          </div>
         </div>
       </form>
 
@@ -84,11 +111,11 @@
           <i class="fas fa-times-circle me-2"></i> Cancel
         </button>
 
-        <button *ngIf="!isEdit" class="btn theme-btn-add" type="button" (click)="saveData()" [disabled]="Formgroup.invalid">
+        <button *ngIf="!isEdit" class="btn theme-btn-add" type="button" (click)="submitCreate()" [disabled]="Formgroup.invalid">
           <i class="fas fa-save me-2"></i> Save
         </button>
 
-        <button *ngIf="isEdit" class="btn theme-btn-edit" type="button" (click)="updateData()" [disabled]="Formgroup.invalid">
+        <button *ngIf="isEdit" class="btn theme-btn-edit" type="button" (click)="submitUpdate()" [disabled]="Formgroup.invalid">
           <i class="fas fa-sync-alt me-2"></i> Update
         </button>
       </div>
