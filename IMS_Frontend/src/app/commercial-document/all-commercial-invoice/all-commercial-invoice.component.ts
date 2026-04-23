@@ -192,6 +192,8 @@ pageIndex = 1;
           let tables = JSON.parse(results.data);
           
           this.detailsData = tables.Tables1[0]; 
+          console.log(this.detailsData);
+          
           this.detailsTableData = tables.Tables2;
           // compute totals for details table
           this.computeDetailsTotals();
