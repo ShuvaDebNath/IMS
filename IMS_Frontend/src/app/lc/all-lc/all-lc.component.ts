@@ -80,24 +80,24 @@ export class AllLcComponent {
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
     this.title.setTitle('All LC');
 
-    var fDate = new Date();
-    const mm = String(fDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-    const dd = String(fDate.getDate()).padStart(2, '0');
-    const yyyy = fDate.getFullYear();
+    // var fDate = new Date();
+    // const mm = String(fDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    // const dd = String(fDate.getDate()).padStart(2, '0');
+    // const yyyy = fDate.getFullYear();
 
-    const formatted = `${dd}/${mm}/${yyyy}`;
+    // const formatted = `${dd}/${mm}/${yyyy}`;
 
-    const threeMonthsAgo = new Date();
-    threeMonthsAgo.setMonth(fDate.getMonth() - 3);
+    // const threeMonthsAgo = new Date();
+    // threeMonthsAgo.setMonth(fDate.getMonth() - 3);
 
-    const mmT = String(threeMonthsAgo.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-    const ddT = String(threeMonthsAgo.getDate()).padStart(2, '0');
-    const yyyyT = threeMonthsAgo.getFullYear();
+    // const mmT = String(threeMonthsAgo.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    // const ddT = String(threeMonthsAgo.getDate()).padStart(2, '0');
+    // const yyyyT = threeMonthsAgo.getFullYear();
 
-    const formattedT = `${ddT}/${mmT}/${yyyyT}`;
+    // const formattedT = `${ddT}/${mmT}/${yyyyT}`;
 
-    this.SearchForm.get('fromDate')?.setValue(formattedT);
-    this.SearchForm.get('toDate')?.setValue(formatted);
+    // this.SearchForm.get('fromDate')?.setValue(formattedT);
+    // this.SearchForm.get('toDate')?.setValue(formatted);
     this.FormLoad();
   }
   initForm(): void {
@@ -121,12 +121,8 @@ export class AllLcComponent {
     this.masterEntryService.GetInitialData(param).subscribe({
       next: (results) => {
         if (results.status) {          
-          this.BaneficiaryAccountList = JSON.parse(results.data).Tables1;
-          if (this.tableData.length > 0) {
-            this.length = parseInt(this.tableData[0].totallen);
-          } else {
-            swal.fire('info', 'No Data Found!!', 'info');
-          }
+
+          this.BaneficiaryAccountList = JSON.parse(results.data).Tables1;       
         
         }
       },
@@ -143,6 +139,7 @@ export class AllLcComponent {
     
     let param = new GetDataModel();
     param.procedureName = '[usp_LC_List]';
+
     param.parameters = {
       FromDate: DateFormat.toApiDate(this.SearchForm.value.fromDate),
       ToDate: DateFormat.toApiDate(this.SearchForm.value.toDate),
@@ -206,7 +203,7 @@ export class AllLcComponent {
                     });
                 }
 
-                this.Search();
+                this.FormLoad();
               } else if (results.message == 'Invalid Token') {
                 swal.fire('Session Expierd!', 'Please Login Again.', 'info');
                 this.gs.Logout();

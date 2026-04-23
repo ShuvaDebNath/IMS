@@ -3,11 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { CD } from 'src/app/models/CDModel';
-import { LC } from 'src/app/models/LCModel';
-import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
-import { Roles } from 'src/app/models/roles.model';
 import { GlobalServiceService } from 'src/app/services/Global-service.service';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
+import { DateFormat } from 'src/app/shared/date-format';
 import swal from 'sweetalert2';
 
 @Component({
@@ -89,6 +87,7 @@ export class GenerateCommercialInvoiceComponent {
       TotalNetWeight: ['', [Validators.required]],
       SailiongOnOrAbout: [''],
       Remarks: [''],
+      Date: [''],
     });
   }
 
@@ -213,8 +212,7 @@ export class GenerateCommercialInvoiceComponent {
       next: (results) => {
         if (results.status) {
           var tableData = JSON.parse(results.data).Tables1;
-          console.log(tableData);
-          
+
           tableData.forEach((e: any) => {
             this.Formgroup.controls.LC_No.setValue(e.LC_ID);
             this.Formgroup.controls.ApplicantBank.setValue(e.Applicant_Bank_ID);
@@ -234,7 +232,9 @@ export class GenerateCommercialInvoiceComponent {
               this.convertDatesddmmyyy(e.Sailing_On_Or_About)
             );
             this.Formgroup.controls.Remarks.setValue(e.Remarks);
-            this.commInvoicNoedit = e.Commercial_Invoice_No
+            this.commInvoicNoedit = e.Commercial_Invoice_No,
+            this.Formgroup.controls.Date.setValue(this.convertDatesddmmyyy(e.Date));
+            
           });
         } else if (results.message == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
@@ -295,7 +295,7 @@ export class GenerateCommercialInvoiceComponent {
     cd.Be_No = this.Formgroup.value.BeNo;
     cd.EP_No = this.Formgroup.value.EpNo;
     cd.Commercial_Invoice_No = this.commInvoicNoedit;
-    cd.Date = formatted;
+    cd.Date = DateFormat.toApiDate(this.Formgroup.value.System_Created_Date);
     cd.User_ID = userId == undefined ? '' : userId;
 
     var tableName = 'tbl_commercial_invoice';

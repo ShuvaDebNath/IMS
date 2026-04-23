@@ -729,11 +729,18 @@ export class GeneratePiComponent implements OnInit {
         let details = this.Formgroup.value.ItemArray;
 
         details.forEach((element: any) => {
+
+          const selectedItem = this.AAList.find((x: any) => x.Item_ID == element.Item_ID);
+
+          if (selectedItem) {
+            element.ActualArticle = selectedItem.Article_No;
+          }
+
           if (element.Unit_ID == 2) {
             element.Quantity_In_Meter = element.Quantity;
             element.Quantity = element.Quantity_In_Meter * 1.09361;
           }
-        });
+        });        
 
         const whereParams = { PI_Master_ID: model.PI_Master_ID };     
 
