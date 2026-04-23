@@ -88,8 +88,6 @@ export class LoginComponent implements OnInit {
         // let company = this.companyList.filter((x: { ComId: any; })=> x.ComId == this.LoginForm.controls.comId.value);
         window.localStorage.setItem('token', res.token);
 
-       
-        console.log(res);
         // debugger;
         window.localStorage.setItem('userName', res.userName);
         window.localStorage.setItem('companyId', res.companyId);
@@ -121,7 +119,7 @@ export class LoginComponent implements OnInit {
               menuWithButtonPermission = JSON.parse(results.data).Tables1;
               window.localStorage.setItem('UserMenu', JSON.stringify(menu));
               window.localStorage.setItem('UserMenuWithPermission', JSON.stringify(menuWithButtonPermission));
-              console.log(JSON.stringify(menuWithButtonPermission));
+            
               
               this.router.navigate(['/dashboard']).then(() => {
                 //window.location.reload();

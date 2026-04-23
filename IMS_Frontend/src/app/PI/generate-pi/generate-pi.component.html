@@ -8,7 +8,8 @@
             [disabled]="!Formgroup.valid" style="width: 130px; height: 38px">
             <i class="fas fa-save"></i>&nbsp;Save
           </button>
-          <button class="btn btn-sm btn-pi-refresh" (click)="RefrashDDL()" style="width: 130px; height: 38px"
+          
+          <button class="btn btn-sm btn-pi-refresh"  style="width: 130px; height: 38px"
             *ngIf="tempPI!='' && tempPI!=undefined" class="btn btn-sm btn-pi-save mr-2" (click)="Update()"
             [disabled]="!Formgroup.valid">
             <i class="fas fa-save"></i>&nbsp;Update

@@ -340,9 +340,14 @@
         </div>
 
         <div class="float-right">
-          <div class="btn-group" role="group" aria-label="Basic example">
-            <!-- <button type="button" class="btn btn-outline-success bg-gradient-warning  btn-sm mr-2">PI Log</button>
-            <button type="button" class="btn btn-outline-success bg-gradient-warning btn-sm mr-2">PI Detail Log</button> -->
+          <div class="btn-group" role="group" aria-label="Basic example">            
+            <button
+              type="button"
+              class="btn btn-outline-success bg-gradient-warning btn-sm mr-2"
+              (click)="OpenPiLog(PIData?.PI_Master_ID)"
+            >
+              <i class="fas fa-history"></i>&nbsp;PI Detail Log
+            </button>
             <button
               type="button"
               class="btn btn-outline-success bg-gradient-warning btn-sm mr-2"
@@ -435,7 +440,7 @@
                 <strong>Expire Date</strong>
               </div>
               <div class="col-md-8 mt-2">
-                {{ PIData?.ExpireDate | date: "dd/MM/yyyy HH:mm:ss" }}
+                {{ PIData?.ExpireDate }}
               </div>
             </div>
           </div>
@@ -673,6 +678,116 @@
     </div>
   </div>
 </p-dialog>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     PI AUDIT LOG MODAL
+     ═══════════════════════════════════════════════════════════════ -->
+<p-dialog
+  header="PI Audit Log"
+  [(visible)]="isPiLogVisible"
+  [modal]="true"
+  [closable]="true"
+  [style]="{ width: '90vw', maxWidth: '1100px' }"
+  [contentStyle]="{ 'max-height': '75vh', 'overflow-y': 'auto' }"
+  [maximizable]="true"
+  (onHide)="isPiLogVisible = false"
+>
+  <!-- Header info strip -->
+  <div class="row mb-3">
+    <div class="col-md-6 d-flex align-items-center gap-2">
+      <span class="font-weight-bold text-muted">PI No:</span>
+      <span class="font-weight-bold text-dark">{{ piLogPiNo || '—' }}</span>
+    </div>
+    <div class="col-md-6 d-flex align-items-center gap-2">
+      <span class="font-weight-bold text-muted">Client:</span>
+      <span class="font-weight-bold text-dark">{{ piLogClientName || '—' }}</span>
+    </div>
+  </div>
+
+  <!-- Loading spinner -->
+  <div *ngIf="isPiLogLoading" class="d-flex justify-content-center align-items-center py-5">
+    <p-progressSpinner
+      strokeWidth="4"
+      styleClass="w-4rem h-4rem"
+      animationDuration=".8s"
+    ></p-progressSpinner>
+    <span class="ml-3 text-muted">Loading audit log…</span>
+  </div>
+
+  <!-- No data -->
+  <div
+    *ngIf="!isPiLogLoading && piLogEntries.length === 0"
+    class="text-center py-5 text-muted"
+  >
+    <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
+    No audit records found.
+  </div>
+
+  <!-- Audit table -->
+  <div
+    *ngIf="!isPiLogLoading && piLogEntries.length > 0"
+    class="table-responsive"
+  >
+    <table class="table table-sm table-bordered table-hover mb-0 audit-log-table">
+      <thead>
+        <tr style="background-color: #6a1a3f; color: white; white-space: nowrap;">
+          <th class="text-center align-middle" style="width: 110px;">Event Type</th>
+          <th class="text-center align-middle" style="min-width: 160px;">Column</th>
+          <th class="text-center align-middle" style="min-width: 180px;">Original Value</th>
+          <th class="text-center align-middle" style="min-width: 180px;">New Value</th>
+          <th class="text-center align-middle" style="width: 110px;">Changed By</th>
+          <th class="text-center align-middle" style="width: 180px;">Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let entry of piLogEntries">
+          <td class="text-center align-middle">
+            <span
+              class="badge"
+              [ngClass]="{
+                'badge-success': entry.eventType === 'Insert',
+                'badge-warning': entry.eventType === 'Modified',
+                'badge-danger':  entry.eventType === 'Deleted'
+              }"
+              style="font-size: 0.78rem; padding: 4px 8px;"
+            >
+              {{ entry.eventType }}
+            </span>
+          </td>
+          <td class="align-middle">{{ entry.columnName }}</td>
+          <td class="align-middle text-danger">
+            <span *ngIf="entry.originalValue; else emptyOld">{{ entry.originalValue }}</span>
+            <ng-template #emptyOld><span class="text-muted">—</span></ng-template>
+          </td>
+          <td class="align-middle text-success font-weight-bold">
+            <span *ngIf="entry.newValue; else emptyNew">{{ entry.newValue }}</span>
+            <ng-template #emptyNew><span class="text-muted">—</span></ng-template>
+          </td>
+          <td class="text-center align-middle">{{ entry.changedBy }}</td>
+          <td class="text-center align-middle" style="white-space: nowrap;">
+            {{ entry.changedDate | date: 'dd-MMM-yyyy hh:mm a' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="d-flex justify-content-between align-items-center">
+      <small class="text-muted">
+        {{ piLogEntries.length }} record(s) found
+      </small>
+      <button
+        class="btn btn-sm btn-secondary"
+        (click)="isPiLogVisible = false"
+      >
+        <i class="fas fa-times"></i>&nbsp;Close
+      </button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
 
 <p-dialog
   header="Special Approval"

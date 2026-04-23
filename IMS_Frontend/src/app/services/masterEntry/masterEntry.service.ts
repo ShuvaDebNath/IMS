@@ -19,6 +19,7 @@ export class MasterEntryService {
   readonly baseUrl = GlobalConfig.BASE_URL_REPORT;
   readonly postApiController: string="DoubleMasterEntry";
   readonly postApiMasterEntryController: string="MasterEntry";
+  readonly postApiProformaInvoiceController: string="ProformaInvoice";
   readonly userController: string="User";
   token:any;
   readonly getapiController = 'GetData';
@@ -398,6 +399,40 @@ public GetAllData(model: GetDataModel){
       );
   }
 
+  public SaveDataMasterDetailsWithLog(fd: any, tableName: any,fdMaster:any,tableNameMaster: any,primaryColumnName: any,ColumnNameForign: any,serialType:any,ColumnNameSerialNo:any,GuidKey:any = false,whereparam:any = {}) {
+    let model: DoubleMasterEntryModel=new DoubleMasterEntryModel();
+
+    model.tableNameMaster = tableNameMaster;
+    model.tableNameChild=tableName;
+
+    model.columnNamePrimary = primaryColumnName;
+    model.columnNameForign = ColumnNameForign;
+    model.columnNameSerialNo = ColumnNameSerialNo;
+    model.serialType = serialType;
+    model.isFlag = null;
+    model.detailsData=fd;
+    model.data  =fdMaster;
+    model.whereParams = whereparam;
+    model.GuidKey = GuidKey;
+
+    return this.http
+      .post<ResponseModel>(
+        this.baseUrlApi + this.postApiProformaInvoiceController + '/Save',
+        model,
+        {
+          headers: new HttpHeaders({
+            Authorization: 'Bearer ' + this.token,
+            'Content-Type': 'application/json',
+          }),
+        }
+      )
+      .pipe(
+        map((Response) => {
+          return Response;
+        })
+      );
+  }
+
   public SaveDataMasterDetailsList(fd: any, tableName: any,fdMaster:any,tableNameMaster: any,primaryColumnName: any,ColumnNameForign: any,serialType:any,ColumnNameSerialNo:any) {
     
     //fd: any, tableName: any,fdMaster:any,tableNameMaster: any,primaryColumnName: any,ColumnNameForign: any,serialType:any,ColumnNameSerialNo:any
@@ -441,6 +476,51 @@ public GetAllData(model: GetDataModel){
           return Response;
         })
       );
+  }
+
+  // ── Beneficiary dedicated endpoints ──────────────────────────────────────
+  // New methods — existing SaveSingleData / UpdateData / GetEditData untouched.
+
+  public GetBeneficiaryById(id: number) {
+    return this.http
+      .get<{ status: boolean; data: any }>(
+        `${this.baseUrlApi}Beneficiary/GetById/${id}`,
+        {
+          headers: new HttpHeaders({
+            Authorization: 'Bearer ' + this.token,
+          }),
+        }
+      )
+      .pipe(map((r) => r));
+  }
+
+  public SaveBeneficiary(formData: FormData) {
+    return this.http
+      .post<any>(
+        this.baseUrlApi + 'Beneficiary/Save',
+        formData,
+        {
+          headers: new HttpHeaders({
+            // Do NOT set Content-Type — browser auto-sets multipart/form-data with boundary
+            Authorization: 'Bearer ' + this.token,
+          }),
+        }
+      )
+      .pipe(map((r) => r));
+  }
+
+  public UpdateBeneficiary(formData: FormData) {
+    return this.http
+      .put<any>(
+        this.baseUrlApi + 'Beneficiary/Update',
+        formData,
+        {
+          headers: new HttpHeaders({
+            Authorization: 'Bearer ' + this.token,
+          }),
+        }
+      )
+      .pipe(map((r) => r));
   }
 
   public UpdateDataMasterDetails(fd: any, tableName: any,fdMaster:any,tableNameMaster: any,primaryColumnName: any,ColumnNameForign: any,serialType:any,ColumnNameSerialNo:any,Whereparam:any) {

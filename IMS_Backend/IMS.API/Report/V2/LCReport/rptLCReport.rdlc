@@ -2453,7 +2453,7 @@
         <DataSetName>LCReport</DataSetName>
         <Top>0.06944in</Top>
         <Height>0.5in</Height>
-        <Width>16.87835in</Width>
+        <Width>16.87836in</Width>
         <Style>
           <Border>
             <Style>Solid</Style>
@@ -2484,7 +2484,7 @@
     <Height>0.72091in</Height>
     <Style />
   </Body>
-  <Width>16.87835in</Width>
+  <Width>16.87836in</Width>
   <Page>
     <PageHeader>
       <Height>0.99697in</Height>
@@ -2498,7 +2498,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>SUNSHINE ACCESSORIES MFC. BD. LTD</Value>
+                  <Value>=Fields!CompanyName.Value</Value>
                   <Style>
                     <FontFamily>times New Roman</FontFamily>
                     <FontSize>14pt</FontSize>
@@ -2531,7 +2531,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>FSSFB#05, Ground Floor (Both Wings), Road #02, CEPZ, Chittagong, Bangladesh</Value>
+                  <Value>=Fields!Address.Value</Value>
                   <Style>
                     <FontFamily>times New Roman</FontFamily>
                     <FontSize>9pt</FontSize>
@@ -2795,35 +2795,25 @@
   </Page>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
-    <DataSource Name="SunshineERPDataSet">
+    <DataSource Name="DataSet2">
       <ConnectionProperties>
         <DataProvider>System.Data.DataSet</DataProvider>
         <ConnectString>/* Local Connection */</ConnectString>
       </ConnectionProperties>
-      <rd:DataSourceID>16fab515-5ac1-4916-9429-2a63d8771256</rd:DataSourceID>
-    </DataSource>
-    <DataSource Name="tds">
-      <ConnectionProperties>
-        <DataProvider>System.Data.DataSet</DataProvider>
-        <ConnectString>/* Local Connection */</ConnectString>
-      </ConnectionProperties>
-      <rd:DataSourceID>ba22fbd9-db14-4c46-86f3-5d41cedefadf</rd:DataSourceID>
-    </DataSource>
-    <DataSource Name="DataSet1">
-      <ConnectionProperties>
-        <DataProvider>System.Data.DataSet</DataProvider>
-        <ConnectString>/* Local Connection */</ConnectString>
-      </ConnectionProperties>
-      <rd:DataSourceID>b13f69fe-1531-44f3-a9f4-56fd5a938d1d</rd:DataSourceID>
+      <rd:DataSourceID>7056df01-1662-4b9d-b26a-1703dda966b9</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <DataSets>
     <DataSet Name="LCReport">
       <Query>
-        <DataSourceName>DataSet1</DataSourceName>
+        <DataSourceName>DataSet2</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
+        <Field Name="date">
+          <DataField>date</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
         <Field Name="mkt_concern">
           <DataField>mkt_concern</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -2842,6 +2832,10 @@
         </Field>
         <Field Name="BenificiaryBank">
           <DataField>BenificiaryBank</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="LC_Receiving_Date_By_Bank">
+          <DataField>LC_Receiving_Date_By_Bank</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="LC_Receiving_Date_By_Mail">
@@ -2912,14 +2906,18 @@
           <DataField>Title</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="LC_Receiving_Date_By_Bank">
-          <DataField>LC_Receiving_Date_By_Bank</DataField>
+        <Field Name="CompanyName">
+          <DataField>CompanyName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Address">
+          <DataField>Address</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
       <rd:DataSetInfo>
-        <rd:DataSetName>DataSet1</rd:DataSetName>
-        <rd:SchemaPath>F:\Project\ReportProject\ReportDesign\TDS\DataSet1.xsd</rd:SchemaPath>
+        <rd:DataSetName>DataSet2</rd:DataSetName>
+        <rd:SchemaPath>E:\Maliha Projects\ReportProject\ReportDesign\TDS\DataSet2.xsd</rd:SchemaPath>
         <rd:TableName>usp_LC_Report</rd:TableName>
         <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
         <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>

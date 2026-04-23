@@ -45,6 +45,8 @@ public class ReportService : IReportService
         }
     }
 
+
+
     public async Task<DataSet> CustomerReport(CustomerReportParams customerReportParams)
     {
         try
@@ -235,6 +237,7 @@ public class ReportService : IReportService
             throw ex;
         }
     }
+
     public async Task<DataSet> TaskReport(string id)
     {
         try
@@ -470,18 +473,17 @@ public class ReportService : IReportService
     {
         var config = await _reportRepository.GetReportConfigAsync(reportKey);
 
-        // Normalise: replace any null values with empty string so the SP
-        // receives "" instead of NULL — prevents "no result" from SP null checks.
-        var safeParams = parameters.ToDictionary(
-            kvp => kvp.Key,
-            kvp => kvp.Value ?? string.Empty);
-
         if (config is null)
             throw new KeyNotFoundException(
                 $"No active report configuration found for key '{reportKey}'. " +
                 $"Insert an active row into the ReportConfigs table.");
 
-       
+        // Normalise: replace any null value with "" so the SP never receives
+        // NULL — prevents stored procedures that use ISNULL(@Param, '') from
+        // returning no results when the frontend omits optional parameters.
+        var safeParams = parameters.ToDictionary(
+            kvp => kvp.Key,
+            kvp => kvp.Value ?? string.Empty);
 
         var ds = await _reportRepository.ExecuteSpReportAsync(config.SpName, safeParams);
 

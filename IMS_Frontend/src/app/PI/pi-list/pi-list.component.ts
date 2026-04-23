@@ -26,6 +26,8 @@ import { Router } from '@angular/router';
 import { ReportService } from 'src/app/services/reportService/report-service.service';
 import { getDate } from 'ngx-bootstrap/chronos/utils/date-getters';
 import { CalendarModule } from 'primeng/calendar';
+import { DoubleMasterEntryService } from 'src/app/services/doubleEntry/doubleEntryService.service';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 @Component({
   standalone: true,
   selector: 'app-pi-list',
@@ -44,7 +46,8 @@ import { CalendarModule } from 'primeng/calendar';
     FieldsetModule,
     DropdownModule,
     RouterModule,
-    CalendarModule
+    CalendarModule,
+    ProgressSpinnerModule,
   ],
 })
 export class PiListComponent implements OnInit {
@@ -64,7 +67,7 @@ export class PiListComponent implements OnInit {
   PITypeList: any[] = [
     { value: 2, text: 'LC' },
     { value: 1, text: 'Cash' },
-    { value: 3, text: 'Both' },
+    // { value: 3, text: 'Both' },
   ];
   first: any = 1;
   rows: any = 10;
@@ -100,6 +103,13 @@ export class PiListComponent implements OnInit {
   isSpecialApprovalVisible: boolean = false;
   specialApprovalSaveEnabled: boolean = false;
 
+  // ── PI Audit Log modal ────────────────────────────────────────────────────
+  isPiLogVisible:  boolean = false;
+  isPiLogLoading:  boolean = false;
+  piLogPiNo:       string  = '';
+  piLogClientName: string  = '';
+  piLogEntries:    any[]   = [];
+
   constructor(
     private service: MasterEntryService,
     private getDataService: GetDataService,
@@ -107,7 +117,8 @@ export class PiListComponent implements OnInit {
     private title: Title,
     private fb: FormBuilder,
     private router: Router,
-    private reportService: ReportService
+    private reportService: ReportService,
+    private doubleMasterEntryService: DoubleMasterEntryService
   ) { }
 
   /**
@@ -348,7 +359,6 @@ export class PiListComponent implements OnInit {
     this.DataTable = [];
     this.isLoading = true;
 
-    console.log(permas);
     var getRole = '';
 
     getRole = this.gs.getSessionData('roleId');
@@ -682,5 +692,68 @@ export class PiListComponent implements OnInit {
     }
     const payload = { Chalan_No: no };
     this.reportService.PrintDeliveryChallanReport(payload, 'pdf', true);
+  }
+
+  // ── PI Audit Log ───────────────────────────────────────────────────────────
+
+  /**
+   * Returns true only when a value is a non-empty, non-whitespace string
+   * that is not a JSON empty-array/object literal.
+   * Reusable for any future audit log table.
+   */
+  private hasAuditValue(val: any): boolean {
+    if (val === null || val === undefined) return false;
+    const str = String(val).trim();
+    return str.length > 0 && str !== '[]' && str !== '{}';
+  }
+
+  /** Keeps only rows where BOTH originalValue and newValue carry meaningful data. */
+  private filterAuditLogs(logs: any[]): any[] {
+    return logs.filter(
+      (entry) =>
+        this.hasAuditValue(entry.originalValue) &&
+        this.hasAuditValue(entry.newValue)
+    );
+  }
+
+  OpenPiLog(piId: number): void {
+    this.isPiLogVisible  = true;
+    this.isPiLogLoading  = true;
+    this.piLogEntries    = [];
+    this.piLogPiNo       = this.PIData?.PINo        ?? '';
+    this.piLogClientName = this.PIData?.CustomerName ?? '';
+
+    this.doubleMasterEntryService.GetPiAuditLog(piId).subscribe({
+      next: (res) => {
+        const filtered = this.filterAuditLogs(res.logs ?? []);
+
+        if (filtered.length === 0) {
+          this.isPiLogVisible = false;
+          this.isPiLogLoading = false;
+          Swal.fire({
+            title: 'No Information Found',
+            text: 'There are no audit log records available for this PI.',
+            icon: 'info',
+            confirmButtonText: 'OK',
+          });
+          return;
+        }
+
+        console.log(res);
+        
+
+        this.piLogEntries    = filtered;
+        // Only overwrite the pre-populated values when the API returns a real value,
+        // guarding against '[]' / '{}' that CREATE logs can produce.
+        if (this.hasAuditValue(res.piNo))       this.piLogPiNo       = res.piNo;
+        if (this.hasAuditValue(res.clientName)) this.piLogClientName = res.clientName;
+        this.isPiLogLoading  = false;
+      },
+      error: () => {
+        this.isPiLogVisible = false;
+        this.isPiLogLoading = false;
+        Swal.fire('Error', 'Failed to load audit log.', 'error');
+      },
+    });
   }
 }

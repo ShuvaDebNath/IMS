@@ -1,3 +1,54 @@
+/* All LC Filter Section Responsive & Consistent Styling */
+.all-lc-filter-row > [class^="col"] {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.all-lc-input, .range-container, .table-dropdown {
+  min-height: 40px !important;
+  height: 40px !important;
+  border-radius: 6px !important;
+  font-size: 16px !important;
+  padding: 0 12px !important;
+  box-sizing: border-box;
+}
+.range-container {
+  width: 100% !important;
+  min-width: 0;
+}
+.all-lc-action-row {
+  gap: 12px;
+}
+.all-lc-action-btn {
+  min-width: 120px;
+  height: 40px;
+  border-radius: 6px;
+  font-size: 16px;
+}
+@media (max-width: 767.98px) {
+  .all-lc-filter-row > [class^="col"] {
+    flex-direction: column;
+    margin-bottom: 12px;
+  }
+  .all-lc-action-row {
+    justify-content: flex-end !important;
+    margin-top: 8px;
+  }
+}
+@media (max-width: 576px) {
+  .all-lc-filter-row > [class^="col"] {
+    margin-bottom: 10px;
+  }
+  .all-lc-action-row {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+  }
+  .all-lc-action-btn {
+    width: 100%;
+    min-width: unset;
+  }
+}
 .table-toolbar{
   display: flex;
   justify-content: flex-end;   /* push to the right */

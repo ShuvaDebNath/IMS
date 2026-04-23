@@ -2,17 +2,18 @@
   <div class="card card-default">
     <div class="card-body">
       <h2 class="mb-0">All LC</h2>
+
       <form [formGroup]="SearchForm">
-        <div class="row align-items-center">
-          <div class="col-5">
+        <div class="row g-3 align-items-end all-lc-filter-row">
+          <div class="col-12 col-md-3">
             <label class="form-label">Select Date</label>
-            <div class="range-container" style="width: 85%">
+            <div class="range-container w-100">
               <p-calendar
                 formControlName="fromDate"
                 [showIcon]="false"
                 dateFormat="dd/mm/yy"
                 placeholder="From"
-                inputStyleClass="custom-date-input"
+                inputStyleClass="custom-date-input all-lc-input"
               ></p-calendar>
               <span class="range-divider">to</span>
               <p-calendar
@@ -20,50 +21,69 @@
                 [showIcon]="false"
                 dateFormat="dd/mm/yy"
                 placeholder="To"
-                inputStyleClass="custom-date-input"
+                inputStyleClass="custom-date-input all-lc-input"
               ></p-calendar>
             </div>
           </div>
-
-          <div class="col-4">
-            <label for="LCNo" class="">LC No</label>
+          <div class="col-12 col-md-3">
+            <label for="LCNo" class="form-label">LC No</label>
             <input
               autocomplete="off"
               type="text"
               formControlName="lcNo"
-              class="form-control"
+              class="form-control all-lc-input"
               placeholder="LC No"
               id="LCNo"
               name="LCNo"
-              value=""
             />
           </div>
-
-          <div class="col-3">
-            <button
-              title="Search"
-              type="button"
-              (click)="Search()"
-              class="btn btn-sm theme-btn"
-              style="margin-top: 30px; width: 130px; height: 38px"
+          <div class="col-12 col-md-4">
+            <label class="form-label fw-bold">Shipper Name <span class="text-danger">*</span></label>
+            <p-dropdown
+              [options]="BaneficiaryAccountList"
+              optionLabel="CompanyName"
+              [filter]="true"
+              filterBy="CompanyName"
+              [showClear]="true"
+              optionValue="Beneficiary_Account_ID"
+              formControlName="Beneficiary_Account_ID"
+              [virtualScroll]="true"
+              [virtualScrollItemSize]="30"
+              appendTo="body"
+              panelStyleClass="description-panel"
+              placeholder="Select Shipper"
+              styleClass="table-dropdown w-100 all-lc-input"
             >
-              <i class="fas fa-search"></i>&nbsp;Search
-            </button>
+              <ng-template let-AB pTemplate="item">
+                <div>{{ AB.CompanyName }}</div>
+              </ng-template>
+            </p-dropdown>
+          </div>          
+          <div class="col-12 col-md-3 d-none d-md-block"></div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-12">
+            <div class="d-flex justify-content-md-end gap-2 all-lc-action-row">
+              <button
+                title="Search"
+                type="button"
+                (click)="Search()"
+                class="btn theme-btn all-lc-action-btn"
+              >
+                <i class="fas fa-search"></i>&nbsp;Search
+              </button>
+              <button
+                class="btn theme-btn all-lc-action-btn"
+                (click)="printLC()"
+                title="Export LC list to Excel, Word, or PDF"
+              >
+                <i class="fas fa-download"></i>&nbsp; Export
+              </button>
+            </div>
           </div>
         </div>
       </form>
       <hr />
-      <div class="row mb-3">
-        <div class="col-md-12">
-          <button
-            class="btn theme-btn px-4 py-2"
-            (click)="printLC()"
-            title="Export LC list to Excel, Word, or PDF"
-          >
-            <i class="fas fa-download"></i>&nbsp; Export
-          </button>
-        </div>
-      </div>
 
     
      <p-table
