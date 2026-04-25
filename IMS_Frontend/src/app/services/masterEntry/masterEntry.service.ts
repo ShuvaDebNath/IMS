@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import {  HttpClient,  HttpHeaders,} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { GlobalConfig } from '../../global-config.config';
-import { GlobalServiceService } from '../../services/Global-service.service';
 import { map } from 'rxjs/operators';
 import { ResponseModel } from 'src/app/models/ResponseModel';
 import { DoubleMasterEntryModel } from 'src/app/models/DoubleMasterEntryModel';
@@ -21,28 +19,19 @@ export class MasterEntryService {
   readonly postApiMasterEntryController: string="MasterEntry";
   readonly postApiProformaInvoiceController: string="ProformaInvoice";
   readonly userController: string="User";
-  token:any;
   readonly getapiController = 'GetData';
 
-  constructor(
-    private router: Router,
-    private http: HttpClient,
-    private gs: GlobalServiceService
-  ) {
-    this.token = gs.getSessionData('token');
-  }
+  /**
+   * All API auth: `AuthInterceptor` adds `Authorization: Bearer <token>` from
+   * `localStorage` on every request. Do not set Bearer here (avoids stale/duplicate headers).
+   */
+  constructor(private http: HttpClient) {}
 
   public GetDataTable(model:MasterEntryModel) {
     return this.http
       .post<ResponseModel>(
         this.baseUrlApi + 'MasterEntry/GetAll',
-        model,
-        {
-          headers: new HttpHeaders({
-            Authorization: 'Bearer ' + this.token,
-            'Content-Type': 'application/json',
-          }),
-        }
+        model
       )
       .pipe(
         map((Response) => {
@@ -55,13 +44,7 @@ export class MasterEntryService {
     return this.http
       .post<ResponseModel>(
         this.baseUrlApi + 'MasterEntry/GetByColumns',
-        model,
-        {
-          headers: new HttpHeaders({
-            Authorization: 'Bearer ' + this.token,
-            'Content-Type': 'application/json',
-          }),
-        }
+        model
       )
       .pipe(
         map((Response) => {
@@ -78,13 +61,7 @@ export class MasterEntryService {
     return this.http
       .post<ResponseModel>(
         this.baseUrlApi + this.postApiController + '/InsertListData',
-        model,
-        {
-          headers: new HttpHeaders({
-            Authorization: 'Bearer ' + this.token,
-            'Content-Type': 'application/json',
-          }),
-        }
+        model
       )
       .pipe(
         map((Response) => {
@@ -102,13 +79,7 @@ export class MasterEntryService {
     return this.http
       .post<ResponseModel>(
         this.baseUrlApi + this.postApiMasterEntryController + '/Insert',
-        model,
-        {
-          headers: new HttpHeaders({
-            Authorization: 'Bearer ' + this.token,
-            'Content-Type': 'application/json',
-          }),
-        }
+        model
       )
       .pipe(
         map((Response) => {
@@ -126,13 +97,7 @@ export class MasterEntryService {
     return this.http
       .post<ResponseModel>(
         this.baseUrlApi + this.userController + '/SaveUser',
-        fd,
-        {
-          headers: new HttpHeaders({
-            Authorization: 'Bearer ' + this.token,
-            'Content-Type': 'application/json',
-          }),
-        }
+        fd
       )
       .pipe(
         map((Response) => {
@@ -150,13 +115,7 @@ export class MasterEntryService {
     return this.http
       .post<ResponseModel>(
         this.baseUrlApi + this.userController + '/EditUser',
-        fd,
-        {
-          headers: new HttpHeaders({
-            Authorization: 'Bearer ' + this.token,
-            'Content-Type': 'application/json',
-          }),
-        }
+        fd
       )
       .pipe(
         map((Response) => {
@@ -177,13 +136,7 @@ export class MasterEntryService {
     return this.http
       .post<ResponseModel>(
         this.baseUrlApi + this.postApiMasterEntryController + '/InsertThenUpdateRefTable',
-        model,
-        {
-          headers: new HttpHeaders({
-            Authorization: 'Bearer ' + this.token,
-            'Content-Type': 'application/json',
-          }),
-        }
+        model
       )
       .pipe(
         map((Response) => {
@@ -203,13 +156,7 @@ export class MasterEntryService {
     return this.http
       .post<ResponseModel>(
         this.baseUrlApi + this.postApiMasterEntryController + '/InsertThenUpdateRefTable',
-        model,
-        {
-          headers: new HttpHeaders({
-            Authorization: 'Bearer ' + this.token,
-            'Content-Type': 'application/json',
-          }),
-        }
+        model
       )
       .pipe(
         map((Response) => {
@@ -231,10 +178,6 @@ export class MasterEntryService {
   .delete<ResponseModel>(
       this.baseUrlApi + 'MasterEntry/DeleteThenUpdateSl',
       {
-        headers: new HttpHeaders({
-          Authorization: 'Bearer ' + this.token,
-          'Content-Type': 'application/json',
-        }),
         body: model // 👈 if your API expects a request body
       }
     )
@@ -254,13 +197,7 @@ export class MasterEntryService {
     return this.http
       .post<ResponseModel>(
         this.baseUrlApi + this.postApiController + '/InsertRequisitionPayment',
-        model,
-        {
-          headers: new HttpHeaders({
-            Authorization: 'Bearer ' + this.token,
-            'Content-Type': 'application/json',
-          }),
-        }
+        model
       )
       .pipe(
         map((Response) => {
@@ -278,13 +215,7 @@ export class MasterEntryService {
     return this.http
       .put<ResponseModel>(
         this.baseUrlApi + 'MasterEntry/Update',
-        model,
-        {
-          headers: new HttpHeaders({
-            Authorization: 'Bearer ' + this.token,
-            'Content-Type': 'application/json',
-          }),
-        }
+        model
       )
       .pipe(
         map((Response) => {
@@ -294,25 +225,10 @@ export class MasterEntryService {
   }
 
   public DeleteData(model:MasterEntryModel) {
-
-    const options = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json',
-    }),
-    body: {
-      id: 1,
-      name: 'test',
-    },
-  };
-
   return this.http
   .delete<ResponseModel>(
       this.baseUrlApi + 'MasterEntry/Delete',
       {
-        headers: new HttpHeaders({
-          Authorization: 'Bearer ' + this.token,
-          'Content-Type': 'application/json',
-        }),
         body: model // 👈 if your API expects a request body
       }
     )
@@ -324,25 +240,12 @@ export class MasterEntryService {
   }
 
 public GetAllData(model: GetDataModel){    
-    return this.http.post<any>(this.baseUrlApi+this.getapiController+'/GetAllData',model,{
-      headers: new HttpHeaders({
-        Authorization: 'Bearer ' + this.token,
-        'Content-Type': 'application/json',
-      }),
-    })
+    return this.http.post<any>(this.baseUrlApi+this.getapiController+'/GetAllData',model)
     .pipe(map((Response)=> {return Response;}));
   }
 
   public GetInitialData(model: GetDataModel){
-   
-    const token = localStorage.getItem('token');
-    
-    return this.http.post<any>(this.baseUrlApi+this.getapiController+'/GetInitialData',model,{
-      headers: new HttpHeaders({
-         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      }),
-    })
+    return this.http.post<any>(this.baseUrlApi+this.getapiController+'/GetInitialData',model)
     .pipe(map((Response)=> {return Response;}));
   }
 
@@ -350,13 +253,7 @@ public GetAllData(model: GetDataModel){
     return this.http
       .post<ResponseModel>(
         this.baseUrlApi + this.getapiController + '/GetDataById',
-        model,
-        {
-          headers: new HttpHeaders({
-            Authorization: 'Bearer ' + this.token,
-            'Content-Type': 'application/json',
-          }),
-        }
+        model
       )
       .pipe(
         map((Response) => {
@@ -384,13 +281,7 @@ public GetAllData(model: GetDataModel){
     return this.http
       .post<ResponseModel>(
         this.baseUrlApi + this.postApiController + '/Insert',
-        model,
-        {
-          headers: new HttpHeaders({
-            Authorization: 'Bearer ' + this.token,
-            'Content-Type': 'application/json',
-          }),
-        }
+        model
       )
       .pipe(
         map((Response) => {
@@ -418,13 +309,7 @@ public GetAllData(model: GetDataModel){
     return this.http
       .post<ResponseModel>(
         this.baseUrlApi + this.postApiProformaInvoiceController + '/Save',
-        model,
-        {
-          headers: new HttpHeaders({
-            Authorization: 'Bearer ' + this.token,
-            'Content-Type': 'application/json',
-          }),
-        }
+        model
       )
       .pipe(
         map((Response) => {
@@ -463,13 +348,7 @@ public GetAllData(model: GetDataModel){
     return this.http
       .post<ResponseModel>(
         this.baseUrlApi + this.postApiController + '/InsertListData',
-        model,
-        {
-          headers: new HttpHeaders({
-            Authorization: 'Bearer ' + this.token,
-            'Content-Type': 'application/json',
-          }),
-        }
+        model
       )
       .pipe(
         map((Response) => {
@@ -483,43 +362,19 @@ public GetAllData(model: GetDataModel){
 
   public GetBeneficiaryById(id: number) {
     return this.http
-      .get<{ status: boolean; data: any }>(
-        `${this.baseUrlApi}Beneficiary/GetById/${id}`,
-        {
-          headers: new HttpHeaders({
-            Authorization: 'Bearer ' + this.token,
-          }),
-        }
-      )
+      .get<{ status: boolean; data: any }>(`${this.baseUrlApi}Beneficiary/GetById/${id}`)
       .pipe(map((r) => r));
   }
 
   public SaveBeneficiary(formData: FormData) {
     return this.http
-      .post<any>(
-        this.baseUrlApi + 'Beneficiary/Save',
-        formData,
-        {
-          headers: new HttpHeaders({
-            // Do NOT set Content-Type — browser auto-sets multipart/form-data with boundary
-            Authorization: 'Bearer ' + this.token,
-          }),
-        }
-      )
+      .post<any>(this.baseUrlApi + 'Beneficiary/Save', formData)
       .pipe(map((r) => r));
   }
 
   public UpdateBeneficiary(formData: FormData) {
     return this.http
-      .put<any>(
-        this.baseUrlApi + 'Beneficiary/Update',
-        formData,
-        {
-          headers: new HttpHeaders({
-            Authorization: 'Bearer ' + this.token,
-          }),
-        }
-      )
+      .put<any>(this.baseUrlApi + 'Beneficiary/Update', formData)
       .pipe(map((r) => r));
   }
 
@@ -541,13 +396,7 @@ public GetAllData(model: GetDataModel){
     return this.http
       .post<ResponseModel>(
         this.baseUrlApi + this.postApiController + '/Update',
-        model,
-        {
-          headers: new HttpHeaders({
-            Authorization: 'Bearer ' + this.token,
-            'Content-Type': 'application/json',
-          }),
-        }
+        model
       )
       .pipe(
         map((Response) => {
@@ -641,13 +490,7 @@ public GetAllData(model: GetDataModel){
     return this.http
       .post<ResponseModel>(
         this.baseUrlApi + this.postApiController + '/UpdateRequisition',
-        model,
-        {
-          headers: new HttpHeaders({
-            Authorization: 'Bearer ' + this.token,
-            'Content-Type': 'application/json',
-          }),
-        }
+        model
       )
       .pipe(
         map((Response) => {

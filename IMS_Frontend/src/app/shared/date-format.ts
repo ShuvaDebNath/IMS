@@ -35,12 +35,27 @@ export class DateFormat {
   if (value instanceof Date) {
     d = value;
   } else if (typeof value === 'string') {
-    // Handle dd/MM/yyyy
     if (value.includes('/')) {
-      const parts = value.split('/');
+      const parts = value.split('/').map((p) => p.trim());
       if (parts.length === 3) {
-        const [dd, mm, yyyy] = parts;
-        d = new Date(+yyyy, +mm - 1, +dd);
+        const a = +parts[0];
+        const b = +parts[1];
+        const y = +parts[2];
+        if (Number.isNaN(a) || Number.isNaN(b) || Number.isNaN(y)) {
+          return '';
+        }
+        // Disambiguate dd/MM/yyyy (e.g. API / Bangladesh) vs MM/dd/yyyy (Angular
+        // DatePipe in generate-pi, generate-cpi, etc.)
+        if (a > 12) {
+          // 25/12/2026 — day is first
+          d = new Date(y, b - 1, a);
+        } else if (b > 12) {
+          // 04/25/2026 — month is first (day 13–31)
+          d = new Date(y, a - 1, b);
+        } else {
+          // Both 1–12: ambiguous; match DatePipe "MM/dd/yyyy" used on PI/LC forms
+          d = new Date(y, a - 1, b);
+        }
       } else {
         return '';
       }
