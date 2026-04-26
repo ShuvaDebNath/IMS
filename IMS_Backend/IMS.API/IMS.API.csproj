@@ -27,6 +27,9 @@
     <None Remove="Report\V2\CashReceiveReport\rptCashReceiveReport.rdlc" />
     <None Remove="Report\V2\CertificateOfOrigin.rdlc" />
     <None Remove="Report\V2\Chalan.rdlc" />
+    <None Remove="Report\V2\ChallanReports\Challan 1.rdlc" />
+	<None Remove="Report\V2\ChallanReports\Challan.rdlc" />
+	<None Remove="Report\V2\ChallanReports\ChallanSanxin.rdlc" />
     <None Remove="Report\V2\CommercialInvoice.rdlc" />
     <None Remove="Report\V2\CommercialReports\BeneficiaryCertificate.rdlc" />
     <None Remove="Report\V2\CommercialReports\BillOfExchange.rdlc" />
@@ -87,10 +90,13 @@
     <Content Include="Report\V2\Chalan.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Report\V2\ChallanReports\ChalanSanxin.rdlc">
+    <Content Include="Report\V2\ChallanReports\Challan 1.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Report\V2\ChallanReports\Chalan.rdlc">
+    <Content Include="Report\V2\ChallanReports\ChallanSanxin.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\ChallanReports\Challan.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Report\V2\CommercialInvoice.rdlc">
