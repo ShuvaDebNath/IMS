@@ -1,4 +1,5 @@
 using Boilerplate.Contracts;
+using Boilerplate.Contracts.Responses;
 using Boilerplate.Contracts.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -45,9 +46,12 @@ public class ProformaInvoiceController : BaseApiController
                     changedByName: AuthUserName,
                     ipAddress:     GetClientIp(),
                     userAgent:     GetUserAgent());
+
+                // Angular expects Messages: messageType, status, message, data (new PI id).
+                return Ok(MessageType.SaveSuccess(newPiId));
             }
 
-            return Ok(newPiId);
+            return Ok(MessageType.SaveError(null));
         }
         catch (Exception ex)
         {

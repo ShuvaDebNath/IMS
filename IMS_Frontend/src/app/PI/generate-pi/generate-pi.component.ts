@@ -624,6 +624,9 @@ export class GeneratePiComponent implements OnInit {
       }
     });
 
+    console.log(model);
+    console.log(details);
+
     this.service
       .SaveDataMasterDetailsWithLog(
         details,
@@ -636,13 +639,16 @@ export class GeneratePiComponent implements OnInit {
         'PI_Master_ID',
       )
       .subscribe((res) => {
+        
+            console.log(res);
+            
         if (res.messageType == 'Success' && res.status) {
           Swal.fire(res.messageType, res.message, 'success').then(() => {
             this.ngOnInit();
           });
         } else {
           if (!res.isAuthorized) {
-            this.gs.Logout();
+            //this.gs.Logout();
           } else {
             Swal.fire(res.messageType, res.message, 'info');
           }
@@ -757,6 +763,7 @@ export class GeneratePiComponent implements OnInit {
             whereParams,
           )
           .subscribe((res) => {
+
             if (res.messageType == 'Success' && res.status) {
               Swal.fire(res.messageType, res.message, 'success').then(() => {
                 this.ngOnInit();
