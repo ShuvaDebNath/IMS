@@ -2,6 +2,7 @@ using Boilerplate.Contracts;
 using Boilerplate.Contracts.Responses;
 using Boilerplate.Contracts.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace Boilerplate.API.Controllers;
 
@@ -32,6 +33,15 @@ public class ProformaInvoiceController : BaseApiController
     {
         try
         {
+
+            var dataDict = JsonSerializer.Deserialize<Dictionary<string, object>>(model.Data.ToString());
+
+            dataDict["Date"] = NormalizeDate(dataDict.ContainsKey("Date") ? dataDict["Date"]?.ToString() : null);
+            dataDict["ExpireDate"] = NormalizeDate(dataDict.ContainsKey("ExpireDate") ? dataDict["ExpireDate"]?.ToString() : null);
+
+            var updatedJson = JsonSerializer.Serialize(dataDict);
+            model.Data = JsonSerializer.Deserialize<JsonElement>(updatedJson);
+
             // InsertGetId returns the new PI_Master_Id (int > 0 on success).
             var newPiId = await _masterEntryService.InsertGetId(model, AuthUserName);
 
@@ -66,6 +76,14 @@ public class ProformaInvoiceController : BaseApiController
     {
         try
         {
+            var dataDict = JsonSerializer.Deserialize<Dictionary<string, object>>(model.Data.ToString());
+
+            dataDict["Date"] = NormalizeDate(dataDict.ContainsKey("Date") ? dataDict["Date"]?.ToString() : null);
+            dataDict["ExpireDate"] = NormalizeDate(dataDict.ContainsKey("ExpireDate") ? dataDict["ExpireDate"]?.ToString() : null);
+
+            var updatedJson = JsonSerializer.Serialize(dataDict);
+            model.Data = JsonSerializer.Deserialize<JsonElement>(updatedJson);
+
             var result = await _masterEntryService.UpdateData(model, AuthUserName);
 
             if (result.Status)
@@ -188,5 +206,23 @@ public class ProformaInvoiceController : BaseApiController
         }
 
         return 0;
+    }
+
+    private string NormalizeDate(string inputDate)
+    {
+        var currentDate = DateTime.Now;
+
+        if (string.IsNullOrWhiteSpace(inputDate))
+            return currentDate.ToString("yyyy-MM-dd");
+
+        if (!DateTime.TryParse(inputDate, out var parsedDate))
+            return currentDate.ToString("yyyy-MM-dd");
+
+        if (parsedDate.Year > currentDate.Year)
+        {
+            parsedDate = new DateTime(currentDate.Year, parsedDate.Month, parsedDate.Day);
+        }
+
+        return parsedDate.ToString("yyyy-MM-dd");
     }
 }
