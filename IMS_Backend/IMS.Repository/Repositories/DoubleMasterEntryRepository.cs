@@ -2,7 +2,9 @@
 using Boilerplate.Contracts.Repositories;
 using Boilerplate.Contracts.Services;
 using IMS.Contracts.Repositories;
+using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
+using MimeKit;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -12,13 +14,11 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Net.Mail;
+using System.Security.Policy;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
-using MailKit.Net.Smtp;
-using MimeKit;
-using System.Security.Policy;
 
 namespace Boilerplate.Repository.Repositories
 {
@@ -845,7 +845,7 @@ namespace Boilerplate.Repository.Repositories
 
         #region Details Update Helpers
 
-        private async Task UpdateDetailsWithIdentity(
+        private async Task UpdateDetailsWithIdentity_old(
     DoubleMasterEntryModel model,
     string authUserName,
     object pkValue,
@@ -989,6 +989,124 @@ namespace Boilerplate.Repository.Repositories
                     $"DELETE FROM [{schema}].[{table}] " +
                     $"WHERE [{fkCol}] = @p_fk AND [{childPkName}] IN ({string.Join(", ", names)});";
 
+                await cmd.ExecuteNonQueryAsync(ct);
+            }
+        }
+
+        #endregion
+
+
+        #region Details Update Helpers for List (non-identity PK)
+
+        private async Task UpdateDetailsWithIdentity(
+    DoubleMasterEntryModel model,
+    string authUserName,
+    object pkValue,
+    SqlCommand cmd,
+    CancellationToken ct = default)
+        {
+            if (cmd == null) throw new ArgumentNullException(nameof(cmd));
+            if (model == null) throw new ArgumentNullException(nameof(model));
+            var childFull = model.TableNameChild ?? throw new ArgumentException("TableNameChild is required.", nameof(model));
+            var fkCol = model.ColumnNameForign ?? throw new ArgumentException("ColumnNameForign is required.", nameof(model));
+            var (schema, table) = SplitSchema(childFull);
+            var rows = AsJArray(model.DetailsData);
+            var childPkName = await GetChildPkNameAsync(cmd.Connection, cmd.Transaction, schema, table, ct);
+            if (string.IsNullOrWhiteSpace(childPkName))
+                throw new InvalidOperationException($"Could not determine child PK column for [{schema}].[{table}].");
+            var existing = new List<string>();
+            cmd.Parameters.Clear();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = $"SELECT [{childPkName}] FROM [{schema}].[{table}] WHERE [{fkCol}] = @p_fk;";
+            cmd.Parameters.Add(new SqlParameter("@p_fk", ToDbValue(pkValue)));
+            using (var rdr = await cmd.ExecuteReaderAsync(ct))
+            {
+                while (await rdr.ReadAsync(ct))
+                {
+                    var v = rdr.GetValue(0);
+                    if (v != DBNull.Value)
+                        existing.Add(Convert.ToString(v, CultureInfo.InvariantCulture) ?? "");
+                }
+            }
+            var keep = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var token in rows)
+            {
+                if (token is not JObject row) continue;
+                JToken? pkTok;
+                var hasPk = row.TryGetValue(childPkName, StringComparison.OrdinalIgnoreCase, out pkTok) &&
+                            pkTok != null && pkTok.Type != JTokenType.Null &&
+                            !string.IsNullOrWhiteSpace(pkTok.ToString());
+                if (hasPk)
+                {
+                    keep.Add(pkTok!.ToString()!);
+                    var sets = new List<string>();
+                    var upParams = new List<SqlParameter>();
+                    foreach (var prop in row.Properties())
+                    {
+                        var col = prop.Name;
+                        if (col.Equals(fkCol, StringComparison.OrdinalIgnoreCase)) continue;
+                        if (col.Equals(childPkName, StringComparison.OrdinalIgnoreCase)) continue;
+                        var pName = "@" + col;
+                        sets.Add($"[{col}] = {pName}");
+                        upParams.Add(new SqlParameter(pName, ToDbValue(prop.Value)));
+                    }
+                    upParams.Add(new SqlParameter("@p_fk", ToDbValue(pkValue)));
+                    upParams.Add(new SqlParameter("@p_childPk", ToDbValue(pkTok!)));
+                    cmd.Parameters.Clear();
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText =
+                        $"UPDATE [{schema}].[{table}] SET {string.Join(", ", sets)} " +
+                        $"WHERE [{childPkName}] = @p_childPk AND [{fkCol}] = @p_fk;";
+                    cmd.Parameters.AddRange(upParams.ToArray());
+                    var affected = await cmd.ExecuteNonQueryAsync(ct);
+                    if (affected == 0)
+                    {
+                        throw new InvalidOperationException(
+                            $"Child row [{childPkName}]={pkTok} was not found for this master, or [FK] does not match. " +
+                            "No insert is performed, so the details primary key is not replaced.");
+                    }
+                    continue;
+                }
+                // Insert only when payload has no child PK (new line)
+                var cols = new List<string>();
+                var vals = new List<string>();
+                var insParams = new List<SqlParameter>();
+                cols.Add($"[{fkCol}]");
+                vals.Add("@p_fk");
+                insParams.Add(new SqlParameter("@p_fk", ToDbValue(pkValue)));
+                foreach (var prop in row.Properties())
+                {
+                    var col = prop.Name;
+                    if (col.Equals(childPkName, StringComparison.OrdinalIgnoreCase)) continue;
+                    if (col.Equals(fkCol, StringComparison.OrdinalIgnoreCase)) continue;
+                    var pName = "@p_" + col;
+                    cols.Add($"[{col}]");
+                    vals.Add(pName);
+                    insParams.Add(new SqlParameter(pName, ToDbValue(prop.Value)));
+                }
+                insParams.Add(new SqlParameter("@p_MakeBy", (object?)authUserName ?? DBNull.Value));
+                cmd.Parameters.Clear();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = $"INSERT INTO [{schema}].[{table}] ({string.Join(", ", cols)}) VALUES ({string.Join(", ", vals)});";
+                cmd.Parameters.AddRange(insParams.ToArray());
+                await cmd.ExecuteNonQueryAsync(ct);
+            }
+            var toDelete = existing.Where(s => !keep.Contains(s)).ToList();
+            if (toDelete.Count > 0)
+            {
+                var names = new List<string>();
+                cmd.Parameters.Clear();
+                cmd.CommandType = CommandType.Text;
+                cmd.Parameters.Add(new SqlParameter("@p_fk", ToDbValue(pkValue)));
+                for (int i = 0; i < toDelete.Count; i++)
+                {
+                    var pName = "@d" + i;
+                    names.Add(pName);
+                    cmd.Parameters.Add(new SqlParameter(pName, ToTypedId(toDelete[i])));
+                }
+                cmd.CommandText =
+                    $"DELETE FROM [{schema}].[{table}] " +
+                    $"WHERE [{fkCol}] = @p_fk AND [{childPkName}] IN ({string.Join(", ", names)});";
                 await cmd.ExecuteNonQueryAsync(ct);
             }
         }

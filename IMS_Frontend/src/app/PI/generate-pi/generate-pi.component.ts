@@ -289,6 +289,7 @@ export class GeneratePiComponent implements OnInit {
   }
   InitRow() {
     return this.fb.group({
+      PI_Detail_ID: [''],
       PI_Master_ID: [''],
       Article: [''],
       Description: [''],

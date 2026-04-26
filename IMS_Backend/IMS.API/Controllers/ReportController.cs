@@ -211,7 +211,7 @@ namespace IMS.API.Controllers
             {
                 var currentUser = HttpContext.User;
 
-                string reportPath = "V2\\";
+                string reportPath = "V2\\ChallanReports\\";
                 DataSet ds = await _reportService.DeliveryChallanReport(challanNo);
 
                 if (ds == null || ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
@@ -226,7 +226,9 @@ namespace IMS.API.Controllers
                 foreach (DataRow row in ds.Tables[0].Rows)
                 {
                     string qrText = row["QRCodeText"]?.ToString()?.Trim() ?? "";
-                    row["QRCode"] = GenerateQrCode(qrText);
+                    //row["QRCode"] = GenerateQrCode(qrText);
+                    //row["QRCodeText"] = GenerateQrCode(qrText);
+                    row["QRCodeText"] = Convert.ToBase64String(GenerateQrCode(qrText));
                 }
 
 
@@ -238,15 +240,17 @@ namespace IMS.API.Controllers
                 }
 
                 // Conditional report selection
-                if (shipperId == 12 || shipperId == 5)
-                {
-                    reportPath += "ChallanSanxin.rdlc";
-                }
-                else
-                {
-                    reportPath += "Chalan.rdlc";
-                }
-                
+                //if (shipperId == 12 || shipperId == 5)
+                //{
+                //    reportPath += "ChallanSanxin.rdlc";
+                //}
+                //else
+                //{
+                //    reportPath += "Challan.rdlc";
+                //}
+
+                reportPath += "Challan.rdlc";
+
                 string reportName = "DeliveryChallan";
 
                 var renderedReport = RDLCSimplified.RDLCSetup.GenerateReportAsync(reportPath, rptType, ds);
