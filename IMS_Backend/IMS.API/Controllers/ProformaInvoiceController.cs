@@ -48,7 +48,7 @@ public class ProformaInvoiceController : BaseApiController
                     userAgent:     GetUserAgent());
 
                 // Angular expects Messages: messageType, status, message, data (new PI id).
-                return Ok(MessageType.SaveSuccess(newPiId));
+                return Ok(MessageType.SaveSuccess(model));
             }
 
             return Ok(MessageType.SaveError(null));
@@ -104,7 +104,7 @@ public class ProformaInvoiceController : BaseApiController
                 }
             }
 
-            return Ok(result);
+            return Ok(MessageType.SaveSuccess(model));
         }
         catch (Exception ex)
         {
