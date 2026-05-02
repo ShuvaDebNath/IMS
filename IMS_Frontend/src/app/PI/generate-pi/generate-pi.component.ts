@@ -625,9 +625,6 @@ export class GeneratePiComponent implements OnInit {
       }
     });
 
-    console.log(model);
-    console.log(details);
-
     this.service
       .SaveDataMasterDetailsWithLog(
         details,

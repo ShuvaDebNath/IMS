@@ -5,6 +5,8 @@ import { GetDataModel } from 'src/app/models/GetDataModel';
 import { GlobalServiceService } from 'src/app/services/Global-service.service';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 import Swal from 'sweetalert2';
+import { DateFormat } from 'src/app/shared/date-format';
+import { DoubleMasterEntryService } from 'src/app/services/doubleEntry/doubleEntryService.service';
 
 @Component({
   selector: 'app-generate-cpi',
@@ -47,6 +49,7 @@ export class GenerateCpiComponent implements OnInit {
   ExchangeRate: any = 1;
 
   constructor(private service: MasterEntryService,
+    private des: DoubleMasterEntryService,
     private gs: GlobalServiceService,
     private fb: FormBuilder
   ) { }
@@ -412,34 +415,199 @@ export class GenerateCpiComponent implements OnInit {
       Currency_ID: this.Formgroup.controls['Currency_ID'].value
     };
 
-    model.PINo = `${model.Consignee_Initial}-${this.datePipe.transform(model.Date, 'yyyyMMdd')}`;
+    this.service
+          .SaveDataMasterDetailsWithLog(
+            this.Formgroup.value.ItemArray,
+            'tbl_pi_detail',
+            model,
+            'tbl_pi_master',
+            'PI_Master_ID',
+            'PI_Master_ID',
+            'tbl_pi_master',
+            'PI_Master_ID',
+          )
+          .subscribe((res) => {
+            if (res.messageType == 'Success' && res.status) {
+              Swal.fire(res.messageType, res.message, 'success').then(() => {
+                this.ngOnInit();
+              });
+            } else {
+              if (!res.isAuthorized) {
+                //this.gs.Logout();
+              } else {
+                Swal.fire(res.messageType, res.message, 'info');
+              }
+            }
+          });
 
-    this.service.SaveDataMasterDetails(this.Formgroup.value.ItemArray,
-      "tbl_pi_detail",
-      model,
-      "tbl_pi_master",
-      "PI_Master_ID",
-      "PI_Master_ID",
-      "tbl_pi_master",
-      "PI_Master_ID"
-    ).subscribe(res => {
-      console.log(res);
-      if (res.messageType == 'Success' && res.status) {
-        Swal.fire(res.messageType, res.message, 'success').then(() => {
-          this.ngOnInit();
-        });
+  }
 
-      } else {
-        if (!res.isAuthorized) {
-          this.gs.Logout();
-        } else {
-          Swal.fire(res.messageType, res.message, 'info');
-        }
-        console.log(res);
+   Update(): void {
+     
+     const requiredFields = [
+      { key: 'Consignee_Initial', label: 'Consignee Initial' },
+      { key: 'PINo', label: 'PI No' },
+      { key: 'Date', label: 'Date' },
+      { key: 'Beneficiary_Account_ID', label: 'Shippeer' },
+      { key: 'Beneficiary_Bank_ID', label: "Beneficiary's Bank" },
+      { key: 'Country_Of_Orgin_ID', label: 'Country of Origin' },
+      { key: 'Packing_ID', label: 'Packing' },
+      { key: 'Loading_Mode_ID', label: 'Loading Mode' },
+      { key: 'Payment_Term_ID', label: 'Payment Mode' },
+      { key: 'Customer_ID', label: 'Consignee' },
+      { key: 'Contact_Person', label: 'Contact Person' },
+      { key: 'Buyer_Name', label: 'Buyer Name' },
+      { key: 'Delivery_Address', label: 'Delivery Address' },
+      { key: 'Style', label: 'Style' },
+      { key: 'Good_Description', label: 'Goods Description' },
+      { key: 'Currency_ID', label: 'Currency' },
+      { key: 'Delivery_Condition_ID', label: 'Delivery Condition' },
+      { key: 'Shipment_Condition_ID', label: 'Partial Shipment' },
+      { key: 'Price_Term_ID', label: 'Price Terms' },
+      { key: 'Documents', label: 'Documents' },
+      { key: 'Loading_Port', label: 'Port Of Loading' },
+      { key: 'Destination_Port', label: 'Port Of Destination' },
+      { key: 'Force_Majeure_ID', label: 'Force Majeure' },
+      { key: 'Arbitration_ID', label: 'Arbitration' }
+    ];
+
+    let missingFields: string[] = [];
+    requiredFields.forEach(field => {
+      const value = this.Formgroup.controls[field.key]?.value;
+      if (value === null || value === undefined || value === '' || value === 0) {
+        missingFields.push(field.label);
       }
     });
 
-  }
+    const itemArray = this.Formgroup.get('ItemArray') as FormArray;
+    if (!itemArray || itemArray.length === 0) {
+      missingFields.push('At least one Item Row');
+    } else {
+      itemArray.controls.forEach((row, idx) => {
+        const itemRequired = [
+          { key: 'Article', label: 'Article No' },
+          { key: 'Description', label: 'Description' },
+          { key: 'Width_ID', label: 'Width' },
+          { key: 'Color_ID', label: 'Color' },
+          { key: 'Packaging_ID', label: 'Packaging' },
+          { key: 'Quantity', label: 'Qty' },
+          { key: 'Unit_ID', label: 'Unit' },
+          { key: 'Unit_Price', label: 'Unit Price' },
+          { key: 'CommissionUnit', label: 'Prod. Cost Unit' },
+          { key: 'Item_ID', label: 'A. A.' }
+        ];
+        itemRequired.forEach(col => {
+          const val = row.get(col.key)?.value;
+          if (val === null || val === undefined || val === '' || val === 0) {
+            missingFields.push(`Row ${idx + 1}: ${col.label}`);
+          }
+        });
+      });
+    }
+
+    if (missingFields.length > 0) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Validation Error',
+        html: 'Please fill the following fields:<br><ul style="text-align:left">' + missingFields.map(f => `<li>${f}</li>`).join('') + '</ul>'
+      });
+      return;
+    }
+
+    const consigneeValue = this.Formgroup.controls['Customer_ID'].value;
+    const consignee = this.ConsigneeList && this.ConsigneeList.length > 0
+      ? this.ConsigneeList.find((x: any) => x.Customer_ID == consigneeValue || x.Consignee == consigneeValue)
+      : null;
+    const roleId = this.gs.getSessionData('roleId');
+    const userId = this.gs.getSessionData('userId');
+    if (consignee) {
+      if (roleId == 1 || roleId == 2 || roleId == 12) {
+        this.Formgroup.controls['User_ID']?.setValue(consignee.Created_By);
+      } else {
+        this.Formgroup.controls['User_ID']?.setValue(userId);
+      }
+      this.Formgroup.controls['Superior_ID']?.setValue(consignee.Superior_ID)
+    }
+  
+      Swal.fire({
+        title: 'Confirm Update',
+        text: 'Are you sure you want to update this Proforma Invoice?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, update it!',
+        cancelButtonText: 'Cancel',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Use getRawValue to get all form values, including disabled controls and nested arrays
+          let model = {
+              PI_Master_ID: this.Formgroup.controls['PI_Master_ID'].value,
+              PINo: this.Formgroup.controls['PINo'].value,
+              Consignee_Initial: this.Formgroup.controls['Consignee_Initial'].value,
+              Date: this.Formgroup.controls['Date'].value,
+              Beneficiary_Account_ID: this.Formgroup.controls['Beneficiary_Account_ID'].value,
+              Beneficiary_Bank_ID: this.Formgroup.controls['Beneficiary_Bank_ID'].value,
+              Country_Of_Orgin_ID: this.Formgroup.controls['Country_Of_Orgin_ID'].value,
+              Packing_ID: this.Formgroup.controls['Packing_ID'].value,
+              Loading_Mode_ID: this.Formgroup.controls['Loading_Mode_ID'].value,
+              Payment_Term_ID: this.Formgroup.controls['Payment_Term_ID'].value,
+              Consignee: this.Formgroup.controls['Consignee'].value,
+              Contact_Person: this.Formgroup.controls['Contact_Person'].value,
+              Buyer_Name: this.Formgroup.controls['Buyer_Name'].value,
+              Delivery_Address: this.Formgroup.controls['Delivery_Address'].value,
+              Style: this.Formgroup.controls['Style'].value,
+              Delivery_Condition_ID: this.Formgroup.controls['Delivery_Condition_ID'].value,
+              Shipment_Condition_ID: this.Formgroup.controls['Shipment_Condition_ID'].value,
+              Price_Term_ID: this.Formgroup.controls['Price_Term_ID'].value,
+              Good_Description: this.Formgroup.controls['Good_Description'].value,
+              Documents: this.Formgroup.controls['Documents'].value,
+              Shipping_Marks: this.Formgroup.controls['Shipping_Marks'].value,
+              Loading_Port: this.Formgroup.controls['Loading_Port'].value,
+              Destination_Port: this.Formgroup.controls['Destination_Port'].value,
+              Remarks: this.Formgroup.controls['Remarks'].value,
+              Force_Majeure_ID: this.Formgroup.controls['Force_Majeure_ID'].value,
+              Arbitration_ID: this.Formgroup.controls['Arbitration_ID'].value,
+              Status: this.Formgroup.controls['Status'].value,
+              User_ID: this.Formgroup.controls['User_ID'].value,
+              Superior_ID: this.Formgroup.controls['Superior_ID'].value,
+              Customer_ID: this.Formgroup.controls['Customer_ID'].value,
+              IsMPI: this.Formgroup.controls['IsMPI'].value,
+              LastUpdateDate: this.Formgroup.controls['LastUpdateDate'].value,
+              Currency_ID: this.Formgroup.controls['Currency_ID'].value
+            };
+
+  
+  
+          const whereParams = { PI_Master_ID: model.PI_Master_ID };     
+  
+          this.des
+            .UpdateDataMasterDetailsWithLog(
+              this.Formgroup.value.ItemArray,
+              'tbl_pi_detail',
+              model,
+              'tbl_pi_master',
+              'PI_Master_ID',
+              'PI_Master_ID',
+              '',
+              '',
+              whereParams,
+            )
+            .subscribe((res) => {
+  
+              if (res.messageType == 'Success' && res.status) {
+                Swal.fire(res.messageType, res.message, 'success').then(() => {
+                  this.ngOnInit();
+                });
+              } else {
+                if (!res.isAuthorized) {
+                  this.gs.Logout();
+                } else {
+                  Swal.fire(res.messageType, res.message, 'error');
+                }
+              }
+            });
+        }
+      });
+    }
 
   toUppercase(controlName: string) {
     const control = this.Formgroup.get(controlName);
