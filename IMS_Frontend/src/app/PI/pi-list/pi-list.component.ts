@@ -125,31 +125,66 @@ export class PiListComponent implements OnInit {
    * Open the generate-pi route in a new browser tab with PI_No as query param.
    * Uses window.open with an absolute URL so the browser opens a new tab.
    */
+  // OpenInNewTab(piNo: string, item: any) {
+  //   try {
+  //     console.log(item);
+  //     const payload = { PI_No: piNo, ts: Date.now() };
+  //     localStorage.setItem('IMS_temp_open_pi', JSON.stringify(payload));
+
+  //     const origin = window.location.origin;
+  //     const paymentType = String(item?.PaymentType ?? '').trim().toUpperCase();
+  //     const isLc = paymentType === 'LC';
+
+  //     if (isLc) {
+  //       const url = `${origin}/generate-pi`;
+  //       window.open(url, '_blank');
+  //     } else {
+  //       const url = `${origin}/generate-cpi`;
+  //       window.open(url, '_blank');
+  //     }
+
+  //   } catch (e) {
+  //     const paymentType = String(item?.PaymentType ?? '').trim().toUpperCase();
+  //     const route = paymentType === 'LC' ? 'generate-pi' : 'generate-cpi';
+  //     this.router.navigate([`/${route}`], { queryParams: { PI_No: piNo } });
+  //   }
+  // }
+
   OpenInNewTab(piNo: string, item: any) {
-    try {
-      console.log(item);
-      const payload = { PI_No: piNo, ts: Date.now() };
-      // store a short-lived transfer key for the new tab to consume
-      localStorage.setItem('IMS_temp_open_pi', JSON.stringify(payload));
+  try {
+    const origin = window.location.origin;
 
-      const origin = window.location.origin;
-      // open generate-pi without query params so PI_No isn't visible in URL
-      if (item.PaymentType == 'LC') {
+    const paymentType = String(item?.PaymentType ?? '')
+      .trim()
+      .toUpperCase();
 
-        const url = `${origin}/generate-pi`;
-        window.open(url, '_blank');
-      }
-      else {
+    const isLC = paymentType === 'LC';
 
-        const url = `${origin}/generate-cpi`;
-        window.open(url, '_blank');
-      }
+    // Optional fallback (not primary anymore)
+    const payload = { PI_Master_ID: piNo, ts: Date.now() };
+    localStorage.setItem('IMS_temp_open_pi', JSON.stringify(payload));
 
-    } catch (e) {
-      // Fallback: try to navigate using router in same tab (will show query param)
-      this.router.navigate(['/generate-pi'], { queryParams: { PI_No: piNo } });
-    }
+    const route = isLC ? 'generate-pi' : 'generate-cpi';
+
+    // ✅ PASS ID IN URL (MAIN FIX)
+    const url = `${origin}/${route}?PI_Master_ID=${piNo}`;
+
+    window.open(url, '_blank');
+
+  } catch (e) {
+    console.error('OpenInNewTab failed, fallback to same tab', e);
+
+    const paymentType = String(item?.PaymentType ?? '')
+      .trim()
+      .toUpperCase();
+
+    const route = paymentType === 'LC' ? 'generate-pi' : 'generate-cpi';
+
+    this.router.navigate([`/${route}`], {
+      queryParams: { PI_Master_ID: piNo }
+    });
   }
+}
 
   computeDeliveryTotals(items: any[]) {
     this.deliveryTotalsOrdered = 0;

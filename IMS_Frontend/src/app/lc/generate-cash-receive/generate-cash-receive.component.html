@@ -29,6 +29,7 @@
                       optionValue="User_ID"
                       formControlName="Marketing_Concern"
                       [readonly]="isEdit"
+                      (onChange)="getPINoByMarketingConcern()"
                     >
                       <ng-template let-item pTemplate="item">
                         <div>{{ item.UserName }}</div>
@@ -112,6 +113,8 @@
                       placeholder="Please Select"
                       optionValue="value"
                       formControlName="PI"
+                      [virtualScroll]="true" 
+                      [itemSize]="30"
                       (onChange)="getCashReceiveInfoByPI()"
                     >
                       <ng-template let-PI pTemplate="item">

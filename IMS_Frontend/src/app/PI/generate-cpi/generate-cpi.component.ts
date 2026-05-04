@@ -7,6 +7,7 @@ import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.ser
 import Swal from 'sweetalert2';
 import { DateFormat } from 'src/app/shared/date-format';
 import { DoubleMasterEntryService } from 'src/app/services/doubleEntry/doubleEntryService.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-generate-cpi',
@@ -38,6 +39,7 @@ export class GenerateCpiComponent implements OnInit {
   PriceTermsList: any | [];
   ForceMajeureList: any | [];
   ArbitrationList: any | [];
+  UserInfosList: any | [];
   PINo!: string;
   PageTitle: any;
 
@@ -47,23 +49,91 @@ export class GenerateCpiComponent implements OnInit {
   GTQTY: any = 0;
   GTAMNT: any = 0;
   ExchangeRate: any = 1;
+  
+tempPI?: string | null;
+ PI_Master_ID!: string;  
+isEdit = false;
+basePINo: string = '';
 
   constructor(private service: MasterEntryService,
     private des: DoubleMasterEntryService,
     private gs: GlobalServiceService,
-    private fb: FormBuilder
-  ) { }
+    private fb: FormBuilder,
+    private activeLink: ActivatedRoute, 
+  ) { 
 
-  ngOnInit(): void {
-    this.PageTitle = 'Generate Cash PI'
-    this.SetDDL = true;
-    this.GenerateFrom();
-    this.GetInitialData();
-
-    this.RegisterFormControlsChangeEvent();
-    this.GTQTY = 0;
-    this.GTAMNT = 0;
+     if (this.activeLink.snapshot.queryParamMap.has('PI_Master_ID')) {
+    this.PI_Master_ID = this.activeLink.snapshot.queryParams['PI_Master_ID'];
+    this.isEdit = true;
   }
+
+  // ✅ FALLBACK: localStorage (only if URL missing)
+  if (!this.PI_Master_ID) {
+    const temp = this.tryConsumeTempPI();
+    if (temp) {
+      this.PI_Master_ID = temp;
+      this.isEdit = true;
+    }
+  }
+
+
+  }
+
+  // ngOnInit(): void {
+  //   this.PageTitle = 'Generate LC PI';
+
+  // this.GTQTY = 0;
+  // this.GTAMNT = 0;
+
+  // this.SetDDL = true;
+
+  // if (this.isEdit && this.PI_Master_ID) {
+
+  //   // ✅ ONLY load dropdowns, NO default values
+  //   this.GenerateFrom(false);
+
+  //   // ✅ THEN load edit data
+  //   this.GetById(this.PI_Master_ID);
+
+  // } else {
+
+  //   // ✅ Create mode only
+  //   this.GenerateFrom(true);
+  // }
+
+  // this.RegisterFormControlsChangeEvent();
+  // }
+
+  
+  ngOnInit(): void {
+
+  this.PageTitle = 'Generate Cash PI';
+
+  this.GTQTY = 0;
+  this.GTAMNT = 0;
+
+  if (this.isEdit && this.PI_Master_ID) {
+
+    // ✅ EDIT MODE
+    this.GenerateFrom(false);
+
+    // ✅ Load dropdown ONLY (no default)
+    this.GetInitialData(false);
+
+    // ✅ THEN load edit data
+    this.GetById(this.PI_Master_ID);
+
+  } else {
+
+    // ✅ CREATE MODE
+    this.GenerateFrom(true);
+
+    // ✅ Load dropdown + default values
+    this.GetInitialData(true);
+  }
+
+  this.RegisterFormControlsChangeEvent();
+}
 
   RegisterFormControlsChangeEvent() {
 
@@ -73,32 +143,185 @@ export class GenerateCpiComponent implements OnInit {
 
 
     this.Formgroup.get('Consignee_Initial')?.valueChanges.subscribe(value => {
-      let piNo = value ? `${value.toUpperCase()}-${this.PINo}` : this.PINo;
+      // let piNo = value ? `${value.toUpperCase()}-${this.PINo}` : this.PINo;
+
+      let piNo = this.basePINo;
+
+      if (value && this.basePINo) {
+        piNo = `${value.toUpperCase()}-${this.basePINo}`;
+      }
+
+      this.Formgroup.get('PINo')?.setValue(piNo, { emitEvent: false });
+
       this.Formgroup.controls["PINo"].setValue(piNo);
     });
 
     this.Formgroup.get('Customer_ID')?.valueChanges.subscribe(value => {
       let contactPerson = this.ConsigneeList.filter((x: any) => x.Customer_ID == value)[0];
       this.Formgroup.controls["Contact_Person"].setValue(contactPerson.Contact_Name);
+
+
+       const consigneeCreatedBy = this.ConsigneeList.find(
+          (x: any) => x.Customer_ID == value
+        );
+        if (consigneeCreatedBy) {
+          this.Formgroup.controls['User_ID'].setValue(consigneeCreatedBy.Created_By); 
+        }
+
+         const getSuperior = this.UserInfosList.find(
+            (x: any) => x.User_ID == consigneeCreatedBy.Created_By
+          );
+          if (getSuperior) {
+            this.Formgroup.controls['Superior_ID'].setValue(getSuperior.Superior_ID);
+          }
+
+
+
     });
 
+    
+
   }
+
+  // GetExchangeRate(value: any) {
+  //   this.ExchangeRate = 1;
+  //   let exchangerate = this.CurrencyList.filter((x: any) => x.Currency_ID == value)[0].ExchangeRate;
+  //   this.ExchangeRate = exchangerate ? exchangerate : 1;
+  // }
 
   GetExchangeRate(value: any) {
-    this.ExchangeRate = 1;
-    let exchangerate = this.CurrencyList.filter((x: any) => x.Currency_ID == value)[0].ExchangeRate;
-    this.ExchangeRate = exchangerate ? exchangerate : 1;
+
+  this.ExchangeRate = 1;
+
+  const selected = this.CurrencyList.find(
+    (x: any) => x.Currency_ID == value
+  );
+
+  if (selected) {
+    this.ExchangeRate = selected.ExchangeRate ?? 1;
+  }
+}
+
+  GetById(id: any) {
+    let model = new GetDataModel();
+    model.procedureName = 'usp_ProformaInvoice_GetDataById';
+    model.parameters = {
+      PI_Master_ID: Number(this.PI_Master_ID),
+    };
+
+    this.service.GetInitialData(model).subscribe((res: any) => {
+      if (res.status) {
+        const ds = JSON.parse(res.data);
+
+
+        const header = ds.Tables1?.[0];   // Master
+        const details = ds.Tables2 || []; // Details
+        if (header) {
+          this.Formgroup.patchValue(header);
+        }
+
+        const formArray = this.Formgroup.get('ItemArray') as FormArray;
+        formArray.clear();
+
+        (details || []).forEach((item: any) => {
+          formArray.push(this.createDetailForm(item));
+          this.calculatetotalGrandTotal();
+        });
+
+      } else {
+        if (res.msg == 'Invalid Token') {
+          this.gs.Logout();
+        }
+      }
+    });
+  }
+
+  createDetailForm(item: any): FormGroup {
+    return this.fb.group({
+      PI_Detail_ID: [item.PI_Detail_ID],
+      Article: [item.Article],
+      Description: [item.Description],
+      Width_ID: [item.Width_ID],
+      Color_ID: [item.Color_ID],
+      Packaging_ID: [item.Packaging_ID],
+      Quantity: [item.Quantity],
+      Unit_ID: [item.Unit_ID],
+      Unit_Price: [item.Unit_Price],
+      Total_Amount: [item.Total_Amount],
+      CommissionUnit: [item.CommissionUnit],
+      TotalCommission: [item.TotalCommission],
+      Item_ID: [item.Item_ID]
+    });
   }
 
 
+  // GenerateFrom() {
+  //   this.Formgroup = this.fb.group({
+  //     PI_Master_ID: [''],
+  //     PINo: [''],
+  //     Consignee_Initial: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
+  //     Date: [this.datePipe.transform(new Date, 'MM/dd/yyyy')],
+  //     Beneficiary_Account_ID: [''],
+  //     Beneficiary_Bank_ID: [''],
+  //     Country_Of_Orgin_ID: [''],
+  //     Packing_ID: [''],
+  //     Loading_Mode_ID: [''],
+  //     Payment_Term_ID: [''],
+  //     Consignee: [''],
+  //     Contact_Person: [''],
+  //     Buyer_Name: [''],
+  //     Delivery_Address: [''],
+  //     Style: [''],
+  //     Marketing_Concern_ID: [''],
+  //     Delivery_Condition_ID: [''],
+  //     Shipment_Condition_ID: [''],
+  //     Price_Term_ID: [''],
+  //     Good_Description: [''],
+  //     Documents: [''],
+  //     Shipping_Marks: [''],
+  //     Loading_Port: [''],
+  //     Destination_Port: [''],
+  //     Remarks: [''],
+  //     Force_Majeure_ID: [''],
+  //     Arbitration_ID: [''],
+  //     Status: ['Pending'],
+  //     User_ID: [''],
+  //     Superior_ID: [''],
+  //     LC_ID: [''],
+  //     Customer_ID: [''],
+  //     Currency_ID: [''],
+  //     IsMPI: [1],
+  //     CR_ID: [''],
+  //     LastUpdateDate: [new Date()],
+  //     Buyer_ID: [''],
+  //     SalesContractId: [''],
+  //     IsBuyerMandatory: [false],
+  //     CustomMaxDeliveryPercentage: [''],
 
-  GenerateFrom() {
-    this.Formgroup = this.fb.group({
-      PI_Master_ID: [''],
-      PINo: [''],
-      Consignee_Initial: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
-      Date: [this.datePipe.transform(new Date, 'MM/dd/yyyy')],
-      Beneficiary_Account_ID: [''],
+  //     GrandTotalAmount_LC: [''],
+  //     GrandTotalAmount_Cash: [''],
+  //     GrandTotalAmount_Both: [''],
+
+  //     ItemArray: this.fb.array([this.InitRow()]),
+  //   });
+  // }
+
+
+   GenerateFrom(setDefault: boolean = true) {
+
+  this.Formgroup = this.fb.group({
+    PI_Master_ID: [''],
+    PINo: [''],
+
+    Consignee_Initial: [
+      '',
+      [Validators.required, Validators.minLength(3), Validators.maxLength(3)],
+    ],
+
+    // ❌ REMOVE direct default from here
+    Date: [''],
+
+     Beneficiary_Account_ID: [''],
       Beneficiary_Bank_ID: [''],
       Country_Of_Orgin_ID: [''],
       Packing_ID: [''],
@@ -135,13 +358,35 @@ export class GenerateCpiComponent implements OnInit {
       IsBuyerMandatory: [false],
       CustomMaxDeliveryPercentage: [''],
 
-      GrandTotalAmount_LC: [''],
-      GrandTotalAmount_Cash: [''],
-      GrandTotalAmount_Both: [''],
+    // ✅ Start EMPTY (important for edit mode)
+    ItemArray: this.fb.array([]),
+  });
 
-      ItemArray: this.fb.array([this.InitRow()]),
-    });
+  // ✅ Apply default ONLY for create mode
+  if (setDefault) {
+    this.setDefaultValues();
+    this.addInitialRow();
   }
+}
+
+setDefaultValues() {
+  this.Formgroup.patchValue({
+    Date: this.datePipe.transform(new Date(), 'MM/dd/yyyy'),
+    Status: 'Pending'
+  });
+}
+
+addInitialRow() {
+  this.ItemArray.push(this.InitRow());
+}
+
+get ItemArray(): FormArray {
+  return this.Formgroup.get('ItemArray') as FormArray;
+}
+
+
+
+
   InitRow() {
     return this.fb.group({
       PI_Master_ID: [''],
@@ -225,11 +470,11 @@ export class GenerateCpiComponent implements OnInit {
     this.Formgroup.controls["Packing_ID"].setValue(1);
     this.Formgroup.controls["Loading_Mode_ID"].setValue(1);
     this.Formgroup.controls["Payment_Term_ID"].setValue(13);
-    this.Formgroup.controls["Currency_ID"].setValue(2);
+    //this.Formgroup.controls["Currency_ID"].setValue(2);
     this.Formgroup.controls["Delivery_Condition_ID"].setValue(1);
     this.Formgroup.controls["Shipment_Condition_ID"].setValue(1);
     this.Formgroup.controls["Price_Term_ID"].setValue(1);
-    this.Formgroup.controls["PINo"].setValue(this.PINo);
+    //this.Formgroup.controls["PINo"].setValue(this.PINo);
   }
 
 
@@ -238,20 +483,77 @@ export class GenerateCpiComponent implements OnInit {
     this.GetInitialData()
   }
 
-  GetInitialData(): void {
-    this.ShipperList = [];
-    let model = new GetDataModel();
-    model.procedureName = "usp_ProformaInvoice_GetInitialData";
-    model.parameters = {
-      userID: this.gs.getSessionData('userId'),
-      roleID: this.gs.getSessionData('roleId'),
-      PaymentType: 1
-    };
-    this.service.GetInitialData(model).subscribe((res: any) => {
-      if (res.status) {
+  // GetInitialData(): void {
+  //   this.ShipperList = [];
+  //   let model = new GetDataModel();
+  //   model.procedureName = "usp_ProformaInvoice_GetInitialData";
+  //   model.parameters = {
+  //     userID: this.gs.getSessionData('userId'),
+  //     roleID: this.gs.getSessionData('roleId'),
+  //     PaymentType: 1
+  //   };
+  //   this.service.GetInitialData(model).subscribe((res: any) => {
+  //     if (res.status) {
 
-        let DataSet = JSON.parse(res.data);
+  //       let DataSet = JSON.parse(res.data);
         
+  //       this.ShipperList=DataSet.Tables31;
+  //       this.BenificaryBankList=DataSet.Tables2;
+  //       this.CountryList=DataSet.Tables3;
+  //       this.PackingList=DataSet.Tables4;
+  //       this.LoadingModeList=DataSet.Tables5;
+  //       this.PaymentModeList=DataSet.Tables6;
+  //       this.ConsigneeList=DataSet.Tables7;
+  //       this.ApplicantBankList=DataSet.Tables8;
+  //       this.BuyingHouseList=DataSet.Tables9;
+        
+  //       this.DescriptionList=DataSet.Tables11;
+  //       this.WidthList=DataSet.Tables12;
+  //       this.ColorList=DataSet.Tables13;
+  //       this.PackagingList=DataSet.Tables14;
+  //       this.UnitList=DataSet.Tables15;
+  //       this.AAList=DataSet.Tables28;
+  //       this.DeliveryConditionList=DataSet.Tables17;
+  //       this.PartialShipmentList=DataSet.Tables18;
+  //       this.PriceTermsList=DataSet.Tables19;
+  //       this.ForceMajeureList=DataSet.Tables20;
+  //       this.ArbitrationList=DataSet.Tables21;
+  //       this.CurrencyList=DataSet.Tables22;
+
+  //       this.PINo=DataSet.Tables30[0].PINO;
+
+  //       if (this.SetDDL){
+  //         this.SetDDLDefaultValue();
+  //       }
+
+  //     } else {
+  //       if (res.msg == 'Invalid Token') {
+  //         this.gs.Logout();
+  //       } else {
+  //       }
+  //     }
+  //   });
+  // }
+
+  GetInitialData(setDefault: boolean = true): void {
+
+  this.ShipperList = [];
+
+  let model = new GetDataModel();
+  model.procedureName = 'usp_ProformaInvoice_GetInitialData';
+  model.parameters = {
+    userID: this.gs.getSessionData('userId'),
+    roleID: this.gs.getSessionData('roleId'),
+    PaymentType: 2,
+  };
+
+  this.service.GetInitialData(model).subscribe((res: any) => {
+
+    if (res.status) {
+
+      let DataSet = JSON.parse(res.data);
+
+      // ✅ dropdowns
         this.ShipperList=DataSet.Tables31;
         this.BenificaryBankList=DataSet.Tables2;
         this.CountryList=DataSet.Tables3;
@@ -274,24 +576,39 @@ export class GenerateCpiComponent implements OnInit {
         this.ForceMajeureList=DataSet.Tables20;
         this.ArbitrationList=DataSet.Tables21;
         this.CurrencyList=DataSet.Tables22;
+        this.UserInfosList = DataSet.Tables32;
+        
+const bdt = this.CurrencyList.find((x: any) => x.CurrencyCode === 'BDT');
 
-        this.PINo=DataSet.Tables30[0].PINO;
+if (bdt) {
+  this.Formgroup.patchValue({
+    Currency_ID: bdt.Currency_ID
+  });
 
-        if (this.SetDDL){
-          this.SetDDLDefaultValue();
-        }
+  this.GetExchangeRate(bdt.Currency_ID); // trigger exchange rate
+}
 
-      } else {
-        if (res.msg == 'Invalid Token') {
-          this.gs.Logout();
-        } else {
-        }
+      // ✅ ONLY for create mode
+      if (setDefault) {
+        this.basePINo = DataSet.Tables30[0].PINO;
+        this.Formgroup.patchValue({
+            PINo: this.basePINo
+          });
+        this.SetDDLDefaultValue();
       }
-    });
-  }
+
+    } else {
+      if (res.msg == 'Invalid Token') {
+        this.gs.Logout();
+      }
+    }
+  });
+}
 
 
   Save(): void {
+
+    console.log(this.Formgroup.controls['Currency_ID']?.value);
 
     const requiredFields = [
       { key: 'Consignee_Initial', label: 'Consignee Initial' },
@@ -362,22 +679,6 @@ export class GenerateCpiComponent implements OnInit {
       });
       return;
     }
-
-    const consigneeValue = this.Formgroup.controls['Customer_ID'].value;
-    const consignee = this.ConsigneeList && this.ConsigneeList.length > 0
-      ? this.ConsigneeList.find((x: any) => x.Customer_ID == consigneeValue || x.Consignee == consigneeValue)
-      : null;
-    const roleId = this.gs.getSessionData('roleId');
-    const userId = this.gs.getSessionData('userId');
-    if (consignee) {
-      if (roleId == 1 || roleId == 2 || roleId == 12) {
-        this.Formgroup.controls['User_ID']?.setValue(consignee.Created_By);
-      } else {
-        this.Formgroup.controls['User_ID']?.setValue(userId);
-      }
-      this.Formgroup.controls['Superior_ID']?.setValue(consignee.Superior_ID)
-    }
-
 
     let model = {
       PI_Master_ID: this.Formgroup.controls['PI_Master_ID'].value,
@@ -514,20 +815,6 @@ export class GenerateCpiComponent implements OnInit {
       return;
     }
 
-    const consigneeValue = this.Formgroup.controls['Customer_ID'].value;
-    const consignee = this.ConsigneeList && this.ConsigneeList.length > 0
-      ? this.ConsigneeList.find((x: any) => x.Customer_ID == consigneeValue || x.Consignee == consigneeValue)
-      : null;
-    const roleId = this.gs.getSessionData('roleId');
-    const userId = this.gs.getSessionData('userId');
-    if (consignee) {
-      if (roleId == 1 || roleId == 2 || roleId == 12) {
-        this.Formgroup.controls['User_ID']?.setValue(consignee.Created_By);
-      } else {
-        this.Formgroup.controls['User_ID']?.setValue(userId);
-      }
-      this.Formgroup.controls['Superior_ID']?.setValue(consignee.Superior_ID)
-    }
   
       Swal.fire({
         title: 'Confirm Update',
@@ -616,4 +903,45 @@ export class GenerateCpiComponent implements OnInit {
       control.setValue(value.toUpperCase(), { emitEvent: false });
     }
   }
+
+
+    private tryConsumeTempPI(): any {
+  try {
+    const raw = localStorage.getItem('IMS_temp_open_pi');
+    if (!raw) return null;
+
+    const data = JSON.parse(raw);
+
+    // expire after 10 seconds (avoid stale data)
+    if (Date.now() - data.ts > 10000) {
+      localStorage.removeItem('IMS_temp_open_pi');
+      return null;
+    }
+
+    localStorage.removeItem('IMS_temp_open_pi');
+    return data.PI_Master_ID;
+
+  } catch {
+    return null;
+  }
+}
+
+GeneratePINo() {
+
+  const consignee = this.Formgroup.get('Consignee_Initial')?.value;
+
+  if (consignee && this.basePINo) {
+    this.Formgroup.patchValue({
+      PINo: `${consignee}-${this.basePINo}`
+    }, { emitEvent: false });
+  }
+  else if (this.basePINo) {
+    // fallback (initial load)
+    this.Formgroup.patchValue({
+      PINo: this.basePINo
+    }, { emitEvent: false });
+  }
+}
+
+
 }
