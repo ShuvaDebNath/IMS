@@ -619,6 +619,10 @@
                       " (change)="calculateAmount(itemrow)" formControlName="Quantity" type="number"
                       class="form-control form-control-sm" placeholder="Enter Quantity" id="Qty" name="Qty" />
                   </td>
+                  <td>
+                    <input type="text" formControlName="Delivered_Quantity" />
+                    <input type="text" formControlName="_originalQty" />
+                  </td>
 
                   <td class="align-middle" style="width: 120px; min-width: 120px">
                     <p-dropdown formControlName="Unit_ID" [options]="UnitList" optionLabel="Unit" optionValue="Unit_ID"
