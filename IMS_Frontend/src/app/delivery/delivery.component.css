@@ -137,3 +137,61 @@ p-inputNumber.min-w-220 {
 ::ng-deep .p-paginator .p-paginator-last {
   margin-left: 0 !important;
 }
+
+
+.table-wrapper {
+    width: 100%;
+    overflow: hidden;
+}
+
+:host ::ng-deep .compact-table {
+    width: 100%;
+}
+
+:host ::ng-deep .compact-table table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+:host ::ng-deep .compact-table th,
+:host ::ng-deep .compact-table td {
+    white-space: normal !important;
+    padding: 6px;
+    font-size: 14px;
+    vertical-align: top;
+    word-break: break-word;
+}
+
+.article-text {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 16px;
+}
+
+.stock-text {
+    color: green;
+    font-size: 12px; 
+    font-weight: 600;
+    line-height: 18px;
+    white-space: pre-line;
+}
+
+:host ::ng-deep .p-inputnumber,
+:host ::ng-deep .p-dropdown,
+:host ::ng-deep .p-inputtext {
+    width: 100%;
+}
+
+:host ::ng-deep .p-inputnumber input,
+:host ::ng-deep .p-dropdown,
+:host ::ng-deep .p-inputtext,
+:host ::ng-deep .p-dropdown-label  {
+    width: 100%;
+    font-size: 14px;
+}
+
+:host ::ng-deep .p-inputtext,
+:host ::ng-deep .p-inputnumber input,
+:host ::ng-deep .p-dropdown {
+    height: 50px;
+}

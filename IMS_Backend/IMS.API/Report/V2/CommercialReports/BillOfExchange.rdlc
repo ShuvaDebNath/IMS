@@ -1678,7 +1678,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>TO:  </Value>
+                    <Value>Drawn On/ Endorsed/ To The Order Of/ Consigned to/Notify:   </Value>
                     <Style>
                       <FontSize>9pt</FontSize>
                     </Style>
@@ -1709,13 +1709,6 @@
               </Paragraph>
               <Paragraph>
                 <TextRuns>
-                  <TextRun>
-                    <Value xml:space="preserve">        </Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                      <FontWeight>Normal</FontWeight>
-                    </Style>
-                  </TextRun>
                   <TextRun>
                     <Value>=Fields!CustomerAddress.Value</Value>
                     <Style>
@@ -1936,7 +1929,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>TO:  </Value>
+                    <Value>Drawn On/ Endorsed/ To The Order Of/ Consigned to/Notify:  </Value>
                     <Style>
                       <FontSize>9pt</FontSize>
                     </Style>
@@ -1967,13 +1960,6 @@
               </Paragraph>
               <Paragraph>
                 <TextRuns>
-                  <TextRun>
-                    <Value xml:space="preserve">        </Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                      <FontWeight>Normal</FontWeight>
-                    </Style>
-                  </TextRun>
                   <TextRun>
                     <Value>=Fields!CustomerAddress.Value</Value>
                     <Style>

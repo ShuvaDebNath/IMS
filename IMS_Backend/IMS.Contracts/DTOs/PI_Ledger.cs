@@ -15,4 +15,5 @@ public class PI_Ledger
     public int? User_ID { get; set; }
     public int? Item_ID { get; set; }
     public int? Stock_Location_ID { get; set; }
+    public string? PINo { get; set; }
 }
