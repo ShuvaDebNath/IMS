@@ -22,6 +22,7 @@
           (click)="getSelectedRows('Partial Approved')"
           type="button"
           class="btn btn-success mr-2"
+          [disabled]="!selectedRows || selectedRows.length === 0"
         >
           <i class="fas fa-check"></i>&nbsp;Approve Partially
         </button>
@@ -30,6 +31,7 @@
           (click)="getSelectedRows('Quartar Approved')"
           type="button"
           class="btn btn-primary mr-2"
+          [disabled]="!selectedRows || selectedRows.length === 0"
         >
           <i class="fas fa-check"></i>&nbsp;Approve Quarterly
         </button>
@@ -38,6 +40,7 @@
           (click)="getSelectedRows('Full Approved')"
           type="button"
           class="btn btn-warning mr-2"
+          [disabled]="!selectedRows || selectedRows.length === 0"
         >
           <i class="fas fa-check"></i>&nbsp;Approve Full
         </button>
@@ -46,6 +49,7 @@
           (click)="getSelectedRows('Rejected')"
           type="button"
           class="btn btn-danger mr-2"
+          [disabled]="!selectedRows || selectedRows.length === 0"
         >
           <i class="fas fa-times"></i>&nbsp;Reject
         </button>
@@ -61,114 +65,72 @@
           <div class="row g-2 align-items-end">
             <div class="col-md-2">
               <label>PI Type</label>
-              <select
-                formControlName="PIType"
-                class="form-control form-control-sm custom-select-height"
-                
-              >
+              <select formControlName="PIType" class="form-control form-control-sm custom-select-height">
                 <option value="" disabled selected>Select a type</option>
                 <option *ngFor="let item of PITypeList" [value]="item.value">
                   {{ item.text }}
                 </option>
               </select>
             </div>
-
+            
             <div class="col-md-2">
               <label>From Date</label>
-              <!-- <input
-                type="date"
-                formControlName="FromDate"
-                class="form-control"
-              /> -->
-              <p-calendar
-                formControlName="FromDate"
-                [showIcon]="false"
-                dateFormat="dd/mm/yy"
-                placeholder="From"
-                inputStyleClass="custom-date-input"
-                [style]="{width:'100%'}"
-              ></p-calendar>
+              <p-calendar formControlName="FromDate" [showIcon]="false" dateFormat="dd/mm/yy" placeholder="From"
+                inputStyleClass="custom-date-input" [style]="{width:'100%'}"></p-calendar>
             </div>
-
+            
             <div class="col-md-2">
               <label>To Date</label>
-              <!-- <input
-                type="date"
-                formControlName="ToDate"
-                class="form-control"
-              /> -->
-                  <p-calendar
-                formControlName="ToDate"
-                [showIcon]="false"
-                dateFormat="dd/mm/yy"
-                placeholder="From"
-                inputStyleClass="custom-date-input"
-                [style]="{width:'100%'}"
-              ></p-calendar>
+              <p-calendar formControlName="ToDate" [showIcon]="false" dateFormat="dd/mm/yy" placeholder="From"
+                inputStyleClass="custom-date-input" [style]="{width:'100%'}"></p-calendar>
             </div>
 
             <div class="col-md-2">
-              <label>PI No</label>
-              <input
-                type="text"
-                formControlName="PINo"
-                class="form-control form-control-sm custom-select-height"
-                placeholder="PI No"
-              />
-            </div>
-
-            <div class="col-md-2 ">
-              <label>Shipper</label>
-              <input
-                type="text"
-                formControlName="Shipper"
-                class="form-control form-control-sm custom-select-height"
-                placeholder="Shipper"
-              />
-            </div>
-
-            <div class="col-md-2">
-              <label>Consignee</label>
-              <input
-                type="text"
-                formControlName="Consignee"
-                class="form-control form-control-sm custom-select-height"
-                placeholder="Consignee"
-              />
-            </div>
-
-            <div class="col-md-2">
-              <label>Name</label>
-
+              <label>UserName</label>
+            
               <ng-container *ngIf="UserList.length > 1">
-                <p-dropdown
-                  [style]="{ width: '100%' }"
-                  [options]="UserList"
-                  optionLabel="UserName"
-                  optionValue="User_ID"
-                  [filter]="true"
-                  filterBy="UserName"
-                  [showClear]="true"
-                  placeholder="Please Select"
-                  formControlName="User_ID"
-                >
+                <p-dropdown [style]="{ width: '100%' }" [options]="UserList" optionLabel="UserName" optionValue="User_ID"
+                  [filter]="true" filterBy="UserName" [showClear]="true" placeholder="Please Select" formControlName="User_ID">
                 </p-dropdown>
               </ng-container>
-
+            
               <ng-container *ngIf="UserList.length === 1">
-                <input
-                  type="text"
-                  class="form-control"
-                  [value]="UserList[0].UserName"
-                  readonly
-                />
-                <input
-                  type="hidden"
-                  formControlName="User_ID"
-                  [value]="UserList[0].UserName"
-                />
+                <input type="text" class="form-control" [value]="UserList[0].UserName" readonly />
+                <input type="hidden" formControlName="User_ID" [value]="UserList[0].UserName" />
               </ng-container>
             </div>
+            
+            <div class="col-md-3">
+              <label>PI No</label>
+              <p-dropdown [style]="{ width: '100%' }" [options]="piList" formControlName="PINo" optionLabel="PINo" optionValue="PINo" placeholder="Search PI No"
+                [filter]="true" (onFilter)="onSearchPI($event)" (onClear)="onClearPI()" [showClear]="true"
+                [disabled]="!SearchFormgroup.get('User_ID')?.value">
+              </p-dropdown>
+            </div>
+            
+            <div class="col-md-3">
+              <label>Shipper</label>
+              <p-dropdown [style]="{ width: '100%' }" class="p-0" [options]="shipperList" optionLabel="CompanyName" [filter]="true"
+                filterBy="CompanyName" [showClear]="true" placeholder="Select Shipper" optionValue="Beneficiary_Account_ID"
+                formControlName="Beneficiary_Account_ID" [virtualScroll]="true" [virtualScrollItemSize]="30" appendTo="body"
+                panelStyleClass="description-panel" [style]="{ width: '100%', height: '52px' }" placeholder="Select Shipper"
+                styleClass="table-dropdown w-100">
+                <ng-template let-AB pTemplate="item">
+                  <div>{{ AB.CompanyName }}</div>
+                </ng-template>
+              </p-dropdown>
+            </div>
+            
+            <div class="col-md-4">
+              <label>Consignee</label>            
+              <p-dropdown [style]="{ width: '100%', height: '52px' }" class="p-0"  [options]="consigneeList" formControlName="Customer_ID" optionLabel="Company_Name"
+                optionValue="Customer_ID" placeholder="Search Consignee" [filter]="true" (onFilter)="onSearchCustomerName($event)"
+                (onClear)="onClearCustomerName()" [showClear]="true" [disabled]="!SearchFormgroup.get('User_ID')?.value"
+                appendTo="body" >
+              </p-dropdown>
+            </div>
+
+            
           </div>
 
           <div class="row mt-3 justify-content-end">
@@ -227,6 +189,12 @@
             <th pSortableColumn="CustomerName" class="text-center">
               Consignee
             </th>
+            <th pSortableColumn="ClientAllocated" class="text-center">
+              Client Allocated By
+            </th>
+            <th pSortableColumn="SuperiorByClientAllocation" class="text-center">
+              Superior By
+            </th>
             <th pSortableColumn="CreatedByUserName" class="text-center">
               Generated By
             </th>
@@ -251,7 +219,9 @@
             <td>{{ row.PIDate | date: "dd-MM-yyyy" }}</td>
             <td>{{ row.BeneficiaryCompanyName }}</td>
             <td>{{ row.CustomerName }}</td>
-            <td>{{ row.MakeBy }}</td>
+            <td>{{ row.ClientAllocated }}</td>
+            <td>{{ row.SuperiorName }}</td>
+            <td>{{ row.CreatedByUserName }}</td>
             <td *ngIf="PiStatus == 'ALL'" class="text-center">
               <span style="padding-left: 2px; padding-right: 2px;"
                 [ngClass]="{
@@ -399,7 +369,7 @@
               <div class="col-md-4 mt-2 text-right content-middle">
                 <strong>Buyer Name</strong>
               </div>
-              <div class="col-md-8 mt-2">{{ PIData?.BuyerName }}</div>
+              <div class="col-md-8 mt-2">{{ PIData?.Buyer_Name }}</div>
 
               <div class="col-md-4 mt-2 text-right content-middle">
                 <strong>Country Of Origin</strong>
@@ -510,6 +480,11 @@
                 <strong>Created By</strong>
               </div>
               <div class="col-md-8 mt-2">{{ PIData?.CreatedByUserName }}</div>
+
+              <div class="col-md-4 mt-2 text-right content-middle">
+                <strong>Client Allocated By</strong>
+              </div>
+              <div class="col-md-8 mt-2">{{ PIData?.ClientAllocated }}</div>
 
               <div class="col-md-4 mt-2 text-right content-middle">
                 <strong>Superior</strong>
@@ -663,7 +638,7 @@
           <td class="text-center align-middle">{{ item.Delivered }}</td>
           <td class="text-center align-middle">{{ item.Orderd_In_Meter }}</td>
           <td class="text-center align-middle">{{ item.Deliverd_In_Meter }}</td>
-          <td class="text-center align-middle">{{ item.Rolls }}</td>
+          <td class="text-center align-middle">{{ item.Roll }}</td>
         </tr>
         <!-- Totals row -->
         <tr class="table-secondary font-weight-bold">

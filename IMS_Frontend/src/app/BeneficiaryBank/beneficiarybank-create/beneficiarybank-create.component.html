@@ -39,8 +39,8 @@
           <div class="col-md-6">
             <label class="form-label">Country</label>
             <select formControlName="Country_ID" class="form-select">
-              <option value="">-- Select Country --</option>
-              <option *ngFor="let c of countryData" [value]="c.id">{{ c.name }}</option>
+              <option [ngValue]="">-- Select Country --</option>
+              <option *ngFor="let c of countryData" [ngValue]="c.id">{{ c.name }}</option>
             </select>
           </div>
 
@@ -65,8 +65,8 @@
           <div class="col-md-6">
             <label class="form-label">Payment Type</label>
             <select formControlName="PaymentTypeId" class="form-select">
-              <option value="">-- Select Payment Type --</option>
-              <option *ngFor="let pt of paymentTypes" [value]="pt.id">{{ pt.name }}</option>
+              <option [ngValue]="">-- Select Payment Type --</option>
+              <option *ngFor="let pt of paymentTypes" [ngValue]="pt.id">{{ pt.name }}</option>
             </select>
           </div>
         </div>

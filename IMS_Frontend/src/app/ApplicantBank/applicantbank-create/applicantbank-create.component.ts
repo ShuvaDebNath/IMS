@@ -99,6 +99,9 @@ export class ApplicantbankCreateComponent implements OnInit {
     let condition = { Applicant_Bank_ID: this.ApplicantBankId };
     let tableName = 'tbl_applicant_bank';
 
+    console.log(payload);
+    
+
     this.masterEntyService.UpdateData(payload, condition, tableName).subscribe((res: any) => {
       if (res.status) {
         Swal.fire({

@@ -7,6 +7,7 @@ import { GlobalServiceService } from 'src/app/services/Global-service.service';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 import Swal from 'sweetalert2';
 import { DateFormat } from 'src/app/shared/date-format';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-generate-pi',
@@ -31,6 +32,7 @@ export class GeneratePiComponent implements OnInit {
   PackagingList: any | [];
   UnitList: any | [];
   AAList: any | [];
+  UserInfosList: any | [];
   DeliveryConditionList: any | [];
   PartialShipmentList: any | [];
   PriceTermsList: any | [];
@@ -40,10 +42,13 @@ export class GeneratePiComponent implements OnInit {
   PageTitle: any;
   // temporary PI passed from another tab (via localStorage)
   tempPI?: string | null;
+  basePINo: string = '';
 
   // keep a snapshot of original master/details when loading for edit so we can compute audit logs
   private originalMaster: any = null;
   private originalDetails: any[] = [];
+  PI_Master_ID!: string;  
+  isEdit = false;
 
   Formgroup!: FormGroup;
   isSubmit!: boolean;
@@ -58,152 +63,131 @@ export class GeneratePiComponent implements OnInit {
     private des: DoubleMasterEntryService,
     private gs: GlobalServiceService,
     private fb: FormBuilder,
-  ) { }
+    private activeLink: ActivatedRoute, 
+  ) { 
+
+   if (this.activeLink.snapshot.queryParamMap.has('PI_Master_ID')) {
+    this.PI_Master_ID = this.activeLink.snapshot.queryParams['PI_Master_ID'];
+    this.isEdit = true;
+  }
+
+  // ✅ FALLBACK: localStorage (only if URL missing)
+  if (!this.PI_Master_ID) {
+    const temp = this.tryConsumeTempPI();
+    if (temp) {
+      this.PI_Master_ID = temp;
+      this.isEdit = true;
+    }
+  }
+
+
+  }
 
   ngOnInit(): void {
-    this.PageTitle = 'Generate LC PI';
-    this.GTQTY = 0;
-    this.GTAMNT = 0;
-    this.SetDDL = true;
-    this.GenerateFrom();
-    this.GetInitialData();
-    this.BuyerToggle(false);
-    this.RegisterFormControlsChangeEvent();
-    this.GrandTotalQty = 0;
-    this.GrandTotalAmount = 0;
-    // If another tab passed a PI_No via localStorage, consume and store it for later
-    const incomingPi = this.tryConsumeTempPI();
-    if (incomingPi) {
-      this.tempPI = incomingPi;
-      // set early if form exists (GenerateFrom will also initialize the form)
-      try {
-        if (this.Formgroup) {
-          this.Formgroup.controls['PINo'].setValue(this.tempPI);
-        }
-      } catch (e) { }
-    }
+
+  this.PageTitle = 'Generate LC PI';
+
+  this.GTQTY = 0;
+  this.GTAMNT = 0;
+
+  if (this.isEdit && this.PI_Master_ID) {
+
+    // ✅ EDIT MODE
+    this.GenerateFrom(false);
+
+    // ✅ Load dropdown ONLY (no default)
+    this.GetInitialData(false);
+
+    // ✅ THEN load edit data
+    this.GetById(this.PI_Master_ID);
+
+  } else {
+
+    // ✅ CREATE MODE
+    this.GenerateFrom(true);
+
+    // ✅ Load dropdown + default values
+    this.GetInitialData(true);
   }
 
-  /**
-   * Load full PI data (master + details) for editing using provided identifier.
-   * The procedure name used is 'usp_ProformaInvoice_GetDataById' but we send multiple
-   * possible params so backend can pick whichever it supports (PI_Master_ID, PINo, PI_No).
-   */
-  loadPIForEdit(piIdentifier: string) {
-    try {
-      const model = new GetDataModel();
-      model.procedureName = 'usp_ProformaInvoice_GetDataById';
-      model.parameters = {
-        PI_Master_ID: Number(piIdentifier),
-      };
+  this.RegisterFormControlsChangeEvent();
+}
 
-      this.service.GetInitialData(model).subscribe((res: any) => {
-        if (res.status) {
-          const ds = JSON.parse(res.data);
+  GetById(id: any) {
+    let model = new GetDataModel();
+    model.procedureName = 'usp_ProformaInvoice_GetDataById';
+    model.parameters = {
+      PI_Master_ID: Number(this.PI_Master_ID),
+    };
 
-          if (ds.Tables1[0].ExpireDate) {
-            const parts = ds.Tables1[0].ExpireDate.split('/');
-            const formattedDate = new Date(+parts[2], +parts[1] - 1, +parts[0]); // dd/mm/yyyy → Date
-            ds.Tables1[0].ExpireDate = formattedDate;
-          }
+    this.service.GetInitialData(model).subscribe((res: any) => {
+      if (res.status) {
+        const ds = JSON.parse(res.data);
 
-          // Try to find master record
-          let master: any = null;
-          if (ds.Tables1 && ds.Tables1.length > 0) master = ds.Tables1[0];
-          if (!master && ds.Tables2 && ds.Tables2.length > 0)
-            master = ds.Tables2[0];
-
-          // store original snapshot for audit diff later
-          try {
-            this.originalMaster = master
-              ? JSON.parse(JSON.stringify(master))
-              : null;
-          } catch (e) {
-            this.originalMaster = master;
-          }
-
-          if (master) {
-            // set PINo and other master form controls if present
-            this.PINo = master.PINo || master.PINO || master.PI_No || this.PINo;
-            this.Formgroup.controls['Customer_Bank_ID'].setValue(master.Customer_Bank_ID);
-            try {
-              // patch known fields into the form
-              const keys = Object.keys(master);
-              for (const k of keys) {
-                if ((this.Formgroup.controls as any)[k] !== undefined) {
-                  (this.Formgroup.controls as any)[k].setValue(master[k]);
-                }
-              }
-            } catch (e) { }
-          }
-
-          // Details table: try Tables2, Tables1 (if it's the details), or Tables3
-          let details = ds.Tables2 || ds.Tables1 || ds.Tables3 || [];
-          // If master was taken from Tables1, details likely in Tables2
-          if (ds.Tables1 && master === ds.Tables1[0] && ds.Tables2)
-            details = ds.Tables2;
-
-          // populate ItemArray form with details
-          try {
-            // keep original details snapshot for audit
-            try {
-              this.originalDetails = Array.isArray(details)
-                ? JSON.parse(JSON.stringify(details))
-                : [];
-            } catch (e) {
-              this.originalDetails = details || [];
-            }
-            const con = this.Formgroup.get('ItemArray') as FormArray;
-            // clear existing
-            while (con.length) con.removeAt(0);
-            if (Array.isArray(details) && details.length > 0) {
-              for (const d of details) {
-                const row = this.InitRow();
-                Object.keys(d).forEach((k) => {
-                  if ((row.controls as any)[k] !== undefined) {
-                    (row.controls as any)[k].setValue(d[k]);
-                  }
-                });
-                con.push(row);
-              }
-            } else {
-              // ensure at least one row
-              con.push(this.InitRow());
-            }
-            // Recalculate grand totals after populating the ItemArray so GTQTY/GTAMNT reflect loaded data
-            try {
-              this.calculatetotalGrandTotal();
-            } catch (tt) {
-              /* ignore */
-            }
-          } catch (e) { }
-        } else {
-          if (res.msg === 'Invalid Token') this.gs.Logout();
+        const header = ds.Tables1?.[0];   // Master
+        const details = ds.Tables2 || []; // Details
+        if (header) {
+          this.Formgroup.patchValue(header);
         }
-      });
-    } catch (err) {
-      console.error('loadPIForEdit error', err);
-    }
-  }
 
-  private tryConsumeTempPI() {
-    try {
-      const raw = localStorage.getItem('IMS_temp_open_pi');
-      if (!raw) return null;
-      const data = JSON.parse(raw);
-      if (data && data.PI_No && Date.now() - (data.ts || 0) < 5000) {
-        localStorage.removeItem('IMS_temp_open_pi');
-        return data.PI_No;
+        const formArray = this.Formgroup.get('ItemArray') as FormArray;
+        formArray.clear();
+
+        (details || []).forEach((item: any) => {
+          formArray.push(this.createDetailForm(item));
+          this.calculatetotalGrandTotal();
+        });
+
+      } else {
+        if (res.msg == 'Invalid Token') {
+          this.gs.Logout();
+        }
       }
+    });
+  }
+
+  createDetailForm(item: any): FormGroup {
+    return this.fb.group({
+      PI_Detail_ID: [item.PI_Detail_ID],
+      Article: [item.Article],
+      Description: [item.Description],
+      Width_ID: [item.Width_ID],
+      Color_ID: [item.Color_ID],
+      Packaging_ID: [item.Packaging_ID],
+      Quantity: [item.Quantity],
+      Delivered_Quantity: [item.Delivered_Quantity],
+      Unit_ID: [item.Unit_ID],
+      Unit_Price: [item.Unit_Price],
+      Total_Amount: [item.Total_Amount],
+      CommissionUnit: [item.CommissionUnit],
+      TotalCommission: [item.TotalCommission],
+      Item_ID: [item.Item_ID],
+
+      _originalQty: [item.Quantity]
+    });
+  }
+
+
+  private tryConsumeTempPI(): any {
+  try {
+    const raw = localStorage.getItem('IMS_temp_open_pi');
+    if (!raw) return null;
+
+    const data = JSON.parse(raw);
+
+    // expire after 10 seconds (avoid stale data)
+    if (Date.now() - data.ts > 10000) {
       localStorage.removeItem('IMS_temp_open_pi');
       return null;
-    } catch (e) {
-      try {
-        localStorage.removeItem('IMS_temp_open_pi');
-      } catch (_) { }
-      return null;
     }
+
+    localStorage.removeItem('IMS_temp_open_pi');
+    return data.PI_Master_ID;
+
+  } catch {
+    return null;
   }
+}
 
   RegisterFormControlsChangeEvent() {
     this.Formgroup.get('IsBuyerMandatory')?.valueChanges.subscribe((value) => {
@@ -211,17 +195,39 @@ export class GeneratePiComponent implements OnInit {
     });
 
     this.Formgroup.get('Consignee_Initial')?.valueChanges.subscribe((value) => {
-      let piNo = value ? `${value.toUpperCase()}-${this.PINo}` : this.PINo;
+       let piNo = this.basePINo;
+
+      if (value && this.basePINo) {
+        piNo = `${value.toUpperCase()}-${this.basePINo}`;
+      }
+
+      this.Formgroup.get('PINo')?.setValue(piNo, { emitEvent: false });
       this.Formgroup.controls['PINo'].setValue(piNo);
     });
 
     this.Formgroup.get('Customer_ID')?.valueChanges.subscribe((value) => {
-      let contactPerson = this.ConsigneeList.filter(
+      const contactPerson = this.ConsigneeList.filter(
         (x: any) => x.Customer_ID == value,
       )[0];
-      this.Formgroup.controls['Contact_Person'].setValue(
-        contactPerson.Contact_Name,
-      );
+      if (contactPerson?.Contact_Name != null) {
+        this.Formgroup.controls['Contact_Person'].setValue(
+          contactPerson.Contact_Name,
+        );
+
+        const consigneeCreatedBy = this.ConsigneeList.find(
+          (x: any) => x.Customer_ID == value
+        );
+        if (consigneeCreatedBy) {
+          this.Formgroup.controls['User_ID'].setValue(consigneeCreatedBy.Created_By); 
+        }
+
+         const getSuperior = this.UserInfosList.find(
+            (x: any) => x.User_ID == consigneeCreatedBy.Created_By
+          );
+          if (getSuperior) {
+            this.Formgroup.controls['Superior_ID'].setValue(getSuperior.Superior_ID);
+          }
+      }
     });
   }
 
@@ -233,60 +239,89 @@ export class GeneratePiComponent implements OnInit {
     }
   }
 
-  GenerateFrom() {
-    this.Formgroup = this.fb.group({
-      PI_Master_ID: [''],
-      PINo: [''],
-      Consignee_Initial: [
-        '',
-        [Validators.required, Validators.minLength(3), Validators.maxLength(3)],
-      ],
-      Date: [this.datePipe.transform(new Date(), 'MM/dd/yyyy')],
-      Beneficiary_Account_ID: [''],
-      Beneficiary_Bank_ID: [''],
-      Country_Of_Orgin_ID: [''],
-      Packing_ID: [''],
-      Loading_Mode_ID: [''],
-      Payment_Term_ID: [''],
-      Consignee: [''],
-      Contact_Person: [''],
-      Buyer_Name: [''],
-      Delivery_Address: [''],
-      Style: [''],
-      Marketing_Concern_ID: [''],
-      Delivery_Condition_ID: [''],
-      Shipment_Condition_ID: [''],
-      Price_Term_ID: [''],
-      Good_Description: [''],
-      Documents: [''],
-      Shipping_Marks: [''],
-      Loading_Port: [''],
-      Destination_Port: [''],
-      Remarks: [''],
-      Force_Majeure_ID: [''],
-      Arbitration_ID: [''],
-      Status: ['Pending'],
-      User_ID: [''],
-      Superior_ID: [''],
-      LC_ID: [''],
-      Customer_ID: [''],
-      IsMPI: [0],
-      CR_ID: [''],
-      LastUpdateDate: [new Date()],
-      ExpireDate: [''],
-      Terms_of_Delivery_ID: [''],
-      Buyer_ID: [''],
-      SalesContractId: [''],
-      IsBuyerMandatory: [false],
-      CustomMaxDeliveryPercentage: [''],
-      Customer_Bank_ID: [''],
-      GrandTotalAmount_LC: [''],
-      GrandTotalAmount_Cash: [''],
-      GrandTotalAmount_Both: [''],
+  GenerateFrom(setDefault: boolean = true) {
 
-      ItemArray: this.fb.array([this.InitRow()]),
-    });
+  this.Formgroup = this.fb.group({
+    PI_Master_ID: [''],
+    PINo: [''],
+
+    Consignee_Initial: [
+      '',
+      [Validators.required, Validators.minLength(3), Validators.maxLength(3)],
+    ],
+
+    // ❌ REMOVE direct default from here
+    Date: [''],
+
+    Beneficiary_Account_ID: [''],
+    Beneficiary_Bank_ID: [''],
+    Country_Of_Orgin_ID: [''],
+    Packing_ID: [''],
+    Loading_Mode_ID: [''],
+    Payment_Term_ID: [''],
+    Consignee: [''],
+    Contact_Person: [''],
+    Buyer_Name: [''],
+    Delivery_Address: [''],
+    Style: [''],
+    Marketing_Concern_ID: [''],
+    Delivery_Condition_ID: [''],
+    Shipment_Condition_ID: [''],
+    Price_Term_ID: [''],
+    Good_Description: [''],
+    Documents: [''],
+    Shipping_Marks: [''],
+    Loading_Port: [''],
+    Destination_Port: [''],
+    Remarks: [''],
+    Force_Majeure_ID: [''],
+    Arbitration_ID: [''],
+    Status: ['Pending'],
+    User_ID: [''],
+    Superior_ID: [''],
+    LC_ID: [''],
+    Customer_ID: [''],
+    IsMPI: [0],
+    CR_ID: [''],
+    LastUpdateDate: [new Date()],
+    ExpireDate: [''],
+    Terms_of_Delivery_ID: [''],
+    Buyer_ID: [''],
+    SalesContractId: [''],
+    IsBuyerMandatory: [false],
+    CustomMaxDeliveryPercentage: [''],
+    Customer_Bank_ID: [''],
+    GrandTotalAmount_LC: [''],
+    GrandTotalAmount_Cash: [''],
+    GrandTotalAmount_Both: [''],
+    GrandTotalQty: [''],    
+
+    // ✅ Start EMPTY (important for edit mode)
+    ItemArray: this.fb.array([]),
+  });
+
+  // ✅ Apply default ONLY for create mode
+  if (setDefault) {
+    this.setDefaultValues();
+    this.addInitialRow();
   }
+}
+
+setDefaultValues() {
+  this.Formgroup.patchValue({
+    Date: this.datePipe.transform(new Date(), 'MM/dd/yyyy'),
+    Status: 'Pending'
+  });
+}
+
+addInitialRow() {
+  this.ItemArray.push(this.InitRow());
+}
+
+get ItemArray(): FormArray {
+  return this.Formgroup.get('ItemArray') as FormArray;
+}
+
   InitRow() {
     return this.fb.group({
       PI_Detail_ID: [''],
@@ -307,6 +342,7 @@ export class GeneratePiComponent implements OnInit {
       Unit_ID: [''],
       Quantity_In_Meter: [0],
       Delivered_Quantity_In_Meter: [0],
+      _originalQty: ['']
     });
   }
   SetActualArticle(itemrow: any) {
@@ -340,22 +376,24 @@ export class GeneratePiComponent implements OnInit {
     }
   }
   calculateAmount(itemrow: any) {
-    let qty = itemrow.controls['Quantity'].value;
+    
+    let originalQty = itemrow.controls['_originalQty']?.value;
+    let userInputQty = itemrow.controls['Quantity'].value;
     let dQty = itemrow.controls['Delivered_Quantity'].value;
     let rate = itemrow.controls['Unit_Price'].value;
     let proCostUnti = itemrow.controls['CommissionUnit'].value;
-    if (qty < dQty) {
+    if (userInputQty < dQty) {
       Swal.fire(
         'Info',
         'Quantity can not be greater than Delivered Quantity (' + dQty + ')',
         'info',
       );
-      itemrow.controls['Quantity'].setValue(dQty);
+      itemrow.controls['Quantity'].setValue(originalQty);
       itemrow.controls['Total_Amount'].setValue(dQty*rate.toFixed(2));
       itemrow.controls['TotalCommission'].setValue(dQty*proCostUnti.toFixed(2));
     } else {
-      itemrow.controls['Total_Amount'].setValue(qty * rate);
-      itemrow.controls['TotalCommission'].setValue(qty * proCostUnti);
+      itemrow.controls['Total_Amount'].setValue(userInputQty * rate);
+      itemrow.controls['TotalCommission'].setValue(userInputQty * proCostUnti);
     }
 
     this.calculatetotalGrandTotal();
@@ -397,7 +435,7 @@ export class GeneratePiComponent implements OnInit {
     this.Formgroup.controls['Delivery_Condition_ID'].setValue(3);
     this.Formgroup.controls['Shipment_Condition_ID'].setValue(1);
     this.Formgroup.controls['Price_Term_ID'].setValue(1);
-    this.Formgroup.controls['PINo'].setValue(this.PINo);
+    //this.Formgroup.controls['PINo'].setValue(this.PINo);
   }
 
   RefrashDDL(): void {
@@ -405,60 +443,64 @@ export class GeneratePiComponent implements OnInit {
     this.GetInitialData();
   }
 
-  GetInitialData(): void {
-    this.ShipperList = [];
-    let model = new GetDataModel();
-    model.procedureName = 'usp_ProformaInvoice_GetInitialData';
-    model.parameters = {
-      userID: this.gs.getSessionData('userId'),
-      roleID: this.gs.getSessionData('roleId'),
-      PaymentType: 2,
-    };
-    this.service.GetInitialData(model).subscribe((res: any) => {
-      if (res.status) {
-        let DataSet = JSON.parse(res.data);
+  GetInitialData(setDefault: boolean = true): void {
 
-        this.ShipperList = DataSet.Tables1;
-        this.BenificaryBankList = DataSet.Tables2;
-        this.CountryList = DataSet.Tables3;
-        this.PackingList = DataSet.Tables4;
-        this.LoadingModeList = DataSet.Tables5;
-        this.PaymentModeList = DataSet.Tables6;
-        this.ConsigneeList = DataSet.Tables7;
-        this.ApplicantBankList = DataSet.Tables8;
-        this.BuyingHouseList = DataSet.Tables9;
-        this.TermsofDeliveryList = DataSet.Tables10;
-        this.DescriptionList = DataSet.Tables11;
-        this.WidthList = DataSet.Tables12;
-        this.ColorList = DataSet.Tables13;
-        this.PackagingList = DataSet.Tables14;
-        this.UnitList = DataSet.Tables15;
-        this.AAList = DataSet.Tables28;
-        this.DeliveryConditionList = DataSet.Tables17;
-        this.PartialShipmentList = DataSet.Tables18;
-        this.PriceTermsList = DataSet.Tables19;
-        this.ForceMajeureList = DataSet.Tables20;
-        this.ArbitrationList = DataSet.Tables21;
+  this.ShipperList = [];
 
-        this.PINo = DataSet.Tables30[0].PINO;
+  let model = new GetDataModel();
+  model.procedureName = 'usp_ProformaInvoice_GetInitialData';
+  model.parameters = {
+    userID: this.gs.getSessionData('userId'),
+    roleID: this.gs.getSessionData('roleId'),
+    PaymentType: 2,
+  };
 
-        if (this.SetDDL) {
-          this.SetDDLDefaultValue();
-        }
+  this.service.GetInitialData(model).subscribe((res: any) => {
 
-        // If we have a temp PI (from another tab), load its full data for edit
-        if (this.tempPI) {
-          // attempt to load by PINo or by id depending on value
-          this.loadPIForEdit(this.tempPI);
-        }
-      } else {
-        if (res.msg == 'Invalid Token') {
-          this.gs.Logout();
-        } else {
-        }
+    if (res.status) {
+
+      let DataSet = JSON.parse(res.data);
+
+      // ✅ dropdowns
+      this.ShipperList = DataSet.Tables1;
+      this.BenificaryBankList = DataSet.Tables2;
+      this.CountryList = DataSet.Tables3;
+      this.PackingList = DataSet.Tables4;
+      this.LoadingModeList = DataSet.Tables5;
+      this.PaymentModeList = DataSet.Tables6;
+      this.ConsigneeList = DataSet.Tables7;
+      this.ApplicantBankList = DataSet.Tables8;
+      this.BuyingHouseList = DataSet.Tables9;
+      this.TermsofDeliveryList = DataSet.Tables10;
+      this.DescriptionList = DataSet.Tables11;
+      this.WidthList = DataSet.Tables12;
+      this.ColorList = DataSet.Tables13;
+      this.PackagingList = DataSet.Tables14;
+      this.UnitList = DataSet.Tables15;
+      this.AAList = DataSet.Tables28;
+      this.DeliveryConditionList = DataSet.Tables17;
+      this.PartialShipmentList = DataSet.Tables18;
+      this.PriceTermsList = DataSet.Tables19;
+      this.ForceMajeureList = DataSet.Tables20;
+      this.ArbitrationList = DataSet.Tables21;
+      this.UserInfosList = DataSet.Tables32;
+
+      // ✅ ONLY for create mode
+      if (setDefault) {
+        this.basePINo = DataSet.Tables30[0].PINO;
+        this.Formgroup.patchValue({
+            PINo: this.basePINo
+          });
+        this.SetDDLDefaultValue();
       }
-    });
-  }
+
+    } else {
+      if (res.msg == 'Invalid Token') {
+        this.gs.Logout();
+      }
+    }
+  });
+}
 
   Save(): void {
     const requiredFields = [
@@ -538,25 +580,6 @@ export class GeneratePiComponent implements OnInit {
       return;
     }
 
-    const consigneeValue = this.Formgroup.controls['Customer_ID'].value;
-    const consignee =
-      this.ConsigneeList && this.ConsigneeList.length > 0
-        ? this.ConsigneeList.find(
-          (x: any) =>
-            x.Customer_ID == consigneeValue || x.Consignee == consigneeValue,
-        )
-        : null;
-    const roleId = this.gs.getSessionData('roleId');
-    const userId = this.gs.getSessionData('userId');
-    if (consignee) {
-      if (roleId == 1 || roleId == 2 || roleId == 12) {
-        this.Formgroup.controls['User_ID']?.setValue(consignee.Created_By);
-      } else {
-        this.Formgroup.controls['User_ID']?.setValue(userId);
-      }
-      this.Formgroup.controls['Superior_ID']?.setValue(consignee.Superior_ID);
-    }
-
     let model = {
       PI_Master_ID: this.Formgroup.controls['PI_Master_ID'].value,
       PINo: this.Formgroup.controls['PINo'].value,
@@ -599,8 +622,12 @@ export class GeneratePiComponent implements OnInit {
         this.Formgroup.controls['Terms_of_Delivery_ID'].value,
       IsBuyerMandatory: this.Formgroup.controls['IsBuyerMandatory'].value,
       Customer_Bank_ID: this.Formgroup.controls['Customer_Bank_ID'].value,
+       GrandTotalQty: this.GTQTY,
+      GrandTotalAmount_LC: this.GTAMNT,
+      GrandTotalAmount_Cash: 0,
+      GrandTotalAmount_Both: 0,
     };
-    // let details=this.Formgroup.value.ItemArray;
+
     const detailsRaw =
       this.Formgroup.value && this.Formgroup.value.ItemArray
         ? this.Formgroup.value.ItemArray
@@ -615,7 +642,15 @@ export class GeneratePiComponent implements OnInit {
         try {
           delete element.PI_Detail_ID;
         } catch (e) {
-          /* ignore */
+        }
+      }
+       if (
+        element &&
+        Object.prototype.hasOwnProperty.call(element, '_originalQty')
+      ) {
+        try {
+          delete element._originalQty;
+        } catch (e) {
         }
       }
 
@@ -624,9 +659,6 @@ export class GeneratePiComponent implements OnInit {
         element.Quantity = element.Quantity_In_Meter * 1.09361;
       }
     });
-
-    console.log(model);
-    console.log(details);
 
     this.service
       .SaveDataMasterDetailsWithLog(
@@ -640,16 +672,13 @@ export class GeneratePiComponent implements OnInit {
         'PI_Master_ID',
       )
       .subscribe((res) => {
-        
-            console.log(res);
-            
         if (res.messageType == 'Success' && res.status) {
           Swal.fire(res.messageType, res.message, 'success').then(() => {
             this.ngOnInit();
           });
         } else {
           if (!res.isAuthorized) {
-            //this.gs.Logout();
+            this.gs.Logout();
           } else {
             Swal.fire(res.messageType, res.message, 'info');
           }
@@ -682,6 +711,10 @@ export class GeneratePiComponent implements OnInit {
       cancelButtonText: 'Cancel',
     }).then((result) => {
       if (result.isConfirmed) {
+
+        console.log(this.Formgroup.getRawValue());
+        
+
         // Use getRawValue to get all form values, including disabled controls and nested arrays
         let model = {
           PI_Master_ID: this.Formgroup.controls['PI_Master_ID'].value,
@@ -727,15 +760,29 @@ export class GeneratePiComponent implements OnInit {
           LastUpdateDate: this.Formgroup.controls['LastUpdateDate'].value,
           ExpireDate: DateFormat.toApiDate(this.Formgroup.controls['ExpireDate'].value),
           Terms_of_Delivery_ID:
-            this.Formgroup.controls['Terms_of_Delivery_ID'].value,
+            this.Formgroup.controls['Terms_of_Delivery_ID'].value,  
           IsBuyerMandatory: this.Formgroup.controls['IsBuyerMandatory'].value,
           Customer_Bank_ID: this.Formgroup.controls['Customer_Bank_ID'].value,
+          GrandTotalQty: this.GTQTY,
+          GrandTotalAmount_LC: this.GTAMNT,
+          GrandTotalAmount_Cash: 0,
+          GrandTotalAmount_Both: 0,
         };
 
         // Deep-clone to avoid mutating the live FormArray in-place.
         let details = this.Formgroup.value.ItemArray;
 
         details.forEach((element: any) => {
+
+           if (
+        element &&
+        Object.prototype.hasOwnProperty.call(element, '_originalQty')
+      ) {
+        try {
+          delete element._originalQty;
+        } catch (e) {
+        }
+      }
 
           const selectedItem = this.AAList.find((x: any) => x.Item_ID == element.Item_ID);
 

@@ -1,40 +1,30 @@
 <div class="p-2 m-2 shadow-sm">
   <form name="PIForm" [formGroup]="Formgroup" role="form">
     <div class="card p-3">
-      <!-- <div class="d-flex align-items-center justify-content-center pt-4">
-        <h1 class="fw-normal">Proforma Invoice</h1>
-        <div class="float-right">
-          <button
-            class="btn btn-sm btn-success mr-2"
-            (click)="Save()"
-            [disabled]="!Formgroup.valid"
-          >
-            <i class="fas fa-save"></i>&nbsp;Save
-          </button>
-          <button class="btn btn-sm btn-primary" (click)="RefrashDDL()">
-            <i class="fas fa-sync"></i>&nbsp;Refresh
-          </button>
-        </div>
-      </div> -->
       <div
         class="card-header sticky-header d-flex align-items-center justify-content-between pt-4"
       >
         <h1 class="fw-normal m-0">Proforma Invoice</h1>
-        <div>
-          <button
-            class="btn btn-sm btn-cpi-save mr-2"
-            (click)="Save()"
-            [disabled]="!Formgroup.valid"
-            style="width: 130px; height: 38px"
-          >
-            <i class="fas fa-save me-1"></i> Save
+        <div class="float-right">
+          <button 
+          *ngIf="!isEdit" 
+          class="btn btn-sm btn-pi-save mr-2" 
+          (click)="Save()" 
+          [disabled]="!Formgroup.valid"
+          style="width: 130px; height: 38px">
+            <i class="fas fa-save"></i>&nbsp;Save
           </button>
-          <button
-            class="btn btn-sm btn-cpi-refresh"
-            (click)="RefrashDDL()"
-            style="width: 130px; height: 38px"
-          >
-            <i class="fas fa-sync me-1"></i> Refresh
+        
+          <!-- Update -->
+          <button *ngIf="isEdit" class="btn btn-sm btn-pi-save mr-2" (click)="Update()" 
+          [disabled]="!Formgroup.valid"
+            style="width: 130px; height: 38px">
+            <i class="fas fa-save"></i>&nbsp;Update
+          </button>
+        
+          <!-- Refresh -->
+          <button class="btn btn-sm btn-pi-refresh" (click)="RefrashDDL()">
+            <i class="fas fa-sync"></i>&nbsp;Refresh
           </button>
         </div>
       </div>
@@ -262,6 +252,8 @@
                   panelStyleClass="my-dropdown-panel"
                   [style]="{ width: '100%' }"
                   placeholder="Select a Consignee"
+                   [virtualScroll]="true" 
+                   [itemSize]="30" 
                 >
                   [virtualScroll]="true" [itemSize]="30">
                 </p-dropdown>
@@ -382,6 +374,7 @@
                   [showClear]="true"
                   [style]="{ width: '100%' }"
                   placeholder="Select a Terms of Delivery"
+                  (onChange)="GetExchangeRate($event.value)"
                 >
                 </p-dropdown>
               </div>
@@ -400,253 +393,7 @@
           </div>
         </div>
 
-        <!-- <div class="table-responsive">
-          <table
-            class="table table-sm table-bordered table-striped table-border-colups"
-          >
-            <thead class="custom-header">
-              <tr>
-                <th class="text-center align-middle sticky-table-column">
-                  <button
-                    class="btn btn-xs btn-primary"
-                    (click)="Addrow()"
-                    type="button"
-                  >
-                    <i class="fas fa-plus"></i>
-                  </button>
-                </th>
-                <th class="text-center align-middle">Article No</th>
-                <th class="text-center align-middle">Description</th>
-                <th class="text-center align-middle">Width</th>
-                <th class="text-center align-middle">Color</th>
-                <th class="text-center align-middle">Packaging</th>
-                <th class="text-center align-middle">Qty</th>
-                <th class="text-center align-middle">Unit</th>
-                <th class="text-center align-middle">Unit Price</th>
-                <th class="text-center align-middle">Total Amount</th>
-                <th class="text-center align-middle">Prod. Cost Unit</th>
-                <th class="text-center align-middle">Total Prod. Cost</th>
-                <th class="text-center align-middle">A. A.</th>
-              </tr>
-            </thead>
-            <tbody formArrayName="ItemArray">
-              <ng-container *ngIf="Formgroup.controls.ItemArray != null">
-                <tr
-                  *ngFor="let itemrow of getControls(); let i = index"
-                  [formGroupName]="i"
-                >
-                  <td class="sticky-table-column align-middle">
-                    <button
-                      class="btn btn-xs btn-danger"
-                      (click)="DeleteRow(i)"
-                      type="button"
-                    >
-                      <i class="fas fa-times"></i>
-                    </button>
-                  </td>
-                  <td class="align-middle">
-                    <input
-                      style="width: 5rem; height: 48px"
-                      formControlName="Article"
-                      type="text"
-                      class="form-control form-control-sm"
-                      placeholder="Article No"
-                      id="ArticleNo"
-                      name="ArticleNo"
-                    />
-                  </td>
-                  <td class="align-middle">
-                    <p-dropdown
-                      formControlName="Description"
-                      [options]="DescriptionList"
-                      optionLabel="Details"
-                      optionValue="Details"
-                      [filter]="true"
-                      filterBy="Details"
-                      [showClear]="true"
-                      appendTo="body"
-                      [style]="{ width: '100%' }"
-                      placeholder="Select a Description"
-                    >
-                    </p-dropdown>
-                  </td>
-                  <td class="align-middle">
-                    <p-dropdown
-                      formControlName="Width_ID"
-                      [options]="WidthList"
-                      optionLabel="Measurement"
-                      optionValue="Width_ID"
-                      [filter]="true"
-                      filterBy="Measurement"
-                      [showClear]="true"
-                      appendTo="body"
-                      [style]="{ width: '100%' }"
-                      placeholder="Select a Width"
-                    >
-                    </p-dropdown>
-                  </td>
-                  <td class="align-middle">
-                    <p-dropdown
-                      formControlName="Color_ID"
-                      [options]="ColorList"
-                      optionLabel="Color"
-                      optionValue="Color_ID"
-                      [filter]="true"
-                      filterBy="Color"
-                      [showClear]="true"
-                      appendTo="body"
-                      [style]="{ width: '100%' }"
-                      placeholder="Select a Color"
-                    >
-                    </p-dropdown>
-                  </td>
-                  <td class="align-middle">
-                    <p-dropdown
-                      formControlName="Packaging_ID"
-                      [options]="PackagingList"
-                      optionLabel="Packaging"
-                      optionValue="Packaging_ID"
-                      [filter]="true"
-                      filterBy="Packaging"
-                      [showClear]="true"
-                      appendTo="body"
-                      [style]="{ width: '100%' }"
-                      placeholder="Select a Packaging"
-                    >
-                    </p-dropdown>
-                  </td>
-                  <td class="align-middle">
-                    <input
-                      style="width: 5rem; height: 48px"
-                      (change)="calculateAmount(itemrow)"
-                      formControlName="Quantity"
-                      type="number"
-                      class="form-control form-control-sm"
-                      placeholder="Qty"
-                      id="Qty"
-                      name="Qty"
-                    />
-                  </td>
-                  <td class="align-middle">
-                    <p-dropdown
-                      formControlName="Unit_ID"
-                      [options]="UnitList"
-                      optionLabel="Unit"
-                      optionValue="Unit_ID"
-                      [filter]="true"
-                      filterBy="Unit"
-                      [showClear]="true"
-                      appendTo="body"
-                      [style]="{ width: '100%' }"
-                      placeholder="Select a Unit"
-                    >
-                    </p-dropdown>
-                  </td>
-                  <td class="align-middle">
-                    <input
-                      style="width: 5rem; height: 48px"
-                      (change)="calculateAmount(itemrow)"
-                      formControlName="Unit_Price"
-                      type="number"
-                      class="form-control form-control-sm text-right"
-                      placeholder="Unit Price"
-                      id="Rate"
-                      name="Rate"
-                    />
-                  </td>
-                  <td class="align-middle">
-                    <input
-                      style="width: 5rem; height: 48px"
-                      formControlName="Total_Amount_Tk"
-                      readonly="readOnly"
-                      type="number"
-                      class="form-control form-control-sm text-right"
-                      placeholder="Total Amount"
-                      id="Amount"
-                      name="Amount"
-                    />
-                  </td>
-                  <td class="align-middle">
-                    <input
-                      style="width: 5rem; height: 48px"
-                      (change)="calculateAmount(itemrow)"
-                      formControlName="CommissionUnit"
-                      type="text"
-                      class="form-control form-control-sm text-right"
-                      placeholder="Prod. Cost Unit"
-                      id="ProdCost"
-                      name="ProdCost"
-                    />
-                  </td>
-                  <td class="align-middle">
-                    <input
-                      style="width: 5rem; height: 48px"
-                      formControlName="TotalCommission"
-                      readonly="readOnly"
-                      type="text"
-                      class="form-control form-control-sm text-right"
-                      placeholder="Total Prod. Cost"
-                      id="TProdCost"
-                      name="TProdCost"
-                    />
-                  </td>
-                  <td class="align-middle">
-                    <p-dropdown
-                      formControlName="Item_ID"
-                      [options]="AAList"
-                      optionLabel="Article_No"
-                      optionValue="Item_ID"
-                      [filter]="true"
-                      filterBy="Article_No"
-                      [showClear]="true"
-                      appendTo="body"
-                      (onChange)="SetActualArticle(itemrow)"
-                      [style]="{ width: '100%' }"
-                      placeholder="Select a Article"
-                    >
-                    </p-dropdown>
-                  </td>
-                </tr>
-              </ng-container>
-            </tbody>
-            <tfoot>
-              <tr>
-                <th class="text-center align-middle sticky-table-column"></th>
-                <th class="text-center align-middle">Total</th>
-                <th class="text-center align-middle"></th>
-                <th class="text-center align-middle"></th>
-                <th class="text-center align-middle"></th>
-                <th class="text-center align-middle"></th>
-                <th class="text-center align-middle">
-                  <input
-                    type="text"
-                    class="form-control form-control-sm"
-                    value="{{ GTQTY }}"
-                    placeholder="Total Qty"
-                    id="GTQty"
-                    name="GTQty"
-                  />
-                </th>
-                <th class="text-center align-middle"></th>
-                <th class="text-center align-middle"></th>
-                <th class="text-center align-middle">
-                  <input
-                    type="text"
-                    class="form-control form-control-sm text-right"
-                    value="{{ GTAMNT }}"
-                    placeholder="Total Amout"
-                    id="GTAmout"
-                    name="GTAmout"
-                  />
-                </th>
-                <th class="text-center align-middle"></th>
-                <th class="text-center align-middle"></th>
-                <th class="text-center align-middle"></th>
-              </tr>
-            </tfoot>
-          </table>
-        </div> -->
-
+       
         <div
           class="table-responsive"
           style="

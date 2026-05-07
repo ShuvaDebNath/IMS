@@ -62,3 +62,10 @@ card-body::after, .card-footer::after, .card-header::after {
   padding-left: 0.5rem !important; 
   line-height: 1.4rem;
 }
+
+
+.btn-pi-save {
+    background-color: #6a1a3f !important;
+    color:
+        white;
+}

@@ -28,6 +28,9 @@ import { getDate } from 'ngx-bootstrap/chronos/utils/date-getters';
 import { CalendarModule } from 'primeng/calendar';
 import { DoubleMasterEntryService } from 'src/app/services/doubleEntry/doubleEntryService.service';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+
 @Component({
   standalone: true,
   selector: 'app-pi-list',
@@ -58,6 +61,7 @@ export class PiListComponent implements OnInit {
   PIData!: any;
   PIDetails!: any[];
   UserList: any[] = [];
+  piList: any[] = [];
   // Totals for PI details table
   totalsOrderQty: number = 0;
   totalsDeliveredQty: number = 0;
@@ -109,6 +113,11 @@ export class PiListComponent implements OnInit {
   piLogPiNo:       string  = '';
   piLogClientName: string  = '';
   piLogEntries:    any[]   = [];
+  User_ID: any;
+  private piSearch$ = new Subject<string>();
+  private customerSearch$ = new Subject<string>();
+  shipperList: any[] = [];
+  consigneeList: any[] = [];
 
   constructor(
     private service: MasterEntryService,
@@ -118,38 +127,44 @@ export class PiListComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private reportService: ReportService,
-    private doubleMasterEntryService: DoubleMasterEntryService
+    private doubleMasterEntryService: DoubleMasterEntryService,
   ) { }
 
-  /**
-   * Open the generate-pi route in a new browser tab with PI_No as query param.
-   * Uses window.open with an absolute URL so the browser opens a new tab.
-   */
   OpenInNewTab(piNo: string, item: any) {
-    try {
-      console.log(item);
-      const payload = { PI_No: piNo, ts: Date.now() };
-      // store a short-lived transfer key for the new tab to consume
-      localStorage.setItem('IMS_temp_open_pi', JSON.stringify(payload));
+  try {
+    const origin = window.location.origin;
 
-      const origin = window.location.origin;
-      // open generate-pi without query params so PI_No isn't visible in URL
-      if (item.PaymentType == 'LC') {
+    const paymentType = String(item?.PaymentType ?? '')
+      .trim()
+      .toUpperCase();
 
-        const url = `${origin}/generate-pi`;
-        window.open(url, '_blank');
-      }
-      else {
+    const isLC = paymentType === 'LC';
 
-        const url = `${origin}/generate-cpi`;
-        window.open(url, '_blank');
-      }
+    // Optional fallback (not primary anymore)
+    const payload = { PI_Master_ID: piNo, ts: Date.now() };
+    localStorage.setItem('IMS_temp_open_pi', JSON.stringify(payload));
 
-    } catch (e) {
-      // Fallback: try to navigate using router in same tab (will show query param)
-      this.router.navigate(['/generate-pi'], { queryParams: { PI_No: piNo } });
-    }
+    const route = isLC ? 'generate-pi' : 'generate-cpi';
+
+    // ✅ PASS ID IN URL (MAIN FIX)
+    const url = `${origin}/${route}?PI_Master_ID=${piNo}`;
+
+    window.open(url, '_blank');
+
+  } catch (e) {
+    console.error('OpenInNewTab failed, fallback to same tab', e);
+
+    const paymentType = String(item?.PaymentType ?? '')
+      .trim()
+      .toUpperCase();
+
+    const route = paymentType === 'LC' ? 'generate-pi' : 'generate-cpi';
+
+    this.router.navigate([`/${route}`], {
+      queryParams: { PI_Master_ID: piNo }
+    });
   }
+}
 
   computeDeliveryTotals(items: any[]) {
     this.deliveryTotalsOrdered = 0;
@@ -171,13 +186,12 @@ export class PiListComponent implements OnInit {
   GenerateSearchFrom() {
     this.SearchFormgroup = this.fb.group({
       PI_Status: [this.PiStatus],
-      PINo: [''],
       FromDate: [''],
       ToDate: [''],
-      Shipper: [''],
-      Consignee: [''],
-      // CreateBY: [''],
       User_ID: [''],
+      PINo: [''],
+      Beneficiary_Account_ID: [''],
+      Customer_ID: [''],
       PIType: [''],
       PageNumber: [''],
       PageSize: [''],
@@ -276,9 +290,30 @@ export class PiListComponent implements OnInit {
       }
     }
     this.title.setTitle(this.PageTitle);
+
+     // PI Search
+  this.piSearch$
+    .pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    )
+    .subscribe(keyword => {
+      this.callPISearchAPI(keyword);
+    });
+
+  // Customer Search
+  this.customerSearch$
+    .pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    )
+    .subscribe(keyword => {
+      this.callCustomerSearchAPI(keyword);
+    });
+     
+
+
     this.GetInitialData();
-    //this.LoadTableData('');
-    // this.LoadTableData();
     this.GenerateSearchFrom();
 
     this.SearchFormgroup.controls.FromDate.setValue(new Date())
@@ -325,14 +360,20 @@ export class PiListComponent implements OnInit {
     const procedureData = {
       procedureName: 'usp_GetUserInfo_With_Superior',
       parameters: {
-        UserId: this.gs.getSessionData('userId'),
+        UserId: this.gs.getSessionData('userId')
       },
     };
 
     this.getDataService.GetInitialData(procedureData).subscribe({
       next: (results) => {
         if (results.status) {
-          this.UserList = JSON.parse(results.data).Tables1;
+
+          let DataSet = JSON.parse(results.data);
+
+          this.UserList = DataSet.Tables1;
+          this.piList = DataSet.Tables2;
+          this.shipperList = DataSet.Tables3;
+          this.consigneeList = DataSet.Tables4;
 
           if (this.UserList.length === 1) {
             this.SearchFormgroup.controls['User_ID'].setValue(
@@ -359,11 +400,6 @@ export class PiListComponent implements OnInit {
     this.DataTable = [];
     this.isLoading = true;
 
-    var getRole = '';
-
-    getRole = this.gs.getSessionData('roleId');
-    var userID = this.gs.getSessionData('userId');
-
     const procedureData = {
       procedureName: 'usp_ProformaInvoice_GetDataDataTable',
       parameters: {
@@ -374,16 +410,9 @@ export class PiListComponent implements OnInit {
         ToDate: permas.ToDate
           ? this.datePipe.transform(permas.ToDate, 'yyyy-MM-dd')
           : '',
-        Shipper: permas.Shipper ? permas.Shipper : '',
-        Consignee: permas.Consignee ? permas.Consignee : '',
-        CreateBY:
-          getRole == '1' || getRole == '2'
-            ? permas.User_ID
-              ? permas.User_ID
-              : ''
-            : permas.User_ID
-              ? permas.User_ID
-              : userID,
+        Shipper: permas.Beneficiary_Account_ID ? permas.Beneficiary_Account_ID : '',
+        Consignee: permas.Customer_ID ? permas.Customer_ID : '',
+        CreateBY: permas.User_ID ? permas.User_ID : '',
         PIType: permas.PIType ? permas.PIType : null,
         PI_Status: this.PiStatus,
         PageNumber: this.first,
@@ -391,15 +420,12 @@ export class PiListComponent implements OnInit {
       },
     };
 
-    console.log(procedureData);
-
     this.getDataService.GetInitialData(procedureData).subscribe({
       next: (results) => {
         if (results.status) {
           this.DataTable = JSON.parse(results.data).Tables1;
           this.totalRecords = this.DataTable[0]?.TotalCount;
           this.isLoading = false;
-          console.log(this.DataTable);
         } else if (results.msg == 'Invalid Token') {
           Swal.fire('Session Expired!', 'Please Login Again.', 'info');
           this.gs.Logout();
@@ -756,4 +782,205 @@ export class PiListComponent implements OnInit {
       },
     });
   }
+
+
+  onSearchPI(event: any) {
+
+    const keyword = event?.filter?.trim() || '';
+    if (!keyword) {
+      this.onClearPI();
+      return;
+    }
+
+     this.piSearch$.next(keyword); 
+  }
+
+   onSearchCustomerName(event: any) {
+
+    const keyword = event?.filter?.trim() || '';
+    if (!keyword) {
+      this.onClearCustomerName();
+      return;
+    }
+
+     this.customerSearch$.next(keyword); 
+  }
+
+  callPISearchAPI(keyword: string) {  
+
+    const userId = this.SearchFormgroup.get('User_ID')?.value;
+
+    if (!userId) {
+      this.piList = [];
+
+      Swal.fire({
+        icon: 'warning',
+        title: 'Select Name First',
+        text: 'Please select a user before searching PI No',
+        timer: 2000,
+        showConfirmButton: false
+      });
+
+      return;
+    }
+
+    const procedureData = {
+      procedureName: 'usp_PINumberSearchWithUserReference',
+      parameters: {
+        UserId: this.SearchFormgroup.get('User_ID')?.value,
+        SearchPI: keyword
+      }
+    };
+
+    this.getDataService.GetInitialData(procedureData).subscribe({
+      next: (results) => {
+
+        if (results.status) {
+
+          const data = JSON.parse(results.data);
+
+          this.piList = data?.Tables1 || [];
+
+          if (this.piList.length === 1) {
+            this.SearchFormgroup.get('PINo')?.setValue(this.piList[0].PINo);
+          }
+
+        }
+        else if (results.msg === 'Invalid Token') {
+          Swal.fire('Session Expired!', 'Please Login Again.', 'info');
+          this.gs.Logout();
+        }
+
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error(err);
+        this.isLoading = false;
+      }
+    });
+  }
+
+ callCustomerSearchAPI(keyword: string) {  
+
+    const userId = this.SearchFormgroup.get('User_ID')?.value;
+
+    if (!userId) {
+      this.consigneeList = [];
+
+      Swal.fire({
+        icon: 'warning',
+        title: 'Select Name First',
+        text: 'Please select a user before searching PI No',
+        timer: 2000,
+        showConfirmButton: false
+      });
+
+      return;
+    }
+
+    const procedureData = {
+      procedureName: 'usp_CustomerNameSearchWithUserReference',
+      parameters: {
+        UserId: this.SearchFormgroup.get('User_ID')?.value,
+        SearchCustomerName: keyword
+      }
+    };
+
+    this.getDataService.GetInitialData(procedureData).subscribe({
+      next: (results) => {
+
+        if (results.status) {
+
+          const data = JSON.parse(results.data);
+
+          this.consigneeList = data?.Tables1 || [];
+
+          if (this.consigneeList.length === 1) {
+            this.SearchFormgroup.get('Customer_ID')?.setValue(
+            this.consigneeList[0].Customer_ID,
+            { emitEvent: false } 
+          );
+          }
+
+        }
+        else if (results.msg === 'Invalid Token') {
+          Swal.fire('Session Expired!', 'Please Login Again.', 'info');
+          this.gs.Logout();
+        }
+
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error(err);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  onClearPI() {
+
+    const rawUserId = this.SearchFormgroup.get('User_ID')?.value;
+
+    const userId = rawUserId ? rawUserId : 1;
+
+    if (!userId) {
+      this.piList = [];
+      return;
+    }
+
+    const procedureData = {
+      procedureName: 'usp_PINumberSearchWithUserReference',
+      parameters: {
+        UserId: userId,
+        SearchPI: null,
+      }
+    };
+
+    this.getDataService.GetInitialData(procedureData).subscribe({
+      next: (results) => {
+        if (results.status) {
+
+          const data = typeof results.data === 'string'
+            ? JSON.parse(results.data)
+            : results.data;
+
+          this.piList = data?.Tables1 || [];
+        }
+      }
+    });
+  }
+
+  onClearCustomerName() {
+
+    const rawUserId = this.SearchFormgroup.get('User_ID')?.value;
+
+    const userId = rawUserId ? rawUserId : 1;
+
+    if (!userId) {
+      this.consigneeList = [];
+      return;
+    }
+
+    const procedureData = {
+      procedureName: 'usp_CustomerNameSearchWithUserReference',
+      parameters: {
+        UserId: userId,
+        SearchCustomerName: null,
+      }
+    };
+
+    this.getDataService.GetInitialData(procedureData).subscribe({
+      next: (results) => {
+        if (results.status) {
+
+          const data = typeof results.data === 'string'
+            ? JSON.parse(results.data)
+            : results.data;
+
+          this.consigneeList = data?.Tables1 || [];
+        }
+      }
+    });
+  }
+  
 }

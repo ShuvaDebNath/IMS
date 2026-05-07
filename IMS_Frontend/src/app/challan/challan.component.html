@@ -91,10 +91,10 @@
 
           <ng-template pTemplate="body" let-row let-i="rowIndex">
             <tr>
-              <td style="text-align: center">{{ row.Date }}</td>
-              <td>{{ row.ClientName }}</td>
-              <td style="text-align: center">{{ row.PINo }}</td>
-              <td style="text-align: center">{{ row.Article }}</td>
+              <td style="text-align: center; white-space: pre-line">{{ row.Date }}</td>
+              <td style="text-align: left; white-space: pre-line">{{ row.ClientName }}</td>
+              <td style="text-align: left; white-space: pre-line">{{ row.PINo }}</td>
+              <td style="text-align: left; white-space: pre-line">{{ row.Article }}</td>
               <td style="text-align: center">{{ row.Color }}</td>
               <td style="text-align: center">{{ row.Quantity }}</td>
               <td style="text-align: center">{{ row.Delivered }}</td>

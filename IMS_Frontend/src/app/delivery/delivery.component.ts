@@ -226,7 +226,6 @@ export class DeliveryComponent implements OnInit {
         while (itemarray.length !== 0) {
           itemarray.removeAt(0);
         }
-        console.log(DataSet);
 
         DataSet.Tables1.forEach((item: any) => {
           itemarray.push(
@@ -257,6 +256,8 @@ export class DeliveryComponent implements OnInit {
               RollBalance: [item.Roll],
               Bag: [item.Bag],
               Deliverd_In_Meter: [0],
+              StockText: [item.StockText],
+              PINo: [item.PINo]
             }),
           );
         });
@@ -279,18 +280,22 @@ export class DeliveryComponent implements OnInit {
       );
       return;
     }
-    console.log(this.Formgroup.controls['ItemArray'].value);
-    let listData = this.Formgroup.controls['ItemArray'].value;
+
+    let listData = this.Formgroup.controls['ItemArray'].value.map((element: any, idx: number) => {
+      // Ensure PINo is included in the payload
+      let newElement = { ...element };
+      if (element.Unit_ID == 2) {
+        newElement.Deliverd_In_Meter = element.Delivered;
+        newElement.Delivered = newElement.Deliverd_In_Meter * 1.09361;
+      }
+      // PINo is already present in the form array, but ensure it's included
+      newElement.PINo = element.PINo;
+      return newElement;
+    });
     let restQty = this.Formgroup.controls['RestQty'].value;
     let sum = 0;
     listData.forEach((element: any) => {
       sum += element.Delivered;
-      console.log(element.Delivered);
-
-      if (element.Unit_ID == 2) {
-        element.Deliverd_In_Meter = element.Delivered;
-        element.Delivered = element.Deliverd_In_Meter * 1.09361;
-      }
     });
 
     if (sum > restQty) {
@@ -303,13 +308,11 @@ export class DeliveryComponent implements OnInit {
         (x.Unit_ID != 2 && x.Delivered > x.StockBalance) ||
         (x.Unit_ID == 2 && x.Deliverd_In_Meter > x.Stock_In_MeterBalance),
     );
-
-    console.log(unAllowedList, listData);
     if (unAllowedList.length > 0) {
       Swal.fire('Save Fail!', 'Stock Unavailable.', 'info');
       return;
     }
-
+    
     this.deliveryService.SaveData(listData).subscribe((res) => {
       if (res.messageType == 'Success' && res.status) {
         Swal.fire(res.messageType, res.message, 'success').then(() => {
@@ -385,7 +388,6 @@ export class DeliveryComponent implements OnInit {
   }
 
   warehouseStockCheck(item: any) {
-    console.log(item, item.value.Stock_Location_ID);
     if (
       item.value.Stock_Location_ID == undefined ||
       item.value.Stock_Location_ID == null ||
