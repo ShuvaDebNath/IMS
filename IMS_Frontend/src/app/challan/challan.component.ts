@@ -18,6 +18,8 @@ import { MasterEntryService } from '../services/masterEntry/masterEntry.service'
 import { ActivatedRoute, Router } from '@angular/router';
 import { CalendarModule } from 'primeng/calendar';
 import { DateFormat } from 'src/app/shared/date-format';
+import { jsPDF } from 'jspdf';
+import * as QRCode from 'qrcode';
 
 @Component({
   standalone: true,
@@ -580,7 +582,6 @@ export class ChallanComponent implements OnInit {
     }
     const payload = { Chalan_No: no };
     this.reportService.PrintDeliveryChallanReport(payload, 'pdf', true);
-
   }
 
   onChallanClick(challanNo: string): void {
@@ -609,111 +610,410 @@ export class ChallanComponent implements OnInit {
     this.tableData = [];
   }
 
-  generateQrCodes(item: any): void {
-    // Generate QR codes and display in a new window, 8 per row
-    const challanNo = this.challanDetails?.master?.Chalan_No;
-    const challanDate = this.challanDetails?.master?.Date;
+  //   generateQrCodes(item: any): void {
+  //     const challanNo = this.challanDetails?.master?.Chalan_No ?? '';
+  //     const challanDate = this.challanDetails?.master?.Date ?? '';
+
+  //     const itemId = item?.Article || item?.Article_No || item?.Description || '';
+
+  //     // Your old code had width/color swapped
+  //     const color = item?.Color ?? '';
+  //     const width = item?.Width ?? '';
+
+  //     const rollCount = Number(
+  //       item?.Roll || item?.Rolls || item?.RollValue || item?.RollBoxPcs || 0,
+  //     );
+
+  //     if (!rollCount || rollCount <= 0) {
+  //       alert('Roll count not found.');
+  //       return;
+  //     }
+
+  //     const totalRoll = rollCount;
+
+  //     const qrLibUrl =
+  //       'https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js';
+
+  //     const safe = (value: any) =>
+  //       String(value ?? '')
+  //         .replace(/\\/g, '\\\\')
+  //         .replace(/'/g, "\\'")
+  //         .replace(/\n/g, '\\n')
+  //         .replace(/\r/g, '');
+
+  //     const html = `
+  // <!DOCTYPE html>
+  // <html>
+  // <head>
+  //   <title>QR Stickers</title>
+
+  //   <style>
+  //     * {
+  //       box-sizing: border-box;
+  //     }
+
+  //     html,
+  //     body {
+  //       margin: 0;
+  //       padding: 0;
+  //       font-family: Arial, sans-serif;
+  //       background: white;
+  //     }
+
+  //     .print-page {
+  //       width: 210mm;
+  //       height: 297mm;
+  //       padding: 7mm 5mm;
+  //       display: grid;
+  //       grid-template-columns: repeat(5, 1fr);
+  //       grid-template-rows: repeat(5, 1fr);
+  //       page-break-after: always;
+  //       break-after: page;
+  //       overflow: hidden;
+  //     }
+
+  //     .print-page:last-child {
+  //       page-break-after: auto;
+  //       break-after: auto;
+  //     }
+
+  //     .qr-block {
+  //       width: 100%;
+  //       height: 100%;
+  //       overflow: hidden;
+
+  //       display: flex;
+  //       flex-direction: column;
+  //       align-items: center;
+  //       justify-content: center;
+
+  //       text-align: center;
+  //       padding: 1mm;
+  //     }
+
+  //     .qr-challan {
+  //       font-size: 10px;
+  //       font-weight: 700;
+  //       line-height: 1.1;
+  //       margin-bottom: 1mm;
+  //     }
+
+  //     .qr-img {
+  //       width: 31mm;
+  //       height: 31mm;
+  //       display: block;
+  //       object-fit: contain;
+  //     }
+
+  //     .qr-label {
+  //       font-size: 10px;
+  //       font-weight: 700;
+  //       line-height: 1.1;
+  //       margin-top: 1mm;
+  //       white-space: nowrap;
+  //     }
+
+  //     .qr-date {
+  //       font-size: 8px;
+  //       font-weight: 600;
+  //       line-height: 1.1;
+  //       margin-top: 0.5mm;
+  //       white-space: nowrap;
+  //     }
+
+  //     @page {
+  //       size: A4 portrait;
+  //       margin: 0;
+  //     }
+
+  //     @media print {
+  //       html,
+  //       body {
+  //         width: 210mm;
+  //         height: 297mm;
+  //         margin: 0;
+  //         padding: 0;
+  //       }
+
+  //       .print-page {
+  //         margin: 0;
+  //         box-shadow: none;
+  //       }
+  //     }
+  //   </style>
+
+  //   <script src="${qrLibUrl}"></script>
+  // </head>
+
+  // <body>
+  //   <div id="qr-container"></div>
+
+  //   <script>
+  //     function makeQR(data, size) {
+  //       var qr = new QRious({
+  //         value: data,
+  //         size: size,
+  //         level: 'M',
+  //         padding: 5
+  //       });
+
+  //       return qr.toDataURL();
+  //     }
+
+  //     function renderQRCodes() {
+  //       var container = document.getElementById('qr-container');
+
+  //       var rollCount = ${rollCount};
+  //       var challanNo = '${safe(challanNo)}';
+  //       var challanDate = '${safe(challanDate)}';
+  //       var itemId = '${safe(itemId)}';
+  //       var width = '${safe(width)}';
+  //       var color = '${safe(color)}';
+  //       var totalRoll = ${totalRoll};
+
+  //       var stickersPerPage = 25;
+  //       var currentPage = null;
+
+  //       for (var i = 1; i <= rollCount; i++) {
+  //         if ((i - 1) % stickersPerPage === 0) {
+  //           currentPage = document.createElement('div');
+  //           currentPage.className = 'print-page';
+  //           container.appendChild(currentPage);
+  //         }
+
+  //         var qrData =
+  //           'Challan: ' + challanNo + '\\n' +
+  //           'Date: ' + challanDate + '\\n' +
+  //           'Article: ' + itemId + '\\n' +
+  //           'Width: ' + width + '\\n' +
+  //           'Color: ' + color + '\\n' +
+  //           'Roll: ' + i + ' of ' + totalRoll;
+
+  //         var block = document.createElement('div');
+  //         block.className = 'qr-block';
+
+  //         var challan = document.createElement('div');
+  //         challan.className = 'qr-challan';
+  //         challan.innerText = challanNo;
+
+  //         var qrImg = document.createElement('img');
+  //         qrImg.className = 'qr-img';
+  //         qrImg.src = makeQR(qrData, 220);
+
+  //         var label = document.createElement('div');
+  //         label.className = 'qr-label';
+  //         label.innerText = 'Roll ' + i + ' of ' + totalRoll;
+
+  //         var date = document.createElement('div');
+  //         date.className = 'qr-date';
+  //         date.innerText = challanDate;
+
+  //         block.appendChild(challan);
+  //         block.appendChild(qrImg);
+  //         block.appendChild(label);
+  //         block.appendChild(date);
+
+  //         currentPage.appendChild(block);
+  //       }
+  //     }
+
+  //     window.onload = function () {
+  //       renderQRCodes();
+
+  //       setTimeout(function () {
+  //         window.print();
+  //       }, 500);
+  //     };
+  //   </script>
+  // </body>
+  // </html>
+  // `;
+
+  //     const win = window.open('', '_blank');
+
+  //     if (win) {
+  //       win.document.open();
+  //       win.document.write(html);
+  //       win.document.close();
+  //     } else {
+  //       alert('Unable to open new window. Please allow popups for this site.');
+  //     }
+  //   }
+
+  async generateQrCodesPdf(item: any): Promise<void> {
+    const challanNo = this.challanDetails?.master?.Chalan_No ?? '';
+    const challanDate = this.challanDetails?.master?.Date ?? '';
+
     const itemId = item?.Article || item?.Article_No || item?.Description || '';
-    const width = item?.Color || '';
-    const color = item?.Width || '';
+
+    // Correct mapping
+    const color = item?.Color ?? '';
+    const width = item?.Width ?? '';
+
     const rollCount = Number(
       item?.Roll || item?.Rolls || item?.RollValue || item?.RollBoxPcs || 0,
     );
-    const totalRoll = rollCount; // Assuming totalRoll is equivalent to rollCount
 
-    // Use CDN for QRCode generation
-    const qrLibUrl =
-      'https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js';
-    let html = `<html><head><title>QR Codes</title>
-      <style>
-        body { font-family: Arial, sans-serif; }
-        .qr-row { margin-left:-5px;display: flex; justify-content: flex-start; margin-bottom: 6px; }
-        .qr-block5 { text-align: center; margin: 8px;margin-left: -12px; }
-        .qr-block1 { text-align: center; margin: 8px;margin-left:-4px; }
-        .qr-block2 { text-align: center; margin: 8px;margin-left: -4px; }
-        .qr-block3 { text-align: center; margin: 8px;margin-left: -8px; }
-        .qr-block4 { text-align: center; margin: 8px;margin-left: -7px; }
-        .qr-label { margin-top: 0px; font-size: 15px; }
-        .qr-challan-date{margin-bottom: 10px; }
-      </style>
-      <script src='${qrLibUrl}'></script>
-    </head><body>`;
-    // html += `<h2 style='text-align:center;'>QR Codes for Challan ${challanNo}</h2>`;
-    html += `<div id='qr-container'></div>`;
-    html += `<script>
-      function makeQR(data, size) {
-        var qr = new QRious({ value: data, size: size });
-        return qr.toDataURL();
-      }
-      function renderQRCodes() {
-        var container = document.getElementById('qr-container');
-        var rollCount = ${rollCount};
-        var challanNo = '${challanNo}';
-        var challanDate = '${challanDate}';
-        var itemId = '${itemId}';
-        var width = '${width}';
-        var color = '${color}';
-        var totalRoll = '${totalRoll}';
-        var perRow = 5;
-        var countClass = 0;
-        for (var i = 1; i <= rollCount; i++) {
-        countClass++;
-        if(countClass>5)
-        countClass = 1;
-          if ((i-1) % perRow === 0) {
-            var rowDiv = document.createElement('div');
-            rowDiv.className = 'qr-row';
-            container.appendChild(rowDiv);
-          }
-          var qrData = ("Challan: " + challanNo + "\\n" +
-              "Date: " + challanDate + "\\n" +
-              "Article: " + itemId + "\\n" +
-              "Width: " + width + "\\n" +
-              "Color: " + color + "\\n" +
-              "Roll: " + i);
-              
-         var qrImg = document.createElement('img');
-qrImg.src = makeQR(qrData, 140);
-qrImg.width = 166.2;
-qrImg.height = 166.2;
-
-var block = document.createElement('div');
-block.className = 'qr-block' + countClass;
-
-// 🔹 Add challan number
-var challan = document.createElement('div');
-challan.className = 'qr-challan';
-challan.innerHTML = challanNo; // make sure challanNo variable exists
-
-// 🔹 Add challan Date
-var challanDate = document.createElement('div');
-challanDate.className = 'qr-challan-date';
-challanDate.innerHTML = 'Date'; // make sure challanDate variable exists
-
-// Existing label
-var label = document.createElement('div');
-label.className = 'qr-label';
-label.innerHTML = 'Roll ' + i + ' of ' + totalRoll;
-
-// Append in correct order
-block.appendChild(qrImg);     // top
-block.appendChild(challan);   // middle
-//block.appendChild(challanDate);   // middle
-block.appendChild(label);     // bottom
-
-container.lastChild.appendChild(block);
-
-        }
-      }
-      window.onload = function() { renderQRCodes(); };
-    </script>`;
-    html += `</body></html>`;
-    var win = window.open('', '_blank');
-    if (win) {
-      win.document.write(html);
-      win.document.close();
-    } else {
-      alert('Unable to open new window. Please allow popups for this site.');
+    if (!rollCount || rollCount <= 0) {
+      alert('Roll count not found.');
+      return;
     }
+
+    const totalRoll = rollCount;
+
+    // A4 portrait in mm
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4',
+    });
+
+    /**
+     * Calibration:
+     * If client print is slightly shifted,
+     * adjust only these values.
+     */
+    const offsetX = 0; // + means move right, - means move left
+    const offsetY = 0; // + means move down, - means move up
+
+    /**
+     * Sticker positions from your marked sheet idea.
+     * 5 columns x 5 rows = 25 stickers per page.
+     * You can fine-tune these numbers after one test print.
+     */
+    const stickerBoxes = [
+      { left: 11.3, top: 8.7, width: 37.1, height: 51.8 },
+      { left: 48.4, top: 8.7, width: 37.9, height: 51.8 },
+      { left: 86.3, top: 8.7, width: 37.1, height: 51.8 },
+      { left: 123.4, top: 8.7, width: 37.0, height: 51.8 },
+      { left: 160.4, top: 8.7, width: 38.3, height: 51.8 },
+
+      { left: 11.3, top: 60.5, width: 37.1, height: 51.6 },
+      { left: 48.4, top: 60.5, width: 37.9, height: 51.6 },
+      { left: 86.3, top: 60.5, width: 37.1, height: 51.6 },
+      { left: 123.4, top: 60.5, width: 37.0, height: 51.6 },
+      { left: 160.4, top: 60.5, width: 38.3, height: 51.6 },
+
+      { left: 11.3, top: 112.1, width: 37.1, height: 51.1 },
+      { left: 48.4, top: 112.1, width: 37.9, height: 51.1 },
+      { left: 86.3, top: 112.1, width: 37.1, height: 51.1 },
+      { left: 123.4, top: 112.1, width: 37.0, height: 51.1 },
+      { left: 160.4, top: 112.1, width: 38.3, height: 51.1 },
+
+      { left: 11.3, top: 163.2, width: 37.1, height: 50.3 },
+      { left: 48.4, top: 163.2, width: 37.9, height: 50.3 },
+      { left: 86.3, top: 163.2, width: 37.1, height: 50.3 },
+      { left: 123.4, top: 163.2, width: 37.0, height: 50.3 },
+      { left: 160.4, top: 163.2, width: 38.3, height: 50.3 },
+
+      { left: 11.3, top: 213.5, width: 37.1, height: 51.3 },
+      { left: 48.4, top: 213.5, width: 37.9, height: 51.3 },
+      { left: 86.3, top: 213.5, width: 37.1, height: 51.3 },
+      { left: 123.4, top: 213.5, width: 37.0, height: 51.3 },
+      { left: 160.4, top: 213.5, width: 38.3, height: 51.3 },
+    ];
+
+    const stickersPerPage = 25;
+
+    for (let i = 1; i <= rollCount; i++) {
+      const indexInPage = (i - 1) % stickersPerPage;
+
+      if (i > 1 && indexInPage === 0) {
+        pdf.addPage('a4', 'portrait');
+      }
+
+      const box = stickerBoxes[indexInPage];
+
+      const qrData =
+        `Challan: ${challanNo}\n` +
+        `Date: ${challanDate}\n` +
+        `Article: ${itemId}\n` +
+        `Width: ${width}\n` +
+        `Color: ${color}\n` +
+        `Roll: ${i} of ${totalRoll}`;
+
+      const qrImage = await QRCode.toDataURL(qrData, {
+        errorCorrectionLevel: 'M',
+        margin: 1,
+        width: 300,
+      });
+
+      const x = box.left + offsetX;
+      const y = box.top + offsetY;
+
+      const centerX = x + box.width / 2;
+
+      const qrSize = 31.5;
+
+      // Challan no
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(9);
+      pdf.text(String(challanNo), centerX, y + 5, {
+        align: 'center',
+      });
+
+      // QR image
+      pdf.addImage(qrImage, 'PNG', centerX - qrSize / 2, y + 7, qrSize, qrSize);
+
+      // Roll label
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(8.5);
+      pdf.text(`Roll ${i} of ${totalRoll}`, centerX, y + 42, {
+        align: 'center',
+      });
+
+      // Optional date
+      // pdf.setFont('helvetica', 'normal');
+      // pdf.setFontSize(7);
+      // pdf.text(String(challanDate), centerX, y + 46, {
+      //   align: 'center'
+      // });
+    }
+
+    this.printPdfBlob(pdf);
+  }
+
+  private printPdfBlob(pdf: jsPDF): void {
+    const blob = pdf.output('blob');
+    const blobUrl = URL.createObjectURL(blob);
+
+    const iframe = document.createElement('iframe');
+
+    iframe.style.position = 'fixed';
+    iframe.style.left = '0';
+    iframe.style.top = '0';
+    iframe.style.width = '1px';
+    iframe.style.height = '1px';
+    iframe.style.opacity = '0';
+    iframe.style.border = '0';
+    iframe.style.zIndex = '-1';
+
+    document.body.appendChild(iframe);
+
+    iframe.onload = () => {
+      // Give browser PDF viewer enough time to render
+      setTimeout(() => {
+        iframe.contentWindow?.focus();
+        iframe.contentWindow?.print();
+      }, 1500);
+    };
+
+    iframe.src = blobUrl;
+
+    // Do NOT remove iframe quickly.
+    // If user changes print settings, browser may need the PDF again.
+    const cleanUp = () => {
+      setTimeout(() => {
+        if (iframe.parentNode) {
+          iframe.parentNode.removeChild(iframe);
+        }
+
+        URL.revokeObjectURL(blobUrl);
+        window.removeEventListener('focus', cleanUp);
+      }, 30000);
+    };
+
+    // Runs after print dialog closes in many browsers
+    window.addEventListener('focus', cleanUp);
   }
 }
