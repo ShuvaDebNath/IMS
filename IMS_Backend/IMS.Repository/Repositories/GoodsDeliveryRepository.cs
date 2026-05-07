@@ -38,9 +38,29 @@ namespace IMS.Repository.Repositories
            ,@Deliverd_In_Meter
            ,@Stock_Location_ID)";
 
-        private string qryPIDetilas = @"UPDATE [dbo].[tbl_pi_detail]
+        private string qryPIDetails = @"UPDATE [dbo].[tbl_pi_detail]
    SET [Delivered_Quantity] = Delivered_Quantity+ @Delivered
  WHERE PI_Detail_ID=@PI_Detail_ID";
+
+        private string qryPIStatusCheck = @"
+                                            IF NOT EXISTS
+                                            (
+                                                SELECT 1
+                                                FROM dbo.tbl_pi_detail
+                                                WHERE PI_Detail_ID IN
+                                                (
+                                                    SELECT PI_Detail_ID
+                                                    FROM dbo.tbl_pi_ledger
+                                                    WHERE Chalan_No = @Chalan_No
+                                                )
+                                                AND ISNULL(Quantity,0) >
+                                                    ISNULL(Delivered_Quantity,0)
+                                            )
+                                            BEGIN
+                                                UPDATE dbo.tbl_pi_master
+                                                SET [Status] = 'Delivered'
+                                                WHERE PINo = @PINo
+                                            END";
 
         public GoodsDeliveryRepository(IConfiguration configuration) : base(configuration)
         {
@@ -64,8 +84,12 @@ namespace IMS.Repository.Repositories
                             model.ForEach(item =>
                             {
                                 item.User_ID = int.Parse(AuthUserId);
+
                                 rowAffect = conn.Execute(qryPILedger, item, trn);
-                                rowAffect += conn.Execute(qryPIDetilas, item, trn);
+
+                                rowAffect += conn.Execute(qryPIDetails, item, trn);
+
+                                rowAffect += conn.Execute(qryPIStatusCheck, item, trn);
                             });
 
                             await trn.CommitAsync();

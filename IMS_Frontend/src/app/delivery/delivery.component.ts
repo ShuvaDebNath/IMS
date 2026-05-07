@@ -256,7 +256,8 @@ export class DeliveryComponent implements OnInit {
               RollBalance: [item.Roll],
               Bag: [item.Bag],
               Deliverd_In_Meter: [0],
-              StockText: [item.StockText]
+              StockText: [item.StockText],
+              PINo: [item.PINo]
             }),
           );
         });
@@ -279,16 +280,22 @@ export class DeliveryComponent implements OnInit {
       );
       return;
     }
-    let listData = this.Formgroup.controls['ItemArray'].value;
+
+    let listData = this.Formgroup.controls['ItemArray'].value.map((element: any, idx: number) => {
+      // Ensure PINo is included in the payload
+      let newElement = { ...element };
+      if (element.Unit_ID == 2) {
+        newElement.Deliverd_In_Meter = element.Delivered;
+        newElement.Delivered = newElement.Deliverd_In_Meter * 1.09361;
+      }
+      // PINo is already present in the form array, but ensure it's included
+      newElement.PINo = element.PINo;
+      return newElement;
+    });
     let restQty = this.Formgroup.controls['RestQty'].value;
     let sum = 0;
     listData.forEach((element: any) => {
       sum += element.Delivered;
-
-      if (element.Unit_ID == 2) {
-        element.Deliverd_In_Meter = element.Delivered;
-        element.Delivered = element.Deliverd_In_Meter * 1.09361;
-      }
     });
 
     if (sum > restQty) {
@@ -305,7 +312,7 @@ export class DeliveryComponent implements OnInit {
       Swal.fire('Save Fail!', 'Stock Unavailable.', 'info');
       return;
     }
-
+    
     this.deliveryService.SaveData(listData).subscribe((res) => {
       if (res.messageType == 'Success' && res.status) {
         Swal.fire(res.messageType, res.message, 'success').then(() => {
