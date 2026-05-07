@@ -254,59 +254,6 @@ basePINo: string = '';
     });
   }
 
-
-  // GenerateFrom() {
-  //   this.Formgroup = this.fb.group({
-  //     PI_Master_ID: [''],
-  //     PINo: [''],
-  //     Consignee_Initial: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
-  //     Date: [this.datePipe.transform(new Date, 'MM/dd/yyyy')],
-  //     Beneficiary_Account_ID: [''],
-  //     Beneficiary_Bank_ID: [''],
-  //     Country_Of_Orgin_ID: [''],
-  //     Packing_ID: [''],
-  //     Loading_Mode_ID: [''],
-  //     Payment_Term_ID: [''],
-  //     Consignee: [''],
-  //     Contact_Person: [''],
-  //     Buyer_Name: [''],
-  //     Delivery_Address: [''],
-  //     Style: [''],
-  //     Marketing_Concern_ID: [''],
-  //     Delivery_Condition_ID: [''],
-  //     Shipment_Condition_ID: [''],
-  //     Price_Term_ID: [''],
-  //     Good_Description: [''],
-  //     Documents: [''],
-  //     Shipping_Marks: [''],
-  //     Loading_Port: [''],
-  //     Destination_Port: [''],
-  //     Remarks: [''],
-  //     Force_Majeure_ID: [''],
-  //     Arbitration_ID: [''],
-  //     Status: ['Pending'],
-  //     User_ID: [''],
-  //     Superior_ID: [''],
-  //     LC_ID: [''],
-  //     Customer_ID: [''],
-  //     Currency_ID: [''],
-  //     IsMPI: [1],
-  //     CR_ID: [''],
-  //     LastUpdateDate: [new Date()],
-  //     Buyer_ID: [''],
-  //     SalesContractId: [''],
-  //     IsBuyerMandatory: [false],
-  //     CustomMaxDeliveryPercentage: [''],
-
-  //     GrandTotalAmount_LC: [''],
-  //     GrandTotalAmount_Cash: [''],
-  //     GrandTotalAmount_Both: [''],
-
-  //     ItemArray: this.fb.array([this.InitRow()]),
-  //   });
-  // }
-
-
    GenerateFrom(setDefault: boolean = true) {
 
   this.Formgroup = this.fb.group({
@@ -357,6 +304,10 @@ basePINo: string = '';
       SalesContractId: [''],
       IsBuyerMandatory: [false],
       CustomMaxDeliveryPercentage: [''],
+      GrandTotalAmount_LC: [''],
+      GrandTotalAmount_Cash: [''],
+      GrandTotalAmount_Both: [''],
+      GrandTotalQty: [''], 
 
     // ✅ Start EMPTY (important for edit mode)
     ItemArray: this.fb.array([]),
@@ -482,58 +433,6 @@ get ItemArray(): FormArray {
     this.SetDDL = false;
     this.GetInitialData()
   }
-
-  // GetInitialData(): void {
-  //   this.ShipperList = [];
-  //   let model = new GetDataModel();
-  //   model.procedureName = "usp_ProformaInvoice_GetInitialData";
-  //   model.parameters = {
-  //     userID: this.gs.getSessionData('userId'),
-  //     roleID: this.gs.getSessionData('roleId'),
-  //     PaymentType: 1
-  //   };
-  //   this.service.GetInitialData(model).subscribe((res: any) => {
-  //     if (res.status) {
-
-  //       let DataSet = JSON.parse(res.data);
-        
-  //       this.ShipperList=DataSet.Tables31;
-  //       this.BenificaryBankList=DataSet.Tables2;
-  //       this.CountryList=DataSet.Tables3;
-  //       this.PackingList=DataSet.Tables4;
-  //       this.LoadingModeList=DataSet.Tables5;
-  //       this.PaymentModeList=DataSet.Tables6;
-  //       this.ConsigneeList=DataSet.Tables7;
-  //       this.ApplicantBankList=DataSet.Tables8;
-  //       this.BuyingHouseList=DataSet.Tables9;
-        
-  //       this.DescriptionList=DataSet.Tables11;
-  //       this.WidthList=DataSet.Tables12;
-  //       this.ColorList=DataSet.Tables13;
-  //       this.PackagingList=DataSet.Tables14;
-  //       this.UnitList=DataSet.Tables15;
-  //       this.AAList=DataSet.Tables28;
-  //       this.DeliveryConditionList=DataSet.Tables17;
-  //       this.PartialShipmentList=DataSet.Tables18;
-  //       this.PriceTermsList=DataSet.Tables19;
-  //       this.ForceMajeureList=DataSet.Tables20;
-  //       this.ArbitrationList=DataSet.Tables21;
-  //       this.CurrencyList=DataSet.Tables22;
-
-  //       this.PINo=DataSet.Tables30[0].PINO;
-
-  //       if (this.SetDDL){
-  //         this.SetDDLDefaultValue();
-  //       }
-
-  //     } else {
-  //       if (res.msg == 'Invalid Token') {
-  //         this.gs.Logout();
-  //       } else {
-  //       }
-  //     }
-  //   });
-  // }
 
   GetInitialData(setDefault: boolean = true): void {
 
@@ -713,7 +612,11 @@ if (bdt) {
       Customer_ID: this.Formgroup.controls['Customer_ID'].value,
       IsMPI: this.Formgroup.controls['IsMPI'].value,
       LastUpdateDate: this.Formgroup.controls['LastUpdateDate'].value,
-      Currency_ID: this.Formgroup.controls['Currency_ID'].value
+      Currency_ID: this.Formgroup.controls['Currency_ID'].value,
+      GrandTotalQty: this.GTQTY,
+      GrandTotalAmount_LC: 0,
+      GrandTotalAmount_Cash: this.GTAMNT,
+      GrandTotalAmount_Both: 0,
     };
 
     this.service
@@ -859,7 +762,11 @@ if (bdt) {
               Customer_ID: this.Formgroup.controls['Customer_ID'].value,
               IsMPI: this.Formgroup.controls['IsMPI'].value,
               LastUpdateDate: this.Formgroup.controls['LastUpdateDate'].value,
-              Currency_ID: this.Formgroup.controls['Currency_ID'].value
+              Currency_ID: this.Formgroup.controls['Currency_ID'].value,
+              GrandTotalQty: this.GTQTY,
+              GrandTotalAmount_LC: 0,
+              GrandTotalAmount_Cash: this.GTAMNT,
+              GrandTotalAmount_Both: 0,
             };
 
   

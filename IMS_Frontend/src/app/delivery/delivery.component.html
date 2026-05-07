@@ -138,115 +138,136 @@
       </div>
 
       <div class="mt-4">
-        <p-table
-          [value]="getControls()"
-          [scrollable]="true"
-          scrollHeight="400px"
-          scrollDirection="both"
-          [tableStyle]="{ 'min-width': '120rem', 'table-layout': 'fixed' }"
-          styleClass="p-datatable-gridlines p-datatable-striped"
-        >
-          <!-- HEADER -->
-          <ng-template pTemplate="header">
-            <tr>
-              <th style="width: 10px; white-space: pre-line" pFrozenColumn>Description</th>
-              <th style="width: 5px; white-space: pre-line" pFrozenColumn>Color</th>
-              <th style="width: 5px; white-space: pre-line" pFrozenColumn>Packaging</th>
-              <th style="width: 5px; white-space: pre-line" pFrozenColumn>Width</th>
-              <th style="width: 50px; white-space: pre-line" pFrozenColumn>Actual Article No.</th>
-              <th style="width: 10px; white-space: pre-line" >Undelivered Quantity</th>
-              <th style="width: 10px; white-space: pre-line">Unit</th>
-              <th style="width: 30px; white-space: pre-line">Deliver Quantity</th>
-              <th style="width: 20px; white-space: pre-line">Roll / BOX / PCS</th>
-              <th style="width: 50px; white-space: pre-line">Remark</th>
-              <th style="width: 100px; white-space: pre-line">Stock Location</th>
-            </tr>
-          </ng-template>
-
-          <!-- BODY -->
-          <ng-template pTemplate="body" let-item>
-            <tr [formGroup]="item">
-              <td style="width: 30px; white-space: pre-line" pFrozenColumn>{{ item.value.Description }}</td>
-              <td style="width: 10px; white-space: pre-line" pFrozenColumn>{{ item.value.Color }}</td>
-              <td style="width: 10px; white-space: pre-line" pFrozenColumn>{{ item.value.Packaging }}</td>
-              <td style="width: 10px; white-space: pre-line" pFrozenColumn>{{ item.value.Measurement }}</td>
-              <td style="width: 50px; white-space: pre-line" pFrozenColumn>
-
-                    <div>
-                        {{ item.value.ActualArticle }}
-                    </div>
-
-                    <small
-                        style="
-                            color: green;
-                            font-size: 11px;
-                            font-weight: 600;
-                            white-space: pre-line;
-                        ">
-
-                        {{ item.value.StockText }}
-
-                    </small>
-
-              </td>
-              
-              <td style="width: 20px; white-space: pre-line" >{{ item.value.UndeliveredQty }}</td>
-              <td style="width: 10px; white-space: pre-line" >{{ item.value.UnitName }}</td>
-
-              <td>
-                <p-inputNumber
-                  formControlName="Delivered"
-                  placeholder="Deliver Quantity"
-                  (onInput)="SetMeterValue($event, item)"
-                   [inputStyle]="{
-        'white-space': 'pre-line',
-        'width': '100%'
-    }">
-                ></p-inputNumber>
-              </td>
-
-              <td>
-                <p-inputNumber
-                  formControlName="Roll"
-                  placeholder="Roll / BOX / PCS"
-                  [inputStyle]="{
-        'white-space': 'pre-line',
-        'width': '100%'
+        <div class="table-wrapper">
+  <p-table
+    [value]="getControls()"
+    [scrollable]="false"
+    responsiveLayout="scroll"
+    [tableStyle]="{
+      'width': '100%',
+      'table-layout': 'fixed'
     }"
-                ></p-inputNumber>
-              </td>
+    styleClass="p-datatable-gridlines p-datatable-striped compact-table"
+  >
+    <!-- HEADER -->
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 18%">
+          Actual Article No.
+        </th>
 
-              <td>
-                <input
-                  type="text"
-                  pInputText
-                  formControlName="Remark"
-                  placeholder="Remark"
-                  style="width: 100%"
-                />
-              </td>
+        <th style="width: 8%">
+          Undelivered Qty
+        </th>
 
-              <td>
-                <p-dropdown
-                  [options]="StoreLocation"
-                  optionLabel="Stock_Location_Name"
-                  optionValue="Stock_Location_ID"
-                  formControlName="Stock_Location_ID"
-                  [filter]="true"
-                  filterBy="Stock_Location_Name"
-                  [showClear]="true"
-                  placeholder="Please Select"
-                  appendTo="body"
-                  styleClass="w-100"
-                >
-                  <ng-template pTemplate="item" let-location>
-                    {{ location.Stock_Location_Name }}
-                  </ng-template>
-                </p-dropdown>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
+        <th style="width: 6%">
+          Unit
+        </th>
+
+        <th style="width: 12%">
+          Deliver Qty
+        </th>
+
+        <th style="width: 12%">
+          Roll / BOX
+        </th>
+
+        <th style="width: 22%">
+          Remark
+        </th>
+
+        <th style="width: 22%">
+          Stock Location
+        </th>
+      </tr>
+    </ng-template>
+
+    <!-- BODY -->
+    <ng-template pTemplate="body" let-item>
+      <tr [formGroup]="item">
+
+        <!-- Actual Article -->
+        <td style="width: 18%">
+          <div class="article-text">
+            {{ item.value.ActualArticle }}
+          </div>
+
+          <small class="stock-text">
+            {{ item.value.StockText }}
+          </small>
+        </td>
+
+        <td>
+          <input type="text" formControlName="PINo" />
+        </td>
+        <!-- Undelivered Qty -->
+        <td style="width: 8%">
+          {{ item.value.UndeliveredQty }}
+        </td>
+
+        <!-- Unit -->
+        <td style="width: 6%">
+          {{ item.value.UnitName }}
+        </td>
+
+        <!-- Deliver -->
+        <td style="width: 12%">
+          <p-inputNumber
+            formControlName="Delivered"
+            placeholder="Qty"
+            (onInput)="SetMeterValue($event, item)"
+            [inputStyle]="{ width: '100%' }"
+            styleClass="w-100"
+          >
+          </p-inputNumber>
+        </td>
+
+        <!-- Roll -->
+        <td style="width: 12%">
+          <p-inputNumber
+            formControlName="Roll"
+            placeholder="Roll"
+            [inputStyle]="{ width: '100%' }"
+            styleClass="w-100"
+          >
+          </p-inputNumber>
+        </td>
+
+        <!-- Remark -->
+        <td style="width: 22%">
+          <input
+            type="text"
+            pInputText
+            formControlName="Remark"
+            placeholder="Remark"
+            class="w-100"
+          />
+        </td>
+
+        <!-- Stock Location -->
+        <td style="width: 22%">
+          <p-dropdown
+            [options]="StoreLocation"
+            optionLabel="Stock_Location_Name"
+            optionValue="Stock_Location_ID"
+            formControlName="Stock_Location_ID"
+            [filter]="true"
+            filterBy="Stock_Location_Name"
+            [showClear]="true"
+            placeholder="Select"
+            appendTo="body"
+            styleClass="w-100"
+          >
+            <ng-template pTemplate="item" let-location>
+              {{ location.Stock_Location_Name }}
+            </ng-template>
+          </p-dropdown>
+        </td>
+
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
       </div>
     </form>
   </div>

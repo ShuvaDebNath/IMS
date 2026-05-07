@@ -294,6 +294,7 @@ export class GeneratePiComponent implements OnInit {
     GrandTotalAmount_LC: [''],
     GrandTotalAmount_Cash: [''],
     GrandTotalAmount_Both: [''],
+    GrandTotalQty: [''],    
 
     // ✅ Start EMPTY (important for edit mode)
     ItemArray: this.fb.array([]),
@@ -621,6 +622,10 @@ get ItemArray(): FormArray {
         this.Formgroup.controls['Terms_of_Delivery_ID'].value,
       IsBuyerMandatory: this.Formgroup.controls['IsBuyerMandatory'].value,
       Customer_Bank_ID: this.Formgroup.controls['Customer_Bank_ID'].value,
+       GrandTotalQty: this.GTQTY,
+      GrandTotalAmount_LC: this.GTAMNT,
+      GrandTotalAmount_Cash: 0,
+      GrandTotalAmount_Both: 0,
     };
 
     const detailsRaw =
@@ -706,6 +711,10 @@ get ItemArray(): FormArray {
       cancelButtonText: 'Cancel',
     }).then((result) => {
       if (result.isConfirmed) {
+
+        console.log(this.Formgroup.getRawValue());
+        
+
         // Use getRawValue to get all form values, including disabled controls and nested arrays
         let model = {
           PI_Master_ID: this.Formgroup.controls['PI_Master_ID'].value,
@@ -751,9 +760,13 @@ get ItemArray(): FormArray {
           LastUpdateDate: this.Formgroup.controls['LastUpdateDate'].value,
           ExpireDate: DateFormat.toApiDate(this.Formgroup.controls['ExpireDate'].value),
           Terms_of_Delivery_ID:
-            this.Formgroup.controls['Terms_of_Delivery_ID'].value,
+            this.Formgroup.controls['Terms_of_Delivery_ID'].value,  
           IsBuyerMandatory: this.Formgroup.controls['IsBuyerMandatory'].value,
           Customer_Bank_ID: this.Formgroup.controls['Customer_Bank_ID'].value,
+          GrandTotalQty: this.GTQTY,
+          GrandTotalAmount_LC: this.GTAMNT,
+          GrandTotalAmount_Cash: 0,
+          GrandTotalAmount_Both: 0,
         };
 
         // Deep-clone to avoid mutating the live FormArray in-place.

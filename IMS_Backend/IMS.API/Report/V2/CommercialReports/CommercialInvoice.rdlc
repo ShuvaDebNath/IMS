@@ -1379,7 +1379,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>2. For account &amp; risk of Messers/ Applicant Bank Details/ To The Order of:</Value>
+                    <Value>2. For account &amp; risk of Messers/ Applicant Bank Details/ Drawn On/ Endorsed/ To The Order Of/ Consigned to/Notify:</Value>
                     <Style>
                       <FontSize>8pt</FontSize>
                     </Style>
@@ -2587,7 +2587,7 @@ We certify that the quality, quantity, other particulars and unit price of the m
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Accessories for 100pct export oriented garments industry</Value>
+                    <Value>ACCESSORIES FOR 100 PERCENT EXPORT ORIENTED READY MADE GARMENTS INDUSTRY.</Value>
                     <Style>
                       <FontSize>8pt</FontSize>
                     </Style>
@@ -2600,79 +2600,11 @@ We certify that the quality, quantity, other particulars and unit price of the m
             <Top>4.32994in</Top>
             <Left>0.37136in</Left>
             <Height>0.1875in</Height>
-            <Width>4.65625in</Width>
+            <Width>7.125in</Width>
             <ZIndex>27</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox59">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>Total CPT Charge</Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox55</rd:DefaultName>
-            <Top>5.79453in</Top>
-            <Left>5.95818in</Left>
-            <Height>0.25in</Height>
-            <Width>1in</Width>
-            <ZIndex>28</ZIndex>
-            <Style>
-              <Border>
-                <Style>Solid</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox61">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=Sum(Fields!Total_Amount.Value)</Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                      <FontWeight>Normal</FontWeight>
-                      <Format>'$'#,0.00</Format>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox55</rd:DefaultName>
-            <Top>5.79453in</Top>
-            <Left>6.95824in</Left>
-            <Height>0.25in</Height>
-            <Width>1.31918in</Width>
-            <ZIndex>29</ZIndex>
-            <Style>
-              <Border>
-                <Style>Solid</Style>
               </Border>
               <PaddingLeft>2pt</PaddingLeft>
               <PaddingRight>2pt</PaddingRight>
@@ -2736,7 +2668,7 @@ We certify that the quality, quantity, other particulars and unit price of the m
             <Left>0.38537in</Left>
             <Height>0.75in</Height>
             <Width>5.51722in</Width>
-            <ZIndex>30</ZIndex>
+            <ZIndex>28</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2772,7 +2704,7 @@ We certify that the quality, quantity, other particulars and unit price of the m
             <Left>0.38537in</Left>
             <Height>0.18072in</Height>
             <Width>7.90616in</Width>
-            <ZIndex>31</ZIndex>
+            <ZIndex>29</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2837,7 +2769,7 @@ We certify that the quality, quantity, other particulars and unit price of the m
             <Left>4.13175in</Left>
             <Height>0.61456in</Height>
             <Width>4.13171in</Width>
-            <ZIndex>32</ZIndex>
+            <ZIndex>30</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -2901,7 +2833,7 @@ We certify that the quality, quantity, other particulars and unit price of the m
             <Left>0.37136in</Left>
             <Height>0.375in</Height>
             <Width>7.89208in</Width>
-            <ZIndex>33</ZIndex>
+            <ZIndex>31</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
