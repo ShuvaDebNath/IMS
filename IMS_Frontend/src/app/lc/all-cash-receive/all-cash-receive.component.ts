@@ -15,6 +15,7 @@ import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
 import { DoubleMasterEntryModel } from 'src/app/models/DoubleMasterEntryModel';
 import { CG } from 'src/app/models/cg';
 import { ReportService } from 'src/app/services/reportService/report-service.service';
+import { DateFormat } from 'src/app/shared/date-format';
 
 @Component({
   selector: 'app-all-cash-receive',
@@ -85,26 +86,26 @@ export class AllCashReceiveComponent {
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
     this.title.setTitle('All Cash Receive');
 
-    var fDate = new Date();
-    const mm = String(fDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-    const dd = String(fDate.getDate()).padStart(2, '0');
-    const yyyy = fDate.getFullYear();
+    // var fDate = new Date();
+    // const mm = String(fDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    // const dd = String(fDate.getDate()).padStart(2, '0');
+    // const yyyy = fDate.getFullYear();
 
-    const formatted = `${mm}/${dd}/${yyyy}`;
+    // const formatted = `${mm}/${dd}/${yyyy}`;
 
-    const threeMonthsAgo = new Date();
-    threeMonthsAgo.setMonth(fDate.getMonth() - 3);
+    // const threeMonthsAgo = new Date();
+    // threeMonthsAgo.setMonth(fDate.getMonth() - 3);
 
-    const mmT = String(threeMonthsAgo.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-    const ddT = String(threeMonthsAgo.getDate()).padStart(2, '0');
-    const yyyyT = threeMonthsAgo.getFullYear();
+    // const mmT = String(threeMonthsAgo.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    // const ddT = String(threeMonthsAgo.getDate()).padStart(2, '0');
+    // const yyyyT = threeMonthsAgo.getFullYear();
 
-    const formattedT = `${mmT}/${ddT}/${yyyyT}`;
+    // const formattedT = `${mmT}/${ddT}/${yyyyT}`;
 
-    this.SearchForm.get('fromDate')?.setValue(formattedT);
-    this.SearchForm.get('toDate')?.setValue(formatted);
+    // this.SearchForm.get('fromDate')?.setValue(formattedT);
+    // this.SearchForm.get('toDate')?.setValue(formatted);
 
-    this.Search();
+    // this.Search();
   }
   initForm(): void {
     this.SearchForm = this.fb.group({
@@ -113,19 +114,9 @@ export class AllCashReceiveComponent {
     });
   }
   Search() {
-    const convertDateFormat = (dateStr: string): string => {
-      if (!dateStr) return '';
-      const parts = dateStr.split('/');
-      if (parts.length === 3) {
-        return `${parts[1]}/${parts[0]}/${parts[2]}`;
-      }
-      return dateStr;
-    };
-    var finput = new Date();
-    var fromDate = convertDateFormat(this.SearchForm.value.fromDate);
-
-    var tinput = new Date();
-    var toDate = convertDateFormat(this.SearchForm.value.toDate);
+   
+    var fromDate = DateFormat.toApiDate(this.SearchForm.value.fromDate);
+    var toDate = DateFormat.toApiDate(this.SearchForm.value.toDate);
 
     let param = new GetDataModel();
     param.procedureName = '[usp_CashReceive_List]';

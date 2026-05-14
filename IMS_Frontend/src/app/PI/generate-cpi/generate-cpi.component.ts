@@ -54,6 +54,7 @@ tempPI?: string | null;
  PI_Master_ID!: string;  
 isEdit = false;
 basePINo: string = '';
+previousValues: any = {};
 
   constructor(private service: MasterEntryService,
     private des: DoubleMasterEntryService,
@@ -76,34 +77,7 @@ basePINo: string = '';
     }
   }
 
-
   }
-
-  // ngOnInit(): void {
-  //   this.PageTitle = 'Generate LC PI';
-
-  // this.GTQTY = 0;
-  // this.GTAMNT = 0;
-
-  // this.SetDDL = true;
-
-  // if (this.isEdit && this.PI_Master_ID) {
-
-  //   // ✅ ONLY load dropdowns, NO default values
-  //   this.GenerateFrom(false);
-
-  //   // ✅ THEN load edit data
-  //   this.GetById(this.PI_Master_ID);
-
-  // } else {
-
-  //   // ✅ Create mode only
-  //   this.GenerateFrom(true);
-  // }
-
-  // this.RegisterFormControlsChangeEvent();
-  // }
-
   
   ngOnInit(): void {
 
@@ -216,6 +190,7 @@ basePINo: string = '';
 
         const header = ds.Tables1?.[0];   // Master
         const details = ds.Tables2 || []; // Details
+
         if (header) {
           this.Formgroup.patchValue(header);
         }
@@ -247,7 +222,7 @@ basePINo: string = '';
       Quantity: [item.Quantity],
       Unit_ID: [item.Unit_ID],
       Unit_Price: [item.Unit_Price],
-      Total_Amount: [item.Total_Amount],
+      Total_Amount_Tk: [item.Total_Amount_Tk],
       CommissionUnit: [item.CommissionUnit],
       TotalCommission: [item.TotalCommission],
       Item_ID: [item.Item_ID]
@@ -308,6 +283,7 @@ basePINo: string = '';
       GrandTotalAmount_Cash: [''],
       GrandTotalAmount_Both: [''],
       GrandTotalQty: [''], 
+      ReceiveAmount: [''],
 
     // ✅ Start EMPTY (important for edit mode)
     ItemArray: this.fb.array([]),
@@ -334,9 +310,6 @@ addInitialRow() {
 get ItemArray(): FormArray {
   return this.Formgroup.get('ItemArray') as FormArray;
 }
-
-
-
 
   InitRow() {
     return this.fb.group({
@@ -397,6 +370,26 @@ get ItemArray(): FormArray {
     this.calculatetotalGrandTotal();
   }
 
+  //---------------------------------------------------
+  // STORE PREVIOUS VALUE
+  //---------------------------------------------------
+
+  storePreviousValue(
+    index: number,
+    field: string,
+    row: any
+  ) {
+
+    if (!this.previousValues[index]) {
+      this.previousValues[index] = {};
+    }
+
+    this.previousValues[index][field] =
+      Number(row.get(field)?.value || 0);
+
+  }
+
+
   calculatetotalGrandTotal() {
     this.GTQTY = 0; this.GTAMNT = 0;
     const itemArray = this.Formgroup.get('ItemArray') as FormArray;
@@ -405,6 +398,117 @@ get ItemArray(): FormArray {
       this.GTAMNT += control.value.Total_Amount_Tk;
     });
   }
+
+  calculatetotalGrandTotal_V2(
+  row?: any,
+  index?: number,
+  changedField?: string
+) {
+
+  // Recalculate the changed row's amounts first (replaces calculateAmount)
+  if (row) {
+    const qty = Number(row.get('Quantity')?.value || 0);
+    const rate = Number(row.get('Unit_Price')?.value || 0);
+    const proCostUnit = Number(row.get('CommissionUnit')?.value || 0);
+    row.get('Total_Amount_Tk')?.setValue(qty * rate);
+    row.get('Total_Amount')?.setValue((qty * rate) / this.ExchangeRate);
+    row.get('TotalCommission')?.setValue(qty * proCostUnit);
+  }
+
+  this.GTQTY = 0;
+  this.GTAMNT = 0;
+
+  const itemArray =
+    this.Formgroup.get('ItemArray') as FormArray;
+
+  itemArray.controls.forEach(control => {
+
+    this.GTQTY += Number(control.value.Quantity || 0);
+
+    this.GTAMNT += Number(control.value.Total_Amount_Tk || 0);
+
+  });
+
+  //---------------------------------------------------
+  // VALIDATION
+  //---------------------------------------------------
+
+  const receiveAmount =
+    Number(this.Formgroup.controls['ReceiveAmount'].value || 0);
+
+  if (
+    receiveAmount > 0 &&
+    this.GTAMNT > receiveAmount
+  ) {
+
+    Swal.fire(
+      'Warning',
+      'Receive Amount cannot be less than Grand Total Amount.',
+      'warning'
+    );
+
+    //---------------------------------------------------
+    // ROLLBACK
+    //---------------------------------------------------
+
+   if (index != null && row && changedField) {
+
+  const oldValue =
+    this.previousValues[index] &&
+    this.previousValues[index][changedField]
+      ? this.previousValues[index][changedField]
+      : 0;
+
+  //---------------------------------------------------
+  // RESTORE OLD VALUE
+  //---------------------------------------------------
+
+  row.get(changedField)?.setValue(oldValue);
+
+  //---------------------------------------------------
+  // RECALCULATE ROW
+  //---------------------------------------------------
+
+  const qty =
+    Number(row.get('Quantity')?.value || 0);
+
+  const rate =
+    Number(row.get('Unit_Price')?.value || 0);
+
+  const totalAmount = qty * rate;
+
+  row.get('Total_Amount_Tk')
+    ?.setValue(totalAmount);
+
+  //---------------------------------------------------
+  // FORCE UPDATE
+  //---------------------------------------------------
+
+  row.updateValueAndValidity();
+
+  //---------------------------------------------------
+  // RECALCULATE GRAND TOTAL
+  //---------------------------------------------------
+
+  this.GTQTY = 0;
+  this.GTAMNT = 0;
+
+  const itemArray =
+    this.Formgroup.get('ItemArray') as FormArray;
+
+  itemArray.controls.forEach(control => {
+
+    this.GTQTY += Number(control.value.Quantity || 0);
+
+    this.GTAMNT += Number(control.value.Total_Amount_Tk || 0);
+
+  });
+
+}
+
+  }
+
+}
 
   isInvalid(itemrow: any, controlName: any) {
     if (itemrow.controls[controlName].invalid && (itemrow.controls[controlName].touched || this.isSubmit)) {
@@ -617,9 +721,15 @@ if (bdt) {
       GrandTotalAmount_Both: 0,
     };
 
+    const details = JSON.parse(JSON.stringify(this.Formgroup.value.ItemArray));
+    details.forEach((item: any) => {
+      delete item.PI_Detail_ID;
+      delete item.ReceiveAmount;
+    });
+
     this.service
           .SaveDataMasterDetailsWithLog(
-            this.Formgroup.value.ItemArray,
+            details,
             'tbl_pi_detail',
             model,
             'tbl_pi_master',
@@ -769,11 +879,16 @@ if (bdt) {
 
   
   
+          const details = JSON.parse(JSON.stringify(this.Formgroup.value.ItemArray));
+          details.forEach((item: any) => {
+            delete item.ReceiveAmount;
+          });
+
           const whereParams = { PI_Master_ID: model.PI_Master_ID };     
   
           this.des
             .UpdateDataMasterDetailsWithLog(
-              this.Formgroup.value.ItemArray,
+              details,
               'tbl_pi_detail',
               model,
               'tbl_pi_master',

@@ -345,7 +345,6 @@ export class PiListComponent implements OnInit {
         if (results.status) {
           this.PIDetails = JSON.parse(results.data).Tables1;
           this.PIData = this.PIDetails[0];
-          console.log(this.PIData, this.PIDetails)
           this.computePidTotals();
         } else if (results.msg == 'Invalid Token') {
           Swal.fire('Session Expired!', 'Please Login Again.', 'info');
@@ -764,8 +763,6 @@ export class PiListComponent implements OnInit {
           });
           return;
         }
-
-        console.log(res);
         
 
         this.piLogEntries    = filtered;

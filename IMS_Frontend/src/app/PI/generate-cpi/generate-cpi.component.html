@@ -649,7 +649,8 @@
                         font-size: 14px;
                         text-align: right;
                       "
-                      (change)="calculateAmount(itemrow)"
+                      (focus)="storePreviousValue(i, 'Quantity', itemrow)"
+                      (change)="calculatetotalGrandTotal_V2(itemrow, i, 'Quantity')"
                       formControlName="Quantity"
                       type="number"
                       class="form-control form-control-sm"
@@ -691,7 +692,8 @@
                         font-size: 14px;
                         text-align: right;
                       "
-                      (change)="calculateAmount(itemrow)"
+                      (focus)="storePreviousValue(i, 'Unit_Price', itemrow)"
+                      (change)="calculatetotalGrandTotal_V2(itemrow, i, 'Unit_Price')"
                       formControlName="Unit_Price"
                       type="number"
                       class="form-control form-control-sm text-right"
@@ -839,7 +841,7 @@
                   <input
                     type="text"
                     class="form-control form-control-sm fw-bold"
-                    value="{{ GTQTY }}"
+                    [value]="GTQTY"
                     placeholder="Total Qty"
                     id="GTQty"
                     name="GTQty"
@@ -857,7 +859,25 @@
                 <th
                   class="text-center align-middle"
                   style="width: 120px; background: #e9ecef"
-                ></th>
+                >
+              <input
+                    type="text"
+                    class="form-control form-control-sm text-center fw-bold"
+                    [value]="Formgroup.get('ReceiveAmount')?.value"
+                    placeholder="Unit"
+                    id="GTUnit"
+                    name="GTUnit"
+                    readonly
+                    style="
+                      height: 48px;
+                      font-size: 16px;
+                      font-weight: 700;
+                      background-color: #fff;
+                      border: 2px solid #6c757d;
+                      text-align: center;
+                    "
+                  />
+              </th>
                 <th
                   class="text-center align-middle"
                   style="width: 150px; background: #e9ecef"
@@ -869,7 +889,7 @@
                   <input
                     type="text"
                     class="form-control form-control-sm text-right fw-bold"
-                    value="{{ GTAMNT }}"
+                    [value]="GTAMNT"
                     placeholder="Total Amount"
                     id="GTAmout"
                     name="GTAmout"
