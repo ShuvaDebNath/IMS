@@ -443,7 +443,7 @@ get ItemArray(): FormArray {
   model.parameters = {
     userID: this.gs.getSessionData('userId'),
     roleID: this.gs.getSessionData('roleId'),
-    PaymentType: 2,
+    PaymentType: 1,
   };
 
   this.service.GetInitialData(model).subscribe((res: any) => {
@@ -506,8 +506,6 @@ if (bdt) {
 
 
   Save(): void {
-
-    console.log(this.Formgroup.controls['Currency_ID']?.value);
 
     const requiredFields = [
       { key: 'Consignee_Initial', label: 'Consignee Initial' },

@@ -377,7 +377,7 @@ export class PiListComponent implements OnInit {
 
           if (this.UserList.length === 1) {
             this.SearchFormgroup.controls['User_ID'].setValue(
-              this.UserList[0].UserName
+              this.UserList[0].User_ID
             );
           }
         } else if (results.msg == 'Invalid Token') {
@@ -448,9 +448,8 @@ export class PiListComponent implements OnInit {
       return;
     }
     const selectedIds = this.selectedRows.map((r) => r.PI_Master_ID);
-    console.log(status);
     
-       var percentageStatus = '0';
+   var percentageStatus = '0';
     Swal.fire({
       title: `Do you want to ${status}?`,
       showDenyButton: true,
@@ -477,6 +476,7 @@ export class PiListComponent implements OnInit {
                     results.message,
                     'success'
                   ).then(() => {
+                    this.selectedRows = [];
                     this.ngOnInit();
                   });
                 } else if (results.message == 'Invalid Token') {

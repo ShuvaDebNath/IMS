@@ -6,5 +6,5 @@ namespace Boilerplate.Contracts.Services;
 
 public interface IGoodsDeliveryService
 {
-    Task<Messages> Save(List<PI_Ledger> model,string AuthUserId);
+    Task<Messages> Save(List<PI_Ledger> model,string AuthUserId, string AuthUserName);
 }

@@ -102,10 +102,13 @@
             
             <div class="col-md-3">
               <label>PI No</label>
-              <p-dropdown [style]="{ width: '100%' }" [options]="piList" formControlName="PINo" optionLabel="PINo" optionValue="PINo" placeholder="Search PI No"
-                [filter]="true" (onFilter)="onSearchPI($event)" (onClear)="onClearPI()" [showClear]="true"
-                [disabled]="!SearchFormgroup.get('User_ID')?.value">
-              </p-dropdown>
+                <ng-container *ngIf="UserList.length > 1 && !SearchFormgroup.get('User_ID')?.value">
+                  <input type="text" class="form-control" value="Select UserName to enable PI No filter" readonly style="background:#f8d7da;color:#721c24;" />
+                </ng-container>
+                <p-dropdown [style]="{ width: '100%' }" [options]="piList" formControlName="PINo" optionLabel="PINo" optionValue="PINo" placeholder="Search PI No"
+                  [filter]="true" (onFilter)="onSearchPI($event)" (onClear)="onClearPI()" [showClear]="true"
+                  [disabled]="UserList.length > 1 && !SearchFormgroup.get('User_ID')?.value">
+                </p-dropdown>
             </div>
             
             <div class="col-md-3">
@@ -122,7 +125,10 @@
             </div>
             
             <div class="col-md-4">
-              <label>Consignee</label>            
+              <label>Consignee</label>      
+              <ng-container *ngIf="UserList.length > 1 && !SearchFormgroup.get('User_ID')?.value">
+                  <input type="text" class="form-control" value="Select UserName to enable Consignee filter" readonly style="background:#f8d7da;color:#721c24;" />
+                </ng-container>      
               <p-dropdown [style]="{ width: '100%', height: '52px' }" class="p-0"  [options]="consigneeList" formControlName="Customer_ID" optionLabel="Company_Name"
                 optionValue="Customer_ID" placeholder="Search Consignee" [filter]="true" (onFilter)="onSearchCustomerName($event)"
                 (onClear)="onClearCustomerName()" [showClear]="true" [disabled]="!SearchFormgroup.get('User_ID')?.value"

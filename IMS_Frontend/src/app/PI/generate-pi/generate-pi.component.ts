@@ -465,6 +465,10 @@ get ItemArray(): FormArray {
       this.ShipperList = DataSet.Tables1;
       this.BenificaryBankList = DataSet.Tables2;
       this.CountryList = DataSet.Tables3;
+    // Disable Buying House DDL on load
+    setTimeout(() => {
+      this.Formgroup.get('Buyer_ID')?.disable();
+    }, 0);
       this.PackingList = DataSet.Tables4;
       this.LoadingModeList = DataSet.Tables5;
       this.PaymentModeList = DataSet.Tables6;
@@ -527,6 +531,7 @@ get ItemArray(): FormArray {
       { key: 'Destination_Port', label: 'Port Of Destination' },
       { key: 'Force_Majeure_ID', label: 'Force Majeure' },
       { key: 'Arbitration_ID', label: 'Arbitration' },
+      { key: 'ExpireDate', label: 'Expire Date' },
     ];
 
     let missingFields: string[] = [];
@@ -711,9 +716,6 @@ get ItemArray(): FormArray {
       cancelButtonText: 'Cancel',
     }).then((result) => {
       if (result.isConfirmed) {
-
-        console.log(this.Formgroup.getRawValue());
-        
 
         // Use getRawValue to get all form values, including disabled controls and nested arrays
         let model = {

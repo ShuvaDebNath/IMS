@@ -27,7 +27,7 @@ namespace Boilerplate.Service.Services
             _validationHelper = validationHelper;
         }
 
-        public async Task<Messages> Save(List<PI_Ledger> model, string AuthUserId)
+        public async Task<Messages> Save(List<PI_Ledger> model, string AuthUserId, string AuthUserName)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace Boilerplate.Service.Services
                     return MessageType.SaveError(null);
                 }
 
-                var result = await goodsDeliveryRepository.Save(model, AuthUserId);
+                var result = await goodsDeliveryRepository.Save(model, AuthUserId, AuthUserName);
 
                 if (result)
                 {

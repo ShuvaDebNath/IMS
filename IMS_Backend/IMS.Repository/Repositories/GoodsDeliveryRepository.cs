@@ -62,12 +62,46 @@ namespace IMS.Repository.Repositories
                                                 WHERE PINo = @PINo
                                             END";
 
+        private string qryStockOut = @"INSERT INTO tbl_stock
+                                        (
+                                            Item_ID,
+                                            Stock_Location_ID,
+
+                                            Stock_Out,
+                                            Roll_Out,
+                                            Bag_Out,
+
+                                            Stock_Change_Date,
+                                            Note,
+
+                                            Challan_No,
+                                            MakeBy,
+                                            MakeDate,
+                                            InsertTime
+                                        )
+                                        VALUES
+                                        (
+                                            @Item_ID,
+                                            @Stock_Location_ID,
+
+                                            @Delivered,
+                                            @Roll,
+                                            @Roll,
+
+                                            GETDATE(),
+                                            @Remark,
+                                            @Chalan_No,
+                                            @MakeBy,
+                                            GETDATE(),
+                                            GETDATE()
+                                        )";
+
         public GoodsDeliveryRepository(IConfiguration configuration) : base(configuration)
         {
 
         }
 
-        public async Task<bool> Save(List<PI_Ledger> model, string AuthUserId)
+        public async Task<bool> Save(List<PI_Ledger> model, string AuthUserId, string AuthUserName)
         {
             int rowAffect = 0;
             using (conn = new SqlConnection(_connectionStringUserDB))
@@ -84,19 +118,22 @@ namespace IMS.Repository.Repositories
                             model.ForEach(item =>
                             {
                                 item.User_ID = int.Parse(AuthUserId);
+                                item.MakeBy = AuthUserName;
 
                                 rowAffect = conn.Execute(qryPILedger, item, trn);
 
                                 rowAffect += conn.Execute(qryPIDetails, item, trn);
 
                                 rowAffect += conn.Execute(qryPIStatusCheck, item, trn);
+
+                                rowAffect += conn.Execute(qryStockOut, item, trn);
                             });
 
                             await trn.CommitAsync();
                         }
 
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         await trn.RollbackAsync();
                         throw;
