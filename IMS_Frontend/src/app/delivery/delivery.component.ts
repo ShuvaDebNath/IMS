@@ -261,6 +261,10 @@ export class DeliveryComponent implements OnInit {
             }),
           );
         });
+
+        console.log(DataSet.Tables1);
+        
+
       } else {
         if (res.msg == 'Invalid Token') {
           this.gs.Logout();

@@ -20,7 +20,7 @@ namespace Boilerplate.API.Controllers
         {
             try
             {
-                return Ok(await _goodsDelivery.Save(item,AuthUserId));
+                return Ok(await _goodsDelivery.Save(item,AuthUserId, AuthUserName));
             }
             catch (Exception ex)
             {

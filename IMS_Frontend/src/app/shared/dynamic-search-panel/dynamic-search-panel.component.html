@@ -1,0 +1,67 @@
+<div class="row g-2 align-items-end">
+
+  <div
+    class="col-md-3"
+    *ngFor="let field of fields"
+  >
+
+    <label>{{ field.label }}</label>
+
+    <!-- TEXT -->
+    <input
+      *ngIf="field.type === 'text'"
+      type="text"
+      class="form-control"
+      [formControlName]="field.controlName"
+      [placeholder]="field.placeholder"
+      [disabled]="field.disabled"
+    />
+
+    <!-- DATE -->
+    <p-calendar
+      *ngIf="field.type === 'date'"
+      [formControlName]="field.controlName"
+      dateFormat="dd/mm/yy"
+      [style]="{ width: '100%' }"
+    ></p-calendar>
+
+    <!-- DROPDOWN -->
+    <p-dropdown
+      *ngIf="field.type === 'dropdown'"
+      [options]="field.options"
+      [optionLabel]="field.optionLabel"
+      [optionValue]="field.optionValue"
+      [formControlName]="field.controlName"
+      [placeholder]="field.placeholder"
+      [filter]="field.filter"
+      [showClear]="field.showClear"
+      [disabled]="field.disabled"
+      [style]="{ width: '100%' }"
+    >
+    </p-dropdown>
+
+  </div>
+  
+  <div class="row mt-3 justify-content-end">
+  <div class="col-auto">
+    <button
+      type="button"
+      class="btn btn-outline-secondary btn-sm"
+      (click)="clear.emit()"
+    >
+      Clear
+    </button>
+  </div>
+
+  <div class="col-auto">
+    <button
+      type="button"
+      class="btn theme-btn btn-sm"
+      (click)="search.emit()"
+    >
+      Search
+    </button>
+  </div>
+</div>
+
+</div>

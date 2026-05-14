@@ -7,8 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Data;
 using System.Collections.Generic;
+using System.Data;
 using System.Text.Json.Nodes;
 
 namespace Boilerplate.Service.Services
