@@ -85,27 +85,6 @@ export class AllCashReceiveComponent {
     this.initForm();
     this.pageSizeOptions = this.gs.GetPageSizeOptions();
     this.title.setTitle('All Cash Receive');
-
-    // var fDate = new Date();
-    // const mm = String(fDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-    // const dd = String(fDate.getDate()).padStart(2, '0');
-    // const yyyy = fDate.getFullYear();
-
-    // const formatted = `${mm}/${dd}/${yyyy}`;
-
-    // const threeMonthsAgo = new Date();
-    // threeMonthsAgo.setMonth(fDate.getMonth() - 3);
-
-    // const mmT = String(threeMonthsAgo.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-    // const ddT = String(threeMonthsAgo.getDate()).padStart(2, '0');
-    // const yyyyT = threeMonthsAgo.getFullYear();
-
-    // const formattedT = `${mmT}/${ddT}/${yyyyT}`;
-
-    // this.SearchForm.get('fromDate')?.setValue(formattedT);
-    // this.SearchForm.get('toDate')?.setValue(formatted);
-
-    // this.Search();
   }
   initForm(): void {
     this.SearchForm = this.fb.group({
