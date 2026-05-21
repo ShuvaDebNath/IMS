@@ -290,6 +290,7 @@ export class GenerateLcComponent {
     lc.Applicant_BIN_VAT = this.Formgroup.value.ApplicantBINVAT;
     lc.HS_Code = this.Formgroup.value.HSCode;
     lc.Bank_BIN_No = this.Formgroup.value.BankBINNo;
+    lc.Bank_TIN_No = this.Formgroup.value.BankTINNo;
     lc.Remarks = this.Formgroup.value.Remarks;
     lc.IRC_No = this.Formgroup.value.IRCNo;
     lc.System_Created_Date = formatted;
@@ -412,6 +413,7 @@ export class GenerateLcComponent {
               BankBINNo: e.Bank_BIN_No,
               Remarks: e.Remarks,
               IRCNo: e.IRC_No,
+              BankTINNo: e.Bank_TIN_No,
               System_Created_Date: this.convertDatesddmmyyy(e.System_Created_Date)
             });
 
@@ -531,6 +533,7 @@ export class GenerateLcComponent {
     lc.Remarks = this.Formgroup.value.Remarks;
     lc.IRC_No = this.Formgroup.value.IRCNo;
     lc.System_Created_Date = DateFormat.toApiDate(this.Formgroup.value.System_Created_Date);
+    lc.Bank_TIN_No = this.Formgroup.value.BankTINNo;
     lc.PI_No = this.Formgroup.value.PINo.join(','); 
 
     var condition = {
