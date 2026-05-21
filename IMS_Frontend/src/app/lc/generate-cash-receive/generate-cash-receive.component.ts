@@ -207,6 +207,13 @@ export class GenerateCashReceiveComponent {
 
     const formatted = `${mm}/${dd}/${yyyy}`;
 
+    const hh = String(fDate.getHours()).padStart(2, '0');
+    const min = String(fDate.getMinutes()).padStart(2, '0');
+    const ss = String(fDate.getSeconds()).padStart(2, '0');
+
+    const formattedWithDateTme = `${mm}/${dd}/${yyyy} ${hh}:${min}:${ss}`;
+
+
     var filterSuperior = this.MarketingConcern.filter(
       (e: any) => e.User_ID == this.Formgroup.value.Marketing_Concern
     );
@@ -235,7 +242,7 @@ export class GenerateCashReceiveComponent {
     cd.Balance =
       this.Formgroup.value.PIValue ;
     cd.PI_Master_ID = this.Formgroup.value.PI;
-    cd.System_Created_Date = formatted;
+    cd.System_Created_Date =  formattedWithDateTme;
 
     
 
@@ -253,7 +260,7 @@ export class GenerateCashReceiveComponent {
         this.Formgroup.value.ReceiveDate == undefined
           ? null
           : this.Formgroup.value.ReceiveDate,
-      CreatedDate: formatted,
+      CreatedDate: formattedWithDateTme,
       UserId: userId,
       CR_ID: '',
     };

@@ -2,9 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { CG } from 'src/app/models/cg';
-import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
-import { Roles } from 'src/app/models/roles.model';
+import { DateFormat } from 'src/app/shared/date-format';
 import { GlobalServiceService } from 'src/app/services/Global-service.service';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 import swal from 'sweetalert2';
@@ -123,22 +121,28 @@ export class CashReceiveUpdateComponent {
 
     const formatted = `${mm}/${dd}/${yyyy}`;
 
+    const hh = String(fDate.getHours()).padStart(2, '0');
+    const min = String(fDate.getMinutes()).padStart(2, '0');
+    const ss = String(fDate.getSeconds()).padStart(2, '0');
+
+    const formattedWithDateTme = `${mm}/${dd}/${yyyy} ${hh}:${min}:${ss}`;
+
     var userId = window.localStorage.getItem('userId');
 
     var model = {
       'ReceiveAmount':this.Formgroup.value.ReceiveAmount,      
-      'ReceiveDate':this.Formgroup.value.ReceiveDate,
+      'ReceiveDate': DateFormat.toApiDate(this.Formgroup.value.ReceiveDate),
       'UserId':userId,
-      'CreatedDate':formatted,
+      'CreatedDate': formattedWithDateTme,
       'CR_ID':this.CRId
     }
 
     
     var updateModel = {
       'ReceiveAmount':this.Formgroup.value.ReceiveAmount,      
-      'ReceiveDate':this.Formgroup.value.ReceiveDate,
+      'ReceiveDate': DateFormat.toApiDate(this.Formgroup.value.ReceiveDate),
       'UserId':userId,
-      'CreatedDate':formatted
+      'CreatedDate':formattedWithDateTme
     }
 
 
