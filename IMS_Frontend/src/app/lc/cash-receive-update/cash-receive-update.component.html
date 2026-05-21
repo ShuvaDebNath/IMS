@@ -27,8 +27,19 @@
                     </div>
             </div>
             <div class="col-md-6">
-                <label class="control-label" for="inlineFormInputGroup">Receive Date</label>
-                <div class="input-group mb-2">
+                <label class="text-end fs-6 fw-bold me-2 mb-0 col-5"
+                    >Receive Date <span>*</span></label
+                  >
+                <p-calendar
+                      formControlName="ReceiveDate"
+                      [showIcon]="false"
+                      dateFormat="dd/mm/yy"
+                      placeholder="Select Date"
+                      class="w-100"
+                      [style]="{ width: '100%' }"
+                      inputStyleClass="form-control custom-date-input"
+                    ></p-calendar>
+                <!-- <div class="input-group mb-2">
                     <div class="input-group-sm input-group-prepend">
                     <div class="input-group-text" (click)="dpfrom.toggle()"><i class="fas fa-calendar"></i></div>
                     </div>
@@ -37,7 +48,7 @@
                     containerClass: 'theme-green'
                     }" class="form-control-sm form-control bg-white" id="ReceiveDate" name="ReceiveDate" placeholder="DD/MM/YYYY"
                     #dpfrom="bsDatepicker" bsDatepicker readonly />
-                </div>
+                </div> -->
             </div>
           </div>
         </form>

@@ -283,7 +283,7 @@ previousValues: any = {};
       GrandTotalAmount_Cash: [''],
       GrandTotalAmount_Both: [''],
       GrandTotalQty: [''], 
-      ReceiveAmount: [''],
+      RemainingAmount: [''],
 
     // ✅ Start EMPTY (important for edit mode)
     ItemArray: this.fb.array([]),
@@ -433,12 +433,12 @@ get ItemArray(): FormArray {
   // VALIDATION
   //---------------------------------------------------
 
-  const receiveAmount =
-    Number(this.Formgroup.controls['ReceiveAmount'].value || 0);
+  const RemainingAmount =
+    Number(this.Formgroup.controls['RemainingAmount'].value || 0);
 
   if (
-    receiveAmount > 0 &&
-    this.GTAMNT > receiveAmount
+    RemainingAmount > 0 &&
+     this.GTAMNT <= RemainingAmount
   ) {
 
     Swal.fire(
@@ -724,7 +724,7 @@ if (bdt) {
     const details = JSON.parse(JSON.stringify(this.Formgroup.value.ItemArray));
     details.forEach((item: any) => {
       delete item.PI_Detail_ID;
-      delete item.ReceiveAmount;
+      delete item.RemainingAmount;
     });
 
     this.service
@@ -881,7 +881,7 @@ if (bdt) {
   
           const details = JSON.parse(JSON.stringify(this.Formgroup.value.ItemArray));
           details.forEach((item: any) => {
-            delete item.ReceiveAmount;
+            delete item.RemainingAmount;
           });
 
           const whereParams = { PI_Master_ID: model.PI_Master_ID };     

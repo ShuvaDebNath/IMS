@@ -57,6 +57,8 @@ export class DeliveryComponent implements OnInit {
   Formgroup!: FormGroup;
   Delivers!: [];
   datePipe = new DatePipe('en-US');
+  piId: any;
+  piType: any;
 
   constructor(
     private service: MasterEntryService,
@@ -135,7 +137,14 @@ export class DeliveryComponent implements OnInit {
       deliverQty += e.Delivered;
     });
 
-    if (deliverQty > parseFloat(this.Formgroup.controls['RestQty'].value)) {
+    const restQty = Number(
+  parseFloat(this.Formgroup.controls['RestQty'].value).toFixed(2)
+);
+
+const totalQty = Number(deliverQty.toFixed(2));
+
+    //if (deliverQty > parseFloat(this.Formgroup.controls['RestQty'].value)) {
+      if (totalQty > restQty) {
       Swal.fire('Info', 'Deliverable Excced.', 'info');
       item.controls['Delivered'].setValue(0);
       return;
@@ -144,7 +153,6 @@ export class DeliveryComponent implements OnInit {
     let unitID = item.controls['Unit_ID'].value;
     let value = unitID == 2 ? event.target.value * 1.09361 : 0;
     this.warehouseStockCheck(item);
-    //item.controls["Delivered"].setValue(value);
   }
   GetPIByPID() {
     if (this.SearchFormgroup.invalid) {
@@ -158,10 +166,22 @@ export class DeliveryComponent implements OnInit {
     }
 
     let model = new GetDataModel();
-    model.procedureName = 'usp_ProformaInvoice_DeliveryInfoByPIId';
-    model.parameters = {
-      TypeId: this.SearchFormgroup.controls['PIId'].value,
-    };
+
+    this.piType = this.SearchFormgroup.controls['PIType'].value;
+    this.piId = this.SearchFormgroup.controls['PIId'].value;
+
+    if (this.piType == 2) {
+      model.procedureName = 'usp_ProformaInvoice_DeliveryInfoByPIId_Cash';
+      model.parameters = {
+        PIId: this.SearchFormgroup.controls['PIId'].value,
+      };
+    }
+    else {
+      model.procedureName = 'usp_ProformaInvoice_DeliveryInfoByPIId';
+      model.parameters = {
+        PIId: this.SearchFormgroup.controls['PIId'].value,
+      };
+    }
 
     this.Formgroup.setControl('items', this.fb.array([]));
 
@@ -186,11 +206,24 @@ export class DeliveryComponent implements OnInit {
         this.Formgroup.controls['PIStatus'].setValue(
           DataSet.Tables1[0].IsMPI == 0 ? 'LC' : 'Cash',
         );
-        this.Formgroup.controls['RestQty'].setValue(
-          DataSet.Tables1[0].Unit_ID == 2
-            ? DataSet.Tables1[0].DeliverableQty_In_Meter
-            : DataSet.Tables1[0].DeliverableQty,
-        );
+
+
+        if (this.piType == 2) {
+          this.Formgroup.controls['RestQty'].setValue(
+            DataSet.Tables1[0].Unit_ID == 2
+              ? DataSet.Tables1[0].TotalDeliverableQty
+              : DataSet.Tables1[0].TotalDeliverableQty,
+          );
+        }
+        else {
+
+          this.Formgroup.controls['RestQty'].setValue(
+            DataSet.Tables1[0].Unit_ID == 2
+              ? DataSet.Tables1[0].DeliverableQty_In_Meter
+              : DataSet.Tables1[0].DeliverableQty,
+          );
+        }
+
         this.Formgroup.controls['LCNo'].setValue(DataSet.Tables1[0].LC_No);
         this.Formgroup.controls['IsCash'].setValue(DataSet.Tables1[0].CR_NO);
 
@@ -228,6 +261,8 @@ export class DeliveryComponent implements OnInit {
         }
 
         DataSet.Tables1.forEach((item: any) => {
+
+          
           itemarray.push(
             this.fb.group({
               PI_Detail_ID: [item.PI_Detail_ID],
@@ -244,6 +279,7 @@ export class DeliveryComponent implements OnInit {
               Packaging: [item.Packaging, [Validators.required]],
               Measurement: [item.Measurement, [Validators.required]],
               ActualArticle: [item.ActualArticle, [Validators.required]],
+              
               UndeliveredQty: [
                 item.Unit_ID == 2
                   ? item.UndeliveredQty_In_Meter
@@ -262,7 +298,7 @@ export class DeliveryComponent implements OnInit {
           );
         });
 
-        console.log(DataSet.Tables1);
+     
         
 
       } else {
@@ -443,4 +479,39 @@ export class DeliveryComponent implements OnInit {
       }
     });
   }
+
+  getTotalDeliveredQty(): number {
+
+  return this.getControls().reduce(
+    (sum: number, item: any) => {
+
+      return sum + Number(item.get('Delivered')?.value || 0);
+
+    },
+    0
+  );
+
+}
+
+
+getTotalRoll(): number {
+
+  return this.getControls().reduce(
+    (sum: number, item: any) => {
+
+      return sum + Number(item.get('Roll')?.value || 0);
+
+    },
+    0
+  );
+
+}
+
+getAvailableDeliverableQty(restQty: number): number {
+
+  const available = restQty - this.getTotalDeliveredQty();
+
+  return available < 0 ? 0 : available;
+
+}
 }

@@ -71,7 +71,7 @@ export class PiListComponent implements OnInit {
   PITypeList: any[] = [
     { value: 2, text: 'LC' },
     { value: 1, text: 'Cash' },
-    // { value: 3, text: 'Both' },
+    { value: 3, text: 'Both' },
   ];
   first: any = 1;
   rows: any = 10;

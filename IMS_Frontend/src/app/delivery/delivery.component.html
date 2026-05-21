@@ -95,6 +95,7 @@
               pInputText
               formControlName="Chalan_No"
               class="w-100"
+              inputStyleClass="text-center w-100"
             />
           </div>
         </div>
@@ -106,6 +107,7 @@
               [readonly]="true"
               formControlName="RestQty"
               styleClass="w-100"
+              inputStyleClass="text-center w-100"
             ></p-inputNumber>
           </div>
         </div>
@@ -118,6 +120,7 @@
               readonly
               pInputText
               formControlName="LCNo"
+              inputStyleClass="text-center w-100"
               class="w-100"
             />
           </div>
@@ -132,8 +135,18 @@
               pInputText
               formControlName="IsCash"
               class="w-100"
+              inputStyleClass="text-center w-100"
             />
           </div>
+        </div>
+
+        <div class="mb-2">        
+          <strong>
+            Available Deliverable Qty :
+          </strong>
+        
+           {{ getAvailableDeliverableQty(Formgroup.get('RestQty')?.value)  | number:'1.2-2'  }}
+        
         </div>
       </div>
 
@@ -215,8 +228,13 @@
             formControlName="Delivered"
             placeholder="Qty"
             (onInput)="SetMeterValue($event, item)"
-            [inputStyle]="{ width: '100%' }"
+            inputStyleClass="text-center w-100"
+            [inputStyle]="{ width: '100%'}"            
             styleClass="w-100"
+
+            mode="decimal"
+    [minFractionDigits]="2"
+    [maxFractionDigits]="2"
           >
           </p-inputNumber>
         </td>
@@ -226,6 +244,7 @@
           <p-inputNumber
             formControlName="Roll"
             placeholder="Roll"
+            inputStyleClass="text-center w-100"
             [inputStyle]="{ width: '100%' }"
             styleClass="w-100"
           >
@@ -265,7 +284,50 @@
 
       </tr>
     </ng-template>
+
+      <!-- FOOTER -->
+<ng-template pTemplate="footer">
+  <tr>
+
+    <!-- Actual Article -->
+    <td style="width: 18%">
+      <strong>Total</strong>
+    </td>
+
+    <!-- Undelivered Qty -->
+    <td style="width: 8%"></td>
+
+    <!-- Unit -->
+    <td style="width: 6%"></td>
+
+    <!-- Deliver Qty -->
+    <td style="width: 12%">
+      <strong>
+        {{ getTotalDeliveredQty() }}
+      </strong>
+    </td>
+
+    <!-- Roll -->
+    <td style="width: 12%">
+      <strong>
+        {{ getTotalRoll() }}
+      </strong>
+    </td>
+
+    <!-- Remark -->
+    <td style="width: 22%"></td>
+
+    <!-- Stock Location -->
+    <td style="width: 22%"></td>
+    
+
+  </tr>
+</ng-template>
+
+    
   </p-table>
+
+
 </div>
       </div>
     </form>
