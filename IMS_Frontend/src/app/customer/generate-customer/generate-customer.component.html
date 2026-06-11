@@ -1,7 +1,8 @@
-
 <div class="m-2 p-2 shadow-sm">
   <div class="row d-flex justify-content-center">
+
     <div class="card card-default">
+
       <div class="card-header">
         <h2 class="p-2 font-weight-bold">
           {{ !isEdit ? "Add" : "Edit" }}
@@ -9,498 +10,445 @@
           <span>Generate Customer</span>
         </h2>
       </div>
+
       <div class="card-body">
-        <div class="d-flex justify-content-center mt-4">
-          <form [formGroup]="Formgroup" [style]="{ width: '90%' }">
-            <div class="row g-3 align-items-center mb-2">
-              <div class="col-md-5 d-flex align-items-center">
-                <label class="text-end fs-6 fw-bold me-2 mb-0 col-5">Shipper Name</label>
-                <p-dropdown 
-                    [options]="BaneficiaryAccountList" 
-                    optionLabel="CompanyName" 
-                    [filter]="true" 
-                    filterBy="CompanyName"
-                    [showClear]="true" 
-                    optionValue="Beneficiary_Account_ID" 
-                    formControlName="Beneficiary_Account_ID"
-                    [virtualScroll]="true" 
-                    [virtualScrollItemSize]="30" 
-                    appendTo="body" 
-                    panelStyleClass="description-panel"
-                    placeholder="Select Shipper" 
-                    styleClass="table-dropdown w-100 all-lc-input">
-                  <ng-template let-AB pTemplate="item">
-                    <div>{{ AB.CompanyName }}</div>
-                  </ng-template>
-                </p-dropdown>
+
+        <form [formGroup]="Formgroup">
+
+          <!-- SHIPPER -->
+          <div class="row mb-4">
+
+            <div class="col-md-6">
+
+              <div class="row align-items-center">
+
+                <div class="col-md-4">
+                  <label class="fw-bold">Shipper Name</label>
                 </div>
-              <div class="col-md-2"></div>
+
+                <div class="col-md-8">
+
+                  <p-dropdown
+                    [options]="BaneficiaryAccountList"
+                    optionLabel="CompanyName"
+                    optionValue="Beneficiary_Account_ID"
+                    formControlName="Beneficiary_Account_ID"
+                    [filter]="true"
+                    filterBy="CompanyName"
+                    [showClear]="true"
+                    [virtualScroll]="true"
+                    [virtualScrollItemSize]="30"
+                    appendTo="body"
+                    placeholder="Select Shipper"
+                    styleClass="w-100"
+                  >
+                  </p-dropdown>
+
+                </div>
+
+              </div>
 
             </div>
-            <div class="row g-3 align-items-center mb-2">
-              <div class="col-md-5 d-flex align-items-center">
-                <label class="text-end fs-6 fw-bold me-2 mb-0 col-5"
-                  >Company Name</label
-                >
-                <div class="col-7">
-                  <div class="form-group d-inline">
+
+          </div>
+
+          <!-- MAIN SECTION -->
+          <div class="row">
+
+            <!-- LEFT SIDE -->
+            <div class="col-md-6">
+
+              <div class="card shadow-sm p-3 h-100">
+
+                <h5 class="fw-bold border-bottom pb-2 mb-4">
+                  Company Information
+                </h5>
+
+                <!-- Company Name -->
+                <div class="row mb-3 align-items-center">
+
+                  <div class="col-md-4">
+                    <label class="fw-bold">Company Name</label>
+                  </div>
+
+                  <div class="col-md-8">
                     <input
-                      autocomplete="off"
                       type="text"
                       formControlName="Company_Name"
                       class="form-control"
                       placeholder="Company Name"
-                      id="Company_Name"
-                      Company_Name="Company_Name"
-                      value=""
                     />
                   </div>
-                </div>
-              </div>
-              <div class="col-md-2"></div>
 
-              <div class="col-md-5 d-flex align-items-center">
-                <label class="text-end fs-6 fw-bold me-2 mb-0 col-5"
-                  >Designation</label
-                >
-                <div class="col-7">
-                  <div class="form-group d-inline">
-                    <input
-                      autocomplete="off"
-                      type="text"
-                      formControlName="Contact_Title"
-                      class="form-control"
-                      placeholder="Designation"
-                      id="Contact_Title"
-                      Company_Name="Contact_Title"
-                      value=""
-                    />
-                  </div>
                 </div>
-              </div>
-            </div>
-            <div class="row g-3 align-items-center mb-2">
-              <div class="col-md-5 d-flex align-items-center">
-                <label class="text-end fs-6 fw-bold me-2 mb-0 col-5"
-                  >Customer Address</label
-                >
-                <div class="col-7">
-                  <div class="form-group d-inline">
-                    <input
-                      autocomplete="off"
-                      type="text"
+
+                <!-- Office Address -->
+                <div class="row mb-3 align-items-center">
+
+                  <div class="col-md-4">
+                    <label class="fw-bold">Office Address</label>
+                  </div>
+
+                  <div class="col-md-8">
+                    <textarea
+                      rows="2"
                       formControlName="Customer_Address"
                       class="form-control"
-                      placeholder="Customer Address"
-                      id="Customer_Address"
-                      name="Customer_Address"
-                      value=""
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-2"></div>
-
-              <div class="col-md-5 d-flex align-items-center">
-                <label class="text-end fs-6 fw-bold me-2 mb-0 col-5"
-                  >Phone Number</label
-                >
-                <div class="col-7">
-                  <div class="form-group d-inline">
-                    <input
-                      autocomplete="off"
-                      type="text"
-                      formControlName="Phone_No"
-                      class="form-control"
-                      placeholder="Phone Number"
-                      id="Phone_No"
-                      name="Phone_No"
-                      value=""
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row g-3 align-items-center mb-2">
-              <div class="col-md-5 d-flex align-items-center">
-                <label class="text-end fs-6 fw-bold me-2 mb-0 col-5"
-                  >Company Info</label
-                >
-                <div class="col-7">
-                  <div class="form-group d-inline">
-                    <input
-                      autocomplete="off"
-                      type="text"
-                      formControlName="Company_Info"
-                      class="form-control"
-                      placeholder="Company Info"
-                      id="Company_Info"
-                      name="Company_Info"
-                      value=""
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-2"></div>
-
-              <div class="col-md-5 d-flex align-items-center">
-                <label class="text-end fs-6 fw-bold me-2 mb-0 col-5"
-                  >Fax Number</label
-                >
-                <div class="col-7">
-                  <div class="form-group d-inline">
-                    <input
-                      autocomplete="off"
-                      type="text"
-                      formControlName="FAX_No"
-                      class="form-control"
-                      placeholder="Fax Number"
-                      id="FAX_No"
-                      name="FAX_No"
-                      value=""
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row g-3 align-items-center mb-2">
-              <div class="col-md-5 d-flex align-items-center">
-                <label class="text-end fs-6 fw-bold me-2 mb-0 col-5"
-                  >Contact Person</label
-                >
-                <div class="col-7">
-                  <div class="form-group d-inline">
-                    <input
-                      autocomplete="off"
-                      type="text"
-                      formControlName="Contact_Name"
-                      class="form-control"
-                      placeholder="Contact Name"
-                      id="Contact_Name"
-                      Company_Name="Contact_Name"
-                      value=""
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-2"></div>
-
-              <div class="col-md-5 d-flex align-items-center">
-                <label class="text-end fs-6 fw-bold me-2 mb-0 col-5"
-                  >E-Mail Address</label
-                >
-                <div class="col-7">
-                  <div class="form-group d-inline">
-                    <input
-                      autocomplete="off"
-                      type="text"
-                      formControlName="Email"
-                      class="form-control"
-                      placeholder="Email"
-                      id="Email"
-                      Company_Name="Email"
-                      value=""
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row g-3 align-items-center mb-2">
-              <div class="col-md-5 d-flex align-items-center">
-                <label class="text-end fs-6 fw-bold me-2 mb-0 col-5"
-                  >City</label
-                >
-                <div class="col-7">
-                  <div class="form-group d-inline">
-                    <input
-                      autocomplete="off"
-                      type="text"
-                      formControlName="City"
-                      class="form-control"
-                      placeholder="City"
-                      id="City"
-                      name="City"
-                      value=""
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-2"></div>
-
-              <div class="col-md-5 d-flex align-items-center">
-                <label class="text-end fs-6 fw-bold me-2 mb-0 col-5"
-                  >Notes</label
-                >
-                <div class="col-7">
-                  <div class="form-group d-inline">
-                    <input
-                      autocomplete="off"
-                      type="text"
-                      formControlName="Notes"
-                      class="form-control"
-                      placeholder="Notes"
-                      id="Notes"
-                      name="Notes"
-                      value=""
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row g-3 align-items-center mb-2">
-              <div class="col-md-5 d-flex align-items-center">
-                <label class="text-end fs-6 fw-bold me-2 mb-0 col-5"
-                  >Postal Code</label
-                >
-                <div class="col-7">
-                  <div class="form-group d-inline">
-                    <input
-                      autocomplete="off"
-                      type="text"
-                      formControlName="Postal_Code"
-                      class="form-control"
-                      placeholder="Postal Code"
-                      id="Postal_Code"
-                      name="Postal_Code"
-                      value=""
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-2"></div>
-
-              <div class="col-md-5 d-flex align-items-center">
-                <label class="text-end fs-6 fw-bold me-2 mb-0 col-5"
-                  >Group Head <span>*</span></label
-                >
-                <div class="col-7">
-                  <p-dropdown
-                    [style]="{ width: '100%' }"
-                    class="p-0"
-                    [virtualScroll]="true"
-                    [virtualScrollItemSize]="30"
-                    [options]="UserList"
-                    optionLabel="UserName"
-                    [filter]="true"
-                    filterBy="UserName"
-                    [showClear]="true"
-                    styleClass="listBottom"
-                    placeholder="Please Select"
-                    optionValue="User_ID"
-                    formControlName="User_Id"
-                  >
-                    <ng-template let-AB pTemplate="item">
-                      <div class="flex align-items-center gap-2">
-                        <div>{{ AB.UserName }}</div>
-                      </div>
-                    </ng-template>
-                  </p-dropdown>
-                </div>
-              </div>
-            </div>
-            <div class="row g-3 align-items-center mb-2">
-              <div class="col-md-5 d-flex align-items-center">
-                <label class="text-end fs-6 fw-bold me-2 mb-0 col-5"
-                  >Office Address</label
-                >
-                <div class="col-7">
-                  <div class="form-group d-inline">
-                    <input
-                      autocomplete="off"
-                      type="text"
-                      formControlName="Office_Address"
-                      class="form-control"
                       placeholder="Office Address"
-                      id="Office_Address"
-                      name="Office_Address"
-                      value=""
-                    />
+                    ></textarea>
                   </div>
+
                 </div>
-              </div>
-              <div class="col-md-2"></div>
-              <div class="col-md-5 d-flex align-items-center">
-                <label class="text-end fs-6 fw-bold me-2 mb-0 col-5"
-                  >Factory Address</label
-                >
-                <div class="col-7">
-                  <div class="form-group d-inline">
-                    <input
-                      autocomplete="off"
-                      type="text"
+
+                <!-- Factory Address -->
+                <div class="row mb-3 align-items-center">
+
+                  <div class="col-md-4">
+                    <label class="fw-bold">Factory Address</label>
+                  </div>
+
+                  <div class="col-md-8">
+                    <textarea
+                      rows="2"
                       formControlName="Factory_Address"
                       class="form-control"
                       placeholder="Factory Address"
-                      id="Factory_Address"
-                      name="Factory_Address"
-                      value=""
-                    />
+                    ></textarea>
                   </div>
+
                 </div>
-              </div>
-              <div class="col-md-2"></div>              
-            </div>
-            <div class="row g-3 align-items-center mb-2">
-              <div class="col-md-5 d-flex align-items-center">
-                <label class="text-end fs-6 fw-bold me-2 mb-0 col-5"
-                  >Product Type</label
-                >
-                <div class="col-7">
-                  <div class="form-group d-inline">
+
+                <!-- Product Type -->
+                <div class="row mb-3 align-items-center">
+
+                  <div class="col-md-4">
+                    <label class="fw-bold">Product Type</label>
+                  </div>
+
+                  <div class="col-md-8">
                     <input
-                      autocomplete="off"
                       type="text"
                       formControlName="Product_Type"
                       class="form-control"
                       placeholder="Product Type"
-                      id="Product_Type"
-                      name="Product_Type"
-                      value=""
                     />
                   </div>
+
                 </div>
-              </div>
-              <div class="col-md-2"></div>
-              <div class="col-md-5 d-flex align-items-center">
-                <label class="text-end fs-6 fw-bold me-2 mb-0 col-5"
-                  >Total Worker</label
-                >
-                <div class="col-7">
-                  <div class="form-group d-inline">
+
+                <!-- Total Worker -->
+                <div class="row mb-3 align-items-center">
+
+                  <div class="col-md-4">
+                    <label class="fw-bold">Total Worker</label>
+                  </div>
+
+                  <div class="col-md-8">
                     <input
-                      autocomplete="off"
-                      type="text"
+                      type="number"
                       formControlName="Total_Worker"
                       class="form-control"
                       placeholder="Total Worker"
-                      id="Total_Worker"
-                      name="Total_Worker"
-                      value=""
                     />
                   </div>
+
                 </div>
-              </div>
-              <div class="col-md-2"></div>              
-            </div>
-            <div class="row g-3 align-items-center mb-2">
-              <div class="col-md-5 d-flex align-items-center">
-                <label class="text-end fs-6 fw-bold me-2 mb-0 col-5"
-                  >Company Type</label
-                >
-                <div class="col-7">
-                  <div class="form-group d-inline">
+
+                <!-- Company Type -->
+                <div class="row mb-3 align-items-center">
+
+                  <div class="col-md-4">
+                    <label class="fw-bold">Company Type</label>
+                  </div>
+
+                  <div class="col-md-8">
                     <input
-                      autocomplete="off"
                       type="text"
                       formControlName="Company_Type"
                       class="form-control"
                       placeholder="Company Type"
-                      id="Company_Type"
-                      name="Company_Type"
-                      value=""
                     />
                   </div>
+
                 </div>
-              </div>
-              <div class="col-md-2"></div>
-              <div class="col-md-5 d-flex align-items-center">
-                <label class="text-end fs-6 fw-bold me-2 mb-0 col-5"
-                  >Buyer Name</label
-                >
-                <div class="col-7">
-                  <div class="form-group d-inline">
+
+                <!-- Buyer Name -->
+                <div class="row mb-3 align-items-center">
+
+                  <div class="col-md-4">
+                    <label class="fw-bold">Buyer Name</label>
+                  </div>
+
+                  <div class="col-md-8">
                     <input
-                      autocomplete="off"
                       type="text"
                       formControlName="Buyer_Name"
                       class="form-control"
                       placeholder="Buyer Name"
-                      id="Buyer_Name"
-                      name="Buyer_Name"
-                      value=""
                     />
                   </div>
-                </div>
-              </div>
-              <div class="col-md-2"></div>              
-            </div>
-            <div class="row g-3 align-items-center mb-2">
-              <div class="col-md-5 d-flex align-items-center">
-                <label class="text-end fs-6 fw-bold me-2 mb-0 col-5"
-                  >Country Name <span>*</span></label
-                >
-                <div class="col-7">
-                  <p-dropdown
-                    [style]="{ width: '100%' }"
-                    class="p-0"
-                    [options]="CountryList"
-                    optionLabel="Country"
-                    [filter]="true"
-                    filterBy="Country"
-                    [showClear]="true"
-                    styleClass="listBottom"
-                    placeholder="Please Select"
-                    optionValue="Country_ID"
-                    formControlName="Country_ID"
-                  >
-                    <ng-template let-AB pTemplate="item">
-                      <div class="flex align-items-center gap-2">
-                        <div>{{ AB.Country }}</div>
-                      </div>
-                    </ng-template>
-                  </p-dropdown>
-                </div>
-              </div>
-              <div class="col-md-2"></div>
 
-              <div class="col-md-5 d-flex align-items-center">
-                <label class="text-end fs-6 fw-bold me-2 mb-0 col-5"
-                  >IsAvailable</label
-                >
-                <div class="col-7">
-                  <p-checkbox
-                    formControlName="IsAvailable"
-                    [binary]="true"
-                    label="Is Available"
-                  ></p-checkbox>
                 </div>
-              </div>
-            </div>
-            <div class="row g-3 align-items-center mb-2">
-              <div class="col-md-5 d-flex align-items-center">
-                <label class="text-end fs-6 fw-bold me-2 mb-0 col-5"></label>
-                <div class="col-7">
-                  <div class="flexbox mt-5">
-                    <!-- <button [routerLink]="['/all-']" class="btn btn-w-xl text-white btn-outline-danger bg-gradient-danger" type="button"
-            >
-            Cancel
-          </button> -->
-                    <button
-                      class="btn btn-w-xl text-white theme-btn px-5 float-right"
-                      type="button"
-                      (click)="saveData()"
-                      [disabled]="Formgroup.invalid"
-                      [hidden]="isEdit"
-                    >
-                      Save
-                    </button>
-                    <button
-                      [hidden]="!isEdit"
-                      class="btn btn-w-xl text-white theme-btn px-5 float-right"
-                      type="button"
-                      (click)="updateData()"
-                      [disabled]="Formgroup.invalid"
-                    >
-                      Update
-                    </button>
+
+                <!-- City -->
+                <div class="row mb-3 align-items-center">
+
+                  <div class="col-md-4">
+                    <label class="fw-bold">City</label>
                   </div>
+
+                  <div class="col-md-8">
+                    <input
+                      type="text"
+                      formControlName="City"
+                      class="form-control"
+                      placeholder="City"
+                    />
+                  </div>
+
                 </div>
+
+                <!-- Postal Code -->
+                <div class="row mb-3 align-items-center">
+
+                  <div class="col-md-4">
+                    <label class="fw-bold">Postal Code</label>
+                  </div>
+
+                  <div class="col-md-8">
+                    <input
+                      type="text"
+                      formControlName="Postal_Code"
+                      class="form-control"
+                      placeholder="Postal Code"
+                    />
+                  </div>
+
+                </div>
+
+                <!-- Country -->
+                <div class="row mb-3 align-items-center">
+
+                  <div class="col-md-4">
+                    <label class="fw-bold">
+                      Country Name
+                    </label>
+                  </div>
+
+                  <div class="col-md-8">
+
+                    <p-dropdown
+                      [options]="CountryList"
+                      optionLabel="Country"
+                      optionValue="Country_ID"
+                      formControlName="Country_ID"
+                      [filter]="true"
+                      filterBy="Country"
+                      [showClear]="true"
+                      placeholder="Select Country"
+                      styleClass="w-100"
+                    >
+                    </p-dropdown>
+
+                  </div>
+
+                </div>
+
               </div>
-              <div class="col-md-2"></div>
+
             </div>
-          </form>
-        </div>
+
+            <!-- RIGHT SIDE -->
+            <div class="col-md-6">
+
+              <div class="card shadow-sm p-3 h-100">
+
+                <h5 class="fw-bold border-bottom pb-2 mb-4">
+                  Contact Information
+                </h5>
+
+                <!-- Contact Person -->
+                <div class="row mb-3 align-items-center">
+
+                  <div class="col-md-4">
+                    <label class="fw-bold">Contact Person</label>
+                  </div>
+
+                  <div class="col-md-8">
+                    <input
+                      type="text"
+                      formControlName="Contact_Name"
+                      class="form-control"
+                      placeholder="Contact Person"
+                    />
+                  </div>
+
+                </div>
+
+                <!-- Designation -->
+                <div class="row mb-3 align-items-center">
+
+                  <div class="col-md-4">
+                    <label class="fw-bold">Designation</label>
+                  </div>
+
+                  <div class="col-md-8">
+                    <input
+                      type="text"
+                      formControlName="Contact_Title"
+                      class="form-control"
+                      placeholder="Designation"
+                    />
+                  </div>
+
+                </div>
+
+                <!-- Phone -->
+                <div class="row mb-3 align-items-center">
+
+                  <div class="col-md-4">
+                    <label class="fw-bold">Phone Number</label>
+                  </div>
+
+                  <div class="col-md-8">
+                    <input
+                      type="text"
+                      formControlName="Phone_No"
+                      class="form-control"
+                      placeholder="Phone Number"
+                    />
+                  </div>
+
+                </div>
+
+                <!-- Email -->
+                <div class="row mb-3 align-items-center">
+
+                  <div class="col-md-4">
+                    <label class="fw-bold">E-Mail</label>
+                  </div>
+
+                  <div class="col-md-8">
+                    <input
+                      type="email"
+                      formControlName="Email"
+                      class="form-control"
+                      placeholder="Email"
+                    />
+                  </div>
+
+                </div>
+
+                <!-- Note -->
+                <div class="row mb-3 align-items-center">
+
+                  <div class="col-md-4">
+                    <label class="fw-bold">Note</label>
+                  </div>
+
+                  <div class="col-md-8">
+                    <textarea
+                      rows="3"
+                      formControlName="Notes"
+                      class="form-control"
+                      placeholder="Note"
+                    ></textarea>
+                  </div>
+
+                </div>
+
+                <!-- Group Head -->
+                <div class="row mb-3 align-items-center">
+
+                  <div class="col-md-4">
+                    <label class="fw-bold">
+                      Group Head
+                    </label>
+                  </div>
+
+                  <div class="col-md-8">
+
+                    <p-dropdown
+                      [options]="UserList"
+                      optionLabel="UserName"
+                      optionValue="User_ID"
+                      formControlName="User_Id"
+                      [filter]="true"
+                      filterBy="UserName"
+                      [showClear]="true"
+                      [virtualScroll]="true"
+                      [virtualScrollItemSize]="30"
+                      placeholder="Select Group Head"
+                      styleClass="w-100"
+                    >
+                    </p-dropdown>
+
+                  </div>
+
+                </div>
+
+                <!-- IsAvailable -->
+                <div class="row mb-3 align-items-center">
+
+                  <div class="col-md-4">
+                    <label class="fw-bold">
+                      IsAvailable
+                    </label>
+                  </div>
+
+                  <div class="col-md-8">
+
+                    <p-checkbox
+                      formControlName="IsAvailable"
+                      [binary]="true"
+                      label="Active"
+                    >
+                    </p-checkbox>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- BUTTON -->
+          <div class="row mt-4">
+
+            <div class="col-md-12 text-end">
+
+              <button
+                class="btn theme-btn px-5 me-2"
+                type="button"
+                (click)="saveData()"
+                [disabled]="Formgroup.invalid"
+                [hidden]="isEdit"
+              >
+                Save
+              </button>
+
+              <button
+                class="btn theme-btn px-5"
+                type="button"
+                (click)="updateData()"
+                [disabled]="Formgroup.invalid"
+                [hidden]="!isEdit"
+              >
+                Update
+              </button>
+
+            </div>
+
+          </div>
+
+        </form>
+
       </div>
+
     </div>
+
   </div>
 </div>

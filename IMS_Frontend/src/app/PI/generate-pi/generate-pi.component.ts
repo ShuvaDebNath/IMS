@@ -23,6 +23,7 @@ export class GeneratePiComponent implements OnInit {
   LoadingModeList: any | [];
   PaymentModeList: any | [];
   ConsigneeList: any | [];
+  AllConsigneeList: any | [];
   ApplicantBankList: any | [];
   BuyingHouseList: any | [];
   TermsofDeliveryList: any | [];
@@ -111,6 +112,7 @@ export class GeneratePiComponent implements OnInit {
   }
 
   this.RegisterFormControlsChangeEvent();
+  this.Formgroup.get('Customer_ID')?.disable();
 }
 
   GetById(id: any) {
@@ -229,6 +231,14 @@ export class GeneratePiComponent implements OnInit {
           }
       }
     });
+
+     this.Formgroup.get('Beneficiary_Account_ID')
+    ?.valueChanges
+    .subscribe((value) => {
+
+      this.ShipperToggle(value);
+
+    });
   }
 
   BuyerToggle(value: boolean) {
@@ -238,6 +248,57 @@ export class GeneratePiComponent implements OnInit {
       this.Formgroup.get('Buyer_ID')?.disable();
     }
   }
+
+  ShipperToggle(value: any) {
+
+  //---------------------------------------------------
+  // SHIPPER SELECTED
+  //---------------------------------------------------
+
+  if (value) {
+
+    this.Formgroup.get('Customer_ID')?.enable();
+
+    //---------------------------------------------------
+    // LOAD CONSIGNEE
+    //---------------------------------------------------
+
+    this.LoadConsignee(value);
+
+  }
+
+  //---------------------------------------------------
+  // SHIPPER CLEARED
+  //---------------------------------------------------
+
+  else {
+
+    this.Formgroup.get('Customer_ID')?.reset();
+
+    this.Formgroup.get('Customer_ID')?.disable();
+
+    this.ConsigneeList = [];
+
+  }
+
+}
+
+LoadConsignee(shipperId: number) {
+
+ this.ConsigneeList =
+    this.AllConsigneeList.filter((x: any) =>
+
+      x.Beneficiary_Account_ID == shipperId
+      &&
+      (
+        x.IsAvailable == true
+        ||
+        x.IsAvailable == 1
+      )
+
+    );
+
+}
 
   GenerateFrom(setDefault: boolean = true) {
 
@@ -472,7 +533,7 @@ get ItemArray(): FormArray {
       this.PackingList = DataSet.Tables4;
       this.LoadingModeList = DataSet.Tables5;
       this.PaymentModeList = DataSet.Tables6;
-      this.ConsigneeList = DataSet.Tables7;
+      this.AllConsigneeList = DataSet.Tables7;
       this.ApplicantBankList = DataSet.Tables8;
       this.BuyingHouseList = DataSet.Tables9;
       this.TermsofDeliveryList = DataSet.Tables10;

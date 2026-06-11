@@ -1,285 +1,534 @@
-<div class="m-2 p-2">
-  <div class="card card-default">
-    <div class="card-header theme-bg">
-      <div class="row">
-        <h2 class="">All Application</h2>
-      </div>
-    </div>
-    <div class="card-body">
-      <form [formGroup]="SearchForm">
-        <div class="row align-items-center">
-          <!-- <div class="col-3">
-            <label class="control-label" for="inlineFormInputGroup"
-              >From Date</label
-            ><input
-              type="date"
-              formControlName="fromDate"
-              class="form-control"
-            />
-          </div>
-          <div class="col-3">
-            <label class="control-label" for="inlineFormInputGroup"
-              >To Date</label
-            >
-            <input type="date" formControlName="toDate" class="form-control" />
-          </div> -->
+<div class="m-3">
 
-          <div class="col-4">
-            <label class="form-label">Select Date</label>
-            <div class="range-container">
-              <p-calendar
-                formControlName="fromDate"
-                dateFormat="dd/mm/yy"
-                placeholder="From"
-                inputStyleClass="custom-date-input"
-              ></p-calendar>
+  <!-- MAIN CARD -->
+  <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
 
-              <span class="range-divider">to</span>
+    <!-- HEADER -->
+    <div class="card-header theme-bg border-0 py-4 px-4">
 
-              <p-calendar
-                formControlName="toDate"
-                dateFormat="dd/mm/yy"
-                placeholder="To"
-                inputStyleClass="custom-date-input"
-              ></p-calendar>
-            </div>
+      <div class="d-flex justify-content-between align-items-center flex-wrap">
+
+        <div>
+
+          <h2 class="fw-bold text-white mb-1">
+            <i class="fas fa-file-signature me-2"></i>
+            All Application
+          </h2>
+
+          <div class="text-light opacity-75">
+            Manage and monitor all application activities
           </div>
-          <div class="col-3">
-            <label class="control-label" for="inlineFormInputGroup"
-              >Application Type</label
-            >
-            <p-dropdown
-              [style]="{ width: '100%' }"
-              class="p-0"
-              [options]="FormType"
-              optionLabel="text"
-              [filter]="true"
-              filterBy="text"
-              [showClear]="true"
-              styleClass="listBottom"
-              placeholder="Please Select"
-              optionValue="value"
-              formControlName="applicationType"
-            >
-              <ng-template let-FormType pTemplate="item">
-                <div class="flex align-items-center gap-2">
-                  <div>{{ FormType.text }}</div>
-                </div>
-              </ng-template>
-            </p-dropdown>
-          </div>
-          <div class="col-3">
-            <button
-              title="Search"
-              type="button"
-              (click)="Search()"
-              class="btn btn-sm theme-btn mt-4 p-1"
-              style="height: 48px; width: 130px;"
-            >
-              <i class="fas fa-search"></i>&nbsp;Search
-            </button>
-          </div>
+
         </div>
-      </form>
-      <hr />
-      <div class="row mb-3" *ngIf="tableData != null">
-        <div class="col-md-12">
+
+        <!-- EXPORT -->
+        <div *ngIf="tableData != null">
+
           <button
-            class="btn theme-btn px-4 py-2"
+            class="btn btn-light rounded-pill shadow-sm px-4 py-2 fw-semibold"
             (click)="printApplication()"
-            title="Export application data to Excel, Word, or PDF"
+            title="Export application data"
           >
-            <i class="fas fa-download"></i>&nbsp; Export
+            <i class="fas fa-download me-2"></i>
+            Export
           </button>
+
         </div>
+
       </div>
-      <p-table
-        #dt
-        [value]="tableData"
-        [paginator]="true"
-        [rows]="10"
-        [responsive]="true"
-        [showCurrentPageReport]="true"
-        [globalFilterFields]="[
-          'POno',
-          'CustomerName',
-          'FormTypeName',
-          'Date',
-          'PiNo',
-          'ArticleNo',
-          'ActualArticleNo',
-          'Colour',
-          'Width',
-          'Unit',
-          'Quantity',
-          'UnitPrice',
-          'UnitCommission',
-          'PaymentTerms',
-          'DeliveredQuantity',
-          'ApplyDeliveryQty',
-          'Warehouse',
-          'Comments',
-          'UserName',
-          'Status',
-        ]"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-      >
-        <ng-template pTemplate="caption">
-          <div class="table-toolbar d-flex justify-content-end">
-            <span class="p-input-icon-left">
-              <i class="pi pi-search"></i>
-              <input
-                pInputText
-                type="text"
-                (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                placeholder="Global Search"
-              />
-            </span>
-          </div>
-        </ng-template>
 
-        <ng-template pTemplate="header">
-          <tr>
-            <th class="">SL</th>
-            <th class="">AP No</th>
-            <th class="">Customer</th>
-            <th class="">Form Type</th>
-            <th class="">Date</th>
-            <th class="">PI No</th>
-            <th class="">Article</th>
-            <th class="">A. Article</th>
-            <th class="">Color</th>
-            <th class="">Width</th>
-            <th class="">Unit</th>
-            <th class="">Quantity</th>
-            <th class="">U. Price</th>
-            <th class="">U. Com.</th>
-            <th class="">Payment Terms</th>
-            <th class="">Delivered Qty</th>
-            <th class="">Applied Qty.</th>
-            <th class="">Warehouse</th>
-            <th class="">Comment</th>
-            <th class="">Status</th>
-            <th class="">Generated By</th>
-            <th class="" *ngIf="allPersmissions">Action</th>
-          </tr>
-        </ng-template>
-
-        <ng-template pTemplate="body" let-table let-i="rowIndex">
-          <tr>
-            <td class="text-center">{{ (dt.first || 0) + i + 1 }}</td>
-            <td class="text-center align-middle">{{ table.POno }}</td>
-            <td class="text-center align-middle">{{ table.CustomerName }}</td>
-            <td class="text-center align-middle">{{ table.FormTypeName }}</td>
-            <td class="text-center align-middle">{{ table.Date }}</td>
-            <td class="text-center align-middle">{{ table.PiNo }}</td>
-            <td class="text-center align-middle">{{ table.ArticleNo }}</td>
-            <td class="text-center align-middle">
-              {{ table.ActualArticleNo }}
-            </td>
-            <td class="text-center align-middle">{{ table.Colour }}</td>
-            <td class="text-center align-middle">{{ table.Width }}</td>
-            <td class="text-center align-middle">{{ table.Unit }}</td>
-            <td class="text-center align-middle">{{ table.Quantity }}</td>
-            <td class="text-center align-middle">{{ table.UnitPrice }}</td>
-            <td class="text-center align-middle">{{ table.UnitCommission }}</td>
-            <td class="text-center align-middle">{{ table.PaymentTerms }}</td>
-            <td class="text-center align-middle">
-              {{ table.DeliveredQuantity }}
-            </td>
-            <td class="text-center align-middle">
-              {{ table.ApplyDeliveryQty }}
-            </td>
-            <td class="text-center align-middle">{{ table.Warehouse }}</td>
-            <td class="text-center align-middle">{{ table.Comments }}</td>
-            <td class="text-center align-middle">{{ table.Status }}</td>
-            <td class="text-center align-middle">{{ table.UserName }}</td>
-            <td class="text-center align-middle p-1 m-0">
-              <div class="d-flex justify-content-center gap-1">
-                <a
-                  *ngIf="updatePermissions"
-                  class="btn theme-btn-edit"
-                  target="_blank"
-                  title="Vide Details"
-                  [routerLink]="['/approve-application']"
-                  [queryParams]="{ Id: table.Id }"
-                  ><i class="fa fa-eye"></i
-                ></a>
-
-                <a
-                  *ngIf="
-                    updatePermissions &&
-                    table.FormTypeName == 'Special Delivery'
-                  "
-                  class="btn theme-btn-edit"
-                  target="_blank"
-                  title="Edit"
-                  [routerLink]="['/generate-application']"
-                  [queryParams]="{ Id: table.Id }"
-                  ><i class="fa fa-edit"></i
-                ></a>
-                <a
-                  *ngIf="
-                    updatePermissions &&
-                    table.FormTypeName == 'PI Amendment Application'
-                  "
-                  class="btn theme-btn-edit"
-                  target="_blank"
-                  title="Edit"
-                  [routerLink]="['/pi-amendment-application']"
-                  [queryParams]="{ Id: table.Id }"
-                  ><i class="fa fa-edit"></i
-                ></a>
-                <a
-                  *ngIf="
-                    updatePermissions &&
-                    table.FormTypeName == 'Cancel PI Application'
-                  "
-                  class="btn theme-btn-edit"
-                  target="_blank"
-                  title="Edit"
-                  [routerLink]="['/cancel-pi-application']"
-                  [queryParams]="{ Id: table.Id }"
-                  ><i class="fa fa-edit"></i
-                ></a>
-                <a
-                  *ngIf="
-                    updatePermissions &&
-                    table.FormTypeName == 'Exchange Goods Application'
-                  "
-                  class="btn theme-btn-edit"
-                  target="_blank"
-                  title="Edit"
-                  [routerLink]="['/exchange-goods-application']"
-                  [queryParams]="{ Id: table.Id }"
-                  ><i class="fa fa-edit"></i
-                ></a>
-                <a
-                  *ngIf="
-                    updatePermissions &&
-                    table.FormTypeName == 'Return Goods Application'
-                  "
-                  class="btn theme-btn-edit"
-                  target="_blank"
-                  title="Edit"
-                  [routerLink]="['/return-goods-application']"
-                  [queryParams]="{ Id: table.Id }"
-                  ><i class="fa fa-edit"></i
-                ></a>
-
-                <button
-                  *ngIf="deletePermissions"
-                  class="btn theme-btn-delete"
-                  title="Delete"
-                  (click)="DeleteData(table)"
-                >
-                  <i class="fas fa-trash"></i>
-                </button>
-              </div>
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
     </div>
+
+    <!-- BODY -->
+    <div class="card-body p-4">
+
+      <!-- SEARCH PANEL -->
+      <form [formGroup]="SearchForm">
+
+        <fieldset class="border rounded-4 p-4 shadow-sm mb-4">
+
+          <legend class="float-none w-auto px-3 fw-bold fs-5">
+            <i class="fas fa-search me-2"></i>
+            Search Application
+          </legend>
+
+          <div class="row g-4 align-items-end">
+
+            <!-- DATE -->
+            <div class="col-lg-4 col-md-12">
+
+              <label class="form-label fw-semibold mb-2">
+                Select Date Range
+              </label>
+
+              <div class="range-container">
+
+                <p-calendar
+                  formControlName="fromDate"
+                  dateFormat="dd/mm/yy"
+                  placeholder="From Date"
+                  inputStyleClass="custom-date-input"
+                >
+                </p-calendar>
+
+                <span class="range-divider fw-bold">
+                  to
+                </span>
+
+                <p-calendar
+                  formControlName="toDate"
+                  dateFormat="dd/mm/yy"
+                  placeholder="To Date"
+                  inputStyleClass="custom-date-input"
+                >
+                </p-calendar>
+
+              </div>
+
+            </div>
+
+            <!-- APPLICATION TYPE -->
+            <div class="col-lg-4 col-md-6">
+
+              <label class="form-label fw-semibold mb-2">
+                Application Type
+              </label>
+
+              <p-dropdown
+                [style]="{ width: '100%' }"
+                class="p-0"
+                [options]="FormType"
+                optionLabel="text"
+                [filter]="true"
+                filterBy="text"
+                [showClear]="true"
+                styleClass="listBottom"
+                placeholder="Please Select"
+                optionValue="value"
+                formControlName="applicationType"
+              >
+
+                <ng-template let-FormType pTemplate="item">
+
+                  <div class="d-flex align-items-center">
+
+                    <div>
+                      {{ FormType.text }}
+                    </div>
+
+                  </div>
+
+                </ng-template>
+
+              </p-dropdown>
+
+            </div>
+
+            <!-- SEARCH BUTTON -->
+            <div class="col-lg-2 col-md-3">
+
+              <button
+                title="Search"
+                type="button"
+                (click)="Search()"
+                class="btn theme-btn rounded-pill shadow-sm w-100 py-2"
+              >
+                <i class="fas fa-search me-2"></i>
+                Search
+              </button>
+
+            </div>
+
+            <!-- TOTAL -->
+            <div class="col-lg-2 col-md-3">
+
+              <div class="card border-0 bg-light shadow-sm rounded-4">
+
+                <div class="card-body py-2 text-center">
+
+                  <div class="small text-muted">
+                    Total Records
+                  </div>
+
+                  <div class="fw-bold fs-4">
+
+                    {{ tableData?.length || 0 }}
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </fieldset>
+
+      </form>
+
+      <!-- TABLE -->
+      <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+
+        <!-- TABLE HEADER -->
+        <div class="card-header bg-light border-0 py-3">
+
+          <div class="d-flex justify-content-between align-items-center flex-wrap">
+
+            <h5 class="fw-bold mb-0">
+
+              <i class="fas fa-table me-2"></i>
+              Application List
+
+            </h5>
+
+            <!-- GLOBAL SEARCH -->
+            <div class="table-toolbar">
+
+              <span class="p-input-icon-left position-relative">
+
+                <i
+                  class="pi pi-search position-absolute"
+                  style="
+                    left: 15px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    z-index: 10;
+                  "
+                ></i>
+
+                <input
+                  pInputText
+                  type="text"
+                  class="form-control rounded-pill ps-5"
+                  (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                  placeholder="Global Search"
+                />
+
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- TABLE BODY -->
+        <div class="card-body p-0">
+
+          <p-table
+            #dt
+            [value]="tableData"
+            [paginator]="true"
+            [rows]="10"
+            [responsive]="true"
+            [scrollable]="true"
+            scrollHeight="600px"
+            styleClass="p-datatable-striped p-datatable-gridlines"
+            [showCurrentPageReport]="true"
+            [globalFilterFields]="[
+              'POno',
+              'CustomerName',
+              'FormTypeName',
+              'Date',
+              'PiNo',
+              'ArticleNo',
+              'ActualArticleNo',
+              'Colour',
+              'Width',
+              'Unit',
+              'Quantity',
+              'UnitPrice',
+              'UnitCommission',
+              'PaymentTerms',
+              'DeliveredQuantity',
+              'ApplyDeliveryQty',
+              'Warehouse',
+              'Comments',
+              'UserName',
+              'Status'
+            ]"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+          >
+
+            <!-- HEADER -->
+            <ng-template pTemplate="header">
+
+              <tr>
+
+                <th class="text-center fw-bold">SL</th>
+                <th class="text-center fw-bold">AP No</th>
+                <th class="text-center fw-bold">Customer</th>
+                <th class="text-center fw-bold">Form Type</th>
+                <th class="text-center fw-bold">Date</th>
+                <th class="text-center fw-bold">PI No</th>
+                <th class="text-center fw-bold">Article</th>
+                <th class="text-center fw-bold">A. Article</th>
+                <th class="text-center fw-bold">Color</th>
+                <th class="text-center fw-bold">Width</th>
+                <th class="text-center fw-bold">Unit</th>
+                <th class="text-center fw-bold">Qty</th>
+                <th class="text-center fw-bold">U. Price</th>
+                <th class="text-center fw-bold">U. Com.</th>
+                <th class="text-center fw-bold">Payment</th>
+                <th class="text-center fw-bold">Delivery</th>
+                <th class="text-center fw-bold">Applied</th>
+                <th class="text-center fw-bold">Warehouse</th>
+                <th class="text-center fw-bold">Comment</th>
+                <th class="text-center fw-bold">Status</th>
+                <th class="text-center fw-bold">Generated By</th>
+
+                <th
+                  class="text-center fw-bold"
+                  *ngIf="allPersmissions"
+                >
+                  Action
+                </th>
+
+              </tr>
+
+            </ng-template>
+
+            <!-- BODY -->
+            <ng-template
+              pTemplate="body"
+              let-table
+              let-i="rowIndex"
+            >
+
+              <tr>
+
+                <td class="text-center align-middle small">
+                  {{ (dt.first || 0) + i + 1 }}
+                </td>
+
+                <td class="text-center align-middle small">
+                  {{ table.POno }}
+                </td>
+
+                <td class="text-center align-middle small">
+                  {{ table.CustomerName }}
+                </td>
+
+                <td class="text-center align-middle small">
+                  {{ table.FormTypeName }}
+                </td>
+
+                <td class="text-center align-middle small">
+                  {{ table.Date }}
+                </td>
+
+                <td class="text-center align-middle small">
+                  {{ table.PiNo }}
+                </td>
+
+                <td class="text-center align-middle small">
+                  {{ table.ArticleNo }}
+                </td>
+
+                <td class="text-center align-middle small">
+                  {{ table.ActualArticleNo }}
+                </td>
+
+                <td class="text-center align-middle small">
+                  {{ table.Colour }}
+                </td>
+
+                <td class="text-center align-middle small">
+                  {{ table.Width }}
+                </td>
+
+                <td class="text-center align-middle small">
+                  {{ table.Unit }}
+                </td>
+
+                <td class="text-center align-middle small">
+                  {{ table.Quantity }}
+                </td>
+
+                <td class="text-center align-middle small">
+                  {{ table.UnitPrice }}
+                </td>
+
+                <td class="text-center align-middle small">
+                  {{ table.UnitCommission }}
+                </td>
+
+                <td class="text-center align-middle small">
+                  {{ table.PaymentTerms }}
+                </td>
+
+                <td class="text-center align-middle small">
+                  {{ table.DeliveredQuantity }}
+                </td>
+
+                <td class="text-center align-middle small">
+                  {{ table.ApplyDeliveryQty }}
+                </td>
+
+                <td class="text-center align-middle small">
+                  {{ table.Warehouse }}
+                </td>
+
+                <td class="text-center align-middle small">
+                  {{ table.Comments }}
+                </td>
+
+                <!-- STATUS -->
+                <td class="text-center align-middle">
+
+                  <!-- Pending -->
+                  <span
+                    *ngIf="table.Status == 'Pending'"
+                    class="badge bg-warning text-dark px-3 py-2"
+                  >
+                    {{ table.Status }}
+                  </span>
+
+                  <!-- Team Lead Approved -->
+                  <span
+                    *ngIf="table.Status == 'Team Lead Approved'"
+                    class="badge bg-info text-dark px-3 py-2"
+                  >
+                    {{ table.Status }}
+                  </span>
+
+                  <!-- Approved -->
+                  <span
+                    *ngIf="table.Status == 'Approved'"
+                    class="badge bg-success px-3 py-2"
+                  >
+                    {{ table.Status }}
+                  </span>
+
+                  <!-- Rejected -->
+                  <span
+                    *ngIf="table.Status == 'Rejected'"
+                    class="badge bg-danger px-3 py-2"
+                  >
+                    {{ table.Status }}
+                  </span>
+
+                </td>
+
+                <td class="text-center align-middle small">
+                  {{ table.UserName }}
+                </td>
+
+                <!-- ACTION -->
+                <td
+                  class="text-center align-middle p-2"
+                  *ngIf="allPersmissions"
+                >
+
+                  <div
+                    class="d-flex justify-content-center align-items-center gap-2"
+                  >
+
+                    <!-- VIEW -->
+                    <a
+                      *ngIf="updatePermissions"
+                      class="btn btn-sm theme-btn-edit rounded-circle shadow-sm"
+                      target="_blank"
+                      title="View Details"
+                      [routerLink]="['/approve-application']"
+                      [queryParams]="{ Id: table.Id }"
+                    >
+                      <i class="fa fa-eye"></i>
+                    </a>
+
+                    <!-- SPECIAL DELIVERY -->
+                    <a
+                      *ngIf="
+                        updatePermissions &&
+                        table.FormTypeName == 'Special Delivery Application'
+                      "
+                      class="btn btn-sm theme-btn-edit rounded-circle shadow-sm"
+                      title="Edit"
+                      (click)="HandleEdit(table, '/generate-application')"
+                    >
+                      <i class="fa fa-edit"></i>
+                    </a>
+
+                    <!-- PI AMENDMENT -->
+                    <a
+                      *ngIf="
+                        updatePermissions &&
+                        table.FormTypeName == 'PI Amendment Application'
+                      "
+                      class="btn btn-sm theme-btn-edit rounded-circle shadow-sm"
+                      title="Edit"
+                      (click)="HandleEdit(table, '/pi-amendment-application')"
+                    >
+                      <i class="fa fa-edit"></i>
+                    </a>
+
+                    <!-- CANCEL PI -->
+                    <a
+                      *ngIf="
+                        updatePermissions &&
+                        table.FormTypeName == 'Cancel PI Application'
+                      "
+                      class="btn btn-sm theme-btn-edit rounded-circle shadow-sm"
+                      title="Edit"
+                      (click)="HandleEdit(table, '/cancel-pi-application')"
+                    >
+                      <i class="fa fa-edit"></i>
+                    </a>
+
+                    <!-- EXCHANGE -->
+                    <a
+                      *ngIf="
+                        updatePermissions &&
+                        table.FormTypeName == 'Exchange Goods Application'
+                      "
+                      class="btn btn-sm theme-btn-edit rounded-circle shadow-sm"
+                      title="Edit"
+                      (click)="HandleEdit(table, '/exchange-goods-application')"
+                    >
+                      <i class="fa fa-edit"></i>
+                    </a>
+
+                    <!-- RETURN -->
+                    <a
+                      *ngIf="
+                        updatePermissions &&
+                        table.FormTypeName == 'Return Goods Application'
+                      "
+                      class="btn btn-sm theme-btn-edit rounded-circle shadow-sm"
+                      title="Edit"
+                      (click)="HandleEdit(table, '/return-goods-application')"
+                    >
+                      <i class="fa fa-edit"></i>
+                    </a>
+
+                    <!-- DELETE -->
+                    <button
+                      *ngIf="deletePermissions"
+                      class="btn btn-sm theme-btn-delete rounded-circle shadow-sm"
+                      title="Delete"
+                      (click)="HandleDelete(table)"
+                    >
+                      <i class="fas fa-trash"></i>
+                    </button>
+
+                  </div>
+
+                </td>
+
+              </tr>
+
+            </ng-template>
+
+          </p-table>
+
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
+
 </div>
