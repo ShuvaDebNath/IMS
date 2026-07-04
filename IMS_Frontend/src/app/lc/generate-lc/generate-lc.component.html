@@ -19,8 +19,7 @@
                   <p-dropdown
                     [style]="{ width: '70%' }"
                     class="w-100 p-0"
-                    [options]="MarketingConcern"
-                    (onChange)="getPINoByMarketingConcern()"
+                    [options]="MarketingConcern"                    
                     optionLabel="UserName"
                     [filter]="true"
                     filterBy="UserName"
@@ -28,6 +27,28 @@
                     placeholder="Select"
                     optionValue="User_ID"
                     formControlName="Marketing_Concern"
+                  ></p-dropdown>
+                </div>
+              </div>
+
+              <!-- Beneficiary Account -->
+              <div class="row align-items-center mb-3">
+                <div class="col-md-4 text-end fs-6 fw-bold">
+                  Beneficiary Account <span>*</span>
+                </div>
+                <div class="col-md-8">
+                  <p-dropdown
+                    [style]="{ width: '70%' }"
+                    class="w-100 p-0"
+                    [options]="CompanyInfos"
+                    optionLabel="CompanyName"
+                    [filter]="true"
+                    filterBy="CompanyName"
+                    [showClear]="true"
+                    placeholder="Select"
+                    optionValue="Beneficiary_Account_ID"
+                    formControlName="Beneficiary_Account_ID"
+                    (onChange)="getPINoByMarketingConcern()"
                   ></p-dropdown>
                 </div>
               </div>

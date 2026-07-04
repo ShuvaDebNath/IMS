@@ -189,17 +189,8 @@
                   <th class="text-center">U. Comm</th>
                   <th class="text-center">Payment Terms</th>
                   <th class="text-center">Delivery Qty</th>
-
-                  <th
-                    class="text-center"
-                    *ngIf="FormType == 'Special Delivery Application'"
-                  >
-                    Applied Qty
-                  </th>
-
-                  <th class="text-center">
-                    Comment
-                  </th>
+                  <th class="text-center">Applied Qty</th>
+                  <th class="text-center">Comment</th>
 
                 </tr>
 
@@ -237,9 +228,7 @@
                     {{ group.DeliveredQuantity }}
                   </td>
 
-                  <td
-                    class="text-center"
-                    *ngIf="FormType == 'Special Delivery Application'"
+                  <td class="text-center"
                   >
                     {{ group.ApplyDeliveryQty }}
                   </td>

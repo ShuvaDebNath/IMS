@@ -207,7 +207,17 @@ export class GeneratePiComponent implements OnInit {
       this.Formgroup.controls['PINo'].setValue(piNo);
     });
 
+    this.ConsigneeList = this.AllConsigneeList;
+    console.log(this.ConsigneeList);
+     console.log(this.AllConsigneeList);
+
+
     this.Formgroup.get('Customer_ID')?.valueChanges.subscribe((value) => {
+
+      if (!this.ConsigneeList || this.ConsigneeList.length === 0) {
+        return;
+      }
+
       const contactPerson = this.ConsigneeList.filter(
         (x: any) => x.Customer_ID == value,
       )[0];
@@ -239,6 +249,21 @@ export class GeneratePiComponent implements OnInit {
       this.ShipperToggle(value);
 
     });
+  }
+
+  ContactPersonToggle(value: any) {
+    if (value) {
+      const contactPerson = this.ConsigneeList.filter(
+        (x: any) => x.Customer_ID == value,
+      )[0];
+      if (contactPerson?.Contact_Name != null) {
+        this.Formgroup.controls['Contact_Person'].setValue(
+          contactPerson.Contact_Name,
+        );
+      }
+
+
+    }
   }
 
   BuyerToggle(value: boolean) {

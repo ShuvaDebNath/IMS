@@ -1,195 +1,394 @@
 <div class="m-2 p-2">
-  <div class="card card-default">
-    <div class="card-header theme-bg">
-      <div class="row">
-        <h2 class="">Exchange Goods Application</h2>
+
+  <div class="card shadow-sm border-0">
+
+    <!-- HEADER -->
+    <div class="card-header theme-bg py-3">
+
+      <div class="d-flex justify-content-between align-items-center">
+
+        <h2 class="text-white mb-0 fw-bold">
+          Exchange Goods Application
+        </h2>
+
       </div>
+
     </div>
+
+    <!-- BODY -->
     <div class="card-body">
+
       <form [formGroup]="Formgroup">
-        <div class="row">
-          <div class="col-md-4 mb-2">
-            <div class="row g-1 align-items-start">
-              <div class="col-4">
-                <label class="form-label">Date</label>
-              </div>
-              <div class="col-8">
-                <input
-                  #dateInput
-                  type="date"
-                  formControlName="Date"
-                  class="form-control form-control-lg"
-                  placeholder="Date"
-                  [readOnly]="true"
-                />
-              </div>
+
+        <!-- SEARCH SECTION -->
+        <fieldset class="border rounded p-3 mb-4">
+
+          <legend class="float-none w-auto px-2 fw-bold fs-5">
+            Search Information
+          </legend>
+
+          <div class="row g-3 align-items-end">
+
+            <!-- DATE -->
+            <div class="col-lg-2 col-md-6">
+
+              <label class="form-label fw-semibold">
+                Date
+              </label>
+
+              <input
+                #dateInput
+                type="date"
+                formControlName="Date"
+                class="form-control"
+                [readOnly]="true"
+              />
+
             </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-4 mb-2">
-            <div class="row g-1 align-items-start">
-              <div class="col-4">
-                <label class="form-label">Customer Name <span>*</span></label>
-              </div>
-              <div class="col-8">
+
+            <!-- USER -->
+            <div class="col-lg-2 col-md-6">
+
+              <label class="form-label fw-semibold">
+                UserName
+              </label>
+
+              <ng-container *ngIf="UserList.length > 1">
+
                 <p-dropdown
-                  [style]="{ width: '100%' }"
-                  class="p-0"
-                  [options]="CustomerList"
-                  optionLabel="CustomerName"
+                  [options]="UserList"
+                  optionLabel="UserName"
+                  optionValue="User_ID"
                   [filter]="true"
-                  filterBy="CustomerName"
+                  filterBy="UserName"
                   [showClear]="true"
-                  styleClass="listBottom"
                   placeholder="Please Select"
-                  optionValue="Customer_ID"
-                  formControlName="Customer"
-                  [virtualScroll]="true"
-                  [virtualScrollItemSize]="30"
-                  (onChange)="getCustomerList()"
-                >
-                  <ng-template let-Customer pTemplate="item">
-                    <div class="flex align-items-center gap-2">
-                      <div>{{ Customer.CustomerName }}</div>
-                    </div>
-                  </ng-template>
+                  formControlName="User_ID"
+                  styleClass="w-100">
                 </p-dropdown>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-4 mb-2">
-            <div class="row g-1 align-items-start">
-              <div class="col-4">
-                <label class="form-label">PI No <span>*</span></label>
-              </div>
-              <div class="col-8">
-                <p-dropdown
-                  [style]="{ width: '100%' }"
-                  class="p-0"
-                  [options]="PIList"
-                  optionLabel="label"
-                  [filter]="true"
-                  filterBy="label"
-                  [showClear]="true"
-                  styleClass="listBottom"
-                  placeholder="Please Select"
-                  optionValue="value"
-                  formControlName="PINo"
-                  [virtualScroll]="true"
-                  [virtualScrollItemSize]="30"
-                  (onChange)="getPIDetails()"
-                >
-                  <ng-template let-pino pTemplate="item">
-                    <div class="flex align-items-center gap-2">
-                      <div>{{ pino.label }}</div>
-                    </div>
-                  </ng-template>
-                </p-dropdown>
-              </div>
-            </div>
-          </div>
-        </div>
-        <h3><strong>PI Info </strong></h3>
-        <!-- Items table -->
-        <table class="table table-bordered">
-          <thead>
-            <tr class="custom-header">
-              <th style="text-align: center">Customer</th>
-              <th style="text-align: center">PI No</th>
-              <th style="text-align: center">Article</th>
-              <th style="text-align: center">A. Article</th>
-              <th style="text-align: center">Color</th>
-              <th style="text-align: center">Width</th>
-              <th style="text-align: center">Unit</th>
-              <th style="text-align: center">Qty</th>
-              <th style="text-align: center">U. Price</th>
-              <th style="text-align: center">U. Comm</th>
-              <th style="text-align: center">Payment Terms</th>
-              <th style="text-align: center">Delivey Qty</th>
-              <th style="text-align: center">Applied Qty</th>
-              <th style="text-align: center">Comment</th>
-              <th style="text-align: center">Action</th>
-            </tr>
-          </thead>
 
-          <tbody formArrayName="items" *ngIf="items && items.length > 0">
-            <tr
-              *ngFor="let group of items.controls; let i = index"
-              [formGroupName]="i"
-            >
-              <td>{{ group.value.customer_name }}</td>
-              <td>{{ group.value.PINo }}</td>
-              <td>{{ group.value.Article }}</td>
-              <td>{{ group.value.ActualArticle }}</td>
-              <td>{{ group.value.Color }}</td>
-              <td>{{ group.value.Width }}</td>
-              <td>{{ group.value.Unit }}</td>
-              <td>{{ group.value.Quantity }}</td>
-              <td>{{ group.value.Unit_Price }}</td>
-              <td>{{ group.value.CommissionUnit }}</td>
-              <td>{{ group.value.PaymentTerms }}</td>
-              <td>{{ group.value.Delivered_Quantity }}</td>
+              </ng-container>
 
-              <td>
+              <ng-container *ngIf="UserList.length === 1">
+
                 <input
-                  type="number"
-                  formControlName="ApprovedQty"
-                  (keyup)="approveQtyChange(group)"
+                  type="text"
+                  class="form-control"
+                  [value]="UserList[0].UserName"
+                  readonly
                 />
-              </td>
 
-              <td>
-                <input type="text" formControlName="Remarks" />
-              </td>
-              <td class="text-center">
-                <button
-                  type="button"
-                  class="btn btn-sm btn-danger px-2 py-1"
-                  (click)="removeItem(i)"
+                <input
+                  type="hidden"
+                  formControlName="User_ID"
+                  [value]="UserList[0].UserName"
+                />
+
+              </ng-container>
+
+            </div>
+
+            <!-- CONSIGNEE -->
+            <div class="col-lg-3 col-md-6">
+
+              <label class="form-label fw-semibold">
+                Consignee
+              </label>
+
+              <ng-container
+                *ngIf="UserList.length > 1 && !Formgroup.get('User_ID')?.value"
+              >
+
+                <input
+                  type="text"
+                  class="form-control border-danger text-danger bg-light"
+                  value="Select UserName first"
+                  readonly
+                />
+
+              </ng-container>
+
+              <p-dropdown
+                [options]="consigneeList"
+                formControlName="Customer_ID"
+                optionLabel="Company_Name"
+                optionValue="Customer_ID"
+                placeholder="Search Consignee"
+                [filter]="true"
+                [showClear]="true"
+                [disabled]="!Formgroup.get('User_ID')?.value"
+                (onFilter)="onSearchCustomerName($event)"
+                (onClear)="onClearCustomerName()"
+                appendTo="body"
+                styleClass="w-100"
+              >
+              </p-dropdown>
+
+            </div>
+
+            <!-- PI -->
+            <div class="col-lg-3 col-md-6">
+
+              <label class="form-label fw-semibold">
+                PI No
+              </label>
+
+              <ng-container
+                *ngIf="UserList.length > 1 && !Formgroup.get('User_ID')?.value"
+              >
+
+                <input
+                  type="text"
+                  class="form-control border-danger text-danger bg-light"
+                  value="Select UserName first"
+                  readonly
+                />
+
+              </ng-container>
+
+              <p-dropdown
+                [options]="piList"
+                formControlName="PINo"
+                optionLabel="PINo"
+                optionValue="PINo"
+                placeholder="Search PI No"
+                [filter]="true"
+                [showClear]="true"
+                [disabled]="UserList.length > 1 && !Formgroup.get('User_ID')?.value"
+                (onFilter)="onSearchPI($event)"
+                (onClear)="onClearPI()"
+                styleClass="w-100"
+              >
+              </p-dropdown>
+
+            </div>
+
+            <!-- SEARCH BUTTON -->
+            <div class="col-lg-2 col-md-12">
+
+              <button
+                type="button"
+                class="btn theme-btn w-100"
+                style="height: 42px;"
+                (click)="LoadPIDetails()"
+              >
+                <i class="pi pi-search me-2"></i>
+                Search
+              </button>
+
+            </div>
+
+          </div>
+
+        </fieldset>
+
+        <!-- PI INFO -->
+        <div class="card border-0 shadow-sm">
+
+          <div class="card-header bg-light">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+              <h4 class="fw-bold mb-0">
+                PI Information
+              </h4>
+
+              <span class="badge bg-primary fs-6">
+                Total Rows:
+                {{ items?.length || 0 }}
+              </span>
+
+            </div>
+
+          </div>
+
+          <div class="card-body p-0">
+
+            <div class="table-responsive">
+
+              <table class="table table-bordered table-hover align-middle mb-0">
+
+                <thead class="table-dark">
+
+                  <tr>
+
+                    <th class="text-center">Customer</th>
+                    <th class="text-center">PI No</th>
+                    <th class="text-center">Article</th>
+                    <th class="text-center">A. Article</th>
+                    <th class="text-center">Color</th>
+                    <th class="text-center">Width</th>
+                    <th class="text-center">Unit</th>
+                    <th class="text-center">Qty</th>
+                    <th class="text-center">U. Price</th>
+                    <th class="text-center">U. Comm</th>
+                    <th class="text-center">Payment Terms</th>
+                    <th class="text-center">Delivery Qty</th>
+                    <th class="text-center">Applied Qty</th>
+                    <th class="text-center">Comment</th>
+                    <th class="text-center">Action</th>
+
+                  </tr>
+
+                </thead>
+
+                <tbody
+                  formArrayName="items"
+                  *ngIf="items && items.length > 0"
                 >
-                  ×
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
 
-        <div class="d-flex justify-content-end gap-2 mt-3">
-          <!-- <button type="button" class="btn btn-outline-success" (click)="addItem()">
-        <i class="bi bi-plus-circle me-1"></i> Add Row
-      </button> -->
+                  <tr
+                    *ngFor="let group of items.controls; let i = index"
+                    [formGroupName]="i"
+                  >
 
+                    <td>{{ group.value.customer_name }}</td>
+
+                    <td>{{ group.value.PINo }}</td>
+
+                    <td>{{ group.value.Article }}</td>
+
+                    <td>{{ group.value.ActualArticle }}</td>
+
+                    <td>{{ group.value.Color }}</td>
+
+                    <td>{{ group.value.Width }}</td>
+
+                    <td>{{ group.value.Unit }}</td>
+
+                    <td class="text-end">
+                      {{ group.value.Quantity }}
+                    </td>
+
+                    <td class="text-end">
+                      {{ group.value.Unit_Price }}
+                    </td>
+
+                    <td class="text-end">
+                      {{ group.value.CommissionUnit }}
+                    </td>
+
+                    <td>
+                      {{ group.value.PaymentTerms }}
+                    </td>
+
+                    <td class="text-end">
+                      {{ group.value.Delivered_Quantity }}
+                    </td>
+
+                    <!-- APPROVED QTY -->
+                    <td style="min-width: 140px;">
+
+                      <input
+                        type="number"
+                        formControlName="ApprovedQty"
+                        class="form-control"
+                        (keyup)="approveQtyChange(group)"
+                        placeholder="Qty"
+                      />
+
+                    </td>
+
+                    <!-- REMARKS -->
+                    <td style="min-width: 180px;">
+
+                      <input
+                        type="text"
+                        formControlName="Remarks"
+                        class="form-control"
+                        placeholder="Comment"
+                      />
+
+                    </td>
+
+                    <!-- ACTION -->
+                    <td class="text-center">
+
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-danger"
+                        (click)="removeItem(i)"
+                      >
+                        <i class="pi pi-trash"></i>
+                      </button>
+
+                    </td>
+
+                  </tr>
+
+                </tbody>
+
+                <!-- EMPTY -->
+                <tbody *ngIf="!items || items.length === 0">
+
+                  <tr>
+
+                    <td colspan="15" class="text-center py-5 text-muted">
+
+                      <div class="d-flex flex-column align-items-center">
+
+                        <i
+                          class="pi pi-inbox mb-3"
+                          style="font-size: 3rem;"
+                        ></i>
+
+                        <h5>
+                          No PI Information Found
+                        </h5>
+
+                        <small>
+                          Select filters and click search
+                        </small>
+
+                      </div>
+
+                    </td>
+
+                  </tr>
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- BUTTON SECTION -->
+        <div class="d-flex justify-content-end mt-4">
+
+          <!-- SAVE -->
           <button
             type="submit"
             (click)="saveData()"
-            [ngClass]="{
-              'theme-btn-disable': Formgroup.invalid,
-            }"
-            class="btn theme-btn btn-rounded"
+            class="btn theme-btn px-4 me-2"
             [disabled]="Formgroup.invalid"
             *ngIf="!isEdit"
-            style="height: 38px; width: 130px"
           >
-            <i class="bi bi-save me-1"></i> Save
+            <i class="pi pi-save me-2"></i>
+            Save
           </button>
+
+          <!-- UPDATE -->
           <button
             type="submit"
             (click)="UpdateData()"
-            [ngClass]="{
-              'theme-btn-disable': Formgroup.invalid,
-            }"
-            class="btn theme-btn btn-rounded"
+            class="btn theme-btn px-4"
             [disabled]="Formgroup.invalid"
             *ngIf="isEdit"
-            style="height: 38px; width: 130px"
           >
-            <i class="bi bi-save me-1"></i> Update
+            <i class="pi pi-save me-2"></i>
+            Update
           </button>
+
         </div>
+
       </form>
+
     </div>
+
   </div>
+
 </div>

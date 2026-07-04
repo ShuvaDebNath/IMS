@@ -1,7 +1,8 @@
 export class LC {
-  LC_ID!: string;
+LC_ID!: string;
 User_ID!: string;
 Beneficiary_Bank_ID!: string;
+Beneficiary_Account_ID!: string;
 Consignee_Name!: string;
 LC_Receiving_Date_By_Mail!: string;
 LC_Receiving_Date_By_Bank!: string;
@@ -36,4 +37,5 @@ totallen!: string;
 Superior_ID!: string;
 Sailing_On_Or_About!: string;
 Bank_TIN_No!: string;
+
 }
