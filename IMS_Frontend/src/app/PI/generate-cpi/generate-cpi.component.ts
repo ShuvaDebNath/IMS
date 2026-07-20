@@ -25,6 +25,7 @@ export class GenerateCpiComponent implements OnInit {
   LoadingModeList: any | [];
   PaymentModeList: any | [];
   ConsigneeList: any | [];
+  AllConsigneeList: any | [];
   ApplicantBankList: any | [];
   BuyingHouseList: any | [];
   CurrencyList: any | [];
@@ -106,7 +107,7 @@ previousValues: any = {};
     this.GetInitialData(true);
   }
 
-  this.RegisterFormControlsChangeEvent();
+  
 }
 
   RegisterFormControlsChangeEvent() {
@@ -129,13 +130,21 @@ previousValues: any = {};
 
       this.Formgroup.controls["PINo"].setValue(piNo);
     });
+    
+
+    console.log('ConsigneeList:', this.ConsigneeList);
 
     this.Formgroup.get('Customer_ID')?.valueChanges.subscribe(value => {
-      let contactPerson = this.ConsigneeList.filter((x: any) => x.Customer_ID == value)[0];
-      this.Formgroup.controls["Contact_Person"].setValue(contactPerson.Contact_Name);
 
+       const contactPerson = this.ConsigneeList.filter(
+        (x: any) => x.Customer_ID == value,
+      )[0];
+      if (contactPerson?.Contact_Name != null) {
+        this.Formgroup.controls['Contact_Person'].setValue(
+          contactPerson.Contact_Name,
+        );
 
-       const consigneeCreatedBy = this.ConsigneeList.find(
+        const consigneeCreatedBy = this.ConsigneeList.find(
           (x: any) => x.Customer_ID == value
         );
         if (consigneeCreatedBy) {
@@ -148,12 +157,8 @@ previousValues: any = {};
           if (getSuperior) {
             this.Formgroup.controls['Superior_ID'].setValue(getSuperior.Superior_ID);
           }
-
-
-
-    });
-
-    
+      }
+    });   
 
   }
 
@@ -580,6 +585,8 @@ get ItemArray(): FormArray {
         this.ArbitrationList=DataSet.Tables21;
         this.CurrencyList=DataSet.Tables22;
         this.UserInfosList = DataSet.Tables32;
+
+       this.RegisterFormControlsChangeEvent();
         
 const bdt = this.CurrencyList.find((x: any) => x.CurrencyCode === 'BDT');
 
