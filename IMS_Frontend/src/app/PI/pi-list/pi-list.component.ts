@@ -84,6 +84,8 @@ export class PiListComponent implements OnInit {
   ShowbtnFull: boolean = false;
   ShowbtnRej: boolean = false;
   ShowbtnSpecial: boolean = false;
+  disableFinalApproval: boolean = false;
+  ShowAllApprovalButtons: boolean = false;
 
   SearchFormgroup!: FormGroup;
   selectedRows: any[] = [];
@@ -118,6 +120,7 @@ export class PiListComponent implements OnInit {
   private customerSearch$ = new Subject<string>();
   shipperList: any[] = [];
   consigneeList: any[] = [];
+  superiorInfos: any[] = [];
 
   constructor(
     private service: MasterEntryService,
@@ -206,13 +209,14 @@ export class PiListComponent implements OnInit {
     this.ShowbtnFull = false;
     this.ShowbtnRej = false;
     this.ShowbtnSpecial = false;
+    this.disableFinalApproval = false;
 
     if (this.PiStatus == 'Pending') {
       this.PageTitle = 'Unapproved PI';
-      this.ShowbtnPar = true;
-      this.ShowbtnQar = true;
-      this.ShowbtnFull = true;
-      this.ShowbtnRej = true;
+      // this.ShowbtnPar = true;
+      // this.ShowbtnQar = true;
+      // this.ShowbtnFull = true;
+      // this.ShowbtnRej = true;
 
       var permissions = this.gs.CheckUserPermission(this.PageTitle);
       this.insertPermissions = permissions.insertPermissions;
@@ -223,10 +227,12 @@ export class PiListComponent implements OnInit {
       if (!this.printPermissions) {
         window.location.href = 'dashboard';
       }
-    } else if (this.PiStatus == 'Partial Approved') {
+    } 
+    
+    else if (this.PiStatus == 'Partial Approved') {
       this.PageTitle = 'Partially Approved PI';
-      this.ShowbtnQar = true;
-      this.ShowbtnFull = true;
+      // this.ShowbtnQar = true;
+      // this.ShowbtnFull = true;
       this.ShowbtnSpecial = true;
 
       var permissions = this.gs.CheckUserPermission(this.PageTitle);
@@ -238,9 +244,11 @@ export class PiListComponent implements OnInit {
       if (!this.printPermissions) {
         window.location.href = 'dashboard';
       }
-    } else if (this.PiStatus == 'Quartar Approved') {
+    } 
+    
+    else if (this.PiStatus == 'Quartar Approved') {
       this.PageTitle = 'Quartar Approved PI';
-      this.ShowbtnFull = true;
+      // this.ShowbtnFull = true;
       this.ShowbtnSpecial = true;
 
       var permissions = this.gs.CheckUserPermission(this.PageTitle);
@@ -252,7 +260,9 @@ export class PiListComponent implements OnInit {
       if (!this.printPermissions) {
         window.location.href = 'dashboard';
       }
-    } else if (this.PiStatus == 'Full Approved') {
+    } 
+    
+    else if (this.PiStatus == 'Full Approved') {
       this.PageTitle = 'Full Approved PI';
 
       var permissions = this.gs.CheckUserPermission(this.PageTitle);
@@ -264,7 +274,9 @@ export class PiListComponent implements OnInit {
       if (!this.printPermissions) {
         window.location.href = 'dashboard';
       }
-    } else if (this.PiStatus == 'Delivered') {
+    } 
+    
+    else if (this.PiStatus == 'Delivered') {
       this.PageTitle = 'Delivered PI';
 
       var permissions = this.gs.CheckUserPermission(this.PageTitle);
@@ -276,7 +288,9 @@ export class PiListComponent implements OnInit {
       if (!this.printPermissions) {
         window.location.href = 'dashboard';
       }
-    } else if (this.PiStatus == 'ALL') {
+    } 
+    
+    else if (this.PiStatus == 'ALL') {
       this.PageTitle = 'All PI';
 
       var permissions = this.gs.CheckUserPermission(this.PageTitle);
@@ -369,16 +383,23 @@ export class PiListComponent implements OnInit {
 
           let DataSet = JSON.parse(results.data);
 
+          const getUserId = Number(this.gs.getSessionData('userId'));
+
+          this.ShowAllApprovalButtons = [1, 2, 19].includes(getUserId);
+
+
           this.UserList = DataSet.Tables1;
           this.piList = DataSet.Tables2;
           this.shipperList = DataSet.Tables3;
           this.consigneeList = DataSet.Tables4;
+          this.superiorInfos = DataSet.Tables6;          
 
           if (this.UserList.length === 1) {
             this.SearchFormgroup.controls['User_ID'].setValue(
               this.UserList[0].User_ID
             );
           }
+          this.SetApprovalButtons();
         } else if (results.msg == 'Invalid Token') {
           Swal.fire('Session Expired!', 'Please Login Again.', 'info');
           this.gs.Logout();
@@ -979,5 +1000,74 @@ export class PiListComponent implements OnInit {
       }
     });
   }
+
+ private SetApprovalButtons(): void {
+
+    // Hide all first
+    this.ShowbtnPar = false;
+    this.ShowbtnQar = false;
+    this.ShowbtnFull = false;
+    this.ShowbtnRej = false;
+
+    const userId = Number(this.gs.getSessionData('userId'));
+    const isAdmin = [1, 2, 19].includes(userId);
+
+    const isSuperior =
+        this.superiorInfos?.length === 1 &&
+        this.superiorInfos[0].User_ID == userId;
+
+    switch (this.PiStatus) {
+
+        case 'Pending':
+
+            if (isAdmin) {
+                this.ShowbtnPar = true;
+                this.ShowbtnQar = true;
+                this.ShowbtnFull = true;
+                this.ShowbtnRej = true;
+            }
+            else if (isSuperior) {
+                this.ShowbtnPar = true;
+            }
+
+            break;
+
+
+        case 'Partial Approved':
+
+            if (isAdmin) {
+                this.ShowbtnPar = true;
+                this.ShowbtnQar = true;
+                this.ShowbtnFull = true;
+            }
+            else if (isSuperior) {
+                this.ShowbtnPar = true;
+            }
+
+            break;
+
+
+        case 'Quartar Approved':
+
+            if (isAdmin) {
+                this.ShowbtnQar = true;
+                this.ShowbtnFull = true;
+            }
+
+            break;
+
+
+        case 'Full Approved':
+
+            // Nobody gets approval buttons
+
+            break;
+
+
+        case 'ALL':
+            // Nobody gets approval buttons
+            break;
+    }
+}
   
 }

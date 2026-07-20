@@ -23,6 +23,7 @@ export class GenerateLcComponent {
   BenificiaryAccounts: any;
   PaymentTerms: any;
   PINo: any;
+  CompanyInfos: any;
 
   insertPermissions: boolean = false;
   updatePermissions: boolean = false;
@@ -75,6 +76,7 @@ export class GenerateLcComponent {
     this.Formgroup = this.fb.group({
       Marketing_Concern: ['', [Validators.required]],
       PINo: [[], [Validators.required]],
+      Beneficiary_Account_ID: ['', [Validators.required]],
       BenificiaryAccounts: ['', [Validators.required]],
       Consignee_Name: [''],
       LCReceivingDateByDraft: [''],
@@ -99,6 +101,7 @@ export class GenerateLcComponent {
       ApplicantBINVAT: [''],
       HSCode: [''],
       BankBINNo: [''],
+      BankTINNo: [''],
       Remarks: [''],
       IRCNo: [''],
       Sailing_On_Or_About: [''],
@@ -118,6 +121,7 @@ export class GenerateLcComponent {
           this.BenificiaryAccounts = JSON.parse(results.data).Tables1;
           this.PaymentTerms = JSON.parse(results.data).Tables2;
           this.MarketingConcern = JSON.parse(results.data).Tables3;
+          this.CompanyInfos = JSON.parse(results.data).Tables4;
         } else if (results.msg == 'Invalid Token') {
           swal.fire('Session Expierd!', 'Please Login Again.', 'info');
           this.gs.Logout();
@@ -129,6 +133,12 @@ export class GenerateLcComponent {
   }
 
   getPINoByMarketingConcern() {
+
+    if(this.Formgroup.value.Marketing_Concern == '' || this.Formgroup.value.Marketing_Concern == null){
+      swal.fire('Select Marketing Concern!', 'Please select Marketing Concern.', 'info');
+      return;
+    }
+
     var procedureName = 'usp_LC_PINo_ByMarketingConcern'
     if(this.isEdit){
       procedureName = 'usp_LC_PINo_ByMarketingConcern_update'
@@ -137,6 +147,7 @@ export class GenerateLcComponent {
       procedureName: procedureName,
       parameters: {
         UserID: this.Formgroup.value.Marketing_Concern,
+        Beneficiary_Account_ID: this.Formgroup.value.Beneficiary_Account_ID,
       },
     };
 
@@ -197,11 +208,14 @@ export class GenerateLcComponent {
     const yyyy = fDate.getFullYear();
 
     const formatted = `${mm}/${dd}/${yyyy}`;
+
+    var getUserId = window.localStorage.getItem('userId') ?? '';
     
     var lc = new LC();
-    lc.User_ID = this.Formgroup.value.Marketing_Concern;
-    //lc. = this.Formgroup.value.PINo;
+    lc.Superior_ID = this.Formgroup.value.Marketing_Concern;
+    lc.User_ID = getUserId;
     lc.Beneficiary_Bank_ID = this.Formgroup.value.BenificiaryAccounts;
+    lc.Beneficiary_Account_ID = this.Formgroup.value.Beneficiary_Account_ID;
     lc.Consignee_Name = this.Formgroup.value.Consignee_Name;
     lc.LC_No = this.Formgroup.value.LCNo;
     lc.LC_Value = this.Formgroup.value.LCValue;
@@ -307,6 +321,10 @@ export class GenerateLcComponent {
     var updateColumnName = 'LC_ID';
     var updateTableName = 'tbl_pi_master';
 
+    console.log(this.Formgroup.value.BankTINNo);
+    console.log(lc);
+    
+
     this.masterEntyService
       .SaveSingleDataAndUpdateSerial(
         lc,
@@ -361,6 +379,14 @@ export class GenerateLcComponent {
             
             var piArr = e.PI_No.split(',');
             this.piArrInt = piArr.map(Number);
+
+   this.Formgroup.patchValue({
+      Marketing_Concern:e.User_ID,
+      Beneficiary_Account_ID:e.Beneficiary_Account_ID
+   });
+
+   this.getPINoByMarketingConcern();
+
             
             this.Formgroup.controls.Marketing_Concern.setValue(e.User_ID);
             this.getPINoByMarketingConcern();
@@ -368,6 +394,9 @@ export class GenerateLcComponent {
                   }, 1000);
             this.Formgroup.controls.BenificiaryAccounts.setValue(
               e.Beneficiary_Bank_ID
+            );
+            this.Formgroup.controls.Beneficiary_Account_ID.setValue(
+              e.Beneficiary_Account_ID
             );
             this.Formgroup.controls.Consignee_Name.setValue(e.Consignee_Name);
             this.Formgroup.controls.LCReceivingDateByDraft.setValue(
@@ -438,9 +467,13 @@ export class GenerateLcComponent {
       return;
     }
 
+    var getUserId = window.localStorage.getItem('userId') ?? '';
+    
     var lc = new LC();
-    lc.User_ID = this.Formgroup.value.Marketing_Concern;
+    lc.Superior_ID = this.Formgroup.value.Marketing_Concern;
+    lc.User_ID = getUserId;
     lc.Beneficiary_Bank_ID = this.Formgroup.value.BenificiaryAccounts;
+    lc.Beneficiary_Account_ID = this.Formgroup.value.Beneficiary_Account_ID;
     lc.Consignee_Name = this.Formgroup.value.Consignee_Name;
     lc.LC_No = this.Formgroup.value.LCNo;
     lc.LC_Value = this.Formgroup.value.LCValue;

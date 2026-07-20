@@ -25,6 +25,7 @@ import { Subject } from 'rxjs';
 import { DoubleMasterEntryService } from 'src/app/services/doubleEntry/doubleEntryService.service';
 import { GetDataService } from 'src/app/services/getData/getDataService.service';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-pi-amendment-application',
@@ -90,6 +91,14 @@ export class PiAmendmentApplicationComponent {
   deletePermissions: boolean = false;
   printPermissions: boolean = false;
 
+
+  private piSearch$ = new Subject<string>();
+  private customerSearch$ = new Subject<string>();
+  piList: any[] = [];
+  consigneeList: any[] = [];
+  UserList: any[] = [];
+  isLoading: boolean = false;
+
   constructor(
     private fb: FormBuilder,
     private doubleMasterEntryService: DoubleMasterEntryService,
@@ -108,8 +117,33 @@ export class PiAmendmentApplicationComponent {
     this.printPermissions = permissions.printPermissions;
 
     this.title.setTitle('PI Amendment Application');
+
+     // PI Search
+  this.piSearch$
+    .pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    )
+    .subscribe(keyword => {
+      this.callPISearchAPI(keyword);
+    });
+
+  // Customer Search
+  this.customerSearch$
+    .pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    )
+    .subscribe(keyword => {
+      this.callCustomerSearchAPI(keyword);
+    });
+
+
+
+
     this.generateForm();
     this.loadPageData();
+    this.RegisterFormControlsChangeEvent();
 
     let has = this.activeLink.snapshot.queryParamMap.has('Id');
     if (has) {
@@ -129,7 +163,8 @@ export class PiAmendmentApplicationComponent {
     const today = new Date().toISOString().split('T')[0];
     this.Formgroup = this.fb.group({
       Date: [today, Validators.required],
-      Customer: ['', Validators.required],
+      User_ID: ['', Validators.required],
+      Customer_ID: [''],
       PINo: ['', Validators.required],
       items: this.fb.array([]),
       itemsRevise: this.fb.array([]),
@@ -137,32 +172,40 @@ export class PiAmendmentApplicationComponent {
   }
 
   loadPageData(): void {
-    var userId = window.localStorage.getItem('userId');
-    var ProcedureData = {
-      procedureName: '[usp_Application_GetInitialData]',
-      parameters: {
-        userID: userId,
-      },
-    };
-
-    this.getDataService.GetInitialData(ProcedureData).subscribe({
-      next: (results) => {
-        if (results.status) {
-          var DataSet = JSON.parse(results.data);
-          this.CustomerList = JSON.parse(results.data).Tables1;
-          this.AAList = DataSet.Tables2;
-          this.ColorList = DataSet.Tables3;
-          this.WidthList = DataSet.Tables4;
-          this.UnitList = DataSet.Tables5;
-          this.PaymentModeList = DataSet.Tables6;
-        } else if (results.msg == 'Invalid Token') {
-          swal.fire('Session Expierd!', 'Please Login Again.', 'info');
-          this.gs.Logout();
-        } else {
-        }
-      },
-      error: (err) => {},
-    });
+    const procedureData = {
+              procedureName: 'usp_GetUserInfo_With_Superior',
+              parameters: {
+                UserId: this.gs.getSessionData('userId')
+              },
+            };
+        
+            this.getDataService.GetInitialData(procedureData).subscribe({
+              next: (results) => {
+                if (results.status) {
+        
+                  let DataSet = JSON.parse(results.data);
+        
+                  this.UserList = DataSet.Tables1;
+        
+                  if (this.UserList.length === 1) {
+                    const userId = this.UserList[0].User_ID;
+    
+                    this.Formgroup.controls['User_ID']
+                      .setValue(userId);
+    
+                       this.OnUserChange(userId);
+                  }
+                   this.loadInitialData();
+                } else if (results.msg == 'Invalid Token') {
+                  swal.fire('Session Expired!', 'Please Login Again.', 'info');
+                  this.gs.Logout();
+                  this.isLoading = false;
+                }
+              },
+              error: (err) => {
+                this.isLoading = false;
+              },
+            });
   }
 
   get items(): FormArray {
@@ -175,12 +218,9 @@ export class PiAmendmentApplicationComponent {
 
   removeItem(i: number) {
     this.items.removeAt(i);
-  }
-
-  // totals (bind to UI + send to API)
+  }  
 
   saveData(): void {
-    console.log(this.Formgroup);
 
     if (this.Formgroup.invalid) {
       swal.fire(
@@ -191,7 +231,7 @@ export class PiAmendmentApplicationComponent {
       return;
     }
 
-    var userId = window.localStorage.getItem('userId');
+   var actualPrepareUserId = window.localStorage.getItem('userId');
 
     var fDate = new Date();
     const mm = String(fDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
@@ -207,22 +247,24 @@ export class PiAmendmentApplicationComponent {
     var totalDeliveredQuantity = 0;
     var totalAproveQty = 0;
 
-    var SuperiorId = this.PIList.filter(
-      (e: any) => e.value == this.Formgroup.value.PINo
-    )[0].Superior_ID;
+    var selectedPI = this.piList.find(
+      (e: any) => e.PINo == this.Formgroup.value.PINo
+    );
+
+    var SuperiorId = selectedPI?.Superior_ID;
+    var userId = selectedPI?.User_ID;
 
     const formArray = this.Formgroup.get('items') as FormArray;
 
     formArray.controls.forEach((group) => {
       const item = group.value;
-      console.log(item);
 
       totalQty += Number(item.Quantity) || 0;
       totalDeliveredQuantity += Number(item.Delivered_Quantity) || 0;
     });
 
     const masterRow = {
-      FormTypeId: 'PIAmendment',
+      FormTypeId: 5, //'PIAmendment',
       TotalQuantity: totalQty,
       TotalDeliveredQuantity: totalDeliveredQuantity,
       TotalAppliedDelQty: totalAproveQty,
@@ -237,12 +279,13 @@ export class PiAmendmentApplicationComponent {
       PiNos: this.Formgroup.value.PINo,
     };
 
-    console.log(fv.itemsRevise);
-
     const detailRows = fv.itemsRevise.map((i: any) => ({
       PiNo: i.PINo,
       ArticleNo: i.Article,
-      CustomerId: fv.Customer,
+      CustomerId: i.Customer_ID,
+      CustomerName: i.customer_name,
+      ApplyDeliveryQty: 0,
+      Commitment: i.Remarks,
       TblPiMasterId: i.PI_Master_ID,
       TblPiDetailId: i.PI_Detail_ID,
       TblPoFormMasterId: '',
@@ -250,7 +293,7 @@ export class PiAmendmentApplicationComponent {
       CreatedDate: new Date(
         new Date().toLocaleString('en', { timeZone: 'Asia/Dhaka' })
       ),
-      CreatedById: userId,
+      CreatedById: actualPrepareUserId,
       Colour: i.Color_ID,
       Width: i.Width_ID,
       Unit: i.Unit_ID,
@@ -258,29 +301,24 @@ export class PiAmendmentApplicationComponent {
       UnitPrice: i.Unit_Price,
       UnitCommission: i.CommissionUnit,
       PaymentTerms: i.PaymentTerms,
-      DeliveredQuantity: i.Delivered_Quantity,
-      ApplyDeliveryQty: 0,
-    }));
+      DeliveredQuantity: i.Delivered_Quantity
+    }));       
 
     this.doubleMasterEntryService
-      .SaveDataMasterDetailsGetId(
-        detailRows, // fd (child rows)
-        'tbl_po_form_detail', // tableName (child)
-        masterRow, // fdMaster (master row)
-        'tbl_po_form_master', // tableNameMaster (master)
-        'Id', // columnNamePrimary (PK)
-        'TblPoFormMasterId', // columnNameForign (FK in child)
-        'Application', // serialType (your code uses it)
-        'Application' // columnNameSerialNo (series name)
+       .SaveDataMasterDetailsGetId(
+        detailRows,
+        'tbl_po_form_detail', 
+        masterRow, 
+        'tbl_po_form_master', 
+        'Id', 
+        'TblPoFormMasterId', 
+        'Application', 
+        'Application'
       )
       .subscribe({
         next: (res: any) => {
-          console.log(res);
-          console.log(res);
-          //Id, CustomerName, PiNo, PiArticle, ActualArticle, Colour, Width, Unit, Quantity, UnitPrice, CMS, PaymentTerms, Note, TblPoFormMasterId, CreatedDate, CreatedById, UpdatedDate, UpdatedById
-
-          const detailRows = fv.itemsRevise.map((i: any) => ({
-            CustomerName: fv.customer_name,
+          const detailRows = fv.itemsRevise.map((i: any) => ({           
+            CustomerName: i.customer_name,
             PiNo: i.PINo,
             PiArticle: i.Article,
             ActualArticle: i.Item_ID,
@@ -320,7 +358,6 @@ export class PiAmendmentApplicationComponent {
                 }
               },
               error: (err) => {
-                console.error(err);
                 swal.fire(
                   'Application generation Failed',
                   err?.error?.message || 'Application generation failed.',
@@ -328,23 +365,6 @@ export class PiAmendmentApplicationComponent {
                 );
               },
             });
-
-          // if (res.messageType === 'Success' && res.status) {
-          //   swal.fire(
-          //     'Success',
-          //     'Application generated successfully',
-          //     'success'
-          //   );
-          //   // Optionally reset form / navigate
-          //   this.Formgroup.reset({});
-          //   this.items.clear();
-          // } else {
-          //   swal.fire(
-          //     'Application generated Failed',
-          //     res?.message || 'Application generated failed.',
-          //     'info'
-          //   );
-          // }
         },
         error: () => {
           swal.fire('info', 'Could not save requisition', 'info');
@@ -353,7 +373,6 @@ export class PiAmendmentApplicationComponent {
   }
 
   UpdateData(): void {
-    console.log(this.Formgroup);
 
     if (this.Formgroup.invalid) {
       swal.fire(
@@ -364,7 +383,7 @@ export class PiAmendmentApplicationComponent {
       return;
     }
 
-    var userId = window.localStorage.getItem('userId');
+     var actualPrepareUserId = window.localStorage.getItem('userId');
 
     var fDate = new Date();
     const mm = String(fDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
@@ -380,22 +399,24 @@ export class PiAmendmentApplicationComponent {
     var totalDeliveredQuantity = 0;
     var totalAproveQty = 0;
 
-    var SuperiorId = this.PIList.filter(
-      (e: any) => e.value == this.Formgroup.value.PINo
-    )[0].Superior_ID;
+    var selectedPI = this.piList.find(
+      (e: any) => e.PINo == this.Formgroup.value.PINo
+    );
+
+    var SuperiorId = selectedPI?.Superior_ID;
+    var userId = selectedPI?.User_ID;
 
     const formArray = this.Formgroup.get('items') as FormArray;
 
     formArray.controls.forEach((group) => {
       const item = group.value;
-      console.log(item);
 
       totalQty += Number(item.Quantity) || 0;
       totalDeliveredQuantity += Number(item.Delivered_Quantity) || 0;
     });
 
     const masterRow = {
-      FormTypeId: 'PIAmendment',
+      FormTypeId: 5, //'PIAmendment',
       TotalQuantity: totalQty,
       TotalDeliveredQuantity: totalDeliveredQuantity,
       TotalAppliedDelQty: totalAproveQty,
@@ -404,26 +425,27 @@ export class PiAmendmentApplicationComponent {
       UserId: userId,
       Status: 'Pending',
       FormTypeName: 'PI Amendment Application',
-      UpdatedDate: new Date(
+      CreatedDate: new Date(
         new Date().toLocaleString('en', { timeZone: 'Asia/Dhaka' })
       ),
       PiNos: this.Formgroup.value.PINo,
     };
 
-    console.log(fv.itemsRevise);
-
     const detailRows = fv.itemsRevise.map((i: any) => ({
       PiNo: i.PINo,
       ArticleNo: i.Article,
-      CustomerId: fv.Customer,
+      CustomerId: i.Customer_ID,
+      CustomerName: i.customer_name,
+      ApplyDeliveryQty: 0,
+      Commitment: i.Remarks,
       TblPiMasterId: i.PI_Master_ID,
       TblPiDetailId: i.PI_Detail_ID,
       TblPoFormMasterId: '',
       ActualArticleNo: i.Item_ID,
-      UpdatedDate: new Date(
+      CreatedDate: new Date(
         new Date().toLocaleString('en', { timeZone: 'Asia/Dhaka' })
       ),
-      UpdatedById: userId,
+      CreatedById: actualPrepareUserId,
       Colour: i.Color_ID,
       Width: i.Width_ID,
       Unit: i.Unit_ID,
@@ -431,9 +453,9 @@ export class PiAmendmentApplicationComponent {
       UnitPrice: i.Unit_Price,
       UnitCommission: i.CommissionUnit,
       PaymentTerms: i.PaymentTerms,
-      DeliveredQuantity: i.Delivered_Quantity,
-      ApplyDeliveryQty: 0,
-    }));
+      DeliveredQuantity: i.Delivered_Quantity
+    }));       
+
     var whereParam = {
       Id: this.Id,
     };
@@ -452,34 +474,32 @@ export class PiAmendmentApplicationComponent {
       )
       .subscribe({
         next: (res: any) => {
-          fv.itemsRevise.map((e: any) => {
+          fv.itemsRevise.map((i: any) => {
             const detailRows = {
-              CustomerName: fv.customer_name,
-              PiNo: e.PINo,
-              PiArticle: e.Article,
-              ActualArticle: e.Item_ID,
-              TblPoFormMasterId: this.Id,
-              UpdatedDate: new Date(
-                new Date().toLocaleString('en', { timeZone: 'Asia/Dhaka' })
-              ),
-              UpdatedById: userId,
-              Colour: e.Color_ID,
-              Width: e.Width_ID,
-              Unit: e.Unit_ID,
-              Quantity: e.Quantity,
-              UnitPrice: e.Unit_Price,
-              CMS: e.CommissionUnit,
-              PaymentTerms: e.PaymentTerms,
-              Note: e.Remarks,
+              CustomerName: i.customer_name,
+            PiNo: i.PINo,
+            PiArticle: i.Article,
+            ActualArticle: i.Item_ID,
+            TblPoFormMasterId: res,
+            CreatedDate: new Date(
+              new Date().toLocaleString('en', { timeZone: 'Asia/Dhaka' })
+            ),
+            CreatedById: userId,
+            Colour: i.Color_ID,
+            Width: i.Width_ID,
+            Unit: i.Unit_ID,
+            Quantity: i.Quantity,
+            UnitPrice: i.Unit_Price,
+            CMS: i.CommissionUnit,
+            PaymentTerms: i.PaymentTerms,
+            Note: i.Remarks,
             };
-            console.log(e.ReviseID);
             
-            if (e.ReviseID == '' || e.ReviseID == null) {
+            if (i.ReviseID == '' || i.ReviseID == null) {
               this.masterEntryService
                 .SaveSingleData(detailRows, 'tbl_po_form_pi_revise_detail')
                 .subscribe({
                   next: (res) => {
-                    console.log(res);
                     
                     if (res.messageType === 'Success' && res.status) {
                       swal.fire(
@@ -499,7 +519,6 @@ export class PiAmendmentApplicationComponent {
                     }
                   },
                   error: (err) => {
-                    console.error(err);
                     swal.fire(
                       'Application generation Failed',
                       err?.error?.message || 'Application generation failed.',
@@ -509,9 +528,8 @@ export class PiAmendmentApplicationComponent {
                 });
             } else {
               var whereParamPIINDiv = {
-                Id: e.ReviseID,
+                Id: i.ReviseID,
               };
-              console.log(whereParamPIINDiv);
 
               this.masterEntryService
                 .UpdateData(
@@ -521,7 +539,6 @@ export class PiAmendmentApplicationComponent {
                 )
                 .subscribe({
                   next: (res) => {
-                    console.log(res);
 
                     if (res.messageType === 'Success' && res.status) {
                       swal.fire(
@@ -538,7 +555,6 @@ export class PiAmendmentApplicationComponent {
                     }
                   },
                   error: (err) => {
-                    console.error(err);
                     swal.fire(
                       'Application Update Failed',
                       err?.error?.message || 'Application update failed.',
@@ -600,13 +616,13 @@ export class PiAmendmentApplicationComponent {
 
     this.masterEntryService.GetInitialData(ProcedureData).subscribe({
       next: (results) => {
-        console.log(results);
         if (results.status) {
           const formArray = this.Formgroup.get('items') as FormArray;
           formArray.clear();
           JSON.parse(results.data).Tables1.forEach((item: any) => {
             formArray.push(
               this.fb.group({
+                Customer_ID : [item.Customer_ID], 
                 customer_name: [item.customer_name],
                 PINo: [item.PINo],
                 PIMasterId: [item.PINo],
@@ -662,19 +678,34 @@ export class PiAmendmentApplicationComponent {
           ) as FormArray;
           formArray.clear();
           formArrayRevise.clear();
+          console.log(JSON.parse(results.data).Tables1[0]);
+          console.log(JSON.parse(results.data).Tables1[0].Date);
+          
           const input = JSON.parse(results.data).Tables1[0].Date;
           const formatted = new Date(input).toISOString();
-          console.log(formatted);
+
+          const customerId =
+            JSON.parse(results.data).Tables2[0].Customer_ID;
+
+          const piNo =
+            JSON.parse(results.data).Tables2[0].PINo;
+
+          const userId =
+            JSON.parse(results.data).Tables2[0].User_ID;
+
+          this.Formgroup.get('User_ID')?.setValue(userId);
+          this.consigneeList = JSON.parse(results.data).Tables1;
+
+          this.Formgroup.get('Customer_ID')
+            ?.setValue(customerId);
+
+          this.piList = JSON.parse(results.data).Tables1;
+
+          this.Formgroup.get('PINo')
+            ?.setValue(piNo);
 
           this.Formgroup.controls['Date'].setValue(
             this.toYMD(JSON.parse(results.data).Tables1[0].Date)
-          );
-          this.Formgroup.controls['Customer'].setValue(
-            JSON.parse(results.data).Tables1[0].Customer_ID
-          );
-          this.getCustomerList();
-          this.Formgroup.controls['PINo'].setValue(
-            JSON.parse(results.data).Tables1[0].PI_Master_ID
           );
           JSON.parse(results.data).Tables1.forEach((item: any) => {
             formArray.push(
@@ -706,8 +737,6 @@ export class PiAmendmentApplicationComponent {
           });
 
           JSON.parse(results.data).Tables2.forEach((item: any) => {
-            console.log(item);
-
             const grp = this.buildReviseGroup({
               customer_name: item.customer_name,
               PINo: item.PINo,
@@ -727,6 +756,7 @@ export class PiAmendmentApplicationComponent {
               TblPiDetailId: item.PI_Detail_ID,
               PaymentTerms: item.PaymentTerms,
               ReviseID: item.ReviseID,
+              Remarks: item.Commitment,
             });
 
             this.itemsRevise.push(grp);
@@ -750,6 +780,7 @@ export class PiAmendmentApplicationComponent {
               TblPiMasterId: item.PI_Master_ID,
               TblPiDetailId: item.PI_Detail_ID,
               ReviseID: item.ReviseID,
+              Remarks: item.Commitment || '',
             });
           });
         } else if (results.msg == 'Invalid Token') {
@@ -763,14 +794,13 @@ export class PiAmendmentApplicationComponent {
   }
 
   CopyItem(item: any) {
-    console.log(item,this.AAList);
 
     try {
       const articleObj = this.AAList.find((x:any) => x.Item_ID === item.ActualArticleId);
-      console.log(articleObj);
       
       // build a revise group (with validators) and push it
       const grp = this.buildReviseGroup({
+        Customer_ID: item.Customer_ID,
         customer_name: item.customer_name,
         PINo: item.PINo,
         Article: item.Article,
@@ -789,12 +819,12 @@ export class PiAmendmentApplicationComponent {
         PaymentTerms:
           item.PaymentTerms ,
       });
-      console.log(grp);
 
       this.itemsRevise.push(grp);
 
       // add a display entry to ReviseDetails used by the template
       this.ReviseDetails.push({
+        Customer_ID: item.Customer_ID,
         customer_name: item.customer_name || '',
         PINo: item.PINo || '',
         Article: item.Article || '',
@@ -811,7 +841,6 @@ export class PiAmendmentApplicationComponent {
         PI_Master_ID: item.PI_Master_ID || null,
       });
 
-      console.log(this.ReviseDetails);
     } catch (err) {
       console.error('CopyItem error', err);
     }
@@ -823,6 +852,7 @@ export class PiAmendmentApplicationComponent {
    */
   buildReviseGroup(data?: any): FormGroup {
     return this.fb.group({
+      Customer_ID: [data?.Customer_ID || ''],
       customer_name: [data?.customer_name || ''],
       PINo: [data?.PINo || ''],
       Article: [data?.Article || '', Validators.required],
@@ -861,12 +891,14 @@ export class PiAmendmentApplicationComponent {
     const pinLabel = first.PINo || '';
 
     const grp = this.buildReviseGroup({
+      Customer_ID: first.Customer_ID,
       customer_name: customerName,
       PINo: pinLabel,
     });
 
     this.itemsRevise.push(grp);
     this.ReviseDetails.push({
+      Customer_ID: first.Customer_ID,
       customer_name: customerName,
       PINo: pinLabel,
       Article: '',
@@ -995,4 +1027,351 @@ export class PiAmendmentApplicationComponent {
     const day = String(dt.getDate()).padStart(2, '0');
     return `${dt.getFullYear()}-${m}-${day}`;
   }
+
+     onSearchPI(event: any) {
+    
+        const keyword = event?.filter?.trim() || '';
+        if (!keyword) {
+          this.onClearPI();
+          return;
+        }
+    
+         this.piSearch$.next(keyword); 
+      }
+    
+       onSearchCustomerName(event: any) {
+    
+        const keyword = event?.filter?.trim() || '';
+        if (!keyword) {
+          this.onClearCustomerName();
+          return;
+        }
+    
+         this.customerSearch$.next(keyword); 
+      }
+    
+      callPISearchAPI(keyword: string) {  
+    
+        const userId = this.Formgroup.get('User_ID')?.value;
+    
+        if (!userId) {
+          this.piList = [];
+    
+          swal.fire({
+            icon: 'warning',
+            title: 'Select Name First',
+            text: 'Please select a user before searching PI No',
+            timer: 2000,
+            showConfirmButton: false
+          });
+    
+          return;
+        }
+    
+        const procedureData = {
+          procedureName: 'usp_PINumberSearchWithUserReference',
+          parameters: {
+            UserId: this.Formgroup.get('User_ID')?.value,
+            SearchPI: keyword
+          }
+        };
+    
+        this.getDataService.GetInitialData(procedureData).subscribe({
+          next: (results) => {
+    
+            if (results.status) {
+    
+              const data = JSON.parse(results.data);
+    
+              this.piList = data?.Tables1 || [];
+    
+              if (this.piList.length === 1) {
+                this.Formgroup.get('PINo')?.setValue(this.piList[0].PINo);
+              }
+    
+            }
+            else if (results.msg === 'Invalid Token') {
+              swal.fire('Session Expired!', 'Please Login Again.', 'info');
+              this.gs.Logout();
+            }
+    
+            this.isLoading = false;
+          },
+          error: (err) => {
+            this.isLoading = false;
+          }
+        });
+      }
+    
+     callCustomerSearchAPI(keyword: string) {  
+    
+        const userId = this.Formgroup.get('User_ID')?.value;
+    
+        if (!userId) {
+          this.consigneeList = [];
+    
+          swal.fire({
+            icon: 'warning',
+            title: 'Select Name First',
+            text: 'Please select a user before searching PI No',
+            timer: 2000,
+            showConfirmButton: false
+          });
+    
+          return;
+        }
+    
+        const procedureData = {
+          procedureName: 'usp_CustomerNameSearchWithUserReference',
+          parameters: {
+            UserId: this.Formgroup.get('User_ID')?.value,
+            SearchCustomerName: keyword
+          }
+        };      
+    
+        this.getDataService.GetInitialData(procedureData).subscribe({
+          next: (results) => {
+    
+            if (results.status) {
+    
+              const data = JSON.parse(results.data);
+    
+              this.consigneeList = data?.Tables1 || [];
+    
+              if (this.consigneeList.length === 1) {
+                this.Formgroup.get('Customer_ID')?.setValue(
+                this.consigneeList[0].Customer_ID,
+                { emitEvent: false } 
+              );
+              }
+    
+            }
+            else if (results.msg === 'Invalid Token') {
+              swal.fire('Session Expired!', 'Please Login Again.', 'info');
+              this.gs.Logout();
+            }
+    
+            this.isLoading = false;
+          },
+          error: (err) => {
+            console.error(err);
+            this.isLoading = false;
+          }
+        });
+      }
+    
+      onClearPI() {
+    
+        const rawUserId = this.Formgroup.get('User_ID')?.value;
+    
+        const userId = rawUserId ? rawUserId : 1;
+    
+        if (!userId) {
+          this.piList = [];
+          return;
+        }
+    
+        const procedureData = {
+          procedureName: 'usp_PINumberSearchWithUserReference',
+          parameters: {
+            UserId: userId,
+            SearchPI: null,
+          }
+        };
+    
+        this.getDataService.GetInitialData(procedureData).subscribe({
+          next: (results) => {
+            if (results.status) {
+    
+              const data = typeof results.data === 'string'
+                ? JSON.parse(results.data)
+                : results.data;
+    
+              this.piList = data?.Tables1 || [];
+            }
+          }
+        });
+      }
+    
+      onClearCustomerName() {
+    
+        const rawUserId = this.Formgroup.get('User_ID')?.value;
+    
+        const userId = rawUserId ? rawUserId : 1;
+    
+        if (!userId) {
+          this.consigneeList = [];
+          return;
+        }
+    
+        const procedureData = {
+          procedureName: 'usp_CustomerNameSearchWithUserReference',
+          parameters: {
+            UserId: userId,
+            SearchCustomerName: null,
+          }
+        };
+    
+        this.getDataService.GetInitialData(procedureData).subscribe({
+          next: (results) => {
+            if (results.status) {
+    
+              const data = typeof results.data === 'string'
+                ? JSON.parse(results.data)
+                : results.data;
+    
+              this.consigneeList = data?.Tables1 || [];
+            }
+          }
+        });
+      }
+  
+  
+      RegisterFormControlsChangeEvent() {
+  
+    this.Formgroup.get('User_ID')
+      ?.valueChanges
+      .subscribe((userId) => {
+  
+        this.OnUserChange(userId);
+  
+      });
+  
+  }
+  
+  OnUserChange(userId: any) {
+  
+    //---------------------------------------------------
+    // RESET
+    //---------------------------------------------------
+  
+    this.Formgroup.get('Customer_ID')?.reset();
+  
+    this.Formgroup.get('PINo')?.reset();
+  
+    this.consigneeList = [];
+  
+    this.piList = [];
+  
+    //---------------------------------------------------
+    // NO USER
+    //---------------------------------------------------
+  
+    if (!userId) {
+      return;
+    }
+  
+    //---------------------------------------------------
+    // LOAD CONSIGNEE
+    //---------------------------------------------------
+  
+    this.LoadConsignee(userId);
+  
+    //---------------------------------------------------
+    // LOAD PI
+    //---------------------------------------------------
+  
+    this.LoadPI(userId);
+  
+  }
+  
+  LoadConsignee(userId: number) {
+  
+    const model = {
+  
+      procedureName:
+        'usp_CustomerNameSearchWithUserReference',
+  
+      parameters: {
+  
+        UserId: userId,
+        SearchPI: null
+  
+      }
+  
+    };
+  
+    this.getDataService
+      .GetInitialData(model)
+      .subscribe({
+  
+        next: (results) => {
+  
+          if (results.status) {
+  
+            this.consigneeList =
+              JSON.parse(results.data).Tables1;
+  
+          }
+  
+        }
+  
+      });
+  
+  }
+  
+  LoadPI(userId: number) {
+  
+    const model = {
+  
+      procedureName:
+        'usp_PINumberSearchWithUserReference',
+  
+      parameters: {
+  
+        UserId: userId,
+        SearchPI: null
+  
+      }
+  
+    };
+  
+    this.getDataService
+      .GetInitialData(model)
+      .subscribe({
+  
+        next: (results) => {
+  
+          if (results.status) {
+  
+            this.piList =
+              JSON.parse(results.data).Tables1;
+  
+          }
+  
+        }
+  
+      });
+  
+  }
+
+  loadInitialData(): void {
+
+  const ProcedureData = {
+    procedureName: 'usp_Application_GetInitialData',
+    parameters: {
+      userID: this.gs.getSessionData('userId')
+    }
+  };
+
+  this.getDataService.GetInitialData(ProcedureData).subscribe({
+    next: (results) => {
+
+      if (results.status) {
+
+        const DataSet = JSON.parse(results.data);
+
+        this.CustomerList = DataSet.Tables1;
+        this.AAList = DataSet.Tables2;
+        this.ColorList = DataSet.Tables3;
+        this.WidthList = DataSet.Tables4;
+        this.UnitList = DataSet.Tables5;
+        this.PaymentModeList = DataSet.Tables6;
+      }
+    },
+    error: (err) => {
+      console.error(err);
+    }
+  });
+}
 }

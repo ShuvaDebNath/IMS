@@ -4,17 +4,15 @@ import { Router } from '@angular/router';
 import { GlobalServiceService } from '../../services/Global-service.service';
 import swal from 'sweetalert2';
 import { Page } from 'src/app/models/Page';
-import { GlobalClass } from 'src/app/shared/global-class';
-//Material Datatable
 import { MatPaginator } from '@angular/material/paginator';
 import { PagesComponent } from 'src/app/pages/pages.component';
 import { Title } from '@angular/platform-browser';
 import { MasterEntryService } from 'src/app/services/masterEntry/masterEntry.service';
 import { GetDataModel } from 'src/app/models/GetDataModel';
 import { LC } from 'src/app/models/LCModel';
-import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
-import { DoubleMasterEntryModel } from 'src/app/models/DoubleMasterEntryModel';
 import { ReportService } from 'src/app/services/reportService/report-service.service';
+import { DateFormat } from 'src/app/shared/date-format';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-all-application',
@@ -116,8 +114,8 @@ export class AllApplicationComponent {
   }
   Search() {
     var finput = new Date();
-    var fromDate = this.SearchForm.value.fromDate;
-    var toDate = this.SearchForm.value.toDate;
+    var fromDate = DateFormat.toApiDate(this.SearchForm.value.fromDate);
+    var toDate = DateFormat.toApiDate(this.SearchForm.value.toDate);
 
     let param = new GetDataModel();
     param.procedureName = '[usp_Application_List]';
@@ -252,4 +250,69 @@ export class AllApplicationComponent {
       },
     });
   }
+
+  HandleEdit(table: any, route: string) {
+
+  //---------------------------------------------------
+  // ONLY PENDING ALLOW
+  //---------------------------------------------------
+
+  if (table.Status != 'Pending') {
+
+    Swal.fire(
+      'Warning',
+      'Only Pending applications can be edited.',
+      'warning'
+    );
+
+    return;
+
+  }
+
+  //---------------------------------------------------
+  // OPEN PAGE
+  //---------------------------------------------------
+
+  const url = this.router.serializeUrl(
+    this.router.createUrlTree(
+      [route],
+      {
+        queryParams: {
+          Id: table.Id
+        }
+      }
+    )
+  );
+
+  window.open(url, '_blank');
+
+}
+
+
+
+HandleDelete(table: any) {
+
+  //---------------------------------------------------
+  // ONLY PENDING ALLOW
+  //---------------------------------------------------
+
+  if (table.Status != 'Pending') {
+
+    Swal.fire(
+      'Warning',
+      'Only Pending applications can be deleted.',
+      'warning'
+    );
+
+    return;
+
+  }
+
+  //---------------------------------------------------
+  // DELETE
+  //---------------------------------------------------
+
+  this.DeleteData(table);
+
+}
 }

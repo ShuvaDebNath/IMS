@@ -101,7 +101,7 @@ export class ApproveApplicationComponent {
             
             this.reviseData = JSON.parse(results.data).Tables2;
           }
-          else if(this.tableData[0].AppType=="Special Delivery"){
+          else if(this.tableData[0].AppType=="Special Delivery Application"){
             this.status = this.tableData[0].Status;
             this.PoNo = this.tableData[0].POno;
             this.AppDate = this.tableData[0].Date;
@@ -115,14 +115,14 @@ export class ApproveApplicationComponent {
             this.FormType = this.tableData[0].FormTypeName;
             this.FormTitle = "Cancel PI Application";
           }
-          else if(this.tableData[0].AppType=="Exchange Goods Application"){
+          else if(this.tableData[0].AppType=="Exchange goods Application"){
             this.status = this.tableData[0].Status;
             this.PoNo = this.tableData[0].POno;
             this.AppDate = this.tableData[0].Date;
             this.FormType = this.tableData[0].FormTypeName;
             this.FormTitle = "Exchange Goods Application";
           }
-          else if(this.tableData[0].AppType=="Return Goods Application"){
+          else if(this.tableData[0].AppType=="Return goods Application"){
             this.status = this.tableData[0].Status;
             this.PoNo = this.tableData[0].POno;
             this.AppDate = this.tableData[0].Date;

@@ -51,7 +51,7 @@ export class GenerateCashReceiveComponent {
 
   ngOnInit() {
     var permissions = this.gs.CheckUserPermission(
-      'Generate Commercial Invoice'
+      'Generate Cash Receive'
     );
     this.insertPermissions = permissions.insertPermissions;
     this.updatePermissions = permissions.updatePermissions;
