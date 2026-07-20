@@ -51,6 +51,7 @@
     <None Remove="Report\V2\LCReport\rptLCReport.rdlc" />
     <None Remove="Report\V2\PackingList.rdlc" />
     <None Remove="Report\V2\PI.rdlc" />
+    <None Remove="Report\V2\PIReport\rptPIReport.rdlc" />
     <None Remove="Report\V2\RawMaterial\rptRawMaterialIssueInvoiceReport.rdlc" />
     <None Remove="Report\V2\RawMaterial\rptRMReceivePendingDetailsReport.rdlc" />
     <None Remove="Report\V2\RawMaterial\rptRMStockReport.rdlc" />
@@ -172,6 +173,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Report\V2\PIReports\PISunshine.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\V2\PIReport\rptPIReport.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Report\V2\RawMaterial\rptRawMaterialIssueInvoiceReport.rdlc">

@@ -15,5 +15,6 @@ namespace AccountingBackEnd.DAL.DTOs
         public int PageLength { get; set; }
         public int PageNo { get; set; }
         public string? SearchParam { get; set; }
+        public string? Beneficiary_Account_ID { get; set; }
     }
 }

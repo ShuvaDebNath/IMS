@@ -1,9 +1,9 @@
 ﻿using AccountingBackEnd.DAL.DTOs;
 using Boilerplate.Contracts;
-using Dapper;
 using Boilerplate.Contracts.Enum;
 using Boilerplate.Contracts.Repositories;
 using Boilerplate.Contracts.Services;
+using Dapper;
 using IMS.Contracts.DTOs;
 using IMS.Contracts.Repositories;
 using Microsoft.Extensions.Configuration;
@@ -629,12 +629,13 @@ namespace Boilerplate.Repository.Repositories
                 {
                     FromDate = pIReportParams.FromDate,
                     ToDate = pIReportParams.ToDate,
-                    PI_Master_Id = pIReportParams.PI_Master_Id,
-                    ClientId = pIReportParams.ClientId,
-                    User_Id = pIReportParams.User_Id,
+                    PI_Master_Id = pIReportParams.PI_Master_Id == "null" ? "" : pIReportParams.PI_Master_Id ,
+                    ClientId = pIReportParams.ClientId == "null" ? "" : pIReportParams.ClientId,
+                    User_Id = pIReportParams.User_Id == "null" ? "" : pIReportParams.User_Id,
                     pageLength = pIReportParams.PageLength,
                     pageNo = pIReportParams.PageNo,
-                    searchParam = pIReportParams.SearchParam
+                    searchParam = pIReportParams.SearchParam,
+                    Beneficiary_Account_ID = pIReportParams.Beneficiary_Account_ID  == "null" ? "" : pIReportParams.Beneficiary_Account_ID
                 };
 
                 string query = @"exec [usp_ProformaInvoice_Report_Print]                     
@@ -645,7 +646,8 @@ namespace Boilerplate.Repository.Repositories
                     @User_Id,
                     @pageLength,
                     @pageNo,
-                    @searchParam";
+                    @searchParam,
+                    @Beneficiary_Account_ID";
 
                 var ds = await GetDataInDataSetAsync(query, parameters);
 
