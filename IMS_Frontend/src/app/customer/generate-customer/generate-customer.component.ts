@@ -288,10 +288,13 @@ Formgroup!: FormGroup;
     
     cd.Superior_ID = this.Formgroup.value.User_Id;
     cd.IsAvailable = this.Formgroup.value.IsAvailable;
-    cd.Status = 'Unapproved';    
-    cd.Created_By = this.Formgroup.value.FreightCharge;
-    cd.Created_At = formatted;
-    cd.Created_By = userId == undefined ? '' : userId;
+    cd.Status = this.Formgroup.value.Status || 'Unapproved';
+    // cd.Created_By = this.Formgroup.value.FreightCharge;
+    // cd.Created_At = formatted;
+    // cd.Created_By = userId == undefined ? '' : userId;
+
+    cd.Updated_At = formatted;
+    cd.Updated_By = userId == undefined ? '' : userId;
     
     var tableName = 'tbl_customer';
 

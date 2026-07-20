@@ -116,7 +116,7 @@ export class AllCustomersComponent {
     const sentBy = sentByStr ? Number(sentByStr) : null;
     var userId = window.localStorage.getItem('userId');
 
-    if (SuperioId == undefined || SuperioId == '') SuperioId = userId;
+    if (SuperioId == undefined || SuperioId == '') SuperioId= '0'; //SuperioId = userId;
 
     const procedureData = {
       procedureName: 'usp_Customer_GetCustomerData',

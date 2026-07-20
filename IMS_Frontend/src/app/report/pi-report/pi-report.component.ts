@@ -306,14 +306,15 @@ export class PiReportComponent {
         const sentBy = sentByStr ? Number(sentByStr) : null;
         const item = {
           rptType: '',
-          FromDate: this.dateForm.value.fromDate,
-          ToDate: this.dateForm.value.toDate,
-          PI_Master_Id: this.dateForm.value.PIId,
-          ClientId: this.dateForm.value.ClientId,
-          User_Id: this.dateForm.value.SuperiorId,
+          FromDate: DateFormat.toApiDate(this.dateForm.value.fromDate),
+          ToDate: DateFormat.toApiDate(this.dateForm.value.toDate),
+          PI_Master_Id: this.dateForm.value.PI_Master_ID || null,
+          ClientId: this.dateForm.value.Customer_ID || null,
+          User_Id: this.dateForm.value.User_ID || null,
           pageLength: this.pageSize,
           pageNo: this.currentPage,
-          searchParam: this.searchText || ''
+          searchParam: this.searchText || '',
+          Beneficiary_Account_Id: this.dateForm.value.Beneficiary_Account_Id || null,
         };
         excelBtn?.addEventListener('click', () => {
           swal.close();

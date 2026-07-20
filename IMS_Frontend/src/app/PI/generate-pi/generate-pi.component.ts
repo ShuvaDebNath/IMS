@@ -208,9 +208,6 @@ export class GeneratePiComponent implements OnInit {
     });
 
     this.ConsigneeList = this.AllConsigneeList;
-    console.log(this.ConsigneeList);
-     console.log(this.AllConsigneeList);
-
 
     this.Formgroup.get('Customer_ID')?.valueChanges.subscribe((value) => {
 
