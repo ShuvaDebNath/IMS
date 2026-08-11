@@ -938,6 +938,7 @@
                     <Style>
                       <FontSize>8pt</FontSize>
                       <FontWeight>Normal</FontWeight>
+                      <Format>MMM d, yyyy</Format>
                     </Style>
                   </TextRun>
                   <TextRun>
@@ -2310,7 +2311,7 @@
             <Top>4.65774in</Top>
             <Left>0.20431in</Left>
             <Height>0.57869in</Height>
-            <Width>7.76339in</Width>
+            <Width>7.76336in</Width>
             <ZIndex>32</ZIndex>
             <Style>
               <Border>
@@ -3055,6 +3056,7 @@
                     <Style>
                       <FontSize>8pt</FontSize>
                       <FontWeight>Normal</FontWeight>
+                      <Format>MMM d, yyyy</Format>
                     </Style>
                   </TextRun>
                   <TextRun>
