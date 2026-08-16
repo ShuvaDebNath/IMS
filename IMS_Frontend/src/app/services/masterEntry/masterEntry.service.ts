@@ -7,6 +7,7 @@ import { DoubleMasterEntryModel } from 'src/app/models/DoubleMasterEntryModel';
 import { MasterEntryModel } from 'src/app/models/MasterEntryModel';
 import { GetDataModel } from 'src/app/models/GetDataModel';
 import { MasterEntryWithSlUpdateModel } from 'src/app/models/MasterEntryWithSlUpdateModel ';
+import { LcAuditLogResponse } from 'src/app/models/lc-audit-log.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,7 @@ export class MasterEntryService {
   readonly postApiController: string="DoubleMasterEntry";
   readonly postApiMasterEntryController: string="MasterEntry";
   readonly postApiProformaInvoiceController: string="ProformaInvoice";
+  readonly postApiLcAuditController: string = 'LcAudit';
   readonly userController: string="User";
   readonly getapiController = 'GetData';
 
@@ -497,5 +499,13 @@ public GetAllData(model: GetDataModel){
           return Response;
         })
       );
+  }
+
+  public GetLcAuditLog(lcId: number) {
+    return this.http
+      .get<LcAuditLogResponse>(
+        `${this.baseUrlApi}${this.postApiLcAuditController}/AuditLog/${lcId}`
+      )
+      .pipe(map((res) => res));
   }
 }

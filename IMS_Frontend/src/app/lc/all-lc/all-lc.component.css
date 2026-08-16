@@ -1,4 +1,14 @@
 /* All LC Filter Section Responsive & Consistent Styling */
+.card-primary:not(.card-outline) > .card-header {
+  background-color: orange !important;
+  color: #fff;
+}
+
+.card-primary:not(.card-outline) > .card-header h5 {
+  color: #fff;
+  margin: 0;
+}
+
 .all-lc-filter-row > [class^="col"] {
   display: flex;
   flex-direction: column;
