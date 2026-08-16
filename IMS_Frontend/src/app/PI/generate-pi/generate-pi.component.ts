@@ -207,7 +207,8 @@ export class GeneratePiComponent implements OnInit {
       this.Formgroup.controls['PINo'].setValue(piNo);
     });
 
-    this.ConsigneeList = this.AllConsigneeList;
+    // this.ConsigneeList = this.AllConsigneeList;
+     console.log('ConsigneeList:', this.ConsigneeList);
 
     this.Formgroup.get('Customer_ID')?.valueChanges.subscribe((value) => {
 
@@ -228,6 +229,8 @@ export class GeneratePiComponent implements OnInit {
         );
         if (consigneeCreatedBy) {
           this.Formgroup.controls['User_ID'].setValue(consigneeCreatedBy.Created_By); 
+          this.Formgroup.controls['Superior_ID'].setValue(consigneeCreatedBy.Superior_ID); 
+          this.Formgroup.controls['Marketing_Concern_ID'].setValue(consigneeCreatedBy.Marketing_Concern_ID); 
         }
 
          const getSuperior = this.UserInfosList.find(
@@ -308,7 +311,7 @@ export class GeneratePiComponent implements OnInit {
 LoadConsignee(shipperId: number) {
 
  this.ConsigneeList =
-    this.AllConsigneeList.filter((x: any) =>
+    this.ConsigneeList.filter((x: any) =>
 
       x.Beneficiary_Account_ID == shipperId
       &&
@@ -555,7 +558,7 @@ get ItemArray(): FormArray {
       this.PackingList = DataSet.Tables4;
       this.LoadingModeList = DataSet.Tables5;
       this.PaymentModeList = DataSet.Tables6;
-      this.AllConsigneeList = DataSet.Tables7;
+      this.ConsigneeList = DataSet.Tables7;
       this.ApplicantBankList = DataSet.Tables8;
       this.BuyingHouseList = DataSet.Tables9;
       this.TermsofDeliveryList = DataSet.Tables10;
@@ -700,6 +703,7 @@ get ItemArray(): FormArray {
       Force_Majeure_ID: this.Formgroup.controls['Force_Majeure_ID'].value,
       Arbitration_ID: this.Formgroup.controls['Arbitration_ID'].value,
       Status: this.Formgroup.controls['Status'].value,
+      Marketing_Concern_ID: this.Formgroup.controls['Marketing_Concern_ID'].value,
       User_ID: this.Formgroup.controls['User_ID'].value,
       Superior_ID: this.Formgroup.controls['Superior_ID'].value,
       Customer_ID: this.Formgroup.controls['Customer_ID'].value,
@@ -838,8 +842,12 @@ get ItemArray(): FormArray {
             this.originalMaster && this.originalMaster.Status
               ? this.originalMaster.Status
               : this.Formgroup.controls['Status'].value,
-          User_ID: this.gs.getSessionData('userId'),
-          Superior_ID: this.gs.getSessionData('userId'),
+          // User_ID: this.gs.getSessionData('userId'),
+          // Superior_ID: this.gs.getSessionData('userId'),
+          Marketing_Concern_ID: this.Formgroup.controls['Marketing_Concern_ID'].value,
+          User_ID: this.Formgroup.controls['User_ID'].value,
+          Superior_ID: this.Formgroup.controls['Superior_ID'].value,
+          
           Customer_ID: this.Formgroup.controls['Customer_ID'].value,
           IsMPI: this.Formgroup.controls['IsMPI'].value,
           LastUpdateDate: this.Formgroup.controls['LastUpdateDate'].value,

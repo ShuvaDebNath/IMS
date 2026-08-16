@@ -1163,7 +1163,7 @@
             <Top>4.36659in</Top>
             <Left>0.22365in</Left>
             <Height>0.57869in</Height>
-            <Width>7.8819in</Width>
+            <Width>7.88194in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1540,6 +1540,7 @@ Certify on the Packing list to the effect that the goods shipped are in accordan
                     <Style>
                       <FontSize>8pt</FontSize>
                       <FontWeight>Normal</FontWeight>
+                      <Format>MMM d, yyyy</Format>
                     </Style>
                   </TextRun>
                   <TextRun>
@@ -1792,6 +1793,7 @@ Certify on the Packing list to the effect that the goods shipped are in accordan
                     <Style>
                       <FontSize>8pt</FontSize>
                       <FontWeight>Normal</FontWeight>
+                      <Format>d MMM yyyy</Format>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -2115,6 +2117,7 @@ Certify on the Packing list to the effect that the goods shipped are in accordan
                     <Style>
                       <FontSize>8pt</FontSize>
                       <FontWeight>Normal</FontWeight>
+                      <Format>d MMM yyyy</Format>
                     </Style>
                   </TextRun>
                   <TextRun>
@@ -2141,6 +2144,7 @@ Certify on the Packing list to the effect that the goods shipped are in accordan
                     <Style>
                       <FontSize>8pt</FontSize>
                       <FontWeight>Normal</FontWeight>
+                      <Format>d MMM yyyy</Format>
                     </Style>
                   </TextRun>
                   <TextRun>
@@ -2235,6 +2239,7 @@ Certify on the Packing list to the effect that the goods shipped are in accordan
                     <Style>
                       <FontSize>8pt</FontSize>
                       <FontWeight>Normal</FontWeight>
+                      <Format>d MMM yyyy</Format>
                     </Style>
                   </TextRun>
                   <TextRun>

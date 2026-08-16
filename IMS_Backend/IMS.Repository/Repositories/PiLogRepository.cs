@@ -61,7 +61,7 @@ public class PiLogRepository : GenericRepository<PiLog>, IPiLogRepository
             const string sql = @"
                 SELECT TOP 1
                     m.PINo,
-                    ISNULL(c.CustomerName, '') AS CustomerName
+                    ISNULL(c.Company_Name, '') AS CustomerName
                 FROM   tbl_pi_master  m
                 LEFT JOIN tbl_customer c ON c.Customer_ID = m.Customer_ID
                 WHERE  m.PI_Master_ID = @PiId";

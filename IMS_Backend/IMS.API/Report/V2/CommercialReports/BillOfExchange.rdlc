@@ -1574,6 +1574,7 @@
                     <Style>
                       <FontSize>8pt</FontSize>
                       <FontWeight>Bold</FontWeight>
+                      <Format>MMM d, yyyy</Format>
                     </Style>
                   </TextRun>
                   <TextRun>
@@ -1825,6 +1826,7 @@
                     <Style>
                       <FontSize>8pt</FontSize>
                       <FontWeight>Bold</FontWeight>
+                      <Format>MMM d, yyyy</Format>
                     </Style>
                   </TextRun>
                   <TextRun>

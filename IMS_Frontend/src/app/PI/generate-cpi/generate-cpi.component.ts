@@ -149,14 +149,16 @@ previousValues: any = {};
         );
         if (consigneeCreatedBy) {
           this.Formgroup.controls['User_ID'].setValue(consigneeCreatedBy.Created_By); 
+          this.Formgroup.controls['Superior_ID'].setValue(consigneeCreatedBy.Superior_ID); 
+          this.Formgroup.controls['Marketing_Concern_ID'].setValue(consigneeCreatedBy.Marketing_Concern_ID); 
         }
 
-         const getSuperior = this.UserInfosList.find(
-            (x: any) => x.User_ID == consigneeCreatedBy.Created_By
-          );
-          if (getSuperior) {
-            this.Formgroup.controls['Superior_ID'].setValue(getSuperior.Superior_ID);
-          }
+        //  const getSuperior = this.UserInfosList.find(
+        //     (x: any) => x.User_ID == consigneeCreatedBy.Created_By
+        //   );
+        //   if (getSuperior) {
+        //     this.Formgroup.controls['Superior_ID'].setValue(getSuperior.Superior_ID);
+        //   }
       }
     });   
 
@@ -441,10 +443,14 @@ get ItemArray(): FormArray {
   const RemainingAmount =
     Number(this.Formgroup.controls['RemainingAmount'].value || 0);
 
+     console.log('GTAMNT:', this.GTAMNT, 'RemainingAmount:', RemainingAmount);
+
   if (
     RemainingAmount > 0 &&
      this.GTAMNT <= RemainingAmount
   ) {
+
+    console.log('GTAMNT:', this.GTAMNT, 'RemainingAmount:', RemainingAmount);
 
     Swal.fire(
       'Warning',
@@ -716,6 +722,7 @@ if (bdt) {
       Force_Majeure_ID: this.Formgroup.controls['Force_Majeure_ID'].value,
       Arbitration_ID: this.Formgroup.controls['Arbitration_ID'].value,
       Status: this.Formgroup.controls['Status'].value,
+      Marketing_Concern_ID: this.Formgroup.controls['Marketing_Concern_ID'].value,
       User_ID: this.Formgroup.controls['User_ID'].value,
       Superior_ID: this.Formgroup.controls['Superior_ID'].value,
       Customer_ID: this.Formgroup.controls['Customer_ID'].value,
@@ -832,6 +839,22 @@ if (bdt) {
       });
       return;
     }
+     const RemainingAmount =
+    Number(this.Formgroup.controls['RemainingAmount'].value || 0);
+
+     console.log('GTAMNT:', this.GTAMNT, 'RemainingAmount:', RemainingAmount);
+
+    if (
+    RemainingAmount > 0 &&
+     this.GTAMNT <= RemainingAmount
+  ) {
+
+    Swal.fire(
+      'Warning',
+      'Receive Amount cannot be less than Grand Total Amount.',
+      'warning'
+    );
+  }
 
   
       Swal.fire({
@@ -872,6 +895,7 @@ if (bdt) {
               Force_Majeure_ID: this.Formgroup.controls['Force_Majeure_ID'].value,
               Arbitration_ID: this.Formgroup.controls['Arbitration_ID'].value,
               Status: this.Formgroup.controls['Status'].value,
+              Marketing_Concern_ID: this.Formgroup.controls['Marketing_Concern_ID'].value,
               User_ID: this.Formgroup.controls['User_ID'].value,
               Superior_ID: this.Formgroup.controls['Superior_ID'].value,
               Customer_ID: this.Formgroup.controls['Customer_ID'].value,
