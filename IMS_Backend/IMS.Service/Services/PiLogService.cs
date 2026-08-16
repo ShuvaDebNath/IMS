@@ -1,5 +1,7 @@
+using Boilerplate.Contracts;
 using Boilerplate.Contracts.Repositories;
 using Boilerplate.Contracts.Services;
+using Boilerplate.Service.Audit;
 using IMS.Contracts.DTOs;
 using System.Text.Json;
 
@@ -8,6 +10,7 @@ namespace Boilerplate.Service.Services;
 public class PiLogService : IPiLogService
 {
     private readonly IPiLogRepository _repo;
+    private readonly IGetDataRepository _getDataRepository;
 
     // Master fields that add no human-readable diff value
     private static readonly HashSet<string> _skipMasterFields =
@@ -27,7 +30,11 @@ public class PiLogService : IPiLogService
             "IsActive", "CreatedDate", "LastUpdateDate"
         };
 
-    public PiLogService(IPiLogRepository repo) => _repo = repo;
+    public PiLogService(IPiLogRepository repo, IGetDataRepository getDataRepository)
+    {
+        _repo = repo;
+        _getDataRepository = getDataRepository;
+    }
 
     // ── WRITE ─────────────────────────────────────────────────────────────────
 
@@ -66,8 +73,9 @@ public class PiLogService : IPiLogService
 
     public async Task<PiAuditLogResponse> GetAuditLogAsync(long piId)
     {
-        var logs   = await _repo.GetByPiIdAsync(piId);
-        var piInfo = await _repo.GetPiInfoAsync(piId);
+        var logs        = await _repo.GetByPiIdAsync(piId);
+        var piInfo      = await _repo.GetPiInfoAsync(piId);
+        var lookupCache = await LoadLookupCacheAsync();
 
         var response = new PiAuditLogResponse
         {
@@ -123,7 +131,7 @@ public class PiLogService : IPiLogService
                     // Only surface the change when both sides carry a real value
                     if (!IsMeaningfulValue(oldVal) || !IsMeaningfulValue(newVal)) continue;
 
-                    entries.Add(new PiAuditLogEntry
+                    entries.Add(lookupCache.Enrich(new PiAuditLogEntry
                     {
                         EventType     = "Modified",
                         ColumnName    = key,
@@ -131,14 +139,14 @@ public class PiLogService : IPiLogService
                         NewValue      = newVal,
                         ChangedBy     = displayUser,
                         ChangedDate   = log.ChangedAt
-                    });
+                    }));
                 }
 
                 // ── Detail row diff ──────────────────────────────────────────
                 if (prevDetails is not null)
                 {
                     var detailDiffs = DiffDetails(
-                        prevDetails, curDetails, displayUser, log.ChangedAt);
+                        prevDetails, curDetails, displayUser, log.ChangedAt, lookupCache);
 
                     entries.AddRange(detailDiffs);
                 }
@@ -163,7 +171,8 @@ public class PiLogService : IPiLogService
         List<Dictionary<string, string>> prev,
         List<Dictionary<string, string>> curr,
         string changedBy,
-        DateTime changedAt)
+        DateTime changedAt,
+        PiAuditLookupCache lookupCache)
     {
         var result = new List<PiAuditLogEntry>();
         var maxLen = Math.Max(prev.Count, curr.Count);
@@ -214,7 +223,7 @@ public class PiLogService : IPiLogService
                 // Only surface the change when both sides carry a real value
                 if (!IsMeaningfulValue(oldVal) || !IsMeaningfulValue(newVal)) continue;
 
-                result.Add(new PiAuditLogEntry
+                result.Add(lookupCache.Enrich(new PiAuditLogEntry
                 {
                     EventType     = "Modified",
                     ColumnName    = $"{label} → {key}",
@@ -222,11 +231,41 @@ public class PiLogService : IPiLogService
                     NewValue      = newVal,
                     ChangedBy     = changedBy,
                     ChangedDate   = changedAt
-                });
+                }));
             }
         }
 
         return result;
+    }
+
+    // ── LOOKUP CACHE ──────────────────────────────────────────────────────────
+
+    /// <summary>
+    /// Loads all PI dropdown tables once via the existing initial-data procedure.
+    /// </summary>
+    private async Task<PiAuditLookupCache> LoadLookupCacheAsync()
+    {
+        try
+        {
+            var model = new GetDataModel
+            {
+                ProcedureName = "usp_ProformaInvoice_GetInitialData",
+                Parameters = Newtonsoft.Json.JsonConvert.SerializeObject(new
+                {
+                    userID = 0,
+                    roleID = 0,
+                    PaymentType = 1
+                })
+            };
+
+            var dataSet = await _getDataRepository.GetInitialData(model);
+            return PiAuditLookupCache.FromDataSet(dataSet);
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"[PiLogService] Lookup cache load failed: {ex.Message}");
+            return PiAuditLookupCache.FromDataSet(null);
+        }
     }
 
     // ── HELPERS ───────────────────────────────────────────────────────────────

@@ -57,6 +57,12 @@ export class AllLcComponent {
   isDetailsVisible: boolean = false;
   BaneficiaryAccountList: any;
 
+  isLcLogVisible = false;
+  isLcLogLoading = false;
+  lcLogLcNo = '';
+  lcLogConsigneeName = '';
+  lcLogEntries: any[] = [];
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -225,8 +231,57 @@ export class AllLcComponent {
   viewDetails(table: any) {
     this.isDetailsVisible = true;
     this.detailsData = table;
-    console.log(table);
-    
+  }
+
+  private hasAuditValue(val: any): boolean {
+    if (val === null || val === undefined) return false;
+    const str = String(val).trim();
+    return str.length > 0 && str !== '[]' && str !== '{}';
+  }
+
+  private filterAuditLogs(logs: any[]): any[] {
+    return logs.filter(
+      (entry) =>
+        this.hasAuditValue(entry.originalValue) &&
+        this.hasAuditValue(entry.newValue)
+    );
+  }
+
+  OpenLcLog(lcId: number): void {
+    this.isLcLogVisible = true;
+    this.isLcLogLoading = true;
+    this.lcLogEntries = [];
+    this.lcLogLcNo = this.detailsData?.LC_No ?? '';
+    this.lcLogConsigneeName = this.detailsData?.Consignee_Name ?? '';
+
+    this.masterEntryService.GetLcAuditLog(lcId).subscribe({
+      next: (res) => {
+        const filtered = this.filterAuditLogs(res.logs ?? []);
+
+        if (filtered.length === 0) {
+          this.isLcLogVisible = false;
+          this.isLcLogLoading = false;
+          swal.fire({
+            title: 'No Information Found',
+            text: 'There are no audit log records available for this LC.',
+            icon: 'info',
+            confirmButtonText: 'OK',
+          });
+          return;
+        }
+
+        this.lcLogEntries = filtered;
+        if (this.hasAuditValue(res.lcNo)) this.lcLogLcNo = res.lcNo;
+        if (this.hasAuditValue(res.consigneeName))
+          this.lcLogConsigneeName = res.consigneeName;
+        this.isLcLogLoading = false;
+      },
+      error: () => {
+        this.isLcLogVisible = false;
+        this.isLcLogLoading = false;
+        swal.fire('Error', 'Failed to load audit log.', 'error');
+      },
+    });
   }
 
   printLC(item?: any): void {

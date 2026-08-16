@@ -246,8 +246,20 @@
       <form>
         <div class="card card-primary">
           <div class="card-header m-0 p-2 sticky-header">
-            <div class="float-left"></div>
-            <div class="float-right"></div>
+            <div class="float-left">
+              <h5>{{ detailsData?.LC_No }}</h5>
+            </div>
+            <div class="float-right">
+              <div class="btn-group" role="group" aria-label="LC detail actions">
+                <button
+                  type="button"
+                  class="btn btn-outline-success bg-gradient-warning btn-sm mr-2"
+                  (click)="OpenLcLog(detailsData?.LC_ID)"
+                >
+                  <i class="fas fa-history"></i>&nbsp;LC Log
+                </button>
+              </div>
+            </div>
           </div>
           <div class="card-body">
             <div class="row">
@@ -435,6 +447,104 @@
           </div>
         </div>
       </form>
+    </p-dialog>
+
+    <!-- LC Audit Log Modal -->
+    <p-dialog
+      header="LC Audit Log"
+      [(visible)]="isLcLogVisible"
+      [modal]="true"
+      [closable]="true"
+      [style]="{ width: '90vw', maxWidth: '1100px' }"
+      [contentStyle]="{ 'max-height': '75vh', 'overflow-y': 'auto' }"
+      [maximizable]="true"
+      (onHide)="isLcLogVisible = false"
+    >
+      <div class="row mb-3">
+        <div class="col-md-6 d-flex align-items-center gap-2">
+          <span class="font-weight-bold text-muted">LC No:</span>
+          <span class="font-weight-bold text-dark">{{ lcLogLcNo || '—' }}</span>
+        </div>
+        <div class="col-md-6 d-flex align-items-center gap-2">
+          <span class="font-weight-bold text-muted">Consignee:</span>
+          <span class="font-weight-bold text-dark">{{ lcLogConsigneeName || '—' }}</span>
+        </div>
+      </div>
+
+      <div *ngIf="isLcLogLoading" class="d-flex justify-content-center align-items-center py-5">
+        <i class="fas fa-spinner fa-spin fa-2x text-muted"></i>
+        <span class="ml-3 text-muted">Loading audit log…</span>
+      </div>
+
+      <div
+        *ngIf="!isLcLogLoading && lcLogEntries.length === 0"
+        class="text-center py-5 text-muted"
+      >
+        <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
+        No audit records found.
+      </div>
+
+      <div
+        *ngIf="!isLcLogLoading && lcLogEntries.length > 0"
+        class="table-responsive"
+      >
+        <table class="table table-sm table-bordered table-hover mb-0 audit-log-table">
+          <thead>
+            <tr style="background-color: #6a1a3f; color: white; white-space: nowrap;">
+              <th class="text-center align-middle" style="width: 110px;">Event Type</th>
+              <th class="text-center align-middle" style="min-width: 160px;">Column</th>
+              <th class="text-center align-middle" style="min-width: 180px;">Original Value</th>
+              <th class="text-center align-middle" style="min-width: 180px;">New Value</th>
+              <th class="text-center align-middle" style="width: 110px;">Changed By</th>
+              <th class="text-center align-middle" style="width: 180px;">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let entry of lcLogEntries">
+              <td class="text-center align-middle">
+                <span
+                  class="badge"
+                  [ngClass]="{
+                    'badge-success': entry.eventType === 'Insert',
+                    'badge-warning': entry.eventType === 'Modified',
+                    'badge-danger': entry.eventType === 'Deleted'
+                  }"
+                  style="font-size: 0.78rem; padding: 4px 8px;"
+                >
+                  {{ entry.eventType }}
+                </span>
+              </td>
+              <td class="align-middle">{{ entry.columnName }}</td>
+              <td class="align-middle text-danger">
+                <span *ngIf="entry.originalValue; else emptyOld">{{ entry.originalValue }}</span>
+                <ng-template #emptyOld><span class="text-muted">—</span></ng-template>
+              </td>
+              <td class="align-middle text-success font-weight-bold">
+                <span *ngIf="entry.newValue; else emptyNew">{{ entry.newValue }}</span>
+                <ng-template #emptyNew><span class="text-muted">—</span></ng-template>
+              </td>
+              <td class="text-center align-middle">{{ entry.changedBy }}</td>
+              <td class="text-center align-middle" style="white-space: nowrap;">
+                {{ entry.changedDate | date: 'dd-MMM-yyyy hh:mm a' }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ng-template pTemplate="footer">
+        <div class="d-flex justify-content-between align-items-center">
+          <small class="text-muted">
+            {{ lcLogEntries.length }} record(s) found
+          </small>
+          <button
+            class="btn btn-sm btn-secondary"
+            (click)="isLcLogVisible = false"
+          >
+            <i class="fas fa-times"></i>&nbsp;Close
+          </button>
+        </div>
+      </ng-template>
     </p-dialog>
   </div>
 </div>

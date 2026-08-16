@@ -1343,6 +1343,7 @@
                     <Style>
                       <FontSize>8pt</FontSize>
                       <FontWeight>Normal</FontWeight>
+                      <Format>MMM d, yyyy</Format>
                     </Style>
                   </TextRun>
                   <TextRun>
@@ -1595,6 +1596,7 @@
                     <Style>
                       <FontSize>8pt</FontSize>
                       <FontWeight>Normal</FontWeight>
+                      <Format>MMM d, yyyy</Format>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -1924,6 +1926,7 @@
                     <Style>
                       <FontSize>8pt</FontSize>
                       <FontWeight>Normal</FontWeight>
+                      <Format>MMM d, yyyy</Format>
                     </Style>
                   </TextRun>
                   <TextRun>
@@ -1950,6 +1953,7 @@
                     <Style>
                       <FontSize>8pt</FontSize>
                       <FontWeight>Normal</FontWeight>
+                      <Format>MMM d, yyyy</Format>
                     </Style>
                   </TextRun>
                   <TextRun>
@@ -2044,6 +2048,7 @@
                     <Style>
                       <FontSize>8pt</FontSize>
                       <FontWeight>Normal</FontWeight>
+                      <Format>MMM d, yyyy</Format>
                     </Style>
                   </TextRun>
                   <TextRun>
